@@ -1,5 +1,7 @@
 # LibNet
 
 ##Authors
-   Hossein Radfar
-   Adam Wright
+
+   Hossein Radfar 
+   Adam Wright 
+
