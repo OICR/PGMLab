@@ -1,2 +1,18 @@
+
+#GSL library
 external_lib/gsl
 external_lib/gsl-*
+
+#generated hash files
+makeHashTable/phash.*
+
+# Object files
+*.o
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+
+#vim files
+*.swp
+*.swo

@@ -76,7 +76,7 @@ void hash_graph_node_IDs(char *readreactionlogicpathways)
         
         
     }
-    
+
     fclose(file); /* reset the fgets to the begining of the file*/
     
     Nv = internal_uniq(targetsource,2*Ne); /* unique list of target and source nodes;  Nv: # of variable node  */

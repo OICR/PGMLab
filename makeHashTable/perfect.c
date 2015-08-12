@@ -1055,7 +1055,7 @@ ub4  nkeys;
 ub4  salt;
 {
     FILE *f;
-    f = fopen("/Users/Hossein/Documents/HashTable/makeHashTable/makeHashTable/phash.h", "w");
+    f = fopen("./makeHashTable/phash.h", "w");
     //f = fopen("./phash.c", "w");
     fprintf(f, "/* Perfect hash definitions */\n");
     fprintf(f, "#ifndef STANDARD\n");
@@ -1107,7 +1107,7 @@ hashform *form;                                           /* user directives */
 {
     ub4   i;
     FILE *f;
-    f = fopen("/Users/Hossein/Documents/HashTable/makeHashTable/makeHashTable/phash.c", "w");
+    f = fopen("./makeHashTable/phash.c", "w");
    // f = fopen("./phash.c", "w");
 
     fprintf(f, "/* table for the mapping for the perfect hash */\n");
@@ -1266,7 +1266,7 @@ int numkeys;
     /* find the hash */
         findhash(&tab, &alen, &blen, &salt, &final, 
                  scramble, &smax, keys, nkeys, form);
-        
+
     /* generate the phash.h file */
         make_h(blen, smax, nkeys, salt);
         printf("Wrote phash.h\n");
