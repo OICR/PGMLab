@@ -56,27 +56,17 @@ int main(void)
     
     begin =clock();
     
-    
-    char obs_data[20000] =  "/Users/Hossein/Documents/MATLAB/work/KEGG_parser/observedData/JE_network_dd.txt";//C_elegans_immunity_learn_hr.txt";
-    
-    
-    char nodepost[20000] = "/Users/Hossein/Documents/MATLAB/work/KEGG_parser/EstimateCPT/nodepost.txt";
-    
-    
-    char pathway[20000] =   "/Users/Hossein/Documents/MATLAB/work/KEGG_parser/KeggFactorgraph/JE_Network_FG.txt";
-    
-    char input4columns[20000]= "/Users/Hossein/Documents/MATLAB/work/KEGG_parser/reaction_logic_pathways/JE_Network.txt";
+    char obs_data[20000] =  "./test/data1/JE_network_dd.txt";//C_elegans_immunity_learn_hr.txt";
+    char nodepost[20000] = "./test/data1/nodepost.txt";
+    char pathway[20000] =   "./test/data1/JE_Network_FG.txt";
+    char input4columns[20000]= "./test/data1/JE_Network.txt";
     
     int num_state = 3;          /* number of states */
     int max_num_repeat = 4000;  /* max number of iterations in EM algorithm */
     int MAPflag = 1;
     double LLchangeLimit = 1e-5; /* */
 
-    
-    
-
     /*read the directed logical graph convert to factor-graph format */
-   
     reaction_logic_to_factorgraph(input4columns,pathway,num_state);
     
     /* inference */

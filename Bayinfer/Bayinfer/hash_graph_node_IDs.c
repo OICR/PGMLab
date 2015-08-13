@@ -20,14 +20,11 @@ void hash_graph_node_IDs(char *readreactionlogicpathways)
     const char delims[2] = "\t";
     char *temp;
     
-    
-        
-    
     // read the node name and store in an array
     FILE *file = fopen(readreactionlogicpathways, "r");
     if (file == NULL)
     {
-        fprintf(stderr, "cannot open the file in  ExtractNonUniqNodelist \n");
+        fprintf(stderr, "cannot open the file in %s ExtractNonUniqNodelist \n", readreactionlogicpathways);
         exit(42);
         
     }
@@ -41,8 +38,6 @@ void hash_graph_node_IDs(char *readreactionlogicpathways)
     char* targetsource[2*Ne]; /* list of all nodes */
     
     fgets(buf,maxLen,file);    /* second line is empty*/
-    
-
     
     
     k = 0;
@@ -76,7 +71,7 @@ void hash_graph_node_IDs(char *readreactionlogicpathways)
         
         
     }
-    
+
     fclose(file); /* reset the fgets to the begining of the file*/
     
     Nv = internal_uniq(targetsource,2*Ne); /* unique list of target and source nodes;  Nv: # of variable node  */

@@ -131,7 +131,6 @@ void findhash(/*_ bstuff **tabb, ub4 *alen, ub4 *blen, ub4 *salt,
 int inithex(/*_ key *keys, ub4 *alen, ub4 *blen, ub4 smax, ub4 nkeys, 
              ub4 salt, gencode *final, gencode *form _*/);
 
-
 static ub4  permute();
 static void scrambleinit();
 static void checkdup();
