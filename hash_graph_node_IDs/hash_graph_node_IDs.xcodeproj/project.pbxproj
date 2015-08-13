@@ -12,7 +12,7 @@
 		94E84F301B6AA6E000AE6E20 /* perfect.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F271B6AA6E000AE6E20 /* perfect.c */; };
 		94E84F311B6AA6E000AE6E20 /* perfhex.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F291B6AA6E000AE6E20 /* perfhex.c */; };
 		94E84F331B6AA6E000AE6E20 /* recycle.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F2C1B6AA6E000AE6E20 /* recycle.c */; };
-		94E84F361B6AA74C00AE6E20 /* hash_graph_node_IDs.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F351B6AA74C00AE6E20 /* hash_graph_node_IDs.c */; };
+		94E84F731B7A8A5F00AE6E20 /* hash_graph_node_IDs.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F721B7A8A5F00AE6E20 /* hash_graph_node_IDs.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,8 +39,8 @@
 		94E84F2C1B6AA6E000AE6E20 /* recycle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = recycle.c; path = ../../../../HashTable/makeHashTable/makeHashTable/recycle.c; sourceTree = "<group>"; };
 		94E84F2D1B6AA6E000AE6E20 /* recycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = recycle.h; path = ../../../../HashTable/makeHashTable/makeHashTable/recycle.h; sourceTree = "<group>"; };
 		94E84F2E1B6AA6E000AE6E20 /* standard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = standard.h; path = ../../../../HashTable/makeHashTable/makeHashTable/standard.h; sourceTree = "<group>"; };
-		94E84F341B6AA73A00AE6E20 /* hash_graph_node_IDs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hash_graph_node_IDs.h; path = ../../../Bayinfer/Bayinfer/hash_graph_node_IDs.h; sourceTree = "<group>"; };
-		94E84F351B6AA74C00AE6E20 /* hash_graph_node_IDs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hash_graph_node_IDs.c; path = ../../../Bayinfer/Bayinfer/hash_graph_node_IDs.c; sourceTree = "<group>"; };
+		94E84F721B7A8A5F00AE6E20 /* hash_graph_node_IDs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hash_graph_node_IDs.c; sourceTree = "<group>"; };
+		94E84F741B7A8A6A00AE6E20 /* hash_graph_node_IDs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hash_graph_node_IDs.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,8 +73,8 @@
 		94E84F1C1B6AA54400AE6E20 /* hash_graph_node_IDs */ = {
 			isa = PBXGroup;
 			children = (
-				94E84F351B6AA74C00AE6E20 /* hash_graph_node_IDs.c */,
-				94E84F341B6AA73A00AE6E20 /* hash_graph_node_IDs.h */,
+				94E84F741B7A8A6A00AE6E20 /* hash_graph_node_IDs.h */,
+				94E84F721B7A8A5F00AE6E20 /* hash_graph_node_IDs.c */,
 				94E84F241B6AA6E000AE6E20 /* lookupa.c */,
 				94E84F251B6AA6E000AE6E20 /* lookupa.h */,
 				94E84F261B6AA6E000AE6E20 /* makeHashTable.1 */,
@@ -145,7 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94E84F361B6AA74C00AE6E20 /* hash_graph_node_IDs.c in Sources */,
+				94E84F731B7A8A5F00AE6E20 /* hash_graph_node_IDs.c in Sources */,
 				94E84F331B6AA6E000AE6E20 /* recycle.c in Sources */,
 				94E84F311B6AA6E000AE6E20 /* perfhex.c in Sources */,
 				94E84F1E1B6AA54400AE6E20 /* main.c in Sources */,
@@ -267,6 +267,7 @@
 				94E84F231B6AA54400AE6E20 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

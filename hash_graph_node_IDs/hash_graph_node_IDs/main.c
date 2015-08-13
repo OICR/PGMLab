@@ -17,7 +17,7 @@ int main(void)
 {
     
     
-       clock_t begin, end; /* to measure run time */
+    clock_t begin, end; /* to measure run time */
     
     double time_spent; /* to measure run time */
     
