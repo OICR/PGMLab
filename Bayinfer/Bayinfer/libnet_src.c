@@ -257,7 +257,6 @@ int ExtractNonUniqNodelist(char *filename,char  ** nodeName)
     char *temp;
     
     
-    
     // read the node name and store in an array
     FILE *file = fopen(filename, "r");
     if (file == NULL)
@@ -479,17 +478,12 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
     int num_visibles = 0;   /* # of visible nodes in each condition   */
     int num_conditions = 0; /* # of samples, conditions  */
     
-
-    
-    
-    
-    
     // read  all varibale nodes, remove duplicates; this section is excuted to make a unique list of nodes (keys) which are passed to
     // the hash function generator to make the hash function; we then we hash Ids throughout the code.
     
     int numel = ExtractNonUniqNodeNum(pathway); // read pathwat file and return the number of varibales nodes in the pathway.
     
-    char* nodelist[numel];
+    char *nodelist[numel];
     char *keys[numel];
     
     /*retrun the list of all varaible nodes; duplication may be in the list */
@@ -499,9 +493,6 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
     
     Nv = uniq(nodelist, numel); /*remove duplicate from nodelist;  Nv: # of variable nodes */
     
-    
-    
-    
     /*sort the variable node names  according  to thier hash map Ids */
     
     for(i=0;i<Nv;i++)
@@ -509,20 +500,11 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         h = phash(nodelist[i],strlen(nodelist[i]));
        //printf(" %d %d %s\n",i,h,nodelist[i]);
         
-        
         k = (int)strlen(nodelist[i]);
-        
-        
         keys[h] = malloc((k+1)*sizeof(char));
         
         strcpy(keys[h],nodelist[i]);
-        
-        
-        
     }
-    
-    
-    
     
     for (i = 0; i < Nv; ++i)
     {
@@ -534,11 +516,10 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
     FILE *file1 = fopen(pathway, "r");
     if (file1 == NULL)
     {
-        fprintf(stderr, "cannot open the file in  main \n");
+        fprintf(stderr, "cannot open the file %s in  main \n", pathway);
         exit(42);
         
     }
-    
     
     /* read first line  to get number of factors and store it in Nf*/
     
@@ -557,42 +538,27 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
     
     /* allocate memory for pGraph struct which contains message info*/
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
-    
     /*  fill the pGraph struct field accroding to info given in factor graph file */
     lenMsgVec = FactorgraphFile_To_NodeStructures(pathway,pGraph,num_state,Nv,Nf);
-    
+
     /*allocate memory for message vectors*/
     double * u = (double *)malloc(lenMsgVec*num_state * sizeof(double));
     double * u_old = (double *)malloc(lenMsgVec*num_state * sizeof(double));
-    
-    
-    
-    
-    
-    
+
     /* build conditional probability table indexes */
-    
     int** cpt = makeCPTindex(pGraph,Nf,Nv,num_state);
     
-    
-    
     /* allocate memory for factorarray and pGraph.beliefs  */
-    
     double** factorarray  =  (double **)malloc(Nf*sizeof(*factorarray));
     double** factorarray0  = (double **)malloc(Nf*sizeof(*factorarray0));
     
-    
-    
     for(i = 0;i < Nf;i++)
     {
-        factorarray[i]   = (double *)malloc(pGraph[i+Nv].numComb*sizeof(factorarray));
-        factorarray0[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(factorarray0));
+        factorarray[i]   = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**factorarray));
+        factorarray0[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**factorarray0));
     }
-    
-    
-    
+
     /* the model parameters passed to factorattay0 once . it  should be noted that factorarray0 does not change but factorattay changes in loop for each input   */
-    
     for(i = 0;i < Nf;i++)
     {
         for (k=0;k<pGraph[i+Nv].numComb;k++)
@@ -602,10 +568,7 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         }
         // printf("----------------------\n");
     }
-    
-    
-    
-    
+
     /* open this file to write the results into*/
     FILE * pn = fopen(nodepost, "w");
     
@@ -614,11 +577,6 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         fprintf(stderr, " to write, cannot open the posterior probabilities file \n");
         exit(42);
     }
-    
-    
-    
-    
-    
     
     /* open and read the file to find number of observed data and samples*/
     FILE *file = fopen(obs_data, "r");
@@ -704,26 +662,12 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
             }
         }
         
-        
-        
         /* normalize CPD; each configuration should sum up to 1 and transform them to log domain */
         for(i=0;i<Nf;i++)
             normalizeCPD(factorarray[i],factorarray[i],pGraph[i+Nv].numComb,num_state,1);/*flag =1 mean convert to log */
         
-        
-        
-        
-
-        
         /* modify factors according to observed nodes states */
-        
           inputBasedModifiedCPT(pGraph,factorarray,visible_values,visibleIds,cpt,Nv,num_visibles,1);
-        
-        
-        
-
-        
-        
         
         /* do inference using LPB */
         
@@ -829,7 +773,6 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     const char delims[2] = "\t";
     char *temp, *target, *source,*type;
     
-    
     struct factor
     {
         int numParents; /*  number of parents of each child*/
@@ -843,7 +786,7 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     FILE *file = fopen(readpairwisefilename, "r");
     if (file == NULL)
     {
-        fprintf(stderr, "cannot open the file in  ExtractNonUniqNodelist \n");
+        fprintf(stderr, "cannot open the file %s in  ExtractNonUniqNodelist \n", readpairwisefilename);
         exit(42);
         
     }
@@ -898,7 +841,7 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
         
         
     }
-    
+
     rewind(file); /* reset the fgets to the begining of the file*/
     
     Nv = uniq(targetsource,2*Ne); /* unique list of target and source nodes;  Nv: # of variable node  */
@@ -959,7 +902,8 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     int varcount[Nv];  /*  a counter for each factor that counts number of nodes added so far*/
     for (i=0;i<Nv;i++)
     {
-        fGraph[i].variablenode = (char**) malloc(fGraph[i].numParents *sizeof(fGraph[i].variablenode));
+        fGraph[i].variablenode = (char**) malloc(fGraph[i].numParents *sizeof(fGraph[i].variablenode[0]));
+      //  fGraph[i].variablenode = (char**) malloc(fGraph[i].numParents *sizeof(fGraph[i].variablenode));
         varcount[i] = 1 ;/* initialize it*/
     }
     
@@ -998,7 +942,6 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
         
         /* add the source nodes to the factor*/
         fGraph[k].variablenode[varcount[k]] = malloc((strlen(source)+1)*sizeof(char));
-        
         strcpy(fGraph[k].variablenode[varcount[k]],source);
         
         varcount[k]++; /*  one node added to factor k*/
@@ -1092,9 +1035,7 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
         
     }
     
-    
     fclose(file1);
-    
     
     for(i=0;i<Nv;i++)
     {
@@ -1161,7 +1102,8 @@ int **makeCPTindex(Node *pGraph,int Nf,int Nv,int num_state)
         
         Ncpt[i] = h;
         
-        cpt[i] = malloc(Ncpt[i]*pGraph[Nv+i].numAdj*sizeof(**cpt));
+       // cpt[i] = malloc(Ncpt[i]*pGraph[Nv+i].numAdj*sizeof(**cpt));
+        cpt[i] = malloc(Ncpt[i]*pGraph[Nv+i].numAdj*sizeof(int));
         
         Nrep = Ncpt[i];
         
@@ -1264,10 +1206,6 @@ void inputBasedModifiedCPT(Node *pGraph,double ** factorarray, int *obs_values,i
 int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,int Nv,int Nf)
 {
     
-    
-    
-    
-    
     int i,ii,nn,k,h;
     int lenMsgVec,K,*adjCount;
     double parZ; // to normalize factors that donot sum up to unity
@@ -1341,18 +1279,15 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
         i++;
     }
     
-    
-    
     /* ***************************************sec **************************************************/
     // allocate memory for the second field of pGraph structure in which we keep indexes of messages
     for(i = 0;i< N;i++)
     {
-        
         pGraph[i].adjNodes = malloc(pGraph[i].numAdj *sizeof(pGraph[i].adjNodes));
         pGraph[i].oIdx = malloc(pGraph[i].numAdj *sizeof(pGraph[i].oIdx));
         pGraph[i].iIdx = malloc(pGraph[i].numAdj *sizeof(pGraph[i].iIdx));
     }
-    
+
     // a counter to increment number of  the adjNodess of variable nodes.
     adjCount = malloc(Nv*sizeof(int));
     
@@ -1363,9 +1298,6 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
     
     for(i = 0;i < N;i++)
         pGraph[i].numComb = 0;  // initialize to zero
-    
-    
-    
     
     
     /* ********************************************* Sec 3 **************************************** */
@@ -1475,18 +1407,18 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
         
         i++;
     }
-    
     fclose(file);
-    
+
     /* allocate memory for variable beliefs and initialize them*/
     for(i = 0;i < Nv;i++)
     {
-        pGraph[i].beliefs = malloc(num_state*sizeof(pGraph[i].beliefs));
+ //       pGraph[i].beliefs = malloc(num_state*sizeof(pGraph[i].beliefs));
+        pGraph[i].beliefs = malloc(num_state*sizeof(double));
         
         for(k = 0;k < num_state;k++)
             pGraph[i].beliefs[k] = 1/(double)num_state;
     }
-    
+
     return(lenMsgVec);
     
 }
@@ -1550,8 +1482,8 @@ int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *nu
     
     /* now you can allocate memory  for observed data */
     
-    mRNA_values =  malloc(nmRNAObs*nmRNASample *sizeof(double));
-    mRNAObsIds  =  malloc(nmRNAObs*sizeof(int));
+    mRNA_values =  malloc(nmRNAObs*nmRNASample *sizeof(*mRNA_values));
+    mRNAObsIds  =  malloc(nmRNAObs*sizeof(*mRNAObsIds));
     
     /*  open the file second time to read the data and store them in allocated matrix*/
     file = fopen(filename, "r");
@@ -1905,7 +1837,7 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
         L = AlarmNet[v+Nv].numComb; /* # of conditions in CPT represnted by factor Nv-v*/
         
         
-        ff = (double *)malloc(L * sizeof(double));
+        ff = (double *)malloc(L * sizeof(*ff));
         
         for(k=0;k<L;k++)
             ff[k] = factorarray[v][k];
@@ -2006,7 +1938,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     FILE *file = fopen(readreactionlogicpathways, "r");
     if (file == NULL)
     {
-        fprintf(stderr, "cannot open the file in  ExtractNonUniqNodelist \n");
+        fprintf(stderr, "cannot open the file %s in  ExtractNonUniqNodelist \n", readreactionlogicpathways);
         exit(42);
         
     }
@@ -2255,8 +2187,9 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
         
         Ncpt[i] = h;
         
-        cpt[i] = malloc(Ncpt[i]*fGraph[i].numVariables*sizeof(**cpt));
-        
+        cpt[i] = malloc(Ncpt[i]*fGraph[i].numVariables*sizeof(int));
+//        cpt[i] = malloc(Ncpt[i]*fGraph[i].numVariables*sizeof(**cpt));
+       
         Nrep = Ncpt[i];
         
         //for(ii =0 ; ii < pGraph[Nv+i].numAdj;ii++) //if you use alramnet format
@@ -2300,9 +2233,8 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     
     for(i = 0;i < Nv;i++)
     {
-        vote[i]  = (double *)malloc(pow(nstate,fGraph[i].numVariables)*sizeof(vote));
-        factorarray[i]  = (double *)malloc(pow(nstate,fGraph[i].numVariables)*sizeof(factorarray));
-        
+        vote[i]  = (double *)malloc(pow(nstate,fGraph[i].numVariables)*sizeof(**vote));
+        factorarray[i]  = (double *)malloc(pow(nstate,fGraph[i].numVariables)*sizeof(**factorarray));
     }
     
     
@@ -2335,30 +2267,17 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     
     for(i = 0;i < Nv;i++)
     {
-        
-            for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
+        for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
         {
-            
             for (h= 0;h < fGraph[i].numVariables;h++)
             {
-                
                 if(i==30)
                     printf("%d %d %d %d\n",i,k,h,cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]);
             }
-            
-            
-            
         }
     }
-    
 
-    
-    
-    
-    
     /*    OR resembles max and AND resembles min */
-    
-    
     int Small_num_for_OR ; /* to find max*/
     int Big_Num_for_AND;   /*to find min*/
     for(i = 0;i < Nv;i++)
@@ -2400,10 +2319,9 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
         
         
     }
-    
+
     /*based on the vote procedure (AND or OR)  to find the best condition and assign a hight probablity fot that condition, i.e. p(y|x1,...x_N,)*/
     /*note for root nodes we assign high probability to "0" state as common mode is to see no change compare to control . this can adapted if we have prior knowledge from the root node*/
-    
     
     for(i = 0;i < Nv;i++)
     {
@@ -2451,16 +2369,14 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
         
         
     }
-    
-    
+
     /*end of writing CDP values*/
     
     /* write retrieved the in a factor graph format */
-    
     FILE *file1 = fopen(writefactorgraphfilename, "w");
     if (file1 == NULL)
     {
-        fprintf(stderr, "cannot open the file in  ExtractNonUniqNodelist to write in \n");
+        fprintf(stderr, "cannot open the file %s in  ExtractNonUniqNodelist to write in \n", writefactorgraphfilename);
         exit(42);
         
     }
@@ -2468,45 +2384,38 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     fprintf(file1,"%d\n",Nv); /* number of factor*/
     fprintf(file1,"\n");    /* space*/
     
-    
     for(i=0;i<Nv;i++)
     {
         //if(fGraph[i].numVariables != 1)
         //{
         fprintf(file1,"%d\n",fGraph[i].numVariables);//
-        
+
         for(k=0;k<fGraph[i].numVariables;k++)
             fprintf(file1,"%s ",fGraph[i].variablenode[k]);
-        
+
         fprintf(file1,"\n");    /* space*/
-        
+         
         for(k=0;k<fGraph[i].numVariables;k++)
             fprintf(file1,"%d ",nstate);
-        
+
         fprintf(file1,"\n");    /* space*/
         
         fprintf(file1,"%d\n",(int)pow(nstate,fGraph[i].numVariables));
-        
-        
+
         for(k=0;k<(int)pow(nstate,fGraph[i].numVariables);k++)
             fprintf(file1,"%d %f\n",k,factorarray[i][k]);
-        
-        
         
         fprintf(file1,"\n");    /* space*/
         //}
         
     }
-    
-    
     fclose(file1);
-    
     
     for(i=0;i<Nv;i++)
     {
         for(k=0;k<fGraph[i].numVariables;k++)
         {
-            // if(fGraph[i].numVariables != 1)
+            //if(fGraph[i].numVariables != 1)
             free(fGraph[i].variablenode[k]);
             
         }
@@ -2518,7 +2427,6 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
         
     }
     free(fGraph);
-    
     
     return(Nv);
     
@@ -2759,12 +2667,10 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
     
     for(i = 0;i < Nf;i++)
     {
-        factorarray[i]   = (double *)malloc(pGraph[i+Nv].numComb*sizeof(factorarray));
-        factorarray0[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(factorarray0));
-        oldfactorarray0[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(oldfactorarray0));
-        alpha[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(alpha));
-        
-        
+        factorarray[i]   = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**factorarray));
+        factorarray0[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**factorarray0));
+        oldfactorarray0[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**oldfactorarray0));
+        alpha[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**alpha));
     }
     
     

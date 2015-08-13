@@ -18,3 +18,15 @@ generateHash:
 	makeHashTable/recycle.c \
 	Bayinfer/Bayinfer/hash_graph_node_IDs.c \
 	-IBayinfer/Bayinfer/ -ImakeHashTable/ -w 
+
+libnet:
+	gcc -o libnet Bayinfer/Bayinfer/main.c \
+	Bayinfer/Bayinfer/libnet_src.c \
+	makeHashTable/perfect.c \
+	makeHashTable/phash.c \
+	makeHashTable/lookupa.c \
+	makeHashTable/recycle.c \
+	makeHashTable/perfhex.c \
+	-IBayinfer/Bayinfer/ -ImakeHashTable \
+	-L./external_lib/gsl/lib -I./external_lib/gsl/include -lgsl -lgslcblas \
+	-lm -w
