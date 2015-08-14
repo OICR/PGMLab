@@ -1,0 +1,410 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		94E84F0D1B6A721700AE6E20 /* libnet_src.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F0C1B6A721700AE6E20 /* libnet_src.c */; };
+		94E84F6D1B7A7AF500AE6E20 /* lookupa.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F621B7A7AF500AE6E20 /* lookupa.c */; };
+		94E84F6E1B7A7AF500AE6E20 /* perfect.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F651B7A7AF500AE6E20 /* perfect.c */; };
+		94E84F6F1B7A7AF500AE6E20 /* perfhex.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F671B7A7AF500AE6E20 /* perfhex.c */; };
+		94E84F701B7A7AF500AE6E20 /* phash.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F681B7A7AF500AE6E20 /* phash.c */; };
+		94E84F711B7A7AF500AE6E20 /* recycle.c in Sources */ = {isa = PBXBuildFile; fileRef = 94E84F6A1B7A7AF500AE6E20 /* recycle.c */; };
+		94FA5D911B38B211007244BB /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 94FA5D901B38B211007244BB /* main.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		94FA5D8B1B38B211007244BB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		94E84F0B1B6A720F00AE6E20 /* listOfFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = listOfFunction.h; sourceTree = "<group>"; };
+		94E84F0C1B6A721700AE6E20 /* libnet_src.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = libnet_src.c; sourceTree = "<group>"; };
+		94E84F621B7A7AF500AE6E20 /* lookupa.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lookupa.c; sourceTree = "<group>"; };
+		94E84F631B7A7AF500AE6E20 /* lookupa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lookupa.h; sourceTree = "<group>"; };
+		94E84F641B7A7AF500AE6E20 /* makeHashTable.1 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.man; path = makeHashTable.1; sourceTree = "<group>"; };
+		94E84F651B7A7AF500AE6E20 /* perfect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = perfect.c; sourceTree = "<group>"; };
+		94E84F661B7A7AF500AE6E20 /* perfect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = perfect.h; sourceTree = "<group>"; };
+		94E84F671B7A7AF500AE6E20 /* perfhex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = perfhex.c; sourceTree = "<group>"; };
+		94E84F681B7A7AF500AE6E20 /* phash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = phash.c; sourceTree = "<group>"; };
+		94E84F691B7A7AF500AE6E20 /* phash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = phash.h; sourceTree = "<group>"; };
+		94E84F6A1B7A7AF500AE6E20 /* recycle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = recycle.c; sourceTree = "<group>"; };
+		94E84F6B1B7A7AF500AE6E20 /* recycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = recycle.h; sourceTree = "<group>"; };
+		94E84F6C1B7A7AF500AE6E20 /* standard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = standard.h; sourceTree = "<group>"; };
+		94FA5D8D1B38B211007244BB /* Bayinfer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Bayinfer; sourceTree = BUILT_PRODUCTS_DIR; };
+		94FA5D901B38B211007244BB /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		94FA5D8A1B38B211007244BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		94E84F611B7A7AF500AE6E20 /* makeHashTable */ = {
+			isa = PBXGroup;
+			children = (
+				94E84F621B7A7AF500AE6E20 /* lookupa.c */,
+				94E84F631B7A7AF500AE6E20 /* lookupa.h */,
+				94E84F641B7A7AF500AE6E20 /* makeHashTable.1 */,
+				94E84F651B7A7AF500AE6E20 /* perfect.c */,
+				94E84F661B7A7AF500AE6E20 /* perfect.h */,
+				94E84F671B7A7AF500AE6E20 /* perfhex.c */,
+				94E84F681B7A7AF500AE6E20 /* phash.c */,
+				94E84F691B7A7AF500AE6E20 /* phash.h */,
+				94E84F6A1B7A7AF500AE6E20 /* recycle.c */,
+				94E84F6B1B7A7AF500AE6E20 /* recycle.h */,
+				94E84F6C1B7A7AF500AE6E20 /* standard.h */,
+			);
+			name = makeHashTable;
+			path = ../../../HashTable/makeHashTable/makeHashTable;
+			sourceTree = "<group>";
+		};
+		94FA5D841B38B211007244BB = {
+			isa = PBXGroup;
+			children = (
+				94E84F611B7A7AF500AE6E20 /* makeHashTable */,
+				94FA5D8F1B38B211007244BB /* Bayinfer */,
+				94FA5D8E1B38B211007244BB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		94FA5D8E1B38B211007244BB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				94FA5D8D1B38B211007244BB /* Bayinfer */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		94FA5D8F1B38B211007244BB /* Bayinfer */ = {
+			isa = PBXGroup;
+			children = (
+				94E84F0C1B6A721700AE6E20 /* libnet_src.c */,
+				94E84F0B1B6A720F00AE6E20 /* listOfFunction.h */,
+				94FA5D901B38B211007244BB /* main.c */,
+			);
+			path = Bayinfer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		94FA5D8C1B38B211007244BB /* Bayinfer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 94FA5D941B38B211007244BB /* Build configuration list for PBXNativeTarget "Bayinfer" */;
+			buildPhases = (
+				94FA5D891B38B211007244BB /* Sources */,
+				94FA5D8A1B38B211007244BB /* Frameworks */,
+				94FA5D8B1B38B211007244BB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Bayinfer;
+			productName = Bayinfer;
+			productReference = 94FA5D8D1B38B211007244BB /* Bayinfer */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		94FA5D851B38B211007244BB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = Hossein;
+				TargetAttributes = {
+					94FA5D8C1B38B211007244BB = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+				};
+			};
+			buildConfigurationList = 94FA5D881B38B211007244BB /* Build configuration list for PBXProject "Bayinfer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 94FA5D841B38B211007244BB;
+			productRefGroup = 94FA5D8E1B38B211007244BB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				94FA5D8C1B38B211007244BB /* Bayinfer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		94FA5D891B38B211007244BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94E84F701B7A7AF500AE6E20 /* phash.c in Sources */,
+				94FA5D911B38B211007244BB /* main.c in Sources */,
+				94E84F6F1B7A7AF500AE6E20 /* perfhex.c in Sources */,
+				94E84F6D1B7A7AF500AE6E20 /* lookupa.c in Sources */,
+				94E84F0D1B6A721700AE6E20 /* libnet_src.c in Sources */,
+				94E84F6E1B7A7AF500AE6E20 /* perfect.c in Sources */,
+				94E84F711B7A7AF500AE6E20 /* recycle.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		94FA5D921B38B211007244BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		94FA5D931B38B211007244BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		94FA5D951B38B211007244BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"/Users/Hossein/Downloads/gsl-1.9/specfunc/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/blas/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/block/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/bspline/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/cblas/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/cdf/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/cheb/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/combination/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/complex/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/deriv/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/dht/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/diff/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/eigen/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/err/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/fft/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/fit/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/histogram/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/ieee-utils/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/integration/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/interpolation/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/linalg/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/matrix/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/min/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/monte/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/multifit/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/multimin/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/multiroots/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/ntuple/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/ode-initval/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/permutation/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/poly/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/qrng/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/randist/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/rng/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/roots/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/siman/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/sort/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/statistics/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/sum/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/sys/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/test/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/utils/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/vector/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/wavelet/.libs",
+				);
+				OTHER_LDFLAGS = (
+					"-lgsl",
+					"-lgslcblas",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		94FA5D961B38B211007244BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"/Users/Hossein/Downloads/gsl-1.9/specfunc/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/blas/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/block/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/bspline/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/cblas/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/cdf/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/cheb/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/combination/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/complex/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/deriv/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/dht/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/diff/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/eigen/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/err/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/fft/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/fit/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/histogram/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/ieee-utils/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/integration/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/interpolation/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/linalg/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/matrix/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/min/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/monte/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/multifit/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/multimin/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/multiroots/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/ntuple/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/ode-initval/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/permutation/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/poly/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/qrng/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/randist/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/rng/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/roots/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/siman/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/sort/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/statistics/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/sum/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/sys/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/test/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/utils/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/vector/.libs",
+					"/Users/Hossein/Downloads/gsl-1.9/wavelet/.libs",
+				);
+				OTHER_LDFLAGS = (
+					"-lgsl",
+					"-lgslcblas",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		94FA5D881B38B211007244BB /* Build configuration list for PBXProject "Bayinfer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94FA5D921B38B211007244BB /* Debug */,
+				94FA5D931B38B211007244BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		94FA5D941B38B211007244BB /* Build configuration list for PBXNativeTarget "Bayinfer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94FA5D951B38B211007244BB /* Debug */,
+				94FA5D961B38B211007244BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 94FA5D851B38B211007244BB /* Project object */;
+}
