@@ -35,7 +35,7 @@ Run Command:
 	make generateHash
 	
 Result:
-	the executable file "generateHash" will now exist
+	The executable file "generateHash" will now exist
 
 Usage:
 
@@ -54,6 +54,12 @@ Prepare Code:
   * learning_discrete_BayNet
 
 If you already have created the pathwaygraph file you should commento out the reaction_logic_to_factorgraph. The other two functions can be commented out based on if you want to do learning and/or inference. 
+
+Run Command:
+	make libnet
+	
+Result
+	The executable file "libnet" will now exist
 
 Usage:
 
