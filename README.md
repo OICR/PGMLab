@@ -19,25 +19,26 @@ There are three steps to compiling this tool:
 
 The GSL library is used by the libnet program. The make file will install gsl in a "external_lib/gsl" folder. This way you will be using the gsl-1.9 version of gsl with the code. 
 
-Run Command:  
+###Command
 
 	make gsl  
 	
-Result:  
+###Result
+
 	GSL will now be installed in the folder "external_lib/gsl"
 
 ##Install generateHash
 
 This tool is used to create a hash for the pathway you are using. If you change the pathway you are using you will have to re-run this tool and then re-install libnet. 
 
-Run Command:  
+###Command
 
 	make generateHash
 	
-Result:  
+###Result
 	The executable file "bin/generateHash" will now exist
 
-Usage:  
+###Usage
 
 	cd bin  
 	./generateHash <path to pathway file>  
@@ -49,27 +50,27 @@ Once the hash has been generated with the generateHash program you will be ready
 ###Prepare config file
 Using config/example.ini as a template specify where the files are that you would like to both have read in and written to file. I suggest creating a folder data folder in your desired location and place all files in this folder. 
 
-###Compiling libnet
+##Compiling libnet
 
-Commands:  
+###Command
 
 	cd net  
 	make  
 
-Result:
+###Result
 	The shared object "net/lib/libnet.so should now exist
 
-###Compiling C interface
+##Compiling C interface
 
-Command:  
+###Command
 
 	cd c_interface  
 	make  
 	
-Result:  
+###Result
 	The exacutable "bin/libnetc" should now exist
 
-Usage:
+###Usage
 
 	cd bin  
 	./libnetc --inifile=../config/example.ini --help  
