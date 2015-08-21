@@ -2,8 +2,8 @@
 
 ##Authors
 
-   Hossein Radfar 
-   Adam Wright 
+   - Hossein Radfar 
+   - Adam Wright 
 
 #System requirements
 This tool has been tested on OS X and Ubuntu 14.04
@@ -35,26 +35,42 @@ Run Command:
 	make generateHash
 	
 Result:
-	the executable file "generateHash" will now exist
+	The executable file "bin/generateHash" will now exist
 
 Usage:
 
+	cd bin
 	./generateHash <path to pathway file>
 
 ##Install libnet
 
 Once the hash has been generated with the generateHash program you will be ready to compile and run teh libnet program. 
 
-Prepare Code:
-1. Open to Bayinfer/Bayinfer/main.c
-2. Change file paths to the paths to your data
-3. There are three functions that you can have not run by commenting out
-  * reaction_logic_to_factorgraph
-  * doLBPinference
-  * learning_discrete_BayNet
+###Prepare config file
+Using config/example.ini as a template specify where the files are that you would like to both have read in and written to file. I suggest creating a folder data folder in your desired location and place all files in this folder. 
 
-If you already have created the pathwaygraph file you should commento out the reaction_logic_to_factorgraph. The other two functions can be commented out based on if you want to do learning and/or inference. 
+###Compiling libnet
+
+Commands:
+	cd net
+	make
+
+Result:
+	The shared object "net/lib/libnet.so should now exist
+
+###Compiling C interface
+
+Command:
+	cd c_interface
+	make
+	
+Result:
+	The exacutable "bin/libnetc" should now exist
 
 Usage:
-
-	./libnet
+	cd bin
+	create config file (using example.ini as template)
+	./libnetc --inifile=../config/example.ini --help
+	Provide customizations and select desired action with parametes
+	
+If you would like to run a new pathway you will need to rerun the generateHash program and then recompile the libnet program
