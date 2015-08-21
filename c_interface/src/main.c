@@ -30,76 +30,96 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
     char observed_data_filepath[200];
     char input4columns_filepath[200];
     char hyperparameters_filepath[200];
-    char result_posteriors_filepath[200];
-    char node_post_filepath[200];
+    char estimated_parameters_filepath[200];
+    char posterior_probabilities_filepath[200];
 
     ini_gets("files", "pairwise", "dummy", pairwise_filepath, sizearray(value), ini_filename);
     ini_gets("files", "pathway", "dummy", pathway_filepath, sizearray(value), ini_filename);
     ini_gets("files", "observed_data", "dummy", observed_data_filepath, sizearray(value), ini_filename);
     ini_gets("files", "input_four_columns", "dummy", input4columns_filepath, sizearray(value), ini_filename);
     ini_gets("files", "hyperparameters", "dummy", hyperparameters_filepath, sizearray(value), ini_filename);
-    ini_gets("files", "posteriors", "dummy", result_posteriors_filepath, sizearray(value), ini_filename);
-    ini_gets("files", "node_posterior_probabilities", "dummy", node_post_filepath, sizearray(value), ini_filename);
+    ini_gets("files", "estimated_parameters", "dummy", estimated_parameters_filepath, sizearray(value), ini_filename);
+    ini_gets("files", "posterior_probabilities", "dummy", posterior_probabilities_filepath, sizearray(value), ini_filename);
 
-
-    if ( strcmp(input4columns_filepath, "dummy") == 0 ) {
-          printf("input_four_columns file not found: %s\n", input4columns_filepath);
-          return 1;
-    }
-    if ( strcmp(pathway_filepath, "dummy") == 0 ) {
-          printf("pathway file not found: %s\n", pathway_filepath);
-          return 1;
-    }
-    if ( strcmp(observed_data_filepath, "dummy") == 0 ) {
-          printf("observed_data file not found\n", observed_data_filepath);
-          return 1;
-    }
-/* This will be added in later
-    if ( strcmp(hyperparameters_filepath, "dummy") == 0 ) {
-          printf("hyperparameters file not found\n");
-          return 1;
-    } 
-    if ( strcmp(result_posteriors_filepath, "dummy") == 0 ) {
-          printf("posteriors file not found\n");
-          return 1;
-    } */
-    if ( strcmp(node_post_filepath, "dummy") == 0 ) {
-          printf("node_posterior_probabilities file not found: %s\n", node_post_filepath);
-          return 1;
-    }
- 
     if (g_count > 0) {
-        puts("Generating factorgraph\n");
+        printf("Generating factorgraph with number of states %d\n", number_of_states);
+
+        if ( strcmp(pathway_filepath, "dummy") == 0 ) {
+            printf("Pathway filepath not specified in config\n");
+            return 1;
+        }
+        if ( strcmp(input4columns_filepath, "dummy") == 0 ) {
+            printf("Input4column filepath not specified in config\n");
+            return 1;
+        }
+
         reaction_logic_to_factorgraph(input4columns_filepath, pathway_filepath, number_of_states);
 
-        int exit_code = 0; //generate_hash_files(pathway_filepath, pairwise_filepath);
+        int exit_code = 0;
         if (exit_code != 0) {
            printf("Failed to generate factorgraph (error_code: %d)\n", exit_code);
         }
         else {
+           printf("Factor gragh has been output into the following pathway file: %s\n", pathway_filepath); 
            printf("Generated hash files\n");
         }
     }
     if (l_count > 0) {
-         printf("Running Learning with Max iterations %d\n", em_max_iterations);
-         learning_discrete_BayNet(input4columns_filepath, pathway_filepath, observed_data_filepath, node_post_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag);
-         int exit_code = 0; // learning(&pairwise_filepath, &pathway_filepath, &observed_data_filepath, &hyperparameters_filepath, &result_posteriors_filepath, &node_post_filepath, em_max_iterations, em_log_likelihood_change_limit, em_number_of_training_samples, number_of_states);
-         if (exit_code != 0) {
-             printf("Learning failed (error_code: %d)\n", exit_code);
-         } 
-         else {
-             printf("Learning completed\n");
-         }
+        printf("Running Learning with Max iterations %d, number of states %d, and log likelilhood change limit %d\n", em_max_iterations, number_of_states, em_log_likelihood_change_limit);
+
+        if ( strcmp(input4columns_filepath, "dummy") == 0 ) {
+            printf("Input4column filepath not specified in config\n");
+            return 1;
+        }
+        if ( strcmp(pathway_filepath, "dummy") == 0 ) {
+            printf("Pathway filepath not specified in config\n");
+            return 1;
+        }
+        if ( strcmp(observed_data_filepath, "dummy") == 0 ) {
+            printf("Observed data filepath not specified in config\n");
+            return 1;
+        }
+        if ( strcmp(estimated_parameters_filepath, "dummy") == 0 ) {
+            printf("Estimated Parameters filepath not specified in config\n");
+            return 1;
+        }
+
+        learning_discrete_BayNet(input4columns_filepath, pathway_filepath, observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag);
+        int exit_code = 0; 
+        if (exit_code != 0) {
+            printf("Learning failed (error_code: %d)\n", exit_code);
+        } 
+        else {
+            printf("Estimated Parameters habe been writtent to teh following file: %s\n", estimated_parameters_filepath);
+            printf("Learning completed\n");
+        }
  
     }
     if (i_count > 0) {
-        puts("Running Inference\n");
-        doLBPinference(pathway_filepath, observed_data_filepath, node_post_filepath, number_of_states);
-        int error_code = 0;//lbp_inference(&pathway_filepath, &observed_data_filepath, &node_post_filepath, number_of_states);
+        printf("Running Inference with number of states %d\n", number_of_states);
+
+        if ( strcmp(pathway_filepath, "dummy") == 0 ) {
+            printf("Pathway filepath not specified in config\n");
+            return 1;
+        }
+        if ( strcmp(observed_data_filepath, "dummy") == 0 ) {
+            printf("Observed data filepath not specified in config\n");
+            return 1;
+        }
+        if ( strcmp(posterior_probabilities_filepath, "dummy") == 0 ) {
+            printf("Posterior probabilities filepath not specified in config\n");
+            return 1;
+        }
+
+
+
+        doLBPinference(pathway_filepath, observed_data_filepath, posterior_probabilities_filepath, number_of_states);
+        int error_code = 0;
         if (error_code != 0) {
              printf("Inference failed with error code %d\n", error_code);
         }
         else {
+             printf("Posterior probabilities have been written to the following file: %s\n", posterior_probabilities_filepath);
              printf("Inference completed\n");
         }
     }
@@ -119,7 +139,7 @@ int main(int argc, char *argv[]) {
         g = arg_lit0("g", "generate-pathway", "Generate factorgraph from reaction logic"),
         i = arg_lit0("i", "inference", "Run inference on dataset"),
         l = arg_lit0("l", "learning", "Run learning on dataset"),
-        number_of_states = arg_int0("nm", "number-of-states", NULL, "Number of states for pathway (default is 3)"),
+        number_of_states = arg_int0("ns", "number-of-states", NULL, "Number of states for pathway (default is 3)"),
         em_max_iterations = arg_int0("k", "em-max-iterations", NULL , "Maximum number of iterations for expectation maximization (default is 4000)"),
         em_number_of_training_samples = arg_int0("ts", "training-samples", NULL, "Number of training samples used in expectation mimization (default 400)"),
         em_log_likelihood_change_limit = arg_dbl0("cl", "log-likelihood-change-limit", NULL, "Loglikeliihood change limit for expectation maximization (default 1e-5)"),
