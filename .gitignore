@@ -6,6 +6,12 @@ external_lib/gsl-*
 #generated hash files
 makeHashTable/phash.*
 
+#binaries
+out/
+bin/
+lib/
+
+
 # Object files
 *.o
 

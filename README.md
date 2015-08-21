@@ -2,8 +2,8 @@
 
 ##Authors
 
-   Hossein Radfar 
-   Adam Wright 
+   - Hossein Radfar 
+   - Adam Wright 
 
 #System requirements
 This tool has been tested on OS X and Ubuntu 14.04
@@ -11,50 +11,65 @@ This tool has been tested on OS X and Ubuntu 14.04
 #Running tool
 
 There are three steps to compiling this tool:
-1. Install GSL Library
-2. Install generateHash
-3. Install libnet  (main tool)
 
-## Install GSL Library
+1. Install GSL Library  
+2. Install generateHash  
+3. Install libnet  (main tool)  
+
+## Install GSL Library and generateHash
+
+###GSL
 
 The GSL library is used by the libnet program. The make file will install gsl in a "external_lib/gsl" folder. This way you will be using the gsl-1.9 version of gsl with the code. 
 
-Run Command:
-
-	make gsl
-	
-Result:
-	GSL will now be installed in the folder "external_lib/gsl"
-
-##Install generateHash
+### generateHash
 
 This tool is used to create a hash for the pathway you are using. If you change the pathway you are using you will have to re-run this tool and then re-install libnet. 
 
-Run Command:
+###Command
 
-	make generateHash
+	make 
 	
-Result:
-	the executable file "generateHash" will now exist
+###Result
 
-Usage:
+	GSL will now be installed in the folder "external_lib/gsl" and the program "bin/generateHash" will exist
 
-	./generateHash <path to pathway file>
+###Usage: generateHash
+
+	cd bin  
+	./generateHash <path to pathway file>  
 
 ##Install libnet
 
 Once the hash has been generated with the generateHash program you will be ready to compile and run teh libnet program. 
 
-Prepare Code:
-1. Open to Bayinfer/Bayinfer/main.c
-2. Change file paths to the paths to your data
-3. There are three functions that you can have not run by commenting out
-  * reaction_logic_to_factorgraph
-  * doLBPinference
-  * learning_discrete_BayNet
+###Prepare config file
+Using config/example.ini as a template specify where the files are that you would like to both have read in and written to file. I suggest creating a folder data folder in your desired location and place all files in this folder. 
 
-If you already have created the pathwaygraph file you should commento out the reaction_logic_to_factorgraph. The other two functions can be commented out based on if you want to do learning and/or inference. 
+##Compiling libnet
 
-Usage:
+###Command
 
-	./libnet
+	cd net  
+	make  
+
+###Result
+	The shared object "net/lib/libnet.so should now exist
+
+##Compiling C interface
+
+###Command
+
+	cd c_interface  
+	make  
+	
+###Result
+	The exacutable "bin/libnetc" should now exist
+
+###Usage
+
+	cd bin  
+	./libnetc --inifile=../config/example.ini --help  
+	Provide customizations and select desired action with parametes  
+	
+If you would like to run a new pathway you will need to rerun the generateHash program and then recompile the libnet program
