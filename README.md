@@ -16,30 +16,25 @@ There are three steps to compiling this tool:
 2. Install generateHash  
 3. Install libnet  (main tool)  
 
-## Install GSL Library
+## Install GSL Library and generateHash
+
+###GSL
 
 The GSL library is used by the libnet program. The make file will install gsl in a "external_lib/gsl" folder. This way you will be using the gsl-1.9 version of gsl with the code. 
 
-###Command
-
-	make gsl  
-	
-###Result
-
-	GSL will now be installed in the folder "external_lib/gsl"
-
-##Install generateHash
+### generateHash
 
 This tool is used to create a hash for the pathway you are using. If you change the pathway you are using you will have to re-run this tool and then re-install libnet. 
 
 ###Command
 
-	make generateHash
+	make 
 	
 ###Result
-	The executable file "bin/generateHash" will now exist
 
-###Usage
+	GSL will now be installed in the folder "external_lib/gsl" and the program "bin/generateHash" will exist
+
+###Usage: generateHash
 
 	cd bin  
 	./generateHash <path to pathway file>  
