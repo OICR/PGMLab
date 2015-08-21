@@ -11,9 +11,10 @@ This tool has been tested on OS X and Ubuntu 14.04
 #Running tool
 
 There are three steps to compiling this tool:
-1. Install GSL Library
-2. Install generateHash
-3. Install libnet  (main tool)
+
+1. Install GSL Library  
+2. Install generateHash  
+3. Install libnet  (main tool)  
 
 ## Install GSL Library
 
