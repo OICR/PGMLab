@@ -60,11 +60,14 @@ INCLUDE_GSL = -L../external_lib/gsl/lib -I../external_lib/gsl/include -lgsl -lgs
 
 all: $(TARGET) 
 
-$(TARGET):
+$(TARGET): folders
 	$(CC) $(CCFLAGS) $(LIBDIRS) -o $(TARGET_PATH) $(SOURCES) $(CFLAGS) $(SOFLAGS) -Iinclude -I../net/include -I../resources/make_hash_table/include $(INCLUDE_GSL)
 
 clean:
 	rm -f $(TARGET) $(OBJECTS) 
+
+folders: 
+	mkdir -p ../bin \
 
 test-inference1:
 	./libnetc -i -f test.ini --number-of-states 2 \

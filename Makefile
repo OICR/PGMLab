@@ -42,6 +42,7 @@ gsl:
 	make install; 
 
 generateHash:
+	mkdir -p bin; \
 	$(CC) $(CCFLAGS) -o bin/generateHash resources/hash_graph_node_ids/src/main.c \
 	resources/make_hash_table/src/perfhex.c \
 	resources/make_hash_table/src/lookupa.c \
