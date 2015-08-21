@@ -1,0 +1,83 @@
+SHELL	= /bin/sh
+CC	= gcc
+CWD	= $(shell pwd)
+ODIR	= obj
+
+GSL_VERSION = 1.9
+
+CFLAGS	= -fPIC -g
+
+ifeq ($(OS),Windows_NT)
+    CCFLAGS += -D WIN32
+    ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
+        CCFLAGS += -D AMD64
+    endif
+    ifeq ($(PROCESSOR_ARCHITECTURE),x86)
+        CCFLAGS += -D IA32
+    endif
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux)
+        CCFLAGS += -D LINUX
+    endif
+    ifeq ($(UNAME_S),Darwin)
+        CCFLAGS += -D OSX
+    endif
+    UNAME_P := $(shell uname -p)
+    ifeq ($(UNAME_P),x86_64)
+        CCFLAGS += -D AMD64
+    endif
+    ifneq ($(filter %86,$(UNAME_P)),)
+        CCFLAGS += -D IA32
+    endif
+    ifneq ($(filter arm%,$(UNAME_P)),)
+        CCFLAGS += -D ARM
+    endif
+endif
+
+LDFLAGS = -shared
+
+TARGET		= libnet.so
+TARGET_PATH	= $(shell pwd)/lib/$(TARGET)
+
+SOURCES	=	src/net.c \
+		../resources/make_hash_table/src/perfect.c \
+		../resources/make_hash_table/src/phash.c \
+		../resources/make_hash_table/src/lookupa.c \
+		../resources/make_hash_table/src/recycle.c \
+		../resources/make_hash_table/src/perfhex.c 
+
+_OBJECTS = net.o perfect.o phash.o lookupa.o recycle.o perfhex.o 
+OBJECTS  = $(patsubst %,$(ODIR)/%,$(_OBJECTS))
+
+INCLUDE_GSL = -L../external_lib/gsl/lib -I../external_lib/gsl/include -lgsl -lgslcblas 
+
+all: $(TARGET_PATH)
+
+$(TARGET_PATH): net.o perfect.o phash.o lookupa.o recycle.o perfhex.o
+	$(CC) $(CCFLAGS) $(CFLAGS) -o $(TARGET_PATH) \
+	$(OBJECTS) \
+	$(LDFLAGS) -lm -w
+
+net.o: src/net.c 
+	$(CC) -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include 
+
+perfect.o: ../resources/make_hash_table/src/perfect.c
+	$(CC) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w
+
+phash.o: ../resources/make_hash_table/src/phash.c
+	$(CC) -c ../resources/make_hash_table/src/phash.c -o obj/phash.o -I../resources/make_hash_table/include -w
+
+lookupa.o: ../resources/make_hash_table/src/lookupa.c
+	$(CC) -c ../resources/make_hash_table/src/lookupa.c -o obj/lookupa.o -I../resources/make_hash_table/include -w
+
+recycle.o: ../resources/make_hash_table/src/recycle.c
+	$(CC) -c ../resources/make_hash_table/src/recycle.c -o obj/recycle.o -I../resources/make_hash_table/include -w
+
+perfhex.o: ../resources/make_hash_table/src/perfhex.c
+	$(CC) -c ../resources/make_hash_table/src/perfhex.c -o obj/perfhex.o -I../resources/make_hash_table/include -w
+
+
+clean:
+	rm -f $(TARGET_PATH) ; \
+	rm -f $(OBJECTS);
