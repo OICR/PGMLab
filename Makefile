@@ -33,7 +33,7 @@ else
 endif
 
 
-all: gsl hash_graph_node_ids
+all: gsl generateHash
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
