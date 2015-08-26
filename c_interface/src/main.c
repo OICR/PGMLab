@@ -60,17 +60,13 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
            printf("Failed to generate factorgraph (error_code: %d)\n", exit_code);
         }
         else {
-           printf("Factor gragh has been output into the following pathway file: %s\n", pathway_filepath); 
-           printf("Generated hash files\n");
+           printf("\tFactorgragh has been output into the following pathway file: %s\n", pathway_filepath); 
+           printf("\tPathway generation completed\n\n");
         }
     }
     if (l_count > 0) {
-        printf("Running Learning with Max iterations %d, number of states %d, and log likelilhood change limit %d\n", em_max_iterations, number_of_states, em_log_likelihood_change_limit);
+        printf("Running Learning with Max iterations %d, number of states %d, and log likelilhood change limit %e\n", em_max_iterations, number_of_states, em_log_likelihood_change_limit);
 
-        if ( strcmp(input4columns_filepath, "dummy") == 0 ) {
-            printf("Input4column filepath not specified in config\n");
-            return 1;
-        }
         if ( strcmp(pathway_filepath, "dummy") == 0 ) {
             printf("Pathway filepath not specified in config\n");
             return 1;
@@ -84,14 +80,14 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
             return 1;
         }
 
-        learning_discrete_BayNet(input4columns_filepath, pathway_filepath, observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag);
+        learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag);
         int exit_code = 0; 
         if (exit_code != 0) {
             printf("Learning failed (error_code: %d)\n", exit_code);
         } 
         else {
-            printf("Estimated Parameters habe been writtent to teh following file: %s\n", estimated_parameters_filepath);
-            printf("Learning completed\n");
+            printf("\tEstimated Parameters habe been writtent to teh following file: %s\n", estimated_parameters_filepath);
+            printf("\tLearning completed\n\n");
         }
  
     }
@@ -111,16 +107,14 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
             return 1;
         }
 
-
-
         doLBPinference(pathway_filepath, observed_data_filepath, posterior_probabilities_filepath, number_of_states);
         int error_code = 0;
         if (error_code != 0) {
              printf("Inference failed with error code %d\n", error_code);
         }
         else {
-             printf("Posterior probabilities have been written to the following file: %s\n", posterior_probabilities_filepath);
-             printf("Inference completed\n");
+             printf("\tPosterior probabilities have been written to the following file: %s\n", posterior_probabilities_filepath);
+             printf("\tInference completed\n");
         }
     }
     return 0;
@@ -142,7 +136,7 @@ int main(int argc, char *argv[]) {
         number_of_states = arg_int0("ns", "number-of-states", NULL, "Number of states for pathway (default is 3)"),
         em_max_iterations = arg_int0("k", "em-max-iterations", NULL , "Maximum number of iterations for expectation maximization (default is 4000)"),
         em_number_of_training_samples = arg_int0("ts", "training-samples", NULL, "Number of training samples used in expectation mimization (default 400)"),
-        em_log_likelihood_change_limit = arg_dbl0("cl", "log-likelihood-change-limit", NULL, "Loglikeliihood change limit for expectation maximization (default 1e-5)"),
+        em_log_likelihood_change_limit = arg_dbl0("cl", "log-likelihood-change-limit", NULL, "Loglikeliihood change limit for expectation maximization (default 1e-3)"),
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
@@ -157,7 +151,7 @@ int main(int argc, char *argv[]) {
     /* set any command line default values prior to parsing */
     em_max_iterations->ival[0] = 4000;
     em_number_of_training_samples->ival[0] = 400;
-    em_log_likelihood_change_limit->dval[0] = 1e-5;
+    em_log_likelihood_change_limit->dval[0] = 1e-3;
     number_of_states->ival[0] = 3; 
 
     /* verify the argtable[] entries were allocated sucessfully */

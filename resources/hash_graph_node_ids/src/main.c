@@ -49,7 +49,7 @@ int main(int argc, char *argv[] )
 
             char input4columns[20000];
             strcpy(input4columns, argv[1]);
-      //      char input4columns[20000]= "/Users/Hossein/Documents/MATLAB/work/KEGG_parser/reaction_logic_pathways/JE_Network.txt";
+
             /*read name of nodes and hash them*/
             hash_graph_node_IDs(input4columns);
         }

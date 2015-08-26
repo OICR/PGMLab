@@ -20,9 +20,6 @@ void hash_graph_node_IDs(char *readreactionlogicpathways)
     const char delims[2] = "\t";
     char *temp;
     
-    
-        
-    
     // read the node name and store in an array
     FILE *file = fopen(readreactionlogicpathways, "r");
     if (file == NULL)
@@ -42,50 +39,34 @@ void hash_graph_node_IDs(char *readreactionlogicpathways)
     
     fgets(buf,maxLen,file);    /* second line is empty*/
     
-
-    
-    
     k = 0;
     kk = 0;
-    
     while ((fgets(buf,maxLen,file)) != NULL)
     {
-        
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-        
-        
         temp = strtok(buf, delims);
         i = 0; /*  we need the second column (i.e. i==1) */
         while (temp != NULL)
         {
-            
             if(i == 0 || i == 1 ) /* read first and second column; child and parent nodes*/
             {
                 targetsource[kk] = malloc((strlen(temp)+1)*sizeof(char));
                 
                 strcpy(targetsource[kk],temp) ;
-                printf("%s\n",temp);
                 kk++;
             }
-            
             temp = strtok(NULL, delims);
-            
             i++;
-            
         }
-        
-        
     }
     
     fclose(file); /* reset the fgets to the begining of the file*/
     
     Nv = internal_uniq(targetsource,2*Ne); /* unique list of target and source nodes;  Nv: # of variable node  */
     
-    
     mphash(targetsource,Nv); /* hash the node lists*/
     
-    
-   for(i=0;i<Nv;i++)
+    for(i=0;i<Nv;i++)
         free(targetsource[i]);
 }
 
@@ -104,11 +85,11 @@ int internal_cstring_cmp(const void *a, const void *b)
 //http://rosettacode.org/wiki/Remove_duplicate_elements#Sorting_method
 int internal_uniq(char *a[], int len)
 {
-    int i, j;
-    
+    int i, j;    
     qsort(a, len, (size_t) sizeof(char*), internal_cstring_cmp);
     for (i = j = 0; i < len; i++)
         if (strcmp(a[i],a[j])) a[++j] = a[i];
+
     return j + 1;
 }
 

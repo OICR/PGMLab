@@ -14,8 +14,8 @@
 #include <math.h>
 #include <sys/time.h>
 
-#ifndef listOfFunction
-#define listOfFunction
+#ifndef net
+#define net
 #include "perfect.h"
 
 
@@ -98,7 +98,7 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 
 void hash_graph_node_IDs(char *readreactionlogicpathways);
 
-void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,char *nodepost, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag);
+void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag);
 
 
 #endif

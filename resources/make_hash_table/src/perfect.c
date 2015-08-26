@@ -998,52 +998,6 @@ int numkeys;
         ++*nkeys;
     }
     redel(textroot, mytext);
-    
-
-    
-   // FILE * pFile;
-    //pFile = fopen (filename , "r");
-    
-    /*
-    
-    while (fgets(mytext, MAXKEYLEN, pFile))
-    {
-        delEoLine(mytext);
-        mykey = (key *)renew(keyroot);
-        if (form->mode == AB_HM)
-        {
-            sscanf(mytext, "%x %x ", &mykey->a_k, &mykey->b_k);
-        }
-        else if (form->mode == ABDEC_HM)
-        {
-            sscanf(mytext, "%d %d ", &mykey->a_k, &mykey->b_k);
-        }
-        else if (form->mode == HEX_HM)
-        {
-            sscanf(mytext, "%x ", &mykey->hash_k);
-        }
-        else if (form->mode == DECIMAL_HM)
-        {
-            sscanf(mytext, "%d ", &mykey->hash_k);
-        }
-        else
-        {
-            mykey->name_k = (ub1 *)mytext;
-            
-            mytext = (char *)renew(textroot);
-            mykey->len_k  = (ub4)(strlen((char *)mykey->name_k));
-        }
-        mykey->next_k = *keys;
-        *keys = mykey;
-        ++*nkeys;
-    }
-    redel(textroot, mytext);
-    fclose(pFile);
-     
-     */
-    
-    
-
    
 }
 
@@ -1056,7 +1010,6 @@ ub4  salt;
 {
     FILE *f;
     f = fopen("../resources/make_hash_table/include/phash.h", "w");
-    //f = fopen("./phash.c", "w");
     fprintf(f, "/* Perfect hash definitions */\n");
     fprintf(f, "#ifndef STANDARD\n");
     fprintf(f, "#include \"standard.h\"\n");
@@ -1108,7 +1061,6 @@ hashform *form;                                           /* user directives */
     ub4   i;
     FILE *f;
     f = fopen("../resources/make_hash_table/src/phash.c", "w");
-   // f = fopen("./phash.c", "w");
 
     fprintf(f, "/* table for the mapping for the perfect hash */\n");
     fprintf(f, "#ifndef STANDARD\n");
@@ -1248,7 +1200,7 @@ int numkeys;
     ub4       scramble[SCRAMBLE_LEN];           /* used in final hash function */
     char      buf[10][80];                        /* buffer for generated code */
     char     *buf2[10];                             /* also for generated code */
-    
+
     /* set up memory sources */
     textroot = remkroot((size_t)MAXKEYLEN);
     keyroot  = remkroot(sizeof(key));
@@ -1269,18 +1221,17 @@ int numkeys;
 
     /* generate the phash.h file */
         make_h(blen, smax, nkeys, salt);
-        printf("Wrote phash.h\n");
+     //   printf("Wrote phash.h\n");
         
     /* generate the phash.c file */
         make_c(tab, smax, blen, scramble, &final, form);
-        printf("Wrote phash.c\n");
+    //    printf("Wrote phash.c\n");
         
     /* clean up memory sources */
         refree(textroot);
         refree(keyroot);
         free((void *)tab);
-        printf("Cleaned up\n");
-        }
+}
 
 
 /* Describe how to use this utility */
