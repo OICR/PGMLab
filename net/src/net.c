@@ -2559,9 +2559,6 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
         // printf(" %d %s\n",i,keys[i]);
     }
     
-    
-    
-    
     /* allocate memory for pGraph struct which contains message info*/
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
     
@@ -2577,17 +2574,12 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
     
     int** cpt = makeCPTindex(pGraph,Nf,Nv,num_state);
     
-    
-    
     /* allocate memory for factorarray and pGraph.beliefs  */
     
     double** factorarray  =  (double **)malloc(Nf*sizeof(*factorarray));
     double** factorarray0  = (double **)malloc(Nf*sizeof(*factorarray0));
     double** oldfactorarray0  = (double **)malloc(Nf*sizeof(*oldfactorarray0));
     double** alpha  = (double **)malloc(Nf*sizeof(*alpha));
-    
-    
-    
     
     
     for(i = 0;i < Nf;i++)
@@ -2597,9 +2589,6 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
         oldfactorarray0[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**oldfactorarray0));
         alpha[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**alpha));
     }
-    
-    
-    
     
     
     /* the model parameters passed to factorattay0 once . it  should be noted that factorarray0 does not change but factorattay changes in loop for each input   */
@@ -2661,9 +2650,6 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
     /* to observe the changes of conditional probability values in each iteration*/
     
     
-    
-    
-    
     /* allocate two log likelihood vectors for the train and test phases*/
     double* LogLikelihood = (double *) malloc(max_num_repeat*sizeof(double));
     
@@ -2674,10 +2660,6 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
         LogLikelihood[i] = 0;
         
     }
-    
-    
-    
-    
     
     /* open and read the file to find number of observed data and samples*/
     FILE *file = fopen(obs_data, "r");
@@ -2773,15 +2755,9 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
                 //printf("%d %d %d\n",m,visibleIds[k],visible_values[k]);
             }
             
-            
-            
-            
-            
             /* modify factors according to observed nodes states */
             
             inputBasedModifiedCPT(pGraph,factorarray,visible_values,visibleIds,cpt,Nv,num_visibles,1);
-            
-            
             
             /* do inference using LPB */
             
@@ -2796,13 +2772,8 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
             iteration = LogRoundRobinSplashLBP(factorarray,cpt,pGraph,u,u_old,num_state, N,Nv,num_state*lenMsgVec);
             //printf("Number of LPB iterations for %d th input data is:   %d\n", m, iteration);
             
-            
-            
-            
             free(visible_values);
             free(visibleIds);
-            
-            
             
             /* sum up joint beliefs (factor probabilities) obtained from ech configuration of obersved data  */
             /* this generates expected sufficient statistics (page 872 Koller book)*/
@@ -2817,16 +2788,10 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
                     // printf("%d %f %f\n",m,factorarray[i][k],pGraph[i+Nv].beliefs[k]);
                 }
                 //printf("-----------------------\n");
-                
             }
-            
-            
         } /* end of m loop for each set of observed data*/
         
-        
-        
         /* the maximization step of the EM algorithm  */
-        
         
         /* compute the expected log likelihood (page 883, see Eq 19.5 Koller book) */
         for(i = 0;i < Nf;i++)
@@ -2838,7 +2803,6 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
                 
             }
         }
-        
         
         /* if you want to do MAP estimate instead of ML (see EQ 10.32  and  11.60 of Murphy's book)*/
         if(MAPflag)
@@ -2853,9 +2817,7 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
                     
                 }
                 //printf("----------------\n");
-                
             }
-            
         }
         
         /* convert joint beliefs to conditional probability, that is, p(x1,x2)--> p(x1|x2); it is a local normalization*/
@@ -2867,9 +2829,7 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
             // printf("-----------------------\n");
         }
         
-        
         /* calculate changes in parameters of each factor after an update*/
-        
         
         for(i = 0;i < Nf;i++)
         {
@@ -2923,22 +2883,34 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
     }
     
     
-    /* wirte the results in this file */
-    for(i = 0;i < Nf;i++)
+    /* write according to format*/
+    fprintf(pm,"%d\n",Nv); /* number of factor*/
+    fprintf(pm,"\n");    /* space*/
+    
+    for(i=0;i<Nv;i++)
     {
+        fprintf(pm,"%d\n",pGraph[i+Nv].numAdj);//
+        
+        for(k=0;k<pGraph[i+Nv].numAdj;k++)
+            fprintf(pm,"%s ",keys[pGraph[i+Nv].adjNodes[k]]);
+        
+        fprintf(pm,"\n");    /* space*/
+        
+        for(k=0;k<pGraph[i+Nv].numAdj;k++)
+            fprintf(pm,"%d ",num_state);
+        
+        fprintf(pm,"\n");    /* space*/
+        
+        fprintf(pm,"%d\n",(int)pow(num_state,pGraph[i+Nv].numAdj));
+        
+        
         for(k=0;k<pGraph[i+Nv].numComb;k++)
-        {
-            fprintf(pm,"%f\n",exp(factorarray0[i][k]));
-            // printf("%f\n",exp(factorarray0[i][k]));
-        }
-        // printf("-------\n");
+            fprintf(pm,"%d %f\n",k,exp(factorarray0[i][k]));
+    
+        fprintf(pm,"\n");    /* space*/
     }
     
-    
-    
     fclose(pm);
-    
-    
     
     /* free  allocated arrays */
     if(1)

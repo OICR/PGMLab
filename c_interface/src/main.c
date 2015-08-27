@@ -86,7 +86,7 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
             printf("Learning failed (error_code: %d)\n", exit_code);
         } 
         else {
-            printf("\tEstimated Parameters habe been writtent to teh following file: %s\n", estimated_parameters_filepath);
+            printf("\tEstimated Parameters habe been writtent to the following file: %s\n", estimated_parameters_filepath);
             printf("\tLearning completed\n\n");
         }
  
