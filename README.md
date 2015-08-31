@@ -91,14 +91,12 @@ In order to call libnet from the R Contole you will need to create and load the 
 ####Result
 	the file lib/libnetR.so should now exist
 
-###Calling LibNetR functions from R Console
-
-####Loading shared object:
+###Loading shared object:
 	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnetR.so")
 		
 ####Call available functions:
 
-All filepaths are full file paths and the rest of the variables should be supplied as integer values. 
+All filepaths can be either full or abolute paths and the rest of the variables should be supplied as integer values. 
 
 The three available functions are:
 
