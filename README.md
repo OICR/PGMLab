@@ -1,5 +1,9 @@
 # LibNet
 
+Libnet is used for performing both inference and learning on graphical probabilistic models. The tool has been written in the programming language C, in order to have the tool run as fast as possible. The main program gets compiled into a a shared object. In order to run this program the user will have to either create an interface or use one of the ones that have been previously created. This repository contains a command line interface and a R programming interface. 
+
+Data is provided to the program through tab delimited files (described later in this document) and results outputed to files as well. With the commandn line interface, the paths to the files are all specified to the user within a configuration file and processing parameters are specified through flags. With the R interface, both the the file paths and processing parameters can be supplied through function parameters. 
+
 ##Authors
 
    - Hossein Radfar 
@@ -73,3 +77,53 @@ Using config/example.ini as a template specify where the files are that you woul
 	Provide customizations and select desired action with parametes  
 	
 If you would like to run a new pathway you will need to rerun the generateHash program and then recompile the libnet program
+
+##R interface
+
+In order to call libnet from the R Contole you will need to create and load the R LibNet shared object. 
+
+###Compile r interface (shared object)
+
+####Command
+	cd r_package/libnetR
+	make
+
+####Result
+	the file lib/libnetR.so should now exist
+
+###Loading shared object:
+	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnetR.so")
+		
+####Call available functions:
+
+All filepaths can be either full or abolute paths and the rest of the variables should be supplied as integer values. 
+
+The three available functions are:
+
+	r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP number_of_states_) 
+	
+	r_learning_discrete_BayNet(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP estimated_parameters_filepath_, SEXP number_of_states_, SEXP em_max_iterations_, SEXP em_log_likelihood_change_limit_, SEXP map_flag_) 
+	
+	r_doLBPinference(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP posterior_probabilities_filepath_, SEXP number_of_states_) 
+	
+	
+###Calling LibNet functions from R
+
+####Loading shared object:
+	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnet.so")
+		
+####Call available functions:
+
+All filepaths are full file paths and the rest of the variables should be supplied as integer values. Functions will return 0 upon success and error codes otherwise. 
+
+#####Reaction Logic to Factorgraph
+	.Call("reaction_logic_to_factorgraph", "../../test/data1/JE_Network.txt", "../../test/data1/JE_Network_FG.txt",3)
+	
+####Learning
+	.Call("r_learning_discrete_BayNet", "../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt", "../../test/data1/estimated_parameters.txt", 3, 4000, 1e-3, 1)
+		
+####Inference
+	.Call("r_doLBPinference","../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt","../../test/data1/nodepost.txt", 3)
+	
+	
+

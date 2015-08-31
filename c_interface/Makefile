@@ -67,24 +67,4 @@ clean:
 	rm -f $(TARGET) $(OBJECTS) 
 
 folders: 
-	mkdir -p ../bin \
-
-test-inference1:
-	./libnetc -i -f test.ini --number-of-states 2 \
-	cmp -s $(TEST_I_1_OUTPUT_FILE) $(TEST_I_1_VALIDATED_OUTPUT_FILE); \
-	RETVAL=$$?; \
-	if [ $$RETVAL -eq 0 ]; then \
-		echo "SAME - PASSED OUTPUT TEST"; \
-	else \
-		echo "NOT SAME -FAILED OUTPUT TEST"; \
-	fi
-
-test-inference2:
-	./libnetc -i -f test2.ini --number-of-states 2; \
-	cmp -s $(TEST_I_2_OUTPUT_FILE) $(TEST_I_2_VALIDATED_OUTPUT_FILE); \
-	RETVAL=$$?; \
-	if [ $$RETVAL -eq 0 ]; then \
-		echo "SAME - PASSED OUTPUT TEST"; \
-	else \
-		echo "NOT SAME -FAILED OUTPUT TEST"; \
-	fi
+	mkdir -p ../bin 

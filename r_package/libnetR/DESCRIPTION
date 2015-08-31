@@ -1,0 +1,17 @@
+Package: libnetR
+Type: Package
+Version: 1.0
+Date: 2015-05-01
+Title: Probablistic Network Learning and Inference
+Authors@R: c(person("Adam", "Wright", role = c("aut", "cre"), 
+                        email = "adam.j.wright82@gmail.com"),
+             person("Hossein", "Radfar", role = c("aut"), 
+                     email = "hradfar@oicr.on.ca"))
+Author: Adam Wright [aut, cre], Hossein Radfar [aut]
+Maintainer: Adam Wright <adam.j.wright82@gmail.com>
+Depends: R (>= 3.0.2)
+Description: This is the R interface to LibNet. LibNet Consists of a c library that can be used for learning and inference on binary baysean probabilistic networks. 
+License: GPL (>= 2)
+LazyLoad: yes
+URL: http://www.r-project.org, http://github.com/a8wright/libnet
+NeedsCompilation: yes

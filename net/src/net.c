@@ -75,30 +75,19 @@ int readCharFile(char * lines[],char *fileToRead,int maxbufflen)
     
     while ((fgets(buf,maxbufflen,fp)) != NULL)
     {
-        
-        
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-        
         temp = strtok(buf, delims);
         
         while (temp != NULL)
         {
-            
-            //printf("%s\n", temp);
-            
             lines[datalen] = malloc((strlen(temp)+1)*sizeof(char));
             
-            
             strcpy(lines[datalen],temp) ;
-            
-            
             
             datalen++;
             
             temp = strtok(NULL, delims);
         }
-        
-        
     }
     
     return(datalen);
@@ -305,7 +294,6 @@ int ExtractNonUniqNodelist(char *filename,char  ** nodeName)
         if(i == 4)
         {
             K= atoi(buf);
-            // printf("%d\n",K);
             for(h=0;h< K;h++)
                 fgets(buf,maxLen,file);
             
@@ -532,7 +520,6 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         
         Nf =  atoi(buf);//first element is the number of factors
         
-        //printf("%d\n",  Nf);
     }
     
     fclose(file1);
@@ -567,9 +554,7 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         for (k=0;k<pGraph[i+Nv].numComb;k++)
         {
             factorarray0[i][k]   =    pGraph[i+Nv].beliefs[k];
-            // printf("not modified %d %f\n",i, (factorarray0[i][k]));
         }
-        // printf("----------------------\n");
     }
 
     /* open this file to write the results into*/
@@ -630,8 +615,6 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
                 if(h == 0) /* first column*/
                 {
                     visibleIds[k] = phash(temp,strlen(temp));
-                   // printf("%d %d %d %s \n",m, k, visibleIds[k],temp);
-
                 }
                 
                 if(h == 1) /* second column */
@@ -645,7 +628,6 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
                 h++;
                 
             }
-            //printf("%d %d %d\n",m,visibleIds[k],visible_values[k]);
         }
         
         
@@ -681,18 +663,14 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
             u_old[i] = 0;
         }
         
-        
-         iteration = LogRoundRobinSplashLBP(factorarray,cpt,pGraph,u,u_old,num_state, N,Nv,num_state*lenMsgVec);
-        //printf("Number of LPB iterations for %d th input data is:   %d\n", m, iteration);
-        
-        
-        /* wirte the results in this file */
+        iteration = LogRoundRobinSplashLBP(factorarray,cpt,pGraph,u,u_old,num_state, N,Nv,num_state*lenMsgVec);
+
+        /* write the results in this file */
         for(i = 0;i < Nv;i++)
         {
             for(kk=0;kk<num_state;kk++)
             {
                 fprintf(pn,"%s \t %f\n",keys[i],pGraph[i].beliefs[kk]);
-                // printf("%f\n",exp(factorarray0[i][k]));
             }
             
         }
@@ -924,19 +902,13 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     
     while ((fgets(buf,maxLen,file)) != NULL)
     {
-        
-        
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
         
-        
         source  = strtok(buf, delims); /* get the source node */
-        //printf("%s \n",source);
         
         target = strtok(NULL, delims);  /* get the target node */
-        //printf("%s \n",target);
         
         type = strtok(NULL, delims);    /* get the type of interaction - for later usages*/
-        //printf("%s \n",type);
         
         k = phash(target,strlen(target));
         /*  add the target node to the factor*/
@@ -948,36 +920,24 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
         strcpy(fGraph[k].variablenode[varcount[k]],source);
         
         varcount[k]++; /*  one node added to factor k*/
-        
-        
     }
     
     rewind(file); /* reset the fgets to the begining of the file*/
     
-    
     /* scan the file once more to fill the single factors that should be connected to the root nodes*/
     
-    
-    
     fgets(buf,maxLen,file);     /* get the first line (don't need this line) */
-    
     fgets(buf,maxLen,file);     /* second line is empty */
-    
     
     while ((fgets(buf,maxLen,file)) != NULL)
     {
-        
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
         
-        
         source  = strtok(buf, delims); /* get the source node */
-        //printf("%s \n",source);
         
         target = strtok(NULL, delims);  /* get the target node */
-        //printf("%s \n",target);
         
         type = strtok(NULL, delims);    /* get the type of interaction - for later usages*/
-        //printf("%s \n",type);
         
         k = phash(source,strlen(source));
         if (varcount[k] == 1)
@@ -1120,7 +1080,6 @@ int **makeCPTindex(Node *pGraph,int Nf,int Nv,int num_state)
             {
                 
                 cpt[i][ii*Ncpt[i]+j] = kk;
-                // printf("%d %d %d %d\n",i,j,ii,kk);
                 
                 if(((j+1) % Nrep) == 0)
                     kk++;
@@ -2178,7 +2137,6 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
             {
                 
                 cpt[i][ii*Ncpt[i]+j] = kk;
-                // printf("%d %d %d %d %d\n",i,j,ii,kk,fGraph[i].numVariables);
                 
                 if(((j+1) % Nrep) == 0)
                     kk++;
@@ -2238,7 +2196,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
         }
     }
     
-    
+    /*
     for(i = 0;i < Nv;i++)
     {
         for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
@@ -2250,6 +2208,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
             }
         }
     }
+    */
 
     /*    OR resembles max and AND resembles min */
     int Small_num_for_OR ; /* to find max*/
@@ -2538,7 +2497,7 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 /**************************************************************************/
 /*  learning_discrete_BayNet*/
 /**************************************************************************/
-void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,char *nodepost, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag)
+void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag)
 {
     int i,k,m,h;         /*indexign for loops  and whiles */
     int lenMsgVec;       /*length of message vector (# of all messages *  # of state per message)*/
@@ -2561,14 +2520,6 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
     double oldLL= -LargeNumber;
     double changeLL = LargeNumber;
     double change_parameters = 10;
-    
-    
-    
-    /*read the directed logical graph convert to factor-graph format */
-    // reaction_logic_to_factorgraph(input4columns,pathway,num_state);
-    
-    
-    
     
     // read  all varibale nodes, remove duplicates; this section is excuted to make a unique list of nodes (keys) which are passed to
     // the hash function generator to make the hash function; we then we hash Ids throughout the code.
@@ -2608,9 +2559,6 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
         // printf(" %d %s\n",i,keys[i]);
     }
     
-    
-    
-    
     /* allocate memory for pGraph struct which contains message info*/
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
     
@@ -2626,17 +2574,12 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
     
     int** cpt = makeCPTindex(pGraph,Nf,Nv,num_state);
     
-    
-    
     /* allocate memory for factorarray and pGraph.beliefs  */
     
     double** factorarray  =  (double **)malloc(Nf*sizeof(*factorarray));
     double** factorarray0  = (double **)malloc(Nf*sizeof(*factorarray0));
     double** oldfactorarray0  = (double **)malloc(Nf*sizeof(*oldfactorarray0));
     double** alpha  = (double **)malloc(Nf*sizeof(*alpha));
-    
-    
-    
     
     
     for(i = 0;i < Nf;i++)
@@ -2646,9 +2589,6 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
         oldfactorarray0[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**oldfactorarray0));
         alpha[i]  = (double *)malloc(pGraph[i+Nv].numComb*sizeof(**alpha));
     }
-    
-    
-    
     
     
     /* the model parameters passed to factorattay0 once . it  should be noted that factorarray0 does not change but factorattay changes in loop for each input   */
@@ -2710,9 +2650,6 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
     /* to observe the changes of conditional probability values in each iteration*/
     
     
-    
-    
-    
     /* allocate two log likelihood vectors for the train and test phases*/
     double* LogLikelihood = (double *) malloc(max_num_repeat*sizeof(double));
     
@@ -2723,10 +2660,6 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
         LogLikelihood[i] = 0;
         
     }
-    
-    
-    
-    
     
     /* open and read the file to find number of observed data and samples*/
     FILE *file = fopen(obs_data, "r");
@@ -2822,15 +2755,9 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
                 //printf("%d %d %d\n",m,visibleIds[k],visible_values[k]);
             }
             
-            
-            
-            
-            
             /* modify factors according to observed nodes states */
             
             inputBasedModifiedCPT(pGraph,factorarray,visible_values,visibleIds,cpt,Nv,num_visibles,1);
-            
-            
             
             /* do inference using LPB */
             
@@ -2845,13 +2772,8 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
             iteration = LogRoundRobinSplashLBP(factorarray,cpt,pGraph,u,u_old,num_state, N,Nv,num_state*lenMsgVec);
             //printf("Number of LPB iterations for %d th input data is:   %d\n", m, iteration);
             
-            
-            
-            
             free(visible_values);
             free(visibleIds);
-            
-            
             
             /* sum up joint beliefs (factor probabilities) obtained from ech configuration of obersved data  */
             /* this generates expected sufficient statistics (page 872 Koller book)*/
@@ -2866,16 +2788,10 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
                     // printf("%d %f %f\n",m,factorarray[i][k],pGraph[i+Nv].beliefs[k]);
                 }
                 //printf("-----------------------\n");
-                
             }
-            
-            
         } /* end of m loop for each set of observed data*/
         
-        
-        
         /* the maximization step of the EM algorithm  */
-        
         
         /* compute the expected log likelihood (page 883, see Eq 19.5 Koller book) */
         for(i = 0;i < Nf;i++)
@@ -2887,7 +2803,6 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
                 
             }
         }
-        
         
         /* if you want to do MAP estimate instead of ML (see EQ 10.32  and  11.60 of Murphy's book)*/
         if(MAPflag)
@@ -2902,9 +2817,7 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
                     
                 }
                 //printf("----------------\n");
-                
             }
-            
         }
         
         /* convert joint beliefs to conditional probability, that is, p(x1,x2)--> p(x1|x2); it is a local normalization*/
@@ -2916,9 +2829,7 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
             // printf("-----------------------\n");
         }
         
-        
         /* calculate changes in parameters of each factor after an update*/
-        
         
         for(i = 0;i < Nf;i++)
         {
@@ -2938,13 +2849,13 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
         
         
         /* check stopping criterion*/
-        printf(" itr = %d, par =  %f  LL = %f   \n",num_repeat,change_parameters,LogLikelihood[num_repeat]);
+     //   printf(" itr = %d, par =  %f  LL = %f   \n",num_repeat,change_parameters,LogLikelihood[num_repeat]);
         changeLL= inAbsolute(oldLL -  LogLikelihood[num_repeat]);
         
         
         
-        if (oldLL> LogLikelihood[num_repeat])//LogLikelihood[num_repeat]
-            printf( " warning : log likelihood decreases! \n");
+   //     if (oldLL> LogLikelihood[num_repeat])//LogLikelihood[num_repeat]
+ //           printf( " warning : log likelihood decreases! \n");
         
         
         
@@ -2972,22 +2883,34 @@ void learning_discrete_BayNet(char *input4columns,char * pathway,char *obs_data,
     }
     
     
-    /* wirte the results in this file */
-    for(i = 0;i < Nf;i++)
+    /* write according to format*/
+    fprintf(pm,"%d\n",Nv); /* number of factor*/
+    fprintf(pm,"\n");    /* space*/
+    
+    for(i=0;i<Nv;i++)
     {
+        fprintf(pm,"%d\n",pGraph[i+Nv].numAdj);//
+        
+        for(k=0;k<pGraph[i+Nv].numAdj;k++)
+            fprintf(pm,"%s ",keys[pGraph[i+Nv].adjNodes[k]]);
+        
+        fprintf(pm,"\n");    /* space*/
+        
+        for(k=0;k<pGraph[i+Nv].numAdj;k++)
+            fprintf(pm,"%d ",num_state);
+        
+        fprintf(pm,"\n");    /* space*/
+        
+        fprintf(pm,"%d\n",(int)pow(num_state,pGraph[i+Nv].numAdj));
+        
+        
         for(k=0;k<pGraph[i+Nv].numComb;k++)
-        {
-            fprintf(pm,"%f\n",exp(factorarray0[i][k]));
-            // printf("%f\n",exp(factorarray0[i][k]));
-        }
-        // printf("-------\n");
+            fprintf(pm,"%d %f\n",k,exp(factorarray0[i][k]));
+    
+        fprintf(pm,"\n");    /* space*/
     }
     
-    
-    
     fclose(pm);
-    
-    
     
     /* free  allocated arrays */
     if(1)

@@ -33,7 +33,7 @@ else
 endif
 
 
-all: gsl hash_graph_node_ids
+all: gsl generateHash
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
@@ -48,7 +48,7 @@ generateHash:
 	resources/make_hash_table/src/lookupa.c \
 	resources/make_hash_table/src/perfect.c \
 	resources/make_hash_table/src/recycle.c \
-	net/src/hash_graph_node_ids.c \
+	resources/hash_graph_node_ids/src/hash_graph_node_ids.c \
 	-Inet/include/ -Iresources/make_hash_table/include/ -w 
 
 libnet:
