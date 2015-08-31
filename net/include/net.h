@@ -61,11 +61,11 @@ typedef struct Node Node ;
 double inAbsolute(double i);
 int cstring_cmp(const void *a, const void *b);
 int uniq(char *a[], int len);
-int readCharFile(char * lines[],char *fileToRead,int maxbufflen);
+int readCharFile(char * lines[],char *fileToRead,int maxbufflen, int *datalen);
 void rad_normaliseC(double *T, int N);
 void maxVector(double *maxV, int *maxIdx, double  *v, int length_v);
-int ExtractNonUniqNodeNum(char *filename);
-int ExtractNonUniqNodelist(char *filename,char  ** nodeName);
+int ExtractNonUniqNodeNum(char *filename, int *numNode);
+int ExtractNonUniqNodelist(char *filename,char  ** nodeName, int *k);
 
 
 void LogSplashLBP(double **factorarray,int **array,int *numComb,Node *AlarmNet,int num_state,int N,int Nv,int lu,int *iteration);
@@ -79,26 +79,25 @@ void belief_resBelief_Splash(double **factorarray, int **array,int *numComb,Node
 void LogRBP(double **factorarray, int **array,int *numComb,Node *AlarmNet,int num_state,int N,int Nv,int lu,int *iteration);
 
 int **makeCPTindex(Node *pGraph,int Nf,int Nv,int num_state);
-int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *numSample);
+int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *nmRNAObs);
 
 int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfilename,int nstate);
-int  hashSourceTargetNodes(char *readpairwisefilename);
+int  hashSourceTargetNodes(char *readpairwisefilename, int * Nv);
 int mod (int a, int b);
 void normalizeCPD(double * f, double *CPD,int numComb,int num_state,int flag);
-int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,int Nv,int Nf);
+int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,int Nv,int Nf, int *lenMsgVec);
 
 void inputBasedModifiedCPT(Node *pGraph,double ** factorarray, int *obs_values,int *obs_Ids, int **cpt, int Nv,int numObs,int  flag );
 
-void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state);
-
+int doLBPinference(char *pathway,char * obs_data,char *posterior_probabilities,int num_state);
 
 int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefactorgraphfilename,int nstate);
 
-int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,int *numSample);
+int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *num_visibles);
 
 void hash_graph_node_IDs(char *readreactionlogicpathways);
 
-void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag);
-
+int learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag);
+char *strerror_libnet(int error_code);
 
 #endif

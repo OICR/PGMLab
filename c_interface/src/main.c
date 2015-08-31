@@ -28,7 +28,7 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
     char pairwise_filepath[200];
     char pathway_filepath[200];
     char observed_data_filepath[200];
-    char input4columns_filepath[200];
+    char pairwise_interactions_filepath[200];
     char hyperparameters_filepath[200];
     char estimated_parameters_filepath[200];
     char posterior_probabilities_filepath[200];
@@ -36,7 +36,7 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
     ini_gets("files", "pairwise", "dummy", pairwise_filepath, sizearray(value), ini_filename);
     ini_gets("files", "pathway", "dummy", pathway_filepath, sizearray(value), ini_filename);
     ini_gets("files", "observed_data", "dummy", observed_data_filepath, sizearray(value), ini_filename);
-    ini_gets("files", "input_four_columns", "dummy", input4columns_filepath, sizearray(value), ini_filename);
+    ini_gets("files", "pairwise_interactions", "dummy", pairwise_interactions_filepath, sizearray(value), ini_filename);
     ini_gets("files", "hyperparameters", "dummy", hyperparameters_filepath, sizearray(value), ini_filename);
     ini_gets("files", "estimated_parameters", "dummy", estimated_parameters_filepath, sizearray(value), ini_filename);
     ini_gets("files", "posterior_probabilities", "dummy", posterior_probabilities_filepath, sizearray(value), ini_filename);
@@ -48,16 +48,17 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
             printf("Pathway filepath not specified in config\n");
             return 1;
         }
-        if ( strcmp(input4columns_filepath, "dummy") == 0 ) {
-            printf("Input4column filepath not specified in config\n");
+        if ( strcmp(pairwise_interactions_filepath, "dummy") == 0 ) {
+            printf("Pairwise interactions filepath not specified in config\n");
             return 1;
         }
 
-        reaction_logic_to_factorgraph(input4columns_filepath, pathway_filepath, number_of_states);
+        int exit_code = reaction_logic_to_factorgraph(pairwise_interactions_filepath, pathway_filepath, number_of_states);
 
-        int exit_code = 0;
         if (exit_code != 0) {
-           printf("Failed to generate factorgraph (error_code: %d)\n", exit_code);
+           char * strerr = strerror(exit_code);
+           printf("Failed to generate factorgraph (error code: %d): %s\n", exit_code, strerr);
+           return exit_code;
         }
         else {
            printf("\tFactorgragh has been output into the following pathway file: %s\n", pathway_filepath); 
@@ -80,10 +81,11 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
             return 1;
         }
 
-        learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag);
-        int exit_code = 0; 
+        int exit_code = learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag);
         if (exit_code != 0) {
-            printf("Learning failed (error_code: %d)\n", exit_code);
+            char * strerr = strerror (exit_code);
+            printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
+            return 0;
         } 
         else {
             printf("\tEstimated Parameters habe been writtent to the following file: %s\n", estimated_parameters_filepath);
@@ -107,10 +109,11 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
             return 1;
         }
 
-        doLBPinference(pathway_filepath, observed_data_filepath, posterior_probabilities_filepath, number_of_states);
-        int error_code = 0;
-        if (error_code != 0) {
-             printf("Inference failed with error code %d\n", error_code);
+        int exit_code = doLBPinference(pathway_filepath, observed_data_filepath, posterior_probabilities_filepath, number_of_states);
+        if (exit_code != 0) {
+             char * strerr = strerror (exit_code);
+             printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
+             return exit_code;
         }
         else {
              printf("\tPosterior probabilities have been written to the following file: %s\n", posterior_probabilities_filepath);

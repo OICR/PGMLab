@@ -56,22 +56,17 @@ int mod (int a, int b)
  June, 2014
  MHR,
  */
-int readCharFile(char * lines[],char *fileToRead,int maxbufflen)
+int readCharFile(char * lines[],char *fileToRead,int maxbufflen, int *datalen)
 {
     
-    int datalen = 0;
+    *datalen = 0;
     char buf[maxbufflen];
     char *temp;
     const char delims[2] = " ";
     
     /* Try to open the file */
     FILE *fp = fopen(fileToRead, "r");
-    if (!fp)
-    {
-        fprintf(stderr, "Unable to open %s: %s\n",
-                fileToRead, strerror(errno));
-        exit(-1);
-    }
+    if (!fp) return 105;
     
     while ((fgets(buf,maxbufflen,fp)) != NULL)
     {
@@ -80,47 +75,18 @@ int readCharFile(char * lines[],char *fileToRead,int maxbufflen)
         
         while (temp != NULL)
         {
-            lines[datalen] = malloc((strlen(temp)+1)*sizeof(char));
+            lines[*datalen] = malloc((strlen(temp)+1)*sizeof(char));
             
-            strcpy(lines[datalen],temp) ;
+            strcpy(lines[*datalen],temp) ;
             
-            datalen++;
+            (*datalen)++;
             
             temp = strtok(NULL, delims);
         }
     }
     
-    return(datalen);
-    
+    return 0;
 }
-
-/* *****************************************************************************************/
-
-
-/*
- //test the function
- int main(void)
- {
- int i;
- int numel = 470464;
- int maxbufflen = 1000;
- char *lines[numel];
- 
- char fileToRead[300] ="/Users/Hossein/Documents/MATLAB/work/UGM/FINetwork/listAllnodeinFGFI.txt";
- if (readCharFile(lines,fileToRead,maxbufflen)!=numel)
- {
- fprintf(stderr, "incorrect read: number of lines does not match \n");
- exit(-1);
- }
- 
- 
- for (i=0;i<numel;i++)
- printf("%s\n",lines[i]);
- 
- return 0;
- }
- 
- */
 
 
 /**************************************************************************/
@@ -176,118 +142,33 @@ void maxVector(double *maxV, int *maxIdx, double  *v, int length_v)
 /**************************************************************************/
 // read the fg file and return the list of all nodes. Note the the list has duplicate nodes so it is passed to the unique function
 
-int ExtractNonUniqNodeNum(char *filename)
+int ExtractNonUniqNodeNum(char *filename, int *numNode)
 {
-    int i,ii,K,h,numNode=0;
+    int i,ii,K,h;
     int  maxLen = 1000;
     char buf[maxLen];
     const char delims[2] = " ";
     char *temp;
     
+    *numNode = 0;
+
     // first read number of nodes to allocate memory
     FILE *file = fopen(filename, "r");
-    if (file)
-    {
-        fgets(buf,maxLen,file);
-        
-        
-        i =  0;
-        ii = 0;
-        
-        while ((fgets(buf,maxLen,file)) != NULL)
-        {
-            
-            buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-            
-            
-            if(i == 2)
-            {
-                
-                temp = strtok(buf, delims);
-                
-                while (temp != NULL)
-                {
-                    
-                    numNode++;
-                    
-                    
-                    temp = strtok(NULL, delims);
-                }
-            }
-            
-            if(i == 4)
-            {
-                K= atoi(buf);
-                
-                for(h=0;h< K;h++)
-                    fgets(buf,maxLen,file);
-                
-                ii++;
-                
-                i = -1;
-                
-            }
-            
-            i++;
-        }
-        
-    }
-    
-    fclose(file);
-    return(numNode);
-}
-/**************************************************************************/
-/*ExtractNonUniqNodelist(char *filename)*/
-/**************************************************************************/
-// read the fg file and return the list of all nodes. Note the the list has duplicate nodes so it is passed to the unique function
+    if (file == NULL) return 107; 
 
-int ExtractNonUniqNodelist(char *filename,char  ** nodeName)
-{
-    int i,ii,k,K,h;
-    int  maxLen = 1000;
-    char buf[maxLen];
-    const char delims[2] = " ";
-    char *temp;
-    
-    
-    // read the node name and store in an array
-    FILE *file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file in  ExtractNonUniqNodelist \n");
-        exit(42);
-        
-    }
-    /* read first line  to get number of factors and store it in Nf*/
     fgets(buf,maxLen,file);
-    
-    
     i =  0;
     ii = 0;
-    k=0;
-    
     while ((fgets(buf,maxLen,file)) != NULL)
     {
-        
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-        
-        
         if(i == 2)
         {
-            
             temp = strtok(buf, delims);
-            
             while (temp != NULL)
             {
-                
-                nodeName[k] = malloc((strlen(temp)+1)*sizeof(char));
-                
-                
-                strcpy(nodeName[k],temp) ;
-                k++;
-                
+                (*numNode)++;
                 temp = strtok(NULL, delims);
-                
             }
         }
         
@@ -298,7 +179,59 @@ int ExtractNonUniqNodelist(char *filename,char  ** nodeName)
                 fgets(buf,maxLen,file);
             
             ii++;
+            i = -1;
+        }
+        i++;
+    }
+    fclose(file);
+
+    return 0;
+}
+/**************************************************************************/
+/*ExtractNonUniqNodelist(char *filename)*/
+/**************************************************************************/
+// read the fg file and return the list of all nodes. Note the the list has duplicate nodes so it is passed to the unique function
+
+int ExtractNonUniqNodelist(char *filename,char  ** nodeName, int * k)
+{
+    int i,ii,K,h;
+    int  maxLen = 1000;
+    char buf[maxLen];
+    const char delims[2] = " ";
+    char *temp;
+    
+    // read the node name and store in an array
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) return 107;
+
+    /* read first line  to get number of factors and store it in Nf*/
+    fgets(buf,maxLen,file);
+    
+    i =  0;
+    ii = 0;
+    *k=0;
+    while ((fgets(buf,maxLen,file)) != NULL)
+    {
+        buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
+        if(i == 2)
+        {
+            temp = strtok(buf, delims);
+            while (temp != NULL)
+            {
+                nodeName[*k] = malloc((strlen(temp)+1)*sizeof(char));
+                strcpy(nodeName[*k],temp) ;
+                (*k)++;
+                temp = strtok(NULL, delims);
+            }
+        }
+        
+        if(i == 4)
+        {
+            K= atoi(buf);
+            for(h=0;h< K;h++)
+                fgets(buf,maxLen,file);
             
+            ii++;
             i = -1;
             
         }
@@ -306,11 +239,9 @@ int ExtractNonUniqNodelist(char *filename,char  ** nodeName)
         
         i++;
     }
-    
     fclose(file);
-    return(k);
-    
-    
+
+    return 0;
 }
 
 /**************************************************************************/
@@ -327,24 +258,17 @@ double inAbsolute(double i)
 /**************************************************************************/
 
 
-int  hashSourceTargetNodes(char *readpairwisefilename)
+int hashSourceTargetNodes(char *readpairwisefilename, int *Nv)
 {
-    int i,k,Ne,Nv;
+    int i,k,Ne;
     int  maxLen = 1000;
     char buf[maxLen];
     const char delims[2] = "\t";
     char *temp;
     
-    
-    
     // read the node name and store in an array
     FILE *file = fopen(readpairwisefilename, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file in  ExtractNonUniqNodelist \n");
-        exit(42);
-        
-    }
+    if (file == NULL) return 101;
     
     fgets(buf,maxLen,file);    /* read first line  to get number of edges and store it in Ne*/
     
@@ -356,15 +280,10 @@ int  hashSourceTargetNodes(char *readpairwisefilename)
     
     fgets(buf,maxLen,file);    /* second line is empty*/
     
-    
     k=0;
-    
     while ((fgets(buf,maxLen,file)) != NULL)
     {
-        
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-        
-        
         temp = strtok(buf, delims);
         i = 0; /*  we need the second column (i.e. i==1) */
         while (temp != NULL)
@@ -372,31 +291,24 @@ int  hashSourceTargetNodes(char *readpairwisefilename)
             if(i != 2)
             {
                 nodeName[k] = malloc((strlen(temp)+1)*sizeof(char));
-                
                 strcpy(nodeName[k],temp) ;
                 k++;
             }
             temp = strtok(NULL, delims);
-            
             i++;
-            
         }
-        
-        
     }
     
     fclose(file); /* reset the fgets to the begining of the file*/
     
+    *Nv = uniq(nodeName,Ne*2); /*remove duplicate from nodelist;  Nf: # of factor */
     
-    Nv = uniq(nodeName,Ne*2); /*remove duplicate from nodelist;  Nf: # of factor */
+    mphash(nodeName,*Nv); /*  and hash unique nodes */
     
-    mphash(nodeName,Nv); /*  and hash unique nodes */
-    
-    for(i=0;i<Nv;i++)
+    for(i=0;i<*Nv;i++)
         free(nodeName[i]);
     
-    
-    return(Nv);
+    return 0;
 }
 
 
@@ -409,7 +321,6 @@ void normalizeCPD(double * f, double *CPD,int numComb,int num_state,int flag)
     int k,j;
     double partitionFactor = 0;
     int K =0;
-    
     
     for(k = 0 ;k < numComb; k++)
     {
@@ -438,9 +349,7 @@ void normalizeCPD(double * f, double *CPD,int numComb,int num_state,int flag)
         {
             f[k] = CPD[k]/partitionFactor; /* update the beliefs*/
         }
-        
     }
-    
 }
 
 
@@ -449,9 +358,8 @@ void normalizeCPD(double * f, double *CPD,int numComb,int num_state,int flag)
 /**************************************************************************/
 
 
-void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
+int doLBPinference(char *pathway, char * obs_data, char *posterior_probabilities, int num_state)
 {
-
     int *obs_values = NULL;
     int    *obs_Ids = NULL;
     gsl_rng *r; /* for random generator for gsl rand gernator to sample from Dirchelte distribution */
@@ -473,14 +381,21 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
     // read  all varibale nodes, remove duplicates; this section is excuted to make a unique list of nodes (keys) which are passed to
     // the hash function generator to make the hash function; we then we hash Ids throughout the code.
     
-    int numel = ExtractNonUniqNodeNum(pathway); // read pathwat file and return the number of varibales nodes in the pathway.
-    
+    int numel;
+
+    int exit_code = ExtractNonUniqNodeNum(pathway, &numel); // read pathwat file and return the number of varibales nodes in the pathway.
+    if (exit_code != 0) return exit_code;
+
     char *nodelist[numel];
     char *keys[numel];
     
     /*retrun the list of all varaible nodes; duplication may be in the list */
-    if (ExtractNonUniqNodelist(pathway,nodelist)!=numel)
-        fprintf(stderr, "incorrect read: number of lines does not match \n");
+    int numline_nodelist;
+    exit_code = ExtractNonUniqNodelist(pathway,nodelist, &numline_nodelist);
+    if(exit_code != 0) return exit_code;
+
+    if (numline_nodelist != numel) return 108;
+        // incorrect read: number of lines does not match
     
     Nv = uniq(nodelist, numel); /*remove duplicate from nodelist;  Nv: # of variable nodes */
     
@@ -505,12 +420,7 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
     /*write the factor graph file to read the number of factor given in the first line Nf*/
     
     FILE *file1 = fopen(pathway, "r");
-    if (file1 == NULL)
-    {
-        fprintf(stderr, "cannot open the file %s in  main \n", pathway);
-        exit(42);
-        
-    }
+    if (file1 == NULL) return 107;
     
     /* read first line  to get number of factors and store it in Nf*/
     
@@ -519,7 +429,6 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
         
         Nf =  atoi(buf);//first element is the number of factors
-        
     }
     
     fclose(file1);
@@ -528,8 +437,10 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
     
     /* allocate memory for pGraph struct which contains message info*/
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
+
     /*  fill the pGraph struct field accroding to info given in factor graph file */
-    lenMsgVec = FactorgraphFile_To_NodeStructures(pathway,pGraph,num_state,Nv,Nf);
+    exit_code = FactorgraphFile_To_NodeStructures(pathway,pGraph,num_state,Nv,Nf, &lenMsgVec);
+    if (exit_code != 0) return exit_code;
 
     /*allocate memory for message vectors*/
     double * u = (double *)malloc(lenMsgVec*num_state * sizeof(double));
@@ -553,40 +464,24 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
     {
         for (k=0;k<pGraph[i+Nv].numComb;k++)
         {
-            factorarray0[i][k]   =    pGraph[i+Nv].beliefs[k];
+            factorarray0[i][k] = pGraph[i+Nv].beliefs[k];
         }
     }
 
     /* open this file to write the results into*/
-    FILE * pn = fopen(nodepost, "w");
-    
-    if (pn == NULL)
-    {
-        fprintf(stderr, " to write, cannot open the posterior probabilities file \n");
-        exit(42);
-    }
+    FILE * pn = fopen(posterior_probabilities, "w");
+    if (pn == NULL) return 104;
     
     /* open and read the file to find number of observed data and samples*/
     FILE *file = fopen(obs_data, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file in  ReadObservedData \n");
-        exit(42);
-        
-    }
-    
+    if (file == NULL) return 103;
     
     fgets(buf,maxLen,file);    /* read first line  to get number of edges and store it in Ne*/
-    
     buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-    
     num_conditions =  atoi(buf); /*number of conditions*/
     
-    
     for(m=0;m < num_conditions;m++)
-        
     {
-        
         fgets(buf,maxLen,file);
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
         
@@ -599,19 +494,12 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         
         for(k=0;k< num_visibles;k++)
         {
-            
-            
             fgets(buf,maxLen,file);
-            
-            
             buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-            
-            
             temp = strtok(buf, delims);
             h = 0; /*   a flag to let read the first and second column */
             while (temp != NULL)
             {
-                
                 if(h == 0) /* first column*/
                 {
                     visibleIds[k] = phash(temp,strlen(temp));
@@ -620,13 +508,10 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
                 if(h == 1) /* second column */
                 {
                     visible_values[k]  = atoi(temp);
-                    
                 }
                 
                 temp = strtok(NULL, delims);
-                
                 h++;
-                
             }
         }
         
@@ -637,13 +522,9 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         {
             for (k=0;k<pGraph[i+Nv].numComb/num_state;k++)
             {
-                
-                
                 r = gsl_rng_alloc(gsl_rng_mt19937);
                 gsl_rng_set(r,1);
                 gsl_ran_dirichlet(r,num_state,&factorarray0[i][k*num_state],&factorarray[i][k*num_state]);
-                
-                
             }
         }
         
@@ -662,7 +543,7 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
             u[i] = 0;
             u_old[i] = 0;
         }
-        
+
         iteration = LogRoundRobinSplashLBP(factorarray,cpt,pGraph,u,u_old,num_state, N,Nv,num_state*lenMsgVec);
 
         /* write the results in this file */
@@ -676,33 +557,21 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         }
         fprintf(pn,"------------------------------\n");
         
-        
         free(visible_values);
         free(visibleIds);
-        
     }
-    
-    
     fclose(file);
-    
-    
-    /***************************************************************/
-    
-    
     fclose(pn);
     
     /* free  allocated arrays */
     if(1)
     {
-        
         free(u);
         free(u_old);
-        
         for (i = 0; i < Nf; ++i) {
             free(cpt[i]);
         }
         free(cpt);
-        
         for(i=0;i<N;i++)
         {
             free(pGraph[i].adjNodes);
@@ -713,22 +582,16 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
         free(pGraph);
         for(i=0;i<Nf;i++)
         {
-            
             free(factorarray[i]);
             free(factorarray0[i]);
-            
         }
         
         free(factorarray);
         free(factorarray0);
         free(obs_values);
         free(obs_Ids);
-        
-        
-        
-        
     }
-    
+    return 0;
 } /*end of doLBPinference function*/
 
 
@@ -739,7 +602,6 @@ void doLBPinference(char *pathway,char * obs_data,char *nodepost,int num_state)
 // read source-target list of nodes in a graph and convert to a factor graph.
 
 //
-//  pairwiseTofactorgraph.c
 //  ReadFgInC
 //
 //  Created by Hossein on 2014-07-17.
@@ -761,16 +623,9 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     };
     typedef  struct factor  *factor;
     
-    
-    
     // read the node name and store in an array
     FILE *file = fopen(readpairwisefilename, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file %s in  ExtractNonUniqNodelist \n", readpairwisefilename);
-        exit(42);
-        
-    }
+    if (file == NULL) return 101;
     
     fgets(buf,maxLen,file);    /* read first line  to get number of edges and store it in Ne*/
     
@@ -789,19 +644,14 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     
     while ((fgets(buf,maxLen,file)) != NULL)
     {
-        
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-        
-        
         temp = strtok(buf, delims);
         i = 0; /*  we need the second column (i.e. i==1) */
         while (temp != NULL)
         {
-            
             if(i == 1)
             {
                 nodeName1[k] = malloc((strlen(temp)+1)*sizeof(char));
-                
                 strcpy(nodeName1[k],temp) ;
                 k++;
             }
@@ -809,7 +659,6 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
             if(i != 2)
             {
                 targetsource[kk] = malloc((strlen(temp)+1)*sizeof(char));
-                
                 strcpy(targetsource[kk],temp) ;
                 kk++;
             }
@@ -817,18 +666,13 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
             temp = strtok(NULL, delims);
             
             i++;
-            
         }
-        
-        
     }
 
     rewind(file); /* reset the fgets to the begining of the file*/
     
     Nv = uniq(targetsource,2*Ne); /* unique list of target and source nodes;  Nv: # of variable node  */
-    
     Nf = uniq(nodeName1,Ne); /* unique list of target nodes (childs);  Nf: # of factor */
-    
     
     for(i=0;i<Nf;i++)
         free(nodeName1[i]);
@@ -840,22 +684,17 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     /* find number of variable nodes connected to each child node */
     /*------------------------------------------------------------*/
     
-    
     factor fGraph = (factor)malloc(Nv*sizeof(*fGraph));
     
     for(i=0;i<Nv;i++)
         fGraph[i].numParents = 1; /* initialize to one since child node is a member of factor */
     
     fgets(buf,maxLen,file);    /*get the first line */
-    
     fgets(buf,maxLen,file);    /* second line is empty*/
     
     while ((fgets(buf,maxLen,file)) != NULL)
     {
-        
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-        
-        
         temp = strtok(buf, delims);
         i = 0; /*  we need the second column (i.e. i==1) */
         while (temp != NULL)
@@ -863,19 +702,12 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
             if(i == 1)
             {
                 k = phash(temp,strlen(temp)); /* child node "temp" has a parent so  count it*/
-                
                 fGraph[k].numParents++;
             }
             temp = strtok(NULL, delims);
-            
             i++;
-            
         }
-        
-        
     }
-    
-    
     
     rewind(file); /* reset the fgets to the begining of the file*/
     
@@ -888,17 +720,12 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
         varcount[i] = 1 ;/* initialize it*/
     }
     
-    
     /*--------------------------------------------------------------------------------*/
     /* find the variable parent  nodes  and the child node connected to  each factor */
     /*--------------------------------------------------------------------------------*/
     
-    
-    
     fgets(buf,maxLen,file);     /* get the first line (don't need this line) */
-    
     fgets(buf,maxLen,file);     /* second line is empty */
-    
     
     while ((fgets(buf,maxLen,file)) != NULL)
     {
@@ -949,26 +776,16 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
         
     }
     
-    
-    
     fclose(file);
-    
-    
-    
     
     /* write retrieved the in a factor graph format */
     
     FILE *file1 = fopen(writefactorgraphfilename, "w");
-    if (file1 == NULL)
-    {
-        fprintf(stderr, "cannot open the file in  ExtractNonUniqNodelist to write in \n");
-        exit(42);
-        
-    }
+    if (file1 == NULL) return 106;
+
     /* write according to format*/
     fprintf(file1,"%d\n",Nv); /* number of factor*/
     fprintf(file1,"\n");    /* space*/
-    
     
     for(i=0;i<Nv;i++)
     {
@@ -1012,9 +829,7 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     }
     free(fGraph);
     
-    
-    return(Nv);
-    
+    return 0;
 }
 
 /**************************************************************************/
@@ -1074,11 +889,9 @@ int **makeCPTindex(Node *pGraph,int Nf,int Nv,int num_state)
         for(ii = pGraph[Nv+i].numAdj-1 ; ii >= 0 ;ii--)
         {
             kk = 1;
-            
             Nrep /= (double)num_state;
             for(j =0; j< Ncpt[i];j++)
             {
-                
                 cpt[i][ii*Ncpt[i]+j] = kk;
                 
                 if(((j+1) % Nrep) == 0)
@@ -1087,10 +900,7 @@ int **makeCPTindex(Node *pGraph,int Nf,int Nv,int num_state)
                 if(kk > num_state)
                     kk = 1;
             }
-            // printf("*************\n");
         }
-        
-        // printf("----------------\n");
     }
     
     free (Ncpt);
@@ -1110,12 +920,7 @@ void inputBasedModifiedCPT(Node *pGraph,double ** factorarray, int *obs_values,i
     
     for(i = 0;i < numObs;i++) //for all observed nodes
     {
-        
-        // nn = phash(obs_Ids[i],strlen(obs_Ids[i]));
         nn = obs_Ids[i];
-        
-        
-        
         if(nn < Nv) // if observed node was found in the list of nodes
         {
             for (j=0;j< pGraph[nn].numAdj;j++) // for all factors connected to each observed node
@@ -1129,7 +934,6 @@ void inputBasedModifiedCPT(Node *pGraph,double ** factorarray, int *obs_values,i
                         ii = kk ; // the variable node is the iith adjNodes the factor node adjNodes list
                 }
                 
-                
                 for(k=0;k<pGraph[h].numComb;k++)
                 {
                     //printf("%d  %d\n ",cpt[h-Nv][ii*pGraph[h].numComb+k], obs_values[i]);
@@ -1139,24 +943,16 @@ void inputBasedModifiedCPT(Node *pGraph,double ** factorarray, int *obs_values,i
                         if(flag)
                         {
                             factorarray[h-Nv][k] = logEPS; /*modify CPT in log domain*/
-                            
                         }
                         else
                         {
                             factorarray[h-Nv][k] = EPS; /*modify CPT in not log domain*/
-                            
-                            
-                            
                         }
                     }
                 }
-                
             }
         }
-        
     }
-    
-    
 }
 
 
@@ -1165,40 +961,29 @@ void inputBasedModifiedCPT(Node *pGraph,double ** factorarray, int *obs_values,i
 /**************************************************************************/
 
 
-int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,int Nv,int Nf)
+int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,int Nv,int Nf, int *lenMsgVec)
 {
     
     int i,ii,nn,k,h;
-    int lenMsgVec,K,*adjCount;
+    int K,*adjCount;
     double parZ; // to normalize factors that donot sum up to unity
     int maxLen = 1000; /* max length of buffer to read a txt line*/
     char buf[maxLen], *temp;
     const char delims[2] = " ";
     int N = Nv+Nf; // number of all nodes the graph
     
-    
     FILE *file = fopen(pathway, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file in  main \n");
-        exit(42);
-        
-    }
-    
+    if (file == NULL) return 107;
     
     /* read first line  to get number of factors and store it in Nf*/
     
     fgets(buf,maxLen,file); /*read the first line but no need to use for it*/
     
-    
-    
     for(i=0;i<N;i++)
         pGraph[i].numAdj = 0;
     
-    
     i =  0;
     ii = 0;
-    
     while ((fgets(buf,maxLen,file)) != NULL)
     {
         
@@ -1208,18 +993,12 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
         if(i == 1)
             pGraph[ii+Nv].numAdj = atoi(buf);
         
-        
-        
         if(i == 2)
         {
-            
             temp = strtok(buf, delims);
-            
             while (temp != NULL)
             {
-                
                 pGraph[phash(temp,strlen(temp))].numAdj++;
-                
                 temp = strtok(NULL, delims);
             }
         }
@@ -1232,11 +1011,8 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
                 fgets(buf,maxLen,file);
             
             ii++;
-            
             i = -1;
-            
         }
-        
         
         i++;
     }
@@ -1275,7 +1051,7 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
     
     i =  0;
     ii = 0;
-    lenMsgVec = 0;
+    *lenMsgVec = 0;
     
     while ((fgets(buf,maxLen,file)) != NULL)
     {
@@ -1305,16 +1081,16 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
                 
                 
                 
-                pGraph[ii+Nv].oIdx[k]         = num_state * lenMsgVec; // message  ii --> nn
-                pGraph[nn].iIdx[adjCount[nn]] = num_state * lenMsgVec; // message  nn --> ii
+                pGraph[ii+Nv].oIdx[k]         = num_state * (*lenMsgVec); // message  ii --> nn
+                pGraph[nn].iIdx[adjCount[nn]] = num_state * (*lenMsgVec); // message  nn --> ii
                 
-                lenMsgVec++;
+                (*lenMsgVec)++;
                 
-                pGraph[ii+Nv].iIdx[k] =           num_state * lenMsgVec; // message nn --> ii
-                pGraph[nn].oIdx[adjCount[nn]] =   num_state * lenMsgVec; // message ii --> nn
+                pGraph[ii+Nv].iIdx[k] =           num_state * (*lenMsgVec); // message nn --> ii
+                pGraph[nn].oIdx[adjCount[nn]] =   num_state * (*lenMsgVec); // message ii --> nn
                 
                 
-                lenMsgVec++;
+                (*lenMsgVec)++;
                 
                 adjCount[nn]++;
                 
@@ -1331,7 +1107,6 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
             parZ = 0; // the probabilities should sum up to 1;
             temp = strtok(buf, delims);
             
-            
             pGraph[ii+Nv].numComb =atoi(temp);
             
             pGraph[ii+Nv].beliefs = malloc(pGraph[ii+Nv].numComb *sizeof(double));
@@ -1345,28 +1120,16 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
                     
                     while (temp != NULL)
                     {
-                        
                         temp = strtok(NULL, delims);
-                        
-                        
                         pGraph[ii+Nv].beliefs[h] = atof(temp);
-                        
-                        
                         parZ += atof(temp);
                         temp = strtok(NULL, delims);
-                        
                     }
                 }
             }
-            
-            
             ii++;
-            
             i = -1;
-            
-            
         }
-        
         i++;
     }
     fclose(file);
@@ -1381,8 +1144,7 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
             pGraph[i].beliefs[k] = 1/(double)num_state;
     }
 
-    return(lenMsgVec);
-    
+    return 0;
 }
 
 
@@ -1390,10 +1152,7 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
 /*ReadObservedData.c */
  /**************************************************************************/
 
-
-
-
-int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *numSample)
+int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *nmRNAObs)
 {
     int h,nn;
     
@@ -1405,52 +1164,38 @@ int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *nu
     int numofTCGAsample =50000; //need a large buffer to reading all observed nodes
     
     char bufTCGA[numofTCGAsample];
-    int nmRNAObs = 0;   /* # of observed nodes */
+    nmRNAObs = 0;   /* # of observed nodes */
     int nmRNASample =0; /* # of samples  */
     
     
     /* open and read the file to find number of observed data and samples*/
     FILE *file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file in  ReadObservedData \n");
-        exit(42);
-        
-    }
-    
+    if (file == NULL) return 103;
     
     if (fgets(bufTCGA,numofTCGAsample,file) != NULL)
     {
         bufTCGA[strlen(bufTCGA)-1] = '\0';  /*remove \n placed at the end of each line */
-        
         temp = strtok(bufTCGA, "\t");
-        
-        
         while (temp != NULL)
         {
-            nmRNAObs++;
+            (*nmRNAObs)++;
             temp = strtok(NULL, "\t");
-            
         }
-        
         while ((fgets(bufTCGA,numofTCGAsample,file)) != NULL)
             nmRNASample++;
     }
     
-    
     fclose(file);
     
-    nmRNAObs--; /* since the first column contains the mRNA ids */
+    (*nmRNAObs)--; /* since the first column contains the mRNA ids */
     
     /* now you can allocate memory  for observed data */
     
-    mRNA_values =  malloc(nmRNAObs*nmRNASample *sizeof(*mRNA_values));
-    mRNAObsIds  =  malloc(nmRNAObs*sizeof(*mRNAObsIds));
+    mRNA_values =  malloc((*nmRNAObs)*nmRNASample *sizeof(*mRNA_values));
+    mRNAObsIds  =  malloc((*nmRNAObs)*sizeof(*mRNAObsIds));
     
     /*  open the file second time to read the data and store them in allocated matrix*/
     file = fopen(filename, "r");
-    
-    
     
     nn = 0;
     while ((fgets(bufTCGA,numofTCGAsample,file)) != NULL)
@@ -1469,51 +1214,23 @@ int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *nu
                 }
                 else
                 {
-                    mRNA_values[h-1+nmRNAObs*(nn-1)]  = atof(temp);
+                    mRNA_values[h-1+(*nmRNAObs)*(nn-1)]  = atof(temp);
                     //printf("%f\n",atof(temp));
                 }
             }
-            
             h++;
-            
             temp = strtok(NULL, "\t");
         }
-        
         nn++;
     }
     
     fclose(file);
     
-    
-    
-    /*to test uncomment this part */
-    
-    
-    // for(h=0;h<nmRNAObs;h++)
-    //{
-    // printf("%d\t\n",mRNAObsIds[h]);
-    //}
-    
-    //for(nn=0;nn<nmRNASample;nn++)
-    //{
-    //for(h=0;h<nmRNAObs;h++)
-    //{
-    //printf("%f\n",mRNA_values[h+nmRNAObs*(nn)]);
-    //}
-    
-    //}
-    
-    
     *obs_values = mRNA_values;
     *obs_Ids  = mRNAObsIds;
     *numSample = nmRNASample;
     
-    
-    
-    
-    
-    return(nmRNAObs);// number of observed data
-    
+    return 0;// number of observed data
 }
 
 
@@ -1522,45 +1239,30 @@ int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *nu
 /**************************************************************************/
 int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,double* u,double* u_old,int num_state,int N,int Nv,int lu)
 {
-    
-    
-    
-    
     int L,i,j,v,k,noN,maxiter,Iter,Nf;
-    
-    
     double *f,*ff,dist,maxVal;
     double temp[num_state],temp0[num_state];;
     double maxLog[num_state],maxLogVar,normLog,stopThr;
     
-    
-    Iter = 0;
+    Iter      = 0;
     maxiter   = 100;
     maxVal    = 1e10;
-    stopThr = 1e-3;
+    stopThr   = 1e-3;
     
     while (maxVal > stopThr  && Iter <maxiter)
     {
-        
         Iter ++; //number of iterations
         
         for (k=0;k<lu;k++)
             u_old[k] = u[k];
         
-        
         for (v=1;v<=N;v++)
         {
-            
-            
             noN =AlarmNet[v-1].numAdj;  /* # of adjNodes nodes conneceted to node v */
             
             if (v > Nv)
             {
-                
-                
                 L = AlarmNet[v-1].numComb; /* # of conditions in CPT represnted by factor Nv-v*/
-                
-                
                 f = (double *)malloc(L * sizeof(double));
                 
                 for(k=0;k<L;k++)
@@ -1571,26 +1273,20 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
                 
                 for (j = 0;j < noN;j++)
                 {
-                    
                     for (k=0;k<L;k++){
                         f[k] +=  u[AlarmNet[v-1].iIdx[j]+array[v-Nv-1][k+j*L]-1];
                         // printf("%f\n",u[AlarmNet[v-1].iIdx[j]+array[v-Nv-1][k+j*L]-1]);
-                        
                     }
                 }
                 
                 for (j =0;j<noN;j++)
                 {
-                    
-                    
                     for(k=0;k<num_state;k++)
                     {
                         maxLog[k] = LargeNegNumber;
                         temp[k]=0;
                         
                     }
-                    
-                    
                     
                     for(i=0;i<num_state;i++)
                     {
@@ -1610,34 +1306,21 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
                     for (k=0;k<L;k++)
                     {
                         temp[array[v-Nv-1][k+j*L]-1] += exp(f[k]-maxLog[array[v-Nv-1][k+j*L]-1]);
-                        
                     }
                     
                     for (k=0;k<num_state;k++)
                     {
                         u[AlarmNet[v-1].oIdx[j]+k] = maxLog[k]+log(temp[k])-u[AlarmNet[v-1].iIdx[j]+k];
                         //printf("%f\n",(u[AlarmNet[v-1].oIdx[j]+k]));
-                        
                     }
-                    
                 }
-                
-                
                 free(f);
-                
             }
-            
-            
             else   /*  message from variable  to factor*/
             {
-                
-                
                 if(noN !=1)
                 {
-                    
-                    
                     for(k=0;k<num_state;k++){temp0[k] = 0;} /* initialize the temp*/
-                    
                     
                     for (j =0;j<noN;j++)
                     {
@@ -1648,64 +1331,39 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
                         }
                     }
                     
-                    
-                    
-                    
-                    
                     for (j =0;j<noN;j++)
                     {
-                        
                         for (k=0;k<num_state;k++)
                         {
                             temp[k] = temp0[k]-u[AlarmNet[v-1].iIdx[j]+k];
                             //printf("%d %d %f\n",j,k,temp[k]);
                         }
                         
-                        
                         maxLogVar = LargeNegNumber;
                         normLog = 0;
                         
                         for (k = 0; k < num_state; k++)
                         {
-                            
-                            
                             if (temp[k]>maxLogVar)
                                 maxLogVar = temp[k];
-                            
                         }
                         
                         for (k = 0; k < num_state; k++)
                         {
                             temp[k] -= maxLogVar;
-                            
                             normLog += exp(temp[k]);
-                            
-                            
                         }
                         
-                        
                         normLog = log(normLog);
-                        
                         
                         for (k = 0; k < num_state; k++)
                         {
                             u[AlarmNet[v-1].oIdx[j]+k] =  temp[k]-normLog;
-                            // printf("%d %d %f\n",j,k,u[AlarmNet[v-1].oIdx[j]+k]);
-                            
-                            
                         }
-                        
-                        //printf("----------------------\n");
-                        
-                        
                     }
                 }
-                
             }
-            
-            
         }
-        
         
         maxVal =0;
         
@@ -1715,38 +1373,20 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
             if (dist > maxVal)
                 maxVal = dist;
         }
-        
-        
     }
     
-    
-    
-    
-    
     /*compute the states probability of nodes after LBP is converged*/
-    
-    
     for (v=1;v<=Nv;v++)
-        
     {
-        
-        
         noN = AlarmNet[v-1].numAdj;
-        
-        
         for(k=0;k<num_state;k++){temp[k] = 0;} /* initialize the temp*/
-        
         
         for (k=0;k<num_state;k++)
         {
             for (j =0;j<noN;j++)
             {
                 temp[k] += u[AlarmNet[v-1].iIdx[j]+k];
-                
-                // printf("%d %d %f\n",j,k,u[AlarmNet[v-1].iIdx[j]+k]);
             }
-            
-            
         }
         
         maxLogVar = LargeNegNumber;
@@ -1756,7 +1396,6 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
         {
             if (temp[k]>maxLogVar)
                 maxLogVar = temp[k];
-            
         }
         
         for (k = 0; k < num_state; k++)
@@ -1770,18 +1409,12 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
         for (k = 0; k < num_state; k++)
             temp[k] -= normLog;
         
-        
-        
         for (k = 0; k < num_state; k++)
         {
-            
             AlarmNet[v-1].beliefs[k] = exp(temp[k]);
             //if(!isfinite(temp[k]))
             //printf("%f %f\n", exp(temp[k]),log(exp(temp[k])));
         }
-        
-        
-        
     }
     
     /*compute the joint probabilty of set of variables belonging to a factor (see Eq 8.72 Bishop book)*/
@@ -1790,39 +1423,23 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
     
     for (v=0;v<Nf;v++)
     {
-        
-        
         noN =AlarmNet[v+Nv].numAdj;  /* # of adjNodes nodes conneceted to node v */
-        
-        
-        
         L = AlarmNet[v+Nv].numComb; /* # of conditions in CPT represnted by factor Nv-v*/
-        
-        
         ff = (double *)malloc(L * sizeof(*ff));
-        
+
         for(k=0;k<L;k++)
             ff[k] = factorarray[v][k];
         
         for (j = 0;j < noN;j++)
         {
-            
             for (k=0;k<L;k++)
             {
                 ff[k] +=  u[AlarmNet[v+Nv].iIdx[j]+array[v][k+j*L]-1];
-                
                 // printf("%d %f\n",k, exp(u[AlarmNet[v+Nv].iIdx[j]+array[v][k+j*L]-1]));
-                
             }
-            
-            //printf("---------------\n");
-            
         }
         
         /* to normalize the beliefs */
-        
-        
-        
         maxLogVar = LargeNegNumber;
         normLog = 0;
         
@@ -1830,9 +1447,8 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
         {
             if (ff[k]>maxLogVar)
                 maxLogVar = ff[k];
-            
         }
-        
+
         for (k = 0; k < L; k++)
         {
             ff[k] -= maxLogVar;
@@ -1845,44 +1461,28 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
         for (k = 0; k < L; k++)
             ff[k] -= normLog;
         
-        
-        
         for (k = 0; k < L; k++)
         {
-            
             AlarmNet[v+Nv].beliefs[k] = exp(ff[k]);
             // printf("%d %f\n",k, AlarmNet[v+Nv].beliefs[k]);
         }
-        // printf("-----------------\n");
         free(ff);
-        
-        
-        
     }
     
-    
     return(Iter);
-    
-    
 }
-
-
-
 
 /**************************************************************************/
 /* reaction_logic_to_factorgraph*/
 /**************************************************************************/
 
-
 int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefactorgraphfilename,int nstate)
 {
-    
     int i,k,h,kk,Ne,Nv;
     int  maxLen = 2000;
     char buf[maxLen];
     const char delims[2] = "\t";
     char *temp, *target, *source,*pos_neg,*type_interaction;
-    
     
     struct factor
     {
@@ -1894,16 +1494,9 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     };
     typedef  struct factor  *factor;
     
-    
-    
     // read the node name and store in an array
     FILE *file = fopen(readreactionlogicpathways, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file %s in  ExtractNonUniqNodelist \n", readreactionlogicpathways);
-        exit(42);
-        
-    }
+    if (file == NULL) return 101;
     
     fgets(buf,maxLen,file);    /* read first line  to get number of edges and store it in Ne*/
     
@@ -1915,24 +1508,16 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     
     fgets(buf,maxLen,file);    /* second line is empty*/
     
-    
-    
-    
     k = 0;
     kk = 0;
     
     while ((fgets(buf,maxLen,file)) != NULL)
     {
-        
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-        
-        
         temp = strtok(buf, delims);
         i = 0; /*  we need the second column (i.e. i==1) */
         while (temp != NULL)
         {
-            
-            
             if(i == 0 || i == 1 ) /* read first and second column; child and parent nodes*/
             {
                 targetsource[kk] = malloc((strlen(temp)+1)*sizeof(char));
@@ -1940,20 +1525,14 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
                 strcpy(targetsource[kk],temp) ;
                 kk++;
             }
-            
             temp = strtok(NULL, delims);
-            
             i++;
-            
         }
-        
-        
     }
     
     rewind(file); /* reset the fgets to the begining of the file*/
     
     Nv = uniq(targetsource,2*Ne); /* unique list of target and source nodes;  Nv: # of variable node  */
-    
     
     for(i=0;i<Nv;i++)
         free(targetsource[i]);
@@ -2007,12 +1586,8 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     /* find the variable parent  nodes  and the child node connected to  each factor */
     /*--------------------------------------------------------------------------------*/
     
-    
-    
     fgets(buf,maxLen,file);     /* get the first line (don't need this line) */
-    
     fgets(buf,maxLen,file);     /* second line is empty */
-    
     
     while ((fgets(buf,maxLen,file)) != NULL)
     {
@@ -2086,20 +1661,10 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
             strcpy(fGraph[k].variablenode[0],source);
             
             fGraph[k].pos_neg[0] = 1; /* read the third column */
-            
             fGraph[k].type_interaction[0] = 1 ; /* read the forth column */
-            
-            
         }
-        
     }
-    
-    
-    
     fclose(file);
-    
-    
-    
     
     /*  make the CPT to be used to compute the probablity corresponding to each combination of parents*/
     
@@ -2149,12 +1714,9 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
         
         //printf("----------------\n");
     }
-    
     free (Ncpt);
     
-    
     /*end CPT*/
-    
     
     /*  we set the CPD values based on AND and OR and POS or Neg ; we use the min and max similar to PARADIGM but should be imporoved*/
     /*start writing CPD values*/
@@ -2190,9 +1752,6 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
             {
                 cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] = (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-2)*fGraph[i].pos_neg[h] ;
             }
-            
-            
-            
         }
     }
     
@@ -2215,11 +1774,8 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     int Big_Num_for_AND;   /*to find min*/
     for(i = 0;i < Nv;i++)
     {
-        
-        
         for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
         {
-            
             Small_num_for_OR   = -1e5;
             Big_Num_for_AND = 1e5;
             for (h=1;h < fGraph[i].numVariables;h++)
@@ -2244,13 +1800,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
             
             vote[i][k] -= cpt[i][k];
             vote[i][k]  = inAbsolute(vote[i][k]);
-            
-            // printf("%f %d\n",vote[i][k],cpt[i][k]);
-            
-            
         }
-        
-        
     }
 
     /*based on the vote procedure (AND or OR)  to find the best condition and assign a hight probablity fot that condition, i.e. p(y|x1,...x_N,)*/
@@ -2258,61 +1808,40 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     
     for(i = 0;i < Nv;i++)
     {
-        
         if(fGraph[i].numVariables > 1) /*if it is not a root node */
         {
             K=0;
-            
             for(k = 0 ;k < pow(nstate,fGraph[i].numVariables); k++)
             {
                 if( k % nstate == 0) /* if the perfect divisor */
                 {
-                    
                     MaxNum = 1e5;
                     s = 0;
-                    
                     for(h = 0 ;h < nstate; h++)
                     {
-                        
                         if(vote[i][h+nstate*K] < MaxNum)
                         {
                             s = h+nstate*K;
                             MaxNum = vote[i][h+nstate*K];
                         }
-                        
-                        
                     }
-                    
                     K++;
                 }
-                
                 factorarray[i][s]= 1-(1e-3)/2;
-                
             }
         }
         else /*this is a root node so the zero state take the maximum change to occur unless we have some prior knowledge about other states being active*/
         {
             factorarray[i][1]= 1-(1e-3)/2;
         }
-        
-        
-        
-        // printf("-----------\n");
-        
-        
-        
     }
 
     /*end of writing CDP values*/
     
     /* write retrieved the in a factor graph format */
     FILE *file1 = fopen(writefactorgraphfilename, "w");
-    if (file1 == NULL)
-    {
-        fprintf(stderr, "cannot open the file %s in  ExtractNonUniqNodelist to write in \n", writefactorgraphfilename);
-        exit(42);
-        
-    }
+    if (file1 == NULL) return 102;
+
     /* write according to format*/
     fprintf(file1,"%d\n",Nv); /* number of factor*/
     fprintf(file1,"\n");    /* space*/
@@ -2356,13 +1885,10 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
         free(fGraph[i].type_interaction);
         free(fGraph[i].pos_neg);
         free(factorarray[i]);
-        
-        
     }
     free(fGraph);
     
-    return(Nv);
-    
+    return 0;
 }
 
 
@@ -2370,11 +1896,9 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
 /*  ReadMultipleVisibleSets*/
 /**************************************************************************/
 
-int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,int *numSample)
+int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *num_visibles)
 {
     int i,k;
-    
-    
     int    *visibleIds,*visible_values;
     const char delims[2] = "\t";
     char *temp;
@@ -2382,19 +1906,12 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
     int maxLen=1000; //need a large buffer to reading all observed nodes
     
     char buf[maxLen];
-    int num_visibles = 0;   /* # of observed nodes */
+    *num_visibles = 0;   /* # of observed nodes */
     int num_conditions =0; /* # of samples  */
-    
     
     /* open and read the file to find number of observed data and samples*/
     FILE *file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file in  ReadObservedData \n");
-        exit(42);
-        
-    }
-    
+    if (file == NULL) return 103;
     
     fgets(buf,maxLen,file);    /* read first line  to get number of edges and store it in Ne*/
     
@@ -2410,28 +1927,21 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
         fgets(buf,maxLen,file);
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
         
-        num_visibles =  atoi(buf); /*number of visible nodes in condition i-th*/
+        *num_visibles =  atoi(buf); /*number of visible nodes in condition i-th*/
         
         /* now you can allocate memory  for observed nodes in condition i-th */
         
-        visible_values =  malloc(num_visibles *sizeof(int));
-        visibleIds  =  malloc(num_visibles*sizeof(int));
+        visible_values =  malloc((*num_visibles) *sizeof(int));
+        visibleIds  =  malloc((*num_visibles)*sizeof(int));
         
-        for(k=0;k< num_visibles;k++)
+        for(k=0;k< (*num_visibles);k++)
         {
-            
-            
             fgets(buf,maxLen,file);
-            
-            
             buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-            
-            
             temp = strtok(buf, delims);
             i = 0; /*  we need the second column (i.e. i==1) */
             while (temp != NULL)
             {
-                
                 if(i == 0)
                 {
                     visibleIds[k] = phash(temp,strlen(temp));
@@ -2444,26 +1954,18 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
                 }
                 
                 temp = strtok(NULL, delims);
-                
                 i++;
-                
             }
             printf("%d %d %d\n",k,visibleIds[k],visible_values[k]);
-            
         }
         
         free(visible_values);
         free(visibleIds);
-        
     }
-    
     
     fclose(file);
     
-    
-    
     /*to test uncomment this part */
-    
     
     // for(h=0;h<num_visibles;h++)
     //{
@@ -2479,25 +1981,17 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
     
     //}
     
-    
     *obs_values = visible_values;
     *obs_Ids  = visibleIds;
     *numSample = num_conditions;
     
-    
-    
-    
-    
-    return(num_visibles);// number of observed data
-    
+    return 0;
 }
-
-
 
 /**************************************************************************/
 /*  learning_discrete_BayNet*/
 /**************************************************************************/
-void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag)
+int learning_discrete_BayNet(char * pathway,char *obs_data,char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag)
 {
     int i,k,m,h;         /*indexign for loops  and whiles */
     int lenMsgVec;       /*length of message vector (# of all messages *  # of state per message)*/
@@ -2524,25 +2018,25 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
     // read  all varibale nodes, remove duplicates; this section is excuted to make a unique list of nodes (keys) which are passed to
     // the hash function generator to make the hash function; we then we hash Ids throughout the code.
     
-    int numel = ExtractNonUniqNodeNum(pathway); // read pathwat file and return the number of varibales nodes in the pathway.
-    
+    int numel;
+    int exit_code = ExtractNonUniqNodeNum(pathway, &numel); // read pathwat file and return the number of varibales nodes in the pathway.
+    if (exit_code != 0) return exit_code;
+
     char* nodelist[numel];
     char *keys[numel];
     
     /*retrun the list of all varaible nodes; duplication may be in the list */
-    if (ExtractNonUniqNodelist(pathway,nodelist)!=numel)
-        fprintf(stderr, "incorrect read: number of lines does not match \n");
-    
+    int numline_nodelist;
+    exit_code = ExtractNonUniqNodelist(pathway,nodelist, &numline_nodelist);
+    if (exit_code !=0) return exit_code;
+
+    if(numline_nodelist !=numel) return 108;
     
     Nv = uniq(nodelist, numel); /*remove duplicate from nodelist;  Nv: # of variable nodes */
-    
-    
     Nf = Nv; /*in our setting # of facotrs should be equal to # of variables becuase we consider one factor for each root node */
-    
     N = Nv+Nf; // number of all nodes the graph
     
     /*sort the variable node names  according  to thier hash map Ids */
-    
     for(i=0;i<Nv;i++)
     {
         h = phash(nodelist[i],strlen(nodelist[i]));
@@ -2563,8 +2057,9 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
     
     /*  fill the pGraph struct field accroding to info given in factor graph file */
-    lenMsgVec = FactorgraphFile_To_NodeStructures(pathway,pGraph,num_state,Nv,Nf);
-    
+    exit_code = FactorgraphFile_To_NodeStructures(pathway, pGraph, num_state, Nv, Nf, &lenMsgVec);
+    if (exit_code != 0) return exit_code;    
+
     /*allocate memory for message vectors*/
     double * u = (double *)malloc(lenMsgVec*num_state * sizeof(double));
     double * u_old = (double *)malloc(lenMsgVec*num_state * sizeof(double));
@@ -2598,14 +2093,9 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
         for (k=0;k<pGraph[i+Nv].numComb;k++)
         {
             alpha[i][k]   =    pGraph[i+Nv].beliefs[k];
-            
-            
             // printf("p_o(%d,%d) %f\n",i,k, (factorarray0[i][k]));
         }
-        //printf("----------------------\n");
     }
-    
-    
     
     /* we assume p(y|x_1,..x_N) has Dirichlet distribution ; factorarray0 contains parameters of Dirichlet (i.e. \alpha). the gsl_ran_dirichlet generates samples from these distributions.   */
     
@@ -2613,69 +2103,48 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
     {
         for (k=0;k<pGraph[i+Nv].numComb/num_state;k++)
         {
-            
-            
             r = gsl_rng_alloc(gsl_rng_mt19937);
             gsl_rng_set(r,1);
             gsl_ran_dirichlet(r,num_state,&pGraph[i+Nv].beliefs[k*num_state],&factorarray0[i][k*num_state]);
-            
-            
         }
     }
-    
-    
     
     /* normalize CPD; each configuration should sum up to 1 and transform them to log domain */
     for(i=0;i<Nf;i++)
         normalizeCPD(factorarray0[i],factorarray0[i],pGraph[i+Nv].numComb,num_state,1);/*flag =1 mean convert to log */
-    
-    
+
     /* allocate a train and test array for sum of factor probabilities across the training and test data*/
-    
     double** sumFactorProbability      = (double **)malloc(Nf*sizeof(*sumFactorProbability));
-    
     
     /* initialize to zero*/
     for(i = 0;i < Nf;i++)
     {
         sumFactorProbability[i] = (double *)malloc(pGraph[i+Nv].numComb*sizeof(double));
-        
         for(k = 0 ;k < pGraph[i+Nv].numComb; k++)
         {
             sumFactorProbability[i][k] = 0;
         }
     }
     
-    
     /* to observe the changes of conditional probability values in each iteration*/
-    
     
     /* allocate two log likelihood vectors for the train and test phases*/
     double* LogLikelihood = (double *) malloc(max_num_repeat*sizeof(double));
-    
     
     /*initialize  the LogLikelihood vectors to zero*/
     for(i=0;i<max_num_repeat;i++)
     {
         LogLikelihood[i] = 0;
-        
     }
     
     /* open and read the file to find number of observed data and samples*/
     FILE *file = fopen(obs_data, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file in  ReadObservedData \n");
-        exit(42);
-        
-    }
+    if (file == NULL) return 103;
     
     /* do the EM algorithm */
     
     while(change_parameters > LLchangeLimit && num_repeat < max_num_repeat) /*stopping criterion*/
     {
-        
-        
         change_parameters = 0;
         /* initialize  to zeros*/
         for(i = 0;i < Nf;i++)
@@ -2695,11 +2164,8 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
         num_conditions =  atoi(buf); /*number of conditions*/
         /* do inference for each set of numSample training data */
         
-        
         for(m=0;m < num_conditions;m++)
-            
         {
-            
             for(i = 0;i < Nf;i++)
             {
                 for (k=0;k<pGraph[i+Nv].numComb;k++)
@@ -2707,9 +2173,7 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
                     factorarray[i][k]   =   factorarray0[i][k];
                     // printf("p_o(%d,%d) %f\n",i,k, (factorarray0[i][k]));
                 }
-                //printf("----------------------\n");
             }
-            
             
             fgets(buf,maxLen,file);
             buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
@@ -2723,34 +2187,22 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
             
             for(k=0;k< num_visibles;k++)
             {
-                
-                
                 fgets(buf,maxLen,file);
-                
-                
                 buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
-                
-                
                 temp = strtok(buf, delims);
                 h = 0; /*   a flag to let read the first and second column */
                 while (temp != NULL)
                 {
-                    
                     if(h == 0) /* first column*/
                     {
                         visibleIds[k] = phash(temp,strlen(temp));
                     }
-                    
                     if(h == 1) /* second column */
                     {
                         visible_values[k]  = atoi(temp);
-                        
                     }
-                    
                     temp = strtok(NULL, delims);
-                    
                     h++;
-                    
                 }
                 //printf("%d %d %d\n",m,visibleIds[k],visible_values[k]);
             }
@@ -2782,12 +2234,9 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
             {
                 for(k = 0 ;k < pGraph[i+Nv].numComb; k++)
                 {
-                    
                     sumFactorProbability[i][k] += pGraph[i+Nv].beliefs[k];
-                    
                     // printf("%d %f %f\n",m,factorarray[i][k],pGraph[i+Nv].beliefs[k]);
                 }
-                //printf("-----------------------\n");
             }
         } /* end of m loop for each set of observed data*/
         
@@ -2799,8 +2248,6 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
             for(k=0;k<pGraph[i+Nv].numComb;k++)
             {
                 LogLikelihood[num_repeat] += sumFactorProbability[i][k]*factorarray0[i][k]+alpha[i][k]*factorarray0[i][k] ;
-                
-                
             }
         }
         
@@ -2812,11 +2259,8 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
                 for(k = 0 ;k < pGraph[i+Nv].numComb; k++)
                 {
                     sumFactorProbability[i][k] += alpha[i][k];
-                    
                     //printf(" output %d %f\n",i,sumFactorProbability[i][k]);
-                    
                 }
-                //printf("----------------\n");
             }
         }
         
@@ -2836,51 +2280,30 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
             for(k=0;k<pGraph[i+Nv].numComb;k++)
             {
                 change_parameters += inAbsolute(exp(factorarray0[i][k])-exp(oldfactorarray0[i][k]));
-                
             }
             
             //change_parameters /= pGraph[i+Nv].numComb; /*if you want to use avarege  change per sample*/
             //printf("%f\n",parameterChange[num_repeat][i]);
         }
         
-        
-        
-        
-        
-        
         /* check stopping criterion*/
      //   printf(" itr = %d, par =  %f  LL = %f   \n",num_repeat,change_parameters,LogLikelihood[num_repeat]);
         changeLL= inAbsolute(oldLL -  LogLikelihood[num_repeat]);
-        
-        
-        
    //     if (oldLL> LogLikelihood[num_repeat])//LogLikelihood[num_repeat]
  //           printf( " warning : log likelihood decreases! \n");
-        
-        
         
         //printf("change in LL = %f\n",changeLL);
         oldLL =  LogLikelihood[num_repeat];
         num_repeat++; /* one EM iteration is performed */
         
-        
-        
         rewind(file); /* reset the fgets to the begining of the file*/
-        
-        
-        
     } /* end of  EM while*/
     
     fclose(file);
     
     /* open this file to write the results into*/
-    FILE * pm = fopen(nodepost, "w");
-    
-    if (pm == NULL)
-    {
-        fprintf(stderr, " to write, cannot open the posterior probabilities file \n");
-        exit(42);
-    }
+    FILE * pm = fopen(estimated_parameters_filepath, "w");
+    if (pm == NULL) return 104;
     
     
     /* write according to format*/
@@ -2915,7 +2338,6 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
     /* free  allocated arrays */
     if(1)
     {
-        
         free(u);
         free(u_old);
         
@@ -2939,7 +2361,6 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
             free(factorarray0[i]);
             free(oldfactorarray0[i]);
             free(sumFactorProbability[i]);
-            
         }
         free(alpha);
         free(factorarray);
@@ -2947,13 +2368,43 @@ void learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int 
         free(oldfactorarray0);
         free(sumFactorProbability);
         free(LogLikelihood);
-        
     }
-    
+
+    return 0;
 }
 
+char *strerror_libnet (int error_code) {
+    static char strerr[100];
 
+    switch(error_code){
+        case 101 :
+            strcpy(strerr, "Cannot read from the specified pairwise interactions file");
+            break;
+        case 102:
+            strcpy(strerr, "Cannot write to the specified factorgraph file");
+            break;
+        case 103:
+            strcpy(strerr, "Cannot read from the specified observed data file");
+            break;
+        case 104:
+            strcpy(strerr, "Cannot write to the specified posterior probabilities");
+            break;
+        case 105:
+            strcpy(strerr, "Cannot read from file");
+            break;
+        case 106:
+            strcpy(strerr, "Cannot write to specified factorgraph file");
+            break;
+        case 107:
+            strcpy(strerr, "Cannot read from specified pathway file");
+            break;
+        case 108:
+            strcpy(strerr, "Number of lines does not match between node num and node list");
+            break;
+        default : 
+           strcpy(strerr, "Undefined error");
+    }
 
-
-
+    return strerr;
+}
 
