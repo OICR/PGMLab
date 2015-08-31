@@ -34,9 +34,9 @@ SEXP r_learning_discrete_BayNet(SEXP pathway_filepath_, SEXP observed_data_filep
 
     int number_of_states = (int) asInteger(number_of_states_);
 
-    int em_max_iterations              = asInteger(em_max_iterations_);
-    int em_log_likelihood_change_limit = asInteger(em_log_likelihood_change_limit_);
-    int map_flag                       = asInteger(map_flag_);
+    int em_max_iterations                 = (int) asInteger(em_max_iterations_);
+    double em_log_likelihood_change_limit = (double) asReal(em_log_likelihood_change_limit_);
+    int map_flag                          = (int) asInteger(map_flag_);
 
     learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, 
                              number_of_states, em_max_iterations, em_log_likelihood_change_limit, map_flag);
