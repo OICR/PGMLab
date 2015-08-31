@@ -17,9 +17,11 @@ SEXP r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP
 
     int number_of_states = (int) asInteger(number_of_states_);
 
-    reaction_logic_to_factorgraph(reaction_logic_pathway_filepath, pathway_filepath, number_of_states);
-
-    int exit_code = 0; // In the future need to make the function return an error code. 
+    int exit_code =reaction_logic_to_factorgraph(reaction_logic_pathway_filepath, pathway_filepath, number_of_states);
+    if (exit_code != 0) {
+        char * strerr = strerror_libnet(exit_code);
+        Rprintf("ERROR: %s\n", strerr);
+    }
 
     return ScalarInteger(exit_code);
 }
@@ -29,7 +31,6 @@ SEXP r_learning_discrete_BayNet(SEXP pathway_filepath_, SEXP observed_data_filep
                                 SEXP em_log_likelihood_change_limit_, SEXP map_flag_) {
     char* pathway_filepath              = (char *) CHAR(asChar(pathway_filepath_));
     char* observed_data_filepath        = (char *) CHAR(asChar(observed_data_filepath_));
-  //  char* hyperparameters_filepath   = (char *) CHAR(asChar(hyper_parameters_filepath_)); add later
     char* estimated_parameters_filepath = (char *) CHAR(asChar(estimated_parameters_filepath_));
 
     int number_of_states = (int) asInteger(number_of_states_);
@@ -38,10 +39,12 @@ SEXP r_learning_discrete_BayNet(SEXP pathway_filepath_, SEXP observed_data_filep
     double em_log_likelihood_change_limit = (double) asReal(em_log_likelihood_change_limit_);
     int map_flag                          = (int) asInteger(map_flag_);
 
-    learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, 
+    int exit_code = learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, 
                              number_of_states, em_max_iterations, em_log_likelihood_change_limit, map_flag);
-
-    int exit_code = 0; // In the future need to make the function return an error code. 
+    if (exit_code != 0) {
+        char * strerr = strerror_libnet(exit_code);
+        Rprintf("ERROR: %s\n", strerr);
+    }
 
     return ScalarInteger(exit_code);
 }
@@ -54,9 +57,11 @@ SEXP r_doLBPinference(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP
  
     int number_of_states = asInteger(number_of_states_); 
  
-    doLBPinference(pathway_filepath, observed_data_filepath, posterior_probabilities_filepath, number_of_states);
-
-    int exit_code = 0; // Make it so that the function from the library returns an int in the future. 
+    int exit_code = doLBPinference(pathway_filepath, observed_data_filepath, posterior_probabilities_filepath, number_of_states);
+    if (exit_code != 0) {
+        char * strerr = strerror_libnet(exit_code);
+        Rprintf("ERROR: %s\n", strerr);
+    }
 
     return ScalarInteger(exit_code);	
 }
