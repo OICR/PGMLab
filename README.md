@@ -105,5 +105,23 @@ The three available functions are:
 	r_learning_discrete_BayNet(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP estimated_parameters_filepath_, SEXP number_of_states_, SEXP em_max_iterations_, SEXP em_log_likelihood_change_limit_, SEXP map_flag_)
 	r_doLBPinference(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP posterior_probabilities_filepath_, SEXP number_of_states_)
 	
+###Calling LibNet functions from R
+
+####Loading shared object:
+	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnet.so")
+		
+####Call available functions:
+
+All filepaths are full file paths and the rest of the variables should be supplied as integer values. Functions will return 0 upon success and error codes otherwise. 
+
+#####Reaction Logic to Factorgraph
+	.Call("reaction_logic_to_factorgraph", "../../test/data1/JE_Network.txt", "../../test/data1/JE_Network_FG.txt",3)
+	
+####Learning
+	.Call("r_learning_discrete_BayNet", "../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt", "../../test/data1/estimated_parameters.txt", 3, 1e-3, 1)
+		
+####Inference
+	.Call("r_doLBPinference","../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt","../../test/data1/nodepost.txt", 3)
+	
 	
 
