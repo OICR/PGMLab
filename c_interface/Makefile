@@ -47,6 +47,8 @@ TEST_I_2_VALIDATED_OUTPUT_FILE = ../test_data/Nt_or_learn.OUT.test.correct
 
 DEBUGFLAGS   = -O0 -D _DEBUG
 
+INCLDUE_READLINE = ../external_lib/readline/include
+
 LIBDIRS = -L$(LIBNET_LIB)
 RPATH   = -Wl,-rpath=$(LIBNET_LIB)
 
@@ -61,10 +63,17 @@ INCLUDE_GSL = -L../external_lib/gsl/lib -I../external_lib/gsl/include -lgsl -lgs
 all: $(TARGET) 
 
 $(TARGET): folders
-	$(CC) $(CCFLAGS) $(LIBDIRS) -o $(TARGET_PATH) $(SOURCES) $(CFLAGS) $(SOFLAGS) -Iinclude -I../net/include -I../resources/make_hash_table/include $(INCLUDE_GSL)
+	$(CC) $(CCFLAGS) $(LIBDIRS) -o $(TARGET_PATH) $(SOURCES) $(CFLAGS) $(SOFLAGS) -Iinclude -I../net/include -I../resources/make_hash_table/include $(INCLUDE_GSL) $(INCLUDE_READLINE)
+
+folders: 
+	mkdir -p ../bin 
+
+readline:
+	cd ..; \
+	make readline
 
 clean:
 	rm -f $(TARGET) $(OBJECTS) 
 
-folders: 
-	mkdir -p ../bin 
+
+

@@ -15,12 +15,20 @@
 //for checking to see if file is readable
 #include <unistd.h>
 
+//readline
+#include <readline/readline.h>
+#include <readline/history.h>
+
 #include "net.h"
 #include "main.h"
 
 #include "../include/argtable3.h"
 
-int mymain(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, int number_of_states, const char *ini_filename, int g_count, int l_count, int i_count) {
+#define TRUE		1
+#define	FALSE		0
+#define FILENAME_MAX	100
+
+int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, int number_of_states, const char *ini_filename, int g_count, int l_count, int i_count) {
 
     char value[200];
     int MAP_flag = 1;
@@ -88,7 +96,7 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
             return 0;
         } 
         else {
-            printf("\tEstimated Parameters habe been writtent to the following file: %s\n", estimated_parameters_filepath);
+            printf("\tEstimated Parameters habe been written to the following file: %s\n", estimated_parameters_filepath);
             printf("\tLearning completed\n\n");
         }
  
@@ -123,8 +131,80 @@ int mymain(int em_max_iterations, int em_number_of_training_samples, double em_l
     return 0;
 }
 
+void remove_newlines(char *s)
+{
+    char *nl = strrchr(s, '\n');
+    if (nl!=NULL)
+        *nl = '\0';
+}
+
+// Returns 1 for true an 0 for false
+int is_yes(char * input) {
+ //   input[strlen(input) - 1] = '\0';
+    if((strcmp(input,"yes") == 0) ||
+       (strcmp(input,"YES") == 0) ||
+       (strcmp(input,"Y") == 0) ||
+       (strcmp(input,"y") == 0) ||
+       (strcmp(input,"") == 0))
+    {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+int get_filepath() {
+    char filename[FILENAME_MAX] = "";
+    char entered_path[FILENAME_MAX/2];
+
+    fgets(entered_path, FILENAME_MAX / 2, stdin);
+    remove_newlines(entered_path);
+
+printf("enteredpath: %s\n", entered_path);
+    FILE *fil = NULL;
+    fil = fopen(entered_path, "r");
+    if (fil!=NULL)
+    {
+        printf("good\n");
+    }
+
+    fclose(fil);
+
+
+   return 0;
+}
+
+int get_pathway_filepath() {
+    printf("\tSpecify your pairwise interaction file:\n>>");
+    get_filepath();
+    return 0;
+}
+
+int interactive_command() {
+   char input[50];
+   char * end;
+   double result = 0;
+
+
+   printf("Would you like to generate factorgraph from pairwise interactions [Y/n] ");
+   fgets(input, sizeof input, stdin);
+   remove_newlines(input);
+
+   if (is_yes(input) == 1)
+   {
+       printf("\nGathering information to generated the factorgraph file from pairwise interactions\n");
+       get_pathway_filepath();
+   } 
+   else 
+   {
+       printf("You have selected no\n");
+   }
+
+   return 0;
+}
+
 int main(int argc, char *argv[]) {
-    struct arg_lit *i, *l, *g;
+    struct arg_lit *i, *l, *g, *interactive;
     struct arg_lit *help, *version;
     struct arg_end *end;
     struct arg_int *em_max_iterations, *em_number_of_training_samples, *number_of_states;
@@ -132,6 +212,7 @@ int main(int argc, char *argv[]) {
     struct arg_dbl *em_log_likelihood_change_limit; 
 
     void *argtable[] = {
+        interactive = arg_lit0(NULL, "interactive", "Interactive mode"),
         inifile = arg_file0("f", "inifile", "inifile", "File to be use to describe configuration of analysis"),
         g = arg_lit0("g", "generate-pathway", "Generate factorgraph from reaction logic"),
         i = arg_lit0("i", "inference", "Run inference on dataset"),
@@ -197,6 +278,12 @@ int main(int argc, char *argv[]) {
         goto exit;
     }
 
+    if(interactive->count > 0) {
+        printf("Starting Interactive Mode\n>>");
+        interactive_command();
+        goto exit;
+    }
+
     if( access( *inifile->filename, F_OK ) == -1 ) {
         arg_print_errors(stdout, end, program_name);
         printf("Either the inifile specified is unreadable or was not specified: %s\n", *inifile->filename);
@@ -205,7 +292,7 @@ int main(int argc, char *argv[]) {
     }
 
     /* Command line parsing is complete, do the main processing */
-    exitcode = mymain(em_max_iterations->ival[0], em_number_of_training_samples->ival[0], em_log_likelihood_change_limit->dval[0], number_of_states->ival[0], *inifile->filename, g->count, l->count, i->count);
+    exitcode = non_interactive_command(em_max_iterations->ival[0], em_number_of_training_samples->ival[0], em_log_likelihood_change_limit->dval[0], number_of_states->ival[0], *inifile->filename, g->count, l->count, i->count);
 exit:
     /* deallocate each non-null entry in argtable[] */
     arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));  

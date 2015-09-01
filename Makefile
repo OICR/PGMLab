@@ -2,6 +2,7 @@ SHELL = /bin/sh
 CC    = gcc
 CWD   = $(shell pwd)
 
+READLINE_VERSION = 6.3
 GSL_VERSION = 1.9
 
 ifeq ($(OS),Windows_NT)
@@ -33,13 +34,19 @@ else
 endif
 
 
-all: gsl generateHash
+all: gsl readline generateHash
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
 	./configure  --prefix=$(CWD)/external_lib/gsl; \
 	make; \
 	make install; 
+
+readline:
+	cd ./external_lib/readline-$(READLINE_VERSION); \
+	./configure --prefix=$(CWD)/external_lib/readline; \
+	make; \
+	make install;
 
 generateHash:
 	mkdir -p bin; \

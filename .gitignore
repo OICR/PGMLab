@@ -3,6 +3,9 @@
 external_lib/gsl
 external_lib/gsl-*
 
+#readline 
+exernal_lib/reawdline
+
 #generated hash files
 makeHashTable/phash.*
 
