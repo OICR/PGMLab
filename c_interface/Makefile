@@ -47,7 +47,7 @@ TEST_I_2_VALIDATED_OUTPUT_FILE = ../test_data/Nt_or_learn.OUT.test.correct
 
 DEBUGFLAGS   = -O0 -D _DEBUG
 
-INCLDUE_READLINE = ../external_lib/readline/include
+
 
 LIBDIRS = -L$(LIBNET_LIB)
 RPATH   = -Wl,-rpath=$(LIBNET_LIB)
@@ -59,6 +59,7 @@ HEADERS = $(shell echo include/*.h) $(shell echo ../resources/make_hash_table/sr
 OBJECTS = $(SOURCES:.c=.o)
 
 INCLUDE_GSL = -L../external_lib/gsl/lib -I../external_lib/gsl/include -lgsl -lgslcblas
+INCLUDE_READLINE =-I../external_lib/readline/include -lreadline
 
 all: $(TARGET) 
 

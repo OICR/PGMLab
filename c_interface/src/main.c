@@ -140,7 +140,6 @@ void remove_newlines(char *s)
 
 // Returns 1 for true an 0 for false
 int is_yes(char * input) {
- //   input[strlen(input) - 1] = '\0';
     if((strcmp(input,"yes") == 0) ||
        (strcmp(input,"YES") == 0) ||
        (strcmp(input,"Y") == 0) ||
@@ -153,47 +152,31 @@ int is_yes(char * input) {
     return FALSE;
 }
 
-int get_filepath() {
-    char filename[FILENAME_MAX] = "";
-    char entered_path[FILENAME_MAX/2];
+int get_pairwise_interaction_filepath(char ** filepath) {
 
-    fgets(entered_path, FILENAME_MAX / 2, stdin);
-    remove_newlines(entered_path);
+    *filepath = readline("Enter pairwise interaction file:  ");
+    add_history(*filepath);
 
-printf("enteredpath: %s\n", entered_path);
-    FILE *fil = NULL;
-    fil = fopen(entered_path, "r");
-    if (fil!=NULL)
-    {
-        printf("good\n");
+    if (access(*filepath, R_OK) != 0) { //check if file is readable
+       printf("Can not read specified file.\n");
+       return get_pairwise_interaction_filepath(filepath);
     }
 
-    fclose(fil);
-
-
-   return 0;
-}
-
-int get_pathway_filepath() {
-    printf("\tSpecify your pairwise interaction file:\n>>");
-    get_filepath();
     return 0;
 }
 
+
 int interactive_command() {
-   char input[50];
-   char * end;
+   char *input; 
+   char *pairwise_interaction_filepath = "";
    double result = 0;
 
-
-   printf("Would you like to generate factorgraph from pairwise interactions [Y/n] ");
-   fgets(input, sizeof input, stdin);
-   remove_newlines(input);
+   input = readline("Would you like to generate factorgraph from pairwise interactions [Y/n] ");
 
    if (is_yes(input) == 1)
    {
        printf("\nGathering information to generated the factorgraph file from pairwise interactions\n");
-       get_pathway_filepath();
+       get_pairwise_interaction_filepath(&pairwise_interaction_filepath);
    } 
    else 
    {
@@ -201,6 +184,22 @@ int interactive_command() {
    }
 
    return 0;
+}
+
+int interactive_commands() {
+    char *inpt;
+
+    int i = 0;
+
+    while ( i < 10 )
+    {
+        inpt = readline("Enter text: ");
+        add_history(inpt);
+        printf("%s", inpt);
+        printf("\n");
+        ++i;
+    }
+
 }
 
 int main(int argc, char *argv[]) {
