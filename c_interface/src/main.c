@@ -15,6 +15,9 @@
 //for checking to see if file is readable
 #include <unistd.h>
 
+//for isbool to check if int
+#include <ctype.h>
+
 //readline
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -91,7 +94,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
 
         int exit_code = learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag);
         if (exit_code != 0) {
-            char * strerr = strerror (exit_code);
+            char * strerr = strerror_libnet(exit_code);
             printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
             return 0;
         } 
@@ -119,7 +122,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
 
         int exit_code = doLBPinference(pathway_filepath, observed_data_filepath, posterior_probabilities_filepath, number_of_states);
         if (exit_code != 0) {
-             char * strerr = strerror (exit_code);
+             char * strerr = strerror_libnet(exit_code);
              printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
              return exit_code;
         }
@@ -152,7 +155,65 @@ int is_yes(char * input) {
     return FALSE;
 }
 
-int get_pairwise_interaction_filepath(char ** filepath) {
+int get_readable_pairwise_interaction_filepath(char ** filepath) {
+
+    *filepath = readline("Enter pairwise interaction file path:  ");
+    add_history(*filepath);
+
+    if (access(*filepath, R_OK) != 0) { //check if file is readable
+       printf("Can not read specified file.\n");
+       return get_readable_pairwise_interaction_filepath(filepath);
+    }
+
+    return 0;
+}
+
+int get_writeable_pathway_filepath(char ** filepath) {
+
+    *filepath = readline("Enter pathway file path:  ");
+    add_history(*filepath);
+
+    if (access(*filepath, W_OK) != 0) { //check if file is readable
+       printf("Can not write specified file.\n");
+       return get_writeable_pathway_filepath(filepath);
+    }
+
+    return 0;
+}
+
+int is_int(char * str) {
+   while (*str)
+   {
+      if (!isdigit(*str))
+         return FALSE;
+      else
+         ++str;
+   }
+
+    return TRUE;
+}
+
+int get_number_of_states(int * number_of_states) {
+
+    char *str = "";
+
+    str = readline("Enter number of states[default 3]: ");
+
+    if (!*str) {
+        *number_of_states = 3;
+    }
+    else if (is_int(str) == 0 ) {
+        printf("Not a valid Integer - please try again");
+        return get_number_of_states(number_of_states); 
+    }
+    else {
+        *number_of_states = 3;
+    }
+
+    return 0;
+}
+/*
+int get_readable_pathway_filepath(char ** filepath) {
 
     *filepath = readline("Enter pairwise interaction file:  ");
     add_history(*filepath);
@@ -165,18 +226,60 @@ int get_pairwise_interaction_filepath(char ** filepath) {
     return 0;
 }
 
+int get_readable_observed_data_filepath(char ** filepath) {
+
+    *filepath = readline("Enter pairwise interaction file:  ");
+    add_history(*filepath);
+
+    if (access(*filepath, R_OK) != 0) { //check if file is readable
+       printf("Can not read specified file.\n");
+       return get_pairwise_interaction_filepath(filepath);
+    }
+
+    return 0;
+}
+
+int get_pairwise_interaction_filepath(char ** filepath) {
+
+    *filepath = readline("Enter pairwise interaction file:  ");
+    add_history(*filepath);
+
+    if (access(*filepath, R_OK) != 0) { //check if file is readable
+       printf("Can not read specified file.\n");
+       return get_pairwise_interaction_filepath(filepath);
+    }
+
+    return 0;
+}
+*/
 
 int interactive_command() {
    char *input; 
-   char *pairwise_interaction_filepath = "";
+   char *pairwise_interactions_filepath = "";
+   char *pathway_filepath = "";
    double result = 0;
+   int number_of_states;
 
    input = readline("Would you like to generate factorgraph from pairwise interactions [Y/n] ");
 
    if (is_yes(input) == 1)
    {
        printf("\nGathering information to generated the factorgraph file from pairwise interactions\n");
-       get_pairwise_interaction_filepath(&pairwise_interaction_filepath);
+       get_readable_pairwise_interaction_filepath(&pairwise_interactions_filepath);
+       get_writeable_pathway_filepath(&pathway_filepath);
+       get_number_of_states(&number_of_states);
+       printf("Generating Factorgraph file from pairwise interactions");
+       int exit_code = reaction_logic_to_factorgraph(pairwise_interactions_filepath, pathway_filepath, number_of_states);
+
+        if (exit_code != 0) {
+           char * strerr = strerror_libnet(exit_code);
+           printf("Failed to generate factorgraph (error code: %d): %s\n", exit_code, strerr);
+           return exit_code;
+        }
+        else {
+           printf("\tFactorgragh has been output into the following pathway file: %s\n", pathway_filepath);
+           printf("\tPathway generation completed\n\n");
+        }
    } 
    else 
    {

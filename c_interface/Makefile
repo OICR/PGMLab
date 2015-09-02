@@ -4,13 +4,13 @@
 #
 # 
 LIBNET_LIB   = ../net/lib
-SOFLAGS      = -lnet -Wl,-rpath,$(LIBNET_LIB)
+SOFLAGS      = -lnet -Wl,-rpath=$(LIBNET_LIB),-rpath=../external_lib/gsl/lib
 ################################
 
 SHELL = /bin/sh
 CC    = gcc
 
-CFLAGS       =  -lm -w#-Wall -Werror
+CFLAGS       =  -lm -fPIC -w #-Wall -Werror
 
 ifeq ($(OS),Windows_NT)
     CCFLAGS += -D WIN32
@@ -59,12 +59,13 @@ HEADERS = $(shell echo include/*.h) $(shell echo ../resources/make_hash_table/sr
 OBJECTS = $(SOURCES:.c=.o)
 
 INCLUDE_GSL = -L../external_lib/gsl/lib -I../external_lib/gsl/include -lgsl -lgslcblas
-INCLUDE_READLINE =-I../external_lib/readline/include -lreadline
+INCLUDE_READLINE = -L../external_lib/readline/lib -I../external_lib/readline/include -lreadline
+INCLUDE_TERMCAP = -L../external_lib/termcap/lib -I../external_lib/termcap/include -ltermcap
 
 all: $(TARGET) 
 
 $(TARGET): folders
-	$(CC) $(CCFLAGS) $(LIBDIRS) -o $(TARGET_PATH) $(SOURCES) $(CFLAGS) $(SOFLAGS) -Iinclude -I../net/include -I../resources/make_hash_table/include $(INCLUDE_GSL) $(INCLUDE_READLINE)
+	$(CC) $(CCFLAGS) $(LIBDIRS) -o $(TARGET_PATH) $(SOURCES) $(CFLAGS) $(SOFLAGS) -Iinclude -I../net/include -I../resources/make_hash_table/include $(INCLUDE_GSL) $(INCLUDE_READLINE) $(INCLUDE_TERMCAP)
 
 folders: 
 	mkdir -p ../bin 

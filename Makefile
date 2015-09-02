@@ -3,7 +3,10 @@ CC    = gcc
 CWD   = $(shell pwd)
 
 READLINE_VERSION = 6.3
+TERMCAP_VERSION = 1.3.1
 GSL_VERSION = 1.9
+
+
 
 ifeq ($(OS),Windows_NT)
     CCFLAGS += -D WIN32
@@ -36,15 +39,23 @@ endif
 
 all: gsl readline generateHash
 
+external_lib: gsl readline
+
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
 	./configure  --prefix=$(CWD)/external_lib/gsl; \
 	make; \
 	make install; 
 
-readline:
+readline: termcap
 	cd ./external_lib/readline-$(READLINE_VERSION); \
 	./configure --prefix=$(CWD)/external_lib/readline; \
+	make; \
+	make install;
+
+termcap:
+	cd ./external_lib/termcap-$(TERMCAP_VERSION); \
+	./configure --prefix=$(CWD)/external_lib/termcap; \
 	make; \
 	make install;
 

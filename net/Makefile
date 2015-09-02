@@ -64,22 +64,22 @@ folder:
 	mkdir -p obj lib; 
 
 net.o: src/net.c 
-	$(CC) $(CCFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include 
+	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include 
 
 perfect.o: ../resources/make_hash_table/src/perfect.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w
 
 phash.o: ../resources/make_hash_table/src/phash.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/phash.c -o obj/phash.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/phash.c -o obj/phash.o -I../resources/make_hash_table/include -w
 
 lookupa.o: ../resources/make_hash_table/src/lookupa.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/lookupa.c -o obj/lookupa.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/lookupa.c -o obj/lookupa.o -I../resources/make_hash_table/include -w
 
 recycle.o: ../resources/make_hash_table/src/recycle.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/recycle.c -o obj/recycle.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/recycle.c -o obj/recycle.o -I../resources/make_hash_table/include -w
 
 perfhex.o: ../resources/make_hash_table/src/perfhex.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/perfhex.c -o obj/perfhex.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfhex.c -o obj/perfhex.o -I../resources/make_hash_table/include -w
 
 clean:
 	rm -f $(TARGET_PATH) ; \
