@@ -8,6 +8,7 @@
 //for inimini
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h> // for strtod
 #include <string.h>
 #include "../minini/minIni.h"
 #define sizearray(a)  (sizeof(a) / sizeof((a)[0]))
@@ -156,8 +157,7 @@ int is_yes(char * input) {
 }
 
 int get_readable_pairwise_interaction_filepath(char ** filepath) {
-
-    *filepath = readline("\tEnter pairwise interaction file path:  ");
+    *filepath = readline("\tEnter pairwise interaction (input) filepath:  ");
     add_history(*filepath);
 
     if (access(*filepath, R_OK) != 0) { //check if file is readable
@@ -169,8 +169,7 @@ int get_readable_pairwise_interaction_filepath(char ** filepath) {
 }
 
 int get_writeable_pathway_filepath(char ** filepath) {
-
-    *filepath = readline("\tEnter pathway file path:  ");
+    *filepath = readline("\tEnter pathway (output) filepath:  ");
     add_history(*filepath);
 
     if (access(*filepath, W_OK) != 0) { //check if file is readable
@@ -182,8 +181,7 @@ int get_writeable_pathway_filepath(char ** filepath) {
 }
 
 int get_readable_pathway_filepath(char ** filepath) {
-
-    *filepath = readline("\tEnter pathway file path:  ");
+    *filepath = readline("\tEnter pathway (input) filepath:  ");
     add_history(*filepath);
 
     if (access(*filepath, R_OK) != 0) { //check if file is readable
@@ -194,19 +192,17 @@ int get_readable_pathway_filepath(char ** filepath) {
     return 0;
 }
 
-
 int get_number_of_states(int * number_of_states) {
-
+    char * ptr;
     char *str = "";
-
     str = readline("\tEnter number of states[default 3]: ");
 
     if (!*str) {
         *number_of_states = 3;
         return 0;
     }
-
-    char number = atoi(*str);
+   
+    int number = strtol(str, &ptr, 10);
     if (number == 0 && *str != '0') {
         printf("\t\tNot a valid Integer - please try again");
         return get_number_of_states(number_of_states); 
@@ -219,8 +215,7 @@ int get_number_of_states(int * number_of_states) {
 }
 
 int get_observed_data_filepath(char ** filepath) {
-
-    *filepath = readline("\tEnter observed data filepath:  ");
+    *filepath = readline("\tEnter observed data (input) filepath:  ");
     add_history(*filepath);
 
     if (access(*filepath, R_OK) != 0) { //check if file is readable
@@ -231,9 +226,20 @@ int get_observed_data_filepath(char ** filepath) {
     return 0;
 }
 
-int get_writeable_estimated_parameters_filepath(char ** filepath) {
+int get_writeable_posterior_probabilites_filepath(char ** filepath) {
+    *filepath = readline("\tEnter posterior probabilities (output) filepath:  ");
+    add_history(*filepath);
 
-    *filepath = readline("\tEnter estimated parameters filepath:  ");
+    if (access(*filepath, W_OK) != 0) { //check if file is readable
+       printf("\t\tCan not read specified file.\n");
+       return get_writeable_posterior_probabilites_filepath(filepath);
+    }
+
+    return 0;
+}
+
+int get_writeable_estimated_parameters_filepath(char ** filepath) {
+    *filepath = readline("\tEnter estimated parameters (output) filepath:  ");
     add_history(*filepath);
 
     if (access(*filepath, W_OK) != 0) { //check if file is readable
@@ -245,18 +251,16 @@ int get_writeable_estimated_parameters_filepath(char ** filepath) {
 }
 
 int get_max_iterations(int * em_max_iterations) {
-
+    char *ptr;
     char *str = "";
-
     str = readline("\tEnter max number of iterations for expectation maximization [default 400]: ");
-
 
     if (!*str) {
         *em_max_iterations = 400;
         return 0;
     }
 
-    int number = atoi(*str);
+    int number = strtol(str, &ptr, 10);
     if (number == 0) {
         printf("\t\tNot a valid Integer - please try again");
         return get_max_iterations(em_max_iterations); 
@@ -269,9 +273,8 @@ int get_max_iterations(int * em_max_iterations) {
 }
 
 int get_log_likelihood_change_limit(double * em_log_likelihood_change_limit) {
-
+    char *ptr;
     char *str = "";
-
     str = readline("\tEnter the log likelihood change limit [default 1e-3]: ");
  
     if (!*str) {
@@ -279,9 +282,9 @@ int get_log_likelihood_change_limit(double * em_log_likelihood_change_limit) {
         return 0;
     }
 
-    double number = atof(*str);
+    double number = strtod(str, &ptr);
     if (number == 0) {
-        printf("\t\tNot a valid Integer - please try again");
+        printf("\t\tNot a valid number");
         return get_log_likelihood_change_limit(em_log_likelihood_change_limit); 
     }
     else {
@@ -293,7 +296,6 @@ int get_log_likelihood_change_limit(double * em_log_likelihood_change_limit) {
 
 int get_map_flag(int * map_flag) {
     char *str = "";
-
     str = readline("\tEnter map flag (1 or 0) [default 1]: ");
 
     if ((!*str) || (*str == '1')) {
@@ -303,79 +305,115 @@ int get_map_flag(int * map_flag) {
         *map_flag = 0;
     }
     else {
-        printf("\t\tNot 0 or 1");
+        printf("\t\tNot 0 or 1 - please try again\n");
         return get_map_flag(map_flag); 
     }
 
     return 0;
 }
 
+int interactive_pairwise_to_factorgraph(char **pairwise_interactions_filepath, char **pathway_filepath, int *number_of_states) {
+    printf("\nGathering information required to generated the factorgraph file from pairwise interactions\n");
+    get_readable_pairwise_interaction_filepath(pairwise_interactions_filepath);
+    get_writeable_pathway_filepath(pathway_filepath);
+    get_number_of_states(number_of_states);
+
+    printf("\nGenerating Factorgraph file from pairwise interactions:\t%s\n", *pathway_filepath);
+    int exit_code = reaction_logic_to_factorgraph(*pairwise_interactions_filepath, *pathway_filepath, *number_of_states);
+
+    if (exit_code != 0) {
+        char * strerr = strerror_libnet(exit_code);
+        printf("Failed to generate factorgraph (error code: %d): %s\n", exit_code, strerr);
+        return exit_code;
+    }
+    else {
+        printf("\tFactorgragh has been output into the following pathway file: %s\n", *pathway_filepath);
+        printf("\tPathway generation completed\n\n");
+    }
+}
+
+int interactive_learning(char **pathway_filepath, char ** observed_data_filepath, char** estimated_parameters_filepath, int *number_of_states, int * em_max_iterations, double * em_log_likelihood_change_limit, int * MAP_flag ) {
+    printf("\nGathering information required to perform learning\n");
+    if (access(*pathway_filepath, R_OK) != 0) 
+        get_readable_pathway_filepath(pathway_filepath);
+    get_observed_data_filepath(observed_data_filepath);
+    get_writeable_estimated_parameters_filepath(estimated_parameters_filepath);
+    if (*number_of_states == 0) 
+        get_number_of_states(number_of_states);
+    get_max_iterations(em_max_iterations);
+    get_log_likelihood_change_limit(em_log_likelihood_change_limit);
+    get_map_flag(MAP_flag);
+
+    int exit_code = learning_discrete_BayNet(*pathway_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *MAP_flag);
+    if (exit_code != 0) {
+        char * strerr = strerror_libnet(exit_code);
+        printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
+        return 0;
+    } 
+    else {
+        printf("\tEstimated Parameters have been written to the following file: %s\n", *estimated_parameters_filepath);
+        printf("\tLearning completed\n\n");
+    }
+
+    return 0;
+}
+
+int interactive_inference(char **pathway_filepath, char ** observed_data_filepath, char** posterior_probabilities_filepath, int *number_of_states) {
+    printf("\nGathering information required to perform inference\n");
+    if (access(*pathway_filepath, R_OK) != 0) 
+        get_readable_pathway_filepath(pathway_filepath);
+    if (access(*observed_data_filepath, R_OK) != 0)
+        get_observed_data_filepath(observed_data_filepath);
+    get_writeable_posterior_probabilites_filepath(posterior_probabilities_filepath);
+    if (*number_of_states == 0) 
+        get_number_of_states(number_of_states);
+  
+    int exit_code = doLBPinference(*pathway_filepath, *observed_data_filepath, *posterior_probabilities_filepath, *number_of_states);
+    if (exit_code != 0) {
+         char * strerr = strerror_libnet(exit_code);
+         printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
+         return exit_code;
+    }
+    else {
+         printf("\tPosterior probabilities have been written to the following file: %s\n", *posterior_probabilities_filepath);
+         printf("\tInference completed\n");
+    }
+
+    return 0;
+}
+
 int interactive_command() {
-   char *input; 
-   char *pairwise_interactions_filepath = "";
-   char *pathway_filepath = "";
-   char *observed_data_filepath = "";
-   char *estimated_parameters_filepath = "";
-   double result = 0;
-   int number_of_states = 0;
-   int em_max_iterations = 0;
-   double em_log_likelihood_change_limit = 0;
-   int MAP_flag = 0;
+    char *input; 
+    char *pairwise_interactions_filepath;
+    char *pathway_filepath;
+    char *observed_data_filepath;
+    char *estimated_parameters_filepath;
+    char *posterior_probabilities_filepath;
+    double result = 0;
+    int number_of_states = 0;
+    int em_max_iterations = 0;
+    double em_log_likelihood_change_limit = 0;
+    int MAP_flag = 0;
 
-   input = readline("Would you like to generate factorgraph from pairwise interactions [Y/n] ");
-
-   if (is_yes(input) == 1)
-   {
-        printf("\nGathering information required to generated the factorgraph file from pairwise interactions\n");
-        get_readable_pairwise_interaction_filepath(&pairwise_interactions_filepath);
-        get_writeable_pathway_filepath(&pathway_filepath);
-        get_number_of_states(&number_of_states);
-
-        printf("Generating Factorgraph file from pairwise interactions");
-        int exit_code = reaction_logic_to_factorgraph(pairwise_interactions_filepath, pathway_filepath, number_of_states);
-
-        if (exit_code != 0) {
-           char * strerr = strerror_libnet(exit_code);
-           printf("Failed to generate factorgraph (error code: %d): %s\n", exit_code, strerr);
-           return exit_code;
-        }
-        else {
-           printf("\tFactorgragh has been output into the following pathway file: %s\n", pathway_filepath);
-           printf("\tPathway generation completed\n\n");
-        }
-   } 
-
-    input = readline("Would you like to perform inference on a factorgraph [Y/n] ");
-
+    input = readline("\nWould you like to generate factorgraph from pairwise interactions [Y/n] ");
     if (is_yes(input) == 1)
     {
-        printf("\nGathering information required to perform inference\n");
-        get_readable_pairwise_interaction_filepath(&pairwise_interactions_filepath);
-        if (access(*pathway_filepath, W_OK) != 0) 
-            get_readable_pathway_filepath(&pathway_filepath);
-        get_observed_data_filepath(&observed_data_filepath);
-        get_writeable_estimated_parameters_filepath(&estimated_parameters_filepath);
-        if (number_of_states == 0) 
-            get_number_of_states(&number_of_states);
-        get_max_iterations(&em_max_iterations);
-        get_log_likelihood_change_limit(&em_log_likelihood_change_limit);
-        get_map_flag(&MAP_flag);
-
-        int exit_code = learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag);
-        if (exit_code != 0) {
-            char * strerr = strerror_libnet(exit_code);
-            printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
-            return 0;
-        } 
-        else {
-            printf("\tEstimated Parameters have been written to the following file: %s\n", estimated_parameters_filepath);
-            printf("\tLearning completed\n\n");
-        }
- 
+        interactive_pairwise_to_factorgraph(&pairwise_interactions_filepath, &pathway_filepath, &number_of_states);
     } 
 
+    input = readline("Would you like to perform learning [Y/n] ");
+    if (is_yes(input) == 1)
+    {
+        interactive_learning(&pathway_filepath, &observed_data_filepath, &estimated_parameters_filepath, &number_of_states, &em_max_iterations, &em_log_likelihood_change_limit, &MAP_flag);  
+    } 
 
+    input = readline("Would you like to perform inference [Y/n] ");
+    if (is_yes(input) == 1)
+    {
+        interactive_inference(&pathway_filepath, &observed_data_filepath, &posterior_probabilities_filepath, &number_of_states);  
+    } 
 
+    printf("\nAnalysis Complete\n");
     return 0;
 }
 
