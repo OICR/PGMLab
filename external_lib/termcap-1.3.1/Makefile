@@ -33,7 +33,7 @@ DEFS =  -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DSTDC_HEADERS=1  -DTERMCAP_FILE=\"$
 
 CFLAGS = -g
 
-prefix = /home/awright/git/LibNet/external_lib/termcap
+prefix = /home/awright/tmp/LibNet/external_lib/termcap
 exec_prefix = ${prefix}
 
 # Directory in which to install libtermcap.a.
