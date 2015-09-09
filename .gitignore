@@ -17,7 +17,6 @@ out/
 bin/
 lib/
 
-
 # Object files
 *.o
 
@@ -28,3 +27,6 @@ lib/
 #vim files
 *.swp
 *.swo
+
+#OS X files
+.DS_Store
