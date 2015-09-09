@@ -5,9 +5,9 @@ external_lib/gsl-*
 
 #readline 
 external_lib/readline
-external_lib/readline-*
+external_lib/readline-*/
 external_lib/termcap
-external_lib/termcap-*
+external_lib/termcap-*/
 
 #generated hash files
 makeHashTable/phash.*

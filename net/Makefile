@@ -4,8 +4,11 @@ CWD	= $(shell pwd)
 ODIR	= obj
 
 GSL_VERSION = 1.9
+SHARED_OBJECT_EXTENSION =
+
 
 CFLAGS	= -fPIC -g
+LDFLAGS =
 
 ifeq ($(OS),Windows_NT)
     CCFLAGS += -D WIN32
@@ -19,9 +22,15 @@ else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         CCFLAGS += -D LINUX
+        LDFLAGS = -shared
+        SHARED_OBJECT_EXTENSION = so
     endif
     ifeq ($(UNAME_S),Darwin)
         CCFLAGS += -D OSX
+        LDFLAGS = -dynamiclib
+        SHARED_OBJECT_EXTENSION = dylib
+        RPATH = -install_name ../net/lib/$(TARGET)
+#@rpath/lib/$(TARGET)
     endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
@@ -35,9 +44,7 @@ else
     endif
 endif
 
-LDFLAGS = -shared
-
-TARGET		= libnet.so
+TARGET		= libnet.$(SHARED_OBJECT_EXTENSION)
 TARGET_PATH	= $(shell pwd)/lib/$(TARGET)
 
 SOURCES	=	src/net.c \
@@ -55,10 +62,11 @@ INCLUDE_GSL = -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/incl
 all: $(TARGET_PATH)
 
 $(TARGET_PATH): folder net.o perfect.o phash.o lookupa.o recycle.o perfhex.o
-	$(CC) $(CCFLAGS) $(CFLAGS) -o $(TARGET_PATH) \
+	$(CC) $(CCFLAGS) $(LDFLAGS) $(CFLAGS) $(RPATH) -o $(TARGET) \
 	$(OBJECTS) \
 	$(INCLUDE_GSL) \
-	$(LDFLAGS) -lm -w
+	-lm -w; \
+        mv $(TARGET) $(TARGET_PATH)
 
 folder:
 	mkdir -p obj lib; 
