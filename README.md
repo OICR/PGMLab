@@ -117,7 +117,7 @@ The three available functions are:
 All filepaths are full file paths and the rest of the variables should be supplied as integer values. Functions will return 0 upon success and error codes otherwise. 
 
 #####Reaction Logic to Factorgraph
-	.Call("reaction_logic_to_factorgraph", "../../test/data1/JE_Network.txt", "../../test/data1/JE_Network_FG.txt",3)
+	.Call("r_reaction_logic_to_factorgraph", "../../test/data1/JE_Network.txt", "../../test/data1/JE_Network_FG.txt",3)
 	
 ####Learning
 	.Call("r_learning_discrete_BayNet", "../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt", "../../test/data1/estimated_parameters.txt", 3, 4000, 1e-3, 1)
