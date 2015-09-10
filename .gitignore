@@ -3,6 +3,12 @@
 external_lib/gsl
 external_lib/gsl-*
 
+#readline 
+external_lib/readline
+external_lib/readline-*/
+external_lib/termcap
+external_lib/termcap-*/
+
 #generated hash files
 makeHashTable/phash.*
 
@@ -10,7 +16,6 @@ makeHashTable/phash.*
 out/
 bin/
 lib/
-
 
 # Object files
 *.o
@@ -22,3 +27,6 @@ lib/
 #vim files
 *.swp
 *.swo
+
+#OS X files
+.DS_Store

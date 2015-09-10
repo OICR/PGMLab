@@ -17,7 +17,7 @@ SEXP r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP
 
     int number_of_states = (int) asInteger(number_of_states_);
 
-    int exit_code =reaction_logic_to_factorgraph(reaction_logic_pathway_filepath, pathway_filepath, number_of_states);
+    int exit_code = reaction_logic_to_factorgraph(reaction_logic_pathway_filepath, pathway_filepath, number_of_states);
     if (exit_code != 0) {
         char * strerr = strerror_libnet(exit_code);
         Rprintf("ERROR: %s\n", strerr);

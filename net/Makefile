@@ -4,8 +4,11 @@ CWD	= $(shell pwd)
 ODIR	= obj
 
 GSL_VERSION = 1.9
+SHARED_OBJECT_EXTENSION =
+
 
 CFLAGS	= -fPIC -g
+LDFLAGS =
 
 ifeq ($(OS),Windows_NT)
     CCFLAGS += -D WIN32
@@ -19,9 +22,14 @@ else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         CCFLAGS += -D LINUX
+        LDFLAGS = -shared
+        SHARED_OBJECT_EXTENSION = so
     endif
     ifeq ($(UNAME_S),Darwin)
         CCFLAGS += -D OSX
+        LDFLAGS = -dynamiclib
+        SHARED_OBJECT_EXTENSION = dylib
+        RPATH = -install_name ../net/lib/libnet.$(SHARED_OBJECT_EXTENSION)
     endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
@@ -35,9 +43,7 @@ else
     endif
 endif
 
-LDFLAGS = -shared
-
-TARGET		= libnet.so
+TARGET		= libnet.$(SHARED_OBJECT_EXTENSION)
 TARGET_PATH	= $(shell pwd)/lib/$(TARGET)
 
 SOURCES	=	src/net.c \
@@ -55,31 +61,32 @@ INCLUDE_GSL = -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/incl
 all: $(TARGET_PATH)
 
 $(TARGET_PATH): folder net.o perfect.o phash.o lookupa.o recycle.o perfhex.o
-	$(CC) $(CCFLAGS) $(CFLAGS) -o $(TARGET_PATH) \
+	$(CC) $(CCFLAGS) $(LDFLAGS) $(CFLAGS) $(RPATH) -o $(TARGET) \
 	$(OBJECTS) \
 	$(INCLUDE_GSL) \
-	$(LDFLAGS) -lm -w
+	-lm -w; \
+        mv $(TARGET) $(TARGET_PATH)
 
 folder:
 	mkdir -p obj lib; 
 
 net.o: src/net.c 
-	$(CC) $(CCFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include 
+	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include 
 
 perfect.o: ../resources/make_hash_table/src/perfect.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w
 
 phash.o: ../resources/make_hash_table/src/phash.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/phash.c -o obj/phash.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/phash.c -o obj/phash.o -I../resources/make_hash_table/include -w
 
 lookupa.o: ../resources/make_hash_table/src/lookupa.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/lookupa.c -o obj/lookupa.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/lookupa.c -o obj/lookupa.o -I../resources/make_hash_table/include -w
 
 recycle.o: ../resources/make_hash_table/src/recycle.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/recycle.c -o obj/recycle.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/recycle.c -o obj/recycle.o -I../resources/make_hash_table/include -w
 
 perfhex.o: ../resources/make_hash_table/src/perfhex.c
-	$(CC) $(CCFLAGS) -c ../resources/make_hash_table/src/perfhex.c -o obj/perfhex.o -I../resources/make_hash_table/include -w
+	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfhex.c -o obj/perfhex.o -I../resources/make_hash_table/include -w
 
 clean:
 	rm -f $(TARGET_PATH) ; \
