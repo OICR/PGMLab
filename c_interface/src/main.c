@@ -135,12 +135,19 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
     return 0;
 }
 
-void remove_newlines(char *s)
-{
-    char *nl = strrchr(s, '\n');
-    if (nl!=NULL)
-        *nl = '\0';
-}
+//this checks if the directory is writalbel and the filename exists
+int is_writeable(char * filepath) {
+    char buf[1000];
+    realpath(filepath, buf);
+    char *ts = strdup(filepath);
+    char *ts2 = strdup(filepath);
+    char *filename = basename(ts);
+    char *dir = dirname(ts2);
+    if ( (access(dir, W_OK) == 0) && (strlen(filename) > 0)) 
+        return TRUE;
+    
+    return FALSE;
+}    
 
 // Returns 1 for true an 0 for false
 int is_yes(char * input) {
@@ -157,10 +164,10 @@ int is_yes(char * input) {
 }
 
 int get_readable_pairwise_interaction_filepath(char ** filepath) {
-    *filepath = readline("\tEnter pairwise interaction (input) filepath:  ");
+    *filepath = readline("\tEnter pairwise interaction filepath (input):  ");
     add_history(*filepath);
 
-    if (access(*filepath, R_OK) != 0) { //check if file is readable
+    if (access(*filepath, R_OK) != 0) {
        printf("\t\tCan not read specified file.\n");
        return get_readable_pairwise_interaction_filepath(filepath);
     }
@@ -169,10 +176,10 @@ int get_readable_pairwise_interaction_filepath(char ** filepath) {
 }
 
 int get_writeable_pathway_filepath(char ** filepath) {
-    *filepath = readline("\tEnter pathway (output) filepath:  ");
+    *filepath = readline("\tEnter pathway filepath (output):  ");
     add_history(*filepath);
 
-    if (access(*filepath, W_OK) != 0) { //check if file is readable
+    if (!is_writeable(*filepath)) {
        printf("\t\tCan not write specified file.\n");
        return get_writeable_pathway_filepath(filepath);
     }
@@ -181,10 +188,10 @@ int get_writeable_pathway_filepath(char ** filepath) {
 }
 
 int get_readable_pathway_filepath(char ** filepath) {
-    *filepath = readline("\tEnter pathway (input) filepath:  ");
+    *filepath = readline("\tEnter pathway filepath (input):  ");
     add_history(*filepath);
 
-    if (access(*filepath, R_OK) != 0) { //check if file is readable
+    if (access(*filepath, R_OK) != 0) {
        printf("\t\tCan not read specified file.\n");
        return get_readable_pathway_filepath(filepath);
     }
@@ -215,10 +222,10 @@ int get_number_of_states(int * number_of_states) {
 }
 
 int get_observed_data_filepath(char ** filepath) {
-    *filepath = readline("\tEnter observed data (input) filepath:  ");
+    *filepath = readline("\tEnter observed data filepath (input):  ");
     add_history(*filepath);
 
-    if (access(*filepath, R_OK) != 0) { //check if file is readable
+    if (access(*filepath, R_OK) != 0) { 
        printf("\t\tCan not read specified file.\n");
        return get_observed_data_filepath(filepath);
     }
@@ -226,13 +233,13 @@ int get_observed_data_filepath(char ** filepath) {
     return 0;
 }
 
-int get_writeable_posterior_probabilites_filepath(char ** filepath) {
-    *filepath = readline("\tEnter posterior probabilities (output) filepath:  ");
+int get_writeable_posterior_probabilities_filepath(char ** filepath) {
+    *filepath = readline("\tEnter posterior probabilities filepath (output):  ");
     add_history(*filepath);
 
-    if (access(*filepath, W_OK) != 0) { //check if file is readable
-       printf("\t\tCan not read specified file.\n");
-       return get_writeable_posterior_probabilites_filepath(filepath);
+    if (!is_writeable(*filepath)) {
+       printf("\t\tCan not write to specified file.\n");
+       return get_writeable_posterior_probabilities_filepath(filepath);
     }
 
     return 0;
@@ -242,7 +249,7 @@ int get_writeable_estimated_parameters_filepath(char ** filepath) {
     *filepath = readline("\tEnter estimated parameters (output) filepath:  ");
     add_history(*filepath);
 
-    if (access(*filepath, W_OK) != 0) { //check if file is readable
+    if (!is_writeable(*filepath)) { 
        printf("\t\tCan not read specified file.\n");
        return get_writeable_estimated_parameters_filepath(filepath);
     }
@@ -272,23 +279,23 @@ int get_max_iterations(int * em_max_iterations) {
     return 0;
 }
 
-int get_log_likelihood_change_limit(double * em_log_likelihood_change_limit) {
+int get_stop_criteria_threshold(double * em_stop_criteria_threshold) {
     char *ptr;
     char *str = "";
-    str = readline("\tEnter the log likelihood change limit [default 1e-3]: ");
+    str = readline("\tEnter the stop criteria threshold [default 1e-3]: ");
  
     if (!*str) {
-        *em_log_likelihood_change_limit = 1e-3;
+        *em_stop_criteria_threshold = 1e-3;
         return 0;
     }
 
     double number = strtod(str, &ptr);
     if (number == 0) {
         printf("\t\tNot a valid number");
-        return get_log_likelihood_change_limit(em_log_likelihood_change_limit); 
+        return get_stop_criteria_threshold(em_stop_criteria_threshold); 
     }
     else {
-        *em_log_likelihood_change_limit = number;
+        *em_stop_criteria_threshold = number;
     }
 
     return 0;
@@ -341,9 +348,10 @@ int interactive_learning(char **pathway_filepath, char ** observed_data_filepath
     if (*number_of_states == 0) 
         get_number_of_states(number_of_states);
     get_max_iterations(em_max_iterations);
-    get_log_likelihood_change_limit(em_log_likelihood_change_limit);
+    get_stop_criteria_threshold(em_log_likelihood_change_limit);
     get_map_flag(MAP_flag);
 
+    printf("Running Learning\n");
     int exit_code = learning_discrete_BayNet(*pathway_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *MAP_flag);
     if (exit_code != 0) {
         char * strerr = strerror_libnet(exit_code);
@@ -364,10 +372,11 @@ int interactive_inference(char **pathway_filepath, char ** observed_data_filepat
         get_readable_pathway_filepath(pathway_filepath);
     if (access(*observed_data_filepath, R_OK) != 0)
         get_observed_data_filepath(observed_data_filepath);
-    get_writeable_posterior_probabilites_filepath(posterior_probabilities_filepath);
+    get_writeable_posterior_probabilities_filepath(posterior_probabilities_filepath);
     if (*number_of_states == 0) 
         get_number_of_states(number_of_states);
   
+    printf("Running Inference\n");
     int exit_code = doLBPinference(*pathway_filepath, *observed_data_filepath, *posterior_probabilities_filepath, *number_of_states);
     if (exit_code != 0) {
          char * strerr = strerror_libnet(exit_code);
@@ -450,7 +459,7 @@ int main(int argc, char *argv[]) {
         number_of_states = arg_int0("ns", "number-of-states", NULL, "Number of states for pathway (default is 3)"),
         em_max_iterations = arg_int0("k", "em-max-iterations", NULL , "Maximum number of iterations for expectation maximization (default is 4000)"),
         em_number_of_training_samples = arg_int0("ts", "training-samples", NULL, "Number of training samples used in expectation mimization (default 400)"),
-        em_log_likelihood_change_limit = arg_dbl0("cl", "log-likelihood-change-limit", NULL, "Loglikeliihood change limit for expectation maximization (default 1e-3)"),
+        em_log_likelihood_change_limit = arg_dbl0("sct", "stop-criteria-threshold", NULL, "Stop criteria threshold for expectation maximization (default 1e-3)"),
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
