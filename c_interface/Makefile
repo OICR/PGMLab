@@ -63,7 +63,7 @@ INCLUDE_TERMCAP = -L../external_lib/termcap/lib -I../external_lib/termcap/includ
 all: $(TARGET) 
 
 $(TARGET): folders
-	$(CC) $(CCFLAGS) $(LIBDIRS) -o $(TARGET_PATH) $(SOURCES) $(CFLAGS) $(SOFLAGS) -Iinclude -I../resources/make_hash_table/include $(INCLUDE_NET) $(INCLUDE_GSL) $(INCLUDE_READLINE) $(INCLUDE_TERMCAP)
+	$(CC) $(CCFLAGS) -o $(TARGET_PATH) $(SOURCES) $(CFLAGS) $(SOFLAGS) -Iinclude -I../resources/make_hash_table/include $(INCLUDE_NET) $(INCLUDE_GSL) $(INCLUDE_READLINE) $(INCLUDE_TERMCAP)
 
 folders: 
 	mkdir -p ../bin 

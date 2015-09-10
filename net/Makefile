@@ -29,8 +29,7 @@ else
         CCFLAGS += -D OSX
         LDFLAGS = -dynamiclib
         SHARED_OBJECT_EXTENSION = dylib
-        RPATH = -install_name ../net/lib/$(TARGET)
-#@rpath/lib/$(TARGET)
+        RPATH = -install_name ../net/lib/libnet.$(SHARED_OBJECT_EXTENSION)
     endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
