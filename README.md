@@ -61,7 +61,7 @@ Using config/example.ini as a template specify where the files are that you woul
 	make  
 
 ###Result
-	The shared object "net/lib/libnet.so (.dynlib on OSX) will now exist
+	net/lib/libnet.so (.dynlib on OSX) has been generated
 
 ##Compiling C interface
 
@@ -71,7 +71,7 @@ Using config/example.ini as a template specify where the files are that you woul
 	make  
 	
 ###Result
-	The exacutable "bin/libnetc" will now exist
+	bin/libnetc has been generated
 
 ###Usage
 
@@ -93,7 +93,7 @@ In order to call libnet from the R Contole you will need to create and load the 
 	make
 
 ####Result
-	the file lib/libnetR.so should now exist
+	lib/libnetR.so has been generated
 
 ###Running R commands
 
