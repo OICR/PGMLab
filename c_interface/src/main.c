@@ -302,7 +302,7 @@ int get_stop_criteria_threshold(double * em_stop_criteria_threshold) {
 }
 
 int get_learning_logging(int *logging) {
-    char *input = readline("Would you like to have a log be generated for monitoring progress. If yes the status will be outputted to screen as well. [Y/n]  ");
+    char *input = readline("\tWould you like to have a log be generated for monitoring progress. If yes the status will be outputted to screen as well. [Y/n]  ");
     
     *logging = is_yes(input) == 1 ? 1 : 0;
 
