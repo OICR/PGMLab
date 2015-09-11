@@ -32,7 +32,7 @@
 #define	FALSE		0
 #define FILENAME_MAX	100
 
-int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, int number_of_states, const char *ini_filename, int g_count, int l_count, int i_count) {
+int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, int number_of_states, const char *ini_filename, int g_count, int l_count, int i_count, int logging) {
 
     char value[200];
     int MAP_flag = 1;
@@ -54,7 +54,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
     ini_gets("files", "posterior_probabilities", "dummy", posterior_probabilities_filepath, sizearray(value), ini_filename);
 
     if (g_count > 0) {
-        printf("Generating factorgraph with number of states %d\n", number_of_states);
+        printf("Generating factorgraph with number of states: %d\n", number_of_states);
 
         if ( strcmp(pathway_filepath, "dummy") == 0 ) {
             printf("Pathway filepath not specified in config\n");
@@ -78,7 +78,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         }
     }
     if (l_count > 0) {
-        printf("Running Learning with Max iterations %d, number of states %d, and log likelilhood change limit %e\n", em_max_iterations, number_of_states, em_log_likelihood_change_limit);
+        printf("Running Learning with Max iterations: %d, number of states: %d, log likelilhood change limit: %e, logging: %d \n", em_max_iterations, number_of_states, em_log_likelihood_change_limit, logging);
 
         if ( strcmp(pathway_filepath, "dummy") == 0 ) {
             printf("Pathway filepath not specified in config\n");
@@ -93,7 +93,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             return 1;
         }
 
-        int exit_code = learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag);
+        int exit_code = learning_discrete_BayNet(pathway_filepath, observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag, logging);
         if (exit_code != 0) {
             char * strerr = strerror_libnet(exit_code);
             printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
@@ -106,7 +106,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
  
     }
     if (i_count > 0) {
-        printf("Running Inference with number of states %d\n", number_of_states);
+        printf("Running Inference with number of states: %d\n", number_of_states);
 
         if ( strcmp(pathway_filepath, "dummy") == 0 ) {
             printf("Pathway filepath not specified in config\n");
@@ -301,6 +301,14 @@ int get_stop_criteria_threshold(double * em_stop_criteria_threshold) {
     return 0;
 }
 
+int get_learning_logging(int *logging) {
+    char *input = readline("Would you like to have a log be generated for monitoring progress. If yes the status will be outputted to screen as well. [Y/n]  ");
+    
+    *logging = is_yes(input) == 1 ? 1 : 0;
+
+    return 0;
+}
+
 int get_map_flag(int * map_flag) {
     char *str = "";
     str = readline("\tEnter map flag (1 or 0) [default 1]: ");
@@ -339,12 +347,13 @@ int interactive_pairwise_to_factorgraph(char **pairwise_interactions_filepath, c
     }
 }
 
-int interactive_learning(char **pathway_filepath, char ** observed_data_filepath, char** estimated_parameters_filepath, int *number_of_states, int * em_max_iterations, double * em_log_likelihood_change_limit, int * MAP_flag ) {
+int interactive_learning(char **pathway_filepath, char ** observed_data_filepath, char** estimated_parameters_filepath, int *number_of_states, int * em_max_iterations, double * em_log_likelihood_change_limit, int * MAP_flag, int * logging ) {
     printf("\nGathering information required to perform learning\n");
     if (access(*pathway_filepath, R_OK) != 0) 
         get_readable_pathway_filepath(pathway_filepath);
     get_observed_data_filepath(observed_data_filepath);
     get_writeable_estimated_parameters_filepath(estimated_parameters_filepath);
+    get_learning_logging(logging);
     if (*number_of_states == 0) 
         get_number_of_states(number_of_states);
     get_max_iterations(em_max_iterations);
@@ -352,7 +361,7 @@ int interactive_learning(char **pathway_filepath, char ** observed_data_filepath
     get_map_flag(MAP_flag);
 
     printf("Running Learning\n");
-    int exit_code = learning_discrete_BayNet(*pathway_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *MAP_flag);
+    int exit_code = learning_discrete_BayNet(*pathway_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *MAP_flag, *logging);
     if (exit_code != 0) {
         char * strerr = strerror_libnet(exit_code);
         printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
@@ -400,6 +409,7 @@ int interactive_command() {
     char *posterior_probabilities_filepath;
     double result = 0;
     int number_of_states = 0;
+    int logging = 0;
     int em_max_iterations = 0;
     double em_log_likelihood_change_limit = 0;
     int MAP_flag = 0;
@@ -413,7 +423,7 @@ int interactive_command() {
     input = readline("Would you like to perform learning [Y/n] ");
     if (is_yes(input) == 1)
     {
-        interactive_learning(&pathway_filepath, &observed_data_filepath, &estimated_parameters_filepath, &number_of_states, &em_max_iterations, &em_log_likelihood_change_limit, &MAP_flag);  
+        interactive_learning(&pathway_filepath, &observed_data_filepath, &estimated_parameters_filepath, &number_of_states, &em_max_iterations, &em_log_likelihood_change_limit, &MAP_flag, &logging);  
     } 
 
     input = readline("Would you like to perform inference [Y/n] ");
@@ -443,7 +453,7 @@ int interactive_commands() {
 }
 
 int main(int argc, char *argv[]) {
-    struct arg_lit *i, *l, *g, *interactive;
+    struct arg_lit *i, *l, *g, *interactive, *logging_on;
     struct arg_lit *help, *version;
     struct arg_end *end;
     struct arg_int *em_max_iterations, *em_number_of_training_samples, *number_of_states;
@@ -460,6 +470,7 @@ int main(int argc, char *argv[]) {
         em_max_iterations = arg_int0("k", "em-max-iterations", NULL , "Maximum number of iterations for expectation maximization (default is 4000)"),
         em_number_of_training_samples = arg_int0("ts", "training-samples", NULL, "Number of training samples used in expectation mimization (default 400)"),
         em_log_likelihood_change_limit = arg_dbl0("sct", "stop-criteria-threshold", NULL, "Stop criteria threshold for expectation maximization (default 1e-3)"),
+        logging_on = arg_lit0("logging-on", "logging-on", "Set this flag if you would like the learning step to produce status output into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
@@ -530,8 +541,10 @@ int main(int argc, char *argv[]) {
         goto exit;
     }
 
+    int logging = logging_on->count > 0 ? 1 : 0;
+
     /* Command line parsing is complete, do the main processing */
-    exitcode = non_interactive_command(em_max_iterations->ival[0], em_number_of_training_samples->ival[0], em_log_likelihood_change_limit->dval[0], number_of_states->ival[0], *inifile->filename, g->count, l->count, i->count);
+    exitcode = non_interactive_command(em_max_iterations->ival[0], em_number_of_training_samples->ival[0], em_log_likelihood_change_limit->dval[0], number_of_states->ival[0], *inifile->filename, g->count, l->count, i->count, logging);
 exit:
     /* deallocate each non-null entry in argtable[] */
     arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));  

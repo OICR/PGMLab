@@ -97,7 +97,7 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 
 void hash_graph_node_IDs(char *readreactionlogicpathways);
 
-int learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag);
+int learning_discrete_BayNet(char * pathway,char *obs_data,char *nodepost, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag, int logging);
 char *strerror_libnet(int error_code);
 
 #endif
