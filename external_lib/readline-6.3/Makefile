@@ -31,7 +31,7 @@ PACKAGE_TARNAME = readline
 srcdir = .
 
 top_srcdir = .
-BUILD_DIR = /home/awright/tmp/LibNet/external_lib/readline-6.3
+BUILD_DIR = /home/awright/git/LibNet/external_lib/readline-6.3
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -50,7 +50,7 @@ PURIFY =
 
 SHELL = /bin/sh
 
-prefix = /home/awright/tmp/LibNet/external_lib/readline
+prefix = /home/awright/git/LibNet/external_lib/readline
 exec_prefix = ${prefix}
 
 datarootdir = ${prefix}/share

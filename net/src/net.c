@@ -10,6 +10,13 @@
 
 #include "net.h"
 /* *****************************************************************************************/
+// Used for appending two char*s together
+char* stradd(const char* a, const char* b){
+    size_t len = strlen(a) + strlen(b);
+    char *ret = (char*)malloc(len * sizeof(char) + 1);
+    *ret = '\0';
+    return strcat(strcat(ret, a) ,b);
+}
 
 // see http://www.anyexample.com/programming/c/qsort__sorting_array_of_strings__integers_and_structs.xml
 int cstring_cmp(const void *a, const void *b)
@@ -1991,7 +1998,7 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 /**************************************************************************/
 /*  learning_discrete_BayNet*/
 /**************************************************************************/
-int learning_discrete_BayNet(char * pathway,char *obs_data,char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag)
+int learning_discrete_BayNet(char * pathway,char *obs_data,char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag, int logging)
 {
     int i,k,m,h;         /*indexign for loops  and whiles */
     int lenMsgVec;       /*length of message vector (# of all messages *  # of state per message)*/
@@ -2140,9 +2147,18 @@ int learning_discrete_BayNet(char * pathway,char *obs_data,char *estimated_param
     /* open and read the file to find number of observed data and samples*/
     FILE *file = fopen(obs_data, "r");
     if (file == NULL) return 103;
-    
-    /* do the EM algorithm */
-    
+
+
+    FILE *fpl;
+ 
+    if (logging == 1) {
+        char *estimated_parameters_log_filepath = stradd(estimated_parameters_filepath, ".log");
+        fpl = fopen(estimated_parameters_log_filepath, "w");
+        if (fpl == NULL) return 109;
+        free(estimated_parameters_log_filepath);
+    }
+
+    /* do the EM algorithm */    
     while(change_parameters > LLchangeLimit && num_repeat < max_num_repeat) /*stopping criterion*/
     {
         change_parameters = 0;
@@ -2285,21 +2301,25 @@ int learning_discrete_BayNet(char * pathway,char *obs_data,char *estimated_param
             //change_parameters /= pGraph[i+Nv].numComb; /*if you want to use avarege  change per sample*/
             //printf("%f\n",parameterChange[num_repeat][i]);
         }
-        
+
+        changeLL = num_repeat == 0 ? 0 : inAbsolute(oldLL -  LogLikelihood[num_repeat]);
+
         /* check stopping criterion*/
-     //   printf(" itr = %d, par =  %f  LL = %f   \n",num_repeat,change_parameters,LogLikelihood[num_repeat]);
-        changeLL= inAbsolute(oldLL -  LogLikelihood[num_repeat]);
-   //     if (oldLL> LogLikelihood[num_repeat])//LogLikelihood[num_repeat]
- //           printf( " warning : log likelihood decreases! \n");
-        
-        //printf("change in LL = %f\n",changeLL);
+        if (logging == 1) {
+            fprintf(fpl, "itr: %d\tpar: %f\tLL: %f\n", num_repeat, change_parameters, LogLikelihood[num_repeat]);
+            fprintf(fpl, "change in LL: %f\n\n", changeLL);
+        }
+
         oldLL =  LogLikelihood[num_repeat];
         num_repeat++; /* one EM iteration is performed */
         
         rewind(file); /* reset the fgets to the begining of the file*/
     } /* end of  EM while*/
     
-    fclose(file);
+    if ((logging == 1) && (fpl != NULL))
+        fclose(fpl);
+
+    fclose(file); //observed data file
     
     /* open this file to write the results into*/
     FILE * pm = fopen(estimated_parameters_filepath, "w");
@@ -2401,6 +2421,8 @@ char *strerror_libnet (int error_code) {
         case 108:
             strcpy(strerr, "Number of lines does not match between node num and node list");
             break;
+        case 109:
+            strcpy(strerr, "Unable to open log file for learning");
         default : 
            strcpy(strerr, "Undefined error");
     }

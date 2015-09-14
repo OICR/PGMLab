@@ -44,7 +44,7 @@ This tool is used to create a hash for the pathway you are using. If you change 
 ###Usage: generateHash
 
 	cd bin  
-	./generateHash <path to pathway file>  
+	./generateHash <pairwise interaction file>  
 
 ##Install libnet
 
@@ -61,7 +61,15 @@ Using config/example.ini as a template specify where the files are that you woul
 	make  
 
 ###Result
-	The shared object "net/lib/libnet.so (.dynlib on OSX) will now exist
+	net/lib/libnet.so (.dynlib on OSX) has been generated
+	
+##Library Path
+
+This program and tutorials rely on the relative paths to the main libnet shared object. If you are wanting to to access this object systemwide you could set the LD_LIBRARY_PATH environment variable (DYLD_LIBRARY_PATH on OSX).
+
+###Example command
+
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<path to shared object directory>
 
 ##Compiling C interface
 
@@ -71,7 +79,7 @@ Using config/example.ini as a template specify where the files are that you woul
 	make  
 	
 ###Result
-	The exacutable "bin/libnetc" will now exist
+	bin/libnetc has been generated
 
 ###Usage
 
@@ -93,7 +101,7 @@ In order to call libnet from the R Contole you will need to create and load the 
 	make
 
 ####Result
-	the file lib/libnetR.so should now exist
+	lib/libnetR.so has been generated
 
 ###Running R commands
 
@@ -112,7 +120,7 @@ The three available functions are:
 
 	r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP number_of_states_) 
 	
-	r_learning_discrete_BayNet(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP estimated_parameters_filepath_, SEXP number_of_states_, SEXP em_max_iterations_, SEXP em_log_likelihood_change_limit_, SEXP map_flag_) 
+	r_learning_discrete_BayNet(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP estimated_parameters_filepath_, SEXP number_of_states_, SEXP em_max_iterations_, SEXP em_log_likelihood_change_limit_, SEXP map_flag_, SEXP logging_) 
 	
 	r_doLBPinference(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP posterior_probabilities_filepath_, SEXP number_of_states_) 
 	
@@ -124,7 +132,7 @@ All filepaths are full file paths and the rest of the variables should be suppli
 	.Call("r_reaction_logic_to_factorgraph", "../../test/data1/JE_Network.txt", "../../test/data1/JE_Network_FG.txt",3)
 	
 ####Learning
-	.Call("r_learning_discrete_BayNet", "../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt", "../../test/data1/estimated_parameters.txt", 3, 4000, 1e-3, 1)
+	.Call("r_learning_discrete_BayNet", "../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt", "../../test/data1/estimated_parameters.txt", 3, 4000, 1e-3, 1, 1)
 		
 ####Inference
 	.Call("r_doLBPinference","../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt","../../test/data1/nodepost.txt", 3)
