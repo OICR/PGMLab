@@ -44,7 +44,7 @@ This tool is used to create a hash for the pathway you are using. If you change 
 ###Usage: generateHash
 
 	cd bin  
-	./generateHash <path to pathway file>  
+	./generateHash <pairwise interaction file>  
 
 ##Install libnet
 
