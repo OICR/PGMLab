@@ -62,6 +62,14 @@ Using config/example.ini as a template specify where the files are that you woul
 
 ###Result
 	net/lib/libnet.so (.dynlib on OSX) has been generated
+	
+##Libarry Path
+
+This program and tutorials rely on the relative paths to the main libnet shared object. If you are wanting to to access this object systemwide you could set the LD_LIBRARY_PATH environment variable (DYLD_LIBRARY_PATH on OSX).
+
+###Example command
+
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<path to shared object directory>
 
 ##Compiling C interface
 
