@@ -22,7 +22,7 @@ topdir = ..
 srcdir = .
 
 
-prefix = /home/awright/tmp/LibNet/external_lib/readline
+prefix = /home/awright/git/LibNet/external_lib/readline
 
 datarootdir = ${prefix}/share
 
@@ -49,7 +49,7 @@ RM = rm -f
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 
-BUILD_DIR = /home/awright/tmp/LibNet/external_lib/readline-6.3
+BUILD_DIR = /home/awright/git/LibNet/external_lib/readline-6.3
 TEXINPUTDIR = $(srcdir)
 
 MAKEINFO    = LANGUAGE= makeinfo

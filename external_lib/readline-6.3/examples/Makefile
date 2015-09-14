@@ -21,7 +21,7 @@ RL_LIBRARY_VERSION = 6.3
 SHELL = /bin/sh
 RM = rm -f
 
-prefix = /home/awright/tmp/LibNet/external_lib/readline
+prefix = /home/awright/git/LibNet/external_lib/readline
 exec_prefix = ${prefix}
 
 datarootdir = ${prefix}/share
@@ -32,7 +32,7 @@ datadir = ${datarootdir}
 
 top_srcdir = ..
 #BUILD_DIR = .
-BUILD_DIR = /home/awright/tmp/LibNet/external_lib/readline-6.3
+BUILD_DIR = /home/awright/git/LibNet/external_lib/readline-6.3
 installdir = $(datadir)/readline
 
 INSTALL = /usr/bin/install -c

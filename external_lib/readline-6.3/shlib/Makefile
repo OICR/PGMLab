@@ -32,7 +32,7 @@ datarootdir = ${prefix}/share
 srcdir = .
 VPATH = ..
 topdir = ..
-BUILD_DIR = /home/awright/tmp/LibNet/external_lib/readline-6.3
+BUILD_DIR = /home/awright/git/LibNet/external_lib/readline-6.3
 
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
@@ -52,7 +52,7 @@ SHELL = /bin/sh
 host_os = linux-gnu
 host_vendor = pc
 
-prefix = /home/awright/tmp/LibNet/external_lib/readline
+prefix = /home/awright/git/LibNet/external_lib/readline
 exec_prefix = ${prefix}
 includedir = ${prefix}/include
 bindir = ${exec_prefix}/bin
