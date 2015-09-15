@@ -188,7 +188,7 @@ int get_readable_pairwise_interaction_filepath(char ** filepath) {
 int get_writeable_pathway_filepath(char ** filepath) {
     *filepath = readline("\tEnter pathway filepath (output):  ");
     add_history(*filepath);
-printf("pathway filepath: %s\n", *filepath);
+
     if (!is_writeable(*filepath)) {
        printf("\t\tCan not write specified file.\n");
        return get_writeable_pathway_filepath(filepath);
