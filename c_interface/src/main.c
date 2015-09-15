@@ -1,8 +1,7 @@
 /*******************************************************************************
 * C interface to libnet
-            irg_int0(const char* shortopts, const char* longopts, const char* datatype, const char* glossary)
 *    USAGE:
-*        prob-net [--learning] [--inference]
+*        libnetc [--help] [--learning] [--inference]
 * 
 *******************************************************************************/
 //for inimini
@@ -15,6 +14,12 @@
 
 //for checking to see if file is readable
 #include <unistd.h>
+
+//To handle tilda 
+#include <wordexp.h>
+
+//for basename
+#include <libgen.h>
 
 //for isbool to check if int
 #include <ctype.h>
@@ -137,12 +142,17 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
 
 //this checks if the directory is writalbel and the filename exists
 int is_writeable(char * filepath) {
+    if( ( strlen(filepath) == 0) || (strcmp(filepath, ".") == 0) || (strcmp(filepath, "/") ==0) ) {
+         return FALSE;
+    }
+ 
     char buf[1000];
-    realpath(filepath, buf);
-    char *ts = strdup(filepath);
+    realpath(filepath, buf); // buff should now be full filepath
+    char *ts = strdup(buf);
     char *ts2 = strdup(filepath);
-    char *filename = basename(ts);
-    char *dir = dirname(ts2);
+    char *filename = basename(buf);
+    char *dir = (char *) dirname(buf);
+
     if ( (access(dir, W_OK) == 0) && (strlen(filename) > 0)) 
         return TRUE;
     
@@ -178,7 +188,7 @@ int get_readable_pairwise_interaction_filepath(char ** filepath) {
 int get_writeable_pathway_filepath(char ** filepath) {
     *filepath = readline("\tEnter pathway filepath (output):  ");
     add_history(*filepath);
-
+printf("pathway filepath: %s\n", *filepath);
     if (!is_writeable(*filepath)) {
        printf("\t\tCan not write specified file.\n");
        return get_writeable_pathway_filepath(filepath);
