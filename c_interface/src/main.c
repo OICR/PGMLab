@@ -156,7 +156,6 @@ void expand_path (char** path) {
     wordexp(*path, &exp_result, 0);
  
     *path = (char*) exp_result.we_wordv[0];
- printf("pathafter: %s\n", *path);
  //   wordfree(&exp_result);  // freeing the variable causes errors at the beggining of the path variable
 }
 
