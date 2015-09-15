@@ -149,6 +149,21 @@ void trimwhitespace(char ** s) {
     memmove(*s, p, l + 1);
 }
 
+// Mainly used to expand tilda at beginning of filepath
+void expand_path (char** path) {
+ 
+    wordexp_t exp_result;
+    wordexp(*path, &exp_result, 0);
+ 
+    *path = (char*) exp_result.we_wordv[0];
+ printf("pathafter: %s\n", *path);
+ //   wordfree(&exp_result);  // freeing the variable causes errors at the beggining of the path variable
+}
+
+void clean_filepath(char**path) {
+    trimwhitespace(path);
+    expand_path(path);
+}
 
 //this checks if the directory is writalbel and the filename exists
 int is_writeable(char * filepath) {
@@ -185,7 +200,7 @@ int is_yes(char * input) {
 
 int get_readable_pairwise_interaction_filepath(char ** filepath) {
     *filepath = readline("\tEnter pairwise interaction filepath (input):  ");
-    trimwhitespace(filepath);
+    clean_filepath(filepath);
     add_history(*filepath);
 
     if (access(*filepath, R_OK) != 0) {
@@ -198,7 +213,7 @@ int get_readable_pairwise_interaction_filepath(char ** filepath) {
 
 int get_writeable_pathway_filepath(char ** filepath) {
     *filepath = readline("\tEnter pathway filepath (output):  ");
-    trimwhitespace(filepath);
+    clean_filepath(filepath);
     add_history(*filepath);
 
     if (!is_writeable(*filepath)) {
@@ -211,7 +226,7 @@ int get_writeable_pathway_filepath(char ** filepath) {
 
 int get_readable_pathway_filepath(char ** filepath) {
     *filepath = readline("\tEnter pathway filepath (input):  ");
-    trimwhitespace(filepath);
+    clean_filepath(filepath);
     add_history(*filepath);
 
     if (access(*filepath, R_OK) != 0) {
@@ -246,7 +261,7 @@ int get_number_of_states(int * number_of_states) {
 
 int get_observed_data_filepath(char ** filepath) {
     *filepath = readline("\tEnter observed data filepath (input):  ");
-    trimwhitespace(filepath);
+    clean_filepath(filepath);
     add_history(*filepath);
 
     if (access(*filepath, R_OK) != 0) { 
@@ -259,7 +274,7 @@ int get_observed_data_filepath(char ** filepath) {
 
 int get_writeable_posterior_probabilities_filepath(char ** filepath) {
     *filepath = readline("\tEnter posterior probabilities filepath (output):  ");
-    trimwhitespace(filepath);
+    clean_filepath(filepath);
     add_history(*filepath);
 
     if (!is_writeable(*filepath)) {
@@ -272,7 +287,7 @@ int get_writeable_posterior_probabilities_filepath(char ** filepath) {
 
 int get_writeable_estimated_parameters_filepath(char ** filepath) {
     *filepath = readline("\tEnter estimated parameters (output) filepath:  ");
-    trimwhitespace(filepath);
+    clean_filepath(filepath);
     add_history(*filepath);
 
     if (!is_writeable(*filepath)) { 
