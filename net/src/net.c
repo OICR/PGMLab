@@ -75,7 +75,7 @@ int readCharFile(char * lines[],char *fileToRead,int maxbufflen, int *datalen)
     FILE *fp = fopen(fileToRead, "r");
     if (!fp) return 105;
     
-    while ((fgets(buf,maxbufflen,fp)) != NULL)
+    while ((fgets(buf,maxbufflen,fp)) != NULL) 
     {
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
         temp = strtok(buf, delims);
@@ -288,7 +288,7 @@ int hashSourceTargetNodes(char *readpairwisefilename, int *Nv)
     fgets(buf,maxLen,file);    /* second line is empty*/
     
     k=0;
-    while ((fgets(buf,maxLen,file)) != NULL)
+    while ((fgets(buf,maxLen,file)) != NULL) 
     {
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
         temp = strtok(buf, delims);
@@ -365,7 +365,7 @@ void normalizeCPD(double * f, double *CPD,int numComb,int num_state,int flag)
 /**************************************************************************/
 
 
-int doLBPinference(char *pathway, char * obs_data, char *posterior_probabilities, int num_state)
+int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabilities, int num_state)
 {
     int *obs_values = NULL;
     int    *obs_Ids = NULL;
@@ -390,7 +390,7 @@ int doLBPinference(char *pathway, char * obs_data, char *posterior_probabilities
     
     int numel;
 
-    int exit_code = ExtractNonUniqNodeNum(pathway, &numel); // read pathwat file and return the number of varibales nodes in the pathway.
+    int exit_code = ExtractNonUniqNodeNum(factorgraph, &numel); // read pathwat file and return the number of varibales nodes in the factorgraph.
     if (exit_code != 0) return exit_code;
 
     char *nodelist[numel];
@@ -398,7 +398,7 @@ int doLBPinference(char *pathway, char * obs_data, char *posterior_probabilities
     
     /*retrun the list of all varaible nodes; duplication may be in the list */
     int numline_nodelist;
-    exit_code = ExtractNonUniqNodelist(pathway,nodelist, &numline_nodelist);
+    exit_code = ExtractNonUniqNodelist(factorgraph,nodelist, &numline_nodelist);
     if(exit_code != 0) return exit_code;
 
     if (numline_nodelist != numel) return 108;
@@ -426,7 +426,7 @@ int doLBPinference(char *pathway, char * obs_data, char *posterior_probabilities
     }
     /*write the factor graph file to read the number of factor given in the first line Nf*/
     
-    FILE *file1 = fopen(pathway, "r");
+    FILE *file1 = fopen(factorgraph, "r");
     if (file1 == NULL) return 107;
     
     /* read first line  to get number of factors and store it in Nf*/
@@ -446,7 +446,7 @@ int doLBPinference(char *pathway, char * obs_data, char *posterior_probabilities
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
 
     /*  fill the pGraph struct field accroding to info given in factor graph file */
-    exit_code = FactorgraphFile_To_NodeStructures(pathway,pGraph,num_state,Nv,Nf, &lenMsgVec);
+    exit_code = FactorgraphFile_To_NodeStructures(factorgraph,pGraph,num_state,Nv,Nf, &lenMsgVec);
     if (exit_code != 0) return exit_code;
 
     /*allocate memory for message vectors*/
@@ -968,7 +968,7 @@ void inputBasedModifiedCPT(Node *pGraph,double ** factorarray, int *obs_values,i
 /**************************************************************************/
 
 
-int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,int Nv,int Nf, int *lenMsgVec)
+int FactorgraphFile_To_NodeStructures(char *factorgraph, Node *pGraph,int num_state,int Nv,int Nf, int *lenMsgVec)
 {
     
     int i,ii,nn,k,h;
@@ -979,7 +979,7 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
     const char delims[2] = " ";
     int N = Nv+Nf; // number of all nodes the graph
     
-    FILE *file = fopen(pathway, "r");
+    FILE *file = fopen(factorgraph, "r");
     if (file == NULL) return 107;
     
     /* read first line  to get number of factors and store it in Nf*/
@@ -1046,7 +1046,7 @@ int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,
     
     
     /* ********************************************* Sec 3 **************************************** */
-    // sec 3 read pathway to a strucute which later is written to Node structure
+    // sec 3 read factorgraph to a strucute which later is written to Node structure
     rewind(file); /* reset the fgets to the begining of the file*/
     
     
@@ -1483,7 +1483,7 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
 /* reaction_logic_to_factorgraph*/
 /**************************************************************************/
 
-int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefactorgraphfilename,int nstate)
+int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgraphfilename,int nstate)
 {
     int i,k,h,kk,Ne,Nv;
     int  maxLen = 2000;
@@ -1502,7 +1502,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefa
     typedef  struct factor  *factor;
     
     // read the node name and store in an array
-    FILE *file = fopen(readreactionlogicpathways, "r");
+    FILE *file = fopen(readreactionlogic, "r");
     if (file == NULL) return 101;
     
     fgets(buf,maxLen,file);    /* read first line  to get number of edges and store it in Ne*/
@@ -1998,8 +1998,9 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 /**************************************************************************/
 /*  learning_discrete_BayNet*/
 /**************************************************************************/
-int learning_discrete_BayNet(char * pathway,char *obs_data,char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag, int logging)
+int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag, int logging)
 {
+
     int i,k,m,h;         /*indexign for loops  and whiles */
     int lenMsgVec;       /*length of message vector (# of all messages *  # of state per message)*/
     int iteration = 0;   /* number of iteration in LBP */
@@ -2026,7 +2027,7 @@ int learning_discrete_BayNet(char * pathway,char *obs_data,char *estimated_param
     // the hash function generator to make the hash function; we then we hash Ids throughout the code.
     
     int numel;
-    int exit_code = ExtractNonUniqNodeNum(pathway, &numel); // read pathwat file and return the number of varibales nodes in the pathway.
+    int exit_code = ExtractNonUniqNodeNum(logical_factorgraph, &numel); // read logic factorgraph file and return the number of varibales nodes in the factorgraph.
     if (exit_code != 0) return exit_code;
 
     char* nodelist[numel];
@@ -2034,7 +2035,7 @@ int learning_discrete_BayNet(char * pathway,char *obs_data,char *estimated_param
     
     /*retrun the list of all varaible nodes; duplication may be in the list */
     int numline_nodelist;
-    exit_code = ExtractNonUniqNodelist(pathway,nodelist, &numline_nodelist);
+    exit_code = ExtractNonUniqNodelist(logical_factorgraph, nodelist, &numline_nodelist);
     if (exit_code !=0) return exit_code;
 
     if(numline_nodelist !=numel) return 108;
@@ -2064,7 +2065,7 @@ int learning_discrete_BayNet(char * pathway,char *obs_data,char *estimated_param
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
     
     /*  fill the pGraph struct field accroding to info given in factor graph file */
-    exit_code = FactorgraphFile_To_NodeStructures(pathway, pGraph, num_state, Nv, Nf, &lenMsgVec);
+    exit_code = FactorgraphFile_To_NodeStructures(logical_factorgraph, pGraph, num_state, Nv, Nf, &lenMsgVec);
     if (exit_code != 0) return exit_code;    
 
     /*allocate memory for message vectors*/
@@ -2416,7 +2417,7 @@ char *strerror_libnet (int error_code) {
             strcpy(strerr, "Cannot write to specified factorgraph file");
             break;
         case 107:
-            strcpy(strerr, "Cannot read from specified pathway file");
+            strcpy(strerr, "Cannot read from specified factorgraph file");
             break;
         case 108:
             strcpy(strerr, "Number of lines does not match between node num and node list");

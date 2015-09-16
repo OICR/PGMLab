@@ -61,10 +61,12 @@ INCLUDE_GSL = -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/incl
 all: $(TARGET_PATH)
 
 $(TARGET_PATH): folder net.o perfect.o phash.o lookupa.o recycle.o perfhex.o
-	$(CC) $(CCFLAGS) $(LDFLAGS) $(CFLAGS) $(RPATH) -o $(TARGET) \
+	$(CC) $(CCFLAGS) $(LDFLAGS) $(CFLAGS) $(RPATH) -o lib/$(TARGET) \
 	$(OBJECTS) \
 	$(INCLUDE_GSL) \
-	-lm -w; \
+	-lm   
+
+# -w; \
         mv $(TARGET) $(TARGET_PATH)
 
 folder:
