@@ -491,13 +491,15 @@ int interactive_command() {
     input = readline("Would you like to perform inference [Y/n] ");
     if (is_yes(input) == 1)
     {
-        input = readline("\nSelect yes if you would like to use a learnt factorgraph (estimated parameters from learning) file vs a logical factorgraph file [Y/n] ");
-        if (is_yes(input) == 1) 
+        if ((strlen(estimated_parameters_filepath) != 0) || (strlen(logical_factorgraph_filepath) !=0 )) {
+            input =  is_yes( readline("\nSelect yes if you would like to use a learnt factorgraph (estimated parameters from learning) file vs a logical factorgraph file [Y/n] ")) ;
+        } 
+
+        if (input)         
         {
             interactive_inference(&estimated_parameters_filepath, &inference_observed_data_filepath, &posterior_probabilities_filepath, &number_of_states);  
         } 
-        else 
-        { 
+        else { 
             interactive_inference(&logical_factorgraph_filepath, &inference_observed_data_filepath, &posterior_probabilities_filepath, &number_of_states);  
         }
     } 
