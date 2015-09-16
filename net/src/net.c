@@ -1998,8 +1998,9 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 /**************************************************************************/
 /*  learning_discrete_BayNet*/
 /**************************************************************************/
-int learning_discrete_BayNet(char * logical_factorgraph, char * learnt_factorgraph,  char *obs_data,char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag, int logging)
+int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag, int logging)
 {
+
     int i,k,m,h;         /*indexign for loops  and whiles */
     int lenMsgVec;       /*length of message vector (# of all messages *  # of state per message)*/
     int iteration = 0;   /* number of iteration in LBP */

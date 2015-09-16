@@ -43,21 +43,19 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
     int MAP_flag = 1;
 
     char pairwise_filepath[200];
-    char learnt_factorgraph_filepath[200];
     char logical_factorgraph_filepath[200];
     char learning_observed_data_filepath[200];
     char inference_observed_data_filepath[200];
     char pairwise_interactions_filepath[200];
-    char learning_estimated_parameters_filepath[200];
+    char estimated_parameters_filepath[200];
     char inference_posterior_probabilities_filepath[200];
 
     ini_gets("files", "pairwise_interactions", "dummy", pairwise_filepath, sizearray(value), ini_filename);
-    ini_gets("files", "learnt_factorgraph", "dummy", learnt_factorgraph_filepath, sizearray(value), ini_filename);
     ini_gets("files", "logical_factorgraph", "dummy", logical_factorgraph_filepath, sizearray(value), ini_filename);
     ini_gets("files", "learning_observed_data", "dummy", learning_observed_data_filepath, sizearray(value), ini_filename);
     ini_gets("files", "inference_observed_data", "dummy", inference_observed_data_filepath, sizearray(value), ini_filename);
     ini_gets("files", "pairwise_interactions", "dummy", pairwise_interactions_filepath, sizearray(value), ini_filename);
-    ini_gets("files", "learning_estimated_parameters", "dummy", learning_estimated_parameters_filepath, sizearray(value), ini_filename);
+    ini_gets("files", "estimated_parameters", "dummy", estimated_parameters_filepath, sizearray(value), ini_filename);
     ini_gets("files", "inference_posterior_probabilities", "dummy", inference_posterior_probabilities_filepath, sizearray(value), ini_filename);
 
     if (g_count > 0) {
@@ -91,31 +89,25 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             printf("Logic factorgraph filepath not specified in config\n");
             return 1;
         }
-        if ( strcmp(learnt_factorgraph_filepath, "dummy") == 0 ) {
-            printf("Learnt factorgraph filepath not specified in config\n");
-            return 1;
-        }
         if ( strcmp(learning_observed_data_filepath, "dummy") == 0 ) {
             printf("Learning observed data filepath not specified in config\n");
             return 1;
         }
-        if ( strcmp(learning_estimated_parameters_filepath, "dummy") == 0 ) {
+        if ( strcmp(estimated_parameters_filepath, "dummy") == 0 ) {
             printf("Estimated Parameters filepath not specified in config\n");
             return 1;
         }
 
-        int exit_code = learning_discrete_BayNet(logical_factorgraph_filepath, learnt_factorgraph_filepath, learning_observed_data_filepath, learning_estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag, logging);
+        int exit_code = learning_discrete_BayNet(logical_factorgraph_filepath, learning_observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag, logging);
         if (exit_code != 0) {
             char * strerr = strerror_libnet(exit_code);
             printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
             return 0;
         } 
         else {
-            printf("\tEstimated Parameters have been written to: %s\n", learning_estimated_parameters_filepath);
-            printf("\tLearnt factorgraph has been wrtittent to: %s\n", learnt_factorgraph_filepath);
+            printf("\tEstimated Parameters (learnt factorgraph) have been written to: %s\n", estimated_parameters_filepath);
             printf("\tLearning completed\n\n");
         }
- 
     }
     if (i_count > 0) {
         printf("Running Inference with number of states: %d\n", number_of_states);
@@ -130,12 +122,12 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
 
         int exit_code;
         if (inference_use_learnt_factorgraph) {
-            if ( strcmp(learnt_factorgraph_filepath, "dummy") == 0 ) {
-               printf("Logic factorgraph filepath not specified in config\n");
+            if ( strcmp(estimated_parameters_filepath, "dummy") == 0 ) {
+               printf("Estimated parameters (learnt factorgraph) filepath not specified in config\n");
                return 1;
             }
 
-            exit_code = doLBPinference(learnt_factorgraph_filepath, inference_observed_data_filepath, inference_posterior_probabilities_filepath, number_of_states);
+            exit_code = doLBPinference(estimated_parameters_filepath, inference_observed_data_filepath, inference_posterior_probabilities_filepath, number_of_states);
         } 
         else {
             if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
@@ -241,32 +233,6 @@ int get_writeable_logical_factorgraph_filepath(char ** filepath) {
     return 0;
 }
 
-int get_writeable_learnt_factorgraph_filepath(char ** filepath) {
-    *filepath = readline("\tEnter learnt factorgraph filepath (output):  ");
-    clean_filepath(filepath);
-    add_history(*filepath);
-
-    if (!is_writeable(*filepath)) {
-       printf("\t\tCan not write specified file.\n");
-       return get_writeable_learnt_factorgraph_filepath(filepath);
-    }
-
-    return 0;
-}
-
-int get_readable_factorgraph_filepath(char ** filepath) {
-    *filepath = readline("\tEnter factorgraph filepath (input):  ");
-    clean_filepath(filepath);
-    add_history(*filepath);
-
-    if (access(*filepath, R_OK) != 0) {
-       printf("\t\tCan not read specified file.\n");
-       return get_readable_factorgraph_filepath(filepath);
-    }
-
-    return 0;
-}
-
 int get_readable_logical_factorgraph_filepath(char ** filepath) {
     *filepath = readline("\tEnter logical factorgraph filepath (input):  ");
     clean_filepath(filepath);
@@ -280,6 +246,19 @@ int get_readable_logical_factorgraph_filepath(char ** filepath) {
     return 0;
 }
 
+
+int get_readable_factorgraph_filepath(char ** filepath) {
+    *filepath = readline("\tEnter factorgraph filepath (input):  ");
+    clean_filepath(filepath);
+    add_history(*filepath);
+
+    if (access(*filepath, R_OK) != 0) {
+       printf("\t\tCan not read specified file.\n");
+       return get_readable_factorgraph_filepath(filepath);
+    }
+
+    return 0;
+}
 
 int get_number_of_states(int * number_of_states) {
     char * ptr;
@@ -432,11 +411,10 @@ int interactive_pairwise_to_factorgraph(char **pairwise_interactions_filepath, c
     }
 }
 
-int interactive_learning(char **logical_factorgraph_filepath, char **learnt_factorgraph_filepath, char ** observed_data_filepath, char** estimated_parameters_filepath, int *number_of_states, int * em_max_iterations, double * em_log_likelihood_change_limit, int * MAP_flag, int * logging ) {
+int interactive_learning(char **logical_factorgraph_filepath, char ** observed_data_filepath, char** estimated_parameters_filepath, int *number_of_states, int * em_max_iterations, double * em_log_likelihood_change_limit, int * MAP_flag, int * logging ) {
     printf("\nGathering information required to perform learning\n");
     if (access(*logical_factorgraph_filepath, R_OK) != 0) 
         get_readable_logical_factorgraph_filepath(logical_factorgraph_filepath);
-    get_writeable_learnt_factorgraph_filepath(learnt_factorgraph_filepath);
     get_observed_data_filepath(observed_data_filepath);
     get_writeable_estimated_parameters_filepath(estimated_parameters_filepath);
     get_learning_logging(logging);
@@ -447,7 +425,7 @@ int interactive_learning(char **logical_factorgraph_filepath, char **learnt_fact
     get_map_flag(MAP_flag);
 
     printf("Running Learning\n");
-    int exit_code = learning_discrete_BayNet(*logical_factorgraph_filepath, *learnt_factorgraph_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *MAP_flag, *logging);
+    int exit_code = learning_discrete_BayNet(*logical_factorgraph_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *MAP_flag, *logging);
     if (exit_code != 0) {
         char * strerr = strerror_libnet(exit_code);
         printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
@@ -465,6 +443,7 @@ int interactive_inference(char **factorgraph_filepath, char ** observed_data_fil
     printf("\nGathering information required to perform inference\n");
     if (access(*factorgraph_filepath, R_OK) != 0) 
         get_readable_factorgraph_filepath(factorgraph_filepath);
+
     if (access(*observed_data_filepath, R_OK) != 0)
         get_observed_data_filepath(observed_data_filepath);
     get_writeable_posterior_probabilities_filepath(posterior_probabilities_filepath);
@@ -488,13 +467,8 @@ int interactive_inference(char **factorgraph_filepath, char ** observed_data_fil
 
 int interactive_command() {
     char *input; 
-    char *pairwise_interactions_filepath;
-    char *logical_factorgraph_filepath;
-    char *learnt_factorgraph_filepath;
-    char *learning_observed_data_filepath;
-    char *inference_observed_data_filepath;
-    char *estimated_parameters_filepath;
-    char *posterior_probabilities_filepath;
+    char *pairwise_interactions_filepath, *logical_factorgraph_filepath, *learning_observed_data_filepath, *inference_observed_data_filepath, *estimated_parameters_filepath, *posterior_probabilities_filepath;
+
     double result = 0;
     int number_of_states = 0;
     int logging = 0;
@@ -511,16 +485,16 @@ int interactive_command() {
     input = readline("Would you like to perform learning [Y/n] ");
     if (is_yes(input) == 1)
     {
-        interactive_learning(&logical_factorgraph_filepath, &learnt_factorgraph_filepath, &learning_observed_data_filepath, &estimated_parameters_filepath, &number_of_states, &em_max_iterations, &em_log_likelihood_change_limit, &MAP_flag, &logging);  
+        interactive_learning(&logical_factorgraph_filepath, &learning_observed_data_filepath, &estimated_parameters_filepath, &number_of_states, &em_max_iterations, &em_log_likelihood_change_limit, &MAP_flag, &logging);  
     } 
 
     input = readline("Would you like to perform inference [Y/n] ");
     if (is_yes(input) == 1)
     {
-        input = readline("\nSelect yes if you would like to use a learnt factorgraph file vs a logical factorgraph file [Y/n] ");
+        input = readline("\nSelect yes if you would like to use a learnt factorgraph (estimated parameters from learning) file vs a logical factorgraph file [Y/n] ");
         if (is_yes(input) == 1) 
         {
-            interactive_inference(&learnt_factorgraph_filepath, &inference_observed_data_filepath, &posterior_probabilities_filepath, &number_of_states);  
+            interactive_inference(&estimated_parameters_filepath, &inference_observed_data_filepath, &posterior_probabilities_filepath, &number_of_states);  
         } 
         else 
         { 
