@@ -10,7 +10,8 @@ Data is provided to the program through tab delimited files (described later in 
    - Adam Wright 
 
 #Detailed Tutorials
-   - Feel free to go through our wiki [here](https://github.com/OICR/LibNet/wiki) for further details
+   - Feel free to go through our wiki [here](https://github.com/OICR/LibNet/wiki) for further details. 
+   - Make sure to follow the file formats specified [here](https://github.com/OICR/LibNet/wiki/File-Formats). It is important to make sure that input files follow the exact format specified in the wiki.
    
 #Software dependencies
 | Name                      |  Description | Link |
