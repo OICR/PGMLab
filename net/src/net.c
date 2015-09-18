@@ -1744,7 +1744,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
     {
         for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
         {
-            factorarray[i][k]  = (1e-3)/2;//(((double)rand()/(double)RAND_MAX));
+            factorarray[i][k]  = (1e-3)/(nstate-1);//(((double)rand()/(double)RAND_MAX));
             // printf("%f\n",(factorarray0[i][k])); /*check to see is really random !!*/
         }
         // printf("------------\n");
@@ -1857,12 +1857,12 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
                     }
                     K++;
                 }
-                factorarray[i][s]= 1-(1e-3)/2;
+                factorarray[i][s]= 1-(1e-3)/(nstate-1);
             }
         }
         else /*this is a root node so the zero state take the maximum change to occur unless we have some prior knowledge about other states being active*/
         {
-            factorarray[i][1]= 1-(1e-3)/2;
+            factorarray[i][1]= 1-(1e-3)/(nstate-1);
         }
     }
 
