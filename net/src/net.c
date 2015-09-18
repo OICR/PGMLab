@@ -1757,11 +1757,34 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         {
             for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
             {
-                cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] = (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-2)*fGraph[i].pos_neg[h] ;
+                if (nstate %2 !=0)
+                {
+                    cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] = (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-floor(nstate/2)-1)*fGraph[i].pos_neg[h] ;
+                    
+                }
+                else
+                {
+                    if (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] > nstate/2)
+                    {
+                        cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] = (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-floor(nstate/2))*fGraph[i].pos_neg[h] ;
+                        
+                    }
+                    
+                    else
+                    {
+                        
+                        cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] = (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-floor(nstate/2)-1)*fGraph[i].pos_neg[h] ;
+                        
+                    }
+                    
+                    
+                }
             }
+            
+            
+            
         }
-    }
-    
+    }   
     /*
     for(i = 0;i < Nv;i++)
     {
