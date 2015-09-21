@@ -533,17 +533,17 @@ int main(int argc, char *argv[]) {
     struct arg_dbl *em_log_likelihood_change_limit; 
 
     void *argtable[] = {
-        interactive = arg_lit0(NULL, "interactive", "Interactive mode"),
-        inifile = arg_file0("f", "inifile", "inifile", "File to be use to describe configuration of analysis"),
         g = arg_lit0("g", "generate-pathway", "Generate factorgraph from reaction logic"),
         i = arg_lit0("i", "inference", "Run inference on dataset"),
         l = arg_lit0("l", "learning", "Run learning on dataset"),
-        inference_use_logical_factorgraph = arg_lit0("inference_use_logical_factorgraph", "inference_use_logical_factorgraph", "Set this flag if for inference you would like to use the logic factorgraph file instead of the learnt factorgraph file"),
-        number_of_states = arg_int0("ns", "number-of-states", NULL, "Number of states for pathway (default is 3)"),
-        em_max_iterations = arg_int0("k", "em-max-iterations", NULL , "Maximum number of iterations for expectation maximization (default is 4000)"),
-        em_number_of_training_samples = arg_int0("ts", "training-samples", NULL, "Number of training samples used in expectation mimization (default 400)"),
-        em_log_likelihood_change_limit = arg_dbl0("sct", "stop-criteria-threshold", NULL, "Stop criteria threshold for expectation maximization (default 1e-3)"),
-        logging_on = arg_lit0("logging-on", "logging-on", "Set this flag if you would like the learning step to produce status output into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
+        interactive = arg_lit0(NULL, "interactive", "Interactive mode"),
+        inifile = arg_file0(NULL, "inifile", "inifile", "File to be use to describe configuration of analysis"),
+        inference_use_logical_factorgraph = arg_lit0(NULL, "inference_use_logical_factorgraph", "Set this flag if for inference you would like to use the logic factorgraph file (created from pairwise interaction file) instead of the learnt factorgraph file"),
+        number_of_states = arg_int0(NULL, "number-of-states", NULL, "Number of states for pathway (default is 3)"),
+        em_max_iterations = arg_int0(NULL, "em-max-iterations", NULL , "Maximum number of iterations for expectation maximization (default is 4000)"),
+        em_number_of_training_samples = arg_int0(NULL, "training-samples", NULL, "Number of training samples used in expectation mimization (default 400)"),
+        em_log_likelihood_change_limit = arg_dbl0(NULL, "stop-criteria-threshold", NULL, "Stop criteria threshold for expectation maximization (default 1e-3)"),
+        logging_on = arg_lit0(NULL, "logging-on", "Set this flag if you would like the learning step to produce status output into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
