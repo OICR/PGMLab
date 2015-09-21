@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -2021,7 +2019,7 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 /**************************************************************************/
 /*  learning_discrete_BayNet*/
 /**************************************************************************/
-int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag, int logging)
+int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging)
 {
 
     int i,k,m,h;         /*indexign for loops  and whiles */
@@ -2183,7 +2181,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
     }
 
     /* do the EM algorithm */    
-    while(change_parameters > LLchangeLimit && num_repeat < max_num_repeat) /*stopping criterion*/
+    while(change_parameters > parChangeLimit && num_repeat < max_num_repeat && changeLL > LLchangeLimit) /*stopping criterion*/
     {
         change_parameters = 0;
         /* initialize  to zeros*/
@@ -2326,7 +2324,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
             //printf("%f\n",parameterChange[num_repeat][i]);
         }
 
-        changeLL = num_repeat == 0 ? 0 : inAbsolute(oldLL -  LogLikelihood[num_repeat]);
+        changeLL = inAbsolute((oldLL -  LogLikelihood[num_repeat])/LogLikelihood[num_repeat]);
 
         /* check stopping criterion*/
         if (logging == 1) {

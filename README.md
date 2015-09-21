@@ -141,7 +141,7 @@ All filepaths are full file paths and the rest of the variables should be suppli
 	.Call("r_reaction_logic_to_factorgraph", "../../test/data1/JE_Network.txt", "../../test/data1/JE_Network_FG.txt",3)
 	
 ####Learning
-	.Call("r_learning_discrete_BayNet", "../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt", "../../test/data1/estimated_parameters.txt", 3, 4000, 1e-3, 1, 1)
+	.Call("r_learning_discrete_BayNet", "../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt", "../../test/data1/estimated_parameters.txt", 3, 4000, 1e-5, 1e-3, 1, 1)
 		
 ####Inference
 	.Call("r_doLBPinference","../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt","../../test/data1/nodepost.txt", 3)
