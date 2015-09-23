@@ -37,7 +37,7 @@
 #define	FALSE		0
 #define FILENAME_MAX	100
 
-int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, int number_of_states, const char *ini_filename, int g_count, int l_count, int i_count, int logging, int inference_use_learnt_factorgraph) {
+int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, const char *ini_filename, int g_count, int l_count, int i_count, int logging, int inference_use_learnt_factorgraph) {
 
     char value[200];
     int MAP_flag = 1;
@@ -83,7 +83,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         }
     }
     if (l_count > 0) {
-        printf("Running Learning with Max iterations: %d, number of states: %d, log likelilhood change limit: %e, logging: %d \n", em_max_iterations, number_of_states, em_log_likelihood_change_limit, logging);
+        printf("Running Learning with Max iterations: %d, number of states: %d, log likelilhood change limit: %e, parameters change limit: %e, logging: %d \n", em_max_iterations, number_of_states, em_log_likelihood_change_limit, em_parameters_change_limit, logging);
 
         if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
             printf("Logic factorgraph filepath not specified in config\n");
@@ -98,7 +98,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             return 1;
         }
 
-        int exit_code = learning_discrete_BayNet(logical_factorgraph_filepath, learning_observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, MAP_flag, logging);
+        int exit_code = learning_discrete_BayNet(logical_factorgraph_filepath, learning_observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, MAP_flag, logging);
         if (exit_code != 0) {
             char * strerr = strerror_libnet(exit_code);
             printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
@@ -343,23 +343,46 @@ int get_max_iterations(int * em_max_iterations) {
     return 0;
 }
 
-int get_stop_criteria_threshold(double * em_stop_criteria_threshold) {
+int get_log_likelihood_change_limit(double * em_log_likelihood_change_limit) {
     char *ptr;
     char *str = "";
-    str = readline("\tEnter the stop criteria threshold [default 1e-3]: ");
+    str = readline("\tEnter the stop criteriion log likelihood change limit [default 1e-5]: ");
  
     if (!*str) {
-        *em_stop_criteria_threshold = 1e-3;
+        *em_log_likelihood_change_limit = 1e-5;
         return 0;
     }
 
     double number = strtod(str, &ptr);
     if (number == 0) {
         printf("\t\tNot a valid number");
-        return get_stop_criteria_threshold(em_stop_criteria_threshold); 
+        return get_log_likelihood_change_limit(em_log_likelihood_change_limit); 
     }
     else {
-        *em_stop_criteria_threshold = number;
+        *em_log_likelihood_change_limit = number;
+    }
+
+    return 0;
+}
+
+
+int get_parameters_change_limit(double * em_parameters_change_limit) {
+    char *ptr;
+    char *str = "";
+    str = readline("\tEnter the stop criteriion parameters change limit [default 1e-3]: ");
+ 
+    if (!*str) {
+        *em_parameters_change_limit = 1e-3;
+        return 0;
+    }
+
+    double number = strtod(str, &ptr);
+    if (number == 0) {
+        printf("\t\tNot a valid number");
+        return get_parameters_change_limit(em_parameters_change_limit); 
+    }
+    else {
+        *em_parameters_change_limit = number;
     }
 
     return 0;
@@ -411,7 +434,7 @@ int interactive_pairwise_to_factorgraph(char **pairwise_interactions_filepath, c
     }
 }
 
-int interactive_learning(char **logical_factorgraph_filepath, char ** observed_data_filepath, char** estimated_parameters_filepath, int *number_of_states, int * em_max_iterations, double * em_log_likelihood_change_limit, int * MAP_flag, int * logging ) {
+int interactive_learning(char **logical_factorgraph_filepath, char ** observed_data_filepath, char** estimated_parameters_filepath, int *number_of_states, int * em_max_iterations, double * em_log_likelihood_change_limit, double * em_parameters_change_limit, int * MAP_flag, int * logging ) {
     printf("\nGathering information required to perform learning\n");
     if (access(*logical_factorgraph_filepath, R_OK) != 0) 
         get_readable_logical_factorgraph_filepath(logical_factorgraph_filepath);
@@ -421,11 +444,12 @@ int interactive_learning(char **logical_factorgraph_filepath, char ** observed_d
     if (*number_of_states == 0) 
         get_number_of_states(number_of_states);
     get_max_iterations(em_max_iterations);
-    get_stop_criteria_threshold(em_log_likelihood_change_limit);
+    get_log_likelihood_change_limit(em_log_likelihood_change_limit);
+    get_parameters_change_limit(em_parameters_change_limit);
     get_map_flag(MAP_flag);
 
     printf("Running Learning\n");
-    int exit_code = learning_discrete_BayNet(*logical_factorgraph_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *MAP_flag, *logging);
+    int exit_code = learning_discrete_BayNet(*logical_factorgraph_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *em_parameters_change_limit, *MAP_flag, *logging);
     if (exit_code != 0) {
         char * strerr = strerror_libnet(exit_code);
         printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
@@ -474,6 +498,7 @@ int interactive_command() {
     int logging = 0;
     int em_max_iterations = 0;
     double em_log_likelihood_change_limit = 0;
+    double em_parameters_change_limit = 0;
     int MAP_flag = 0;
 
     input = readline("\nWould you like to generate a logical factorgraph file from pairwise interactions [Y/n] ");
@@ -485,7 +510,7 @@ int interactive_command() {
     input = readline("Would you like to perform learning [Y/n] ");
     if (is_yes(input) == 1)
     {
-        interactive_learning(&logical_factorgraph_filepath, &learning_observed_data_filepath, &estimated_parameters_filepath, &number_of_states, &em_max_iterations, &em_log_likelihood_change_limit, &MAP_flag, &logging);  
+        interactive_learning(&logical_factorgraph_filepath, &learning_observed_data_filepath, &estimated_parameters_filepath, &number_of_states, &em_max_iterations, &em_log_likelihood_change_limit, &em_parameters_change_limit, &MAP_flag, &logging);  
     } 
 
     input = readline("Would you like to perform inference [Y/n] ");
@@ -530,20 +555,21 @@ int main(int argc, char *argv[]) {
     struct arg_end *end;
     struct arg_int *em_max_iterations, *em_number_of_training_samples, *number_of_states;
     struct arg_file *inifile;
-    struct arg_dbl *em_log_likelihood_change_limit; 
+    struct arg_dbl *em_log_likelihood_change_limit, *em_parameters_change_limit; 
 
     void *argtable[] = {
-        interactive = arg_lit0(NULL, "interactive", "Interactive mode"),
-        inifile = arg_file0("f", "inifile", "inifile", "File to be use to describe configuration of analysis"),
         g = arg_lit0("g", "generate-pathway", "Generate factorgraph from reaction logic"),
         i = arg_lit0("i", "inference", "Run inference on dataset"),
         l = arg_lit0("l", "learning", "Run learning on dataset"),
-        inference_use_logical_factorgraph = arg_lit0("inference_use_logical_factorgraph", "inference_use_logical_factorgraph", "Set this flag if for inference you would like to use the logic factorgraph file instead of the learnt factorgraph file"),
-        number_of_states = arg_int0("ns", "number-of-states", NULL, "Number of states for pathway (default is 3)"),
-        em_max_iterations = arg_int0("k", "em-max-iterations", NULL , "Maximum number of iterations for expectation maximization (default is 4000)"),
-        em_number_of_training_samples = arg_int0("ts", "training-samples", NULL, "Number of training samples used in expectation mimization (default 400)"),
-        em_log_likelihood_change_limit = arg_dbl0("sct", "stop-criteria-threshold", NULL, "Stop criteria threshold for expectation maximization (default 1e-3)"),
-        logging_on = arg_lit0("logging-on", "logging-on", "Set this flag if you would like the learning step to produce status output into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
+        interactive = arg_lit0(NULL, "interactive", "Interactive mode"),
+        inifile = arg_file0(NULL, "inifile", "inifile", "File to be use to describe configuration of analysis"),
+        inference_use_logical_factorgraph = arg_lit0(NULL, "inference_use_logical_factorgraph", "Set this flag if for inference you would like to use the logic factorgraph file (created from pairwise interaction file) instead of the learnt factorgraph file"),
+        number_of_states = arg_int0(NULL, "number-of-states", NULL, "Number of states for pathway (default is 3)"),
+        em_max_iterations = arg_int0(NULL, "em-max-iterations", NULL , "Maximum number of iterations for expectation maximization (default is 4000)"),
+        em_number_of_training_samples = arg_int0(NULL, "training-samples", NULL, "Number of training samples used in expectation mimization (default 400)"),
+        em_log_likelihood_change_limit = arg_dbl0(NULL, "log-likelihood-change-limit", NULL, "Stop criteria threshold for expectation maximization (default 1e-5)"),
+        em_parameters_change_limit = arg_dbl0(NULL, "parameters-change-limit", NULL, "Stop criteria threshold for expectation maximization parameters (default 1e-3)"),
+        logging_on = arg_lit0(NULL, "logging-on", "Set this flag if you would like the learning step to produce status output into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
@@ -558,7 +584,8 @@ int main(int argc, char *argv[]) {
     /* set any command line default values prior to parsing */
     em_max_iterations->ival[0] = 4000;
     em_number_of_training_samples->ival[0] = 400;
-    em_log_likelihood_change_limit->dval[0] = 1e-3;
+    em_parameters_change_limit->dval[0] = 1e-3;
+    em_log_likelihood_change_limit->dval[0] = 1e-5;
     number_of_states->ival[0] = 3; 
 
     /* verify the argtable[] entries were allocated sucessfully */
@@ -617,7 +644,7 @@ int main(int argc, char *argv[]) {
     int logging = logging_on->count > 0 ? 1 : 0;
 
     /* Command line parsing is complete, do the main processing */
-    exitcode = non_interactive_command(em_max_iterations->ival[0], em_number_of_training_samples->ival[0], em_log_likelihood_change_limit->dval[0], number_of_states->ival[0], *inifile->filename, g->count, l->count, i->count, logging, inference_use_logical_factorgraph->count);
+    exitcode = non_interactive_command(em_max_iterations->ival[0], em_number_of_training_samples->ival[0], em_log_likelihood_change_limit->dval[0], em_parameters_change_limit->dval[0], number_of_states->ival[0], *inifile->filename, g->count, l->count, i->count, logging, inference_use_logical_factorgraph->count);
 exit:
     /* deallocate each non-null entry in argtable[] */
     arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));  

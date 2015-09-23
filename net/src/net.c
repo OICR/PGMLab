@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1744,7 +1742,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
     {
         for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
         {
-            factorarray[i][k]  = (1e-3)/2;//(((double)rand()/(double)RAND_MAX));
+            factorarray[i][k]  = (1e-3)/(nstate-1);//(((double)rand()/(double)RAND_MAX));
             // printf("%f\n",(factorarray0[i][k])); /*check to see is really random !!*/
         }
         // printf("------------\n");
@@ -1757,11 +1755,34 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         {
             for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
             {
-                cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] = (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-2)*fGraph[i].pos_neg[h] ;
+                if (nstate %2 !=0)
+                {
+                    cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] = (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-floor(nstate/2)-1)*fGraph[i].pos_neg[h] ;
+                    
+                }
+                else
+                {
+                    if (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] > nstate/2)
+                    {
+                        cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] = (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-floor(nstate/2))*fGraph[i].pos_neg[h] ;
+                        
+                    }
+                    
+                    else
+                    {
+                        
+                        cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] = (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-floor(nstate/2)-1)*fGraph[i].pos_neg[h] ;
+                        
+                    }
+                    
+                    
+                }
             }
+            
+            
+            
         }
-    }
-    
+    }   
     /*
     for(i = 0;i < Nv;i++)
     {
@@ -1834,12 +1855,12 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
                     }
                     K++;
                 }
-                factorarray[i][s]= 1-(1e-3)/2;
+                factorarray[i][s]= 1-(1e-3)/(nstate-1);
             }
         }
         else /*this is a root node so the zero state take the maximum change to occur unless we have some prior knowledge about other states being active*/
         {
-            factorarray[i][1]= 1-(1e-3)/2;
+            factorarray[i][1]= 1-(1e-3)/(nstate-1);
         }
     }
 
@@ -1998,7 +2019,7 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 /**************************************************************************/
 /*  learning_discrete_BayNet*/
 /**************************************************************************/
-int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, int MAPflag, int logging)
+int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging)
 {
 
     int i,k,m,h;         /*indexign for loops  and whiles */
@@ -2160,7 +2181,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
     }
 
     /* do the EM algorithm */    
-    while(change_parameters > LLchangeLimit && num_repeat < max_num_repeat) /*stopping criterion*/
+    while(change_parameters > parChangeLimit && num_repeat < max_num_repeat && changeLL > LLchangeLimit) /*stopping criterion*/
     {
         change_parameters = 0;
         /* initialize  to zeros*/
@@ -2303,7 +2324,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
             //printf("%f\n",parameterChange[num_repeat][i]);
         }
 
-        changeLL = num_repeat == 0 ? 0 : inAbsolute(oldLL -  LogLikelihood[num_repeat]);
+        changeLL = inAbsolute((oldLL -  LogLikelihood[num_repeat])/LogLikelihood[num_repeat]);
 
         /* check stopping criterion*/
         if (logging == 1) {

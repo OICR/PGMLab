@@ -10,7 +10,16 @@ Data is provided to the program through tab delimited files (described later in 
    - Adam Wright 
 
 #Detailed Tutorials
-   - Feel free to go through our wiki [here](https://github.com/OICR/LibNet/wiki) for further details
+   - Feel free to go through our wiki [here](https://github.com/OICR/LibNet/wiki) for further details. 
+   - Make sure to follow the file formats specified [here](https://github.com/OICR/LibNet/wiki/File-Formats). It is important to make sure that input files follow the exact format specified in the wiki.
+   
+#Software dependencies
+| Name                      |  Description | Link |
+|---------------------------|------------------------|------|
+| Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Botelho and Ziviani and is used to hashing the names of the nodes. This allows LibNet to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
+| GNU Scientific Library (GSL) | GSL is a numerical library for C and C++ that provides a wirde range of mathematical routines | http://www.gnu.org/software/gsl/ |
+| GNU Readline Library | The GNU Readline library provides a set of functions for use by applications that allow users to edit command lines as they are typed in. This library is used for the interactive command line interface. | https://cnswww.cns.cwru.edu/php/chet/readline/rltop.html |
+| GNU Termcap Library | Termcap is a library and data base that enables programs to use display terminals in a terminal-independent manner | https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html |
 
 #System requirements
 This tool has been tested on OS X and Ubuntu 14.04
@@ -132,7 +141,7 @@ All filepaths are full file paths and the rest of the variables should be suppli
 	.Call("r_reaction_logic_to_factorgraph", "../../test/data1/JE_Network.txt", "../../test/data1/JE_Network_FG.txt",3)
 	
 ####Learning
-	.Call("r_learning_discrete_BayNet", "../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt", "../../test/data1/estimated_parameters.txt", 3, 4000, 1e-3, 1, 1)
+	.Call("r_learning_discrete_BayNet", "../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt", "../../test/data1/estimated_parameters.txt", 3, 4000, 1e-5, 1e-3, 1, 1)
 		
 ####Inference
 	.Call("r_doLBPinference","../../test/data1/JE_Network_FG.txt", "../../test/data1/JE_network_dd.txt","../../test/data1/nodepost.txt", 3)
