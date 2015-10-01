@@ -530,6 +530,7 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
                 r = gsl_rng_alloc(gsl_rng_mt19937);
                 gsl_rng_set(r,1);
                 gsl_ran_dirichlet(r,num_state,&factorarray0[i][k*num_state],&factorarray[i][k*num_state]);
+                gsl_rng_free(r);
             }
         }
         
@@ -2134,6 +2135,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
             r = gsl_rng_alloc(gsl_rng_mt19937);
             gsl_rng_set(r,1);
             gsl_ran_dirichlet(r,num_state,&pGraph[i+Nv].beliefs[k*num_state],&factorarray0[i][k*num_state]);
+            gsl_rng_free(r);
         }
     }
     
@@ -2327,7 +2329,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
 
         /* check stopping criterion*/
         if (logging == 1) {
-            fprintf(fpl, "itr: %d\tpar: %f\tLL: %f\n", num_repeat, change_parameters, LogLikelihood[num_repeat]);
+            fprintf(fpl, "itr: %d\tpar: %f\tLL: %f\n", num_repeat, change_parameters, changeLL);
             fprintf(fpl, "change in LL: %f\n\n", changeLL);
         }
 
