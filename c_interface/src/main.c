@@ -575,7 +575,7 @@ int main(int argc, char *argv[]) {
         end = arg_end(20)
     };
  
-    const char *program_name = "prob-net";
+    const char *program_name = "libnetc";
     const char *program_version = "1.0.0";
 
     int exitcode = 0;
