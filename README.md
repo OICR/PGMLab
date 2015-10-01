@@ -131,7 +131,7 @@ If you would like to run a new pathway you will need to rerun the generateHash p
 
 In order to call libnet from the R Contole you will need to create and load the R LibNet shared object. 
 
-###Compile r interface (shared object)
+###Compile R interface (shared object)
 
 ####Command
 	cd r_package/libnetR
