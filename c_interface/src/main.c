@@ -83,7 +83,13 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         }
     }
     if (l_count > 0) {
-        printf("Running Learning with:\n\t\tMax iterations\t\t\t%d\n\t\tnumber of states\t\t%d\n\t\tlog likelilhood change limit\t%f\n\t\tparameters change limit\t\t%f\n\t\tlogging\t\t\t\t%d\n", em_max_iterations, number_of_states, em_log_likelihood_change_limit, em_parameters_change_limit, logging);
+        printf("Running Learning with:\n\t\tMax iterations\t\t\t%d\n\t\tnumber of states\t\t%d\n\t\tlog likelilhood change limit\t%f\n\t\tparameters change limit\t\t%f\n", em_max_iterations, number_of_states, em_log_likelihood_change_limit, em_parameters_change_limit);
+        if (logging == 1 ) {
+            printf("\t\tlogging\t\t\t\ton\n");
+        }
+        else {
+            printf("\t\tlogging\t\t\t\toff\n");
+        }
 
         if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
             printf("Logic factorgraph filepath not specified in config\n");
