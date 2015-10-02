@@ -59,7 +59,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
     ini_gets("files", "inference_posterior_probabilities", "dummy", inference_posterior_probabilities_filepath, sizearray(value), ini_filename);
 
     if (g_count > 0) {
-        printf("Generating factorgraph with number of states: %d\n", number_of_states);
+        printf("Generating factorgraph with:\n\t\tnumber of states\t%d\n", number_of_states);
 
         if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
             printf("Pathway filepath not specified in config\n");
@@ -74,16 +74,16 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
 
         if (exit_code != 0) {
            char * strerr = strerror(exit_code);
-           printf("Failed to generate logical factorgraph (error code: %d): %s\n", exit_code, strerr);
+           printf("Failed to generate factorgraph (error code: %d): %s\n", exit_code, strerr);
            return exit_code;
         }
         else {
-           printf("\tLogic factorgragh has been output into the following pathway file: %s\n", logical_factorgraph_filepath); 
+           printf("\tFactorgragh has been printed out into the following file: %s\n", logical_factorgraph_filepath); 
            printf("\tFactorgraph generation completed\n\n");
         }
     }
     if (l_count > 0) {
-        printf("Running Learning with Max iterations: %d, number of states: %d, log likelilhood change limit: %e, parameters change limit: %e, logging: %d \n", em_max_iterations, number_of_states, em_log_likelihood_change_limit, em_parameters_change_limit, logging);
+        printf("Running Learning with:\n\t\tMax iterations\t\t\t%d\n\t\tnumber of states\t\t%d\n\t\tlog likelilhood change limit\t%f\n\t\tparameters change limit\t\t%f\n\t\tlogging\t\t\t\t%d\n", em_max_iterations, number_of_states, em_log_likelihood_change_limit, em_parameters_change_limit, logging);
 
         if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
             printf("Logic factorgraph filepath not specified in config\n");
@@ -110,7 +110,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         }
     }
     if (i_count > 0) {
-        printf("Running Inference with number of states: %d\n", number_of_states);
+        printf("Running Inference with:\n\t\tnumber of states\t%d\n", number_of_states);
         if ( strcmp(learning_observed_data_filepath, "dummy") == 0 ) {
             printf("Observed data filepath not specified in config\n");
             return 1;
@@ -558,18 +558,18 @@ int main(int argc, char *argv[]) {
     struct arg_dbl *em_log_likelihood_change_limit, *em_parameters_change_limit; 
 
     void *argtable[] = {
-        g = arg_lit0("g", "generate-pathway", "Generate factorgraph from reaction logic"),
-        i = arg_lit0("i", "inference", "Run inference on dataset"),
-        l = arg_lit0("l", "learning", "Run learning on dataset"),
+        g = arg_lit0("g", "generate-factorgraph", "Generate factor graph from reaction logic"),
+        i = arg_lit0("i", "inference", "Run inference given the states of visible sets"),
+        l = arg_lit0("l", "learning", "Run learning using training dataset"),
         interactive = arg_lit0(NULL, "interactive", "Interactive mode"),
-        inifile = arg_file0(NULL, "inifile", "inifile", "File to be use to describe configuration of analysis"),
-        inference_use_logical_factorgraph = arg_lit0(NULL, "inference_use_logical_factorgraph", "Set this flag if for inference you would like to use the logic factorgraph file (created from pairwise interaction file) instead of the learnt factorgraph file for inference"),
-        number_of_states = arg_int0(NULL, "number-of-states", NULL, "Number of states for pathway (default is 3)"),
-        em_max_iterations = arg_int0(NULL, "em-max-iterations", NULL , "Maximum number of iterations for expectation maximization - used in learning step (default is 4000)"),
+        inifile = arg_file0(NULL, "file-paths", "file-paths", "Path to config file that contains paths for input and output files"),
+        inference_use_logical_factorgraph = arg_lit0(NULL, "inference-use-logical-factorgraph", "Set this flag if, for inference, you would like to use the logic factorgraph file (created from pairwise interaction file) instead of the learnt factorgraph file for inference"),
+        number_of_states = arg_int0(NULL, "number-of-states", NULL, "Number of states for each node (default is 2)"),
+        em_max_iterations = arg_int0(NULL, "em-max-iterations", NULL , "Maximum number of iterations in the EM algorithm - used in learning (default is 4000)"),
         em_number_of_training_samples = arg_int0(NULL, "training-samples", NULL, "Number of training samples used in expectation mimization - used in learning step(default 400)"),
-        em_log_likelihood_change_limit = arg_dbl0(NULL, "log-likelihood-change-limit", NULL, "Stop criteria threshold for expectation maximization - used in learning step (default 1e-5)"),
-        em_parameters_change_limit = arg_dbl0(NULL, "parameters-change-limit", NULL, "Stop criteria threshold for expectation maximization parameters -used in learning step (default 1e-3)"),
-        logging_on = arg_lit0(NULL, "logging-on", "Set this flag if you would like the learning step to produce status output into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
+        em_log_likelihood_change_limit = arg_dbl0(NULL, "log-likelihood-change-limit", NULL, "Stopping criteria: change in the ML - used in learning (default 1e-5)"),
+        em_parameters_change_limit = arg_dbl0(NULL, "parameters-change-limit", NULL, "Stopping criteria: change in the parameters - used in learning (default 1e-3)"),
+        logging_on = arg_lit0(NULL, "logging-on", "Set this flag if you would like the learning step to print out the status into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
@@ -586,7 +586,7 @@ int main(int argc, char *argv[]) {
     em_number_of_training_samples->ival[0] = 400;
     em_parameters_change_limit->dval[0] = 1e-3;
     em_log_likelihood_change_limit->dval[0] = 1e-5;
-    number_of_states->ival[0] = 3; 
+    number_of_states->ival[0] = 2; 
 
     /* verify the argtable[] entries were allocated sucessfully */
     if (arg_nullcheck(argtable) != 0) {
