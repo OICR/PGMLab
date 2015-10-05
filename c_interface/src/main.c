@@ -37,10 +37,9 @@
 #define	FALSE		0
 #define FILENAME_MAX	100
 
-int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, const char *ini_filename, int g_count, int l_count, int i_count, int logging, int inference_use_learnt_factorgraph) {
+int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, const char *ini_filename, int g_count, int l_count, int i_count, int logging, int inference_use_learnt_factorgraph, int MAP_flag) {
 
     char value[200];
-    int MAP_flag = 1;
 
     char pairwise_filepath[200];
     char logical_factorgraph_filepath[200];
@@ -90,7 +89,12 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         else {
             printf("\t\tlogging\t\t\t\toff\n");
         }
-
+        if (MAP_flag == 1) {
+            printf("\t\tMAP\t\t\t\ton\n");
+        }
+        else {
+            printf("\t\tMAP\t\t\t\toff\n");
+        }
         if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
             printf("Logic factorgraph filepath not specified in config\n");
             return 1;
@@ -556,7 +560,7 @@ int interactive_commands() {
 }
 
 int main(int argc, char *argv[]) {
-    struct arg_lit *i, *l, *g, *interactive, *logging_on, *inference_use_logical_factorgraph;
+    struct arg_lit *i, *l, *g, *interactive, *logging_on, *map_off, *inference_use_logical_factorgraph;
     struct arg_lit *help, *version;
     struct arg_end *end;
     struct arg_int *em_max_iterations, *em_number_of_training_samples, *number_of_states;
@@ -576,6 +580,7 @@ int main(int argc, char *argv[]) {
         em_log_likelihood_change_limit = arg_dbl0(NULL, "log-likelihood-change-limit", NULL, "Stopping criteria: change in the ML - used in learning (default 1e-5)"),
         em_parameters_change_limit = arg_dbl0(NULL, "parameters-change-limit", NULL, "Stopping criteria: change in the parameters - used in learning (default 1e-3)"),
         logging_on = arg_lit0(NULL, "logging-on", "Set this flag if you would like the learning step to print out the status into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
+        map_off = arg_lit0(NULL, "map-off", "Use this flag to set map flag to 0 (default 1)"),
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
@@ -648,9 +653,10 @@ int main(int argc, char *argv[]) {
     }
 
     int logging = logging_on->count > 0 ? 1 : 0;
+    int map = map_off->count > 1 ? 0: 1;
 
     /* Command line parsing is complete, do the main processing */
-    exitcode = non_interactive_command(em_max_iterations->ival[0], em_number_of_training_samples->ival[0], em_log_likelihood_change_limit->dval[0], em_parameters_change_limit->dval[0], number_of_states->ival[0], *inifile->filename, g->count, l->count, i->count, logging, inference_use_logical_factorgraph->count);
+    exitcode = non_interactive_command(em_max_iterations->ival[0], em_number_of_training_samples->ival[0], em_log_likelihood_change_limit->dval[0], em_parameters_change_limit->dval[0], number_of_states->ival[0], *inifile->filename, g->count, l->count, i->count, logging, inference_use_logical_factorgraph->count, map);
 exit:
     /* deallocate each non-null entry in argtable[] */
     arg_freetable(argtable,sizeof(argtable)/sizeof(argtable[0]));  
