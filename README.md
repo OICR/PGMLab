@@ -140,9 +140,10 @@ In order to call libnet from the R Contole you will need to create and load the 
 ####Result
 	lib/libnetR.so has been generated
 
-###Running R commands
+###Running R commands ( The current working directory needs to be correct to have the shared obejects link to one another correctly)
 
-	cd r_package (can run R from anywhere but the paths in this tutorial will only work if you started R in this directory)
+	cd r_package/libnetR/  (for Linux)
+	cd r_pathage/ (for OS X)
 	r or rstudio
 
 ####Loading shared object:
@@ -163,16 +164,18 @@ The three available functions are:
 	
 ####Call available functions:
 
-All filepaths are full file paths and the rest of the variables should be supplied as integer values. Functions will return 0 upon success and error codes otherwise. 
+All filepaths can either be relative or full paths and the rest of the variables should be supplied as integer values. Functions will return 0 upon success and error codes otherwise. 
+
+*These relative paths are for linux and should be changed of OS X. In OS X the change should be to remove one of the '../' from the beggining of the each filepath. 
 
 #####Reaction Logic to Factorgraph
-	.Call("r_reaction_logic_to_factorgraph", "../test/data1/munin4_pairwise.txt", "../test/data1/logical_factorgraph.txt",3)
+	.Call("r_reaction_logic_to_factorgraph", "../../test/data1/munin4_pairwise.txt", "../../test/data1/logical_factorgraph.txt",3)
 	
 ####Learning
-	.Call("r_learning_discrete_BayNet", "../test/data1/logical_factorgraph.txt", "../test/data1/visibleSet_0.5.txt", "../test/data1/estimated_parameters_0.5.txt", 3, 4000, 1e-5, 1e-3, 1, 1)
+	.Call("r_learning_discrete_BayNet", "../../test/data1/logical_factorgraph.txt", "../../test/data1/visibleSet_0.5.txt", "../../test/data1/estimated_parameters_0.5.txt", 3, 4000, 1e-5, 1e-3, 1, 1)
 		
 ####Inference
-	.Call("r_doLBPinference","../test/data1/estimated_parameters_0.5.txt", "../test/data1/visibleSet_0.7.txt","../test/data1/visibleSet_0.5.txt", 3)
+	.Call("r_doLBPinference","../../test/data1/estimated_parameters_0.5.txt", "../../test/data1/visibleSet_0.7.txt","../../test/data1/visibleSet_0.5.txt", 3)
 	
 	
 
