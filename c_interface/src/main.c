@@ -273,10 +273,10 @@ int get_readable_factorgraph_filepath(char ** filepath) {
 int get_number_of_states(int * number_of_states) {
     char * ptr;
     char *str = "";
-    str = readline("\tEnter number of states[default 3]: ");
+    str = readline("\tEnter number of states[default 2]: ");
 
     if (!*str) {
-        *number_of_states = 3;
+        *number_of_states = 2;
         return 0;
     }
    
