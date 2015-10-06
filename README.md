@@ -32,7 +32,7 @@ This tool has been tested on OS X and Ubuntu 14.04
 
 #Running tool
 
-There are three steps to compiling this tool:
+Three steps to compiling this tool:
 
 1. Install external libraries and generateHash
 2. Generate hash for particular network with the  generateHash tool
