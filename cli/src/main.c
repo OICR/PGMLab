@@ -231,7 +231,7 @@ int get_readable_pairwise_interaction_filepath(char ** filepath) {
 }
 
 int get_writeable_logical_factorgraph_filepath(char ** filepath) {
-    *filepath = readline("\tEnter logical factorgraph filepath (output):  ");
+    *filepath = readline("\tEnter factorgraph filepath (output):  ");
     clean_filepath(filepath);
     add_history(*filepath);
 
@@ -244,7 +244,7 @@ int get_writeable_logical_factorgraph_filepath(char ** filepath) {
 }
 
 int get_readable_logical_factorgraph_filepath(char ** filepath) {
-    *filepath = readline("\tEnter logical factorgraph filepath (input):  ");
+    *filepath = readline("\tEnter factorgraph filepath (input):  ");
     clean_filepath(filepath);
     add_history(*filepath);
 
@@ -273,7 +273,7 @@ int get_readable_factorgraph_filepath(char ** filepath) {
 int get_number_of_states(int * number_of_states) {
     char * ptr;
     char *str = "";
-    str = readline("\tEnter number of states[default 2]: ");
+    str = readline("\tEnter number of states [default 2]: ");
 
     if (!*str) {
         *number_of_states = 2;
@@ -319,7 +319,7 @@ int get_writeable_posterior_probabilities_filepath(char ** filepath) {
 }
 
 int get_writeable_estimated_parameters_filepath(char ** filepath) {
-    *filepath = readline("\tEnter estimated parameters (output) filepath:  ");
+    *filepath = readline("\tEnter estimated parameters filepath (output):  ");
     clean_filepath(filepath);
     add_history(*filepath);
 
@@ -334,7 +334,7 @@ int get_writeable_estimated_parameters_filepath(char ** filepath) {
 int get_max_iterations(int * em_max_iterations) {
     char *ptr;
     char *str = "";
-    str = readline("\tEnter max number of iterations for expectation maximization [default 400]: ");
+    str = readline("\tEnter max number of iterations for EM [default 400]: ");
 
     if (!*str) {
         *em_max_iterations = 400;
@@ -399,7 +399,7 @@ int get_parameters_change_limit(double * em_parameters_change_limit) {
 }
 
 int get_learning_logging(int *logging) {
-    char *input = readline("\tWould you like to have a log be generated for monitoring progress. If yes the status will be outputted to screen as well. [Y/n]  ");
+    char *input = readline("\tWould you like to have a log be generated for monitoring progress. If yes a \"file.log\" will be generated. [Y/n]  ");
     
     *logging = is_yes(input) == 1 ? 1 : 0;
 
@@ -430,7 +430,7 @@ int interactive_pairwise_to_factorgraph(char **pairwise_interactions_filepath, c
     get_writeable_logical_factorgraph_filepath(factorgraph_filepath);
     get_number_of_states(number_of_states);
 
-    printf("\nGenerating Factorgraph file from pairwise interactions:\t%s\n", *factorgraph_filepath);
+    printf("\nGenerating a factorgraph from pairwise interactions:\t%s\n", *factorgraph_filepath);
     int exit_code = reaction_logic_to_factorgraph(*pairwise_interactions_filepath, *factorgraph_filepath, *number_of_states);
 
     if (exit_code != 0) {
@@ -511,7 +511,7 @@ int interactive_command() {
     double em_parameters_change_limit = 0;
     int MAP_flag = 0;
 
-    input = readline("\nWould you like to generate a logical factorgraph file from pairwise interactions [Y/n] ");
+    input = readline("\nWould you like to generate a factorgraph from pairwise interactions [Y/n] ");
     if (is_yes(input) == 1)
     {
         interactive_pairwise_to_factorgraph(&pairwise_interactions_filepath, &logical_factorgraph_filepath, &number_of_states);
@@ -580,7 +580,7 @@ int main(int argc, char *argv[]) {
         em_log_likelihood_change_limit = arg_dbl0(NULL, "log-likelihood-change-limit", NULL, "Stopping criteria: change in the ML - used in learning (default 1e-5)"),
         em_parameters_change_limit = arg_dbl0(NULL, "parameters-change-limit", NULL, "Stopping criteria: change in the parameters - used in learning (default 1e-3)"),
         logging_on = arg_lit0(NULL, "logging-on", "Set this flag if you would like the learning step to print out the status into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
-        map_off = arg_lit0(NULL, "map-off", "Use this flag to set map flag to 0 (default 1)"),
+        map_off = arg_lit0(NULL, "maximum-a-posteriori-estimation", "Use this flag to set the MAP flag to 0 (default 1)"),
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
