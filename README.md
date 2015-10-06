@@ -166,7 +166,7 @@ The three available functions are:
 
 All filepaths can either be relative or full paths and the rest of the variables should be supplied as integer values. Functions will return 0 upon success and error codes otherwise. 
 
-*These relative paths are for linux and should be changed of OS X. In OS X the change should be to remove one of the '../' from the beggining of the each filepath. 
+*These relative paths are for linux and should be changed of OS X. In OS X the change should be to remove one of the '../' from the beginning of the each filepath. 
 
 #####Reaction Logic to Factorgraph
 	.Call("r_reaction_logic_to_factorgraph", "../../test/data1/munin4_pairwise.txt", "../../test/data1/logical_factorgraph.txt",2)
