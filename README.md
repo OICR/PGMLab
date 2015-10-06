@@ -169,7 +169,7 @@ All filepaths can either be relative or full paths and the rest of the variables
 *These relative paths are for linux and should be changed of OS X. In OS X the change should be to remove one of the '../' from the beggining of the each filepath. 
 
 #####Reaction Logic to Factorgraph
-	.Call("r_reaction_logic_to_factorgraph", "../../test/data1/munin4_pairwise.txt", "../../test/data1/logical_factorgraph.txt",3)
+	.Call("r_reaction_logic_to_factorgraph", "../../test/data1/munin4_pairwise.txt", "../../test/data1/logical_factorgraph.txt",2)
 	
 ####Learning
 	.Call("r_learning_discrete_BayNet", "../../test/data1/logical_factorgraph.txt", "../../test/data1/visibleSet_0.5.txt", "../../test/data1/estimated_parameters_0.5.txt", 2, 4000, 1e-5, 1e-3, 1, 1)
