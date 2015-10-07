@@ -90,38 +90,38 @@ This program and tutorials rely on the relative paths to the main libnet shared 
 
 ###Command
 
-	cd c_interface  
+	cd cli  
 	make  
 	
 ###Result
-	bin/libnetc has been generated
+	bin/libnet has been generated
 
 ###Getting started
 
 	cd bin  
-	./libnetc --help  
+	./libnet --help  
 	
 	
 ###Usage
 
-libnetc [-gil] [--interactive] [--inifile=inifile] [--inference_use_logical_factorgraph] [--number-of-states=<int>] [--em-max-iterations=<int>] [--training-samples=<int>] [--log-likelihood-change-limit=<double>] [--parameters-change-limit=<double>] [--logging-on] [--help] [--version]  
+libnet [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical-factorgraph] [--number-of-states=<int>] [--em-max-iterations=<int>] [--training-samples=<int>] [--log-likelihood-change-limit=<double>] [--parameters-change-limit=<double>] [--logging-on] [--maximum-a-posteriori-estimation] [--help] [--version] 
 
 ###Flag descriptions  
- -g, --generate-pathway    Generate factorgraph from reaction logic  
- -i, --inference           Run inference on dataset  
- -l, --learning            Run learning on dataset  
- --interactive             Interactive mode  
- --inifile=inifile         File to be use to describe configuration of analysis  
- --inference_use_logical_factorgraph Set this flag if for inference you would like to use the logic factorgraph file (created from pairwise interaction file) instead of the learnt factorgraph file for inference  
- --number-of-states=<int>  Number of states for pathway (default is 3)  
- --em-max-iterations=<int> Maximum number of iterations for expectation maximization - used in learning step (default is 4000)  
- --training-samples=<int>  Number of training samples used in expectation mimization - used in learning step(default 400)  
- --log-likelihood-change-limit=<double> Stop criteria threshold for expectation maximization - used in learning step (default 1e-5)  
- --parameters-change-limit=<double> Stop criteria threshold for expectation maximization parameters -used in learning step (default 1e-3)  
- --logging-on              Set this flag if you would like the learning step to produce status output into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)  
- --help                    Display help and exit  
- --version                 Display version information and exit  
-
+ -g, --generate-factorgraph Generate factor graph from reaction logic
+ -i, --inference           Run inference given the states of visible sets
+ -l, --learning            Run learning using training dataset
+ --interactive             Interactive mode
+ --file-paths=file-paths   Path to config file that contains paths for input and output files
+ --inference-use-logical-factorgraph Set this flag if, for inference, you would like to use the logic factorgraph file (created from pairwise interaction file) instead of the learnt factorgraph file for inference
+ --number-of-states=<int>  Number of states for each node (default is 2)
+ --em-max-iterations=<int> Maximum number of iterations in the EM algorithm - used in learning (default is 4000)
+ --training-samples=<int>  Number of training samples used in expectation mimization - used in learning step(default 400)
+ --log-likelihood-change-limit=<double> Stopping criteria: change in the ML - used in learning (default 1e-5)
+ --parameters-change-limit=<double> Stopping criteria: change in the parameters - used in learning (default 1e-3)
+ --logging-on              Set this flag if you would like the learning step to print out the status into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)
+ --maximum-a-posteriori-estimation Use this flag to set the MAP flag to 0 (default 1)
+ --help                    Display help and exit
+ --version                 Display version information and exit
 
 
 If you would like to be guided through the running of the tool you should select the flag "--interactive".
