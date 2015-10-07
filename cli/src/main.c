@@ -1,7 +1,7 @@
 /*******************************************************************************
 * C interface to libnet
 *    USAGE:
-*        libnetc [--help] [--learning] [--inference]
+*        libnet [--help] [--learning] [--inference]
 * 
 *******************************************************************************/
 //for inimini
@@ -586,7 +586,7 @@ int main(int argc, char *argv[]) {
         end = arg_end(20)
     };
  
-    const char *program_name = "libnetc";
+    const char *program_name = "libnet";
     const char *program_version = "1.0.0";
 
     int exitcode = 0;
@@ -616,8 +616,7 @@ int main(int argc, char *argv[]) {
         arg_print_syntax(stdout,argtable,"\n");
         printf("Perform inference and learning on probabilistic networks.\n");
         arg_print_glossary(stdout,argtable," %-25s %s\n");
-        printf("\nSupply paths of files in prob-net.cfg configuration file.\n\n"
-        "Report bugs to <adam.j.wright82@gmail.com>.\n");
+        printf("Report bugs to <adam.j.wright82@gmail.com>.\n");
         exitcode = 0;
         goto exit;
     }
