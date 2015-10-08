@@ -530,6 +530,7 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
                 r = gsl_rng_alloc(gsl_rng_mt19937);
                 gsl_rng_set(r,1);
                 gsl_ran_dirichlet(r,num_state,&factorarray0[i][k*num_state],&factorarray[i][k*num_state]);
+                gsl_rng_free(r);
             }
         }
         
@@ -976,17 +977,17 @@ int FactorgraphFile_To_NodeStructures(char *factorgraph, Node *pGraph,int num_st
     char buf[maxLen], *temp;
     const char delims[2] = " ";
     int N = Nv+Nf; // number of all nodes the graph
-    
+
     FILE *file = fopen(factorgraph, "r");
     if (file == NULL) return 107;
     
     /* read first line  to get number of factors and store it in Nf*/
-    
+
     fgets(buf,maxLen,file); /*read the first line but no need to use for it*/
-    
+
     for(i=0;i<N;i++)
         pGraph[i].numAdj = 0;
-    
+
     i =  0;
     ii = 0;
     while ((fgets(buf,maxLen,file)) != NULL)
@@ -1021,7 +1022,7 @@ int FactorgraphFile_To_NodeStructures(char *factorgraph, Node *pGraph,int num_st
         
         i++;
     }
-    
+
     /* ***************************************sec **************************************************/
     // allocate memory for the second field of pGraph structure in which we keep indexes of messages
     for(i = 0;i< N;i++)
@@ -2021,7 +2022,6 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 /**************************************************************************/
 int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging)
 {
-
     int i,k,m,h;         /*indexign for loops  and whiles */
     int lenMsgVec;       /*length of message vector (# of all messages *  # of state per message)*/
     int iteration = 0;   /* number of iteration in LBP */
@@ -2053,7 +2053,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
 
     char* nodelist[numel];
     char *keys[numel];
-    
+
     /*retrun the list of all varaible nodes; duplication may be in the list */
     int numline_nodelist;
     exit_code = ExtractNonUniqNodelist(logical_factorgraph, nodelist, &numline_nodelist);
@@ -2064,7 +2064,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
     Nv = uniq(nodelist, numel); /*remove duplicate from nodelist;  Nv: # of variable nodes */
     Nf = Nv; /*in our setting # of facotrs should be equal to # of variables becuase we consider one factor for each root node */
     N = Nv+Nf; // number of all nodes the graph
-    
+
     /*sort the variable node names  according  to thier hash map Ids */
     for(i=0;i<Nv;i++)
     {
@@ -2084,7 +2084,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
     
     /* allocate memory for pGraph struct which contains message info*/
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
-    
+
     /*  fill the pGraph struct field accroding to info given in factor graph file */
     exit_code = FactorgraphFile_To_NodeStructures(logical_factorgraph, pGraph, num_state, Nv, Nf, &lenMsgVec);
     if (exit_code != 0) return exit_code;    
@@ -2135,6 +2135,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
             r = gsl_rng_alloc(gsl_rng_mt19937);
             gsl_rng_set(r,1);
             gsl_ran_dirichlet(r,num_state,&pGraph[i+Nv].beliefs[k*num_state],&factorarray0[i][k*num_state]);
+            gsl_rng_free(r);
         }
     }
     
@@ -2328,7 +2329,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
 
         /* check stopping criterion*/
         if (logging == 1) {
-            fprintf(fpl, "itr: %d\tpar: %f\tLL: %f\n", num_repeat, change_parameters, LogLikelihood[num_repeat]);
+            fprintf(fpl, "itr: %d\tpar: %f\tLL: %f\n", num_repeat, change_parameters, changeLL);
             fprintf(fpl, "change in LL: %f\n\n", changeLL);
         }
 
