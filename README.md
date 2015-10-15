@@ -2,9 +2,11 @@
 
 Libnet performs learning and inference in large discrete baysian networks. Libnet is a standalone library written in c. 
 
-is used for performing both inference and learning on graphical probabilistic models. The tool has been written in the programming language C, in order to have the tool run as fast as possible. The main program gets compiled into a a shared object. In order to run this program the user will have to either create an interface or use one of the ones that have been previously created. This repository contains a command line interface and a R programming interface. 
+Developed to fulfill three tasks: 
 
-Data is provided to the program through tab delimited files (described later in this document) and results outputted to files as well. With the command line interface, the paths to the files are all specified to the user within a configuration file and processing parameters are specified through flags. With the R interface, both the the file paths and processing parameters can be supplied through function parameters. 
+    - To perform learning and inference in extremely large graphs. 
+    - To be used by both expert and non expert in the field of machine learning
+    - To be as fast and as accurate as possible 
 
 ##Authors
 
