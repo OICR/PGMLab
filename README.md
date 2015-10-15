@@ -1,4 +1,4 @@
-# LibNet
+#LibNet
 
 Libnet performs learning and inference in large discrete baysian networks. Libnet is a standalone library written in c. 
 
@@ -11,16 +11,16 @@ Data is provided to the program through tab delimited files (described later in 
    - Hossein Radfar 
    - Adam Wright 
 
-#Detailed Tutorials
+##Wiki
    - Please visit the LibNet wiki [here](https://github.com/OICR/LibNet/wiki) for details and theory. 
    - Make sure to follow the input file formats specifications [here](https://github.com/OICR/LibNet/wiki/File-Formats).  
 
-#System requirements
-This tool has been tested on OS X and Ubuntu 14.04
+##System requirements
+LibNet has been tested on OS X and Ubuntu 14.04.
 
-#How to run LibNet
+##How to run LibNet
 
-##Installation
+###Installation
 
 ###Command
 
