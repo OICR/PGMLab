@@ -2,7 +2,7 @@
 
 Libnet performs learning and inference in large discrete baysian networks. Libnet is a standalone C library, which has command line and R interfaces. 
 
-Developed to fulfill three tasks: 
+LibNet developed to fulfill three goals: 
 
    - To perform learning and inference in extremely large graphs. 
    - To be used by both expert and non expert in the field of machine learning
