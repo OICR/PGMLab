@@ -4,9 +4,9 @@ Libnet performs learning and inference in large discrete baysian networks. Libne
 
 Developed to fulfill three tasks: 
 
-    - To perform learning and inference in extremely large graphs. 
-    - To be used by both expert and non expert in the field of machine learning
-    - To be as fast and as accurate as possible 
+   - To perform learning and inference in extremely large graphs. 
+   - To be used by both expert and non expert in the field of machine learning
+   - To be as fast and as accurate as possible 
 
 ##Authors
 
