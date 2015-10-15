@@ -77,7 +77,7 @@ This program and tutorials rely on the relative paths to the main libnet shared 
 
 After the LibNet shared object has been created with the hash you desire you will need to compile an interface. 
 
-##Compiling command line interface
+##Command line interface
 
 ###Command
 
