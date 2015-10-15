@@ -12,9 +12,8 @@ Data is provided to the program through tab delimited files (described later in 
    - Adam Wright 
 
 #Detailed Tutorials
-   - Feel free to go through our wiki [here](https://github.com/OICR/LibNet/wiki) for further details. 
-   - Make sure to follow the file formats specified [here](https://github.com/OICR/LibNet/wiki/File-Formats). It is important to make sure that input files follow the exact format specified in the wiki.
-   
+   - Please visit the LibNet wiki [here](https://github.com/OICR/LibNet/wiki) for details and theory. 
+   - Make sure to follow the input file formats specifications [here](https://github.com/OICR/LibNet/wiki/File-Formats).  
 
 #System requirements
 This tool has been tested on OS X and Ubuntu 14.04
@@ -25,8 +24,8 @@ This tool has been tested on OS X and Ubuntu 14.04
 
 ###Command
 
-        cd <libnet root directory>
-	make 
+        cd <libnet root directory>  
+	make   
 
 ###Result
 
@@ -76,7 +75,9 @@ This program and tutorials rely on the relative paths to the main libnet shared 
 
 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<path to shared object directory>
 
-##Compiling C interface
+After the LibNet shared object has been created with the hash you desire you will need to compile an interface. 
+
+##Compiling command line interface
 
 ###Command
 
