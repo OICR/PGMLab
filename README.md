@@ -169,10 +169,12 @@ All filepaths can either be relative or full paths and the rest of the variables
 	
 #Libnet dependencies
 
+All resources are included in the LibNet package. 
+
 ##Resources
 | Name                      |  Description | Link |
 |---------------------------|------------------------|------|
-|  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Botelho and Ziviani and is used to hashing the names of the nodes. This allows LibNet to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
+|  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Bob Jenkins and is used to hashing the names of the nodes. This allows LibNet to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
 
 ##External Libraries
 | Name                      |  Description | Link |
