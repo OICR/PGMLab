@@ -19,15 +19,18 @@ Data is provided to the program through tab delimited files (described later in 
 #System requirements
 This tool has been tested on OS X and Ubuntu 14.04
 
-#Running tool
+#How to run LibNet
 
-Three steps to compiling this tool:
+##Installation
 
-1. Install external libraries and generateHash
-2. Generate hash for particular network with the  generateHash tool
-3. Install libnet and desired interface  
+###Command
 
-## Install GSL Library and generateHash
+        cd <libnet root directory>
+	make 
+
+###Result
+
+    	gsl, termcap, and readline libraries will now be installed in the folder "external_lib" and the program "bin/generateHash" and bin/generasteHash will exist.
 
 ###External Libraries
 
@@ -37,13 +40,11 @@ The external libraries GSL, termcap, and realidne are used by the libnet program
 
 This tool is used to create a hash for the pathway you are using. If you change the pathway you are using you will have to re-run this tool and then re-install libnet. 
 
-###Command
+#Running LibNet
 
-	make 
-	
-###Result
-
-	gsl, termcap, and readline libraries will now be installed in the folder "external_lib" and the program "bin/generateHash" will exist
+1. Generate hash for particular network with the  generateHash
+2. Install libnet and desired interface  
+3. Run analysis
 
 ###Usage: generateHash
 
