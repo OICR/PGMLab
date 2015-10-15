@@ -16,12 +16,13 @@ Data is provided to the program through tab delimited files (described later in 
    - Make sure to follow the input file formats specifications [here](https://github.com/OICR/LibNet/wiki/File-Formats).  
 
 ##System requirements
+
 LibNet has been tested on OS X and Ubuntu 14.04.
 
 ###How to download, install and Run LibNet
 ####1. Download
 
-Download the latest version of LibNet from [here](https://github.com/OICR/LibNet/zipball/master)
+    Download the latest version of LibNet from [here](https://github.com/OICR/LibNet/zipball/master)
 
 ####2. Installation
 
