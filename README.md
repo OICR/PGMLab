@@ -22,28 +22,16 @@ LibNet has been tested on OS X and Ubuntu 14.04.
 ###How to download, install and Run LibNet
 ####1. Download
 
-    Download the latest version of LibNet from [here](https://github.com/OICR/LibNet/zipball/master)
+   - Download the latest version of LibNet from [here](https://github.com/OICR/LibNet/zipball/master) 
 
 ####2. Installation
 
-#####Command
+   - Type the following command in a terminal:
+   
+        $cd .../your-download-directory/LibNet  
+	$make  
 
-        cd <libnet root directory>  
-	make 
-
-####Result
-
-    	gsl, termcap, and readline libraries will now be installed in the folder "external_lib" and the program "bin/generateHash" and bin/generasteHash will exist.
-
-###External Libraries
-
-The external libraries GSL, termcap, and realidne are used by the libnet program. The make command will install these external libraries in the external_lib folder and create the generateHash tool when you run the "make" command. 
-
-### generateHash
-
-This tool is used to create a hash for the pathway you are using. If you change the pathway you are using you will have to re-run this tool and then re-install libnet. 
-
-#Running LibNet
+####3. Running LibNet
 
 1. Generate hash for particular network with the  generateHash
 2. Install libnet and desired interface  
