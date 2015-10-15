@@ -1,6 +1,8 @@
 # LibNet
 
-Libnet is used for performing both inference and learning on graphical probabilistic models. The tool has been written in the programming language C, in order to have the tool run as fast as possible. The main program gets compiled into a a shared object. In order to run this program the user will have to either create an interface or use one of the ones that have been previously created. This repository contains a command line interface and a R programming interface. 
+Libnet performs learning and inference in large discrete baysian networks. Libnet is a standalone library written in c. 
+
+is used for performing both inference and learning on graphical probabilistic models. The tool has been written in the programming language C, in order to have the tool run as fast as possible. The main program gets compiled into a a shared object. In order to run this program the user will have to either create an interface or use one of the ones that have been previously created. This repository contains a command line interface and a R programming interface. 
 
 Data is provided to the program through tab delimited files (described later in this document) and results outputted to files as well. With the command line interface, the paths to the files are all specified to the user within a configuration file and processing parameters are specified through flags. With the R interface, both the the file paths and processing parameters can be supplied through function parameters. 
 
@@ -13,19 +15,6 @@ Data is provided to the program through tab delimited files (described later in 
    - Feel free to go through our wiki [here](https://github.com/OICR/LibNet/wiki) for further details. 
    - Make sure to follow the file formats specified [here](https://github.com/OICR/LibNet/wiki/File-Formats). It is important to make sure that input files follow the exact format specified in the wiki.
    
-#Software dependencies
-
-##Resources
-| Name                      |  Description | Link |
-|---------------------------|------------------------|------|
-|  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Botelho and Ziviani and is used to hashing the names of the nodes. This allows LibNet to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
-
-##External Libraries
-| Name                      |  Description | Link |
-|---------------------------|------------------------|------|
-| GNU Scientific Library (GSL) | GSL is a numerical library for C and C++ that provides a wirde range of mathematical routines | http://www.gnu.org/software/gsl/ |
-| GNU Readline Library | The GNU Readline library provides a set of functions for use by applications that allow users to edit command lines as they are typed in. This library is used for the interactive command line interface. | https://cnswww.cns.cwru.edu/php/chet/readline/rltop.html |
-| GNU Termcap Library | Termcap is a library and data base that enables programs to use display terminals in a terminal-independent manner | https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html |
 
 #System requirements
 This tool has been tested on OS X and Ubuntu 14.04
@@ -178,4 +167,17 @@ All filepaths can either be relative or full paths and the rest of the variables
 	.Call("r_doLBPinference","../../test/data1/estimated_parameters_0.5.txt", "../../test/data1/visibleSet_0.7.txt","../../test/data1/visibleSet_0.5.txt", 2)
 	
 	
+#Libnet uses these external dependencies
+
+##Resources
+| Name                      |  Description | Link |
+|---------------------------|------------------------|------|
+|  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Botelho and Ziviani and is used to hashing the names of the nodes. This allows LibNet to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
+
+##External Libraries
+| Name                      |  Description | Link |
+|---------------------------|------------------------|------|
+| GNU Scientific Library (GSL) | GSL is a numerical library for C and C++ that provides a wirde range of mathematical routines | http://www.gnu.org/software/gsl/ |
+| GNU Readline Library | The GNU Readline library provides a set of functions for use by applications that allow users to edit command lines as they are typed in. This library is used for the interactive command line interface. | https://cnswww.cns.cwru.edu/php/chet/readline/rltop.html |
+| GNU Termcap Library | Termcap is a library and data base that enables programs to use display terminals in a terminal-independent manner | https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html |
 
