@@ -93,6 +93,7 @@ This program and tutorials rely on the relative paths to the main libnet shared 
 	
 ###Usage
 
+```
 libnet [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical-factorgraph] [--number-of-states=<int>] [--em-max-iterations=<int>] [--training-samples=<int>] [--log-likelihood-change-limit=<double>] [--parameters-change-limit=<double>] [--logging-on] [--maximum-a-posteriori-estimation] [--help] [--version] 
 
 ###Flag descriptions  
@@ -111,7 +112,7 @@ libnet [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical
  --maximum-a-posteriori-estimation Use this flag to set the MAP flag to 0 (default 1)
  --help                    Display help and exit
  --version                 Display version information and exit
-
+```
 
 If you would like to be guided through the running of the tool you should select the flag "--interactive".
 If you would like to run a new pathway you will need to rerun the generateHash program and then recompile the libnet program.
