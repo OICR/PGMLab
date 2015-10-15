@@ -18,16 +18,19 @@ Data is provided to the program through tab delimited files (described later in 
 ##System requirements
 LibNet has been tested on OS X and Ubuntu 14.04.
 
-##How to run LibNet
+###How to download, install and Run LibNet
+####1. Download
 
-###Installation
+Download the latest version of LibNet from [here](https://github.com/OICR/LibNet/zipball/master)
 
-###Command
+####2. Installation
+
+#####Command
 
         cd <libnet root directory>  
-	make   
+	make 
 
-###Result
+####Result
 
     	gsl, termcap, and readline libraries will now be installed in the folder "external_lib" and the program "bin/generateHash" and bin/generasteHash will exist.
 
