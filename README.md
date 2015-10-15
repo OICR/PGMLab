@@ -26,10 +26,10 @@ LibNet has been tested on OS X and Ubuntu 14.04.
 
 ####2. Installation
 
-   - Type the following command in a terminal:
+   - Type the following commands in a terminal:
    
-        $cd .../your-download-directory/LibNet  
-	$make  
+        cd .../your-download-directory/LibNet  
+	make  
 
 ####3. Running LibNet
 
