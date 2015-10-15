@@ -167,7 +167,7 @@ All filepaths can either be relative or full paths and the rest of the variables
 	.Call("r_doLBPinference","../../test/data1/estimated_parameters_0.5.txt", "../../test/data1/visibleSet_0.7.txt","../../test/data1/visibleSet_0.5.txt", 2)
 	
 	
-#Libnet uses these external dependencies
+#Libnet dependencies
 
 ##Resources
 | Name                      |  Description | Link |
