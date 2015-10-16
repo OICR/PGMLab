@@ -35,59 +35,57 @@ LibNet has been tested on OS X and Ubuntu 14.04.
 
 ####3. Running LibNet
 
-1. Generate hash for particular network with the  generateHash
-2. Install libnet and desired interface  
-3. Run analysis
+#####3.1 Generate hash for particular network with generateHash
 
 ###Usage: generateHash
+
+   - Type the following commands in the terminal in order to generate the hash for the pairwise interaction network you are intending on using for analysis
 
 	cd bin  
 	./generateHash <pairwise interaction file>  
 
-##Install libnet
+#####3.2 Compile LibNet shared object
 
 Once the hash has been generated with the generateHash program you will be ready to compile and run the libnet program. 
 
-###Prepare config file
-Using config/example.ini as a template specify where the files are that you would like to both have read in and written to file. I suggest creating a folder data folder in your desired location and place all files in this folder. 
-
-##Compiling libnet
-
-###Command
-
+   - In order to create the shared object with the desired hash files run the following commands 
+ 
 	cd net  
-	make  
+	make
 
-###Result
-	net/lib/libnet.so (.dynlib on OSX) has been generated
-	
-##Library Path
+   - This command has produced the shared object net/lib/libnet.so (.dynlib on OSX) 
 
-This program and tutorials rely on the relative paths to the main libnet shared object. If you are wanting to to access this object systemwide you could set the LD_LIBRARY_PATH environment variable (DYLD_LIBRARY_PATH on OSX).
+######Library Path
 
-###Example command
+   - Run the following command if you would like to access this library system wide (not necessary for basic installation) 
 
-	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<path to shared object directory>
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<path to shared object directory> 
 
-After the LibNet shared object has been created with the hash you desire you will need to compile an interface. 
+####4 User Interfaces
 
-##Command line interface
+There are two interaces to the shared object that come with this package: a command line interaface and a C interface.
 
-###Command
+#####4.1Command line interface
+
+######4.1.1 Compiling command line intface
+
+   - Run the following command to create the command line interface
 
 	cd cli  
 	make  
 	
-###Result
-	bin/libnet has been generated
+   - After running this command the command line interface will be locaated at bin/libnet
 
-###Getting started
+######4.1.2 Interacting with the command line intface
 
+This command line interface can be used in two distinct ways. The first way is to supply the paths of the files in a config file, in the same way as the example config files in the config folder and flags to customize the parameters to be use and the second way is to input the information through an interactive interface. Further infromation on how to use these interface can be found in the wiki.
+
+   - Run the following commands for a description of the LibNet command line interface. 
+ 
 	cd bin  
 	./libnet --help  
 	
-	
-###Usage
+   - The following will be outputed from the previous command
 
 ```
 libnet [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical-factorgraph] [--number-of-states=<int>] [--em-max-iterations=<int>] [--training-samples=<int>] [--log-likelihood-change-limit=<double>] [--parameters-change-limit=<double>] [--logging-on] [--maximum-a-posteriori-estimation] [--help] [--version] 
@@ -110,37 +108,44 @@ libnet [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical
  --version                 Display version information and exit
 ```
 
-If you would like to be guided through the running of the tool you should select the flag "--interactive".
-If you would like to run a new pathway you will need to rerun the generateHash program and then recompile the libnet program.
+*If you would like to use the interactive interface select the following flag: "--interactive".
 
-##R interface
+*If you would like to run a new pathway you will need to rerun the generateHash program and then recompile the libnet program.
 
-In order to call libnet from the R Contole you will need to create and load the R LibNet shared object. 
 
-###Compile R interface (shared object)
+#####4.2 R interface
 
-####Command
+In order to call libnet from the R Console you will need to create and load the R LibNet shared object. 
+
+######4.2.1 Compiling the R interface
+
+   - Run the following two commands to compile the R interface
+
 	cd r_package/libnetR
 	make
 
-####Result
+   - After running the command the following shared object should exist 
+
 	lib/libnetR.so has been generated
 
-###Running R commands ( The current working directory needs to be correct to have the shared obejects link to one another correctly)
+######4.2.2 Running R in order to be able to access the R LibNet shared object
+
+   - Run on of the first two commands, depending on your OS, and then run one fo the two options in the last line. 
 
 	cd r_package/libnetR/  (for Linux)
 	cd r_pathage/ (for OS X)
 	r or rstudio
 
-####Loading shared object:
+*The current working directory needs to be correct to have the shared obejects link to one another correctly
+
+######4.2.3 Loading the LibNet shared ojbect within R or Rstudio
+
+   - Run the following command in order to load the shared object 
+
 	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnetR.so")
 
 		
-####Available functions:
-
-All filepaths can be either full or abolute paths and the rest of the variables should be supplied as integer values. 
-
-The three available functions are:
+######4.2.4 Description of functions available from the R LibNet library
 
 	r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP number_of_states_) 
 	
@@ -148,32 +153,36 @@ The three available functions are:
 	
 	r_doLBPinference(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP posterior_probabilities_filepath_, SEXP number_of_states_) 
 	
-####Call available functions:
-
-All filepaths can either be relative or full paths and the rest of the variables should be supplied as integer values. Functions will return 0 upon success and error codes otherwise. 
+*All filepaths can be either full or abolute paths and the rest of the variables should be supplied as integer values. 
+	
+######4.2.5Example R function calls 
 
 *These relative paths are for linux and should be changed of OS X. In OS X the change should be to remove one of the '../' from the beginning of the each filepath. 
 
-#####Reaction Logic to Factorgraph
+   - Reaction Logic to Factorgraph
+  
 	.Call("r_reaction_logic_to_factorgraph", "../../test/data1/munin4_pairwise.txt", "../../test/data1/logical_factorgraph.txt",2)
 	
-####Learning
+   - Learning
+
 	.Call("r_learning_discrete_BayNet", "../../test/data1/logical_factorgraph.txt", "../../test/data1/visibleSet_0.5.txt", "../../test/data1/estimated_parameters_0.5.txt", 2, 4000, 1e-5, 1e-3, 1, 1)
 		
-####Inference
+   - Inference
+
 	.Call("r_doLBPinference","../../test/data1/estimated_parameters_0.5.txt", "../../test/data1/visibleSet_0.7.txt","../../test/data1/visibleSet_0.5.txt", 2)
+
+*Functions will return 0 upon success and error codes otherwise. 	
 	
-	
-#Libnet dependencies
+####5 Libnet dependencies
 
 All resources are included in the LibNet package. 
 
-##Resources
+#####5.1 Resources
 | Name                      |  Description | Link |
 |---------------------------|------------------------|------|
 |  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Bob Jenkins and is used to hashing the names of the nodes. This allows LibNet to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
 
-##External Libraries
+#####5.2 External Libraries
 | Name                      |  Description | Link |
 |---------------------------|------------------------|------|
 | GNU Scientific Library (GSL) | GSL is a numerical library for C and C++ that provides a wirde range of mathematical routines | http://www.gnu.org/software/gsl/ |
