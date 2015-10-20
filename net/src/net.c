@@ -520,17 +520,23 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
             }
         }
         
-        
         /* we assume p(y|x_1,..x_N) has Dirichlet distribution ; factorarray0 contains parameters of Dirichlet (i.e. \alpha). the gsl_ran_dirichlet generates samples from these distributions.   */
-        
-        for(i = 0;i < Nf;i++)
-        {
-            for (k=0;k<pGraph[i+Nv].numComb/num_state;k++)
-            {
-                r = gsl_rng_alloc(gsl_rng_mt19937);
-                gsl_rng_set(r,1);
-                gsl_ran_dirichlet(r,num_state,&factorarray0[i][k*num_state],&factorarray[i][k*num_state]);
-                gsl_rng_free(r);
+        int sampler_flag = 0;
+        if(sampler_flag) {
+            for(i = 0;i < Nf;i++) {
+                for (k=0;k<pGraph[i+Nv].numComb/num_state;k++) {
+                    r = gsl_rng_alloc(gsl_rng_mt19937);
+                    //printf(" I = %d, R = %gsl_rng \n" ,m,r);
+                    gsl_rng_set(r,1);
+                    gsl_ran_dirichlet(r,num_state,&factorarray0[i][k*num_state],&factorarray[i][k*num_state]);
+                    gsl_rng_free(r);
+                }
+            }
+        }
+        else {
+            for(i = 0;i < Nf;i++) {
+                for (k=0;k<pGraph[i+Nv].numComb;k++)
+                    factorarray[i][k]= factorarray0[i][k];
             }
         }
         
@@ -1715,10 +1721,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
                 if(kk > nstate)
                     kk = 1;
             }
-            // printf("*************\n");
         }
-        
-        //printf("----------------\n");
     }
     free (Ncpt);
     
@@ -1746,7 +1749,6 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
             factorarray[i][k]  = (1e-3)/(nstate-1);//(((double)rand()/(double)RAND_MAX));
             // printf("%f\n",(factorarray0[i][k])); /*check to see is really random !!*/
         }
-        // printf("------------\n");
     }
     
     /*   multiply indexes of CPT by +1 or -1 depending that the interaction is positive or negative*/
@@ -1784,19 +1786,6 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
             
         }
     }   
-    /*
-    for(i = 0;i < Nv;i++)
-    {
-        for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
-        {
-            for (h= 0;h < fGraph[i].numVariables;h++)
-            {
-                if(i==30)
-                    printf("%d %d %d %d\n",i,k,h,cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]);
-            }
-        }
-    }
-    */
 
     /*    OR resembles max and AND resembles min */
     int Small_num_for_OR ; /* to find max*/
@@ -1856,12 +1845,12 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
                     }
                     K++;
                 }
-                factorarray[i][s]= 1-(1e-3)/(nstate-1);
+                factorarray[i][s]= 1-(1e-3);
             }
         }
         else /*this is a root node so the zero state take the maximum change to occur unless we have some prior knowledge about other states being active*/
         {
-            factorarray[i][1]= 1-(1e-3)/(nstate-1);
+            factorarray[i][1]= 1-(1e-3);
         }
     }
 
