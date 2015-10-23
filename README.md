@@ -61,9 +61,9 @@ Once the hash has been generated with the generateHash program you will be ready
 
 	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<path to shared object directory> 
 
-####4 User Interfaces
+####4 User Interfaces 
 
-There are two interaces to the shared object that come with this package: a command line interaface and a C interface.
+There are two interaces to the shared object that come with this package: a command line interaface and a C interface. To make either of the interfaces you are required to have already compiled the LibNet shared object (3.2).
 
 #####4.1Command line interface
 
