@@ -134,7 +134,9 @@ In order to call libnet from the R Console you will need to create and load the 
 
 	cd r_package/libnetR/  (for Linux)  
 	cd r_package/ (for OS X)  
-	r or rstudio  
+	type r or rstudio  
+   
+   - You should now be in a R prompt
 
 *The current working directory needs to be correct to have the shared obejects link to one another correctly
 
@@ -142,9 +144,9 @@ In order to call libnet from the R Console you will need to create and load the 
 
    - Run the following command in order to load the shared object 
 
-	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnetR.so")
+	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnetR.so") (for Linux)
+	dyn.load("libnetR/lib/libnetR.so") (for OS X)
 
-		
 ######4.2.4 Description of functions available from the R LibNet library
 
 	r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP number_of_states_) 
