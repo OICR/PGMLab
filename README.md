@@ -121,8 +121,8 @@ In order to call libnet from the R Console you will need to create and load the 
 
    - Run the following two commands to compile the R interface
 
-	cd r_package/libnetR
-	make
+	cd r_package/libnetR  
+	make  
 
    - After running the command the following shared object should exist 
 
@@ -130,11 +130,11 @@ In order to call libnet from the R Console you will need to create and load the 
 
 ######4.2.2 Running R in order to be able to access the R LibNet shared object
 
-   - Run on of the first two commands, depending on your OS, and then run one fo the two options in the last line. 
+   - Run on of the first two commands, depending on your OS, and then run one of the two options in the last line. 
 
-	cd r_package/libnetR/  (for Linux)
-	cd r_pathage/ (for OS X)
-	r or rstudio
+	cd r_package/libnetR/  (for Linux)  
+	cd r_package/ (for OS X)  
+	r or rstudio  
 
 *The current working directory needs to be correct to have the shared obejects link to one another correctly
 
