@@ -46,7 +46,7 @@ LibNet has been tested on OS X and Ubuntu 14.04.
 
 #####3.2 Compile LibNet shared object
 
-Once the hash has been generated with the generateHash program you will be ready to compile and run the libnet program. 
+Once the hash has been generated with the generateHash program you will be ready to compile and run the libnet program. This stip has to be performed every time you generate a hash in order to have the new hash in shared object. 
 
    - In order to create the shared object with the desired hash files run the following commands 
  
