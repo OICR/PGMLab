@@ -54,26 +54,30 @@ SOURCES	=	src/net.c \
 		../resources/make_hash_table/src/perfhex.c 
 
 _OBJECTS = net.o perfect.o phash.o lookupa.o recycle.o perfhex.o 
-OBJECTS  = $(patsubst %,$(ODIR)/%,$(_OBJECTS))
+OBJECTS  = $(patsubst %,$(ODIR)/%,$(_OBJECTS)) 
+
+OBJECTS_SHA = ../external_lib/mbedtls-2.1.2/library/md5.o
 
 INCLUDE_GSL = -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/include -lgsl -lgslcblas 
+
+INCLUDE_SHA = -I$(CWD)/../external_lib/mbedtls-2.1.2/include
 
 all: $(TARGET_PATH)
 
 $(TARGET_PATH): folder net.o perfect.o phash.o lookupa.o recycle.o perfhex.o
 	$(CC) $(CCFLAGS) $(LDFLAGS) $(CFLAGS) $(RPATH) -o lib/$(TARGET) \
 	$(OBJECTS) \
+	$(OBJECTS_SHA) \
 	$(INCLUDE_GSL) \
 	-lm   
 
 # -w; \
-        mv $(TARGET) $(TARGET_PATH)
 
 folder:
 	mkdir -p obj lib; 
 
 net.o: src/net.c 
-	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include 
+	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include $(INCLUDE_SHA)
 
 perfect.o: ../resources/make_hash_table/src/perfect.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w

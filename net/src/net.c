@@ -3,10 +3,18 @@
 #include <string.h>
 #include <errno.h>
 
+#include "net.h"
+
+// GSL lib
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
-#include "net.h"
+// sha256 - this is used for creating the phash shared objects
+#include "mbedtls/config.h"
+#include <stddef.h>
+#include <stdint.h>
+#include "mbedtls/sha256.h"
+
 /* *****************************************************************************************/
 // Used for appending two char*s together
 char* stradd(const char* a, const char* b){
@@ -606,7 +614,45 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
     return 0;
 } /*end of doLBPinference function*/
 
+int streamFile(char* filename, char** string, long *length)
+{
+    FILE * file = fopen (filename, "rb"); 
+    if (file == NULL) return 101;
 
+    fseek (file, 0, SEEK_END);
+
+    long file_size = ftell (file);
+    *length = file_size;
+
+    fseek (file, 0, SEEK_SET);
+
+    *string = malloc (file_size);
+    if (*string == NULL) return 109; // need to fix this return value new one on dictionary
+
+    fread (*string, file_size, 1, file); 
+    fclose (file);
+
+    return 0;
+}
+
+
+int hashFile(char *filename, unsigned char sum[16]) 
+{
+    char* string;
+    long length;
+
+    int exit_code = streamFile(filename, &string, &length);
+    if (exit_code != 0) return exit_code;
+
+    size_t ilen = (size_t) length;
+    const unsigned char *input = (const unsigned char*) string;
+
+    mbedtls_md5(input, ilen, sum);
+ 
+    free(string);
+
+    return 0;
+}
 
 /**************************************************************************/
 /*pairwiseTofactorgraph*/
@@ -1484,6 +1530,15 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
     return(Iter);
 }
 
+
+// adapted from: http://www.experts-exchange.com/Programming/Languages/C/Q_20746033.html
+void unsigned_char_to_char(char *dst,unsigned char *src,size_t src_len)
+{
+        while (src_len--)
+            dst += sprintf(dst,"%02x",*src++);
+        *dst = '\0';
+}
+
 /**************************************************************************/
 /* reaction_logic_to_factorgraph*/
 /**************************************************************************/
@@ -1506,6 +1561,25 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
     };
     typedef  struct factor  *factor;
     
+    unsigned char sum[16];
+
+    int error_code = hashFile(readreactionlogic, sum);
+
+    char folder_name[sizeof(sum)*2+1];
+    unsigned_char_to_char(folder_name, sum, sizeof(sum));
+
+    printf("foldername: %s\n", folder_name);
+
+  return 0;
+
+    for(i=0;i<16;i++) printf("%02x",sum[i]);
+printf("\nfile %02x\n", sum);
+    printf("\n");
+    if (error_code != 0) return error_code;
+    printf("sum :%s\n", (char *) sum);
+    printf("\n\nsdfsdf\n\n");
+    return 0;
+
     // read the node name and store in an array
     FILE *file = fopen(readreactionlogic, "r");
     if (file == NULL) return 101;

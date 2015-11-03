@@ -100,4 +100,7 @@ void hash_graph_node_IDs(char *readreactionlogicpathways);
 int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data,char *estimated_parameters, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging);
 char *strerror_libnet(int error_code);
 
+void unsigned_char_to_char(char *dst,unsigned char *src,size_t src_len);
+int streamFile(char*filename, char**string, long *length);
+int hashFile(char *filename, unsigned char *sum);
 #endif

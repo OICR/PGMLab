@@ -39,7 +39,11 @@ endif
 
 all: gsl readline generateHash
 
-external_lib: gsl readline
+external_lib: gsl readline sha
+
+sha: 
+	cd ./external_lib/mbedtls-2.1.2; \
+	make;
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
