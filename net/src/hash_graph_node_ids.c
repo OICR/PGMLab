@@ -7,12 +7,12 @@
 //
 
 
-#include "hash_graph_node_IDs.h"
+#include "hash_graph_node_ids.h"
 
 int internal_uniq(char *a[], int len);
 int internal_cstring_cmp(const void *a, const void *b);
 
-void hash_graph_node_IDs(char *readreactionlogicpathways)
+int hash_graph_node_ids(char *reaction_logic_filepath, char* hash_folder)
 {
     int i,k,kk,Ne,Nv;
     int  maxLen = 2000;
@@ -21,13 +21,8 @@ void hash_graph_node_IDs(char *readreactionlogicpathways)
     char *temp;
     
     // read the node name and store in an array
-    FILE *file = fopen(readreactionlogicpathways, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "cannot open the file in  ExtractNonUniqNodelist \n");
-        exit(42);
-        
-    }
+    FILE *file = fopen(reaction_logic_filepath, "r");
+    if (file == NULL) return 101;
     
     fgets(buf,maxLen,file);    /* read first line  to get number of edges and store it in Ne*/
     
@@ -64,10 +59,12 @@ void hash_graph_node_IDs(char *readreactionlogicpathways)
     
     Nv = internal_uniq(targetsource,2*Ne); /* unique list of target and source nodes;  Nv: # of variable node  */
     
-    mphash(targetsource,Nv); /* hash the node lists*/
+    mphash(targetsource, Nv, hash_folder); /* hash the node lists*/
     
     for(i=0;i<Nv;i++)
         free(targetsource[i]);
+
+    return 0;
 }
 
 

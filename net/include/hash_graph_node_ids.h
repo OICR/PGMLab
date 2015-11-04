@@ -26,4 +26,4 @@
 #endif
 
 
-void hash_graph_node_IDs(char *readreactionlogicpathways);
+int hash_graph_node_ids(char *readreactionlogicpathways, char * hash_folder);

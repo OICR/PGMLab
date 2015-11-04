@@ -22,9 +22,6 @@
 #ifndef STANDARD
 #include "standard.h"
 #endif
-#ifndef PHASH
-#include "phash.h"
-#endif
 
 #ifndef EPS
 #define  EPS 1e-300 ;
@@ -38,8 +35,7 @@
 #ifndef LargeNegNumber
 #define  LargeNegNumber -1e300;
 #endif
-
-
+typedef int (*lib_function)(char* key, int len); // for dynamic library
 
 // define the struct node for message passing
 struct Node
@@ -51,12 +47,7 @@ struct Node
     int *iIdx;     // indexes of inbound messages
     double * beliefs; // beliefs of nodes
 };
-
-
 typedef struct Node Node ;
-
-
-
 
 double inAbsolute(double i);
 int cstring_cmp(const void *a, const void *b);
@@ -79,28 +70,33 @@ void belief_resBelief_Splash(double **factorarray, int **array,int *numComb,Node
 void LogRBP(double **factorarray, int **array,int *numComb,Node *AlarmNet,int num_state,int N,int Nv,int lu,int *iteration);
 
 int **makeCPTindex(Node *pGraph,int Nf,int Nv,int num_state);
-int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *nmRNAObs);
+int ReadObservedData(lib_function *phash, char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *nmRNAObs);
 
 int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfilename,int nstate);
 int  hashSourceTargetNodes(char *readpairwisefilename, int * Nv);
 int mod (int a, int b);
 void normalizeCPD(double * f, double *CPD,int numComb,int num_state,int flag);
-int FactorgraphFile_To_NodeStructures(char *pathway, Node *pGraph,int num_state,int Nv,int Nf, int *lenMsgVec);
+int FactorgraphFile_To_NodeStructures(lib_function *phash, char *pathway, Node *pGraph,int num_state,int Nv,int Nf, int *lenMsgVec);
 
 void inputBasedModifiedCPT(Node *pGraph,double ** factorarray, int *obs_values,int *obs_Ids, int **cpt, int Nv,int numObs,int  flag );
 
-int doLBPinference(char *pathway,char * obs_data,char *posterior_probabilities,int num_state);
+int doLBPinference(char* readreactionlogic, char *pathway,char * obs_data,char *posterior_probabilities,int num_state);
 
 int reaction_logic_to_factorgraph(char *readreactionlogicpathways,char * writefactorgraphfilename,int nstate);
 
-int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *num_visibles);
+int ReadMultipleVisibleSets(lib_function *phash, char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *num_visibles);
 
 void hash_graph_node_IDs(char *readreactionlogicpathways);
 
-int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data,char *estimated_parameters, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging);
+int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph, char *obs_data,char *estimated_parameters, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging);
 char *strerror_libnet(int error_code);
 
+int compile_shared_object(char* path);
+int create_hash_folder (char* hash_folder_path);
 void unsigned_char_to_char(char *dst,unsigned char *src,size_t src_len);
 int streamFile(char*filename, char**string, long *length);
 int hashFile(char *filename, unsigned char *sum);
+
+int create_hash_object(char* readreactionlogic, char* hash_folder_path );
+int load_hash_library(char* readreactionlogic, lib_function *phash);
 #endif

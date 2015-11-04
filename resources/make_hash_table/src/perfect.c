@@ -1002,14 +1002,23 @@ int numkeys;
 }
 
 /* make the .h file */
-static void make_h(blen, smax, nkeys, salt)
+static void make_h(blen, smax, nkeys, salt, hash_folder)
 ub4  blen;
 ub4  smax;
 ub4  nkeys;
 ub4  salt;
+char* hash_folder;
 {
+    char* header_filename = "/phash.h";
+    char* phash_header_path;
+
+    int phash_header_path_size = strlen(hash_folder)+1+strlen(header_filename);
+    phash_header_path = malloc(phash_header_path_size);
+    strcpy(phash_header_path, hash_folder);
+    strcat(phash_header_path, header_filename);
+
     FILE *f;
-    f = fopen("../resources/make_hash_table/include/phash.h", "w");
+    f = fopen(phash_header_path, "w");
     fprintf(f, "/* Perfect hash definitions */\n");
     fprintf(f, "#ifndef STANDARD\n");
     fprintf(f, "#include \"standard.h\"\n");
@@ -1047,20 +1056,31 @@ ub4  salt;
     fprintf(f, "#endif  /* PHASH */\n");
     fprintf(f, "\n");
     fclose(f);
+
+    free(phash_header_path);
 }
 
 /* make the .c file */
-static void make_c(tab, smax, blen, scramble, final, form)
+static void make_c(tab, smax, blen, scramble, final, form, hash_folder)
 bstuff   *tab;                                         /* table indexed by b */
 ub4       smax;                                       /* range of scramble[] */
 ub4       blen;                                /* b in 0..blen-1, power of 2 */
 ub4      *scramble;                                    /* used in final hash */
 gencode  *final;                                  /* code for the final hash */
 hashform *form;                                           /* user directives */
+char*     hash_folder;
 {
+    char* src_filename = "/phash.c";
+    char* phash_src_path;
+
+    int phash_src_path_size = strlen(hash_folder)+1+strlen(src_filename);
+    phash_src_path = malloc(phash_src_path_size);
+    strcpy(phash_src_path, hash_folder);
+    strcat(phash_src_path, src_filename);
+
     ub4   i;
     FILE *f;
-    f = fopen("../resources/make_hash_table/src/phash.c", "w");
+    f = fopen(phash_src_path, "w");
 
     fprintf(f, "/* table for the mapping for the perfect hash */\n");
     fprintf(f, "#ifndef STANDARD\n");
@@ -1181,10 +1201,11 @@ hashform *form;                                           /* user directives */
  Read in the keys, find the hash, and write the .c and .h files
  ------------------------------------------------------------------------------
  */
-static void driver(form,inputkeys,numkeys)
+static void driver(form, inputkeys, numkeys, hash_folder)
 hashform *form;                                           /* user directives */
 char** inputkeys;
 int numkeys;
+char* hash_folder;
 {
     ub4       nkeys;                                         /* number of keys */
     key      *keys;                                    /* head of list of keys */
@@ -1220,11 +1241,11 @@ int numkeys;
                  scramble, &smax, keys, nkeys, form);
 
     /* generate the phash.h file */
-        make_h(blen, smax, nkeys, salt);
+        make_h(blen, smax, nkeys, salt, hash_folder);
      //   printf("Wrote phash.h\n");
         
     /* generate the phash.c file */
-        make_c(tab, smax, blen, scramble, &final, form);
+        make_c(tab, smax, blen, scramble, &final, form, hash_folder);
     //    printf("Wrote phash.c\n");
         
     /* clean up memory sources */
@@ -1279,9 +1300,10 @@ void delEoLine(char *buf) //if end of line is /n the delete it
 
 /* Interpret arguments and call the driver */
 /* See usage_error for the expected arguments */
-int mphash(inputkeys,numkeys) /* do minimal perfect hashing*/
+int mphash(inputkeys,numkeys, hash_folder) /* do minimal perfect hashing*/
 char **inputkeys;
 int numkeys;
+char *hash_folder;
 {
    // int      mode_given = FALSE;
     //int      minimal_given = FALSE;
@@ -1294,82 +1316,9 @@ int numkeys;
     form.hashtype = STRING_HT;
     form.perfect = MINIMAL_HP;
     form.speed = SLOW_HS;
-    /* let the user override the default behavior */
-    /*
-    
-    switch (argc)
-    {
-        case 1:
-            break;
-        case 2:
-            if (argv[1][0] != '-')
-            {
-                usage_error();
-                break;
-            }
-            for (c = &argv[1][1]; *c != '\0'; ++c) switch(*c)
-            {
-                case 'n': case 'N':
-                case 'i': case 'I':
-                case 'h': case 'H':
-                case 'd': case 'D':
-                case 'a': case 'A':
-                case 'b': case 'B':
-                    if (mode_given == TRUE) 
-                        usage_error();
-                    switch(*c)
-                {
-                    case 'n': case 'N':
-                        form.mode = NORMAL_HM;  form.hashtype = STRING_HT; break;
-                    case 'i': case 'I':
-                        form.mode = INLINE_HM;  form.hashtype = STRING_HT; break;
-                    case 'h': case 'H':
-                        form.mode = HEX_HM;     form.hashtype = INT_HT; break;
-                    case 'd': case 'D':
-                        form.mode = DECIMAL_HM; form.hashtype = INT_HT; break;
-                    case 'a': case 'A':
-                        form.mode = AB_HM;      form.hashtype = AB_HT; break;
-                    case 'b': case 'B':
-                        form.mode = ABDEC_HM;   form.hashtype = AB_HT; break;
-                }
-                    mode_given = TRUE;
-                    break;
-                case 'm': case 'M':
-                case 'p': case 'P':
-                    if (minimal_given == TRUE)
-                        usage_error();
-                    switch(*c)
-                {
-                    case 'p': case 'P':
-                        form.perfect = NORMAL_HP; break;
-                    case 'm': case 'M':
-                        form.perfect = MINIMAL_HP; break;
-                }
-                    minimal_given = TRUE;
-                    break;
-                case 'f': case 'F':
-                case 's': case 'S':
-                    if (speed_given == TRUE)
-                        usage_error();
-                    switch(*c)
-                {
-                    case 'f': case 'F':
-                        form.speed = FAST_HS; break;
-                    case 's': case 'S':
-                        form.speed = SLOW_HS; break;
-                }
-                    speed_given = TRUE;
-                    break;
-                default:
-                    usage_error();
-            }
-            break;
-        default:
-            usage_error();
-    }
-    */
+
     /* Generate the [minimal] perfect hash */
-    driver(&form,inputkeys,numkeys);
+    driver(&form,inputkeys,numkeys, hash_folder);
     
     return SUCCESS;
 }
