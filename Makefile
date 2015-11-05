@@ -40,20 +40,17 @@ endif
 all: cli r_package
 
 cli: libnet readline
-	cd cli; \ 
-	make
+	make -C cli 
+
 
 r_package: libnet
-	cd r_package/libnetR \
-	make
+	make -C r_package/libnetR
 
 libnet: sha gsl
-	cd net; \
-	make 
+	make -C net
 
 sha: 
-	cd ./external_lib/mbedtls-2.1.2; \
-	make;
+	make -C external_lib/mbedtls-2.1.2
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
