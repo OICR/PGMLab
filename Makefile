@@ -68,7 +68,7 @@ libnet:
 	make 
 
 cli: 
-	cd clk; \ 
+	cd cli; \ 
 	make
 
 clean:
