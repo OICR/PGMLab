@@ -324,8 +324,9 @@ int hashSourceTargetNodes(char *readpairwisefilename, int *Nv)
     
     *Nv = uniq(nodeName,Ne*2); /*remove duplicate from nodelist;  Nf: # of factor */
     
-    mphash(nodeName,*Nv); /*  and hash unique nodes */
-    
+    int exit_code = mphash(nodeName,*Nv); /*  and hash unique nodes */
+    if (exit_code != 0) return exit_code;    
+
     for(i=0;i<*Nv;i++)
         free(nodeName[i]);
     
@@ -464,7 +465,7 @@ int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, 
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
 
     /*  fill the pGraph struct field accroding to info given in factor graph file */
-    exit_code = FactorgraphFile_To_NodeStructures(phash, factorgraph,pGraph,num_state,Nv,Nf, &lenMsgVec);
+    exit_code = FactorgraphFile_To_NodeStructures(&phash, factorgraph,pGraph,num_state,Nv,Nf, &lenMsgVec);
     if (exit_code != 0) return exit_code;
 
     /*allocate memory for message vectors*/
@@ -1210,7 +1211,6 @@ int FactorgraphFile_To_NodeStructures(lib_function *phash, char *factorgraph, No
     /* allocate memory for variable beliefs and initialize them*/
     for(i = 0;i < Nv;i++)
     {
- //       pGraph[i].beliefs = malloc(num_state*sizeof(pGraph[i].beliefs));
         pGraph[i].beliefs = malloc(num_state*sizeof(double));
         
         for(k = 0;k < num_state;k++)
@@ -1572,8 +1572,6 @@ int compile_shared_object(char* path)
     strcpy(command, cd);
     strcat(command, path);
     strcat(command, gcc_command);
-
-    printf("command: %s\n", command);
 
     system(command);
 
@@ -2161,6 +2159,7 @@ int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph
     int exit_code = load_hash_library(readreactionlogic, &phash);
     if (exit_code != 0) return exit_code;
 
+
     int i,k,m,h;         /*indexign for loops  and whiles */
     int lenMsgVec;       /*length of message vector (# of all messages *  # of state per message)*/
     int iteration = 0;   /* number of iteration in LBP */
@@ -2181,6 +2180,7 @@ int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph
     double changeLL = LargeNumber;
     double change_parameters = 10;
     
+
     // read  all varibale nodes, remove duplicates; this section is excuted to make a unique list of nodes (keys) which are passed to
     // the hash function generator to make the hash function; we then we hash Ids throughout the code.
     
@@ -2201,7 +2201,7 @@ int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph
     Nv = uniq(nodelist, numel); /*remove duplicate from nodelist;  Nv: # of variable nodes */
     Nf = Nv; /*in our setting # of facotrs should be equal to # of variables becuase we consider one factor for each root node */
     N = Nv+Nf; // number of all nodes the graph
-
+printf("before");
     /*sort the variable node names  according  to thier hash map Ids */
     for(i=0;i<Nv;i++)
     {
@@ -2221,9 +2221,8 @@ int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph
     
     /* allocate memory for pGraph struct which contains message info*/
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
-
     /*  fill the pGraph struct field accroding to info given in factor graph file */
-    exit_code = FactorgraphFile_To_NodeStructures(phash, logical_factorgraph, pGraph, num_state, Nv, Nf, &lenMsgVec);
+    exit_code = FactorgraphFile_To_NodeStructures(&phash, logical_factorgraph, pGraph, num_state, Nv, Nf, &lenMsgVec);
     if (exit_code != 0) return exit_code;    
 
     /*allocate memory for message vectors*/
@@ -2241,7 +2240,6 @@ int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph
     double** factorarray0  = (double **)malloc(Nf*sizeof(*factorarray0));
     double** oldfactorarray0  = (double **)malloc(Nf*sizeof(*oldfactorarray0));
     double** alpha  = (double **)malloc(Nf*sizeof(*alpha));
-    
     
     for(i = 0;i < Nf;i++)
     {

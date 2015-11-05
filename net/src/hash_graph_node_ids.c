@@ -59,7 +59,8 @@ int hash_graph_node_ids(char *reaction_logic_filepath, char* hash_folder)
     
     Nv = internal_uniq(targetsource,2*Ne); /* unique list of target and source nodes;  Nv: # of variable node  */
     
-    mphash(targetsource, Nv, hash_folder); /* hash the node lists*/
+    int exit_code = mphash(targetsource, Nv, hash_folder); /* hash the node lists*/
+    if (exit_code != 0) return exit_code;
     
     for(i=0;i<Nv;i++)
         free(targetsource[i]);

@@ -112,7 +112,6 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             return 1;
         }
 
-
         int exit_code = learning_discrete_BayNet(pairwise_interactions_filepath, logical_factorgraph_filepath, learning_observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, MAP_flag, logging);
         if (exit_code != 0) {
             char * strerr = strerror_libnet(exit_code);

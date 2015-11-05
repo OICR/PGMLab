@@ -123,9 +123,9 @@ ub4 mylog2(/*_ ub4 x _*/);
 
 
 /* Given the keys, scramble[], and hash mode, find the perfect hash */
-void findhash(/*_ bstuff **tabb, ub4 *alen, ub4 *blen, ub4 *salt,
+int findhash(/*_ bstuff **tabb, ub4 *alen, ub4 *blen, ub4 *salt,
                gencode *final, ub4 *scramble, ub4 smax, key *keys, ub4 nkeys,
-               hashform *form _*/);
+               hashform *form, FILE *fp _*/);
 
 /* private, but in a different file because it's excessively verbose */
 int inithex(/*_ key *keys, ub4 *alen, ub4 *blen, ub4 smax, ub4 nkeys, 
@@ -142,13 +142,13 @@ static void duplicates();
 static int apply();
 static int augment();
 static int perfect();
-static void hash_ab();
+static int hash_ab();
 static void initalen();
 static void getkeys();
 static void make_h();
 static void make_c();
-static void driver();
-static void usage_error();
+static int driver();
+static void usage_error(FILE *fp);
 int mphash();
 
 #endif /* PERFECT */

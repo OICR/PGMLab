@@ -74,7 +74,7 @@ $(TARGET_PATH): folder net.o perfect.o lookupa.o recycle.o perfhex.o hash_graph_
 # -w; \
 
 folder:
-	mkdir -p obj lib; 
+	mkdir -p obj lib hash_obj; 
 
 net.o: src/net.c 
 	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include $(INCLUDE_SHA)
