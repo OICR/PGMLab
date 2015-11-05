@@ -71,6 +71,10 @@ cli:
 	cd cli; \ 
 	make
 
+r_package: 
+	cd r_package/libnetR \
+	make
+
 clean:
 	cd net; make clean; cd ..; \
 	cd cli; make clean; cd ..; \
