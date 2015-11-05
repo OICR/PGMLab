@@ -28,6 +28,13 @@ LibNet has been tested on OS X and Ubuntu 14.04.
 
 ####2. Installation
 
+#####2.1 Dependencies
+
+	Linux: sudo apt-get install texinfo
+	Mac OS X: follow the following instructions http://macappstore.org/texinfo/
+
+#####2.2 Install LibNet Package
+
    - Type the following commands in a terminal:
    
         cd .../your-download-directory/LibNet  
