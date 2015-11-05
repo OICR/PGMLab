@@ -71,7 +71,7 @@ termcap:
 	make install;
 
 clean:
-	cd net; make clean; cd ..; \
-	cd cli; make clean; cd ..; \
-	cd r_package/libnetR; make clean; cd ..; \
+	make -C net clean; \
+	make -C cli clean; \
+	make -C r_package/libnetR clean; \
 	rm bin/*
