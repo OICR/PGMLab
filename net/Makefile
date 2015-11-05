@@ -48,38 +48,39 @@ TARGET_PATH	= $(shell pwd)/lib/$(TARGET)
 
 SOURCES	=	src/net.c \
 		../resources/make_hash_table/src/perfect.c \
-		../resources/make_hash_table/src/phash.c \
 		../resources/make_hash_table/src/lookupa.c \
 		../resources/make_hash_table/src/recycle.c \
 		../resources/make_hash_table/src/perfhex.c 
 
-_OBJECTS = net.o perfect.o phash.o lookupa.o recycle.o perfhex.o 
-OBJECTS  = $(patsubst %,$(ODIR)/%,$(_OBJECTS))
+_OBJECTS = net.o perfect.o lookupa.o recycle.o perfhex.o hash_graph_node_ids.o
+OBJECTS  = $(patsubst %,$(ODIR)/%,$(_OBJECTS)) 
+
+OBJECTS_SHA = ../external_lib/mbedtls-2.1.2/library/md5.o
 
 INCLUDE_GSL = -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/include -lgsl -lgslcblas 
 
+INCLUDE_SHA = -I$(CWD)/../external_lib/mbedtls-2.1.2/include
+
 all: $(TARGET_PATH)
 
-$(TARGET_PATH): folder net.o perfect.o phash.o lookupa.o recycle.o perfhex.o
+$(TARGET_PATH): folder net.o perfect.o lookupa.o recycle.o perfhex.o hash_graph_node_ids.o
 	$(CC) $(CCFLAGS) $(LDFLAGS) $(CFLAGS) $(RPATH) -o lib/$(TARGET) \
 	$(OBJECTS) \
+	$(OBJECTS_SHA) \
 	$(INCLUDE_GSL) \
-	-lm   
+	-lm \
+        -ldl  
 
 # -w; \
-        mv $(TARGET) $(TARGET_PATH)
 
 folder:
-	mkdir -p obj lib; 
+	mkdir -p obj lib hash_obj; 
 
 net.o: src/net.c 
-	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include 
+	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include $(INCLUDE_SHA)
 
 perfect.o: ../resources/make_hash_table/src/perfect.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w
-
-phash.o: ../resources/make_hash_table/src/phash.c
-	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/phash.c -o obj/phash.o -I../resources/make_hash_table/include -w
 
 lookupa.o: ../resources/make_hash_table/src/lookupa.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/lookupa.c -o obj/lookupa.o -I../resources/make_hash_table/include -w
@@ -89,6 +90,9 @@ recycle.o: ../resources/make_hash_table/src/recycle.c
 
 perfhex.o: ../resources/make_hash_table/src/perfhex.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfhex.c -o obj/perfhex.o -I../resources/make_hash_table/include -w
+
+hash_graph_node_ids.o: src/hash_graph_node_ids.c
+	$(CC) $(CCFLAGS) $(CFLAGS) -c src/hash_graph_node_ids.c -o obj/hash_graph_node_ids.o -Iinclude -I../resources/make_hash_table/include -w
 
 clean:
 	rm -f $(TARGET_PATH) ; \

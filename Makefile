@@ -37,9 +37,13 @@ else
 endif
 
 
-all: gsl readline generateHash
+all: external_lib libnet cli r_package
 
-external_lib: gsl readline
+external_lib: gsl readline sha 
+
+sha: 
+	cd ./external_lib/mbedtls-2.1.2; \
+	make;
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
@@ -59,20 +63,19 @@ termcap:
 	make; \
 	make install;
 
-generateHash:
-	mkdir -p bin; \
-	$(CC) $(CCFLAGS) -o bin/generateHash resources/hash_graph_node_ids/src/main.c \
-	resources/make_hash_table/src/perfhex.c \
-	resources/make_hash_table/src/lookupa.c \
-	resources/make_hash_table/src/perfect.c \
-	resources/make_hash_table/src/recycle.c \
-	resources/hash_graph_node_ids/src/hash_graph_node_ids.c \
-	-Inet/include/ -Iresources/make_hash_table/include/ -w 
-
 libnet:
 	cd net; \
 	make 
 
+cli: 
+	cd cli; \ 
+	make
+
+r_package: 
+	cd r_package/libnetR \
+	make
+
 clean:
 	cd net; make clean; cd ..; \
+	cd cli; make clean; cd ..; \
 	rm bin/*

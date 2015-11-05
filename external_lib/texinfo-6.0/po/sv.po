@@ -1,0 +1,5559 @@
+# Swedish messages for texinfo.
+# Copyright (C) 2001, 2002, 2003, 2004, 2008 Free Software Foundation, Inc.
+# Christian Rose <menthos@menthos.com>, 2001, 2002, 2003, 2004, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: texinfo 4.11.93\n"
+"Report-Msgid-Bugs-To: bug-texinfo@gnu.org\n"
+"POT-Creation-Date: 2015-06-26 13:52+0100\n"
+"PO-Revision-Date: 2008-03-09 20:35+0100\n"
+"Last-Translator: Christian Rose <menthos@menthos.com>\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gnulib/lib/error.c:191
+msgid "Unknown system error"
+msgstr "Okänt systemfel"
+
+#: gnulib/lib/getopt.c:575 gnulib/lib/getopt.c:604
+#, fuzzy, c-format
+msgid "%s: option '%s' is ambiguous; possibilities:"
+msgstr "%s: flaggan \"%s\" är flertydig\n"
+
+#: gnulib/lib/getopt.c:619
+#, fuzzy, c-format
+msgid "%s: option '%s' is ambiguous\n"
+msgstr "%s: flaggan \"-W %s\" är flertydig\n"
+
+#: gnulib/lib/getopt.c:654 gnulib/lib/getopt.c:658
+#, fuzzy, c-format
+msgid "%s: option '--%s' doesn't allow an argument\n"
+msgstr "%s: flaggan \"--%s\" tillåter inget argument\n"
+
+#: gnulib/lib/getopt.c:667 gnulib/lib/getopt.c:672
+#, fuzzy, c-format
+msgid "%s: option '%c%s' doesn't allow an argument\n"
+msgstr "%s: flaggan \"%c%s\" tillåter inget argument\n"
+
+#: gnulib/lib/getopt.c:715 gnulib/lib/getopt.c:734
+#, fuzzy, c-format
+msgid "%s: option '--%s' requires an argument\n"
+msgstr "%s: flaggan \"%s\" kräver ett argument\n"
+
+#: gnulib/lib/getopt.c:772 gnulib/lib/getopt.c:775
+#, fuzzy, c-format
+msgid "%s: unrecognized option '--%s'\n"
+msgstr "%s: okänd flagga \"%c%s\"\n"
+
+#: gnulib/lib/getopt.c:783 gnulib/lib/getopt.c:786
+#, fuzzy, c-format
+msgid "%s: unrecognized option '%c%s'\n"
+msgstr "%s: okänd flagga \"%c%s\"\n"
+
+#: gnulib/lib/getopt.c:835 gnulib/lib/getopt.c:838
+#, fuzzy, c-format
+msgid "%s: invalid option -- '%c'\n"
+msgstr "%s: ogiltig flagga -- %c\n"
+
+#: gnulib/lib/getopt.c:891 gnulib/lib/getopt.c:908 gnulib/lib/getopt.c:1118
+#: gnulib/lib/getopt.c:1136
+#, fuzzy, c-format
+msgid "%s: option requires an argument -- '%c'\n"
+msgstr "%s: flaggan kräver ett argument -- %c\n"
+
+#: gnulib/lib/getopt.c:964 gnulib/lib/getopt.c:980
+#, fuzzy, c-format
+msgid "%s: option '-W %s' is ambiguous\n"
+msgstr "%s: flaggan \"-W %s\" är flertydig\n"
+
+#: gnulib/lib/getopt.c:1004 gnulib/lib/getopt.c:1022
+#, fuzzy, c-format
+msgid "%s: option '-W %s' doesn't allow an argument\n"
+msgstr "%s: flaggan \"-W %s\" tillåter inget argument\n"
+
+#: gnulib/lib/getopt.c:1043 gnulib/lib/getopt.c:1061
+#, fuzzy, c-format
+msgid "%s: option '-W %s' requires an argument\n"
+msgstr "%s: flaggan \"%s\" kräver ett argument\n"
+
+#: gnulib/lib/regcomp.c:131
+msgid "Success"
+msgstr ""
+
+#: gnulib/lib/regcomp.c:134
+msgid "No match"
+msgstr ""
+
+#: gnulib/lib/regcomp.c:137
+#, fuzzy
+msgid "Invalid regular expression"
+msgstr "Fel i reguljära uttrycket \"%s\": %s"
+
+#: gnulib/lib/regcomp.c:140
+#, fuzzy
+msgid "Invalid collation character"
+msgstr "ogiltigt kodat tecken \"%s\""
+
+#: gnulib/lib/regcomp.c:143
+#, fuzzy
+msgid "Invalid character class name"
+msgstr "osannolikt tecken %c i @var"
+
+#: gnulib/lib/regcomp.c:146
+msgid "Trailing backslash"
+msgstr ""
+
+#: gnulib/lib/regcomp.c:149
+msgid "Invalid back reference"
+msgstr ""
+
+#: gnulib/lib/regcomp.c:152
+#, fuzzy
+msgid "Unmatched [ or [^"
+msgstr "Ensam }"
+
+#: gnulib/lib/regcomp.c:155
+#, fuzzy
+msgid "Unmatched ( or \\("
+msgstr "Ensam }"
+
+#: gnulib/lib/regcomp.c:158
+#, fuzzy
+msgid "Unmatched \\{"
+msgstr "Ensam }"
+
+#: gnulib/lib/regcomp.c:161
+msgid "Invalid content of \\{\\}"
+msgstr ""
+
+#: gnulib/lib/regcomp.c:164
+#, fuzzy
+msgid "Invalid range end"
+msgstr "Fel i reguljära uttrycket \"%s\": %s"
+
+#: gnulib/lib/regcomp.c:167
+#, fuzzy
+msgid "Memory exhausted"
+msgstr "minne slut"
+
+#: gnulib/lib/regcomp.c:170
+#, fuzzy
+msgid "Invalid preceding regular expression"
+msgstr "Fel i reguljära uttrycket \"%s\": %s"
+
+#: gnulib/lib/regcomp.c:173
+#, fuzzy
+msgid "Premature end of regular expression"
+msgstr "Fel i reguljära uttrycket \"%s\": %s"
+
+#: gnulib/lib/regcomp.c:176
+#, fuzzy
+msgid "Regular expression too big"
+msgstr "Använder reguljära uttryck i sökningar."
+
+#: gnulib/lib/regcomp.c:179
+#, fuzzy
+msgid "Unmatched ) or \\)"
+msgstr "Ensam }"
+
+#: gnulib/lib/regcomp.c:707
+#, fuzzy
+msgid "No previous regular expression"
+msgstr "Ingen tidigare söksträng"
+
+#: gnulib/lib/xalloc-die.c:34
+msgid "memory exhausted"
+msgstr "minne slut"
+
+#: info/echo-area.c:299 info/session.c:1328
+msgid "Move forward a character"
+msgstr "Gå ett tecken framåt"
+
+#: info/echo-area.c:318 info/session.c:1341
+msgid "Move backward a character"
+msgstr "Gå ett tecken bakåt"
+
+#: info/echo-area.c:344
+msgid "Move to the start of this line"
+msgstr "Gå till början på raden"
+
+#: info/echo-area.c:349
+msgid "Move to the end of this line"
+msgstr "Gå till slutet på raden"
+
+#: info/echo-area.c:357 info/session.c:1356
+msgid "Move forward a word"
+msgstr "Gå ett ord framåt"
+
+#: info/echo-area.c:397 info/session.c:1370
+msgid "Move backward a word"
+msgstr "Gå ett ord bakåt"
+
+#: info/echo-area.c:437
+msgid "Delete the character under the cursor"
+msgstr "Ta bort tecknet under markören"
+
+#: info/echo-area.c:457
+msgid "Delete the character behind the cursor"
+msgstr "Ta bort tecknet bakom markören"
+
+#: info/echo-area.c:478
+msgid "Cancel or quit operation"
+msgstr "Avbryt eller avsluta operation"
+
+#: info/echo-area.c:493
+msgid "Accept (or force completion of) this line"
+msgstr "Acceptera (eller tvinga komplettering av) denna rad"
+
+#: info/echo-area.c:498
+msgid "Insert next character verbatim"
+msgstr "Infoga nästa tecken ordagrant"
+
+#: info/echo-area.c:530
+msgid "Insert a TAB character"
+msgstr "Infoga ett TABULATOR-tecken"
+
+#: info/echo-area.c:582
+msgid "Transpose characters at point"
+msgstr "Transponera tecken vid punkt"
+
+#: info/echo-area.c:651
+msgid "Yank back the contents of the last kill"
+msgstr "Ryck tillbaka innehållet i det senaste dödandet"
+
+#: info/echo-area.c:658
+msgid "Kill ring is empty"
+msgstr "Dödsringen är tom"
+
+#: info/echo-area.c:671
+msgid "Yank back a previous kill"
+msgstr "Ryck tillbaka ett tidigare dödande"
+
+#: info/echo-area.c:704
+msgid "Kill to the end of the line"
+msgstr "Döda till slutet på raden"
+
+#: info/echo-area.c:717
+msgid "Kill to the beginning of the line"
+msgstr "Döda till början på raden"
+
+#: info/echo-area.c:729
+msgid "Kill the word following the cursor"
+msgstr "Döda ordet efter markören"
+
+#: info/echo-area.c:749
+msgid "Kill the word preceding the cursor"
+msgstr "Döda ordet före markören"
+
+#: info/echo-area.c:981 info/echo-area.c:1039
+msgid "No completions"
+msgstr "Inga kompletteringar"
+
+#: info/echo-area.c:983
+msgid "Not complete"
+msgstr "Inte fullständig"
+
+#: info/echo-area.c:1032
+msgid "List possible completions"
+msgstr "Visa möjliga kompletteringar"
+
+#: info/echo-area.c:1043
+msgid "Sole completion"
+msgstr "Enda komplettering"
+
+#: info/echo-area.c:1052
+#, fuzzy, c-format
+msgid "%d completion:\n"
+msgid_plural "%d completions:\n"
+msgstr[0] "%d kompletteringar:\n"
+msgstr[1] "%d kompletteringar:\n"
+
+#: info/echo-area.c:1169
+msgid "Insert completion"
+msgstr "Infoga komplettering"
+
+#: info/echo-area.c:1271
+#, c-format
+msgid "Building completions..."
+msgstr "Bygger kompletteringar..."
+
+#: info/echo-area.c:1390
+msgid "Scroll the completions window"
+msgstr "Rulla kompletteringsfönstret"
+
+#: info/filesys.c:91
+#, fuzzy, c-format
+msgid "looking for file \"%s\""
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: info/filesys.c:158
+#, fuzzy, c-format
+msgid "looking for file %s in %s"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: info/filesys.c:227 info/filesys.c:241 info/filesys.c:262
+#, fuzzy, c-format
+msgid "found file %s"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: info/footnotes.c:231
+#, c-format
+msgid "Footnotes could not be displayed"
+msgstr "Fotnoter kunde inte visas"
+
+#: info/footnotes.c:251
+msgid "Show the footnotes associated with this node in another window"
+msgstr "Visa fotnoterna som är associerade med denna nod i ett annat fönster"
+
+#: info/footnotes.h:26
+msgid "---------- Footnotes ----------"
+msgstr "---------- Fotnoter -----------"
+
+#: info/indices.c:123 info/indices.c:806
+#, c-format
+msgid "Finding index entries..."
+msgstr "Söker indexposter..."
+
+#: info/indices.c:206
+msgid "Look up a string in the index for this file"
+msgstr "Slå upp en sträng i indexet för denna fil"
+
+#: info/indices.c:218 info/indices.c:324 info/indices.c:812
+#, c-format
+msgid "No indices found."
+msgstr "Inga index hittades."
+
+#: info/indices.c:222
+msgid "Index entry: "
+msgstr "Indexpost: "
+
+#: info/indices.c:439
+#, fuzzy, c-format
+msgid "Found '%s' in %s. ('\\[next-index-match]' tries to find next.)"
+msgstr "Hittade \"%s\" i %s. (\"\\[next-index-match]\" försöker hitta nästa)."
+
+#: info/indices.c:449
+#, fuzzy
+msgid ""
+"Go to the next matching index item from the last '\\[index-search]' command"
+msgstr ""
+"Gå till nästa matchande indexpost från det senaste \"\\[index-search]\"-"
+"kommandot"
+
+#: info/indices.c:460
+#, c-format
+msgid "No previous index search string."
+msgstr "Det finns ingen tidigare indexsöksträng."
+
+# This is broken
+#
+#  info_error (_("No %sindex entries containing \"%s\"."),
+#              index_offset > 0 ? _("more ") : "", index_search);
+#
+# Please don't use this type of construct, use two complete sentences
+# instead and an outer if statement.
+#
+#: info/indices.c:478
+#, fuzzy, c-format
+msgid "No more index entries containing '%s'."
+msgstr "Inga %sindexposter som innehåller \"%s\"."
+
+# This is broken
+#
+#  info_error (_("No %sindex entries containing \"%s\"."),
+#              index_offset > 0 ? _("more ") : "", index_search);
+#
+# Please don't use this type of construct, use two complete sentences
+# instead and an outer if statement.
+#
+#: info/indices.c:479 info/indices.c:874
+#, fuzzy, c-format
+msgid "No index entries containing '%s'."
+msgstr "Inga %sindexposter som innehåller \"%s\"."
+
+#: info/indices.c:583
+#, fuzzy, c-format
+msgid "Scanning indices of '%s'..."
+msgstr "Genomsöker index av \"%s\"..."
+
+#: info/indices.c:636
+msgid "Grovel all known info file's indices for a string and build a menu"
+msgstr "Gräv i alla kända infofilers index efter en sträng och bygg en meny"
+
+#: info/indices.c:644 info/indices.c:646
+#, fuzzy
+msgid "Index apropos"
+msgstr "Index-apropos: "
+
+# This is broken
+#
+#  info_error (_("No %sindex entries containing \"%s\"."),
+#              index_offset > 0 ? _("more ") : "", index_search);
+#
+# Please don't use this type of construct, use two complete sentences
+# instead and an outer if statement.
+#
+#: info/indices.c:686
+#, fuzzy, c-format
+msgid "Index entries containing '%s':\n"
+msgstr "Inga %sindexposter som innehåller \"%s\"."
+
+#: info/indices.c:791
+msgid "List all matches of a string in the index"
+msgstr ""
+
+#: info/indices.c:818 info/indices.c:820
+#, fuzzy
+msgid "Index topic"
+msgstr "Index-apropos: "
+
+#: info/indices.h:40
+#, fuzzy, c-format
+msgid "No available info files have '%s' in their indices."
+msgstr "Inga tillgängliga infofiler har \"%s\" i deras index."
+
+#: info/info-utils.c:899
+#, c-format
+msgid "Error converting file character encoding."
+msgstr ""
+
+#: info/info.c:223 info/session.c:2700
+#, fuzzy, c-format
+msgid "No menu item '%s' in node '%s'."
+msgstr "Ingen menypost \"%s\" i noden \"%s\"."
+
+#: info/info.c:316
+#, fuzzy, c-format
+msgid "No file given for node '%s'."
+msgstr "Ingen meny i noden \"%s\"."
+
+#: info/info.c:365 info/info.c:1115
+#, fuzzy, c-format
+msgid "Cannot find node '%s'."
+msgstr "Kan inte hitta noden \"%s\"."
+
+#: info/info.c:387
+#, c-format
+msgid "No program name given."
+msgstr ""
+
+#: info/info.c:578
+#, c-format
+msgid "invalid number: %s\n"
+msgstr ""
+
+#: info/info.c:758
+#, c-format
+msgid "malformed variable assignment: %s"
+msgstr ""
+
+#: info/info.c:765 info/infokey.c:537
+#, fuzzy, c-format
+msgid "%s: no such variable"
+msgstr "Okänt kommando \"%s\""
+
+#: info/info.c:771 info/infokey.c:539
+#, fuzzy, c-format
+msgid "value %s is not valid for variable %s"
+msgstr "Ställ in värdet på en Info-variabel"
+
+#: info/info.c:783
+#, c-format
+msgid "Try --help for more information.\n"
+msgstr "Prova --help för mer information.\n"
+
+#: info/info.c:805 install-info/install-info.c:2212 tp/texi2any.pl:878
+#: texindex/ti.twjr:1293
+#, c-format, awk-format, perl-format
+msgid ""
+"Copyright (C) %s Free Software Foundation, Inc.\n"
+"License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl."
+"html>\n"
+"This is free software: you are free to change and redistribute it.\n"
+"There is NO WARRANTY, to the extent permitted by law.\n"
+msgstr ""
+"Copyright © %s Free Software Foundation, Inc.\n"
+"Licens GPLv3+: GNU GPL version 3 eller senare <http://gnu.org/licenses/gpl."
+"html>\n"
+"(Följande text är en informell översättning som enbart tillhandahålls\n"
+" i informativt syfte. För alla juridiska tolkningar gäller den engelska\n"
+" originaltexten.)\n"
+"Det här är fri programvara. Du kan fritt modifiera det och\n"
+"vidaredistribuera det. Det finns INGEN GARANTI, i den omfattning som\n"
+"medges av gällande lag.\n"
+
+#: info/info.c:963
+#, fuzzy, c-format
+msgid "no index entries found for '%s'\n"
+msgstr "inga indexposter för \"%s\" hittades\n"
+
+#: info/info.c:1016
+#, c-format
+msgid ""
+"Usage: %s [OPTION]... [MENU-ITEM...]\n"
+"\n"
+"Read documentation in Info format.\n"
+msgstr ""
+"Användning: %s [FLAGGA]... [MENYPOST...]\n"
+"\n"
+"Läs dokumentation i Info-format.\n"
+
+#: info/info.c:1022
+#, fuzzy
+msgid ""
+"Options:\n"
+"  -a, --all                    use all matching manuals.\n"
+"  -k, --apropos=STRING         look up STRING in all indices of all "
+"manuals.\n"
+"  -d, --directory=DIR          add DIR to INFOPATH.\n"
+"      --dribble=FILE           remember user keystrokes in FILENAME.\n"
+"  -f, --file=MANUAL            specify Info manual to visit."
+msgstr ""
+"Flaggor:\n"
+"  -k, --apropos=STRÄNG         slå upp STRÄNG i alla index i alla manualer.\n"
+"  -d, --directory=KATALOG      lägg till KATALOG till INFOPATH.\n"
+"      --dribble=FILNAMN        kom ihåg användarens tangentnedtryckningar i\n"
+"                               FILNAMN.\n"
+"  -f, --file=FILNAMN           ange den Info-fil som ska besökas."
+
+#: info/info.c:1030
+#, fuzzy
+msgid ""
+"  -h, --help                   display this help and exit.\n"
+"      --index-search=STRING    go to node pointed by index entry STRING.\n"
+"  -n, --node=NODENAME          specify nodes in first visited Info file.\n"
+"  -o, --output=FILE            output selected nodes to FILE."
+msgstr ""
+"  -h, --help                   visa denna hjälptext och avsluta.\n"
+"      --index-search=STRÄNG    gå till noden som utpekas av indexpost\n"
+"                               STRÄNG.\n"
+"  -n, --node=NODNAMN           ange noder i den först besökta Info-filen.\n"
+"  -o, --output=FILNAMN         skriv ut valda noder till FILNAMN."
+
+#: info/info.c:1036
+#, fuzzy
+msgid ""
+"  -R, --raw-escapes            output \"raw\" ANSI escapes (default).\n"
+"      --no-raw-escapes         output escapes as literal text.\n"
+"      --restore=FILE           read initial keystrokes from FILE.\n"
+"  -O, --show-options, --usage  go to command-line options node."
+msgstr ""
+"  -R, --raw-escapes            skriv ut \"råa\" ANSI-styrkoder (standard).\n"
+"      --no-raw-escapes         skriv ut styrkoder som text.\n"
+"      --restore=FILNAMN        läs initiala tangentnedtryckningar från\n"
+"                               FILNAMN.\n"
+"  -O, --show-options, --usage  gå till noden för kommandoradsflaggor."
+
+#: info/info.c:1043
+msgid "  -b, --speech-friendly        be friendly to speech synthesizers."
+msgstr "  -b, --speech-friendly        var vänlig mot talsyntesprogram."
+
+#: info/info.c:1047
+#, fuzzy
+msgid ""
+"      --strict-node-location   (for debugging) use Info file pointers as-"
+"is.\n"
+"      --subnodes               recursively output menu items.\n"
+"  -v, --variable VAR=VALUE     assign VALUE to Info variable VAR.\n"
+"      --vi-keys                use vi-like and less-like key bindings.\n"
+"      --version                display version information and exit.\n"
+"  -w, --where, --location      print physical location of Info file.\n"
+"  -x, --debug=NUMBER           set debugging level (-1 for all).\n"
+msgstr ""
+"      --subnodes               skriv ut menyposter rekursivt.\n"
+"      --vi-keys                använd vi- och less-liknande\n"
+"                               snabbtangenter.\n"
+"      --version                visa versionsinformation och avsluta.\n"
+"  -w, --where, --location      skriv ut den fysiska platsen för Info-filen."
+
+#: info/info.c:1056
+#, fuzzy
+msgid ""
+"\n"
+"The first non-option argument, if present, is the menu entry to start from;\n"
+"it is searched for in all 'dir' files along INFOPATH.\n"
+"If it is not present, info merges all 'dir' files and shows the result.\n"
+"Any remaining arguments are treated as the names of menu\n"
+"items relative to the initial node visited."
+msgstr ""
+"\n"
+"Det första argumentet som inte är en flagga är, om det finns, menyposten\n"
+"att börja från. Det söks efter i alla \"dir\"-filer i INFOPATH.\n"
+"Om den inte finns slår info samman alla \"dir\"-filer och visar resultatet.\n"
+"Alla återstående argument betraktas som namnen på menyposter relativa till\n"
+"den först besökta noden."
+
+#: info/info.c:1063
+msgid ""
+"\n"
+"For a summary of key bindings, type H within Info."
+msgstr ""
+
+#: info/info.c:1066
+#, fuzzy
+msgid ""
+"\n"
+"Examples:\n"
+"  info                       show top-level dir menu\n"
+"  info info                  show the general manual for Info readers\n"
+"  info info-stnd             show the manual specific to this Info program\n"
+"  info emacs                 start at emacs node from top-level dir\n"
+"  info emacs buffers         select buffers menu entry in emacs manual\n"
+"  info emacs -n Files        start at Files node within emacs manual\n"
+"  info '(emacs)Files'        alternative way to start at Files node\n"
+"  info --show-options emacs  start at node with emacs' command line options\n"
+"  info --subnodes -o out.txt emacs  dump entire manual to out.txt\n"
+"  info -f ./foo.info         show file ./foo.info, not searching dir"
+msgstr ""
+"\n"
+"Exempel:\n"
+"  info                       visa översta katalogmenyn\n"
+"  info emacs                 börja på emacs-noden från översta katalogen\n"
+"  info emacs buffers         börja på buffertnoden inom emacs-manualen\n"
+"  info --show-options emacs  börja på noden med emacs kommandoradsflaggor\n"
+"  info --subnodes -o ut.txt emacs  dumpa hela manualen till ut.txt\n"
+"  info -f ./foo.info         visa filen ./foo.info, sök inte i katalogen"
+
+#: info/info.c:1081 install-info/install-info.c:616 tp/texi2any.pl:866
+#: texindex/ti.twjr:1282
+msgid ""
+"Email bug reports to bug-texinfo@gnu.org,\n"
+"general questions and discussion to help-texinfo@gnu.org.\n"
+"Texinfo home page: http://www.gnu.org/software/texinfo/"
+msgstr ""
+"Skicka felrapporter till bug-texinfo@gnu.org,\n"
+"allmänna frågor och diskussion till help-texinfo@gnu.org\n"
+"och synpunkter på översättningen till tp-sv@listor.tp-sv.se.\n"
+"Hemsida för texinfo: http://www.gnu.org/software/texinfo/"
+
+#: info/info.c:1116
+#, fuzzy, c-format
+msgid "Cannot find node '(%s)%s'."
+msgstr "Kan inte hitta noden \"(%s)%s\"."
+
+#: info/info.c:1117
+msgid "Cannot find a window!"
+msgstr "Kan inte hitta ett fönster!"
+
+#: info/info.c:1118
+msgid "Point doesn't appear within this window's node!"
+msgstr "Punkten finns inte inom detta fönsters nod!"
+
+#: info/info.c:1119
+msgid "Cannot delete the last window."
+msgstr "Kan inte ta bort det sista fönstret."
+
+#: info/info.c:1120
+msgid "No menu in this node."
+msgstr "Ingen meny i denna nod."
+
+#: info/info.c:1121
+msgid "No footnotes in this node."
+msgstr "Inga fotnoter i denna nod."
+
+#: info/info.c:1122
+msgid "No cross references in this node."
+msgstr "Inga korsreferenser i denna nod."
+
+#: info/info.c:1123
+#, fuzzy, c-format
+msgid "No '%s' pointer for this node."
+msgstr "Ingen \"%s\"-pekare för denna nod."
+
+#: info/info.c:1124
+#, fuzzy, c-format
+msgid "Unknown Info command '%c'; try '?' for help."
+msgstr "Okänt Info-kommando \"%c\". Prova \"?\" för hjälp."
+
+#: info/info.c:1125
+#, fuzzy, c-format
+msgid "Terminal type '%s' is not smart enough to run Info."
+msgstr "Terminaltypen \"%s\" är inte tillräckligt smart för att köra Info."
+
+#: info/info.c:1126
+msgid "You are already at the last page of this node."
+msgstr "Du är redan på sista sidan för denna nod."
+
+#: info/info.c:1127
+msgid "You are already at the first page of this node."
+msgstr "Du är redan på första sidan för denna nod."
+
+#: info/info.c:1128
+msgid "Only one window."
+msgstr "Endast ett fönster."
+
+#: info/info.c:1129
+msgid "Resulting window would be too small."
+msgstr "Resulterande fönstret skulle bli för litet."
+
+#: info/info.c:1130
+msgid "Not enough room for a help window, please delete a window."
+msgstr ""
+"Inte tillräckligt med utrymme för ett hjälpfönster, ta bort ett fönster."
+
+#: info/infodoc.c:40
+msgid "Basic Info command keys\n"
+msgstr "Grundläggande Info-kommandotangenter\n"
+
+#: info/infodoc.c:42
+msgid "\\%-10[quit-help]  Close this help window.\n"
+msgstr "\\%-10[quit-help]  Stäng detta hjälpfönster.\n"
+
+#: info/infodoc.c:43
+msgid "\\%-10[quit]  Quit Info altogether.\n"
+msgstr "\\%-10[quit]  Avsluta Info helt.\n"
+
+#: info/infodoc.c:44
+msgid "\\%-10[get-info-help-node]  Invoke the Info tutorial.\n"
+msgstr "\\%-10[get-info-help-node]  Starta Info-handboken.\n"
+
+#: info/infodoc.c:46
+msgid "\\%-10[prev-line]  Move up one line.\n"
+msgstr "\\%-10[prev-node]  Gå en rad uppåt.\n"
+
+#: info/infodoc.c:47
+msgid "\\%-10[next-line]  Move down one line.\n"
+msgstr "\\%-10[next-line]  Gå en rad nedåt.\n"
+
+#: info/infodoc.c:48
+msgid "\\%-10[scroll-backward]  Scroll backward one screenful.\n"
+msgstr "\\%-10[scroll-backward]  Rulla en skärmlängd bakåt.\n"
+
+#: info/infodoc.c:49
+msgid "\\%-10[scroll-forward]  Scroll forward one screenful.\n"
+msgstr "\\%-10[scroll-forward]  Rulla en skärmlängd framåt.\n"
+
+#: info/infodoc.c:50
+msgid "\\%-10[beginning-of-node]  Go to the beginning of this node.\n"
+msgstr "\\%-10[beginning-of-node]  Gå till början på denna nod.\n"
+
+#: info/infodoc.c:51
+msgid "\\%-10[end-of-node]  Go to the end of this node.\n"
+msgstr "\\%-10[end-of-node]  Gå till slutet på denna nod.\n"
+
+#: info/infodoc.c:53
+msgid "\\%-10[move-to-next-xref]  Skip to the next hypertext link.\n"
+msgstr "\\%-10[move-to-next-xref]  Hoppa till nästa hypertextlänk.\n"
+
+#: info/infodoc.c:54
+msgid ""
+"\\%-10[select-reference-this-line]  Follow the hypertext link under the "
+"cursor.\n"
+msgstr ""
+"\\%-10[select-reference-this-line]  Följ hypertextlänken under markören.\n"
+
+#: info/infodoc.c:55
+msgid "\\%-10[history-node]  Go back to the last node seen in this window.\n"
+msgstr "\\%-10[history-node]  Gå till den sista noden i detta fönster.\n"
+
+#: info/infodoc.c:57
+msgid "\\%-10[global-prev-node]  Go to the previous node in the document.\n"
+msgstr "\\%-10[global-prev-node]  Gå till föregående nod i dokumentet.\n"
+
+#: info/infodoc.c:58
+msgid "\\%-10[global-next-node]  Go to the next node in the document.\n"
+msgstr "\\%-10[global-next-node]  Gå till nästa nod i dokumentet.\n"
+
+#: info/infodoc.c:59
+msgid "\\%-10[prev-node]  Go to the previous node on this level.\n"
+msgstr "\\%-10[prev-node]  Gå till föregående nod på denna nivå.\n"
+
+#: info/infodoc.c:60
+msgid "\\%-10[next-node]  Go to the next node on this level.\n"
+msgstr "\\%-10[next-node]  Gå till nästa nod på denna nivå.\n"
+
+#: info/infodoc.c:61
+msgid "\\%-10[up-node]  Go up one level.\n"
+msgstr "\\%-10[up-node]  Gå en nivå uppåt.\n"
+
+#: info/infodoc.c:62
+msgid "\\%-10[top-node]  Go to the top node of this document.\n"
+msgstr "\\%-10[top-node]  Gå till den översta noden i detta dokument.\n"
+
+#: info/infodoc.c:63
+#, fuzzy
+msgid "\\%-10[dir-node]  Go to the main 'directory' node.\n"
+msgstr "\\%-10[dir-node]  Gå till huvudkatalognoden.\n"
+
+#: info/infodoc.c:65
+msgid "1...9       Pick the first...ninth item in this node's menu.\n"
+msgstr "1...9       Välj första...nionde objektet i denna nods meny.\n"
+
+#: info/infodoc.c:66
+msgid "\\%-10[last-menu-item]  Pick the last item in this node's menu.\n"
+msgstr "\\%-10[last-menu-item]  Välj sista objektet i denna nods meny.\n"
+
+#: info/infodoc.c:67
+msgid "\\%-10[menu-item]  Pick a menu item specified by name.\n"
+msgstr "\\%-10[menu-item]  Välj den namngivna menyposten.\n"
+
+#: info/infodoc.c:68
+msgid "\\%-10[xref-item]  Follow a cross reference specified by name.\n"
+msgstr "\\%-10[xref-item]  Följ den namngivna korsreferensen.\n"
+
+#: info/infodoc.c:69
+msgid "\\%-10[goto-node]  Go to a node specified by name.\n"
+msgstr "\\%-10[goto-node]  Gå till den namngivna noden.\n"
+
+#: info/infodoc.c:71
+msgid "\\%-10[search]  Search forward for a specified string.\n"
+msgstr "\\%-10[search]  Sök framåt efter en angiven sträng.\n"
+
+#: info/infodoc.c:72
+msgid "\\%-10[search-previous]  Search for previous occurrence.\n"
+msgstr "\\%-10[search-previous]  Sök efter föregående förekomst.\n"
+
+#: info/infodoc.c:73
+msgid "\\%-10[search-next]  Search for next occurrence.\n"
+msgstr "\\%-10[search-next]  Sök efter nästa förekomst.\n"
+
+#: info/infodoc.c:74
+msgid ""
+"\\%-10[index-search]  Search for a specified string in the index, and\n"
+"              select the node referenced by the first entry found.\n"
+msgstr ""
+"\\%-10[index-search]  Sök efter en angiven sträng i indexet, och välj\n"
+"              noden som refereras av den första posten som hittas.\n"
+
+#: info/infodoc.c:76
+msgid "\\%-10[virtual-index]  Synthesize menu of matching index entries.\n"
+msgstr ""
+
+#: info/infodoc.c:78
+msgid "\\%-10[abort-key]  Cancel the current operation.\n"
+msgstr "\\%-10[abort-key]  Avbryt pågående åtgärd.\n"
+
+#: info/infodoc.c:197
+#, fuzzy, c-format
+msgid "This is GNU Info version %s.  "
+msgstr "Detta är %s, skapad av makeinfo version %s från %s.\n"
+
+#: info/infodoc.c:198
+msgid "The current search path is:\n"
+msgstr "Den aktuella sökvägen är:\n"
+
+#: info/infodoc.c:203
+msgid ""
+"Commands available in Info windows:\n"
+"\n"
+msgstr ""
+"Kommandon som är tillgängliga i Info-fönster:\n"
+"\n"
+
+#: info/infodoc.c:206
+msgid ""
+"Commands available in the echo area:\n"
+"\n"
+msgstr ""
+"Kommandon som är tillgängliga i echo-området:\n"
+"\n"
+
+#: info/infodoc.c:226
+#, c-format
+msgid ""
+"The following commands can only be invoked via %s:\n"
+"\n"
+msgstr ""
+"Följande kommandon kan endast startas via %s:\n"
+"\n"
+
+#: info/infodoc.c:231
+msgid ""
+"The following commands cannot be invoked at all:\n"
+"\n"
+msgstr ""
+"Följande kommandon kan inte startas alls:\n"
+"\n"
+
+#: info/infodoc.c:335
+msgid "Display help message"
+msgstr "Visa hjälpmeddelande"
+
+#: info/infodoc.c:348
+#, fuzzy
+msgid "Visit Info node '(info)Help'"
+msgstr "Besök Info-noden \"(info)Help\""
+
+#: info/infodoc.c:447
+msgid "Print documentation for KEY"
+msgstr "Visa dokumentationen för NYCKEL"
+
+#: info/infodoc.c:458
+#, c-format
+msgid "Describe key: %s"
+msgstr "Beskriv nyckel: %s"
+
+#: info/infodoc.c:468 info/infodoc.c:504
+#, c-format
+msgid "%s is undefined."
+msgstr "%s är odefinierad."
+
+#: info/infodoc.c:866
+msgid "Show what to type to execute a given command"
+msgstr "Visa vad som ska anges för att köra ett angivet kommando"
+
+#: info/infodoc.c:870
+msgid "Where is command: "
+msgstr "Var är kommando: "
+
+#: info/infodoc.c:892
+#, fuzzy, c-format
+msgid "'%s' is not on any keys"
+msgstr "\"%s\" finns inte på några tangenter"
+
+#: info/infodoc.c:898
+#, c-format
+msgid "%s can only be invoked via %s."
+msgstr "%s kan endast startas via %s."
+
+#: info/infodoc.c:902
+#, c-format
+msgid "%s can be invoked via %s."
+msgstr "%s kan startas via %s."
+
+#: info/infodoc.c:907
+#, fuzzy, c-format
+msgid "There is no function named '%s'"
+msgstr "Det finns ingen funktion med namnet \"%s\""
+
+#: info/infomap.c:600
+#, fuzzy, c-format
+msgid "could not open init file %s"
+msgstr "kan inte öppna indatafilen \"%s\""
+
+#: info/infokey.c:229
+#, c-format
+msgid "key sequence too long"
+msgstr "nyckelsekvensen är för lång"
+
+#: info/infokey.c:306
+#, c-format
+msgid "missing key sequence"
+msgstr "nyckelsekvens saknas"
+
+#: info/infokey.c:386
+#, c-format
+msgid "NUL character (\\000) not permitted"
+msgstr "NUL-tecknet (\\000) är inte tillåtet"
+
+#: info/infokey.c:415
+#, c-format
+msgid "NUL character (^%c) not permitted"
+msgstr "NUL-tecknet (^%c) är inte tillåtet"
+
+#: info/infokey.c:438
+#, c-format
+msgid "missing action name"
+msgstr "åtgärdsnamn saknas"
+
+#: info/infokey.c:450
+#, fuzzy, c-format
+msgid "cannot bind key sequence to menu-digit"
+msgstr "nyckelsekvensen är för lång"
+
+#: info/infokey.c:458
+#, c-format
+msgid "unknown action `%s'"
+msgstr "okänd åtgärd \"%s\""
+
+#: info/infokey.c:482
+#, c-format
+msgid "action name too long"
+msgstr "åtgärdsnamnet är för långt"
+
+#: info/infokey.c:495
+#, c-format
+msgid "extra characters following action `%s'"
+msgstr "extra tecken följer på åtgärden \"%s\""
+
+#: info/infokey.c:506
+#, c-format
+msgid "missing variable name"
+msgstr "variabelnamn saknas"
+
+#: info/infokey.c:515
+#, c-format
+msgid "missing `=' immediately after variable name"
+msgstr "\"=\" saknas direkt efter variabelnamnet"
+
+#: info/infokey.c:522
+#, c-format
+msgid "variable name too long"
+msgstr "variabelnamnet är för långt"
+
+#: info/infokey.c:546
+#, c-format
+msgid "value too long"
+msgstr "värdet är för långt"
+
+#: info/infokey.c:592
+#, c-format
+msgid "\"%s\", line %u: "
+msgstr "\"%s\", rad %u: "
+
+#: info/m-x.c:66
+msgid "Read the name of an Info command and describe it"
+msgstr "Läs namnet på ett Info-kommando och beskriv det"
+
+#: info/m-x.c:70
+msgid "Describe command: "
+msgstr "Beskriv kommando: "
+
+#: info/m-x.c:93
+msgid "Read a command name in the echo area and execute it"
+msgstr "Läs ett kommandonamn i echo-området och kör det"
+
+#: info/m-x.c:136
+#, fuzzy, c-format
+msgid "Cannot execute an 'echo-area' command here."
+msgstr "Kan inte köra ett \"echo-area\"-kommando här."
+
+#: info/m-x.c:149
+#, c-format
+msgid "Undefined command: %s"
+msgstr "Odefinierat kommando: %s"
+
+#: info/m-x.c:155
+msgid "Set the height of the displayed window"
+msgstr "Ställ in höjden på det visade fönstret"
+
+#: info/m-x.c:168
+#, c-format
+msgid "Set screen height to (%d): "
+msgstr "Ställ in skärmhöjden till (%d): "
+
+#: info/makedoc.c:141
+#, c-format
+msgid ""
+"   Source files groveled to make this file include:\n"
+"\n"
+msgstr ""
+"   Källkodsfiler som grävdes igenom för att göra att denna fil inkluderar:\n"
+"\n"
+
+#: info/makedoc.c:466
+#, c-format
+msgid "Couldn't manipulate the file %s.\n"
+msgstr "Kunde inte manipulera filen %s.\n"
+
+#. TRANSLATORS: The "\n* Menu:\n\n" part of this should not be translated, as
+#. it is part of the Info syntax.
+#: info/nodemenu.c:35
+#, fuzzy
+msgid ""
+"\n"
+"* Menu:\n"
+"\n"
+"  (File)Node                        Lines   Size   Containing File\n"
+"  ----------                        -----   ----   ---------------"
+msgstr ""
+"\n"
+"* Meny:\n"
+"  (Fil)Nod                          Rader   Storl. Innehållande fil\n"
+"  --------                          -----   ------ ----------------"
+
+#: info/nodemenu.c:187
+#, fuzzy
+msgid ""
+"Here is the menu of nodes you have recently visited.\n"
+"Select one from this menu, or use '\\[history-node]' in another window.\n"
+msgstr ""
+"Här är menyn med de noder som du har besökt nyligen.\n"
+"Välj en från denna meny eller använd\"\\[history-node]\" i ett annat "
+"fönster.\n"
+
+#: info/nodemenu.c:208
+msgid "Make a window containing a menu of all of the currently visited nodes"
+msgstr ""
+"Skapa ett fönster som innehåller en meny med alla nyligen besökta noder"
+
+#: info/nodemenu.c:253
+msgid "Select a node which has been previously visited in a visible window"
+msgstr "Välj en nod som har besökts nyligen i ett synligt fönster"
+
+#: info/nodemenu.c:260
+msgid "Select visited node: "
+msgstr "Välj besökt nod: "
+
+#: info/nodemenu.c:278 info/session.c:2356
+#, c-format
+msgid "The reference disappeared! (%s)."
+msgstr "Referensen försvann! (%s)."
+
+#: info/pcterm.c:211
+#, c-format
+msgid "Terminal cannot be initialized: %s\n"
+msgstr ""
+
+#: info/search.c:166
+#, c-format
+msgid "regexp error: %s"
+msgstr "fel i reguljärt uttryck: %s"
+
+#: info/session.c:61
+msgid "Show all matching files"
+msgstr ""
+
+#: info/session.c:65
+#, fuzzy, c-format
+msgid "No file index"
+msgstr "Inga indexposter."
+
+#. TRANSLATORS: Try to keep this message (when "expanded") at most 79
+#. characters; anything after the 79th character will not actually be
+#. displayed on an 80-column terminal.
+#: info/session.c:191
+#, fuzzy, c-format
+msgid ""
+"Welcome to Info version %s.  Type \\[get-help-window] for help, \\[get-info-"
+"help-node] for tutorial."
+msgstr ""
+"Välkommen till Info version %s. Skriv in \\[get-help-window] för hjälp, "
+"\\[menu-item] för menypost."
+
+#: info/session.c:767
+#, fuzzy, c-format
+msgid "can't open %s: %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: info/session.c:773
+#, c-format
+msgid "debugging output diverted to \"%s\""
+msgstr ""
+
+#: info/session.c:1215
+msgid "Move down to the next line"
+msgstr "Gå ned till nästa rad"
+
+#: info/session.c:1230
+msgid "Move up to the previous line"
+msgstr "Gå upp till föregående rad"
+
+#: info/session.c:1246
+msgid "Move the cursor to a specific line of the window"
+msgstr "Flytta markören till en specifik rad i fönstret"
+
+#: info/session.c:1278
+msgid "Move to the end of the line"
+msgstr "Gå till slutet på raden"
+
+#: info/session.c:1303
+msgid "Move to the start of the line"
+msgstr "Gå till början på raden"
+
+#: info/session.c:1385
+msgid "Move to the start of this node"
+msgstr "Gå till början på denna nod"
+
+#: info/session.c:1392
+msgid "Move to the end of this node"
+msgstr "Gå till slutet på denna nod"
+
+#: info/session.c:1474
+msgid "Scroll forward in this window"
+msgstr "Rulla framåt i detta fönster"
+
+#: info/session.c:1488
+msgid "Scroll backward in this window"
+msgstr "Rulla bakåt i detta fönster"
+
+#: info/session.c:1496
+msgid "Scroll forward in this window and set default window size"
+msgstr "Rulla framåt i detta fönster och ställ in standardfönsterstorleken"
+
+#: info/session.c:1511
+msgid "Scroll backward in this window and set default window size"
+msgstr "Rulla bakåt i detta fönster och ställ in standardfönsterstorleken"
+
+#: info/session.c:1517
+msgid "Scroll forward in this window staying within node"
+msgstr "Rulla framåt i detta fönster och stanna inom noden"
+
+#: info/session.c:1532
+msgid "Scroll backward in this window staying within node"
+msgstr "Rulla bakåt i detta fönster och stanna inom noden"
+
+#: info/session.c:1540
+msgid ""
+"Scroll forward in this window staying within node and set default window size"
+msgstr ""
+"Rulla framåt i detta fönster och stanna inom noden och ställ in "
+"standardfönsterstorleken"
+
+#: info/session.c:1567
+msgid ""
+"Scroll backward in this window staying within node and set default window "
+"size"
+msgstr ""
+"Rulla bakåt i detta fönster och stanna inom noden och ställ in "
+"standardfönsterstorleken"
+
+#: info/session.c:1573
+msgid "Scroll down by lines"
+msgstr "Rulla nedåt radvis"
+
+#: info/session.c:1579
+msgid "Scroll up by lines"
+msgstr "Rulla uppåt radvis"
+
+#: info/session.c:1591
+msgid "Scroll down by half screen size"
+msgstr "Rulla nedåt med halva skärmstorleken"
+
+#: info/session.c:1618
+msgid "Scroll up by half screen size"
+msgstr "Rulla uppåt med halva skärmstorleken"
+
+#: info/session.c:1624
+msgid "Scroll the other window"
+msgstr "Rulla det andra fönstret"
+
+#: info/session.c:1645
+msgid "Scroll the other window backward"
+msgstr "Rulla det andra fönstret bakåt"
+
+#: info/session.c:1745
+msgid "Select the next window"
+msgstr "Välj nästa fönster"
+
+#: info/session.c:1782
+msgid "Select the previous window"
+msgstr "Välj föregående fönster"
+
+#: info/session.c:1826
+msgid "Split the current window"
+msgstr "Dela aktuellt fönster"
+
+#: info/session.c:1868
+msgid "Delete the current window"
+msgstr "Ta bort aktuellt fönster"
+
+#: info/session.c:1873
+msgid "Cannot delete a permanent window"
+msgstr "Kan inte ta bort ett permanent fönster"
+
+#: info/session.c:1904
+msgid "Delete all other windows"
+msgstr "Ta bort alla andra fönster"
+
+#: info/session.c:1950
+msgid "Grow (or shrink) this window"
+msgstr "Väx (eller krymp) detta fönster"
+
+#: info/session.c:1961
+msgid "Divide the available screen space among the visible windows"
+msgstr "Dela det tillgängliga skärmutrymmet mellan de synliga fönstren"
+
+#: info/session.c:1968
+msgid "Toggle the state of line wrapping in the current window"
+msgstr "Växla tillståndet för radbrytning i det aktuella fönstret"
+
+#: info/session.c:2117
+msgid "Select this menu item"
+msgstr "Välj denna menypost"
+
+#: info/session.c:2147
+#, fuzzy, c-format
+msgid "There isn't %d item in this menu."
+msgid_plural "There aren't %d items in this menu."
+msgstr[0] "Det finns inte %d poster i denna meny."
+msgstr[1] "Det finns inte %d poster i denna meny."
+
+#: info/session.c:2156
+msgid "Select the last item in this node's menu"
+msgstr "Välj det sista objektet i denna nods meny"
+
+#: info/session.c:2264 info/session.c:2265
+#, c-format
+msgid "Menu item (%s): "
+msgstr "Menypost (%s): "
+
+#: info/session.c:2268
+msgid "Menu item: "
+msgstr "Menypost: "
+
+#: info/session.c:2275 info/session.c:2276
+#, c-format
+msgid "Follow xref (%s): "
+msgstr "Följ xref (%s): "
+
+#: info/session.c:2279
+msgid "Follow xref: "
+msgstr "Följ xref: "
+
+#: info/session.c:2368
+msgid "Read a menu item and select its node"
+msgstr "Läs en menypost och välj dess nod"
+
+#: info/session.c:2393
+msgid "Read a footnote or cross reference and select its node"
+msgstr "Läs en fotnot eller korsreferens och välj dess nod"
+
+#: info/session.c:2399
+msgid "Move to the start of this node's menu"
+msgstr "Gå till början på denna nods meny"
+
+#: info/session.c:2421
+msgid "Visit as many menu items at once as possible"
+msgstr "Besök så många menyposter som möjligt samtidigt"
+
+#: info/session.c:2520
+msgid "Move to the previous cross reference"
+msgstr "Gå till föregående korsreferens"
+
+#: info/session.c:2583
+msgid "Move to the next cross reference"
+msgstr "Gå till nästa korsreferens"
+
+#: info/session.c:2644
+msgid "Select reference or menu item appearing on this line"
+msgstr "Välj referens eller menypost som finns på denna rad"
+
+#: info/session.c:2678
+#, fuzzy, c-format
+msgid "No menu in node '%s'."
+msgstr "Ingen meny i noden \"%s\"."
+
+#: info/session.c:2725
+#, fuzzy, c-format
+msgid "Unable to find node referenced by '%s' in '%s'."
+msgstr "Kan inte hitta noden som refereras av \"%s\" i \"%s\"."
+
+#: info/session.c:2775
+msgid "Read a list of menus starting from dir and follow them"
+msgstr "Läs en lista med menyer som börjar med katalog, och följ dem"
+
+#: info/session.c:2777
+msgid "Follow menus: "
+msgstr "Följ menyer: "
+
+#: info/session.c:2879
+msgid "Select the Next node"
+msgstr "Välj nästa nod"
+
+#: info/session.c:2886
+msgid "Select the Prev node"
+msgstr "Välj föregående nod"
+
+#: info/session.c:2893
+msgid "Select the Up node"
+msgstr "Välj uppnoden"
+
+#: info/session.c:2899
+msgid "Select the last node in this file"
+msgstr "Välj den sista noden i denna fil"
+
+#: info/session.c:2926 info/session.c:2959
+msgid "This window has no additional nodes"
+msgstr "Detta fönster har inga ytterligare noder"
+
+#: info/session.c:2932
+msgid "Select the first node in this file"
+msgstr "Välj den första noden i denna fil"
+
+#: info/session.c:3064
+msgid "No more nodes within this document."
+msgstr "Inga fler noder i detta dokument."
+
+#: info/session.c:3109 info/session.c:3149
+#, fuzzy
+msgid "No 'Prev' or 'Up' for this node within this document."
+msgstr "Inget \"Prev\" eller \"Up\" för denna nod inom detta dokument."
+
+#: info/session.c:3162
+msgid "Move forwards or down through node structure"
+msgstr "Gå framåt eller nedåt i nodstrukturen"
+
+#: info/session.c:3179
+msgid "Move backwards or up through node structure"
+msgstr "Gå bakåt eller upp i nodstrukturen"
+
+#: info/session.c:3202
+msgid "Read a node name and select it"
+msgstr "Läs ett nodnamn och välj det"
+
+#: info/session.c:3256 info/session.c:3260
+msgid "Goto node: "
+msgstr "Gå till nod: "
+
+#: info/session.c:3439
+msgid "Find the node describing program invocation"
+msgstr "Hitta den nod som beskriver start av programmet"
+
+#: info/session.c:3441
+#, c-format
+msgid "Find Invocation node of [%s]: "
+msgstr "Hitta programstartnod för [%s]: "
+
+#: info/session.c:3486
+msgid "Read a manpage reference and select it"
+msgstr "Läs en referens till manualsida och välj den"
+
+#: info/session.c:3490
+msgid "Get Manpage: "
+msgstr "Hämta manualsida: "
+
+#: info/session.c:3511
+#, fuzzy
+msgid "Select the node 'Top' in this file"
+msgstr "Välj noden \"Top\" i denna fil"
+
+#: info/session.c:3517
+#, fuzzy
+msgid "Select the node '(dir)'"
+msgstr "Välj noden \"(dir)\""
+
+#: info/session.c:3523
+msgid "Show full file name of node being displayed"
+msgstr ""
+
+#: info/session.c:3540
+msgid "Select the most recently selected node"
+msgstr "Välj den senast valda noden"
+
+#: info/session.c:3545
+#, c-format
+msgid "No earlier node in history"
+msgstr ""
+
+#: info/session.c:3549
+msgid "Read the name of a file and select it"
+msgstr "Läs namnet på en fil och välj den"
+
+#: info/session.c:3553
+msgid "Find file: "
+msgstr "Sök fil: "
+
+#: info/session.c:3570
+#, fuzzy, c-format
+msgid "Cannot find '%s'."
+msgstr "Kan inte hitta \"%s\"."
+
+#: info/session.c:3619
+#, fuzzy, c-format
+msgid "Could not create output file '%s'."
+msgstr "Kunde inte skapa utdatafilen \"%s\"."
+
+#: info/session.c:3633
+#, fuzzy, c-format
+msgid "error writing to %s: %s"
+msgstr "fel vid skrivning till \"%s\""
+
+#: info/session.c:3642
+#, fuzzy, c-format
+msgid "closing %s"
+msgstr "Tar bort %s\n"
+
+#: info/session.c:3691
+#, fuzzy, c-format
+msgid "writing node %s..."
+msgstr "Skriver noden %s..."
+
+#: info/session.c:3737
+msgid "Pipe the contents of this node through INFO_PRINT_COMMAND"
+msgstr "Skicka innehållet i denna nod i rör till INFO_PRINT_COMMAND"
+
+#: info/session.c:3765
+#, fuzzy, c-format
+msgid "Cannot open pipe to '%s'."
+msgstr "Kan inte öppna rör till \"%s\"."
+
+#: info/session.c:3770
+#, fuzzy, c-format
+msgid "printing node %s..."
+msgstr "Skriver ut noden %s..."
+
+#: info/session.c:3778
+#, fuzzy, c-format
+msgid "finished printing node %s"
+msgstr "Skriver ut noden %s..."
+
+#: info/session.c:3810
+msgid "Toggle the usage of regular expressions in searches"
+msgstr "Växla användningen av reguljära uttryck i sökningar"
+
+#: info/session.c:3814
+#, c-format
+msgid "Using regular expressions for searches."
+msgstr "Använder reguljära uttryck i sökningar."
+
+#: info/session.c:3815
+#, c-format
+msgid "Using literal strings for searches."
+msgstr "Använder ordagranna strängar i sökningar."
+
+#: info/session.c:4059
+msgid "Search continued from the end of the document."
+msgstr "Sökningen fortsatte från slutet av dokumentet."
+
+#: info/session.c:4064
+msgid "Search continued from the beginning of the document."
+msgstr "Sökningen fortsatte från början av dokumentet."
+
+#: info/session.c:4084
+#, c-format
+msgid "Searching subfile %s ..."
+msgstr "Söker i underfilen %s..."
+
+#: info/session.c:4123
+msgid "Search failed."
+msgstr "Sökningen misslyckades."
+
+# This is broken
+#
+#  sprintf (prompt, _("%s%sfor string [%s]: "),
+#           direction < 0 ? _("Search backward") : _("Search"),
+#           case_sensitive ? _(" case-sensitively ") : _(" "),
+#           search_string);
+#
+# Never split a sentence like this, use multiple complete messages instead.
+# If you split a sentence like this, you actually mark them for seperate
+# translation, but they shouldn't be translated seperately, since they
+# belong to the same sentence! All grammar/wording/sentence rules affect
+# how the words interact in the sentence, and you cannot take them out of
+# their sentence context and expect the same grammar to be valid. If you do,
+# you assume things about languages that are hardly true for any language
+# but the original one.
+# Make this several, complete messages, and move the logic out of the
+# messages themselves. Yes, this will result in many more messages, but
+# those will be translatable, while the current design isn't.
+#
+#: info/session.c:4142
+#, c-format
+msgid "%s%s%s [%s]: "
+msgstr "%s%s%s [%s]: "
+
+#: info/session.c:4143 info/session.c:4149
+msgid "Regexp search"
+msgstr "Sökning med reguljära uttryck"
+
+#: info/session.c:4143 info/session.c:4149
+msgid "Search"
+msgstr "Sök"
+
+#: info/session.c:4144 info/session.c:4150
+msgid " case-sensitively"
+msgstr " skiljandes på VERSALER/gemener"
+
+#: info/session.c:4145 info/session.c:4151
+msgid " backward"
+msgstr " baklänges"
+
+# This is broken
+#
+#  sprintf (prompt, _("%s%sfor string [%s]: "),
+#           direction < 0 ? _("Search backward") : _("Search"),
+#           case_sensitive ? _(" case-sensitively ") : _(" "),
+#           search_string);
+#
+# Never split a sentence like this, use multiple complete messages instead.
+# If you split a sentence like this, you actually mark them for seperate
+# translation, but they shouldn't be translated seperately, since they
+# belong to the same sentence! All grammar/wording/sentence rules affect
+# how the words interact in the sentence, and you cannot take them out of
+# their sentence context and expect the same grammar to be valid. If you do,
+# you assume things about languages that are hardly true for any language
+# but the original one.
+# Make this several, complete messages, and move the logic out of the
+# messages themselves. Yes, this will result in many more messages, but
+# those will be translatable, while the current design isn't.
+#
+#: info/session.c:4148
+#, fuzzy, c-format
+msgid "%s%s%s: "
+msgstr "%s%s%s [%s]: "
+
+#: info/session.c:4168
+msgid "Search string too short"
+msgstr ""
+
+#: info/session.c:4238
+msgid "Read a string and search for it case-sensitively"
+msgstr "Läs en sträng och sök efter den skiftlägeskänsligt"
+
+#: info/session.c:4243
+msgid "Read a string and search for it"
+msgstr "Läs en sträng och sök efter den"
+
+#: info/session.c:4249
+msgid "Read a string and search backward for it"
+msgstr "Läs en sträng och sök baklänges efter den"
+
+#: info/session.c:4257
+msgid "Repeat last search in the same direction"
+msgstr "Upprepa den senaste sökningen i samma riktning"
+
+#: info/session.c:4265 info/session.c:4310
+msgid "No previous search string"
+msgstr "Ingen tidigare söksträng"
+
+#: info/session.c:4302
+msgid "Repeat last search in the reverse direction"
+msgstr "Upprepa den senaste sökningen i omvänd riktning"
+
+#: info/session.c:4349
+msgid "Clear displayed search matches"
+msgstr ""
+
+#: info/session.c:4366 info/session.c:4372
+msgid "Search interactively for a string as you type it"
+msgstr "Sök interaktivt efter en sträng allteftersom du skriver den"
+
+#: info/session.c:4486
+msgid "Regexp I-search backward: "
+msgstr "I-sök med reguljärt uttryck baklänges: "
+
+#: info/session.c:4487
+msgid "I-search backward: "
+msgstr "I-sök baklänges: "
+
+#: info/session.c:4489
+msgid "Regexp I-search: "
+msgstr "I-sök med reguljärt uttryck: "
+
+#: info/session.c:4490
+msgid "I-search: "
+msgstr "I-sök: "
+
+#: info/session.c:4515 info/session.c:4518
+msgid "Failing "
+msgstr "Misslyckas "
+
+#: info/session.c:4891
+msgid "Cancel current operation"
+msgstr "Avbryt pågående åtgärd"
+
+#: info/session.c:4898
+msgid "Quit"
+msgstr "Avsluta"
+
+#: info/session.c:4903
+#, fuzzy
+msgid "Display version of Info being run"
+msgstr "visa versionsinformation och avsluta"
+
+#: info/session.c:4905
+#, fuzzy, c-format
+msgid "GNU Info version %s"
+msgstr "Detta är %s, skapad av makeinfo version %s från %s.\n"
+
+#: info/session.c:4910
+msgid "Redraw the display"
+msgstr "Rita om displayen"
+
+#: info/session.c:4947
+msgid "Quit using Info"
+msgstr "Avsluta användandet av Info"
+
+#: info/session.c:4960
+msgid "Run command bound to this key's lowercase variant"
+msgstr "Kör kommando som är knutet till denna tangents gemena variant"
+
+#: info/session.c:4971
+#, c-format
+msgid "Unknown command (%s)."
+msgstr "Okänt kommando (%s)."
+
+#: info/session.c:4974
+#, c-format
+msgid "\"%s\" is invalid"
+msgstr "\"%s\" är ogiltigt"
+
+#: info/session.c:4975
+#, fuzzy, c-format
+msgid "'%s' is invalid"
+msgstr "\"%s\" är ogiltigt"
+
+#: info/session.c:5293
+msgid "Add this digit to the current numeric argument"
+msgstr "Lägg till denna siffra till det aktuella numeriska argumentet"
+
+#: info/session.c:5300
+msgid "Start (or multiply by 4) the current numeric argument"
+msgstr "Börja (eller multiplicera med 4) det numeriska argumentet"
+
+#: info/tilde.c:361
+#, c-format
+msgid "readline: Out of virtual memory!\n"
+msgstr "readline: Slut på virtuellt minne!\n"
+
+#: info/variables.c:51
+msgid "When \"On\", footnotes appear and disappear automatically"
+msgstr "När detta är \"On\" visas och försvinner fotnoter automatiskt"
+
+#: info/variables.c:55
+msgid "When \"On\", creating or deleting a window resizes other windows"
+msgstr ""
+"När detta är \"On\" ändrar skapande eller borttagande av ett fönster\n"
+"storleken på andra fönster"
+
+#: info/variables.c:59
+msgid "When \"On\", flash the screen instead of ringing the bell"
+msgstr ""
+"När detta är \"On\" blinkar skärmen till istället för att klockan ringer"
+
+#: info/variables.c:63
+msgid "When \"On\", errors cause the bell to ring"
+msgstr "När detta är \"On\" gör fel att klockan ringer"
+
+#: info/variables.c:67
+msgid "When \"On\", Info garbage collects files which had to be uncompressed"
+msgstr "När detta är \"On\" skräpsamlar Info filer som behövde packas upp"
+
+#: info/variables.c:70
+msgid "When \"On\", the portion of the matched search string is highlighted"
+msgstr "När detta är \"On\" markeras delen av den matchade söksträngen"
+
+#: info/variables.c:74
+msgid "Controls what happens when scrolling is requested at the end of a node"
+msgstr "Styr vad som händer då rullning begärs i slutet på en nod"
+
+#: info/variables.c:79
+msgid "Same as scroll-behaviour"
+msgstr "Samma som \"scroll-behaviour\""
+
+#: info/variables.c:83
+msgid "The number lines to scroll when the cursor moves out of the window"
+msgstr "Antalet rader att rulla då markören flyttas utanför fönstret"
+
+#: info/variables.c:87
+msgid "Controls whether scroll-behavior affects cursor movement commands"
+msgstr "Styr huruvida \"scroll-behavior\" påverkar flyttkommandon för markören"
+
+#: info/variables.c:91
+msgid "When \"On\", Info accepts and displays ISO Latin characters"
+msgstr "När detta är \"On\" accepterar och visar Info ISO Latin-tecken"
+
+#: info/variables.c:95
+msgid ""
+"What to do when a scrolling command is issued at the end of the last node"
+msgstr ""
+"Vad som ska göras då ett rullningskommando ges i slutet på den sista noden"
+
+#: info/variables.c:100
+msgid "Minimal length of a search string"
+msgstr ""
+
+#: info/variables.c:104
+msgid "Skip current window when searching"
+msgstr ""
+
+#: info/variables.c:108
+msgid "Exclude default directories from file search path"
+msgstr ""
+
+#: info/variables.c:112
+msgid "Hide some Info file syntax in the text of nodes"
+msgstr ""
+
+#: info/variables.c:116
+msgid ""
+"Length of time in milliseconds to wait for the next byte in a sequence "
+"indicating that a key has been pressed"
+msgstr ""
+
+#: info/variables.c:120
+msgid "Highlight search matches"
+msgstr ""
+
+#: info/variables.c:124
+msgid "Method to use to track mouse events"
+msgstr ""
+
+#: info/variables.c:130
+msgid "Explain the use of a variable"
+msgstr "Förklara användandet av en variabel"
+
+#: info/variables.c:136
+msgid "Describe variable: "
+msgstr "Beskriv variabel: "
+
+#: info/variables.c:151
+msgid "Set the value of an Info variable"
+msgstr "Ställ in värdet på en Info-variabel"
+
+#: info/variables.c:158
+msgid "Set variable: "
+msgstr "Ställ in variabel: "
+
+#: info/variables.c:174
+#, c-format
+msgid "Set %s to value (%d): "
+msgstr "Ställ in %s till värdet (%d): "
+
+#: info/variables.c:208
+#, c-format
+msgid "Set %s to value (%s): "
+msgstr "Ställ in %s till värdet (%s): "
+
+#: info/window.c:921
+msgid "--*** Tags out of Date ***"
+msgstr "--*** För gamla taggar ***"
+
+#: info/window.c:965
+msgid "-----Info: (), lines ----, "
+msgstr "-----Info: (), rader ----, "
+
+#: info/window.c:972
+#, fuzzy, c-format
+msgid "-%s---Info: %s, %ld lines --%s--"
+msgstr "-%s---Info: %s, %d rader --%s--"
+
+#: info/window.c:976
+#, fuzzy, c-format
+msgid "-%s%s-Info: (%s)%s, %ld lines --%s--"
+msgstr "-%s%s-Info: (%s)%s, %d rader --%s--"
+
+#: info/window.c:982
+#, c-format
+msgid " Subfile: %s"
+msgstr " Underfil: %s"
+
+#: install-info/install-info.c:292
+#, c-format
+msgid "%s: empty file"
+msgstr "%s: tom fil"
+
+# char *s = concat ("", strerror (errno), _(" for %s"));
+#
+#: install-info/install-info.c:294
+#, fuzzy, c-format
+msgid "%s for %s"
+msgstr " för %s"
+
+#: install-info/install-info.c:533
+#, c-format
+msgid "\tTry `%s --help' for a complete list of options.\n"
+msgstr "\tProva \"%s --help\" för en fullständig lista med flaggor.\n"
+
+#: install-info/install-info.c:541
+#, c-format
+msgid "Usage: %s [OPTION]... [INFO-FILE [DIR-FILE]]\n"
+msgstr "Användning: %s [FLAGGA]... [INFO-FIL [KATALOGFIL]]\n"
+
+#: install-info/install-info.c:543
+msgid "Add or remove entries in INFO-FILE from the Info directory DIR-FILE."
+msgstr ""
+"Lägg till eller ta bort poster i INFO-FIL från Info-katalogen KATALOGFIL."
+
+#: install-info/install-info.c:544
+msgid ""
+"INFO-FILE and DIR-FILE are required unless the --info-file\n"
+"or --dir-file (or --info-dir) options are given, respectively."
+msgstr ""
+
+#: install-info/install-info.c:548
+msgid ""
+"Options:\n"
+" --add-once          add only to first matching section, not all.\n"
+" --align=COL         start description of new entries at column COL.\n"
+" --calign=COL        format second and subsequent description lines to\n"
+"                       start at column COL."
+msgstr ""
+
+#: install-info/install-info.c:555
+#, fuzzy
+msgid ""
+" --debug             report what is being done.\n"
+" --delete            delete existing entries for INFO-FILE from DIR-FILE;\n"
+"                      don't insert any new entries.\n"
+" --defsection=TEXT   like --section, but only use TEXT if no sections\n"
+"                      are present in INFO-FILE (replacing \"Miscellaneous"
+"\").\n"
+" --description=TEXT  the description of the entry is TEXT; used with\n"
+"                      the --name option to become synonymous with the\n"
+"                      --entry option.\n"
+" --dir-file=NAME     specify file name of Info directory file;\n"
+"                      equivalent to using the DIR-FILE argument.\n"
+" --dry-run           same as --test."
+msgstr ""
+"Flaggor:\n"
+" --debug             rapportera vad som görs.\n"
+" --delete            ta bort existerande poster för INFO-FIL från "
+"KATALOGFIL\n"
+"                      och infoga inte några nya poster.\n"
+" --description=TEXT  postens beskrivning är TEXT. Detta används tillsammans\n"
+"                      med flaggan --name för att den ska bli likvärdig med\n"
+"                      flaggan --entry.\n"
+" --dir-file=NAMN     ange filnamnet på Info-katalogfilen. Detta motsvarar\n"
+"                      användning av argumentet KATALOGFIL.\n"
+" --dry-run           samma som --test."
+
+#: install-info/install-info.c:568
+#, fuzzy
+msgid ""
+" --entry=TEXT        insert TEXT as an Info directory entry,\n"
+"                      overriding any corresponding entry from DIR-FILE.\n"
+"                      TEXT is written as an Info menu item line followed\n"
+"                       by zero or more extra lines starting with "
+"whitespace.\n"
+"                      If you specify more than one entry, all are added.\n"
+"                      If you don't specify any entries, they are determined\n"
+"                       from information in the Info file itself."
+msgstr ""
+" --entry=TEXT        infoga TEXT som en Info-katalogpost.\n"
+"                      TEXT skrivs som en Info-menypostrad som följs av\n"
+"                      noll eller fler extra rader som börjar med tomrum.\n"
+"                     Om du anger mer än en post kommer alla att läggas\n"
+"                      till. Om du inte anger några poster kommer de att\n"
+"                      avgöras från information i själva Info-filen.\n"
+"                     Vid borttagning anger TEXT posten som ska tas bort.\n"
+"                     TEXT tas endast bort som en sista utväg, om den\n"
+"                     post som anges utav Info-filen inte finns och\n"
+"                     basnamnet för Info-filen inte heller kan hittas."
+
+#: install-info/install-info.c:577
+#, fuzzy
+msgid ""
+" --help              display this help and exit.\n"
+" --info-dir=DIR      same as --dir-file=DIR/dir.\n"
+" --info-file=FILE    specify Info file to install in the directory;\n"
+"                      equivalent to using the INFO-FILE argument.\n"
+" --item=TEXT         same as --entry=TEXT.\n"
+" --keep-old          do not replace entries, or remove empty sections."
+msgstr ""
+" --help              visa denna hjälptext och avsluta.\n"
+" --info-dir=KAT      samma som --dir-file=KAT/dir.\n"
+" --info-file=FIL     ange Info-fil att installera i katalogen.\n"
+"                      Detta motsvarar användning av argumentet INFO-FIL.\n"
+" --item=TEXT         samma som --entry=TEXT.\n"
+" --keep-old          ersätt inte poster och ta inte bort tomma avsnitt.\n"
+" --menuentry=TEXT    samma som --name=TEXT.\n"
+" --name=TEXT         namnet på posten är TEXT. Används tillsammans med\n"
+"                      --description för att bli likvärdigt med flaggan\n"
+"                      --entry.\n"
+" --no-indent         formatera inte nya poster i filen KAT.\n"
+" --quiet             undertryck varningar."
+
+#: install-info/install-info.c:585
+#, fuzzy
+msgid ""
+" --maxwidth, --max-width=COL  wrap description at column COL.\n"
+" --menuentry=TEXT    same as --name=TEXT.\n"
+" --name=TEXT         the name of the entry is TEXT; used with --description\n"
+"                      to become synonymous with the --entry option.\n"
+" --no-indent         do not format new entries in the DIR file.\n"
+" --quiet             suppress warnings."
+msgstr ""
+" --help              visa denna hjälptext och avsluta.\n"
+" --info-dir=KAT      samma som --dir-file=KAT/dir.\n"
+" --info-file=FIL     ange Info-fil att installera i katalogen.\n"
+"                      Detta motsvarar användning av argumentet INFO-FIL.\n"
+" --item=TEXT         samma som --entry=TEXT.\n"
+" --keep-old          ersätt inte poster och ta inte bort tomma avsnitt.\n"
+" --menuentry=TEXT    samma som --name=TEXT.\n"
+" --name=TEXT         namnet på posten är TEXT. Används tillsammans med\n"
+"                      --description för att bli likvärdigt med flaggan\n"
+"                      --entry.\n"
+" --no-indent         formatera inte nya poster i filen KAT.\n"
+" --quiet             undertryck varningar."
+
+#: install-info/install-info.c:593
+#, fuzzy
+msgid ""
+" --regex=R           put this file's entries in all sections that match the\n"
+"                      regular expression R (ignoring case).\n"
+" --remove            same as --delete.\n"
+" --remove-exactly    only remove if the info file name matches exactly;\n"
+"                      suffixes such as .info and .gz are not ignored.\n"
+" --section=SEC       put entries in section SEC of the directory.\n"
+"                      If you specify more than one section, all the entries\n"
+"                       are added in each of the sections.\n"
+"                      If you don't specify any sections, they are "
+"determined\n"
+"                       from information in the Info file itself;\n"
+"                       if nothing is available there, the --defsection\n"
+"                       value is used; if that is not specified, the\n"
+"                       final default is \"Miscellaneous\".\n"
+" --section R SEC     equivalent to --regex=R --section=SEC --add-once."
+msgstr ""
+" --regex=R           placera denna fils poster i alla avsnitt som matchar\n"
+"                      det reguljära uttrycket R (och ignorera skiftläge).\n"
+" --remove            samma som --delete.\n"
+" --remove-exactly    ta endast bort om Info-filnamnet matchar exakt.\n"
+"                      Filändelser som till exempel .info- och .gz ignoreras\n"
+"                      inte.\n"
+" --section=AVSNITT   placera poster i avsnittet AVSNITT i katalogen. Om du\n"
+"                      anger mer än ett avsnitt kommer alla poster att "
+"läggas\n"
+"                      till i varje avsnitt. Om du inte anger några avsnitt\n"
+"                      kommer de att bestämmas utifrån information i själva\n"
+"                      Info-filen.\n"
+" --section R AVSNITT likvärdigt med --regex=R --section=AVSNITT --add-once."
+
+#: install-info/install-info.c:609
+msgid ""
+" --silent            suppress warnings.\n"
+" --test              suppress updating of DIR-FILE.\n"
+" --version           display version information and exit."
+msgstr ""
+" --silent            undertryck varningar.\n"
+" --test              undertryck uppdatering av KATALOGFIL.\n"
+" --version           visa versionsinformation och avsluta."
+
+#: install-info/install-info.c:643
+#, fuzzy, c-format
+msgid ""
+"This is the file .../info/dir, which contains the\n"
+"topmost node of the Info hierarchy, called (dir)Top.\n"
+"The first time you invoke Info you start off looking at this node.\n"
+"%c\n"
+"%s\tThis is the top of the INFO tree\n"
+"\n"
+"  This (the Directory node) gives a menu of major topics.\n"
+"  Typing \"q\" exits, \"?\" lists all Info commands, \"d\" returns here,\n"
+"  \"h\" gives a primer for first-timers,\n"
+"  \"mEmacs<Return>\" visits the Emacs manual, etc.\n"
+"\n"
+"  In Emacs, you can click mouse button 2 on a menu item or cross reference\n"
+"  to select it.\n"
+"\n"
+"%s\n"
+msgstr ""
+"Detta är filen .../info/dir som innehåller den översta noden i\n"
+"Info-hierarkin som kallas (kat)Top.\n"
+"Första gången du använder Info börjar du med denna nod.\n"
+"\n"
+"%s\tDetta är översta noden i INFO-trädet\n"
+"\n"
+"  Denna nod (katalognoden) erbjuder en meny med huvudrubriker.\n"
+"  Att skriva \"q\" avslutar, \"?\" visar alla Info-kommandon, \"d\"\n"
+"  återvänder hit, \"h\" visar en hjälp för förstagångsanvändare,\n"
+"  \"mEmacs<Retur>\" besöker Emacs-manualen, osv.\n"
+"\n"
+"  I Emacs kan du klicka med musknapp 2 på en menypost eller korsreferens\n"
+"  för att välja den.\n"
+"\n"
+"%s\n"
+
+#: install-info/install-info.c:667
+#, fuzzy, c-format
+msgid "%s: could not read (%s) and could not create (%s)"
+msgstr "%s: kunde inte läsa (%s) och kunde inte skapa (%s)\n"
+
+#: install-info/install-info.c:1134 install-info/install-info.c:1174
+#, c-format
+msgid "START-INFO-DIR-ENTRY without matching END-INFO-DIR-ENTRY"
+msgstr "START-INFO-DIR-ENTRY utan matchande END-INFO-DIR-ENTRY"
+
+#: install-info/install-info.c:1169
+#, c-format
+msgid "END-INFO-DIR-ENTRY without matching START-INFO-DIR-ENTRY"
+msgstr "END-INFO-DIR-ENTRY utan matchande START-INFO-DIR-ENTRY"
+
+#: install-info/install-info.c:2037 install-info/install-info.c:2047
+#, c-format
+msgid "%s: already have dir file: %s\n"
+msgstr "%s: har redan katalogfilen: %s\n"
+
+#: install-info/install-info.c:2143
+#, c-format
+msgid "%s: Specify the Info file only once.\n"
+msgstr "%s: Ange Info-filen endast en gång.\n"
+
+#: install-info/install-info.c:2176
+#, c-format
+msgid "Extra regular expression specified, ignoring `%s'"
+msgstr "Extra reguljärt uttryck angivet, ignorerar \"%s\""
+
+#: install-info/install-info.c:2188
+#, c-format
+msgid "Error in regular expression `%s': %s"
+msgstr "Fel i reguljära uttrycket \"%s\": %s"
+
+#: install-info/install-info.c:2250
+#, c-format
+msgid "excess command line argument `%s'"
+msgstr "för många kommandoradsargument \"%s\""
+
+#: install-info/install-info.c:2254
+#, c-format
+msgid "No input file specified; try --help for more information."
+msgstr "Ingen indatafil angiven; prova --help för mer information."
+
+#: install-info/install-info.c:2256
+#, c-format
+msgid "No dir file specified; try --help for more information."
+msgstr "Ingen katalogfil angiven; prova --help för mer information."
+
+#: install-info/install-info.c:2277
+#, fuzzy, c-format
+msgid "Could not read %s."
+msgstr "Kan inte skapa katalogen \"%s\": %s"
+
+#: install-info/install-info.c:2424
+#, c-format
+msgid "no info dir entry in `%s'"
+msgstr "ingen info-katalogpost i \"%s\""
+
+#: install-info/install-info.c:2672
+#, c-format
+msgid "no entries found for `%s'; nothing deleted"
+msgstr "inga poster hittades för \"%s\"; ingenting togs bort"
+
+#: tp/DebugTexinfo/DebugTree.pm:63 tp/Texinfo/Convert/Converter.pm:855
+#: tp/Texinfo/Convert/Converter.pm:893 tp/Texinfo/Convert/Converter.pm:1204
+#: tp/Texinfo/Convert/DocBook.pm:326 tp/Texinfo/Convert/HTML.pm:6499
+#: tp/Texinfo/Convert/HTML.pm:6523 tp/Texinfo/Convert/HTML.pm:6900
+#: tp/Texinfo/Convert/HTML.pm:6958 tp/Texinfo/Convert/HTML.pm:7036
+#: tp/Texinfo/Convert/HTML.pm:7113 tp/Texinfo/Convert/IXIN.pm:293
+#: tp/Texinfo/Convert/Info.pm:295 tp/Texinfo/Convert/Plaintext.pm:538
+#: tp/Texinfo/Convert/TexinfoXML.pm:457
+#, fuzzy, perl-format
+msgid "could not open %s for writing: %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Common.pm:878
+msgid "recursion is always allowed"
+msgstr ""
+
+#: tp/Texinfo/Common.pm:879
+#, fuzzy
+msgid "arguments are quoted by default"
+msgstr "@quote-arg är föråldrat; argument är citerade som standard"
+
+#: tp/Texinfo/Common.pm:1102
+#, fuzzy, perl-format
+msgid "%s is not a valid language code"
+msgstr "%s är inte en giltig landskod enligt ISO 639"
+
+#: tp/Texinfo/Common.pm:1107
+#, fuzzy, perl-format
+msgid "%s is not a valid region code"
+msgstr "%s är inte en giltig landskod enligt ISO 639"
+
+#: tp/Texinfo/Common.pm:1125
+#, fuzzy, perl-format
+msgid "%s is not a valid split possibility"
+msgstr "%s är inte en giltig landskod enligt ISO 639"
+
+#: tp/Texinfo/Common.pm:1148
+#, fuzzy, perl-format
+msgid "could not read %s: %s"
+msgstr "Kan inte skapa katalogen \"%s\": %s"
+
+#: tp/Texinfo/Common.pm:1167
+#, fuzzy, perl-format
+msgid "error on closing @verbatiminclude file %s: %s"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: tp/Texinfo/Common.pm:1173 tp/Texinfo/Parser.pm:3342
+#, fuzzy, perl-format
+msgid "@%s: could not find %s"
+msgstr "Kan inte hitta \"%s\"."
+
+#: tp/Texinfo/Common.pm:1517
+#, fuzzy, perl-format
+msgid "could not open html refs config file %s: %s"
+msgstr "Kan inte ta bort filen \"%s\": %s"
+
+#: tp/Texinfo/Common.pm:1545
+#, fuzzy
+msgid "missing type"
+msgstr "åtgärdsnamn saknas"
+
+#: tp/Texinfo/Common.pm:1548
+#, fuzzy, perl-format
+msgid "unrecognized type: %s"
+msgstr "%s: okänd flagga \"--%s\"\n"
+
+#: tp/Texinfo/Common.pm:1565
+#, fuzzy, perl-format
+msgid "error on closing html refs config file %s: %s"
+msgstr "Kan inte ta bort filen \"%s\": %s"
+
+#: tp/Texinfo/Common.pm:1600
+msgid "no node to be renamed"
+msgstr ""
+
+#: tp/Texinfo/Common.pm:1611
+msgid "nodes without a new name at the end of file"
+msgstr ""
+
+#: tp/Texinfo/Common.pm:1621 tp/Texinfo/Parser.pm:926
+#, fuzzy, perl-format
+msgid "could not open %s: %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Common.pm:2141
+#, fuzzy, perl-format
+msgid "could not protect hash character in @%s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Convert/Converter.pm:395 tp/Texinfo/Convert/Converter.pm:414
+#, fuzzy, perl-format
+msgid "Obsolete variable %s\n"
+msgstr "Ställ in variabel: "
+
+#: tp/Texinfo/Convert/Converter.pm:794
+#, perl-format
+msgid "%s: output incompatible with split"
+msgstr ""
+
+#: tp/Texinfo/Convert/Converter.pm:876 tp/Texinfo/Convert/Converter.pm:909
+#: tp/Texinfo/Convert/DocBook.pm:362 tp/Texinfo/Convert/HTML.pm:6926
+#: tp/Texinfo/Convert/HTML.pm:6984 tp/Texinfo/Convert/IXIN.pm:915
+#: tp/Texinfo/Convert/Info.pm:161 tp/Texinfo/Convert/Info.pm:187
+#: tp/Texinfo/Convert/Info.pm:215 tp/Texinfo/Convert/Info.pm:275
+#: tp/Texinfo/Convert/TexinfoXML.pm:476 tp/Texinfo/Parser.pm:2034
+#, fuzzy, perl-format
+msgid "error on closing %s: %s"
+msgstr "fel vid skrivning till \"%s\""
+
+#: tp/Texinfo/Convert/Converter.pm:987
+#, fuzzy, perl-format
+msgid "could not create directories `%s' or `%s': %s"
+msgstr "Kan inte skapa katalogen \"%s\": %s"
+
+#: tp/Texinfo/Convert/Converter.pm:995
+#, fuzzy, perl-format
+msgid "could not create directory `%s': %s"
+msgstr "Kan inte skapa katalogen \"%s\": %s"
+
+#: tp/Texinfo/Convert/DocBook.pm:969
+#, fuzzy, perl-format
+msgid "@image file `%s' not found, using `%s'"
+msgstr "@image-filen \"%s\" är oläslig: %s"
+
+#: tp/Texinfo/Convert/DocBook.pm:1083 tp/Texinfo/Parser.pm:5355
+#, fuzzy
+msgid "no argument specified for @U"
+msgstr "Inget nodnamn angivet för kommandot \"%c%s\""
+
+#: tp/Texinfo/Convert/HTML.pm:1684
+#, fuzzy, perl-format
+msgid "@image file `%s' (for HTML) not found, using `%s'"
+msgstr "@image-filen \"%s\" (för HTML) är oläslig: %s"
+
+#: tp/Texinfo/Convert/HTML.pm:2373
+#, perl-format
+msgid "raw format %s is not converted"
+msgstr ""
+
+#: tp/Texinfo/Convert/HTML.pm:4883
+msgid "string not closed in css file"
+msgstr ""
+
+#: tp/Texinfo/Convert/HTML.pm:4885
+#, fuzzy
+msgid "--css-include ended in comment"
+msgstr "%s:%d: --css-fil slutade med kommentar"
+
+#: tp/Texinfo/Convert/HTML.pm:4887
+msgid "@import not finished in css file"
+msgstr ""
+
+#: tp/Texinfo/Convert/HTML.pm:4913
+#, fuzzy, perl-format
+msgid "CSS file %s not found"
+msgstr "Makrot %cend hittades inte"
+
+#: tp/Texinfo/Convert/HTML.pm:4919
+#, fuzzy, perl-format
+msgid "could not open --include-file %s: %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Convert/HTML.pm:4929
+#, fuzzy, perl-format
+msgid "error on closing CSS file %s: %s"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: tp/Texinfo/Convert/HTML.pm:5796 tp/Texinfo/Convert/HTML.pm:5800
+#, fuzzy, perl-format
+msgid "no htmlxref.cnf entry found for `%s'"
+msgstr "inga indexposter för \"%s\" hittades\n"
+
+#: tp/Texinfo/Convert/HTML.pm:6494
+#, fuzzy, perl-format
+msgid "error on closing frame file %s: %s"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: tp/Texinfo/Convert/HTML.pm:6518
+#, fuzzy, perl-format
+msgid "error on closing TOC frame file %s: %s"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: tp/Texinfo/Convert/HTML.pm:6633
+#, perl-format
+msgid "handler %s of stage %s priority %s failed"
+msgstr ""
+
+#: tp/Texinfo/Convert/HTML.pm:6834
+msgid "must specify a title with a title command or @top"
+msgstr ""
+
+#: tp/Texinfo/Convert/HTML.pm:7043
+#, fuzzy, perl-format
+msgid "error on closing redirection node file %s: %s"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: tp/Texinfo/Convert/HTML.pm:7068
+#, fuzzy, perl-format
+msgid "old name for `%s' is a node of the document"
+msgstr "Inget \"Prev\" eller \"Up\" för denna nod inom detta dokument."
+
+#: tp/Texinfo/Convert/HTML.pm:7074
+#, fuzzy, perl-format
+msgid "file empty for renamed node `%s'"
+msgstr "orefererad nod \"%s\""
+
+#: tp/Texinfo/Convert/HTML.pm:7088
+#, fuzzy, perl-format
+msgid "target node (new name for `%s') not in document: %s"
+msgstr "Inget \"Prev\" eller \"Up\" för denna nod inom detta dokument."
+
+#: tp/Texinfo/Convert/HTML.pm:7120
+#, fuzzy, perl-format
+msgid "error on closing renamed node redirection file %s: %s"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: tp/Texinfo/Convert/HTML.pm:7158
+#, fuzzy
+msgid "empty node name"
+msgstr "inga indexposter för \"%s\" hittades\n"
+
+#: tp/Texinfo/Convert/HTML.pm:7160 tp/Texinfo/Parser.pm:3689
+#, perl-format
+msgid "syntax for an external node used for `%s'"
+msgstr ""
+
+#: tp/Texinfo/Convert/Info.pm:106
+#, fuzzy
+msgid "document without nodes"
+msgstr "Ingen meny i denna nod."
+
+#: tp/Texinfo/Convert/Info.pm:123
+#, fuzzy
+msgid "document without Top node"
+msgstr "Ingen meny i denna nod."
+
+#: tp/Texinfo/Convert/Info.pm:171
+#, fuzzy, perl-format
+msgid "rename %s failed: %s"
+msgstr "Kan inte hitta \"%s\"."
+
+#: tp/Texinfo/Convert/Info.pm:247
+#, perl-format
+msgid "@%s output more than once: %s"
+msgstr ""
+
+#: tp/Texinfo/Convert/Info.pm:379
+#, fuzzy, perl-format
+msgid "@%s outside of any node"
+msgstr "(utanför alla noder)"
+
+#: tp/Texinfo/Convert/Info.pm:419
+#, fuzzy, perl-format
+msgid "@node name should not contain `,': %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Convert/Plaintext.pm:1312
+#, perl-format
+msgid "Index entry in @%s with : produces invalid Info: %s"
+msgstr ""
+
+#: tp/Texinfo/Convert/Plaintext.pm:1359 tp/Texinfo/Parser.pm:2721
+#, fuzzy, perl-format
+msgid "entry for index `%s' outside of any node"
+msgstr "Posten för index \"%s\" är utanför alla noder"
+
+#: tp/Texinfo/Convert/Plaintext.pm:1473
+#, fuzzy, perl-format
+msgid "error on closing image text file %s: %s"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: tp/Texinfo/Convert/Plaintext.pm:1478
+#, perl-format
+msgid "@image file `%s' unreadable: %s"
+msgstr "@image-filen \"%s\" är oläslig: %s"
+
+#: tp/Texinfo/Convert/Plaintext.pm:1501
+#, fuzzy, perl-format
+msgid "could not find @image file `%s.txt' nor alternate text"
+msgstr "Kan inte hitta noden \"%s\"."
+
+# Är det kombinationen "@strong{Note:.." eller bara @strong{} rent allmänt som
+# orsakar problem?
+#: tp/Texinfo/Convert/Plaintext.pm:1893
+msgid ""
+"@strong{Note...} produces a spurious cross-reference in Info; reword to "
+"avoid that"
+msgstr ""
+"@strong{Obs...} skapar en falsk korsreferens i Info; formulera om för att "
+"undvika detta"
+
+#: tp/Texinfo/Convert/Plaintext.pm:2113
+#, fuzzy, perl-format
+msgid "@%s cross-reference name should not contain `:'"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Convert/Plaintext.pm:2130
+#, fuzzy, perl-format
+msgid "@%s node name should not contain `%s'"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Convert/Plaintext.pm:2145
+#, fuzzy, perl-format
+msgid "@%s node name should not contain `:'"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Convert/Plaintext.pm:2168
+#, fuzzy, perl-format
+msgid "`.' or `,' must follow @xref, not %s"
+msgstr "\".\" eller \",\" måste följa på @%s, inte \"%c\""
+
+#: tp/Texinfo/Convert/Plaintext.pm:2171
+#, fuzzy
+msgid "`.' or `,' must follow @xref"
+msgstr "\".\" eller \",\" måste följa på @%s, inte \"%c\""
+
+#: tp/Texinfo/Convert/Plaintext.pm:3007
+#, fuzzy, perl-format
+msgid "menu entry node name should not contain `%s'"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Convert/Plaintext.pm:3014
+#, fuzzy
+msgid "menu entry node name should not contain `:'"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Convert/Plaintext.pm:3025
+#, fuzzy
+msgid "menu entry name should not contain `:'"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:910
+#, fuzzy, perl-format
+msgid "@%s should only appear at beginning or end of document"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:1160 tp/Texinfo/Structuring.pm:613
+#, perl-format
+msgid "multiple @%s"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:1194
+#, fuzzy, perl-format
+msgid "bad syntax for @%s argument: %s"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:1210
+#, fuzzy, perl-format
+msgid "bad or empty @%s formal argument: %s"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:1219 tp/Texinfo/Parser.pm:4823
+#: tp/Texinfo/Parser.pm:4849 tp/Texinfo/Parser.pm:5615
+#: tp/Texinfo/Parser.pm:5631 tp/Texinfo/Parser.pm:5646
+#, perl-format
+msgid "%c%s requires a name"
+msgstr "%c%s kräver ett namn"
+
+#: tp/Texinfo/Parser.pm:1223 tp/Texinfo/Parser.pm:4826
+#: tp/Texinfo/Parser.pm:4852 tp/Texinfo/Parser.pm:5618
+#: tp/Texinfo/Parser.pm:5634 tp/Texinfo/Parser.pm:5649
+#, fuzzy, perl-format
+msgid "bad name for @%s"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:1341
+#, fuzzy, perl-format
+msgid "@end %s seen before @%s closing brace"
+msgstr "@menu sågs innan första @node, skapar \"Top\"-nod"
+
+#: tp/Texinfo/Parser.pm:1345
+#, fuzzy, perl-format
+msgid "@%s seen before @%s closing brace"
+msgstr "@menu sågs innan första @node, skapar \"Top\"-nod"
+
+#: tp/Texinfo/Parser.pm:1350
+#, perl-format
+msgid "%c%s missing close brace"
+msgstr "%c%s saknar avslutande klammer"
+
+#: tp/Texinfo/Parser.pm:1354
+#, fuzzy, perl-format
+msgid "@%s missing closing delimiter sequence: %s}"
+msgstr "%c%s saknar avslutande klammer"
+
+#: tp/Texinfo/Parser.pm:1476
+#, fuzzy, perl-format
+msgid "@itemx should not begin @%s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:1544
+msgid "@itemx must follow @item"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:1712
+#, perl-format
+msgid "@%s has text but no @item"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:1743
+#, perl-format
+msgid "`@end' expected `%s', but saw `%s'"
+msgstr "\"@end\" förväntade \"%s\", men såg \"%s\""
+
+#: tp/Texinfo/Parser.pm:1746
+#, fuzzy, perl-format
+msgid "@%s seen before @end %s"
+msgstr "@menu sågs innan första @node, skapar \"Top\"-nod"
+
+#: tp/Texinfo/Parser.pm:1750
+#, fuzzy, perl-format
+msgid "no matching `%cend %s'"
+msgstr "Inget matchande \"%cend %s\""
+
+#: tp/Texinfo/Parser.pm:1776 tp/Texinfo/Parser.pm:5171
+#: tp/Texinfo/Parser.pm:5437
+#, fuzzy, perl-format
+msgid "misplaced %c"
+msgstr "Felplacerat %c"
+
+#: tp/Texinfo/Parser.pm:1874 tp/Texinfo/Parser.pm:3301
+#, fuzzy, perl-format
+msgid "unmatched `%c%s'"
+msgstr "Ensamt \"%c%s\""
+
+#: tp/Texinfo/Parser.pm:2109
+#, fuzzy, perl-format
+msgid "macro `%s' called with too many args"
+msgstr "Makrot \"%s\" anropades på rad %d med för många argument"
+
+#: tp/Texinfo/Parser.pm:2131
+#, fuzzy, perl-format
+msgid "@%s missing close brace"
+msgstr "%c%s saknar avslutande klammer"
+
+#: tp/Texinfo/Parser.pm:2139
+#, fuzzy, perl-format
+msgid "macro `%s' declared without argument called with an argument"
+msgstr "Makrot \"%s\" anropades på rad %d med för många argument"
+
+#: tp/Texinfo/Parser.pm:2174
+#, fuzzy, perl-format
+msgid "\\ in @%s expansion followed `%s' instead of parameter name or \\"
+msgstr "\\ i makroutökning följdes av \"%s\" istället för parameternamn"
+
+#: tp/Texinfo/Parser.pm:2649
+#, fuzzy, perl-format
+msgid "@%s `%s' previously defined"
+msgstr "makrot \"%s\" är redan definierat"
+
+#: tp/Texinfo/Parser.pm:2654
+#, fuzzy, perl-format
+msgid "here is the previous definition as @%s"
+msgstr "här är den tidigare definitionen av \"%s\""
+
+#: tp/Texinfo/Parser.pm:3015
+#, fuzzy, perl-format
+msgid "missing name for @%s"
+msgstr "\"}\" saknas i @def-argumentet"
+
+#: tp/Texinfo/Parser.pm:3020
+#, fuzzy, perl-format
+msgid "missing category for @%s"
+msgstr "\"}\" saknas i @def-argumentet"
+
+#: tp/Texinfo/Parser.pm:3072
+#, fuzzy, perl-format
+msgid "unexpected argument on @%s line: %s"
+msgstr "Felaktigt argument till @%s: %s"
+
+#: tp/Texinfo/Parser.pm:3088
+#, fuzzy
+msgid "empty multitable"
+msgstr "%s: tom fil"
+
+#: tp/Texinfo/Parser.pm:3144 tp/Texinfo/Parser.pm:5728
+#, fuzzy, perl-format
+msgid "superfluous argument to @%s"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:3150 tp/Texinfo/Parser.pm:5750
+#: tp/Texinfo/Parser.pm:5762
+#, fuzzy, perl-format
+msgid "bad argument to @%s"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:3161
+#, perl-format
+msgid "%s requires an argument: the formatter for %citem"
+msgstr "%s kräver ett argument: formateraren för %citem"
+
+#: tp/Texinfo/Parser.pm:3166
+#, fuzzy, perl-format
+msgid "command @%s not accepting argument in brace should not be on @%s line"
+msgstr "@item är inte tillåtet i argument till @itemize"
+
+#: tp/Texinfo/Parser.pm:3201
+#, fuzzy, perl-format
+msgid "accent command `@%s' not allowed as @%s argument"
+msgstr "@item är inte tillåtet i argument till @itemize"
+
+#: tp/Texinfo/Parser.pm:3279 tp/Texinfo/Parser.pm:3418
+#: tp/Texinfo/Parser.pm:5721
+#, fuzzy, perl-format
+msgid "@%s missing argument"
+msgstr "%s: filargument saknas.\n"
+
+#: tp/Texinfo/Parser.pm:3291
+#, fuzzy, perl-format
+msgid "unknown @end %s"
+msgstr "Okänt index \"%s\""
+
+#: tp/Texinfo/Parser.pm:3313 tp/Texinfo/Parser.pm:3935
+#, fuzzy, perl-format
+msgid "superfluous argument to @%s %s: %s"
+msgstr "Felaktigt argument till @%s: %s"
+
+#: tp/Texinfo/Parser.pm:3318 tp/Texinfo/Parser.pm:5805
+#: tp/Texinfo/Parser.pm:5850 tp/Texinfo/Parser.pm:5879
+#: tp/Texinfo/Parser.pm:5920 tp/Texinfo/Parser.pm:5998
+#, fuzzy, perl-format
+msgid "bad argument to @%s: %s"
+msgstr "Felaktigt argument till @%s: %s"
+
+#: tp/Texinfo/Parser.pm:3337
+#, fuzzy, perl-format
+msgid "@%s: could not open %s: %s"
+msgstr "Kan inte hitta \"%s\"."
+
+#: tp/Texinfo/Parser.pm:3349
+#, perl-format
+msgid "encoding `%s' is not a canonical texinfo encoding"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:3358
+#, perl-format
+msgid "unrecognized encoding name `%s'"
+msgstr "okänt kodningsnamn \"%s\""
+
+#: tp/Texinfo/Parser.pm:3508
+#, perl-format
+msgid "@%s after the first element"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:3515
+#, fuzzy, perl-format
+msgid "@%s only meaningful on a @multitable line"
+msgstr "@%s är inte meningsfullt utanför \"@titlepage\"-omgivning"
+
+#: tp/Texinfo/Parser.pm:3555
+#, fuzzy, perl-format
+msgid "@%s should not be associated with @top"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:3567
+#, fuzzy, perl-format
+msgid "@node precedes @%s, but parts may not be associated with nodes"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:3669
+#, fuzzy, perl-format
+msgid "empty argument in @%s"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:3673
+#, fuzzy, perl-format
+msgid "empty node name after expansion `%s'"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:3716
+#, fuzzy, perl-format
+msgid "empty menu entry name in `%s'"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:3724
+#, fuzzy
+msgid "empty node name in menu entry"
+msgstr "inga indexposter för \"%s\" hittades\n"
+
+#: tp/Texinfo/Parser.pm:3797
+#, fuzzy, perl-format
+msgid "@%s should not appear in @%s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:3929
+#, fuzzy, perl-format
+msgid "@end %s should only appear at a line beginning"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:3952
+#, perl-format
+msgid "macro `%s' previously defined"
+msgstr "makrot \"%s\" är redan definierat"
+
+#: tp/Texinfo/Parser.pm:3955
+#, perl-format
+msgid "here is the previous definition of `%s'"
+msgstr "här är den tidigare definitionen av \"%s\""
+
+#: tp/Texinfo/Parser.pm:3960
+#, perl-format
+msgid "redefining Texinfo language command: @%s"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:4009
+#, fuzzy, perl-format
+msgid "@%s without associated character"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:4079
+#, perl-format
+msgid ""
+"@%s defined with zero or more than one argument should be invoked with {}"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:4103
+#, perl-format
+msgid ""
+"macro call nested too deeply (set MAX_NESTED_MACROS to override; current "
+"value %d)"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:4112
+#, perl-format
+msgid "recursive call of macro %s is not allowed; use @rmacro if needed"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:4168
+#, fuzzy, perl-format
+msgid "accent command `@%s' must not be followed by whitespace"
+msgstr "@item är inte tillåtet i argument till @itemize"
+
+#: tp/Texinfo/Parser.pm:4174
+#, fuzzy, perl-format
+msgid "use braces to give a command as an argument to @%s"
+msgstr "Använd klamrar för att ge ett komamndo som ett argument till @%s"
+
+#: tp/Texinfo/Parser.pm:4187 tp/Texinfo/Parser.pm:5292
+#, fuzzy, perl-format
+msgid "%c%s expects `i' or `j' as argument, not `%s'"
+msgstr "%c%s förväntar \"i\" eller \"j\" som argument, inte \"%c\""
+
+#: tp/Texinfo/Parser.pm:4199
+#, fuzzy, perl-format
+msgid "accent command `@%s' must not be followed by new line"
+msgstr "@item är inte tillåtet i argument till @itemize"
+
+#: tp/Texinfo/Parser.pm:4210
+#, fuzzy, perl-format
+msgid "@%s expected braces"
+msgstr "%c%s förväntade klamrar"
+
+#: tp/Texinfo/Parser.pm:4375
+#, perl-format
+msgid "undefined flag: %s"
+msgstr "odefinierad flagga: %s"
+
+#: tp/Texinfo/Parser.pm:4378
+#, fuzzy
+msgid "bad syntax for @value"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:4385
+#, fuzzy, perl-format
+msgid "%c%s is obsolete."
+msgstr "%c%s är föråldrat"
+
+#: tp/Texinfo/Parser.pm:4388
+#, fuzzy, perl-format
+msgid "%c%s is obsolete; %s"
+msgstr "%c%s är föråldrat"
+
+#: tp/Texinfo/Parser.pm:4397
+#, fuzzy, perl-format
+msgid "@%s should only appear at a line beginning"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:4488
+#, fuzzy, perl-format
+msgid "@%s not allowed inside `@%s' block"
+msgstr "@%s är inte meningsfullt inuti \"@%s\"-block"
+
+#: tp/Texinfo/Parser.pm:4497
+#, fuzzy, perl-format
+msgid "@%s should only appear in heading or footing"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:4623 tp/Texinfo/Parser.pm:4640
+#: tp/Texinfo/Parser.pm:4690
+#, perl-format
+msgid "@%s not meaningful inside `@%s' block"
+msgstr "@%s är inte meningsfullt inuti \"@%s\"-block"
+
+#: tp/Texinfo/Parser.pm:4650
+#, fuzzy, perl-format
+msgid "@%s in empty multitable"
+msgstr "%s: tom fil"
+
+#: tp/Texinfo/Parser.pm:4656
+#, fuzzy
+msgid "@tab before @item"
+msgstr "@menu sågs innan första @node, skapar \"Top\"-nod"
+
+#: tp/Texinfo/Parser.pm:4659
+#, fuzzy, perl-format
+msgid "too many columns in multitable item (max %d)"
+msgstr "För många kolumner i multitabellsobjekt (max %d)"
+
+#: tp/Texinfo/Parser.pm:4696
+msgid "ignoring @tab outside of multitable"
+msgstr "ignorerar @tab utanför multitabell"
+
+#: tp/Texinfo/Parser.pm:4700
+#, fuzzy, perl-format
+msgid "@%s outside of table or list"
+msgstr "(utanför alla noder)"
+
+#: tp/Texinfo/Parser.pm:4735
+#, fuzzy, perl-format
+msgid "must be after `@%s' to use `@%s'"
+msgstr "Måste vara i \"@%s\"-omgivning för att använda \"@%s\""
+
+#: tp/Texinfo/Parser.pm:4777
+#, perl-format
+msgid "@%s not meaningful outside `@titlepage' and `@quotation' environments"
+msgstr ""
+"@%s är inte meningsfullt utanför \"@titlepage\"- och \"@quotation\"-omgivning"
+
+#: tp/Texinfo/Parser.pm:4781
+#, fuzzy
+msgid "@dircategory after first node"
+msgstr "@menu sågs innan första @node, skapar \"Top\"-nod"
+
+#: tp/Texinfo/Parser.pm:4946
+#, fuzzy, perl-format
+msgid "region %s inside region %s is not allowed"
+msgstr "Fotnoter inuti fotnoter är inte tillåtet"
+
+#: tp/Texinfo/Parser.pm:4964
+#, fuzzy
+msgid "@direntry after first node"
+msgstr "@menu sågs innan första @node, skapar \"Top\"-nod"
+
+#: tp/Texinfo/Parser.pm:4972
+#, fuzzy, perl-format
+msgid "@%s seen before first @node"
+msgstr "@menu sågs innan första @node, skapar \"Top\"-nod"
+
+#: tp/Texinfo/Parser.pm:4975
+msgid ""
+"perhaps your @top node should be wrapped in @ifnottex rather than @ifinfo?"
+msgstr "din @top-nod ska kanske packas i @ifnottex istället för @ifinfo?"
+
+#: tp/Texinfo/Parser.pm:5037
+#, fuzzy, perl-format
+msgid "@%s should only appear in math context"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/Texinfo/Parser.pm:5045
+#, fuzzy, perl-format
+msgid "unknown command `%s'"
+msgstr "Okänt kommando \"%s\""
+
+#: tp/Texinfo/Parser.pm:5055
+#, fuzzy
+msgid "unexpected @"
+msgstr "\"%s\" förväntades"
+
+#: tp/Texinfo/Parser.pm:5084
+#, fuzzy, perl-format
+msgid "@%s is not meaningful outside `@float' environment"
+msgstr "@%s är inte meningsfullt utanför \"@float\"-omgivning"
+
+#: tp/Texinfo/Parser.pm:5089
+#, perl-format
+msgid "@%s should be right below `@float'"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:5097
+#, fuzzy, perl-format
+msgid "ignoring multiple @%s"
+msgstr "Skriver noden %s..."
+
+#: tp/Texinfo/Parser.pm:5216
+#, fuzzy, perl-format
+msgid "command @%s does not accept arguments"
+msgstr "@item är inte tillåtet i argument till @itemize"
+
+#: tp/Texinfo/Parser.pm:5240
+#, fuzzy, perl-format
+msgid "command @%s missing a node or external manual argument"
+msgstr "%s: filargument saknas.\n"
+
+#: tp/Texinfo/Parser.pm:5259
+#, fuzzy, perl-format
+msgid "in @%s empty cross reference name after expansion `%s'"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:5270
+#, fuzzy, perl-format
+msgid "in @%s empty cross reference title after expansion `%s'"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:5283
+msgid "@image missing filename argument"
+msgstr "@image saknar filnamnsargument"
+
+#: tp/Texinfo/Parser.pm:5315
+#, fuzzy, perl-format
+msgid "@%s missing first argument"
+msgstr "%s: filargument saknas.\n"
+
+#: tp/Texinfo/Parser.pm:5360
+#, fuzzy, perl-format
+msgid "non-hex digits in argument for @U: %s"
+msgstr "@item är inte tillåtet i argument till @itemize"
+
+#: tp/Texinfo/Parser.pm:5366
+#, fuzzy, perl-format
+msgid "fewer than four hex digits in argument for @U: %s"
+msgstr "@item är inte tillåtet i argument till @itemize"
+
+#: tp/Texinfo/Parser.pm:5379
+#, perl-format
+msgid "argument for @U exceeds size of integer: %s"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:5385
+#, perl-format
+msgid "argument for @U exceeds Unicode maximum 0x10FFFF: %s"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:5513
+#, fuzzy
+msgid "superfluous arguments for node"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:5563
+#, fuzzy, perl-format
+msgid "expected @end %s"
+msgstr "\"%s\" förväntades"
+
+#: tp/Texinfo/Parser.pm:5662
+#, fuzzy, perl-format
+msgid "@%s should only accept a @-command as argument, not `%s'"
+msgstr "Använd klamrar för att ge ett komamndo som ett argument till @%s"
+
+#: tp/Texinfo/Parser.pm:5672
+#, fuzzy, perl-format
+msgid "remaining argument on @%s line: %s"
+msgstr "Felaktigt argument till @%s: %s"
+
+#: tp/Texinfo/Parser.pm:5745
+#, fuzzy, perl-format
+msgid "environment command %s as argument to @%s"
+msgstr "Använd klamrar för att ge ett komamndo som ett argument till @%s"
+
+#: tp/Texinfo/Parser.pm:5767
+#, fuzzy, perl-format
+msgid "empty @%s"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Parser.pm:5775
+#, perl-format
+msgid "column fraction not a number: %s"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:5784
+#, fuzzy, perl-format
+msgid "@sp arg must be numeric, not `%s'"
+msgstr "%s: argumentet %s måste vara numeriskt, inte \"%s\".\n"
+
+#: tp/Texinfo/Parser.pm:5793
+#, perl-format
+msgid "reserved index name %s"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:5812
+#, fuzzy, perl-format
+msgid "unknown source index in @%s: %s"
+msgstr "Okänt index \"%s\""
+
+#: tp/Texinfo/Parser.pm:5815
+#, fuzzy, perl-format
+msgid "unknown destination index in @%s: %s"
+msgstr "Okänt index \"%s\""
+
+#: tp/Texinfo/Parser.pm:5845
+#, perl-format
+msgid "@%s leads to a merging of %s in itself, ignoring"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:5858
+#, fuzzy, perl-format
+msgid "unknown index `%s' in @printindex"
+msgstr "Okänt index \"%s\" i @printindex"
+
+#: tp/Texinfo/Parser.pm:5864
+#, perl-format
+msgid "printing an index `%s' merged in another one `%s'"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:5872
+#, perl-format
+msgid "printindex before document beginning: @printindex %s"
+msgstr ""
+
+#: tp/Texinfo/Parser.pm:5888
+#, fuzzy, perl-format
+msgid "@%s arg must be `top' or `bottom', not `%s'"
+msgstr "%s: argumentet %s måste vara numeriskt, inte \"%s\".\n"
+
+#: tp/Texinfo/Parser.pm:5896
+#, perl-format
+msgid "Only @%s 10 or 11 is supported, not `%s'"
+msgstr "Endast @%s 10 eller 11 stöds, inte \"%s\""
+
+#: tp/Texinfo/Parser.pm:5904
+#, fuzzy, perl-format
+msgid "@%s arg must be `separate' or `end', not `%s'"
+msgstr ""
+"%s: argumentet --footnote-style måste vara \"separate\" eller \"end\", inte "
+"\"%s\".\n"
+
+#: tp/Texinfo/Parser.pm:5912
+#, fuzzy, perl-format
+msgid "@%s arg must be `on', `off' or `odd', not `%s'"
+msgstr "%s: argumentet %s måste vara numeriskt, inte \"%s\".\n"
+
+#: tp/Texinfo/Parser.pm:5930 tp/Texinfo/Parser.pm:5935
+#, fuzzy, perl-format
+msgid "@paragraphindent arg must be numeric/`none'/`asis', not `%s'"
+msgstr ""
+"%s: argumentet --paragraph-indent måste vara numeriskt/\"none\"/\"asis\", "
+"inte \"%s\".\n"
+
+#: tp/Texinfo/Parser.pm:5943
+#, fuzzy, perl-format
+msgid "@firstparagraphindent arg must be `none' or `insert', not `%s'"
+msgstr ""
+"%s: argumentet --paragraph-indent måste vara numeriskt/\"none\"/\"asis\", "
+"inte \"%s\".\n"
+
+#: tp/Texinfo/Parser.pm:5953
+#, fuzzy, perl-format
+msgid "@exampleindent arg must be numeric/`asis', not `%s'"
+msgstr ""
+"%s: argumentet --paragraph-indent måste vara numeriskt/\"none\"/\"asis\", "
+"inte \"%s\".\n"
+
+#: tp/Texinfo/Parser.pm:5964
+#, fuzzy, perl-format
+msgid "expected @%s on or off, not `%s'"
+msgstr "Förväntade @%s on eller off, inte \"%s\""
+
+#: tp/Texinfo/Parser.pm:5974
+#, fuzzy, perl-format
+msgid "@kbdinputstyle arg must be `code'/`example'/`distinct', not `%s'"
+msgstr ""
+"%s: argumentet --footnote-style måste vara \"separate\" eller \"end\", inte "
+"\"%s\".\n"
+
+#: tp/Texinfo/Parser.pm:5982
+#, fuzzy, perl-format
+msgid "@allowcodebreaks arg must be `true' or `false', not `%s'"
+msgstr ""
+"%s: argumentet --footnote-style måste vara \"separate\" eller \"end\", inte "
+"\"%s\".\n"
+
+#: tp/Texinfo/Parser.pm:5990
+#, fuzzy, perl-format
+msgid "@urefbreakstyle arg must be `after'/`before'/`none', not `%s'"
+msgstr ""
+"%s: argumentet --footnote-style måste vara \"separate\" eller \"end\", inte "
+"\"%s\".\n"
+
+#: tp/Texinfo/Structuring.pm:232
+#, perl-format
+msgid "raising the section level of @%s which is too low"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:264
+#, perl-format
+msgid "no chapter-level command before @%s"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:269
+#, perl-format
+msgid "lowering the section level of @%s appearing after a lower element"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:358
+#, perl-format
+msgid "no sectioning command associated with @%s"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:507
+#, fuzzy, perl-format
+msgid "@%s not empty"
+msgstr "%s: tom fil"
+
+#: tp/Texinfo/Structuring.pm:563 tp/Texinfo/Structuring.pm:1345
+#, fuzzy, perl-format
+msgid "@%s reference to nonexistent node `%s'"
+msgstr ""
+"%s-referens till ickeexisterande noden \"%s\" (kanske felaktig "
+"avsnittsindelning?)"
+
+#: tp/Texinfo/Structuring.pm:576
+#, fuzzy, perl-format
+msgid "@%s entry node name `%s' different from %s name `%s'"
+msgstr "Felaktigt argument till @%s"
+
+#: tp/Texinfo/Structuring.pm:681
+#, perl-format
+msgid "unreferenced node `%s'"
+msgstr "orefererad nod \"%s\""
+
+#: tp/Texinfo/Structuring.pm:727
+#, perl-format
+msgid "node `%s' is %s for `%s' in sectioning but not in menu"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:734
+#, perl-format
+msgid "node %s `%s' in menu `%s' and in sectioning `%s' differ"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:752
+#, perl-format
+msgid "node `%s' is %s for `%s' in menu but not in sectioning"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:806
+#, perl-format
+msgid "%s pointer `%s' (for node `%s') different from %s name `%s'"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:833
+#, fuzzy, perl-format
+msgid "%s reference to nonexistent `%s'"
+msgstr "orefererad nod \"%s\""
+
+#: tp/Texinfo/Structuring.pm:853
+#, fuzzy, perl-format
+msgid "node `%s' lacks menu item for `%s' despite being its Up target"
+msgstr "Noden \"%s\" saknar menypost för \"%s\" trots att den är dess Upp-mål"
+
+#: tp/Texinfo/Structuring.pm:861
+#, perl-format
+msgid "for `%s', up in menu `%s' and up `%s' don't match"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:1357
+#, perl-format
+msgid "@%s to `%s', different from %s name `%s'"
+msgstr ""
+
+#: tp/Texinfo/Structuring.pm:2023
+#, fuzzy, perl-format
+msgid "empty index key in @%s"
+msgstr "inga indexposter för \"%s\" hittades\n"
+
+#: tp/init/chm.pm:221 tp/init/chm.pm:277 tp/init/chm.pm:348
+#, fuzzy, perl-format
+msgid "chm.pm: could not open %s for writing: %s\n"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/init/chm.pm:267 tp/init/chm.pm:338 tp/init/chm.pm:399
+#, fuzzy, perl-format
+msgid "chm.pm: error on closing %s: %s"
+msgstr "fel vid skrivning till \"%s\""
+
+#: tp/init/latex2html.pm:200
+#, fuzzy, perl-format
+msgid "l2h: could not open latex file %s for writing: %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/init/latex2html.pm:341
+msgid "l2h: L2H_TMP directory contains a dot"
+msgstr ""
+
+#: tp/init/latex2html.pm:346
+msgid "l2h: current directory contains a dot"
+msgstr ""
+
+#: tp/init/latex2html.pm:374
+#, fuzzy, perl-format
+msgid "l2h: command did not succeed: %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/init/latex2html.pm:422
+#, perl-format
+msgid "l2h: image has invalid extension: %s"
+msgstr ""
+
+#: tp/init/latex2html.pm:438
+#, perl-format
+msgid "l2h: rename %s as %s failed: %s"
+msgstr ""
+
+#: tp/init/latex2html.pm:460
+#, fuzzy, perl-format
+msgid "l2h: could not open %s: %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/init/latex2html.pm:493
+#, perl-format
+msgid "latex2html.pm: end of @%s item %d not found"
+msgstr ""
+
+#: tp/init/latex2html.pm:504
+#, perl-format
+msgid ""
+"latex2html.pm: processing produced %d items in HTML; expected %d, the number "
+"of items found in the document"
+msgstr ""
+
+#: tp/init/latex2html.pm:534
+#, fuzzy, perl-format
+msgid "l2h: could not determine the fragment %d for @%s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/init/latex2html.pm:560
+#, perl-format
+msgid ""
+"l2h: could not extract the fragment %d for @%s with output counter %d from "
+"HTML"
+msgstr ""
+
+#: tp/init/latex2html.pm:621
+#, fuzzy, perl-format
+msgid "l2h: could not load %s: %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/init/latex2html.pm:634
+#, fuzzy, perl-format
+msgid "l2h: could not open %s for writing: %s"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/init/tex4ht.pm:123 tp/init/tex4ht.pm:267
+#, fuzzy, perl-format
+msgid "tex4ht.pm: could not open %s: %s"
+msgstr "Kan inte hitta \"%s\"."
+
+#: tp/init/tex4ht.pm:219
+#, fuzzy, perl-format
+msgid "tex4ht.pm: chdir %s failed: %s"
+msgstr "Kan inte hitta \"%s\"."
+
+#: tp/init/tex4ht.pm:232
+#, perl-format
+msgid "tex4ht.pm: unable to return to initial directory: %s"
+msgstr ""
+
+#: tp/init/tex4ht.pm:244
+#, fuzzy, perl-format
+msgid "tex4ht.pm: output file missing: %s"
+msgstr "kan inte skapa utdatafilen \"%s\""
+
+#: tp/init/tex4ht.pm:260
+#, fuzzy, perl-format
+msgid "tex4ht.pm: command failed: %s"
+msgstr "Kan inte hitta \"%s\"."
+
+#: tp/init/tex4ht.pm:294
+#, perl-format
+msgid "tex4ht.pm: end of @%s item %d not found"
+msgstr ""
+
+#: tp/init/tex4ht.pm:301
+#, perl-format
+msgid ""
+"tex4ht.pm: processing produced %d items in HTML; expected %d, the number of "
+"items found in the document for @%s"
+msgstr ""
+
+#: tp/init/tex4ht.pm:321
+#, fuzzy, perl-format
+msgid "tex4ht.pm: output has no HTML item for @%s %s"
+msgstr "kan inte skapa utdatafilen \"%s\""
+
+#: tp/init/tex4ht.pm:336
+#, perl-format
+msgid ""
+"tex4ht.pm: processing retrieved %d items in HTML; expected %d, the number of "
+"items found in the document for @%s"
+msgstr ""
+
+#: tp/texi2any.pl:388
+#, fuzzy, perl-format
+msgid "error loading %s: %s\n"
+msgstr "fel vid skrivning till \"%s\""
+
+#: tp/texi2any.pl:401
+#, fuzzy, perl-format
+msgid "%s: unknown variable %s"
+msgstr "Okänt kommando \"%s\""
+
+#: tp/texi2any.pl:405
+#, fuzzy, perl-format
+msgid "%s: obsolete variable %s\n"
+msgstr "Ställ in variabel: "
+
+#: tp/texi2any.pl:420
+#, fuzzy, perl-format
+msgid "%s: unknown variable %s\n"
+msgstr "Okänt kommando \"%s\""
+
+#: tp/texi2any.pl:424
+#, fuzzy, perl-format
+msgid "obsolete variable %s\n"
+msgstr "Ställ in variabel: "
+
+#: tp/texi2any.pl:489
+#, fuzzy, perl-format
+msgid "could not read init file %s"
+msgstr "kan inte öppna indatafilen \"%s\""
+
+#: tp/texi2any.pl:652
+#, fuzzy, perl-format
+msgid "ignoring unrecognized TEXINFO_OUTPUT_FORMAT value `%s'\n"
+msgstr "%s: Ignorerar okänt TEXINFO_OUTPUT_FORMAT-värde \"%s\".\n"
+
+#: tp/texi2any.pl:735
+#, fuzzy, perl-format
+msgid "Usage: %s [OPTION]... TEXINFO-FILE...\n"
+msgstr "Användning: %s [FLAGGA]... FIL...\n"
+
+#: tp/texi2any.pl:738
+#, fuzzy
+msgid ""
+"Translate Texinfo source documentation to various other formats, by default\n"
+"Info files suitable for reading online with Emacs or standalone GNU Info.\n"
+"\n"
+"This program is commonly installed as both `makeinfo' and `texi2any';\n"
+"the behavior is identical, and does not depend on the installed name.\n"
+msgstr ""
+"Översätt Texinfo-källdokumentation till diverse andra format, som standard\n"
+"infofiler som är lämpliga för läsning med Emacs eller GNU Info.\n"
+
+#: tp/texi2any.pl:744
+#, fuzzy, perl-format
+msgid ""
+"General options:\n"
+"      --document-language=STR locale to use in translating Texinfo keywords\n"
+"                                for the output document (default C).\n"
+"      --error-limit=NUM       quit after NUM errors (default %d).\n"
+"      --force                 preserve output even if errors.\n"
+"      --help                  display this help and exit.\n"
+"      --no-validate           suppress node cross-reference validation.\n"
+"      --no-warn               suppress warnings (but not errors).\n"
+"      --conf-dir=DIR          search also for initialization files in DIR.\n"
+"      --init-file=FILE        load FILE to modify the default behavior.\n"
+"  -c, --set-customization-variable VAR=VAL  set customization variable VAR \n"
+"                                to value VAL.\n"
+"  -v, --verbose               explain what is being done.\n"
+"      --version               display version information and exit.\n"
+msgstr ""
+"Allmänna flaggor:\n"
+"      --error-limit=ANTAL     avsluta efter ANTAL fel (standardvärde %d).\n"
+"      --document-language=STR lokal att använda vid översättning av\n"
+"                                Texinfo-nyckelord för utdatadokumentet\n"
+"                                (standardvärde C).\n"
+"      --force                 bevara utdata även om fel.\n"
+"      --help                  visa denna hjälptext och avsluta.\n"
+"      --no-validate           undertryck korsreferensvalidering av noder.\n"
+"      --no-warn               undertryck varningar (men inte fel).\n"
+"  -v, --verbose               förklara vad som görs.\n"
+"      --version               visa versionsinformation och avsluta.\n"
+
+#: tp/texi2any.pl:760
+#, fuzzy
+msgid ""
+"Output format selection (default is to produce Info):\n"
+"      --docbook               output Docbook XML rather than Info.\n"
+"      --html                  output HTML rather than Info.\n"
+"      --plaintext             output plain text rather than Info.\n"
+"      --xml                   output Texinfo XML rather than Info.\n"
+"      --dvi, --dvipdf, --ps, --pdf  call texi2dvi to generate given output,\n"
+"                                after checking validity of TEXINFO-FILE.\n"
+msgstr ""
+"Val av utdataformat (standard är att producera Info):\n"
+"      --docbook               generera Docbook XML istället för Info.\n"
+"      --html                  generera HTML istället för Info.\n"
+"      --xml                   generera Texinfo XML istället för Info.\n"
+"      --plaintext             generera vanlig text istället för Info.\n"
+
+#: tp/texi2any.pl:768
+#, fuzzy
+msgid ""
+"General output options:\n"
+"  -E, --macro-expand=FILE     output macro-expanded source to FILE,\n"
+"                                ignoring any @setfilename.\n"
+"      --no-headers            suppress node separators, Node: lines, and "
+"menus\n"
+"                                from Info output (thus producing plain "
+"text)\n"
+"                                or from HTML (thus producing shorter "
+"output).\n"
+"                                Also, if producing Info, write to\n"
+"                                standard output by default.\n"
+"      --no-split              suppress any splitting of the output;\n"
+"                                generate only one output file.\n"
+"      --[no-]number-sections  output chapter and sectioning numbers;\n"
+"                                default is on.\n"
+"  -o, --output=DEST           output to DEST.\n"
+"                                With split output, create DEST as a "
+"directory\n"
+"                                 and put the output files there.\n"
+"                                With non-split output, if DEST is already\n"
+"                                 a directory or ends with a /,\n"
+"                                 put the output file there.\n"
+"                                Otherwise, DEST names the output file.\n"
+msgstr ""
+"Allmänna utdataflaggor:\n"
+"  -E, --macro-expand=FIL      generera makroexpanderad källkod till FIL,\n"
+"                              ignorera alla @setfilename.\n"
+"      --no-headers            undertryck nodseparatorer, Node:-rader och\n"
+"                                menyer från Info-utdata (och skapa\n"
+"                                därigenom vanlig text) eller från HTML\n"
+"                                (och producera därigenom kortare utdata).\n"
+"                                Skriv även till standard ut som standard.\n"
+"      --no-split              undertryck delning av Info eller HTML-utdata,\n"
+"                              generera endast en utdatafil.\n"
+"      --number-sections       generera kapitel- och avsnittsnummer.\n"
+"  -o, --output=FIL            generera till FIL (katalog om delad HTML).\n"
+
+#: tp/texi2any.pl:788
+#, perl-format
+msgid ""
+"Options for Info and plain text:\n"
+"      --disable-encoding      do not output accented and special characters\n"
+"                                in Info output based on @documentencoding.\n"
+"      --enable-encoding       override --disable-encoding (default).\n"
+"      --fill-column=NUM       break Info lines at NUM characters (default "
+"%d).\n"
+"      --footnote-style=STYLE  output footnotes in Info according to STYLE:\n"
+"                                `separate' to put them in their own node;\n"
+"                                `end' to put them at the end of the node, "
+"in\n"
+"                                which they are defined (this is the "
+"default).\n"
+"      --paragraph-indent=VAL  indent Info paragraphs by VAL spaces (default "
+"%d).\n"
+"                                If VAL is `none', do not indent; if VAL is\n"
+"                                `asis', preserve existing indentation.\n"
+"      --split-size=NUM        split Info files at size NUM (default %d).\n"
+msgstr ""
+"Flaggor för Info och vanlig text:\n"
+"      --disable-encoding      generera inte tecken med accent och\n"
+"                                specialtecken i Info-utdata baserat på\n"
+"                                @documentencoding.\n"
+"      --enable-encoding       åsidosätt --disable-encoding (standard).\n"
+"      --fill-column=ANTAL     radbryt Info-rader vid ANTAL tecken\n"
+"                                (standardvärde %d).\n"
+"      --footnote-style=STIL   generera fotnoter i Info som följer STIL:\n"
+"                                \"separate\" för att placera fotnoter i sin\n"
+"                                egen nod,\n"
+"                                \"end\" för att placera fotnoter i slutet\n"
+"                                av den nod där de är definierade\n"
+"                                (standardalternativ).\n"
+"      --paragraph-indent=VÄRDE gör indrag i Info-stycken med VÄRDE\n"
+"                                blanksteg (standardvärde %d).\n"
+"                                Om VÄRDE är \"none\" görs inga indrag; om\n"
+"                                VÄRDE är \"asis\" bevaras befintliga\n"
+"                                indrag.\n"
+"      --split-size=ANTAL      dela upp Info-filer vid storleken ANTAL\n"
+"                                (standardvärde %d).\n"
+
+#: tp/texi2any.pl:805
+#, fuzzy
+msgid ""
+"Options for HTML:\n"
+"      --css-include=FILE      include FILE in HTML <style> output;\n"
+"                                read stdin if FILE is -.\n"
+"      --css-ref=URL           generate CSS reference to URL.\n"
+"      --internal-links=FILE   produce list of internal links in FILE.\n"
+"      --split=SPLIT           split at SPLIT, where SPLIT may be `chapter',\n"
+"                                `section' or `node'.\n"
+"      --transliterate-file-names  use file names in ASCII transliteration.\n"
+"      --node-files            produce redirection files for nodes and \n"
+"                                anchors; default is set only if split.\n"
+msgstr ""
+"Flaggor för HTML:\n"
+"      --css-include=FIL       inkludera FIL i HTML <style>-utdata;\n"
+"                                läs standard in om FIL är -.\n"
+"      --css-ref=URL           generera referens till en CSS-fil.\n"
+"      --transliterate-file-names\n"
+"                              producera filnamn i ASCII-translitteration.\n"
+
+#: tp/texi2any.pl:816
+msgid ""
+"Options for XML and Docbook:\n"
+"      --output-indent=VAL     does nothing, retained for compatibility.\n"
+msgstr ""
+
+#: tp/texi2any.pl:819
+msgid ""
+"Options for DVI/PS/PDF:\n"
+"      --Xopt=OPT              pass OPT to texi2dvi; can be repeated.\n"
+msgstr ""
+
+#: tp/texi2any.pl:822
+#, fuzzy
+msgid ""
+"Input file options:\n"
+"      --commands-in-node-names  does nothing, retained for compatibility.\n"
+"  -D VAR                        define the variable VAR, as with @set.\n"
+"  -D 'VAR VAL'                  define VAR to VAL (one shell argument).\n"
+"  -I DIR                        append DIR to the @include search path.\n"
+"  -P DIR                        prepend DIR to the @include search path.\n"
+"  -U VAR                        undefine the variable VAR, as with @clear.\n"
+msgstr ""
+"Flaggor för indatafil:\n"
+"      --commands-in-node-names   tillåt @-kommandon i nodnamn.\n"
+"  -D VARIABEL                    definiera variabeln VARIABEL, som med "
+"@set.\n"
+"  -I KATALOG                     lägg till KATALOG till @include-sökvägen.\n"
+"  -P KATALOG                     lägg till KATALOG först i @include-"
+"sökvägen.\n"
+"  -U VARIABEL                    odefiniera variabeln VARIABEL, som med "
+"@clear.\n"
+
+#: tp/texi2any.pl:830
+#, fuzzy
+msgid ""
+"Conditional processing in input:\n"
+"  --ifdocbook       process @ifdocbook and @docbook even if\n"
+"                      not generating Docbook.\n"
+"  --ifhtml          process @ifhtml and @html even if not generating HTML.\n"
+"  --ifinfo          process @ifinfo even if not generating Info.\n"
+"  --ifplaintext     process @ifplaintext even if not generating plain text.\n"
+"  --iftex           process @iftex and @tex.\n"
+"  --ifxml           process @ifxml and @xml.\n"
+"  --no-ifdocbook    do not process @ifdocbook and @docbook text.\n"
+"  --no-ifhtml       do not process @ifhtml and @html text.\n"
+"  --no-ifinfo       do not process @ifinfo text.\n"
+"  --no-ifplaintext  do not process @ifplaintext text.\n"
+"  --no-iftex        do not process @iftex and @tex text.\n"
+"  --no-ifxml        do not process @ifxml and @xml text.\n"
+"\n"
+"  Also, for the --no-ifFORMAT options, do process @ifnotFORMAT text.\n"
+msgstr ""
+"Villkorlig behandling i indata:\n"
+"  --ifdocbook       behandla @ifdocbook och @docbook även om inte\n"
+"                      Docbook genereras.\n"
+"  --ifhtml          behandla @ifhtml och @html även om inte HTML genereras.\n"
+"  --ifinfo          behandla @ifinfo-text även om inte Info genereras.\n"
+"  --ifplaintext     behandla @ifplaintext även om inte vanlig text\n"
+"                    genereras.\n"
+"  --iftex           behandla @iftex och @tex-text; medför --no-split.\n"
+"  --ifxml           behandla @ifxml och @xml.\n"
+"  --no-ifdocbook    behandla inte @ifdocbook- och @docbook-text.\n"
+"  --no-ifhtml       behandla inte @ifhtml- och @html-text.\n"
+"  --no-ifinfo       behandla inte @ifinfo-text.\n"
+"  --no-ifplaintext  behandla inte @ifplaintext-text.\n"
+"  --no-iftex        behandla inte @iftex- och @tex-text.\n"
+"  --no-ifxml        behandla inte @ifxml- och @xml-text.\n"
+"\n"
+"  Dessutom, för flaggorna --no-ifFORMAT, behandla @ifnotFORMAT-text.\n"
+
+#: tp/texi2any.pl:847
+#, fuzzy
+msgid ""
+"  The defaults for the @if... conditionals depend on the output format:\n"
+"  if generating Docbook, --ifdocbook is on and the others are off;\n"
+"  if generating HTML, --ifhtml is on and the others are off;\n"
+"  if generating Info, --ifinfo is on and the others are off;\n"
+"  if generating plain text, --ifplaintext is on and the others are off;\n"
+"  if generating XML, --ifxml is on and the others are off.\n"
+msgstr ""
+"  Standardvärdena för @if...-villkoren beror på utdataformatet:\n"
+"  om HTML genereras är --ifhtml på och de andra av;\n"
+"  om Info genereras är --ifinfo på och de andra av;\n"
+"  om vanlig text genereras är --ifplaintext på och de andra av;\n"
+"  om XML genereras är --ifxml på och de andra av.\n"
+
+#: tp/texi2any.pl:854
+#, fuzzy
+msgid ""
+"Examples:\n"
+"  makeinfo foo.texi                      write Info to foo's @setfilename\n"
+"  makeinfo --html foo.texi               write HTML to @setfilename\n"
+"  makeinfo --xml foo.texi                write Texinfo XML to @setfilename\n"
+"  makeinfo --docbook foo.texi            write Docbook XML to @setfilename\n"
+"  makeinfo --plaintext foo.texi          write plain text to standard "
+"output\n"
+"  makeinfo --pdf foo.texi                write PDF using texi2dvi\n"
+"\n"
+"  makeinfo --html --no-headers foo.texi  write html without node lines, "
+"menus\n"
+"  makeinfo --number-sections foo.texi    write Info with numbered sections\n"
+"  makeinfo --no-split foo.texi           write one Info file however big\n"
+msgstr ""
+"Exempel:\n"
+"  makeinfo apa.texi                      skriv Info till apas @setfilename\n"
+"  makeinfo --html apa.texi               skriv HTML till @setfilename\n"
+"  makeinfo --xml apa.texi                skriv Texinfo XML till "
+"@setfilename\n"
+"  makeinfo --docbook apa.texi            skriv DocBook XML till "
+"@setfilename\n"
+"  makeinfo --no-headers apa.texi         skriv vanlig text till standard ut\n"
+"  makeinfo --html --no-headers apa.texi  skriv html utan nodrader och "
+"menyer\n"
+"  makeinfo --number-sections apa.texi    skriv Info med numrerade avsnitt\n"
+"  makeinfo --no-split apa.texi           skriv en Info-fil hur stor den än "
+"är\n"
+
+#: tp/texi2any.pl:901
+#, perl-format
+msgid "%s: --footnote-style arg must be `separate' or `end', not `%s'.\n"
+msgstr ""
+"%s: argumentet --footnote-style måste vara \"separate\" eller \"end\", inte "
+"\"%s\".\n"
+
+#: tp/texi2any.pl:992
+#, perl-format
+msgid "%s: --paragraph-indent arg must be numeric/`none'/`asis', not `%s'.\n"
+msgstr ""
+"%s: argumentet --paragraph-indent måste vara numeriskt/\"none\"/\"asis\", "
+"inte \"%s\".\n"
+
+#: tp/texi2any.pl:1069
+#, perl-format
+msgid "%s: when generating %s, only one input FILE may be specified with -o\n"
+msgstr ""
+
+#: tp/texi2any.pl:1073
+msgid "--Xopt option without printed output"
+msgstr ""
+
+#: tp/texi2any.pl:1083
+#, fuzzy, perl-format
+msgid "unknown tree transformation %s"
+msgstr "Okänt kommando \"%s\""
+
+#: tp/texi2any.pl:1090
+#, perl-format
+msgid "ignoring splitting for format %s"
+msgstr ""
+
+#: tp/texi2any.pl:1140
+#, perl-format
+msgid "%s: missing file argument.\n"
+msgstr "%s: filargument saknas.\n"
+
+#: tp/texi2any.pl:1141
+#, perl-format
+msgid "Try `%s --help' for more information.\n"
+msgstr "Prova \"%s --help\" för mer information.\n"
+
+#: tp/texi2any.pl:1222
+msgid "fill_gaps_in_sectioning transformation return no result. No section?"
+msgstr ""
+
+#: tp/texi2any.pl:1244
+#, fuzzy, perl-format
+msgid "error on closing macro expand file %s: %s\n"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: tp/texi2any.pl:1250
+#, fuzzy, perl-format
+msgid "could not open %s for writing: %s\n"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: tp/texi2any.pl:1275
+msgid ""
+"insert_nodes_for_sectioning_commands transformation return no result. No "
+"section?"
+msgstr ""
+
+#: tp/texi2any.pl:1345 tp/texi2any.pl:1421
+#, fuzzy, perl-format
+msgid "%s: error on closing %s: %s\n"
+msgstr "fel vid skrivning till \"%s\""
+
+#: tp/texi2any.pl:1368 tp/texi2any.pl:1402
+#, fuzzy, perl-format
+msgid "%s: error on closing internal links file %s: %s\n"
+msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#: tp/texi2any.pl:1374 tp/texi2any.pl:1408
+#, fuzzy, perl-format
+msgid "%s: could not open %s for writing: %s\n"
+msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#: texindex/ti.twjr:373
+#, fuzzy, awk-format
+msgid "%s: unrecognized option `%s'\n"
+msgstr "%s: okänd flagga \"--%s\"\n"
+
+#: texindex/ti.twjr:444
+#, fuzzy, awk-format
+msgid "%s is not a Texinfo index file\n"
+msgstr "%s: inte en texinfo-indexfil"
+
+#: texindex/ti.twjr:543
+#, awk-format
+msgid "%s:%d: Bad key %s in record\n"
+msgstr ""
+
+#: texindex/ti.twjr:566
+#, awk-format
+msgid "%s:%d: Bad entry; expected three fields, not %d\n"
+msgstr ""
+
+#: texindex/ti.twjr:725
+#, awk-format
+msgid "%s:%d: Bad entry; expected %s at column %d\n"
+msgstr ""
+
+#: texindex/ti.twjr:1254
+msgid "..."
+msgstr ""
+
+#: texindex/ti.twjr:1273
+#, fuzzy, awk-format
+msgid "Usage: %s [OPTION]... FILE...\n"
+msgstr "Användning: %s [FLAGGA]... FIL...\n"
+
+#: texindex/ti.twjr:1274
+#, fuzzy
+msgid "Generate a sorted index for each TeX output FILE."
+msgstr "Generera ett sorterat index för varje TeX-utdataFIL.\n"
+
+#: texindex/ti.twjr:1275
+#, fuzzy
+msgid "Usually FILE... is specified as `foo.??' for a document `foo.texi'."
+msgstr ""
+"Vanligtvis anges FIL... som \"apa.%c%c\" för ett dokument \"apa.texi\".\n"
+
+#: texindex/ti.twjr:1277
+#, fuzzy
+msgid "Options:"
+msgstr ""
+"\n"
+"Flaggor:\n"
+
+#: texindex/ti.twjr:1278
+#, fuzzy
+msgid " -h, --help   display this help and exit"
+msgstr "visa denna hjälptext och avsluta"
+
+#: texindex/ti.twjr:1279
+msgid " --version    display version information and exit"
+msgstr ""
+
+#: texindex/ti.twjr:1280
+msgid " --           end option processing"
+msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "Email bug reports to bug-texinfo@gnu.org,\n"
+#~ "general questions and discussion to help-texinfo@gnu.org.\n"
+#~ "Texinfo home page: http://www.gnu.org/software/texinfo/"
+#~ msgstr ""
+#~ "\n"
+#~ "Skicka felrapporter till bug-texinfo@gnu.org,\n"
+#~ "allmänna frågor och diskussion till help-texinfo@gnu.org\n"
+#~ "och synpunkter på översättningen till sv@li.org.\n"
+#~ "Hemsida för texinfo: http://www.gnu.org/software/texinfo/"
+
+#, fuzzy
+#~ msgid "general questions and discussion to help-texinfo@gnu.org."
+#~ msgstr ""
+#~ "Skicka felrapporter till bug-texinfo@gnu.org,\n"
+#~ "allmänna frågor och diskussion till help-texinfo@gnu.org\n"
+#~ "och synpunkter på översättningen till sv@li.org."
+
+#~ msgid "Insert this character"
+#~ msgstr "Infoga detta tecken"
+
+#~ msgid "No index entries."
+#~ msgstr "Inga indexposter."
+
+#~ msgid "CAN'T SEE THIS"
+#~ msgstr "KAN INTE SE DETTA"
+
+#~ msgid ""
+#~ "\n"
+#~ "* Menu: Nodes whose indices contain `%s':\n"
+#~ msgstr ""
+#~ "\n"
+#~ "* Meny: Noder vars index innehåller \"%s\":\n"
+
+#, fuzzy
+#~ msgid "No index"
+#~ msgstr "Inga indexposter."
+
+# char *s = concat ("", strerror (errno), _(" for %s"));
+#
+#, fuzzy
+#~ msgid "Index for `%s'"
+#~ msgstr " för %s"
+
+#, fuzzy
+#~ msgid "File names matching `%s'"
+#~ msgstr "Inget matchande \"%cend %s\""
+
+#~ msgid ""
+#~ "Basic Commands in Info Windows\n"
+#~ "******************************\n"
+#~ msgstr ""
+#~ "Grundläggande kommandon i Info-fönster\n"
+#~ "**************************************\n"
+
+#~ msgid "  %-10s  Quit this help.\n"
+#~ msgstr "  %-10s  Avsluta denna hjälp.\n"
+
+#~ msgid "  %-10s  Quit Info altogether.\n"
+#~ msgstr "  %-10s  Avsluta Info helt.\n"
+
+#~ msgid "  %-10s  Invoke the Info tutorial.\n"
+#~ msgstr "  %-10s  Starta Info-handboken.\n"
+
+#~ msgid "  %-10s  Move to the `next' node of this node.\n"
+#~ msgstr "  %-10s  Gå till nästa nod från denna nod.\n"
+
+#~ msgid "  %-10s  Move to the `previous' node of this node.\n"
+#~ msgstr "  %-10s  Gå till föregående nod från denna nod.\n"
+
+#~ msgid "  %-10s  Move `up' from this node.\n"
+#~ msgstr "  %-10s  Gå upp från denna nod.\n"
+
+#~ msgid ""
+#~ "  %-10s  Pick menu item specified by name.\n"
+#~ "              Picking a menu item causes another node to be selected.\n"
+#~ msgstr ""
+#~ "  %-10s  Välj den namngivna menyposten.\n"
+#~ "              Att välja en menypost gör att en annan nod väljs.\n"
+
+#~ msgid "  %-10s  Follow a cross reference.  Reads name of reference.\n"
+#~ msgstr "  %-10s  Följ en korsreferens. Läser namnet på en referens.\n"
+
+#~ msgid "  %-10s  Move to the last node seen in this window.\n"
+#~ msgstr "  %-10s  Gå till den sista noden i detta fönster.\n"
+
+#~ msgid "  %-10s  Skip to next hypertext link within this node.\n"
+#~ msgstr "  %-10s  Hoppa till nästa hypertextlänk i denna nod.\n"
+
+#~ msgid "  %-10s  Follow the hypertext link under cursor.\n"
+#~ msgstr "  %-10s  Följ hypertextlänken under markören.\n"
+
+#~ msgid "  %-10s  Move to the `directory' node.  Equivalent to `g (DIR)'.\n"
+#~ msgstr "  %-10s  Gå till \"directory\"-noden. Likvärdigt med \"g (DIR)\".\n"
+
+#~ msgid "  %-10s  Move to the Top node.  Equivalent to `g Top'.\n"
+#~ msgstr "  %-10s  Gå till den översta noden. Likvärdigt med \"g Top\".\n"
+
+#~ msgid ""
+#~ "Moving within a node:\n"
+#~ "---------------------\n"
+#~ msgstr ""
+#~ "Förflyttning inom en nod:\n"
+#~ "-------------------------\n"
+
+#~ msgid "  %-10s  Scroll forward a page.\n"
+#~ msgstr "  %-10s  Rulla en sida framåt.\n"
+
+#~ msgid "  %-10s  Scroll backward a page.\n"
+#~ msgstr "  %-10s  Rulla en sida bakåt.\n"
+
+#~ msgid "  %-10s  Go to the beginning of this node.\n"
+#~ msgstr "  %-10s  Gå till början på denna nod.\n"
+
+#~ msgid "  %-10s  Go to the end of this node.\n"
+#~ msgstr "  %-10s  Gå till slutet på denna nod.\n"
+
+#~ msgid "  %-10s  Scroll forward 1 line.\n"
+#~ msgstr "  %-10s  Rulla en rad framåt.\n"
+
+#~ msgid "  %-10s  Scroll backward 1 line.\n"
+#~ msgstr "  %-10s  Rulla en rad bakåt.\n"
+
+#~ msgid ""
+#~ "Other commands:\n"
+#~ "---------------\n"
+#~ msgstr ""
+#~ "Andra kommandon:\n"
+#~ "----------------\n"
+
+#~ msgid "  %-10s  Pick first...ninth item in node's menu.\n"
+#~ msgstr "  %-10s  Välj första...nionde objektet i nodens meny.\n"
+
+#~ msgid "  %-10s  Pick last item in node's menu.\n"
+#~ msgstr "  %-10s  Välj det sista objektet i nodens meny.\n"
+
+#~ msgid ""
+#~ "  %-10s  Search for a specified string in the index entries of this Info\n"
+#~ "              file, and select the node referenced by the first entry "
+#~ "found.\n"
+#~ msgstr ""
+#~ "  %-10s  Sök efter en angiven sträng i indexposterna i denna Info-fil,\n"
+#~ "              och välj noden som refereras av den första posten som\n"
+#~ "              hittas.\n"
+
+#~ msgid ""
+#~ "  %-10s  Move to node specified by name.\n"
+#~ "              You may include a filename as well, as in "
+#~ "(FILENAME)NODENAME.\n"
+#~ msgstr ""
+#~ "  %-10s  Gå till den namngivna noden.\n"
+#~ "              Du kan även inkludera ett filnamn, som exempelvis\n"
+#~ "              (FILNAMN)NODNAMN.\n"
+
+#~ msgid ""
+#~ "  %-10s  Search forward for a specified string,\n"
+#~ "              and select the node in which the next occurrence is found.\n"
+#~ msgstr ""
+#~ "  %-10s  Sök framåt efter en angiven sträng\n"
+#~ "              och välj den nod i vilken nästa förekomst hittas.\n"
+
+#~ msgid ""
+#~ "  %-10s  Search backward for a specified string,\n"
+#~ "              and select the node in which the next occurrence is found.\n"
+#~ msgstr ""
+#~ "  %-10s  Sök bakåt efter en angiven sträng\n"
+#~ "              och välj den nod i vilken nästa förekomst hittas.\n"
+
+#~ msgid "ESC %s is undefined."
+#~ msgstr "ESC %s är odefinierad."
+
+#~ msgid "%s is defined to %s."
+#~ msgstr "%s är definierad till %s."
+
+#~ msgid ""
+#~ "Selecting other nodes:\n"
+#~ "----------------------\n"
+#~ msgstr ""
+#~ "Välja andra noder:\n"
+#~ "------------------\n"
+
+#~ msgid "incorrect number of arguments"
+#~ msgstr "felaktigt antal argument"
+
+#~ msgid "cannot open input file `%s'"
+#~ msgstr "kan inte öppna indatafilen \"%s\""
+
+#~ msgid "cannot create output file `%s'"
+#~ msgstr "kan inte skapa utdatafilen \"%s\""
+
+#~ msgid "error writing to `%s'"
+#~ msgstr "fel vid skrivning till \"%s\""
+
+#~ msgid "error closing output file `%s'"
+#~ msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#~ msgid "section too long"
+#~ msgstr "avsnittet är för långt"
+
+#~ msgid ""
+#~ "Usage: %s [OPTION]... [INPUT-FILE]\n"
+#~ "\n"
+#~ "Compile infokey source file to infokey file.  Reads INPUT-FILE (default\n"
+#~ "$HOME/.infokey) and writes compiled key file to (by default) $HOME/."
+#~ "info.\n"
+#~ "\n"
+#~ "Options:\n"
+#~ "  --output FILE        output to FILE instead of $HOME/.info\n"
+#~ "  --help               display this help and exit.\n"
+#~ "  --version            display version information and exit.\n"
+#~ msgstr ""
+#~ "Användning: %s [FLAGGA]... [INDATAFIL]\n"
+#~ "\n"
+#~ "Kompilera infonyckelkällfil till infonyckelfil. Läser INDATAFIL (som\n"
+#~ "standard $HOME/.infokey) och skriver (som standard) den kompilerade\n"
+#~ "nyckelfilen till $HOME/.info.\n"
+#~ "\n"
+#~ "Flaggor:\n"
+#~ "  --output FIL         generera till FIL istället för $HOME/.info\n"
+#~ "  --help               visa denna hjälptext och avsluta.\n"
+#~ "  --version            visa versionsinformation och avsluta.\n"
+
+#~ msgid "Ignoring invalid infokey file `%s' - too small"
+#~ msgstr "Ignorerar ogiltig infonyckelfil \"%s\" - för liten"
+
+#~ msgid "Ignoring invalid infokey file `%s' - too big"
+#~ msgstr "Ignorerar ogiltig infonyckelfil \"%s\" - för stor"
+
+#~ msgid "Error reading infokey file `%s' - short read"
+#~ msgstr "Fel vid läsning av infonyckelfilen \"%s\" - kort läsning"
+
+#~ msgid ""
+#~ "Invalid infokey file `%s' (bad magic numbers) -- run infokey to update it"
+#~ msgstr ""
+#~ "Ogiltig infonyckelfil \"%s\" (felaktiga magiska nummer) -- kör infokey "
+#~ "för\n"
+#~ "att uppdatera den"
+
+#~ msgid "Your infokey file `%s' is out of date -- run infokey to update it"
+#~ msgstr ""
+#~ "Din infonyckelfil \"%s\" är för gammal -- kör infokey för att uppdatera "
+#~ "den"
+
+#~ msgid ""
+#~ "Invalid infokey file `%s' (bad section length) -- run infokey to update it"
+#~ msgstr ""
+#~ "Ogiltig infonyckelfil \"%s\" (felaktig asvnittslängd) -- kör infokey för\n"
+#~ "att uppdatera den"
+
+#~ msgid ""
+#~ "Invalid infokey file `%s' (bad section code) -- run infokey to update it"
+#~ msgstr ""
+#~ "ogiltig infonyckelfil \"%s\" (felaktig avsnittskod) -- kör infokey för "
+#~ "att\n"
+#~ "uppdatera den"
+
+#~ msgid "Bad data in infokey file -- some key bindings ignored"
+#~ msgstr "Felaktig data i infonyckelfil -- en del bindningar ignorerades"
+
+#~ msgid "Bad data in infokey file -- some var settings ignored"
+#~ msgstr "Felaktig data i infonyckelfil -- en del inställningar ignorerades"
+
+# src/menus.c:332
+#~ msgid "Next"
+#~ msgstr "Nästa"
+
+#~ msgid "No `Prev' for this node."
+#~ msgstr "Ingen \"Föreg\" för denna nod."
+
+#~ msgid "Kill node (%s): "
+#~ msgstr "Döda noden (%s): "
+
+#~ msgid "Cannot kill node `%s'"
+#~ msgstr "Kan inte döda noden \"%s\""
+
+#~ msgid "Cannot kill the last node"
+#~ msgstr "Kan inte döda den sista noden"
+
+#~ msgid "Kill this node"
+#~ msgstr "Döda denna nod"
+
+#, fuzzy
+#~ msgid "closing file %s"
+#~ msgstr "fel vid stängning av utdatafilen \"%s\""
+
+#~ msgid "Internally used by \\[universal-argument]"
+#~ msgstr "Används internt av \\[universal-argument]"
+
+#, fuzzy
+#~ msgid "Usage: makeinfo [OPTION]... TEXINFO-FILE...\n"
+#~ msgstr "Användning: %s [FLAGGA]... TEXINFO-FIL...\n"
+
+#, fuzzy
+#~ msgid "  or:  texi2any [OPTION]... TEXINFO-FILE...\n"
+#~ msgstr "Användning: %s [FLAGGA]... TEXINFO-FIL...\n"
+
+#~ msgid "send output to FILE"
+#~ msgstr "skicka utdata till FIL"
+
+#~ msgid "failure reopening %s"
+#~ msgstr "misslyckande vid återöppnande av %s"
+
+#~ msgid "No page number in %s"
+#~ msgstr "Inget sidnummer i %s"
+
+#~ msgid "entry %s follows an entry with a secondary name"
+#~ msgstr "posten %s följer på en post med ett sekundärt namn"
+
+#~ msgid "Done."
+#~ msgstr "Färdig."
+
+#, fuzzy
+#~ msgid "tex4ht.pm: could not open %s"
+#~ msgstr "Kan inte hitta \"%s\"."
+
+#, fuzzy
+#~ msgid "menu reference to nonexistent node `%s'"
+#~ msgstr "orefererad nod \"%s\""
+
+#, fuzzy
+#~ msgid "Can't create directories `%s': %s"
+#~ msgstr "Kan inte skapa katalogen \"%s\": %s"
+
+#, fuzzy
+#~ msgid "Can't read file %s: %s"
+#~ msgstr "Kan inte ta bort filen \"%s\": %s"
+
+#, fuzzy
+#~ msgid "%s:%d: warning: %s (possibly involving @%s)\n"
+#~ msgstr "%s:%d: varning: "
+
+#, fuzzy
+#~ msgid "%s:%d: warning: %s\n"
+#~ msgstr "%s:%d: varning: "
+
+#, fuzzy
+#~ msgid "warning: %s\n"
+#~ msgstr "%s:%d: varning: "
+
+#, fuzzy
+#~ msgid "chm.pm:%s: Cannot open for writing: %s\n"
+#~ msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#, fuzzy
+#~ msgid "tex4ht error opening %s: %s"
+#~ msgstr "fel vid skrivning till \"%s\""
+
+#, fuzzy
+#~ msgid "Node `%s' that is to be renamed exists"
+#~ msgstr "Indexet \"%s\" finns redan"
+
+#~ msgid "ferror on stdout\n"
+#~ msgstr "ferror-fel på standard ut\n"
+
+#~ msgid "fflush error on stdout\n"
+#~ msgstr "fflush-fel på standard ut\n"
+
+#~ msgid "arguments to @%s ignored"
+#~ msgstr "argument till @%s ignorerades"
+
+# This is broken
+#
+# The translator should not need to translate this - it is all present
+# in libc and can be used with nl_langinfo(), strftime() and friends.
+#
+#~ msgid "January"
+#~ msgstr "januari"
+
+#~ msgid "February"
+#~ msgstr "februari"
+
+#~ msgid "March"
+#~ msgstr "mars"
+
+#~ msgid "April"
+#~ msgstr "april"
+
+#~ msgid "May"
+#~ msgstr "maj"
+
+#~ msgid "June"
+#~ msgstr "juni"
+
+#~ msgid "July"
+#~ msgstr "juli"
+
+#~ msgid "August"
+#~ msgstr "augusti"
+
+#~ msgid "September"
+#~ msgstr "september"
+
+#~ msgid "October"
+#~ msgstr "oktober"
+
+#~ msgid "November"
+#~ msgstr "november"
+
+#~ msgid "December"
+#~ msgstr "december"
+
+#~ msgid "@sc argument all uppercase, thus no effect"
+#~ msgstr ""
+#~ "@sc-argumentet är enbart med stora bokstäver, därför har det ingen effekt"
+
+#~ msgid "`{' expected, but saw `%c'"
+#~ msgstr "\"{\" förväntades, men såg \"%c\""
+
+#~ msgid "end of file inside verb block"
+#~ msgstr "filslut inuti verb-block"
+
+#~ msgid "`}' expected, but saw `%c'"
+#~ msgstr "\"}\" förväntades, men såg \"%c\""
+
+#~ msgid "%c%s is obsolete"
+#~ msgstr "%c%s är föråldrat"
+
+#~ msgid "@sp requires a positive numeric argument, not `%s'"
+#~ msgstr "@sp kräver ett positivt numeriskt argument, inte \"%s\""
+
+#~ msgid "Bad argument to %c%s"
+#~ msgstr "Felaktigt argument till %c%s"
+
+#~ msgid "asis"
+#~ msgstr "oförändrad"
+
+#~ msgid "none"
+#~ msgstr "ingen"
+
+#~ msgid "insert"
+#~ msgstr "infoga"
+
+#~ msgid "Missing `}' in @def arg"
+#~ msgstr "\"}\" saknas i @def-argumentet"
+
+#~ msgid "Must be in `@%s' environment to use `@%s'"
+#~ msgstr "Måste vara i \"@%s\"-omgivning för att använda \"@%s\""
+
+#~ msgid "%s: getwd: %s, %s\n"
+#~ msgstr "%s: getwd: %s, %s\n"
+
+#~ msgid "`%s' omitted before output filename"
+#~ msgstr "\"%s\" utelämnades innan utdatafilnamnet"
+
+#~ msgid "`%s' omitted since writing to stdout"
+#~ msgstr "\"%s\" utelämnades efter skrivning till standard ut"
+
+#~ msgid "Output buffer not empty."
+#~ msgstr "Utdatabufferten är inte tom."
+
+#~ msgid "Requested float type `%s' not previously used"
+#~ msgstr "Begärda flyttalstypen \"%s\" har inte tidigare använts"
+
+#~ msgid "See "
+#~ msgstr "Se "
+
+#~ msgid "`%c%s' needs an argument `{...}', not just `%s'"
+#~ msgstr "\"%c%s\" behöver ett argument \"{...}\", inte bara \"%s\""
+
+#~ msgid "No closing brace for footnote `%s'"
+#~ msgstr "Ingen avslutande klammer för fotnoten \"%s\""
+
+#~ msgid "Footnote defined without parent node"
+#~ msgstr "Fotnoten definierad utan föräldernod"
+
+#~ msgid "Footnotes inside footnotes are not allowed"
+#~ msgstr "Fotnoter inuti fotnoter är inte tillåtet"
+
+#~ msgid "Footnotes"
+#~ msgstr "Fotnoter"
+
+# to pop?
+#~ msgid "[unexpected] no html tag to pop"
+#~ msgstr "[oväntat] ingen html-tagg att poppa"
+
+#~ msgid "[unexpected] invalid node name: `%s'"
+#~ msgstr "[oväntat] ogiltigt nodnamn: \"%s\""
+
+#~ msgid "Unknown index `%s'"
+#~ msgstr "Okänt index \"%s\""
+
+#~ msgid "Info cannot handle `:' in index entry `%s'"
+#~ msgstr "Info kan inte hantera \":\" i indexposten \"%s\""
+
+#~ msgid "Index `%s' already exists"
+#~ msgstr "Indexet \"%s\" finns redan"
+
+#~ msgid "Unknown index `%s' and/or `%s' in @synindex"
+#~ msgstr "Okänt index \"%s\" och/eller \"%s\" i @synindex"
+
+#~ msgid "(line )"
+#~ msgstr "(rad )"
+
+#~ msgid "(line %*d)"
+#~ msgstr "(rad %*d)"
+
+#~ msgid "(outside of any node)"
+#~ msgstr "(utanför alla noder)"
+
+#~ msgid "@item not allowed in argument to @itemize"
+#~ msgstr "@item är inte tillåtet i argument till @itemize"
+
+#~ msgid "Broken-Type in insertion_type_pname"
+#~ msgstr "Felaktig typ i insertion_type_pname"
+
+#~ msgid "Enumeration stack overflow"
+#~ msgstr "Uppräkningsstacken har flödat över"
+
+#~ msgid "lettering overflow, restarting at %c"
+#~ msgstr "bokstaveringen har flödat över, startar om vid %c"
+
+#~ msgid "%cfloat environments cannot be nested"
+#~ msgstr "%cfloat-omgivningar kan inte nästlas"
+
+#~ msgid "%s requires letter or digit"
+#~ msgstr "%s kräver bokstav eller siffra"
+
+#~ msgid "end of file inside verbatim block"
+#~ msgstr "filslut inuti bokstavligt block"
+
+#~ msgid "@%s not meaningful outside `@float' environment"
+#~ msgstr "@%s är inte meningsfullt utanför \"@float\"-omgivning"
+
+#~ msgid "@menu seen before first @node, creating `Top' node"
+#~ msgstr "@menu sågs innan första @node, skapar \"Top\"-nod"
+
+#~ msgid "@detailmenu seen before first node, creating `Top' node"
+#~ msgstr "@detailmenu sågs innan första noden, skapar \"Top\"-nod"
+
+#~ msgid "@%s not meaningful outside `@titlepage' environment"
+#~ msgstr "@%s är inte meningsfullt utanför \"@titlepage\"-omgivning"
+
+#~ msgid "`%c%s' needs something after it"
+#~ msgstr "\"%c%s\" kräver någonting efter sig"
+
+#~ msgid "Bad argument `%s' to `@%s', using `%s'"
+#~ msgstr "Felaktigt argument \"%s\" till \"@%s\", använder \"%s\""
+
+#~ msgid "@itemx not meaningful inside `%s' block"
+#~ msgstr "@itemx är inte meningsfullt inuti \"%s\"-block"
+
+#~ msgid "%c%s found outside of an insertion block"
+#~ msgstr "%c%s hittades utanför ett insättningsblock"
+
+#~ msgid "no default territory known for language `%s'"
+#~ msgstr "inget standardterritorium är känt för språket \"%s\""
+
+#~ msgid "%s is not a valid ISO 639 language code"
+#~ msgstr "%s är inte en giltig landskod enligt ISO 639"
+
+#~ msgid "sorry, encoding `%s' not supported"
+#~ msgstr "tyvärr, kodningen \"%s\" stöds inte"
+
+#~ msgid "%c%s expects `i' or `j' as argument, not `%c'"
+#~ msgstr "%c%s förväntar \"i\" eller \"j\" som argument, inte \"%c\""
+
+#~ msgid "%c%s expects a single character `i' or `j' as argument"
+#~ msgstr "%c%s förväntar ett ensamt tecken \"i\" eller \"j\" som argument"
+
+#~ msgid "\\ in macro expansion followed by `%s' instead of parameter name"
+#~ msgstr "\\ i makroutökning följdes av \"%s\" istället för parameternamn"
+
+#~ msgid "Macro `%s' called on line %d with too many args"
+#~ msgstr "Makrot \"%s\" anropades på rad %d med för många argument"
+
+#~ msgid "%cend macro not found"
+#~ msgstr "Makrot %cend hittades inte"
+
+#~ msgid "@allow-recursion is deprecated; please use @rmacro instead"
+#~ msgstr "@allow-recursion är föråldrat; använd @rmacro istället"
+
+#~ msgid "@quote-arg is deprecated; arguments are quoted by default"
+#~ msgstr "@quote-arg är föråldrat; argument är citerade som standard"
+
+#~ msgid "mismatched @end %s with @%s"
+#~ msgstr "@end %s och @%s passar inte"
+
+#~ msgid "Too many errors!  Gave up.\n"
+#~ msgstr "För många fel! Gav upp.\n"
+
+#~ msgid "%s:%d: warning: "
+#~ msgstr "%s:%d: varning: "
+
+#~ msgid ""
+#~ "General options:\n"
+#~ "      --error-limit=NUM       quit after NUM errors (default %d).\n"
+#~ "      --document-language=STR locale to use in translating Texinfo "
+#~ "keywords\n"
+#~ "                                for the output document (default C).\n"
+#~ "      --force                 preserve output even if errors.\n"
+#~ "      --help                  display this help and exit.\n"
+#~ "      --no-validate           suppress node cross-reference validation.\n"
+#~ "      --no-warn               suppress warnings (but not errors).\n"
+#~ "  -v, --verbose               explain what is being done.\n"
+#~ "      --version               display version information and exit.\n"
+#~ msgstr ""
+#~ "Allmänna flaggor:\n"
+#~ "      --error-limit=ANTAL     avsluta efter ANTAL fel (standardvärde "
+#~ "%d).\n"
+#~ "      --document-language=STR lokal att använda vid översättning av\n"
+#~ "                                Texinfo-nyckelord för utdatadokumentet\n"
+#~ "                                (standardvärde C).\n"
+#~ "      --force                 bevara utdata även om fel.\n"
+#~ "      --help                  visa denna hjälptext och avsluta.\n"
+#~ "      --no-validate           undertryck korsreferensvalidering av "
+#~ "noder.\n"
+#~ "      --no-warn               undertryck varningar (men inte fel).\n"
+#~ "  -v, --verbose               förklara vad som görs.\n"
+#~ "      --version               visa versionsinformation och avsluta.\n"
+
+#~ msgid ""
+#~ "Output format selection (default is to produce Info):\n"
+#~ "      --docbook               output Docbook XML rather than Info.\n"
+#~ "      --html                  output HTML rather than Info.\n"
+#~ "      --xml                   output Texinfo XML rather than Info.\n"
+#~ "      --plaintext             output plain text rather than Info.\n"
+#~ msgstr ""
+#~ "Val av utdataformat (standard är att producera Info):\n"
+#~ "      --docbook               generera Docbook XML istället för Info.\n"
+#~ "      --html                  generera HTML istället för Info.\n"
+#~ "      --xml                   generera Texinfo XML istället för Info.\n"
+#~ "      --plaintext             generera vanlig text istället för Info.\n"
+
+#~ msgid ""
+#~ "General output options:\n"
+#~ "  -E, --macro-expand=FILE     output macro-expanded source to FILE,\n"
+#~ "                                ignoring any @setfilename.\n"
+#~ "      --no-headers            suppress node separators, Node: lines, and "
+#~ "menus\n"
+#~ "                                from Info output (thus producing plain "
+#~ "text)\n"
+#~ "                                or from HTML (thus producing shorter "
+#~ "output);\n"
+#~ "                                also, write to standard output by "
+#~ "default.\n"
+#~ "      --no-split              suppress the splitting of Info or HTML "
+#~ "output,\n"
+#~ "                                generate only one output file.\n"
+#~ "      --number-sections       output chapter and sectioning numbers.\n"
+#~ "  -o, --output=FILE           output to FILE (or directory if split "
+#~ "HTML).\n"
+#~ msgstr ""
+#~ "Allmänna utdataflaggor:\n"
+#~ "  -E, --macro-expand=FIL      generera makroexpanderad källkod till FIL,\n"
+#~ "                              ignorera alla @setfilename.\n"
+#~ "      --no-headers            undertryck nodseparatorer, Node:-rader och\n"
+#~ "                                menyer från Info-utdata (och skapa\n"
+#~ "                                därigenom vanlig text) eller från HTML\n"
+#~ "                                (och producera därigenom kortare "
+#~ "utdata).\n"
+#~ "                                Skriv även till standard ut som "
+#~ "standard.\n"
+#~ "      --no-split              undertryck delning av Info eller HTML-"
+#~ "utdata,\n"
+#~ "                              generera endast en utdatafil.\n"
+#~ "      --number-sections       generera kapitel- och avsnittsnummer.\n"
+#~ "  -o, --output=FIL            generera till FIL (katalog om delad HTML).\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "Options for HTML:\n"
+#~ "      --css-include=FILE      include FILE in HTML <style> output;\n"
+#~ "                                read stdin if FILE is -.\n"
+#~ "      --css-ref=URL           generate reference to a CSS file.\n"
+#~ "      --internal-links=FILE   produce list of internal links in FILE.\n"
+#~ "      --transliterate-file-names\n"
+#~ "                              produce file names in ASCII "
+#~ "transliteration.\n"
+#~ msgstr ""
+#~ "Flaggor för HTML:\n"
+#~ "      --css-include=FIL       inkludera FIL i HTML <style>-utdata;\n"
+#~ "                                läs standard in om FIL är -.\n"
+#~ "      --css-ref=URL           generera referens till en CSS-fil.\n"
+#~ "      --transliterate-file-names\n"
+#~ "                              producera filnamn i ASCII-"
+#~ "translitteration.\n"
+
+#~ msgid ""
+#~ "Options for XML and Docbook:\n"
+#~ "      --output-indent=VAL     indent XML elements by VAL spaces (default "
+#~ "%d).\n"
+#~ "                                If VAL is 0, ignorable whitespace is "
+#~ "dropped.\n"
+#~ msgstr ""
+#~ "Flaggor för XML och Docbook:\n"
+#~ "      --output-indent=VÄRDE   dra in XML-element med VÄRDE blanksteg\n"
+#~ "                                (standard %d). Om VÄRDE är 0 kastas\n"
+#~ "                                mellanrum som kan ignoreras.\n"
+
+#~ msgid ""
+#~ "Input file options:\n"
+#~ "      --commands-in-node-names  allow @ commands in node names.\n"
+#~ "  -D VAR                        define the variable VAR, as with @set.\n"
+#~ "  -I DIR                        append DIR to the @include search path.\n"
+#~ "  -P DIR                        prepend DIR to the @include search path.\n"
+#~ "  -U VAR                        undefine the variable VAR, as with "
+#~ "@clear.\n"
+#~ msgstr ""
+#~ "Flaggor för indatafil:\n"
+#~ "      --commands-in-node-names   tillåt @-kommandon i nodnamn.\n"
+#~ "  -D VARIABEL                    definiera variabeln VARIABEL, som med "
+#~ "@set.\n"
+#~ "  -I KATALOG                     lägg till KATALOG till @include-"
+#~ "sökvägen.\n"
+#~ "  -P KATALOG                     lägg till KATALOG först i @include-"
+#~ "sökvägen.\n"
+#~ "  -U VARIABEL                    odefiniera variabeln VARIABEL, som med "
+#~ "@clear.\n"
+
+#~ msgid ""
+#~ "Conditional processing in input:\n"
+#~ "  --ifdocbook       process @ifdocbook and @docbook even if\n"
+#~ "                      not generating Docbook.\n"
+#~ "  --ifhtml          process @ifhtml and @html even if not generating "
+#~ "HTML.\n"
+#~ "  --ifinfo          process @ifinfo even if not generating Info.\n"
+#~ "  --ifplaintext     process @ifplaintext even if not generating plain "
+#~ "text.\n"
+#~ "  --iftex           process @iftex and @tex; implies --no-split.\n"
+#~ "  --ifxml           process @ifxml and @xml.\n"
+#~ "  --no-ifdocbook    do not process @ifdocbook and @docbook text.\n"
+#~ "  --no-ifhtml       do not process @ifhtml and @html text.\n"
+#~ "  --no-ifinfo       do not process @ifinfo text.\n"
+#~ "  --no-ifplaintext  do not process @ifplaintext text.\n"
+#~ "  --no-iftex        do not process @iftex and @tex text.\n"
+#~ "  --no-ifxml        do not process @ifxml and @xml text.\n"
+#~ "\n"
+#~ "  Also, for the --no-ifFORMAT options, do process @ifnotFORMAT text.\n"
+#~ msgstr ""
+#~ "Villkorlig behandling i indata:\n"
+#~ "  --ifdocbook       behandla @ifdocbook och @docbook även om inte\n"
+#~ "                      Docbook genereras.\n"
+#~ "  --ifhtml          behandla @ifhtml och @html även om inte HTML "
+#~ "genereras.\n"
+#~ "  --ifinfo          behandla @ifinfo-text även om inte Info genereras.\n"
+#~ "  --ifplaintext     behandla @ifplaintext även om inte vanlig text\n"
+#~ "                    genereras.\n"
+#~ "  --iftex           behandla @iftex och @tex-text; medför --no-split.\n"
+#~ "  --ifxml           behandla @ifxml och @xml.\n"
+#~ "  --no-ifdocbook    behandla inte @ifdocbook- och @docbook-text.\n"
+#~ "  --no-ifhtml       behandla inte @ifhtml- och @html-text.\n"
+#~ "  --no-ifinfo       behandla inte @ifinfo-text.\n"
+#~ "  --no-ifplaintext  behandla inte @ifplaintext-text.\n"
+#~ "  --no-iftex        behandla inte @iftex- och @tex-text.\n"
+#~ "  --no-ifxml        behandla inte @ifxml- och @xml-text.\n"
+#~ "\n"
+#~ "  Dessutom, för flaggorna --no-ifFORMAT, behandla @ifnotFORMAT-text.\n"
+
+#~ msgid "%s: %s arg must be numeric, not `%s'.\n"
+#~ msgstr "%s: argumentet %s måste vara numeriskt, inte \"%s\".\n"
+
+#~ msgid "%s: could not open macro expansion output `%s'"
+#~ msgstr "%s: kunde inte öppna makroexpansionsutdata \"%s\""
+
+#~ msgid "%s: ignoring second macro expansion output `%s'.\n"
+#~ msgstr "%s: ignorerar andra makroexpansionsutdata \"%s\".\n"
+
+#, fuzzy
+#~ msgid "%s: could not open internal links output `%s'"
+#~ msgstr "%s: kunde inte öppna makroexpansionsutdata \"%s\""
+
+#, fuzzy
+#~ msgid "%s: ignoring second internal links output `%s'.\n"
+#~ msgstr "%s: ignorerar andra makroexpansionsutdata \"%s\".\n"
+
+#~ msgid "Multiline command %c%s used improperly"
+#~ msgstr "Flerradskommandot %c%s används felaktigt"
+
+#~ msgid "Expected `%s'"
+#~ msgstr "\"%s\" förväntades"
+
+#~ msgid "No `%s' found in `%s'"
+#~ msgstr "Inget \"%s\" hittades i \"%s\""
+
+#~ msgid ""
+#~ "%s: Skipping macro expansion to stdout as Info output is going there.\n"
+#~ msgstr ""
+#~ "%s: Hoppar över makroexpansionen till standard ut eftersom Info-utdatan "
+#~ "går dit.\n"
+
+# printf (_("Making %s file `%s' from `%s'.\n"),
+#         no_headers ? "text" : (html ? "HTML" : "info"),
+#         output_filename, input_filename);
+#
+#~ msgid "Making %s file `%s' from `%s'.\n"
+#~ msgstr "Skapar %s-fil \"%s\" från \"%s\".\n"
+
+#~ msgid ""
+#~ "%s: Removing macro output file `%s' due to errors; use --force to "
+#~ "preserve.\n"
+#~ msgstr ""
+#~ "%s: Tar bort makroutdatafilen \"%s\" på grund av fel; använd --force för "
+#~ "att bevara.\n"
+
+#~ msgid ""
+#~ "%s: Removing output file `%s' due to errors; use --force to preserve.\n"
+#~ msgstr ""
+#~ "%s: Tar bort utdatafilen \"%s\" på grund av fel; använd --force för att "
+#~ "bevara.\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "%s: Removing internal links output file `%s' due to errors; use --force "
+#~ "to preserve.\n"
+#~ msgstr ""
+#~ "%s: Tar bort utdatafilen \"%s\" på grund av fel; använd --force för att "
+#~ "bevara.\n"
+
+#~ msgid "%c%s expected braces"
+#~ msgstr "%c%s förväntade klamrar"
+
+#~ msgid "NO_NAME!"
+#~ msgstr "INGET_NAMN!"
+
+#~ msgid "@image file `%s' (for HTML) not readable: %s"
+#~ msgstr "@image-filen \"%s\" (för HTML) är oläslig: %s"
+
+#~ msgid "No such file `%s'"
+#~ msgstr "Det finns ingen sådan fil \"%s\""
+
+#~ msgid "@image file `%s' (for text) unreadable: %s"
+#~ msgstr "@image-filen \"%s\" (för text) är oläslig: %s"
+
+#~ msgid "{No value for `%s'}"
+#~ msgstr "{Inget värde för \"%s\"}"
+
+#~ msgid "Reached eof before matching @end %s"
+#~ msgstr "Nådde filslut innan matchande @end %s"
+
+#~ msgid "`%.40s...' is too long for expansion; not expanded"
+#~ msgstr "\"%.40s...\" är för lång för expansion; inte expanderad"
+
+#~ msgid "Missing } in @multitable template"
+#~ msgstr "Ett } saknas i @multitable-mall"
+
+#~ msgid "ignoring stray text `%s' after @multitable"
+#~ msgstr "ignorerar lös text \"%s\" efter @multitable"
+
+#~ msgid "[unexpected] cannot select column #%d in multitable"
+#~ msgstr "[oväntat] kan inte välja kolumn %d i multitabell"
+
+#~ msgid "** Multicolumn output from last row:\n"
+#~ msgstr "** Utdata på flera kolumner från senaste raden:\n"
+
+#~ msgid "* column #%d: output = %s\n"
+#~ msgstr "* kolumn %d: utdata = %s\n"
+
+#~ msgid "Node `%s' previously defined at line %d"
+#~ msgstr "Noden \"%s\" är tidigare definierad på rad %d"
+
+#~ msgid "Formatting node %s...\n"
+#~ msgstr "Formaterar noden %s...\n"
+
+#~ msgid "Node `%s' requires a sectioning command (e.g., %c%s)"
+#~ msgstr "Noden \"%s\" kräver ett kommando för avsnittsindelning (t.ex. %c%s)"
+
+#~ msgid "Anchor `%s' and node `%s' map to the same file name"
+#~ msgstr "Ankaret \"%s\" och noden \"%s\" mappas till samma filnamn"
+
+#~ msgid "This @anchor command ignored; references to it will not work"
+#~ msgstr ""
+#~ "Detta @anchor-kommando ignoreras; referenser till det kommer inte att "
+#~ "fungera"
+
+#~ msgid "Rename this anchor or use the `--no-split' option"
+#~ msgstr "Byt namn på detta ankare eller använd flaggan \"--no-split\""
+
+#~ msgid "Unexpected string at end of split-HTML file `%s'"
+#~ msgstr "Oväntad sträng vid slutet på den delade HTML-filen \"%s\""
+
+#~ msgid "Anchors `%s' and `%s' map to the same file name"
+#~ msgstr "Ankarna \"%s\" och \"%s\" mappas till samma filnamn"
+
+#~ msgid "@anchor command ignored; references to it will not work"
+#~ msgstr ""
+#~ "@anchor-kommandot ignoreras; referenser till det kommer inte att fungera"
+
+#~ msgid ""
+#~ "%s reference to nonexistent node `%s' (perhaps incorrect sectioning?)"
+#~ msgstr ""
+#~ "%s-referens till ickeexisterande noden \"%s\" (kanske felaktig "
+#~ "avsnittsindelning?)"
+
+#~ msgid ""
+#~ "Next field of node `%s' not pointed to (perhaps incorrect sectioning?)"
+#~ msgstr ""
+#~ "Nästa fält i noden \"%s\" pekas inte till (kanske felaktig "
+#~ "avsnittsindelning?)"
+
+#~ msgid "This node (%s) has the bad Prev"
+#~ msgstr "Denna nod (%s) har den felaktiga föregående-noden"
+
+#~ msgid "Prev field of node `%s' not pointed to"
+#~ msgstr "Föregående-fältet i noden \"%s\" pekas inte till"
+
+#~ msgid "This node (%s) has the bad Next"
+#~ msgstr "Denna nod (%s) har den felaktiga nästa-noden"
+
+#~ msgid "`%s' has no Up field (perhaps incorrect sectioning?)"
+#~ msgstr "\"%s\" har inget upp-fält (kanske felaktig avsnittsindelning?)"
+
+#~ msgid "Can't remove file `%s': %s"
+#~ msgstr "Kan inte ta bort filen \"%s\": %s"
+
+#~ msgid "Internal error (search_sectioning) `%s'!"
+#~ msgstr "Internt fel (search_sectioning) \"%s\"!"
+
+#~ msgid "Internal error (search_sectioning) \"%s\"!"
+#~ msgstr "Internt fel (search_sectioning) \"%s\"!"
+
+#~ msgid "%c%s is obsolete; use %c%s instead"
+#~ msgstr "%c%s är föråldrat; använd %c%s istället"
+
+#~ msgid "Node with %ctop as a section already exists"
+#~ msgstr "En nod med %ctop som ett avsnitt finns redan"
+
+#~ msgid "Here is the %ctop node"
+#~ msgstr "Här är %ctop-noden"
+
+#~ msgid "%ctop used before %cnode, defaulting to %s"
+#~ msgstr "%ctop användes innan %cnode, använder %s som standard"
+
+#~ msgid ""
+#~ "@headitem as the last item of @multitable produces invalid Docbook "
+#~ "documents"
+#~ msgstr ""
+#~ "@headitem som det sista objektet i @multitable genererar ogiltiga Docbook-"
+#~ "dokument"
+
+#~ msgid "of"
+#~ msgstr "av"
+
+#~ msgid "on"
+#~ msgstr "på"
+
+#~ msgid "First argument to cross-reference may not be empty"
+#~ msgstr "Första argumentet till korsreferens kan inte vara tomt"
+
+#~ msgid "Empty file name for HTML cross reference in `%s'"
+#~ msgstr "Tomt filnamn för HTML-korsreferens i \"%s\""
+
+#~ msgid "End of file reached while looking for `.' or `,'"
+#~ msgstr "Slutet på filen nåddes då \".\" eller \",\" eftersöktes"
+
+#~ msgid "`.' or `,' must follow @%s, not `%c'"
+#~ msgstr "\".\" eller \",\" måste följa på @%s, inte \"%c\""
+
+#~ msgid "for cross-references in parentheses, use @pxref"
+#~ msgstr "använd @pxref för korsreferenser inuti parenteser"
+
+#~ msgid "First argument to @inforef may not be empty"
+#~ msgstr "Första argumentet till @inforef kan inte vara tomt"
+
+#, fuzzy
+#~ msgid "Encoding %s certainly poorly supported"
+#~ msgstr "tyvärr, kodningen \"%s\" stöds inte"
+
+#, fuzzy
+#~ msgid ""
+#~ "General options:\n"
+#~ "      --error-limit=NUM       quit after NUM errors (default %d).\n"
+#~ "      --document-language=STR locale to use in translating Texinfo "
+#~ "keywords\n"
+#~ "                                for the output document (default C).\n"
+#~ "      --force                 preserve output even if errors.\n"
+#~ "      --help                  display this help and exit.\n"
+#~ "      --no-validate           suppress node cross-reference validation.\n"
+#~ "      --no-warn               suppress warnings (but not errors).\n"
+#~ "      --conf-dir=DIR          search also for initialization files in "
+#~ "DIR.\n"
+#~ "      --init-file=FILE        load FILE to modify the default behaviour.\n"
+#~ "      --set-init-variable VAR=VAL  set configuration variable VAR to "
+#~ "VAL.\n"
+#~ "  -v, --verbose               explain what is being done.\n"
+#~ "      --version               display version information and exit.\n"
+#~ msgstr ""
+#~ "Allmänna flaggor:\n"
+#~ "      --error-limit=ANTAL     avsluta efter ANTAL fel (standardvärde "
+#~ "%d).\n"
+#~ "      --document-language=STR lokal att använda vid översättning av\n"
+#~ "                                Texinfo-nyckelord för utdatadokumentet\n"
+#~ "                                (standardvärde C).\n"
+#~ "      --force                 bevara utdata även om fel.\n"
+#~ "      --help                  visa denna hjälptext och avsluta.\n"
+#~ "      --no-validate           undertryck korsreferensvalidering av "
+#~ "noder.\n"
+#~ "      --no-warn               undertryck varningar (men inte fel).\n"
+#~ "  -v, --verbose               förklara vad som görs.\n"
+#~ "      --version               visa versionsinformation och avsluta.\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "General output options:\n"
+#~ "  -E, --macro-expand=FILE     output macro-expanded source to FILE,\n"
+#~ "                                ignoring any @setfilename.\n"
+#~ "      --no-headers            suppress node separators, Node: lines, and "
+#~ "menus\n"
+#~ "                                from Info output (thus producing plain "
+#~ "text)\n"
+#~ "                                or from HTML (thus producing shorter "
+#~ "output);\n"
+#~ "                                also, write to standard output by default "
+#~ "if\n"
+#~ "                                producing Info.\n"
+#~ "      --split=SPLIT           split at SPLIT, where SPLIT may be "
+#~ "chapter, \n"
+#~ "                                section or node if output supports "
+#~ "splitting.\n"
+#~ "      --no-split              suppress the splitting of Info or HTML "
+#~ "output,\n"
+#~ "                                generate only one output file.\n"
+#~ "      --number-sections       output chapter and sectioning numbers.\n"
+#~ "  -o, --output=FILE           output to FILE (or directory if split).\n"
+#~ "                                If not split and FILE is a directory, put "
+#~ "the\n"
+#~ "                                resulting files in FILE.\n"
+#~ msgstr ""
+#~ "Allmänna utdataflaggor:\n"
+#~ "  -E, --macro-expand=FIL      generera makroexpanderad källkod till FIL,\n"
+#~ "                              ignorera alla @setfilename.\n"
+#~ "      --no-headers            undertryck nodseparatorer, Node:-rader och\n"
+#~ "                                menyer från Info-utdata (och skapa\n"
+#~ "                                därigenom vanlig text) eller från HTML\n"
+#~ "                                (och producera därigenom kortare "
+#~ "utdata).\n"
+#~ "                                Skriv även till standard ut som "
+#~ "standard.\n"
+#~ "      --no-split              undertryck delning av Info eller HTML-"
+#~ "utdata,\n"
+#~ "                              generera endast en utdatafil.\n"
+#~ "      --number-sections       generera kapitel- och avsnittsnummer.\n"
+#~ "  -o, --output=FIL            generera till FIL (katalog om delad HTML).\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "Options for HTML:\n"
+#~ "      --css-include=FILE      include FILE in HTML <style> output;\n"
+#~ "                                read stdin if FILE is -.\n"
+#~ "      --css-ref=URL           generate reference to a CSS file.\n"
+#~ "      --internal-links=FILE   produce list of internal links in FILE.\n"
+#~ "      --transliterate-file-names\n"
+#~ "                              produce file names in ASCII "
+#~ "transliteration.\n"
+#~ "      --node-files            produce redirection files for nodes and \n"
+#~ "                                anchors. Default is set only if split.\n"
+#~ msgstr ""
+#~ "Flaggor för HTML:\n"
+#~ "      --css-include=FIL       inkludera FIL i HTML <style>-utdata;\n"
+#~ "                                läs standard in om FIL är -.\n"
+#~ "      --css-ref=URL           generera referens till en CSS-fil.\n"
+#~ "      --transliterate-file-names\n"
+#~ "                              producera filnamn i ASCII-"
+#~ "translitteration.\n"
+
+#, fuzzy
+#~ msgid "Cannot split output %s"
+#~ msgstr "kan inte skapa utdatafilen \"%s\""
+
+#, fuzzy
+#~ msgid "%s not writable"
+#~ msgstr "%s: tom fil"
+
+#, fuzzy
+#~ msgid " end of file"
+#~ msgstr "Sök fil: "
+
+#, fuzzy
+#~ msgid "Node `%s' previously defined %s"
+#~ msgstr "Noden \"%s\" är tidigare definierad på rad %d"
+
+#, fuzzy
+#~ msgid "@%s requires an argument"
+#~ msgstr "%c%s kräver ett namn"
+
+#, fuzzy
+#~ msgid "Node `%s' that is to be renamed exists "
+#~ msgstr "Indexet \"%s\" finns redan"
+
+#, fuzzy
+#~ msgid "%s: Removing output files due to errors; use --force to preserve.\n"
+#~ msgstr ""
+#~ "%s: Tar bort utdatafilen \"%s\" på grund av fel; använd --force för att "
+#~ "bevara.\n"
+
+#, fuzzy
+#~ msgid "(in %s l. %d)"
+#~ msgstr "(rad %d)"
+
+#, fuzzy
+#~ msgid "(l. %d)"
+#~ msgstr "(rad %d)"
+
+#, fuzzy
+#~ msgid "Missing `}' on @%s line"
+#~ msgstr "\"}\" saknas i @def-argumentet"
+
+#, fuzzy
+#~ msgid "Anchor `%s' ignored in %s expanded more than once"
+#~ msgstr "Ankaret \"%s\" och noden \"%s\" mappas till samma filnamn"
+
+#, fuzzy
+#~ msgid "@%s (argument nr %d)"
+#~ msgstr "Felaktigt argument till @%s"
+
+#, fuzzy
+#~ msgid "First argument to @%s may not be empty"
+#~ msgstr "Första argumentet till @inforef kan inte vara tomt"
+
+#, fuzzy
+#~ msgid "@image file name"
+#~ msgstr "@image-filen \"%s\" är oläslig: %s"
+
+#, fuzzy
+#~ msgid "\\ in macro expansion followed `%s' instead of parameter name or \\"
+#~ msgstr "\\ i makroutökning följdes av \"%s\" istället för parameternamn"
+
+#, fuzzy
+#~ msgid "No index prefix found for @%s"
+#~ msgstr "inga indexposter för \"%s\" hittades\n"
+
+#, fuzzy
+#~ msgid "@%s already set"
+#~ msgstr "Indexet \"%s\" finns redan"
+
+#, fuzzy
+#~ msgid "Anchor `%s' previously defined %s"
+#~ msgstr "makrot \"%s\" är redan definierat"
+
+#, fuzzy
+#~ msgid "No closing brace for specially handled command %s"
+#~ msgstr "Ingen avslutande klammer för fotnoten \"%s\""
+
+#, fuzzy
+#~ msgid "Float label `%s' previously defined %s"
+#~ msgstr "makrot \"%s\" är redan definierat"
+
+#, fuzzy
+#~ msgid "ignoring @tab in empty multitable"
+#~ msgstr "ignorerar @tab utanför multitabell"
+
+#, fuzzy
+#~ msgid "Unknown command with braces `@%s'"
+#~ msgstr "Okänt kommando \"%s\""
+
+#, fuzzy
+#~ msgid "Unexpected command `%s' here"
+#~ msgstr "Odefinierat kommando: %s"
+
+#, fuzzy
+#~ msgid "%s should not appear in %s"
+#~ msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#, fuzzy
+#~ msgid "%s: could not open --css-file %s: %s\n"
+#~ msgstr "%s: kunde inte öppna --css-fil: %s"
+
+#, fuzzy
+#~ msgid "`.' or `,' must follow @xref."
+#~ msgstr "\".\" eller \",\" måste följa på @%s, inte \"%c\""
+
+#~ msgid "One completion:\n"
+#~ msgstr "En komplettering:\n"
+
+#~ msgid "more "
+#~ msgstr "fler "
+
+#, fuzzy
+#~ msgid "\\@image file `%s' unreadable: %s"
+#~ msgstr "@image-filen \"%s\" är oläslig: %s"
+
+#, fuzzy
+#~ msgid "Cannot find \\@image file `%s.txt'"
+#~ msgstr "Kan inte hitta noden \"%s\"."
+
+# Är det kombinationen "@strong{Note:.." eller bara @strong{} rent allmänt som
+# orsakar problem?
+#, fuzzy
+#~ msgid ""
+#~ "\\@strong{Note...} produces a spurious cross-reference in Info; reword to "
+#~ "avoid that"
+#~ msgstr ""
+#~ "@strong{Obs...} skapar en falsk korsreferens i Info; formulera om för att "
+#~ "undvika detta"
+
+#, fuzzy
+#~ msgid "`.' or `,' must follow \\@xref, not %s"
+#~ msgstr "\".\" eller \",\" måste följa på @%s, inte \"%c\""
+
+#~ msgid "%s: warning: "
+#~ msgstr "%s: varning: "
+
+#, fuzzy
+#~ msgid "@top already exists"
+#~ msgstr "Indexet \"%s\" finns redan"
+
+#~ msgid "%s: illegal option -- %c\n"
+#~ msgstr "%s: otillåten flagga -- %c\n"
+
+#~ msgid "Function"
+#~ msgstr "Funktion"
+
+#~ msgid "Macro"
+#~ msgstr "Makro"
+
+#~ msgid "Special Form"
+#~ msgstr "Specialform"
+
+#~ msgid "Variable"
+#~ msgstr "Variabel"
+
+#~ msgid "User Option"
+#~ msgstr "Användarflagga"
+
+#~ msgid "Instance Variable"
+#~ msgstr "Instansvariabel"
+
+#~ msgid "Method"
+#~ msgstr "Metod"
+
+#~ msgid "Untitled"
+#~ msgstr "Namnlös"
+
+# src/menus.c:332
+#~ msgid "Next:"
+#~ msgstr "Nästa:"
+
+#~ msgid "Previous:"
+#~ msgstr "Föregående:"
+
+#~ msgid "Up:"
+#~ msgstr "Upp:"
+
+#~ msgid "Menu"
+#~ msgstr "Meny"
+
+#~ msgid "Cross"
+#~ msgstr "Kors"
+
+#~ msgid "Prev"
+#~ msgstr "Föreg"
+
+#~ msgid "Up"
+#~ msgstr "Upp"
+
+#~ msgid "see "
+#~ msgstr "se "
+
+#~ msgid "See section ``%s'' in "
+#~ msgstr "Se avsnittet \"%s\" i "
+
+#~ msgid "Table of Contents"
+#~ msgstr "Innehållsförteckning"
+
+#, fuzzy
+#~ msgid "Short Table of Contents"
+#~ msgstr "Innehållsförteckning"
+
+#, fuzzy
+#~ msgid "@{No value for `{value}'@}"
+#~ msgstr "{Inget värde för \"%s\"}"
+
+#~ msgid "Appendix %c"
+#~ msgstr "Appendix %c"
+
+#~ msgid "Cancel the current operation"
+#~ msgstr "Avbryt aktuell åtgärd"
+
+#~ msgid "Search backward"
+#~ msgstr "Sök baklänges"
+
+#~ msgid ""
+#~ "Usage: %s [OPTION]... [MENU-ITEM...]\n"
+#~ "\n"
+#~ "Read documentation in Info format.\n"
+#~ "\n"
+#~ "Options:\n"
+#~ "      --apropos=STRING         look up STRING in all indices of all "
+#~ "manuals.\n"
+#~ "  -d, --directory=DIR          add DIR to INFOPATH.\n"
+#~ "      --dribble=FILENAME       remember user keystrokes in FILENAME.\n"
+#~ "  -f, --file=FILENAME          specify Info file to visit.\n"
+#~ "  -h, --help                   display this help and exit.\n"
+#~ "      --index-search=STRING    go to node pointed by index entry STRING.\n"
+#~ "  -n, --node=NODENAME          specify nodes in first visited Info file.\n"
+#~ "  -o, --output=FILENAME        output selected nodes to FILENAME.\n"
+#~ "  -R, --raw-escapes            output \"raw\" ANSI escapes (default).\n"
+#~ "      --no-raw-escapes         output escapes as literal text.\n"
+#~ "      --restore=FILENAME       read initial keystrokes from FILENAME.\n"
+#~ "  -O, --show-options, --usage  go to command-line options node.\n"
+#~ "%s      --subnodes               recursively output menu items.\n"
+#~ "  -w, --where, --location      print physical location of Info file.\n"
+#~ "      --vi-keys                use vi-like and less-like key bindings.\n"
+#~ "      --version                display version information and exit.\n"
+#~ "\n"
+#~ "The first non-option argument, if present, is the menu entry to start "
+#~ "from;\n"
+#~ "it is searched for in all `dir' files along INFOPATH.\n"
+#~ "If it is not present, info merges all `dir' files and shows the result.\n"
+#~ "Any remaining arguments are treated as the names of menu\n"
+#~ "items relative to the initial node visited.\n"
+#~ "\n"
+#~ "Examples:\n"
+#~ "  info                       show top-level dir menu\n"
+#~ "  info emacs                 start at emacs node from top-level dir\n"
+#~ "  info emacs buffers         start at buffers node within emacs manual\n"
+#~ "  info --show-options emacs  start at node with emacs' command line "
+#~ "options\n"
+#~ "  info --subnodes -o out.txt emacs  dump entire manual to out.txt\n"
+#~ "  info -f ./foo.info         show file ./foo.info, not searching dir\n"
+#~ msgstr ""
+#~ "Användning: %s [FLAGGA]... [MENYPOST...]\n"
+#~ "\n"
+#~ "Läs dokumentation i Info-format.\n"
+#~ "\n"
+#~ "Flaggor:\n"
+#~ "      --apropos=STRÄNG         slå upp STRÄNG i alla index i alla "
+#~ "manualer.\n"
+#~ "  -d, --directory=KATALOG      lägg till KATALOG till INFOPATH.\n"
+#~ "      --dribble=FILNAMN        kom ihåg användarens tangentnedtryckningar "
+#~ "i\n"
+#~ "                               FILNAMN.\n"
+#~ "  -f, --file=FILNAMN           ange den Info-fil som ska besökas.\n"
+#~ "  -h, --help                   visa denna hjälptext och avsluta.\n"
+#~ "      --index-search=STRÄNG    gå till noden som utpekas av indexpost\n"
+#~ "                               STRÄNG.\n"
+#~ "  -n, --node=NODNAMN           ange noder i den först besökta Info-"
+#~ "filen.\n"
+#~ "  -o, --output=FILNAMN         skriv ut valda noder till FILNAMN.\n"
+#~ "  -R, --raw-escapes            skriv ut \"råa\" ANSI-styrkoder "
+#~ "(standard).\n"
+#~ "      --no-raw-escapes         skriv ut styrkoder som text.\n"
+#~ "      --restore=FILNAMN        läs initiala tangentnedtryckningar från\n"
+#~ "                               FILNAMN.\n"
+#~ "  -O, --show-options, --usage  gå till noden för kommandoradsflaggor.\n"
+#~ "%s      --subnodes               skriv ut menyposter rekursivt.\n"
+#~ "  -w, --where, --location      skriv ut den fysiska platsen för Info-"
+#~ "filen.\n"
+#~ "      --vi-keys                använd vi- och less-liknande\n"
+#~ "                               snabbtangenter.\n"
+#~ "      --version                visa versionsinformation och avsluta.\n"
+#~ "\n"
+#~ "Det första argumentet som inte är en flagga är, om det finns, menyposten\n"
+#~ "att börja från. Det söks efter i alla \"dir\"-filer i INFOPATH.\n"
+#~ "Om den inte finns slår info samman alla \"dir\"-filer och visar "
+#~ "resultatet.\n"
+#~ "Alla återstående argument betraktas som namnen på menyposter relativa "
+#~ "till\n"
+#~ "den först besökta noden.\n"
+#~ "\n"
+#~ "Exampel:\n"
+#~ "  info                       visa översta katalogmenyn\n"
+#~ "  info emacs                 börja på emacs-noden från översta katalogen\n"
+#~ "  info emacs buffers         börja på buffertnoden inom emacs-manualen\n"
+#~ "  info --show-options emacs  börja på noden med emacs "
+#~ "kommandoradsflaggor\n"
+#~ "  info --subnodes -o ut.txt emacs  dumpa hela manualen till ut.txt\n"
+#~ "  info -f ./foo.info         visa filen ./foo.info, sök inte i katalogen\n"
+
+#~ msgid "\\%-10[move-to-prev-xref]  Skip to previous hypertext link [*].\n"
+#~ msgstr ""
+#~ "\\%-10[move-to-prev-xref]  Hoppa till föregående hypertextlänk [*].\n"
+
+#~ msgid ""
+#~ "\\%-10[dir-node]  Move to the `directory' node.  Equivalent to `\\[goto-"
+#~ "node] (DIR)'.\n"
+#~ msgstr ""
+#~ "\\%-10[dir-node]  Gå till \"directory\"-noden. Likvärdigt med \"g "
+#~ "(DIR)\".\n"
+
+#~ msgid ""
+#~ "\\%-10[top-node]  Move to the Top node.  Equivalent to `\\[goto-node] "
+#~ "Top'.\n"
+#~ msgstr ""
+#~ "\\%-10[top-node]  Gå till den översta noden. Likvärdigt med \"g Top\".\n"
+
+#~ msgid ""
+#~ "[*]    Command acts within this node or the entire document, depending "
+#~ "on\n"
+#~ "the value of cursor-movement-scrolls variable\n"
+#~ msgstr ""
+#~ "[*]    Kommandot agerar inuti denna nod eller hela dokumentet, beroende "
+#~ "på\n"
+#~ "värdet av variabeln cursor-movement-scrolls\n"
+
+#~ msgid "\\%-10[prev-line]  Scroll backward 1 line.\n"
+#~ msgstr "\\%-10[prev-line]  Rulla en rad bakåt.\n"
+
+#~ msgid ""
+#~ "\\%-10[search]  Search forward for a specified string\n"
+#~ "              and select the node in which the next occurrence is found.\n"
+#~ msgstr ""
+#~ "\\%-10[search]  Sök framåt efter en angiven sträng\n"
+#~ "              och välj den nod i vilken nästa förekomst hittas.\n"
+
+#~ msgid ""
+#~ "\\%-10[search-backward]  Search backward for a specified string\n"
+#~ "              and select the node in which the previous occurrence is "
+#~ "found.\n"
+#~ msgstr ""
+#~ "\\%-10[search-backward]  Sök bakåt efter en angiven sträng\n"
+#~ "              och välj den nod i vilken nästa förekomst hittas.\n"
+
+#~ msgid ""
+#~ "              Picking a menu item causes another node to be selected.\n"
+#~ msgstr "              Att välja en menypost gör att en annan nod väljs.\n"
+
+#~ msgid ""
+#~ "              You may include a filename as well, as in "
+#~ "(FILENAME)NODENAME.\n"
+#~ msgstr ""
+#~ "              Du kan även inkludera ett filnamn, som exempelvis\n"
+#~ "              (FILNAMN)NODNAMN.\n"
+
+# This is broken
+#
+#  N_("  %-10s  Search backward in this Info file for a specified string,\n"),
+#  N_("              and select the node in which the next occurrence is found.\n"),
+#
+# Please don't split a single sentence like this in multiple messages,
+# use one single message instead. Sentences have to be kept together when
+# translating, you can't split a sentence into parts and mark them for
+# separate translation and expect it to work with word ordering,
+# grammar, and everything else in other languages. Splitting sentences
+# just makes it harder for translators when having not just to translate,
+# but also puzzle the pieces of the sentence together again so that it
+# makes some sense, in order to be able to translate in the first place.
+#
+#~ msgid "  %-10s  Search backward for a specified string\n"
+#~ msgstr "  %-10s  Sök bakåt efter en angiven sträng,\n"
+
+#~ msgid ""
+#~ "              and select the node in which the next occurrence is found.\n"
+#~ msgstr "              och välj den nod i vilken nästa förekomst hittas.\n"
+
+#~ msgid "--- Use `\\[history-node]' or `\\[kill-node]' to exit ---\n"
+#~ msgstr ""
+#~ "--- Använd \"\\[history-node]\" eller \"\\[kill-node]\" för att avsluta "
+#~ "---\n"
+
+#~ msgid "Following Next node..."
+#~ msgstr "Följer nästa-nod..."
+
+#~ msgid "Selecting first menu item..."
+#~ msgstr "Väljer första menyposten..."
+
+#~ msgid "Selecting Next node..."
+#~ msgstr "Väljer nästa nod..."
+
+#~ msgid "Moving Up %d time(s), then Next."
+#~ msgstr "Går upp %d gång(er), sedan Nästa."
+
+#~ msgid "Moving Prev in this window."
+#~ msgstr "Gå till föregående i detta fönster."
+
+#~ msgid "Moving Up in this window."
+#~ msgstr "Går upp i detta fönster."
+
+#~ msgid "Moving to `Prev's last menu item."
+#~ msgstr "Gå till \"Föreg\"s senaste menypost."
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid ""
+#~ "Usage: %s [OPTION]... [INFO-FILE [DIR-FILE]]\n"
+#~ "\n"
+#~ "Add or remove entries in INFO-FILE from the Info directory DIR-FILE.\n"
+#~ "\n"
+#~ "Options:\n"
+#~ " --debug           report what is being done.\n"
+#~ " --delete          delete existing entries for INFO-FILE from DIR-FILE;\n"
+#~ "                     don't insert any new entries.\n"
+#~ " --dir-file=NAME   specify file name of Info directory file.\n"
+#~ "                     This is equivalent to using the DIR-FILE argument.\n"
+#~ " --entry=TEXT      insert TEXT as an Info directory entry.\n"
+#~ "                     TEXT should have the form of an Info menu item line\n"
+#~ "                     plus zero or more extra lines starting with "
+#~ "whitespace.\n"
+#~ "                     If you specify more than one entry, they are all "
+#~ "added.\n"
+#~ "                     If you don't specify any entries, they are "
+#~ "determined\n"
+#~ "                     from information in the Info file itself.\n"
+#~ " --help            display this help and exit.\n"
+#~ " --info-file=FILE  specify Info file to install in the directory.\n"
+#~ "                     This is equivalent to using the INFO-FILE argument.\n"
+#~ " --info-dir=DIR    same as --dir-file=DIR/dir.\n"
+#~ " --item=TEXT       same as --entry TEXT.\n"
+#~ "                     An Info directory entry is actually a menu item.\n"
+#~ " --quiet           suppress warnings.\n"
+#~ " --remove          same as --delete.\n"
+#~ " --remove-exactly  only remove if the info file name matches exactly;\n"
+#~ "                     .info and/or .gz suffixes are not ignored.\n"
+#~ " --section=SEC     put this file's entries in section SEC of the "
+#~ "directory.\n"
+#~ "                     If you specify more than one section, all the "
+#~ "entries\n"
+#~ "                     are added in each of the sections.\n"
+#~ "                     If you don't specify any sections, they are "
+#~ "determined\n"
+#~ "                     from information in the Info file itself.\n"
+#~ " --section-regex=R if an entry is added to a section that does not "
+#~ "exist,\n"
+#~ "                     look for a section matching basic regular expression "
+#~ "R\n"
+#~ "                     (and ignoring case) before starting a new section.\n"
+#~ " --test            suppress updating of DIR-FILE.\n"
+#~ " --silent          suppress warnings.\n"
+#~ " --version         display version information and exit.\n"
+#~ msgstr ""
+#~ "Användning: %s [FLAGGA]... [INFO-FIL [KATALOGFIL]]\n"
+#~ "\n"
+#~ "Installera eller ta bort katalogposter från INFO-FIL i Info-katalogfilen\n"
+#~ "KATALOGFIL.\n"
+#~ "\n"
+#~ "Flaggor:\n"
+#~ " --debug           rapportera vad som görs.\n"
+#~ " --delete          ta bort existerande poster för INFO-FIL från "
+#~ "KATALOGFIL;\n"
+#~ "                     infoga inte några nya poster.\n"
+#~ " --dir-file=NAMN   ange filnamnet på Info-katalogfilen.\n"
+#~ "                     Detta motsvarar användning av argumentet "
+#~ "KATALOGFIL.\n"
+#~ " --entry=TEXT      infoga TEXT som en Info-katalogpost.\n"
+#~ "                     TEXT bör vara i formen av en Info-menypostsrad plus\n"
+#~ "                     noll eller fler extra rader som börjar med tomrum.\n"
+#~ "                     Om du anger mer än en post kommer alla att läggas\n"
+#~ "                     till. Om du inte anger några poster kommer de att\n"
+#~ "                     avgöras från information i själva Info-filen.\n"
+#~ " --help            visa denna hjälptext och avsluta.\n"
+#~ " --info-file=FIL   ange Info-fil att installera i katalogen.\n"
+#~ "                     Detta motsvarar användning av argumentet INFO-FIL.\n"
+#~ " --info-dir=KAT    samma som --dir-file=KAT/kat.\n"
+#~ " --item=TEXT       samma som --entry TEXT.\n"
+#~ "                     En Info-katalogpost är egentligen en menypost.\n"
+#~ " --quiet           undertryck varningar.\n"
+#~ " --remove          samma som --delete.\n"
+#~ " --remove-exactly  ta endast bort om Info-filnamnet matchar exakt.\n"
+#~ "                     .info- och/eller .gz-filändelser ignoreras inte.\n"
+#~ " --section=AVSNITT placera denna fils poster i avsnittet AVSNITT i\n"
+#~ "                     katalogen. Om du anger mer än ett avsnitt kommer "
+#~ "alla\n"
+#~ "                     poster att läggas till i varje avsnitt. Om du inte\n"
+#~ "                     anger några avsnitt kommer de att bestämmas från\n"
+#~ "                     information i själva Info-filen.\n"
+#~ " --section-regex=R om en post läggs till i ett avsnitt som saknas,\n"
+#~ "                     leta efter ett avsnitt som matchar det "
+#~ "grundläggande\n"
+#~ "                     reguljära uttrycket R (och ignorera skiftläge) "
+#~ "innan\n"
+#~ "                     ett nytt avsnitt påbörjas.\n"
+#~ " --test            undertryck varning av KATALOGFIL.\n"
+#~ " --silent          undertryck varningar.\n"
+#~ " --version         visa versionsinformation och avsluta.\n"
+
+#~ msgid "menu item `%s' already exists, for file `%s'"
+#~ msgstr "menyposten \"%s\" finns redan, för filen \"%s\""
+
+#~ msgid "virtual memory exhausted"
+#~ msgstr "virtuellt minne slut"
+
+#~ msgid "Same as scroll-behavior"
+#~ msgstr "Samma som \"scroll-behavior\""
+
+#~ msgid "off"
+#~ msgstr "av"
+
+#~ msgid ""
+#~ "There is NO warranty.  You may redistribute this software\n"
+#~ "under the terms of the GNU General Public License.\n"
+#~ "For more information about these matters, see the files named COPYING.\n"
+#~ msgstr ""
+#~ "Det finns INGEN garanti. Du kan vidaredistribuera denna programvara\n"
+#~ "under villkoren i GNU General Public License.\n"
+#~ "Se filen COPYING för mer information om detta.\n"
+
+#~ msgid "\\%-10[menu-digit]  Pick first ... ninth item in node's menu.\n"
+#~ msgstr ""
+#~ "\\%-10[menu-digit]  Välj första ... nionde objektet i nodens meny.\n"
+
+# This is broken
+#
+#  N_("  %-10s  Search for a specified string in the index entries of this Info\n"),
+#  N_("              file, and select the node referenced by the first entry found.\n"),
+#
+# Please don't split a single sentence like this in multiple messages,
+# use one single message instead. Sentences have to be kept together when
+# translating, you can't split a sentence into parts and mark them for
+# separate translation and expect it to work with word ordering,
+# grammar, and everything else in other languages. Splitting sentences
+# just makes it harder for translators when having not just to translate,
+# but also puzzle the pieces of the sentence together again so that it
+# makes some sense, in order to be able to translate in the first place.
+#
+#~ msgid ""
+#~ "  %-10s  Search for a specified string in the index entries of this Info\n"
+#~ msgstr "  %-10s  Sök efter en angiven sträng i indexposterna i denna\n"
+
+#~ msgid ""
+#~ "              file, and select the node referenced by the first entry "
+#~ "found.\n"
+#~ msgstr ""
+#~ "              Info-fil, och välj noden som refereras av den första "
+#~ "posten\n"
+#~ "              som hittas.\n"
+
+#~ msgid ""
+#~ "Copyright (C) %s Free Software Foundation, Inc.\n"
+#~ "There is NO warranty.  You may redistribute this software\n"
+#~ "under the terms of the GNU General Public License.\n"
+#~ "For more information about these matters, see the files named COPYING.\n"
+#~ msgstr ""
+#~ "Copyright © %s Free Software Foundation, Inc.\n"
+#~ "Det finns INGEN garanti. Du kan vidaredistribuera denna programvara\n"
+#~ "under villkoren i GNU General Public License.\n"
+#~ "Se filen COPYING för mer information om detta.\n"
+
+#~ msgid "@quote-arg only useful for single-argument macros"
+#~ msgstr "@quote-arg är endast användbart för makron med ett argument"
+
+#~ msgid "node `%s' has been referenced %d times"
+#~ msgstr "noden \"%s\" har refererats %d gånger"
+
+#~ msgid "Short Contents"
+#~ msgstr "Kort innehållsförteckning"
+
+#~ msgid "keep temporary files around after processing"
+#~ msgstr "behåll temporära filer efter behandling"
+
+#~ msgid "do not keep temporary files around after processing (default)"
+#~ msgstr "behåll inte temporära filer efter behandling (standardalternativ)"
+
+#~ msgid "%s: Specify the Info directory only once.\n"
+#~ msgstr "%s: Ange Info-katalogen endast en gång.\n"
+
+#~ msgid "(line)"
+#~ msgstr "(rad)"
+
+#~ msgid "line"
+#~ msgstr "rad"
+
+#~ msgid "line %*d"
+#~ msgstr "rad %*d"
+
+#~ msgid "line %d"
+#~ msgstr "rad %d"
+
+#~ msgid "Appendix %c "
+#~ msgstr "Appendix %c "
+
+#~ msgid "\"\" is invalid"
+#~ msgstr "\"\" är ogiltigt"
+
+#~ msgid "%s is an invalid ISO code, using %c"
+#~ msgstr "%s är en ogiltig ISO-kod, använder %c"
+
+#~ msgid "Cannot specify more than one macro expansion output"
+#~ msgstr "Kan inte ange mer än en makroexpansionsutdata"
+
+#~ msgid "File exists, but is not a directory"
+#~ msgstr "Filen finns men är ingen katalog"
+
+#~ msgid "Node:"
+#~ msgstr "Nod:"
+
+#~ msgid "%s: TOC should be here, but it was not found"
+#~ msgstr "%s: Innehållsförteckningen skulle vara här, men hittades inte"
+
+#~ msgid "No `%s.png' or `.jpg', and no extension supplied"
+#~ msgstr "Ingen \"%s.png\" eller \".jpg\" och ingen filändelse angiven"
+
+#~ msgid "%s; for file `%s'.\n"
+#~ msgstr "%s; för filen \"%s\".\n"
+
+#~ msgid "`%s' has no Up field"
+#~ msgstr "\"%s\" har inget upp-fält"
+
+#~ msgid "\\%-10[scroll-forward]  Scroll forward 1 line.\n"
+#~ msgstr "\\%-10[scroll-forward]  Rulla en rad framåt.\n"
+
+#~ msgid "\\%-10[scroll-backward]  Scroll backward 1 line.\n"
+#~ msgstr "\\%-10[scroll-backward]  Rulla en rad bakåt.\n"
+
+#~ msgid "%s' argument to @image command not found"
+#~ msgstr "%s argument till @image-kommandot hittades inte"
+
+#~ msgid ""
+#~ "Usage: %s [OPTION]... TEXINFO-FILE...\n"
+#~ "\n"
+#~ "Translate Texinfo source documentation to various other formats:\n"
+#~ "Info files suitable for reading online with Emacs or standalone GNU Info\n"
+#~ "(by default); plain text (with --no-headers); or HTML (with --html).\n"
+#~ "\n"
+#~ "Options:\n"
+#~ " --commands-in-node-names  allow @ commands in node names.\n"
+#~ " -D VAR                    define a variable, as with @set.\n"
+#~ "--docbook                  output DocBook rather than Info format.\n"
+#~ " -E, --macro-expand FILE   output macro-expanded source to FILE.\n"
+#~ " --error-limit=NUM         quit after NUM errors (default %d).\n"
+#~ " --fill-column=NUM         break Info lines at NUM characters (default "
+#~ "%d).\n"
+#~ " --footnote-style=STYLE    output footnotes according to STYLE:\n"
+#~ "                            `separate' to place footnotes in their own "
+#~ "node,\n"
+#~ "                            `end' to place the footnotes at the end of "
+#~ "the\n"
+#~ "                             node in which they are defined (the "
+#~ "default).\n"
+#~ " --force                   preserve output even if errors.\n"
+#~ " --help                    display this help and exit.\n"
+#~ " --html                    output HTML rather than Info format.\n"
+#~ " -I DIR                    append DIR to the @include search path.\n"
+#~ " --ifhtml                  process @ifhtml and @html text even when not\n"
+#~ "                            generating HTML.\n"
+#~ " --ifinfo                  process @ifinfo text even when generating "
+#~ "HTML.\n"
+#~ " --iftex                   process @iftex and @tex text.\n"
+#~ "                            implies --no-split.\n"
+#~ msgstr ""
+#~ "Användning: %s [FLAGGA]... TEXINFO-FIL...\n"
+#~ "\n"
+#~ "Översätt Texinfo-källdokumentation till diverse andra format:\n"
+#~ "Info-filer som är lämpliga för läsning på skärm med Emacs eller separat\n"
+#~ "GNU Info (standardalternativ), vanlig text (med --no-headers), eller\n"
+#~ "HTML (med --html).\n"
+#~ "\n"
+#~ "Flaggor:\n"
+#~ " --commands-in-node-names  tillåt @-kommandon i nodnamn.\n"
+#~ " -D VARIABEL               definiera en variabel, som med @set.\n"
+#~ "--docbook                  generera DocBook istället för Info-format.\n"
+#~ " -E, --macro-expand FIL    generera makroexpanderad källkod till FIL.\n"
+#~ " --error-limit=ANTAL       avsluta efter ANTAL fel (standard %d).\n"
+#~ " --fill-column=ANTAL       radbryt Info-rader vid ANTAL tecken (standard "
+#~ "%d).\n"
+#~ " --footnote-style=STIL     generera fotnoter enligt STIL:\n"
+#~ "                            \"separate\" för att placera fotnoter i sin\n"
+#~ "                            egen nod,\n"
+#~ "                            \"end\" för att placera fotnoter i slutet på\n"
+#~ "                            den nod där de är definierade (standard).\n"
+#~ " --force                   bevara utdata även om fel påträffas.\n"
+#~ " --help                    visa denna hjälptext och avsluta.\n"
+#~ " --html                    generera HTML istället för Info-format.\n"
+#~ " -I KATALOG                lägg till KATALOG till @include-sökvägen.\n"
+#~ " --ifhtml                  behandla @ifhtml- och @html-text även om inte\n"
+#~ "                            HTML genereras.\n"
+#~ " --ifinfo                  behandla @ifinfo-text även då HTML genereras.\n"
+#~ " --iftex                   behandla @iftex- och @tex-text.\n"
+#~ "                            medför --no-split.\n"
+
+#~ msgid ""
+#~ " --no-headers              suppress Info node separators and Node: "
+#~ "lines;\n"
+#~ "                            write to standard output without --output.\n"
+#~ " --no-ifhtml               do not process @ifhtml and @html text.\n"
+#~ " --no-ifinfo               do not process @ifinfo text.\n"
+#~ " --no-iftex                do not process @iftex and @tex text.\n"
+#~ " --no-split                suppress splitting of Info or HTML output,\n"
+#~ "                            generate only one output file.\n"
+#~ " --no-validate             suppress node cross-reference validation.\n"
+#~ " --no-warn                 suppress warnings (but not errors).\n"
+#~ " --number-sections         include chapter, section, etc. numbers in "
+#~ "output.\n"
+#~ " -o, --output=FILE         output to FILE (directory if split HTML),\n"
+#~ "                            ignoring any @setfilename.\n"
+#~ " -P DIR                    prepend DIR to the @include search path.\n"
+#~ " --paragraph-indent=VAL    indent Info paragraphs by VAL spaces (default "
+#~ "%d).\n"
+#~ "                            if VAL is `none', do not indent;\n"
+#~ "                            if VAL is `asis', preserve existing "
+#~ "indentation.\n"
+#~ " --reference-limit=NUM     warn about at most NUM references (default "
+#~ "%d).\n"
+#~ " --split-size=NUM          split into files at NUM size. (default %d).\n"
+#~ " -U VAR                    undefine a variable, as with @clear.\n"
+#~ " -v, --verbose             explain what is being done.\n"
+#~ " --version                 display version information and exit.\n"
+#~ " --xml                     output XML (TexinfoML) rather than Info "
+#~ "format.\n"
+#~ msgstr ""
+#~ " --no-headers              undertryck Info-nodavskiljare och \"Node:\"-"
+#~ "rader,\n"
+#~ "                            skriv till standard ut utan --output.\n"
+#~ " --no-ifhtml               behandla inte @ifhtml- och @html-text.\n"
+#~ " --no-ifinfo               behandla inte @ifinfo-text.\n"
+#~ " --no-iftex                behandla inte @iftex- och @tex-text.\n"
+#~ " --no-split                undertryck delning av Info- eller HTML-"
+#~ "utdata,\n"
+#~ "                            skapa endast en utdatafil.\n"
+#~ " --no-validate             undertryck nod-korsreferensvalidering.\n"
+#~ " --no-warn                 undertryck varningar (men inte fel).\n"
+#~ " --number-sections         inkludera kapitel-, sektionsnummer osv i "
+#~ "utdata.\n"
+#~ " -o, --output=FIL          skriv till FIL (katalog om delad HTML),\n"
+#~ "                            ignorerar alla @setfilename.\n"
+#~ " -P KATALOG                lägg till KATALOG till @include-sökvägen.\n"
+#~ " --paragraph-indent=VÄRDE  gör indrag i Info-stycken med VÄRDE blanksteg\n"
+#~ "                            (standardvärde %d).\n"
+#~ "                            om VÄRDE är \"none\" görs inget indrag;\n"
+#~ "                            om VÄRDE är \"asis\" bevaras befintlig "
+#~ "indragning.\n"
+#~ " --reference-limit=ANTAL   varna om högst ANTAL referenser\n"
+#~ "                            (standardvärde %d).\n"
+#~ " --split-size=ANTAL        dela i filer vid storleken ANTAL\n"
+#~ "                            (standardvärde %d).\n"
+#~ " -U VARIABEL               odefiniera en variabel, som med @clear.\n"
+#~ " -v, --verbose             förklara vad som görs.\n"
+#~ " --version                 visa versionsinformation och avsluta.\n"
+#~ " --xml                     generera XML (TexinfoML) istället för Info-"
+#~ "format.\n"

@@ -3,10 +3,26 @@
 #include <string.h>
 #include <errno.h>
 
+#include "net.h"
+
+// GSL lib
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
-#include "net.h"
+// sha256 - this is used for creating the phash shared objects
+#include "mbedtls/config.h"
+#include <stddef.h>
+#include <stdint.h>
+#include "mbedtls/sha256.h"
+
+//Checking file permissions
+#include <unistd.h>
+
+// for hashing files
+#include <dlfcn.h> 
+#include "hash_graph_node_ids.h"
+#include <sys/stat.h>
+
 /* *****************************************************************************************/
 // Used for appending two char*s together
 char* stradd(const char* a, const char* b){
@@ -308,8 +324,9 @@ int hashSourceTargetNodes(char *readpairwisefilename, int *Nv)
     
     *Nv = uniq(nodeName,Ne*2); /*remove duplicate from nodelist;  Nf: # of factor */
     
-    mphash(nodeName,*Nv); /*  and hash unique nodes */
-    
+    int exit_code = mphash(nodeName,*Nv); /*  and hash unique nodes */
+    if (exit_code != 0) return exit_code;    
+
     for(i=0;i<*Nv;i++)
         free(nodeName[i]);
     
@@ -363,8 +380,12 @@ void normalizeCPD(double * f, double *CPD,int numComb,int num_state,int flag)
 /**************************************************************************/
 
 
-int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabilities, int num_state)
+int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, char *posterior_probabilities, int num_state)
 {
+    lib_function phash; 
+    int exit_code = load_hash_library(readreactionlogic, &phash);
+    if (exit_code != 0) return exit_code;
+
     int *obs_values = NULL;
     int    *obs_Ids = NULL;
     gsl_rng *r; /* for random generator for gsl rand gernator to sample from Dirchelte distribution */
@@ -388,7 +409,7 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
     
     int numel;
 
-    int exit_code = ExtractNonUniqNodeNum(factorgraph, &numel); // read pathwat file and return the number of varibales nodes in the factorgraph.
+    exit_code = ExtractNonUniqNodeNum(factorgraph, &numel); // read pathwat file and return the number of varibales nodes in the factorgraph.
     if (exit_code != 0) return exit_code;
 
     char *nodelist[numel];
@@ -408,7 +429,7 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
     
     for(i=0;i<Nv;i++)
     {
-        h = phash(nodelist[i],strlen(nodelist[i]));
+        h = (*phash)(nodelist[i],strlen(nodelist[i]));
        //printf(" %d %d %s\n",i,h,nodelist[i]);
         
         k = (int)strlen(nodelist[i]);
@@ -444,7 +465,7 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
 
     /*  fill the pGraph struct field accroding to info given in factor graph file */
-    exit_code = FactorgraphFile_To_NodeStructures(factorgraph,pGraph,num_state,Nv,Nf, &lenMsgVec);
+    exit_code = FactorgraphFile_To_NodeStructures(&phash, factorgraph,pGraph,num_state,Nv,Nf, &lenMsgVec);
     if (exit_code != 0) return exit_code;
 
     /*allocate memory for message vectors*/
@@ -507,7 +528,7 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
             {
                 if(h == 0) /* first column*/
                 {
-                    visibleIds[k] = phash(temp,strlen(temp));
+                    visibleIds[k] = (*phash)(temp,strlen(temp));
                 }
                 
                 if(h == 1) /* second column */
@@ -606,7 +627,45 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
     return 0;
 } /*end of doLBPinference function*/
 
+int streamFile(char* filename, char** string, long *length)
+{
+    FILE * file = fopen (filename, "rb"); 
+    if (file == NULL) return 101;
 
+    fseek (file, 0, SEEK_END);
+
+    long file_size = ftell (file);
+    *length = file_size;
+
+    fseek (file, 0, SEEK_SET);
+
+    *string = malloc (file_size);
+    if (*string == NULL) return 109; // need to fix this return value new one on dictionary
+
+    fread (*string, file_size, 1, file); 
+    fclose (file);
+
+    return 0;
+}
+
+
+int hashFile(char *filename, unsigned char sum[16]) 
+{
+    char* string;
+    long length;
+
+    int exit_code = streamFile(filename, &string, &length);
+    if (exit_code != 0) return exit_code;
+
+    size_t ilen = (size_t) length;
+    const unsigned char *input = (const unsigned char*) string;
+
+    mbedtls_md5(input, ilen, sum);
+ 
+    free(string);
+
+    return 0;
+}
 
 /**************************************************************************/
 /*pairwiseTofactorgraph*/
@@ -622,6 +681,10 @@ int doLBPinference(char *factorgraph, char * obs_data, char *posterior_probabili
 
 int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfilename,int nstate)
 {
+    lib_function phash; 
+    int exit_code = load_hash_library(readpairwisefilename, &phash);
+    if (exit_code != 0) return exit_code;
+
     int i,k,kk,Ne,Nv,Nf;
     int  maxLen = 1000;
     char buf[maxLen];
@@ -713,7 +776,7 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
         {
             if(i == 1)
             {
-                k = phash(temp,strlen(temp)); /* child node "temp" has a parent so  count it*/
+                k = (*phash)(temp,strlen(temp)); /* child node "temp" has a parent so  count it*/
                 fGraph[k].numParents++;
             }
             temp = strtok(NULL, delims);
@@ -749,7 +812,7 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
         
         type = strtok(NULL, delims);    /* get the type of interaction - for later usages*/
         
-        k = phash(target,strlen(target));
+        k = (*phash)(target,strlen(target));
         /*  add the target node to the factor*/
         fGraph[k].variablenode[0] = malloc((strlen(target)+1)*sizeof(char));
         strcpy(fGraph[k].variablenode[0],target);
@@ -778,7 +841,7 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
         
         type = strtok(NULL, delims);    /* get the type of interaction - for later usages*/
         
-        k = phash(source,strlen(source));
+        k = (*phash)(source,strlen(source));
         if (varcount[k] == 1)
         {
             /*  add a factor for the root  nodes*/
@@ -973,9 +1036,8 @@ void inputBasedModifiedCPT(Node *pGraph,double ** factorarray, int *obs_values,i
 /**************************************************************************/
 
 
-int FactorgraphFile_To_NodeStructures(char *factorgraph, Node *pGraph,int num_state,int Nv,int Nf, int *lenMsgVec)
+int FactorgraphFile_To_NodeStructures(lib_function *phash, char *factorgraph, Node *pGraph,int num_state,int Nv,int Nf, int *lenMsgVec)
 {
-    
     int i,ii,nn,k,h;
     int K,*adjCount;
     double parZ; // to normalize factors that donot sum up to unity
@@ -1010,7 +1072,7 @@ int FactorgraphFile_To_NodeStructures(char *factorgraph, Node *pGraph,int num_st
             temp = strtok(buf, delims);
             while (temp != NULL)
             {
-                pGraph[phash(temp,strlen(temp))].numAdj++;
+                pGraph[(*phash)(temp,strlen(temp))].numAdj++;
                 temp = strtok(NULL, delims);
             }
         }
@@ -1083,7 +1145,7 @@ int FactorgraphFile_To_NodeStructures(char *factorgraph, Node *pGraph,int num_st
             while (temp != NULL)
             {
                 
-                nn = phash(temp,strlen(temp));// the index of variable node temp
+                nn = (*phash)(temp,strlen(temp));// the index of variable node temp
                 
                 pGraph[ii+Nv].adjNodes[k] = nn;// add variable node nn to the factor node ii neighbor
                 
@@ -1149,7 +1211,6 @@ int FactorgraphFile_To_NodeStructures(char *factorgraph, Node *pGraph,int num_st
     /* allocate memory for variable beliefs and initialize them*/
     for(i = 0;i < Nv;i++)
     {
- //       pGraph[i].beliefs = malloc(num_state*sizeof(pGraph[i].beliefs));
         pGraph[i].beliefs = malloc(num_state*sizeof(double));
         
         for(k = 0;k < num_state;k++)
@@ -1164,13 +1225,11 @@ int FactorgraphFile_To_NodeStructures(char *factorgraph, Node *pGraph,int num_st
 /*ReadObservedData.c */
  /**************************************************************************/
 
-int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *nmRNAObs)
+int ReadObservedData(lib_function *phash, char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *nmRNAObs)
 {
     int h,nn;
-    
     double *mRNA_values;
     int    *mRNAObsIds;
-    
     char *temp;
     
     int numofTCGAsample =50000; //need a large buffer to reading all observed nodes
@@ -1222,7 +1281,7 @@ int ReadObservedData(char *filename,  double **obs_values, int **obs_Ids,int *nu
             {
                 if(nn==0)
                 {
-                    mRNAObsIds[h-1] = phash(temp,strlen(temp));
+                    mRNAObsIds[h-1] = (*phash)(temp,strlen(temp));
                 }
                 else
                 {
@@ -1484,18 +1543,121 @@ int LogRoundRobinSplashLBP(double **factorarray,int **array,Node *AlarmNet,doubl
     return(Iter);
 }
 
+int create_hash_folder (char* folder_path) 
+{
+   struct stat st = {0};
+   if (stat(folder_path, &st) == -1) 
+       mkdir(folder_path, 0700);
+ 
+   return 0;
+}
+
+// adapted from: http://www.experts-exchange.com/Programming/Languages/C/Q_20746033.html
+void unsigned_char_to_char(char *dst,unsigned char *src,size_t src_len)
+{
+        while (src_len--)
+            dst += sprintf(dst,"%02x",*src++);
+        *dst = '\0';
+}
+
+int compile_shared_object(char* path) 
+{
+    char* cd = "cd ";
+    char* gcc_command = "; gcc -c -Wall -g -Werror -I. -I../../../resources/make_hash_table/include/ -fpic phash.c; gcc -shared -o libphash.so phash.o";
+
+    int command_size = strlen(cd)+1+strlen(path)+1+strlen(gcc_command);
+    char* command;
+
+    command = malloc(command_size);
+    strcpy(command, cd);
+    strcat(command, path);
+    strcat(command, gcc_command);
+
+    system(command);
+
+
+    free(command);   
+  
+    return 0;
+}
+
+
+int create_hash_object(char* readreactionlogic, char* hash_folder_path) 
+{
+    int exit_code = create_hash_folder(hash_folder_path);
+    if( exit_code != 0) return exit_code;
+
+    exit_code = hash_graph_node_ids(readreactionlogic, hash_folder_path);
+    if (exit_code != 0) return exit_code;
+
+    exit_code = compile_shared_object(hash_folder_path);
+    if (exit_code != 0) return exit_code;
+
+    return 0;
+}
+
+int load_hash_library(char* readreactionlogic, lib_function * phash)
+{    
+    unsigned char sum[16];
+
+    int error_code = hashFile(readreactionlogic, sum);
+    if (error_code != 0) return error_code;
+
+    char folder_name[sizeof(sum)*2+1];
+    unsigned_char_to_char(folder_name, sum, sizeof(sum));
+
+    const char* base_dir = "../net/hash_obj/";
+    const char* filename = "/libphash.so";
+
+    char* hash_object_path;
+    int hash_object_path_size = strlen(folder_name)+1+strlen(base_dir)+1+strlen(filename);
+    hash_object_path = malloc(hash_object_path_size);
+    strcpy(hash_object_path, base_dir);
+    strcat(hash_object_path, folder_name);
+    strcat(hash_object_path, filename);
+
+    //Creates the shared object if it does not exist
+    if ( access( hash_object_path, X_OK ) == -1 ) {
+        char* hash_folder_path;
+        int hash_folder_path_size = strlen(folder_name)+1+strlen(base_dir);
+        hash_folder_path = malloc(hash_folder_path_size);
+        strcpy(hash_folder_path, base_dir);
+        strcat(hash_folder_path, folder_name);
+
+        error_code = create_hash_object(readreactionlogic, hash_folder_path);
+        free(hash_folder_path);
+        if (error_code != 0) return error_code;
+    }
+
+    char* error;
+    void *hash_library;
+    hash_library = dlopen(hash_object_path, RTLD_NOW);
+    if(!hash_library) return 110;
+
+    *phash = dlsym(hash_library, "phash"); 
+    if((error = dlerror()) != NULL) return 111;
+   
+    /* dlclose(hash_library); */
+
+    return 0;
+}
+
 /**************************************************************************/
 /* reaction_logic_to_factorgraph*/
 /**************************************************************************/
 
 int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgraphfilename,int nstate)
 {
+    lib_function phash; 
+    int exit_code = load_hash_library(readreactionlogic, &phash);
+    if (exit_code != 0) return exit_code;
+
     int i,k,h,kk,Ne,Nv;
     int  maxLen = 2000;
     char buf[maxLen];
     const char delims[2] = "\t";
     char *temp, *target, *source,*pos_neg,*type_interaction;
-    
+   
     struct factor
     {
         int numVariables;         /*  number of parents of each child*/
@@ -1505,7 +1667,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         
     };
     typedef  struct factor  *factor;
-    
+
     // read the node name and store in an array
     FILE *file = fopen(readreactionlogic, "r");
     if (file == NULL) return 101;
@@ -1562,7 +1724,6 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
     fgets(buf,maxLen,file);    /*get the first line */
     
     fgets(buf,maxLen,file);    /* second line is empty*/
-    
     while ((fgets(buf,maxLen,file)) != NULL)
     {
         buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
@@ -1572,23 +1733,22 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         {
             if(i == 1)
             {
-                k = phash(temp,strlen(temp)); /* child node "temp" has a parent so  count it*/
+                k = (*phash)(temp,strlen(temp)); /* child node "temp" has a parent so  count it*/
                 fGraph[k].numVariables++;
             }
             temp = strtok(NULL, delims);
             i++;
         }
     }
-    
     rewind(file); /* reset the fgets to the begining of the file*/
     
     /* allocate the memory  nodes connected to each factor*/
     int varcount[Nv];  /*  a counter for each factor that counts number of nodes added so far*/
     for (i=0;i<Nv;i++)
     {
-        fGraph[i].variablenode =      (char**) malloc(fGraph[i].numVariables *sizeof(fGraph[i].variablenode));
-        fGraph[i].pos_neg =  (int*) malloc(fGraph[i].numVariables *sizeof(int));
-        fGraph[i].type_interaction  =     (int*) malloc(fGraph[i].numVariables *sizeof(int));
+        fGraph[i].variablenode = (char**) malloc(fGraph[i].numVariables *sizeof(fGraph[i].variablenode));
+        fGraph[i].pos_neg = (int*) malloc(fGraph[i].numVariables *sizeof(int));
+        fGraph[i].type_interaction = (int*) malloc(fGraph[i].numVariables *sizeof(int));
         
         varcount[i] = 1 ;/* initialize it*/
     }
@@ -1617,7 +1777,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         type_interaction = strtok(NULL, delims);    /* get the type of interaction and or or*/
         //printf("%s  %s \n",pos_neg,type_interaction);
         
-        k = phash(target,strlen(target));
+        k = (*phash)(target,strlen(target));
         /*  add the target node to the factor*/
         fGraph[k].variablenode[0] = malloc((strlen(target)+1)*sizeof(char));
         strcpy(fGraph[k].variablenode[0],target);
@@ -1665,7 +1825,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         //printf("%s  %s \n",pos_neg,type_interaction);
         
         
-        k = phash(source,strlen(source));
+        k = (*phash)(source, strlen(source));
         if (varcount[k] == 1)
         {
             /*  add a factor for the root  nodes*/
@@ -1905,7 +2065,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         free(factorarray[i]);
     }
     free(fGraph);
-    
+ 
     return 0;
 }
 
@@ -1914,7 +2074,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
 /*  ReadMultipleVisibleSets*/
 /**************************************************************************/
 
-int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *num_visibles)
+int ReadMultipleVisibleSets(lib_function *phash, char *filename,  double **obs_values, int **obs_Ids,int *numSample, int *num_visibles)
 {
     int i,k;
     int    *visibleIds,*visible_values;
@@ -1962,7 +2122,7 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
             {
                 if(i == 0)
                 {
-                    visibleIds[k] = phash(temp,strlen(temp));
+                    visibleIds[k] = (*phash)(temp,strlen(temp));
                 }
                 
                 if(i == 1)
@@ -1982,23 +2142,7 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
     }
     
     fclose(file);
-    
-    /*to test uncomment this part */
-    
-    // for(h=0;h<num_visibles;h++)
-    //{
-    // printf("%d\t\n",mRNAObsIds[h]);
-    //}
-    
-    //for(nn=0;nn<num_conditions;nn++)
-    //{
-    //for(h=0;h<num_visibles;h++)
-    //{
-    //printf("%f\n",mRNA_values[h+num_visibles*(nn)]);
-    //}
-    
-    //}
-    
+   
     *obs_values = visible_values;
     *obs_Ids  = visibleIds;
     *numSample = num_conditions;
@@ -2009,8 +2153,13 @@ int ReadMultipleVisibleSets(char *filename,  double **obs_values, int **obs_Ids,
 /**************************************************************************/
 /*  learning_discrete_BayNet*/
 /**************************************************************************/
-int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging)
+int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging)
 {
+    lib_function phash; 
+    int exit_code = load_hash_library(readreactionlogic, &phash);
+    if (exit_code != 0) return exit_code;
+
+
     int i,k,m,h;         /*indexign for loops  and whiles */
     int lenMsgVec;       /*length of message vector (# of all messages *  # of state per message)*/
     int iteration = 0;   /* number of iteration in LBP */
@@ -2021,8 +2170,6 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
     int N  = 0 ;          /* number of all nodes: Nf+Nv (factors+variables)*/
     char buf[maxLen];
     gsl_rng *r; /* for random generator for gsl rand gernator to sample from Dirchelte distribution */
-    
-    
     int  *visibleIds,*visible_values;
     const char delims[2] = "\t";
     char *temp;
@@ -2033,11 +2180,12 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
     double changeLL = LargeNumber;
     double change_parameters = 10;
     
+
     // read  all varibale nodes, remove duplicates; this section is excuted to make a unique list of nodes (keys) which are passed to
     // the hash function generator to make the hash function; we then we hash Ids throughout the code.
     
     int numel;
-    int exit_code = ExtractNonUniqNodeNum(logical_factorgraph, &numel); // read logic factorgraph file and return the number of varibales nodes in the factorgraph.
+    exit_code = ExtractNonUniqNodeNum(logical_factorgraph, &numel); // read logic factorgraph file and return the number of varibales nodes in the factorgraph.
     if (exit_code != 0) return exit_code;
 
     char* nodelist[numel];
@@ -2053,11 +2201,11 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
     Nv = uniq(nodelist, numel); /*remove duplicate from nodelist;  Nv: # of variable nodes */
     Nf = Nv; /*in our setting # of facotrs should be equal to # of variables becuase we consider one factor for each root node */
     N = Nv+Nf; // number of all nodes the graph
-
+printf("before");
     /*sort the variable node names  according  to thier hash map Ids */
     for(i=0;i<Nv;i++)
     {
-        h = phash(nodelist[i],strlen(nodelist[i]));
+        h = (*phash)(nodelist[i],strlen(nodelist[i]));
         //printf(" %d %d %s\n",i,h,nodelist[i]);
         
         k = (int)strlen(nodelist[i]);
@@ -2073,9 +2221,8 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
     
     /* allocate memory for pGraph struct which contains message info*/
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
-
     /*  fill the pGraph struct field accroding to info given in factor graph file */
-    exit_code = FactorgraphFile_To_NodeStructures(logical_factorgraph, pGraph, num_state, Nv, Nf, &lenMsgVec);
+    exit_code = FactorgraphFile_To_NodeStructures(&phash, logical_factorgraph, pGraph, num_state, Nv, Nf, &lenMsgVec);
     if (exit_code != 0) return exit_code;    
 
     /*allocate memory for message vectors*/
@@ -2093,7 +2240,6 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
     double** factorarray0  = (double **)malloc(Nf*sizeof(*factorarray0));
     double** oldfactorarray0  = (double **)malloc(Nf*sizeof(*oldfactorarray0));
     double** alpha  = (double **)malloc(Nf*sizeof(*alpha));
-    
     
     for(i = 0;i < Nf;i++)
     {
@@ -2223,7 +2369,7 @@ int learning_discrete_BayNet(char * logical_factorgraph, char *obs_data, char *e
                 {
                     if(h == 0) /* first column*/
                     {
-                        visibleIds[k] = phash(temp,strlen(temp));
+                        visibleIds[k] = (*phash)(temp,strlen(temp));
                     }
                     if(h == 1) /* second column */
                     {
@@ -2435,6 +2581,10 @@ char *strerror_libnet (int error_code) {
             break;
         case 109:
             strcpy(strerr, "Unable to open log file for learning");
+        case 110:
+            strcpy(strerr, "Unable to open hash shared object");
+        case 111:
+            strcpy(strerr, "Unable to access phash function in the phash shared object");
         default : 
            strcpy(strerr, "Undefined error");
     }
