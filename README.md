@@ -37,29 +37,11 @@ LibNet has been tested on OS X and Ubuntu 14.04.
 
 #####3.1 Generate hash for particular network with generateHash
 
-###Usage: generateHash
-
-   - Type the following commands in the terminal in order to generate the hash for the pairwise interaction network you are intending on using for analysis
-
-	cd bin  
-	./generateHash <pairwise interaction file>  
-
-#####3.2 Compile LibNet shared object
-
-Once the hash has been generated with the generateHash program you will be ready to compile and run the libnet program. This stip has to be performed every time you generate a hash in order to have the new hash in shared object. 
-
-   - In order to create the shared object with the desired hash files run the following commands 
- 
-	cd net  
-	make
-
-   - This command has produced the shared object net/lib/libnet.so (.dynlib on OSX) 
-
 ######Library Path
 
    - Run the following command if you would like to access this library system wide (not necessary for basic installation) 
 
-	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<path to shared object directory> 
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<net/lib/libnet.[so|dynlib> 
 
 ####4 User Interfaces 
 
@@ -67,16 +49,7 @@ There are two interaces to the shared object that come with this package: a comm
 
 #####4.1Command line interface
 
-######4.1.1 Compiling command line intface
-
-   - Run the following command to create the command line interface
-
-	cd cli  
-	make  
-	
-   - After running this command the command line interface will be locaated at bin/libnet
-
-######4.1.2 Interacting with the command line intface
+######4.1.2 Interacting with the command line interface
 
 This command line interface can be used in two distinct ways. The first way is to supply the paths of the files in a config file, in the same way as the example config files in the config folder and flags to customize the parameters to be use and the second way is to input the information through an interactive interface. Further infromation on how to use these interface can be found in the wiki.
 
@@ -115,20 +88,9 @@ libnet [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical
 
 #####4.2 R interface
 
-In order to call libnet from the R Console you will need to create and load the R LibNet shared object. 
+In order to call libnet from the R Console you will need to load the R LibNet shared object. 
 
-######4.2.1 Compiling the R interface
-
-   - Run the following two commands to compile the R interface
-
-	cd r_package/libnetR  
-	make  
-
-   - After running the command the following shared object should exist 
-
-	lib/libnetR.so has been generated
-
-######4.2.2 Running R in order to be able to access the R LibNet shared object
+######4.2.1 Running R in order to be able to access the R LibNet shared object
 
    - Run on of the first two commands, depending on your OS, and then run one of the two options in the last line. 
 
@@ -140,24 +102,24 @@ In order to call libnet from the R Console you will need to create and load the 
 
 *The current working directory needs to be correct to have the shared obejects link to one another correctly
 
-######4.2.3 Loading the LibNet shared ojbect within R or Rstudio
+######4.2.2 Loading the LibNet shared ojbect within R or Rstudio
 
    - Run the following command in order to load the shared object 
 
 	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnetR.so") (for Linux)
 	dyn.load("libnetR/lib/libnetR.so") (for OS X)
 
-######4.2.4 Description of functions available from the R LibNet library
+######4.2.3 Description of functions available from the R LibNet library
 
 	r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP number_of_states_) 
 	
-	r_learning_discrete_BayNet(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP estimated_parameters_filepath_, SEXP number_of_states_, SEXP em_max_iterations_, SEXP em_log_likelihood_change_limit_, SEXP map_flag_, SEXP logging_) 
+	r_learning_discrete_BayNet(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP estimated_parameters_filepath_, SEXP number_of_states_, SEXP em_max_iterations_, SEXP em_log_likelihood_change_limit_, SEXP map_flag_, SEXP logging_) 
 	
-	r_doLBPinference(SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP posterior_probabilities_filepath_, SEXP number_of_states_) 
+	r_doLBPinference(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP observed_data_filepath_, SEXP posterior_probabilities_filepath_, SEXP number_of_states_) 
 	
 *All filepaths can be either full or abolute paths and the rest of the variables should be supplied as integer values. 
 	
-######4.2.5Example R function calls 
+######4.2.4 Example R function calls 
 
 *These relative paths are for linux and should be changed of OS X. In OS X the change should be to remove one of the '../' from the beginning of the each filepath. 
 
@@ -167,11 +129,11 @@ In order to call libnet from the R Console you will need to create and load the 
 	
    - Learning
 
-	.Call("r_learning_discrete_BayNet", "../../test/data1/logical_factorgraph.txt", "../../test/data1/visibleSet_0.5.txt", "../../test/data1/estimated_parameters_0.5.txt", 2, 4000, 1e-5, 1e-3, 1, 1)
+	.Call("r_learning_discrete_BayNet", "../../test/data1/munin4_pairwise.txt", "../../test/data1/logical_factorgraph.txt", "../../test/data1/visibleSet_0.5.txt", "../../test/data1/estimated_parameters_0.5.txt", 2, 4000, 1e-5, 1e-3, 1, 1)
 		
    - Inference
 
-	.Call("r_doLBPinference","../../test/data1/estimated_parameters_0.5.txt", "../../test/data1/visibleSet_0.7.txt","../../test/data1/visibleSet_0.5.txt", 2)
+	.Call("r_doLBPinference", "../../test/data1/munin4_pairwise.txt", "../../test/data1/estimated_parameters_0.5.txt", "../../test/data1/visibleSet_0.7.txt", "../../test/data1/visibleSet_0.5.txt", 2)
 
 *Functions will return 0 upon success and error codes otherwise. 	
 	
