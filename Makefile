@@ -37,9 +37,19 @@ else
 endif
 
 
-all: external_lib libnet cli r_package
+all: cli r_package
 
-external_lib: gsl readline sha 
+cli: libnet readline
+	cd cli; \ 
+	make
+
+r_package: libnet
+	cd r_package/libnetR \
+	make
+
+libnet: sha gsl
+	cd net; \
+	make 
 
 sha: 
 	cd ./external_lib/mbedtls-2.1.2; \
@@ -63,19 +73,8 @@ termcap:
 	make; \
 	make install;
 
-libnet:
-	cd net; \
-	make 
-
-cli: 
-	cd cli; \ 
-	make
-
-r_package: 
-	cd r_package/libnetR \
-	make
-
 clean:
 	cd net; make clean; cd ..; \
 	cd cli; make clean; cd ..; \
+	cd r_package/libnetR; make clean; cd ..; \
 	rm bin/*
