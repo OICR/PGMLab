@@ -574,7 +574,7 @@ FILE     *fp;
             if (tabb[i].listlen_b == j)
                 if (!augment(tabb, tabh, tabq, blen, scramble, smax, &tabb[i], nkeys, i+1, form))
                 {
-                    printf("fail to map group of size %d for tab size %d\n", j, blen);
+                    fprintf(fp, "fail to map group of size %d for tab size %d\n", j, blen);
                     return FALSE;
                 }
 
@@ -826,13 +826,14 @@ int findhash(tabb, alen, blen, salt, final,
 bstuff  **tabb;           /* output, tab[] of the perfect hash, length *blen */
 ub4      *alen;                 /* output, 0..alen-1 is range for a of (a,b) */
 ub4      *blen;                 /* output, 0..blen-1 is range for b of (a,b) */
-ub4      *salt;                         /* output, initializes initial hash */
+ub4      *salt;                          /* output, initializes initial hash */
 gencode  *final;                                      /* code for final hash */
 ub4      *scramble;                      /* input, hash = a^scramble[tab[b]] */
 ub4      *smax;                           /* input, scramble[i] in 0..smax-1 */
 key      *keys;                                       /* input, keys to hash */
 ub4       nkeys;                       /* input, number of keys being hashed */
 hashform *form;                                           /* user directives */
+FILE     *fp;                                    /* for printing to log file */
 {
     ub4 bad_initkey;                       /* how many times did initkey fail? */
     ub4 bad_perfect;                       /* how many times did perfect fail? */
@@ -908,6 +909,7 @@ hashform *form;                                           /* user directives */
         }
         
         fprintf(fp, "found distinct (A,B) on attempt %d\n", trysalt);
+
         /* Given distinct (A,B) for all keys, build a perfect hash */
         if (!perfect(*tabb, tabh, tabq, *blen, *smax, scramble, nkeys, form, fp))
         {

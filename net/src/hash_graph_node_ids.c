@@ -23,7 +23,7 @@ int hash_graph_node_ids(char *reaction_logic_filepath, char* hash_folder)
     // read the node name and store in an array
     FILE *file = fopen(reaction_logic_filepath, "r");
     if (file == NULL) return 101;
-    
+  
     fgets(buf,maxLen,file);    /* read first line  to get number of edges and store it in Ne*/
     
     buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
@@ -33,7 +33,7 @@ int hash_graph_node_ids(char *reaction_logic_filepath, char* hash_folder)
     char* targetsource[2*Ne]; /* list of all nodes */
     
     fgets(buf,maxLen,file);    /* second line is empty*/
-    
+
     k = 0;
     kk = 0;
     while ((fgets(buf,maxLen,file)) != NULL)

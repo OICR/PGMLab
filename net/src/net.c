@@ -588,7 +588,6 @@ int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, 
             }
             
         }
-        fprintf(pn,"------------------------------\n");
         
         free(visible_values);
         free(visibleIds);
@@ -1563,18 +1562,16 @@ void unsigned_char_to_char(char *dst,unsigned char *src,size_t src_len)
 int compile_shared_object(char* path) 
 {
     char* cd = "cd ";
-    char* gcc_command = "; gcc -c -Wall -g -Werror -I. -I../../../resources/make_hash_table/include/ -fpic phash.c; gcc -shared -o libphash.so phash.o";
+    char* gcc_command = "; gcc -c -Wall -g -Werror -I../../../resources/make_hash_table/include/ -fPIC ../../../resources/make_hash_table/src/lookupa.c; gcc -c -Wall -g -Werror -I. -I../../../resources/make_hash_table/include/ -fpic phash.c; gcc -shared -o libphash.so phash.o lookupa.o";
 
     int command_size = strlen(cd)+1+strlen(path)+1+strlen(gcc_command);
-    char* command;
 
+    char* command;
     command = malloc(command_size);
     strcpy(command, cd);
     strcat(command, path);
     strcat(command, gcc_command);
-
     system(command);
-
 
     free(command);   
   
