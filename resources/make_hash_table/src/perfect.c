@@ -546,7 +546,7 @@ hashform *form;               /* TRUE if we should do a minimal perfect hash */
 
 
 /* find a mapping that makes this a perfect hash */
-static int perfect(tabb, tabh, tabq, blen, smax, scramble, nkeys, form)
+static int perfect(tabb, tabh, tabq, blen, smax, scramble, nkeys, form, fp)
 bstuff   *tabb;
 hstuff   *tabh;
 qstuff   *tabq;
@@ -555,31 +555,29 @@ ub4       smax;
 ub4      *scramble;
 ub4       nkeys;
 hashform *form;
+FILE     *fp;
 {
     ub4 maxkeys;                           /* maximum number of keys for any b */
     ub4 i, j;
     
     /* clear any state from previous attempts */
-    memset((void *)tabh, 0,
-           (size_t)(sizeof(hstuff)*
-                    ((form->perfect == MINIMAL_HP) ? nkeys : smax)));
+    memset((void *)tabh, 0, (size_t)(sizeof(hstuff)*((form->perfect == MINIMAL_HP) ? nkeys : smax)));
     memset((void *)tabq, 0, (size_t)(sizeof(qstuff)*(blen+1)));
     
     for (maxkeys=0,i=0; i<blen; ++i)
         if (tabb[i].listlen_b > maxkeys)
             maxkeys = tabb[i].listlen_b;
-            
-        /* In descending order by number of keys, map all *b*s */
-            for (j=maxkeys; j>0; --j)
-                for (i=0; i<blen; ++i)
-                    if (tabb[i].listlen_b == j)
-                        if (!augment(tabb, tabh, tabq, blen, scramble, smax, &tabb[i], nkeys,
-                                     i+1, form))
-                        {
-                            printf("fail to map group of size %d for tab size %d\n", j, blen);
-                            return FALSE;
-                        }
-    
+     
+    /* In descending order by number of keys, map all *b*s */
+    for (j=maxkeys; j>0; --j)
+        for (i=0; i<blen; ++i)
+            if (tabb[i].listlen_b == j)
+                if (!augment(tabb, tabh, tabq, blen, scramble, smax, &tabb[i], nkeys, i+1, form))
+                {
+                    fprintf(fp, "fail to map group of size %d for tab size %d\n", j, blen);
+                    return FALSE;
+                }
+
     /* Success!  We found a perfect hash of all keys into 0..nkeys-1. */
     return TRUE;
 }
@@ -589,8 +587,8 @@ hashform *form;
  * Simple case: user gave (a,b).  No more mixing, no guessing alen or blen.
  * This assumes a,b reside in (key->a_k, key->b_k), and final->form == AB_HK.
  */
-static void hash_ab(tabb, alen, blen, salt, final,
-                    scramble, smax, keys, nkeys, form)
+static int hash_ab(tabb, alen, blen, salt, final,
+                    scramble, smax, keys, nkeys, form, fp)
 bstuff  **tabb;           /* output, tab[] of the perfect hash, length *blen */
 ub4      *alen;                 /* output, 0..alen-1 is range for a of (a,b) */
 ub4      *blen;                 /* output, 0..blen-1 is range for b of (a,b) */
@@ -601,6 +599,7 @@ ub4      *smax;                           /* input, scramble[i] in 0..smax-1 */
 key      *keys;                                       /* input, keys to hash */
 ub4       nkeys;                       /* input, number of keys being hashed */
 hashform *form;                                           /* user directives */
+FILE     *fp;
 {
     hstuff *tabh;
     qstuff *tabq;
@@ -622,30 +621,26 @@ hashform *form;                                           /* user directives */
     }
     if (*alen > 2**smax)
     {
-        fprintf(stderr,
-                "perfect.c: Can't deal with (A,B) having A bigger than twice \n");
-        fprintf(stderr,
-                "  the smallest power of two greater or equal to any legal hash.\n");
-        exit(SUCCESS);
+        fprintf(fp, "perfect.c: Can't deal with (A,B) having A bigger than twice \n");
+        fprintf(fp, "  the smallest power of two greater or equal to any legal hash.\n");
+        return 1;
     }
     
     /* allocate working memory */
     *tabb = (bstuff *)malloc((size_t)(sizeof(bstuff)*(*blen)));
     tabq  = (qstuff *)remalloc(sizeof(qstuff)*(*blen+1), "perfect.c, tabq");
-    tabh  = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ?
-                                               nkeys : *smax),
-                               "perfect.c, tabh");
+    tabh  = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ? nkeys : *smax), "perfect.c, tabh");
     
     /* check that (a,b) are distinct and put them in tabb indexed by b */
     (void)inittab(*tabb, *blen, keys, form, FALSE);
     
     /* try with smax */
-    if (!perfect(*tabb, tabh, tabq, *blen, *smax, scramble, nkeys, form))
+    if (!perfect(*tabb, tabh, tabq, *blen, *smax, scramble, nkeys, form, fp))
     {
         if (form->perfect == MINIMAL_HP)
         {
-            printf("fatal error: Cannot find perfect hash for user (A,B) pairs\n");
-            exit(SUCCESS);
+            fprintf(fp, "fatal error: Cannot find perfect hash for user (A,B) pairs\n");
+            return 1;
         }
         else
         {
@@ -653,13 +648,11 @@ hashform *form;                                           /* user directives */
             free((void *)tabh);
             *smax = *smax * 2;
             scrambleinit(scramble, *smax);
-            tabh = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ?
-                                                      nkeys : *smax),
-                                      "perfect.c, tabh");
-            if (!perfect(*tabb, tabh, tabq, *blen, *smax, scramble, nkeys, form))
+            tabh = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ? nkeys : *smax), "perfect.c, tabh");
+            if (!perfect(*tabb, tabh, tabq, *blen, *smax, scramble, nkeys, form, fp))
             {
-                printf("fatal error: Cannot find perfect hash for user (A,B) pairs\n");
-                exit(SUCCESS);
+                fprintf(fp, "fatal error: Cannot find perfect hash for user (A,B) pairs\n");
+                return 1;
             }
         }
     }
@@ -687,7 +680,7 @@ hashform *form;                                           /* user directives */
         sprintf(final->line[0], "  ub4 rsl = (a ^ scramble[tab[b]]);\n");
     }
     
-    printf("success, found a perfect hash\n");
+    fprintf(fp, "success, found a perfect hash\n");
     
     free((void *)tabq);
     free((void *)tabh);
@@ -828,18 +821,19 @@ hashform *form;                                           /* user directives */
  ** Return the successful initializer for the initial hash.
  ** Return 0 if no perfect hash could be found.
  */
-void findhash(tabb, alen, blen, salt, final,
-              scramble, smax, keys, nkeys, form)
+int findhash(tabb, alen, blen, salt, final,
+              scramble, smax, keys, nkeys, form, fp)
 bstuff  **tabb;           /* output, tab[] of the perfect hash, length *blen */
 ub4      *alen;                 /* output, 0..alen-1 is range for a of (a,b) */
 ub4      *blen;                 /* output, 0..blen-1 is range for b of (a,b) */
-ub4      *salt;                         /* output, initializes initial hash */
+ub4      *salt;                          /* output, initializes initial hash */
 gencode  *final;                                      /* code for final hash */
 ub4      *scramble;                      /* input, hash = a^scramble[tab[b]] */
 ub4      *smax;                           /* input, scramble[i] in 0..smax-1 */
 key      *keys;                                       /* input, keys to hash */
 ub4       nkeys;                       /* input, number of keys being hashed */
 hashform *form;                                           /* user directives */
+FILE     *fp;                                    /* for printing to log file */
 {
     ub4 bad_initkey;                       /* how many times did initkey fail? */
     ub4 bad_perfect;                       /* how many times did perfect fail? */
@@ -848,14 +842,12 @@ hashform *form;                                           /* user directives */
     hstuff *tabh;                       /* table of keys indexed by hash value */
     qstuff *tabq;    /* table of stuff indexed by queue value, used by augment */
     
+    int exit_code;
+
     /* The case of (A,B) supplied by the user is a special case */
     if (form->hashtype == AB_HT)
-    {
-        hash_ab(tabb, alen, blen, salt, final,
-                scramble, smax, keys, nkeys, form);
-        return;
-    }
-    
+        return hash_ab(tabb, alen, blen, salt, final, scramble, smax, keys, nkeys, form);
+
     /* guess initial values for smax, alen and blen */
     *smax = ((ub4)1<<mylog2(nkeys));
     initalen(alen, blen, smax, nkeys, form);
@@ -865,12 +857,9 @@ hashform *form;                                           /* user directives */
     maxalen = (form->perfect == MINIMAL_HP) ? *smax/2 : *smax;
     
     /* allocate working memory */
-    *tabb = (bstuff *)remalloc((size_t)(sizeof(bstuff)*(*blen)),
-                               "perfect.c, tabb");
+    *tabb = (bstuff *)remalloc((size_t)(sizeof(bstuff)*(*blen)), "perfect.c, tabb");
     tabq  = (qstuff *)remalloc(sizeof(qstuff)*(*blen+1), "perfect.c, tabq");
-    tabh  = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ?
-                                               nkeys : *smax),
-                               "perfect.c, tabh");
+    tabh  = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ? nkeys : *smax), "perfect.c, tabh");
     
     /* Actually find the perfect hash */
     *salt = 0;
@@ -881,8 +870,7 @@ hashform *form;                                           /* user directives */
         ub4 rslinit;
         /* Try to find distinct (A,B) for all keys */
         
-        rslinit = initkey(keys, nkeys, *tabb, *alen, *blen, *smax, trysalt,
-                          form, final);
+        rslinit = initkey(keys, nkeys, *tabb, *alen, *blen, *smax, trysalt, form, final);
         
         if (rslinit == 2)
         {      /* initkey actually found a perfect hash, not just distinct (a,b) */
@@ -911,8 +899,8 @@ hashform *form;                                           /* user directives */
                 else
                 {
                     duplicates(*tabb, *blen, keys, form);      /* check for duplicates */
-                    printf("fatal error: Cannot perfect hash: cannot find distinct (A,B)\n");
-                    exit(SUCCESS);
+                    fprintf(fp, "fatal error: Cannot perfect hash: cannot find distinct (A,B)\n");
+                    return 1;
                 }
                 bad_initkey = 0;
                 bad_perfect = 0;
@@ -920,10 +908,10 @@ hashform *form;                                           /* user directives */
             continue;                             /* two keys have same (a,b) pair */
         }
         
-        printf("found distinct (A,B) on attempt %d\n", trysalt);
-        
+        fprintf(fp, "found distinct (A,B) on attempt %d\n", trysalt);
+
         /* Given distinct (A,B) for all keys, build a perfect hash */
-        if (!perfect(*tabb, tabh, tabq, *blen, *smax, scramble, nkeys, form))
+        if (!perfect(*tabb, tabh, tabq, *blen, *smax, scramble, nkeys, form, fp))
         {
             if ((form->hashtype != INT_HT && ++bad_perfect >= RETRY_PERFECT) ||
                 (form->hashtype == INT_HT && ++bad_perfect >= RETRY_HEX))
@@ -939,8 +927,8 @@ hashform *form;                                           /* user directives */
                 }
                 else
                 {
-                    printf("fatal error: Cannot perfect hash: cannot build tab[]\n");
-                    exit(SUCCESS);
+                    fprintf(fp, "fatal error: Cannot perfect hash: cannot build tab[]\n");
+                    return 1;
                 }
                 bad_perfect = 0;
             }
@@ -950,12 +938,14 @@ hashform *form;                                           /* user directives */
         *salt = trysalt;
         break;
     }
-    
-    printf("built perfect hash table of size %d\n", *blen);
+
+    fprintf(fp, "built perfect hash table of size %d\n", *blen);
 
     /* free working memory */
     free((void *)tabh);
     free((void *)tabq);
+
+    return 0;
 }
 
 /*
@@ -1002,14 +992,23 @@ int numkeys;
 }
 
 /* make the .h file */
-static void make_h(blen, smax, nkeys, salt)
+static void make_h(blen, smax, nkeys, salt, hash_folder)
 ub4  blen;
 ub4  smax;
 ub4  nkeys;
 ub4  salt;
+char* hash_folder;
 {
+    char* header_filename = "/phash.h";
+    char* phash_header_path;
+
+    int phash_header_path_size = strlen(hash_folder)+1+strlen(header_filename);
+    phash_header_path = malloc(phash_header_path_size);
+    strcpy(phash_header_path, hash_folder);
+    strcat(phash_header_path, header_filename);
+
     FILE *f;
-    f = fopen("../resources/make_hash_table/include/phash.h", "w");
+    f = fopen(phash_header_path, "w");
     fprintf(f, "/* Perfect hash definitions */\n");
     fprintf(f, "#ifndef STANDARD\n");
     fprintf(f, "#include \"standard.h\"\n");
@@ -1047,20 +1046,31 @@ ub4  salt;
     fprintf(f, "#endif  /* PHASH */\n");
     fprintf(f, "\n");
     fclose(f);
+
+    free(phash_header_path);
 }
 
 /* make the .c file */
-static void make_c(tab, smax, blen, scramble, final, form)
+static void make_c(tab, smax, blen, scramble, final, form, hash_folder)
 bstuff   *tab;                                         /* table indexed by b */
 ub4       smax;                                       /* range of scramble[] */
 ub4       blen;                                /* b in 0..blen-1, power of 2 */
 ub4      *scramble;                                    /* used in final hash */
 gencode  *final;                                  /* code for the final hash */
 hashform *form;                                           /* user directives */
+char*     hash_folder;
 {
+    char* src_filename = "/phash.c";
+    char* phash_src_path;
+
+    int phash_src_path_size = strlen(hash_folder)+1+strlen(src_filename);
+    phash_src_path = malloc(phash_src_path_size);
+    strcpy(phash_src_path, hash_folder);
+    strcat(phash_src_path, src_filename);
+
     ub4   i;
     FILE *f;
-    f = fopen("../resources/make_hash_table/src/phash.c", "w");
+    f = fopen(phash_src_path, "w");
 
     fprintf(f, "/* table for the mapping for the perfect hash */\n");
     fprintf(f, "#ifndef STANDARD\n");
@@ -1181,10 +1191,11 @@ hashform *form;                                           /* user directives */
  Read in the keys, find the hash, and write the .c and .h files
  ------------------------------------------------------------------------------
  */
-static void driver(form,inputkeys,numkeys)
+static int driver(form, inputkeys, numkeys, hash_folder)
 hashform *form;                                           /* user directives */
 char** inputkeys;
 int numkeys;
+char* hash_folder;
 {
     ub4       nkeys;                                         /* number of keys */
     key      *keys;                                    /* head of list of keys */
@@ -1210,61 +1221,74 @@ int numkeys;
     final.used = 0;
     final.len  = 10;
     for (i=0; i<10; ++i) final.line[i] = buf[i];
-        
+
+    /* creating log filename */
+    char* log_filename = "/phash.log";
+    char* phash_log_path;
+    int phash_log_path_size = strlen(hash_folder)+1+strlen(log_filename);
+    phash_log_path = malloc(phash_log_path_size);
+    strcpy(phash_log_path, hash_folder);
+    strcat(phash_log_path, log_filename);
+
+    FILE *fp = fopen( phash_log_path, "w" );
+    if( fp == NULL) return 1;
+
+    int exit_code; 
     /* read in the list of keywords */
-        getkeys(&keys, &nkeys, textroot, keyroot, form,inputkeys,numkeys);
-        printf("Read in %d keys\n",nkeys);
-        
+    getkeys(&keys, &nkeys, textroot, keyroot, form,inputkeys,numkeys);
+    fprintf(fp, "Read in %d keys\n", nkeys);
+
     /* find the hash */
-        findhash(&tab, &alen, &blen, &salt, &final, 
-                 scramble, &smax, keys, nkeys, form);
+    exit_code = findhash(&tab, &alen, &blen, &salt, &final, scramble, &smax, keys, nkeys, form, fp);
+    if (exit_code != 0) return exit_code;
 
     /* generate the phash.h file */
-        make_h(blen, smax, nkeys, salt);
-     //   printf("Wrote phash.h\n");
+    make_h(blen, smax, nkeys, salt, hash_folder);
         
     /* generate the phash.c file */
-        make_c(tab, smax, blen, scramble, &final, form);
-    //    printf("Wrote phash.c\n");
+    make_c(tab, smax, blen, scramble, &final, form, hash_folder);
         
+    /*clean up log file handle */
+    fclose( fp );
+
     /* clean up memory sources */
-        refree(textroot);
-        refree(keyroot);
-        free((void *)tab);
+    refree(textroot);
+    refree(keyroot);
+    free((void *)tab);
+
+    return 0;
 }
 
 
 /* Describe how to use this utility */
-static void usage_error()
+static void usage_error(FILE *fp)
 {
-    printf("Usage: perfect [-{NnIiHhDdAaBb}{MmPp}{FfSs}] < key.txt \n");
-    printf("The input is a list of keys, one key per line.\n");
-    printf("Only one of NnIiHhDdAa and one of MmPp may be specified.\n");
-    printf("  N,n: normal mode, key is any string string (default).\n");
-    printf("  I,i: initial hash for ASCII char strings.\n");
-    printf("The initial hash must be\n");
-    printf("  hash = PHASHSALT;\n");
-    printf("  for (i=0; i<keylength; ++i) {\n");
-    printf("    hash = (hash ^ key[i]) + ((hash<<26)+(hash>>6));\n");
-    printf("  }\n");
-    printf("Note that this can be inlined in any user loop that walks\n");
-    printf("through the key anyways, eliminating the loop overhead.\n");
-    printf("  H,h: Keys are 4-byte integers in hex in this format:\n");
-    printf("ffffffff\n");
-    printf("This is good for optimizing switch statement compilation.\n");
-    printf("  D,d: Same as H,h, except in decimal not hexidecimal\n");
-    printf("  A,a: An (A,B) pair is supplied in hex in this format:\n");
-    printf("aaa bbb\n");
-    printf("  B,b: Same as A,a, except in decimal not hexidecimal\n");
-    printf("This mode does nothing but find the values of tab[].\n");
-    printf("*A* must be less than the total number of keys.\n");
-    printf("  M,m: Minimal perfect hash.  Hash will be in 0..nkeys-1 (default)\n");
-    printf("  P,p: Perfect hash.  Hash will be in 0..n-1, where n >= nkeys\n");
-    printf("and n is a power of 2.  Will probably use a smaller tab[].");
-    printf("  F,f: Fast mode.  Generate the perfect hash fast.\n");
-    printf("  S,s: Slow mode.  Spend time finding a good perfect hash.\n");
-    
-    exit(SUCCESS);
+    fprintf(fp, "Usage: perfect [-{NnIiHhDdAaBb}{MmPp}{FfSs}] < key.txt \n");
+    fprintf(fp, "The input is a list of keys, one key per line.\n");
+    fprintf(fp, "Only one of NnIiHhDdAa and one of MmPp may be specified.\n");
+    fprintf(fp, "  N,n: normal mode, key is any string string (default).\n");
+    fprintf(fp, "  I,i: initial hash for ASCII char strings.\n");
+    fprintf(fp, "The initial hash must be\n");
+    fprintf(fp, "  hash = PHASHSALT;\n");
+    fprintf(fp, "  for (i=0; i<keylength; ++i) {\n");
+    fprintf(fp, "    hash = (hash ^ key[i]) + ((hash<<26)+(hash>>6));\n");
+    fprintf(fp, "  }\n");
+    fprintf(fp, "Note that this can be inlined in any user loop that walks\n");
+    fprintf(fp, "through the key anyways, eliminating the loop overhead.\n");
+    fprintf(fp, "  H,h: Keys are 4-byte integers in hex in this format:\n");
+    fprintf(fp, "ffffffff\n");
+    fprintf(fp, "This is good for optimizing switch statement compilation.\n");
+    fprintf(fp, "  D,d: Same as H,h, except in decimal not hexidecimal\n");
+    fprintf(fp, "  A,a: An (A,B) pair is supplied in hex in this format:\n");
+    fprintf(fp, "aaa bbb\n");
+    fprintf(fp, "  B,b: Same as A,a, except in decimal not hexidecimal\n");
+    fprintf(fp, "This mode does nothing but find the values of tab[].\n");
+    fprintf(fp, "*A* must be less than the total number of keys.\n");
+    fprintf(fp, "  M,m: Minimal perfect hash.  Hash will be in 0..nkeys-1 (default)\n");
+    fprintf(fp, "  P,p: Perfect hash.  Hash will be in 0..n-1, where n >= nkeys\n");
+    fprintf(fp, "and n is a power of 2.  Will probably use a smaller tab[].");
+    fprintf(fp, "  F,f: Fast mode.  Generate the perfect hash fast.\n");
+    fprintf(fp, "  S,s: Slow mode.  Spend time finding a good perfect hash.\n");
 }
 
 
@@ -1279,9 +1303,10 @@ void delEoLine(char *buf) //if end of line is /n the delete it
 
 /* Interpret arguments and call the driver */
 /* See usage_error for the expected arguments */
-int mphash(inputkeys,numkeys) /* do minimal perfect hashing*/
+int mphash(inputkeys,numkeys, hash_folder) /* do minimal perfect hashing*/
 char **inputkeys;
 int numkeys;
+char *hash_folder;
 {
    // int      mode_given = FALSE;
     //int      minimal_given = FALSE;
@@ -1294,82 +1319,10 @@ int numkeys;
     form.hashtype = STRING_HT;
     form.perfect = MINIMAL_HP;
     form.speed = SLOW_HS;
-    /* let the user override the default behavior */
-    /*
-    
-    switch (argc)
-    {
-        case 1:
-            break;
-        case 2:
-            if (argv[1][0] != '-')
-            {
-                usage_error();
-                break;
-            }
-            for (c = &argv[1][1]; *c != '\0'; ++c) switch(*c)
-            {
-                case 'n': case 'N':
-                case 'i': case 'I':
-                case 'h': case 'H':
-                case 'd': case 'D':
-                case 'a': case 'A':
-                case 'b': case 'B':
-                    if (mode_given == TRUE) 
-                        usage_error();
-                    switch(*c)
-                {
-                    case 'n': case 'N':
-                        form.mode = NORMAL_HM;  form.hashtype = STRING_HT; break;
-                    case 'i': case 'I':
-                        form.mode = INLINE_HM;  form.hashtype = STRING_HT; break;
-                    case 'h': case 'H':
-                        form.mode = HEX_HM;     form.hashtype = INT_HT; break;
-                    case 'd': case 'D':
-                        form.mode = DECIMAL_HM; form.hashtype = INT_HT; break;
-                    case 'a': case 'A':
-                        form.mode = AB_HM;      form.hashtype = AB_HT; break;
-                    case 'b': case 'B':
-                        form.mode = ABDEC_HM;   form.hashtype = AB_HT; break;
-                }
-                    mode_given = TRUE;
-                    break;
-                case 'm': case 'M':
-                case 'p': case 'P':
-                    if (minimal_given == TRUE)
-                        usage_error();
-                    switch(*c)
-                {
-                    case 'p': case 'P':
-                        form.perfect = NORMAL_HP; break;
-                    case 'm': case 'M':
-                        form.perfect = MINIMAL_HP; break;
-                }
-                    minimal_given = TRUE;
-                    break;
-                case 'f': case 'F':
-                case 's': case 'S':
-                    if (speed_given == TRUE)
-                        usage_error();
-                    switch(*c)
-                {
-                    case 'f': case 'F':
-                        form.speed = FAST_HS; break;
-                    case 's': case 'S':
-                        form.speed = SLOW_HS; break;
-                }
-                    speed_given = TRUE;
-                    break;
-                default:
-                    usage_error();
-            }
-            break;
-        default:
-            usage_error();
-    }
-    */
+
     /* Generate the [minimal] perfect hash */
-    driver(&form,inputkeys,numkeys);
-    
-    return SUCCESS;
+    int exit_code = driver(&form,inputkeys,numkeys, hash_folder);
+    if (exit_code != 0 ) return exit_code;   
+ 
+    return 0;
 }

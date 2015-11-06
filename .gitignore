@@ -1,6 +1,8 @@
 ##extracted large test dataset
 test/lage-network/
 
+#hash objects
+net/hash_obj
 
 #GSL library
 external_lib/gsl

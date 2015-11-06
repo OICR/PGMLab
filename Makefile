@@ -4,7 +4,7 @@ CWD   = $(shell pwd)
 
 READLINE_VERSION = 6.3
 TERMCAP_VERSION = 1.3.1
-GSL_VERSION = 1.9
+GSL_VERSION = 2.0
 
 
 
@@ -37,9 +37,20 @@ else
 endif
 
 
-all: gsl readline generateHash
+all: cli r_package
 
-external_lib: gsl readline
+cli: libnet readline
+	make -C cli 
+
+
+r_package: libnet
+	make -C r_package/libnetR
+
+libnet: sha gsl
+	make -C net
+
+sha: 
+	make -C external_lib/mbedtls-2.1.2
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
@@ -59,20 +70,8 @@ termcap:
 	make; \
 	make install;
 
-generateHash:
-	mkdir -p bin; \
-	$(CC) $(CCFLAGS) -o bin/generateHash resources/hash_graph_node_ids/src/main.c \
-	resources/make_hash_table/src/perfhex.c \
-	resources/make_hash_table/src/lookupa.c \
-	resources/make_hash_table/src/perfect.c \
-	resources/make_hash_table/src/recycle.c \
-	resources/hash_graph_node_ids/src/hash_graph_node_ids.c \
-	-Inet/include/ -Iresources/make_hash_table/include/ -w 
-
-libnet:
-	cd net; \
-	make 
-
 clean:
-	cd net; make clean; cd ..; \
+	make -C net clean; \
+	make -C cli clean; \
+	make -C r_package/libnetR clean; \
 	rm bin/*

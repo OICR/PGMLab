@@ -107,8 +107,12 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             printf("Estimated Parameters filepath not specified in config\n");
             return 1;
         }
+        if ( strcmp(pairwise_interactions_filepath, "dummy") == 0 ) {
+            printf("Pairwise interactions filepath not specified in config\n");
+            return 1;
+        }
 
-        int exit_code = learning_discrete_BayNet(logical_factorgraph_filepath, learning_observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, MAP_flag, logging);
+        int exit_code = learning_discrete_BayNet(pairwise_interactions_filepath, logical_factorgraph_filepath, learning_observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, MAP_flag, logging);
         if (exit_code != 0) {
             char * strerr = strerror_libnet(exit_code);
             printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
@@ -129,6 +133,15 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             printf("Posterior probabilities filepath not specified in config\n");
             return 1;
         }
+        if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
+            printf("Logic factorgraph filepath not specified in config\n");
+            return 1;
+        }
+        if ( strcmp(pairwise_interactions_filepath, "dummy") == 0 ) {
+            printf("Pairwise interactions filepath not specified in config\n");
+            return 1;
+        }
+
 
         int exit_code;
         if (inference_use_learnt_factorgraph) {
@@ -137,7 +150,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
                return 1;
             }
 
-            exit_code = doLBPinference(estimated_parameters_filepath, inference_observed_data_filepath, inference_posterior_probabilities_filepath, number_of_states);
+            exit_code = doLBPinference(pairwise_interactions_filepath, estimated_parameters_filepath, inference_observed_data_filepath, inference_posterior_probabilities_filepath, number_of_states);
         } 
         else {
             if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
@@ -145,7 +158,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
                return 1;
             }
 
-            exit_code = doLBPinference(logical_factorgraph_filepath, inference_observed_data_filepath, inference_posterior_probabilities_filepath, number_of_states);
+            exit_code = doLBPinference(pairwise_interactions_filepath, logical_factorgraph_filepath, inference_observed_data_filepath, inference_posterior_probabilities_filepath, number_of_states);
         } 
         if (exit_code != 0) {
              char * strerr = strerror_libnet(exit_code);
@@ -444,8 +457,10 @@ int interactive_pairwise_to_factorgraph(char **pairwise_interactions_filepath, c
     }
 }
 
-int interactive_learning(char **logical_factorgraph_filepath, char ** observed_data_filepath, char** estimated_parameters_filepath, int *number_of_states, int * em_max_iterations, double * em_log_likelihood_change_limit, double * em_parameters_change_limit, int * MAP_flag, int * logging ) {
+int interactive_learning(char **pairwise_interactions_filepath, char **logical_factorgraph_filepath, char ** observed_data_filepath, char** estimated_parameters_filepath, int *number_of_states, int * em_max_iterations, double * em_log_likelihood_change_limit, double * em_parameters_change_limit, int * MAP_flag, int * logging ) {
     printf("\nGathering information required to perform learning\n");
+    if (access(*pairwise_interactions_filepath, R_OK) != 0)
+        get_readable_pairwise_interaction_filepath(pairwise_interactions_filepath);
     if (access(*logical_factorgraph_filepath, R_OK) != 0) 
         get_readable_logical_factorgraph_filepath(logical_factorgraph_filepath);
     get_observed_data_filepath(observed_data_filepath);
@@ -459,7 +474,7 @@ int interactive_learning(char **logical_factorgraph_filepath, char ** observed_d
     get_map_flag(MAP_flag);
 
     printf("Running Learning\n");
-    int exit_code = learning_discrete_BayNet(*logical_factorgraph_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *em_parameters_change_limit, *MAP_flag, *logging);
+    int exit_code = learning_discrete_BayNet(*pairwise_interactions_filepath, *logical_factorgraph_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *em_parameters_change_limit, *MAP_flag, *logging);
     if (exit_code != 0) {
         char * strerr = strerror_libnet(exit_code);
         printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
@@ -473,11 +488,12 @@ int interactive_learning(char **logical_factorgraph_filepath, char ** observed_d
     return 0;
 }
 
-int interactive_inference(char **factorgraph_filepath, char ** observed_data_filepath, char** posterior_probabilities_filepath, int *number_of_states) {
+int interactive_inference(char** pairwise_interactions_filepath, char **factorgraph_filepath, char ** observed_data_filepath, char** posterior_probabilities_filepath, int *number_of_states) {
     printf("\nGathering information required to perform inference\n");
     if (access(*factorgraph_filepath, R_OK) != 0) 
         get_readable_factorgraph_filepath(factorgraph_filepath);
-
+    if (access(*pairwise_interactions_filepath, R_OK) != 0)
+        get_readable_pairwise_interaction_filepath(pairwise_interactions_filepath);
     if (access(*observed_data_filepath, R_OK) != 0)
         get_observed_data_filepath(observed_data_filepath);
     get_writeable_posterior_probabilities_filepath(posterior_probabilities_filepath);
@@ -485,7 +501,7 @@ int interactive_inference(char **factorgraph_filepath, char ** observed_data_fil
         get_number_of_states(number_of_states);
   
     printf("Running Inference\n");
-    int exit_code = doLBPinference(*factorgraph_filepath, *observed_data_filepath, *posterior_probabilities_filepath, *number_of_states);
+    int exit_code = doLBPinference(*pairwise_interactions_filepath, *factorgraph_filepath, *observed_data_filepath, *posterior_probabilities_filepath, *number_of_states);
     if (exit_code != 0) {
          char * strerr = strerror_libnet(exit_code);
          printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
@@ -520,7 +536,7 @@ int interactive_command() {
     input = readline("Would you like to perform learning [Y/n] ");
     if (is_yes(input) == 1)
     {
-        interactive_learning(&logical_factorgraph_filepath, &learning_observed_data_filepath, &estimated_parameters_filepath, &number_of_states, &em_max_iterations, &em_log_likelihood_change_limit, &em_parameters_change_limit, &MAP_flag, &logging);  
+        interactive_learning(&pairwise_interactions_filepath, &logical_factorgraph_filepath, &learning_observed_data_filepath, &estimated_parameters_filepath, &number_of_states, &em_max_iterations, &em_log_likelihood_change_limit, &em_parameters_change_limit, &MAP_flag, &logging);  
     } 
 
     input = readline("Would you like to perform inference [Y/n] ");
@@ -532,10 +548,10 @@ int interactive_command() {
 
         if (input)         
         {
-            interactive_inference(&estimated_parameters_filepath, &inference_observed_data_filepath, &posterior_probabilities_filepath, &number_of_states);  
+            interactive_inference(&pairwise_interactions_filepath, &estimated_parameters_filepath, &inference_observed_data_filepath, &posterior_probabilities_filepath, &number_of_states);  
         } 
         else { 
-            interactive_inference(&logical_factorgraph_filepath, &inference_observed_data_filepath, &posterior_probabilities_filepath, &number_of_states);  
+            interactive_inference(&pairwise_interactions_filepath, &logical_factorgraph_filepath, &inference_observed_data_filepath, &posterior_probabilities_filepath, &number_of_states);  
         }
     } 
 
