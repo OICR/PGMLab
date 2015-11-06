@@ -4,7 +4,7 @@ CWD   = $(shell pwd)
 
 READLINE_VERSION = 6.3
 TERMCAP_VERSION = 1.3.1
-GSL_VERSION = 1.9
+GSL_VERSION = 2.0
 
 
 
