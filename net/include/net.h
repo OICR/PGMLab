@@ -98,5 +98,5 @@ int streamFile(char*filename, char**string, long *length);
 int hashFile(char *filename, unsigned char *sum);
 
 int create_hash_object(char* readreactionlogic, char* hash_folder_path );
-int load_hash_library(char* readreactionlogic, lib_function *phash);
+int load_hash_library(char* readreactionlogic, void **hash_library, lib_function *phash);
 #endif

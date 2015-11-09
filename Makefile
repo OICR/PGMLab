@@ -42,7 +42,6 @@ all: cli r_package
 cli: libnet readline
 	make -C cli 
 
-
 r_package: libnet
 	make -C r_package/libnetR
 
@@ -69,6 +68,14 @@ termcap:
 	./configure --prefix=$(CWD)/external_lib/termcap; \
 	make; \
 	make install;
+
+make install:
+	make -C net install; \
+	make -C cli install
+
+make uninstall:
+	make -C net uninstall; \
+	make -C cli uninstall
 
 clean:
 	make -C net clean; \

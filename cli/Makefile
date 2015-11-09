@@ -2,7 +2,8 @@
 #
 # other external libraries/tools 
 #
-# 
+#
+CWD = $(shell pwd)
 LIBNET_LIB   = ../net/lib
 SOFLAGS      = 
 ################################
@@ -71,6 +72,12 @@ folders:
 readline:
 	cd ..; \
 	make readline
+
+make install:
+	ln -s $(CWD)/../bin/libnet /usr/local/bin/libnet
+
+make uninstall:
+	rm /usr/local/bin/libnet
 
 clean:
 	rm -f $(TARGET) $(OBJECTS) 

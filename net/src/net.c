@@ -382,8 +382,9 @@ void normalizeCPD(double * f, double *CPD,int numComb,int num_state,int flag)
 
 int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, char *posterior_probabilities, int num_state)
 {
+    void *hash_library;
     lib_function phash; 
-    int exit_code = load_hash_library(readreactionlogic, &phash);
+    int exit_code = load_hash_library(readreactionlogic, &hash_library, &phash);
     if (exit_code != 0) return exit_code;
 
     int *obs_values = NULL;
@@ -540,7 +541,7 @@ int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, 
                 h++;
             }
         }
-        
+
         /* we assume p(y|x_1,..x_N) has Dirichlet distribution ; factorarray0 contains parameters of Dirichlet (i.e. \alpha). the gsl_ran_dirichlet generates samples from these distributions.   */
         int sampler_flag = 0;
         if(sampler_flag) {
@@ -594,7 +595,7 @@ int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, 
     }
     fclose(file);
     fclose(pn);
-    
+
     /* free  allocated arrays */
     if(1)
     {
@@ -623,6 +624,9 @@ int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, 
         free(obs_values);
         free(obs_Ids);
     }
+
+    dlclose(hash_library);
+
     return 0;
 } /*end of doLBPinference function*/
 
@@ -680,8 +684,9 @@ int hashFile(char *filename, unsigned char sum[16])
 
 int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfilename,int nstate)
 {
+    void *hash_library;
     lib_function phash; 
-    int exit_code = load_hash_library(readpairwisefilename, &phash);
+    int exit_code = load_hash_library(readpairwisefilename, &hash_library, &phash);
     if (exit_code != 0) return exit_code;
 
     int i,k,kk,Ne,Nv,Nf;
@@ -852,6 +857,8 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     
     fclose(file);
     
+
+
     /* write retrieved the in a factor graph format */
     
     FILE *file1 = fopen(writefactorgraphfilename, "w");
@@ -903,6 +910,8 @@ int pairwiseTofactorgraph(char *readpairwisefilename,char * writefactorgraphfile
     }
     free(fGraph);
     
+    dlclose(hash_library);
+
     return 0;
 }
 
@@ -1593,7 +1602,7 @@ int create_hash_object(char* readreactionlogic, char* hash_folder_path)
     return 0;
 }
 
-int load_hash_library(char* readreactionlogic, lib_function * phash)
+int load_hash_library(char* readreactionlogic, void **hash_library, lib_function * phash)
 {    
     unsigned char sum[16];
 
@@ -1603,22 +1612,26 @@ int load_hash_library(char* readreactionlogic, lib_function * phash)
     char folder_name[sizeof(sum)*2+1];
     unsigned_char_to_char(folder_name, sum, sizeof(sum));
 
-    const char* base_dir = "../net/hash_obj/";
+    const char* hash_dir = "/hash_obj/";
     const char* filename = "/libphash.so";
 
+    char * libnet_so_dir = LIBNET_SO_DIR;
+
     char* hash_object_path;
-    int hash_object_path_size = strlen(folder_name)+1+strlen(base_dir)+1+strlen(filename);
+    int hash_object_path_size = strlen(libnet_so_dir)+1+strlen(hash_dir)+1+strlen(folder_name)+1+strlen(filename);
     hash_object_path = malloc(hash_object_path_size);
-    strcpy(hash_object_path, base_dir);
+    strcpy(hash_object_path, libnet_so_dir);
+    strcat(hash_object_path, hash_dir);
     strcat(hash_object_path, folder_name);
     strcat(hash_object_path, filename);
 
     //Creates the shared object if it does not exist
     if ( access( hash_object_path, X_OK ) == -1 ) {
         char* hash_folder_path;
-        int hash_folder_path_size = strlen(folder_name)+1+strlen(base_dir);
+        int hash_folder_path_size = strlen(libnet_so_dir)+1+strlen(hash_dir)+1+strlen(folder_name);
         hash_folder_path = malloc(hash_folder_path_size);
-        strcpy(hash_folder_path, base_dir);
+        strcpy(hash_folder_path, libnet_so_dir);
+        strcat(hash_folder_path, hash_dir);
         strcat(hash_folder_path, folder_name);
 
         error_code = create_hash_object(readreactionlogic, hash_folder_path);
@@ -1627,14 +1640,12 @@ int load_hash_library(char* readreactionlogic, lib_function * phash)
     }
 
     char* error;
-    void *hash_library;
-    hash_library = dlopen(hash_object_path, RTLD_NOW);
+
+    *hash_library = dlopen(hash_object_path, RTLD_NOW);
     if(!hash_library) return 110;
 
-    *phash = dlsym(hash_library, "phash"); 
+    *phash = dlsym(*hash_library, "phash"); 
     if((error = dlerror()) != NULL) return 111;
-   
-    /* dlclose(hash_library); */
 
     return 0;
 }
@@ -1645,8 +1656,9 @@ int load_hash_library(char* readreactionlogic, lib_function * phash)
 
 int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgraphfilename,int nstate)
 {
+    void *hash_library;
     lib_function phash; 
-    int exit_code = load_hash_library(readreactionlogic, &phash);
+    int exit_code = load_hash_library(readreactionlogic, &hash_library, &phash);
     if (exit_code != 0) return exit_code;
 
     int i,k,h,kk,Ne,Nv;
@@ -1834,6 +1846,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         }
     }
     fclose(file);
+
     
     /*  make the CPT to be used to compute the probablity corresponding to each combination of parents*/
     
@@ -2063,6 +2076,8 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
     }
     free(fGraph);
  
+    dlclose(hash_library);
+
     return 0;
 }
 
@@ -2152,10 +2167,10 @@ int ReadMultipleVisibleSets(lib_function *phash, char *filename,  double **obs_v
 /**************************************************************************/
 int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph, char *obs_data, char *estimated_parameters_filepath, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging)
 {
+    void *hash_library;
     lib_function phash; 
-    int exit_code = load_hash_library(readreactionlogic, &phash);
+    int exit_code = load_hash_library(readreactionlogic, &hash_library, &phash);
     if (exit_code != 0) return exit_code;
-
 
     int i,k,m,h;         /*indexign for loops  and whiles */
     int lenMsgVec;       /*length of message vector (# of all messages *  # of state per message)*/
@@ -2176,7 +2191,6 @@ int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph
     double oldLL= -LargeNumber;
     double changeLL = LargeNumber;
     double change_parameters = 10;
-    
 
     // read  all varibale nodes, remove duplicates; this section is excuted to make a unique list of nodes (keys) which are passed to
     // the hash function generator to make the hash function; we then we hash Ids throughout the code.
@@ -2198,13 +2212,11 @@ int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph
     Nv = uniq(nodelist, numel); /*remove duplicate from nodelist;  Nv: # of variable nodes */
     Nf = Nv; /*in our setting # of facotrs should be equal to # of variables becuase we consider one factor for each root node */
     N = Nv+Nf; // number of all nodes the graph
-printf("before");
+
     /*sort the variable node names  according  to thier hash map Ids */
     for(i=0;i<Nv;i++)
     {
         h = (*phash)(nodelist[i],strlen(nodelist[i]));
-        //printf(" %d %d %s\n",i,h,nodelist[i]);
-        
         k = (int)strlen(nodelist[i]);
         keys[h] = malloc((k+1)*sizeof(char));
         strcpy(keys[h],nodelist[i]);
@@ -2213,11 +2225,11 @@ printf("before");
     for (i = 0; i < Nv; ++i)
     {
         free(nodelist[i]);
-        // printf(" %d %s\n",i,keys[i]);
     }
     
     /* allocate memory for pGraph struct which contains message info*/
     Node *pGraph  = (Node *) malloc(N*sizeof(*pGraph));
+
     /*  fill the pGraph struct field accroding to info given in factor graph file */
     exit_code = FactorgraphFile_To_NodeStructures(&phash, logical_factorgraph, pGraph, num_state, Nv, Nf, &lenMsgVec);
     if (exit_code != 0) return exit_code;    
@@ -2225,7 +2237,6 @@ printf("before");
     /*allocate memory for message vectors*/
     double * u = (double *)malloc(lenMsgVec*num_state * sizeof(double));
     double * u_old = (double *)malloc(lenMsgVec*num_state * sizeof(double));
-    
     
     /* build conditional probability table indexes */
     
@@ -2377,7 +2388,7 @@ printf("before");
                 }
                 //printf("%d %d %d\n",m,visibleIds[k],visible_values[k]);
             }
-            
+
             /* modify factors according to observed nodes states */
             
             inputBasedModifiedCPT(pGraph,factorarray,visible_values,visibleIds,cpt,Nv,num_visibles,1);
@@ -2390,7 +2401,6 @@ printf("before");
                 u[i] = 0;
                 u_old[i] = 0;
             }
-            
             
             iteration = LogRoundRobinSplashLBP(factorarray,cpt,pGraph,u,u_old,num_state, N,Nv,num_state*lenMsgVec);
             //printf("Number of LPB iterations for %d th input data is:   %d\n", m, iteration);
@@ -2471,6 +2481,7 @@ printf("before");
         rewind(file); /* reset the fgets to the begining of the file*/
     } /* end of  EM while*/
     
+
     if ((logging == 1) && (fpl != NULL))
         fclose(fpl);
 
@@ -2544,6 +2555,8 @@ printf("before");
         free(sumFactorProbability);
         free(LogLikelihood);
     }
+
+    dlclose(hash_library);
 
     return 0;
 }

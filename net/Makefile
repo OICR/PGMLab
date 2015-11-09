@@ -69,7 +69,8 @@ $(TARGET_PATH): folder net.o perfect.o lookupa.o recycle.o perfhex.o hash_graph_
 	$(OBJECTS_SHA) \
 	$(INCLUDE_GSL) \
 	-lm \
-        -ldl  
+        -ldl
+         
 
 # -w; \
 
@@ -77,7 +78,7 @@ folder:
 	mkdir -p obj lib hash_obj; 
 
 net.o: src/net.c 
-	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include $(INCLUDE_SHA)
+	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include $(INCLUDE_SHA) 	-DLIBNET_SO_DIR=\"$(CWD)\"
 
 perfect.o: ../resources/make_hash_table/src/perfect.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w
@@ -93,6 +94,12 @@ perfhex.o: ../resources/make_hash_table/src/perfhex.c
 
 hash_graph_node_ids.o: src/hash_graph_node_ids.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c src/hash_graph_node_ids.c -o obj/hash_graph_node_ids.o -Iinclude -I../resources/make_hash_table/include -w
+
+make install:
+	ln -s $(CWD)/lib/libnet.so /usr/lib/
+
+make uninstall:
+	rm /usr/lib/libnet.so
 
 clean:
 	rm -f $(TARGET_PATH) ; \

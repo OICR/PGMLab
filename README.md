@@ -38,25 +38,17 @@ LibNet has been tested on OS X and Ubuntu 14.04.
    - Type the following commands in a terminal:
    
         cd .../your-download-directory/LibNet  
-	make  
+	make 
+        make install (this will link libnet to system paths, making LibNet accessible from anywhere on the host) 
 
-####3. Running LibNet
 
-#####3.1 Generate hash for particular network with generateHash
-
-######Library Path
-
-   - Run the following command if you would like to access this library system wide (not necessary for basic installation) 
-
-	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<net/lib/libnet.[so|dynlib> 
-
-####4 User Interfaces 
+####3 User Interfaces 
 
 There are two interaces to the shared object that come with this package: a command line interaface and a C interface. To make either of the interfaces you are required to have already compiled the LibNet shared object (3.2).
 
-#####4.1Command line interface
+#####3.1Command line interface
 
-######4.1.2 Interacting with the command line interface
+######3.1.2 Interacting with the command line interface
 
 This command line interface can be used in two distinct ways. The first way is to supply the paths of the files in a config file, in the same way as the example config files in the config folder and flags to customize the parameters to be use and the second way is to input the information through an interactive interface. Further infromation on how to use these interface can be found in the wiki.
 
@@ -93,11 +85,11 @@ libnet [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical
 *If you would like to run a new pathway you will need to rerun the generateHash program and then recompile the libnet program.
 
 
-#####4.2 R interface
+#####3.2 R interface
 
 In order to call libnet from the R Console you will need to load the R LibNet shared object. 
 
-######4.2.1 Running R in order to be able to access the R LibNet shared object
+######3.2.1 Running R in order to be able to access the R LibNet shared object
 
    - Run on of the first two commands, depending on your OS, and then run one of the two options in the last line. 
 
@@ -109,14 +101,14 @@ In order to call libnet from the R Console you will need to load the R LibNet sh
 
 *The current working directory needs to be correct to have the shared obejects link to one another correctly
 
-######4.2.2 Loading the LibNet shared ojbect within R or Rstudio
+######3.2.2 Loading the LibNet shared ojbect within R or Rstudio
 
    - Run the following command in order to load the shared object 
 
 	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnetR.so") (for Linux)
 	dyn.load("libnetR/lib/libnetR.so") (for OS X)
 
-######4.2.3 Description of functions available from the R LibNet library
+######3.2.3 Description of functions available from the R LibNet library
 
 	r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP number_of_states_) 
 	
@@ -126,7 +118,7 @@ In order to call libnet from the R Console you will need to load the R LibNet sh
 	
 *All filepaths can be either full or abolute paths and the rest of the variables should be supplied as integer values. 
 	
-######4.2.4 Example R function calls 
+######3.2.4 Example R function calls 
 
 *These relative paths are for linux and should be changed of OS X. In OS X the change should be to remove one of the '../' from the beginning of the each filepath. 
 
@@ -144,16 +136,16 @@ In order to call libnet from the R Console you will need to load the R LibNet sh
 
 *Functions will return 0 upon success and error codes otherwise. 	
 	
-####5 Libnet dependencies
+####4 Libnet dependencies
 
 All resources are included in the LibNet package. 
 
-#####5.1 Resources
+#####4.1 Resources
 | Name                      |  Description | Link |
 |---------------------------|------------------------|------|
 |  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Bob Jenkins and is used to hashing the names of the nodes. This allows LibNet to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
 
-#####5.2 External Libraries
+#####4.2 External Libraries
 | Name                      |  Description | Link |
 |---------------------------|------------------------|------|
 | GNU Scientific Library (GSL) | GSL is a numerical library for C and C++ that provides a wirde range of mathematical routines | http://www.gnu.org/software/gsl/ |
