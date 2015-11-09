@@ -96,10 +96,10 @@ hash_graph_node_ids.o: src/hash_graph_node_ids.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c src/hash_graph_node_ids.c -o obj/hash_graph_node_ids.o -Iinclude -I../resources/make_hash_table/include -w
 
 make install:
-	ln -s $(CWD)/lib/libnet.so /usr/lib/
+	ln -s $(CWD)/lib/$(TARGET) /usr/lib/
 
 make uninstall:
-	rm /usr/lib/libnet.so
+	rm /usr/lib/$(TARGET)
 
 clean:
 	rm -f $(TARGET_PATH) ; \

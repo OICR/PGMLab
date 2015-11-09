@@ -6,8 +6,6 @@ READLINE_VERSION = 6.3
 TERMCAP_VERSION = 1.3.1
 GSL_VERSION = 2.0
 
-
-
 ifeq ($(OS),Windows_NT)
     CCFLAGS += -D WIN32
     ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
@@ -35,7 +33,6 @@ else
         CCFLAGS += -D ARM
     endif
 endif
-
 
 all: cli r_package
 
