@@ -1546,7 +1546,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
     // read the node name and store in an array
     FILE *file = fopen(readreactionlogic, "r");
     if (file == NULL) return 101;
-    
+
     fgets(buf,maxLen,file);    /* read first line  to get number of edges and store it in Ne*/
     
     buf[strlen(buf)-1] = '\0';  /*remove \n placed at the end of each line */
@@ -1628,7 +1628,6 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         varcount[i] = 1 ;/* initialize it*/
     }
     
-    
     /*--------------------------------------------------------------------------------*/
     /* find the variable parent  nodes  and the child node connected to  each factor */
     /*--------------------------------------------------------------------------------*/
@@ -1688,7 +1687,6 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         }
     }
     fclose(file);
-
     
     /*  make the CPT to be used to compute the probablity corresponding to each combination of parents*/
     
@@ -1745,7 +1743,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
         vote[i]  = (double *)malloc(pow(nstate,fGraph[i].numVariables)*sizeof(**vote));
         factorarray[i]  = (double *)malloc(pow(nstate,fGraph[i].numVariables)*sizeof(**factorarray));
     }
-    
+
     for(i = 0;i < Nv;i++)
         for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
             factorarray[i][k]  = (1e-3)/(nstate-1);
@@ -1759,6 +1757,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
                         (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] > nstate/2) ?
                               (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-floor(nstate/2))*fGraph[i].pos_neg[h] :
                               (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]-floor(nstate/2)-1)*fGraph[i].pos_neg[h];
+
 
     /*    OR resembles max and AND resembles min */
     int Small_num_for_OR ; /* to find max*/
