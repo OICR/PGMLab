@@ -60,12 +60,12 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
     if (g_count > 0) {
         printf("Generating factorgraph with:\n\t\tnumber of states\t%d\n", number_of_states);
 
-        if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
-            printf("Pathway filepath not specified in config\n");
+        if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 )  {
+            printf("Pathway filepath not specified correctly in config\n");
             return 1;
         }
-        if ( strcmp(pairwise_interactions_filepath, "dummy") == 0 ) {
-            printf("Pairwise interactions filepath not specified in config\n");
+        if (( strcmp(pairwise_interactions_filepath, "dummy") == 0 ) || access(pairwise_interactions_filepath, R_OK) ) {
+            printf("Pairwise interactions filepath not specified correctly in config\n");
             return 1;
         }
 
@@ -95,20 +95,20 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         else {
             printf("\t\tMAP\t\t\t\toff\n");
         }
-        if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
-            printf("Logic factorgraph filepath not specified in config\n");
+        if (( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) || access(logical_factorgraph_filepath, R_OK)){
+            printf("Logic factorgraph filepath not specified correctly in config\n");
             return 1;
         }
-        if ( strcmp(learning_observed_data_filepath, "dummy") == 0 ) {
-            printf("Learning observed data filepath not specified in config\n");
+        if (( strcmp(learning_observed_data_filepath, "dummy") == 0 ) || access(learning_observed_data_filepath, R_OK) ) {
+            printf("Learning observed data filepath not specified correctly in config\n");
             return 1;
         }
         if ( strcmp(estimated_parameters_filepath, "dummy") == 0 ) {
-            printf("Estimated Parameters filepath not specified in config\n");
+            printf("Estimated Parameters filepath not specified correctly in config\n");
             return 1;
         }
-        if ( strcmp(pairwise_interactions_filepath, "dummy") == 0 ) {
-            printf("Pairwise interactions filepath not specified in config\n");
+        if (( strcmp(pairwise_interactions_filepath, "dummy") == 0 ) || access(pairwise_interactions_filepath, R_OK) ) {
+            printf("Pairwise interactions filepath not specified correctly in config\n");
             return 1;
         }
 
@@ -125,36 +125,32 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
     }
     if (i_count > 0) {
         printf("Running Inference with:\n\t\tnumber of states\t%d\n", number_of_states);
-        if ( strcmp(learning_observed_data_filepath, "dummy") == 0 ) {
-            printf("Observed data filepath not specified in config\n");
+        if (( strcmp(inference_observed_data_filepath, "dummy") == 0 )  || access(inference_observed_data_filepath, R_OK) ){
+            printf("Observed data filepath not specified correctly in config\n");
             return 1;
         }
         if ( strcmp(inference_posterior_probabilities_filepath, "dummy") == 0 ) {
-            printf("Posterior probabilities filepath not specified in config\n");
+            printf("Posterior probabilities filepath not specified correctly in config\n");
             return 1;
         }
-        if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
-            printf("Logic factorgraph filepath not specified in config\n");
-            return 1;
-        }
-        if ( strcmp(pairwise_interactions_filepath, "dummy") == 0 ) {
-            printf("Pairwise interactions filepath not specified in config\n");
+        if (( strcmp(pairwise_interactions_filepath, "dummy") == 0 ) || access(pairwise_interactions_filepath, R_OK) ) {
+            printf("Pairwise interactions filepath not specified correctly in config\n");
             return 1;
         }
 
 
         int exit_code;
         if (inference_use_learnt_factorgraph) {
-            if ( strcmp(estimated_parameters_filepath, "dummy") == 0 ) {
-               printf("Estimated parameters (learnt factorgraph) filepath not specified in config\n");
+            if (( strcmp(estimated_parameters_filepath, "dummy") == 0 ) || access(estimated_parameters_filepath, R_OK) ) {
+               printf("Estimated parameters (learnt factorgraph) filepath not specified correctly in config\n");
                return 1;
             }
 
             exit_code = doLBPinference(pairwise_interactions_filepath, estimated_parameters_filepath, inference_observed_data_filepath, inference_posterior_probabilities_filepath, number_of_states);
         } 
         else {
-            if ( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) {
-               printf("Logic factorgraph filepath not specified in config\n");
+            if (( strcmp(logical_factorgraph_filepath, "dummy") == 0 ) || access(logical_factorgraph_filepath, R_OK) ) {
+               printf("Logic factorgraph filepath not specified correctly in config\n");
                return 1;
             }
 
