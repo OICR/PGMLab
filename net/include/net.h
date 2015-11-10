@@ -24,10 +24,10 @@
 #endif
 
 #ifndef EPS
-#define  EPS 1e-300 ;
+#define  EPS 1e-300;
 #endif
 #ifndef logEPS
-#define  logEPS -30 ;
+#define  logEPS -30;
 #endif
 #ifndef LargeNumber
 #define  LargeNumber 1e300;
