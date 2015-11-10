@@ -74,10 +74,10 @@ readline:
 	make readline
 
 make install:
-	ln -s $(CWD)/../bin/libnet /usr/local/bin/libnet
+	ln -s $(CWD)/../bin/$(TARGET) /usr/local/bin/$(TARGET)
 
 make uninstall:
-	rm /usr/local/bin/libnet
+	rm /usr/local/bin/$(TARGET)
 
 clean:
 	rm -f $(TARGET) $(OBJECTS) 
