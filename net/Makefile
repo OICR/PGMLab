@@ -3,6 +3,7 @@ CC	= gcc
 CWD	= $(shell pwd)
 ODIR	= obj
 
+NAME = pgmlab
 GSL_VERSION = 1.9
 SHARED_OBJECT_EXTENSION =
 
@@ -29,7 +30,7 @@ else
         CCFLAGS += -D OSX
         LDFLAGS = -dynamiclib
         SHARED_OBJECT_EXTENSION = dylib
-        RPATH = -install_name ../net/lib/libnet.$(SHARED_OBJECT_EXTENSION)
+        RPATH = -install_name ../net/lib/lib$(NAME).$(SHARED_OBJECT_EXTENSION)
     endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
@@ -43,7 +44,7 @@ else
     endif
 endif
 
-TARGET		= libnet.$(SHARED_OBJECT_EXTENSION)
+TARGET		= lib$(NAME).$(SHARED_OBJECT_EXTENSION)
 TARGET_PATH	= $(shell pwd)/lib/$(TARGET)
 
 SOURCES	=	src/net.c \
@@ -69,7 +70,8 @@ $(TARGET_PATH): folder net.o perfect.o lookupa.o recycle.o perfhex.o hash_graph_
 	$(OBJECTS_SHA) \
 	$(INCLUDE_GSL) \
 	-lm \
-        -ldl  
+        -ldl
+         
 
 # -w; \
 
@@ -77,7 +79,7 @@ folder:
 	mkdir -p obj lib hash_obj; 
 
 net.o: src/net.c 
-	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include $(INCLUDE_SHA)
+	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include $(INCLUDE_SHA) 	-DPGMLAB_SO_DIR=\"$(CWD)\"
 
 perfect.o: ../resources/make_hash_table/src/perfect.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w
@@ -93,6 +95,12 @@ perfhex.o: ../resources/make_hash_table/src/perfhex.c
 
 hash_graph_node_ids.o: src/hash_graph_node_ids.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c src/hash_graph_node_ids.c -o obj/hash_graph_node_ids.o -Iinclude -I../resources/make_hash_table/include -w
+
+make install:
+	ln -s $(CWD)/lib/$(TARGET) /usr/lib/
+
+make uninstall:
+	rm /usr/lib/$(TARGET)
 
 clean:
 	rm -f $(TARGET_PATH) ; \

@@ -6,8 +6,6 @@ READLINE_VERSION = 6.3
 TERMCAP_VERSION = 1.3.1
 GSL_VERSION = 2.0
 
-
-
 ifeq ($(OS),Windows_NT)
     CCFLAGS += -D WIN32
     ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
@@ -36,17 +34,15 @@ else
     endif
 endif
 
-
 all: cli r_package
 
-cli: libnet readline
+cli: pgmlab readline
 	make -C cli 
 
+r_package: pgmlab
+	make -C R/pgmlabR
 
-r_package: libnet
-	make -C r_package/libnetR
-
-libnet: sha gsl
+pgmlab: sha gsl
 	make -C net
 
 sha: 
@@ -70,8 +66,16 @@ termcap:
 	make; \
 	make install;
 
+make install:
+	make -C net install; \
+	make -C cli install
+
+make uninstall:
+	make -C net uninstall; \
+	make -C cli uninstall
+
 clean:
 	make -C net clean; \
 	make -C cli clean; \
-	make -C r_package/libnetR clean; \
+	make -C R/pgmlabR clean; \
 	rm bin/*

@@ -24,10 +24,10 @@
 #endif
 
 #ifndef EPS
-#define  EPS 1e-300 ;
+#define  EPS 1e-300;
 #endif
 #ifndef logEPS
-#define  logEPS -30 ;
+#define  logEPS -30;
 #endif
 #ifndef LargeNumber
 #define  LargeNumber 1e300;
@@ -89,7 +89,7 @@ int ReadMultipleVisibleSets(lib_function *phash, char *filename,  double **obs_v
 void hash_graph_node_IDs(char *readreactionlogicpathways);
 
 int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph, char *obs_data,char *estimated_parameters, int num_state, int max_num_repeat, double LLchangeLimit, double parChangeLimit, int MAPflag, int logging);
-char *strerror_libnet(int error_code);
+char *strerror_pgmlab(int error_code);
 
 int compile_shared_object(char* path);
 int create_hash_folder (char* hash_folder_path);
@@ -98,5 +98,5 @@ int streamFile(char*filename, char**string, long *length);
 int hashFile(char *filename, unsigned char *sum);
 
 int create_hash_object(char* readreactionlogic, char* hash_folder_path );
-int load_hash_library(char* readreactionlogic, lib_function *phash);
+int load_hash_library(char* readreactionlogic, void **hash_library, lib_function *phash);
 #endif
