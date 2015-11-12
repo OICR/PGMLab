@@ -56,8 +56,7 @@ This command line interface can be used in two distinct ways. The first way is t
 
    - Run the following commands for a description of the PGMLAB command line interface. 
  
-	cd bin  
-	./pgmlab --help  
+	pgmlab --help  
 	
    - The following will be outputed from the previous command
 
@@ -104,7 +103,7 @@ In order to call pgmlab from the R Console you will need to load the PGMLAB R sh
 
    - Run the following command in order to load the shared object 
 
-	dyn.load("<path to repo>/pgmlab/r_package/pgmlabR/lib/pgmlabR.so") (for Linux)
+	dyn.load("<path to repo>/PGMLAB/r_package/pgmlabR/lib/pgmlabR.so") (for Linux)
 	dyn.load("pgmlabR/lib/pgmlabR.so") (for OS X)
 
 ######3.2.3 Description of functions available from the PGMLAB R library

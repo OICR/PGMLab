@@ -51,7 +51,7 @@ else
 endif
 
 INCLUDE_GSL = -L../../external_lib/gsl/lib -I../../external_lib/gsl/include -lgsl -lgslcblas
-INCLUDE_PGMLAB = -L../../net/lib -lnet -I../../net/include -I../../resources/make_hash_table/include
+INCLUDE_PGMLAB = -L../../net/lib -lpgmlab -I../../net/include -I../../resources/make_hash_table/include
 
 all: object 
 	mkdir -p lib; \
