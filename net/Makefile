@@ -3,6 +3,7 @@ CC	= gcc
 CWD	= $(shell pwd)
 ODIR	= obj
 
+NAME = pgmlab
 GSL_VERSION = 1.9
 SHARED_OBJECT_EXTENSION =
 
@@ -29,7 +30,7 @@ else
         CCFLAGS += -D OSX
         LDFLAGS = -dynamiclib
         SHARED_OBJECT_EXTENSION = dylib
-        RPATH = -install_name ../net/lib/pgmlab.$(SHARED_OBJECT_EXTENSION)
+        RPATH = -install_name ../net/lib/lib$(NAME).$(SHARED_OBJECT_EXTENSION)
     endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
@@ -43,7 +44,7 @@ else
     endif
 endif
 
-TARGET		= pgmlab.$(SHARED_OBJECT_EXTENSION)
+TARGET		= lib$(NAME).$(SHARED_OBJECT_EXTENSION)
 TARGET_PATH	= $(shell pwd)/lib/$(TARGET)
 
 SOURCES	=	src/net.c \
