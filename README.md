@@ -91,8 +91,8 @@ In order to call pgmlab from the R Console you will need to load the PGMLAB R sh
 
    - Run on of the first two commands, depending on your OS, and then run one of the two options in the last line. 
 
-	cd r_package/pgmlabR/  (for Linux)  
-	cd r_package/ (for OS X)  
+	cd R/pgmlabR/  (for Linux)  
+	cd R/ (for OS X)  
 	type r or rstudio  
 
    - You should now be in a R prompt
@@ -103,7 +103,7 @@ In order to call pgmlab from the R Console you will need to load the PGMLAB R sh
 
    - Run the following command in order to load the shared object 
 
-	dyn.load("<path to repo>/PGMLAB/r_package/pgmlabR/lib/pgmlabR.so") (for Linux)
+	dyn.load("<path to repo>/PGMLAB/R/pgmlabR/lib/pgmlabR.so") (for Linux)
 	dyn.load("pgmlabR/lib/pgmlabR.so") (for OS X)
 
 ######3.2.3 Description of functions available from the PGMLAB R library

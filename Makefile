@@ -40,7 +40,7 @@ cli: pgmlab readline
 	make -C cli 
 
 r_package: pgmlab
-	make -C r_package/pgmlabR
+	make -C R/pgmlabR
 
 pgmlab: sha gsl
 	make -C net
@@ -77,5 +77,5 @@ make uninstall:
 clean:
 	make -C net clean; \
 	make -C cli clean; \
-	make -C r_package/pgmlabR clean; \
+	make -C R/pgmlabR clean; \
 	rm bin/*
