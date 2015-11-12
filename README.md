@@ -12,6 +12,8 @@ PGMLAB developed to fulfill three goals:
 
    - Hossein Radfar 
    - Adam Wright 
+##Web Site
+   - Visit the PGMLAB website [here](http://oicr.github.io/PGMLAB)
 
 ##Wiki
    - Please visit the PGMLAB wiki [here](https://github.com/OICR/PGMLAB/wiki) for details and theory. 
