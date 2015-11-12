@@ -1,4 +1,4 @@
-#PGMLAB (Probablisti Graphical Model Laboratory)
+#PGMLAB (Probablistic Graphical Model Laboratory)
 
 PGMLAB performs learning and inference in large discrete baysian networks. PGMLAB is a standalone C library, which has command line and R interfaces. 
 
