@@ -12,7 +12,7 @@ SEXP r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP
 
     int exit_code = reaction_logic_to_factorgraph(reaction_logic_pathway_filepath, pathway_filepath, number_of_states);
     if (exit_code != 0) {
-        char * strerr = strerror_libnet(exit_code);
+        char * strerr = strerror_pgmlab(exit_code);
         Rprintf("ERROR: %s\n", strerr);
     }
 
@@ -37,7 +37,7 @@ SEXP r_learning_discrete_BayNet(SEXP reaction_logic_pathway_filepath_, SEXP path
     int exit_code = learning_discrete_BayNet(reaction_logic_pathway_filepath, pathway_filepath, observed_data_filepath, estimated_parameters_filepath, 
                              number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, map_flag, logging);
     if (exit_code != 0) {
-        char * strerr = strerror_libnet(exit_code);
+        char * strerr = strerror_pgmlab(exit_code);
         Rprintf("ERROR: %s\n", strerr);
     }
 
@@ -55,7 +55,7 @@ SEXP r_doLBPinference(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepa
  
     int exit_code = doLBPinference(reaction_logic_pathway_filepath, pathway_filepath, observed_data_filepath, posterior_probabilities_filepath, number_of_states);
     if (exit_code != 0) {
-        char * strerr = strerror_libnet(exit_code);
+        char * strerr = strerror_pgmlab(exit_code);
         Rprintf("ERROR: %s\n", strerr);
     }
 

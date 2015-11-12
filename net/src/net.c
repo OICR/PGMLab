@@ -1481,12 +1481,12 @@ int load_hash_library(char* readreactionlogic, void **hash_library, lib_function
     const char* hash_dir = "/hash_obj/";
     const char* filename = "/libphash.so";
 
-    char * libnet_so_dir = LIBNET_SO_DIR;
+    char * pgmlab_so_dir = PGMLAB_SO_DIR;
 
     char* hash_object_path;
-    int hash_object_path_size = strlen(libnet_so_dir)+1+strlen(hash_dir)+1+strlen(folder_name)+1+strlen(filename);
+    int hash_object_path_size = strlen(pgmlab_so_dir)+1+strlen(hash_dir)+1+strlen(folder_name)+1+strlen(filename);
     hash_object_path = malloc(hash_object_path_size);
-    strcpy(hash_object_path, libnet_so_dir);
+    strcpy(hash_object_path, pgmlab_so_dir);
     strcat(hash_object_path, hash_dir);
     strcat(hash_object_path, folder_name);
     strcat(hash_object_path, filename);
@@ -1494,9 +1494,9 @@ int load_hash_library(char* readreactionlogic, void **hash_library, lib_function
     //Creates the shared object if it does not exist
     if ( access( hash_object_path, X_OK ) == -1 ) {
         char* hash_folder_path;
-        int hash_folder_path_size = strlen(libnet_so_dir)+1+strlen(hash_dir)+1+strlen(folder_name);
+        int hash_folder_path_size = strlen(pgmlab_so_dir)+1+strlen(hash_dir)+1+strlen(folder_name);
         hash_folder_path = malloc(hash_folder_path_size);
-        strcpy(hash_folder_path, libnet_so_dir);
+        strcpy(hash_folder_path, pgmlab_so_dir);
         strcat(hash_folder_path, hash_dir);
         strcat(hash_folder_path, folder_name);
 
@@ -2300,7 +2300,7 @@ int learning_discrete_BayNet(char* readreactionlogic, char * logical_factorgraph
     return 0;
 }
 
-char *strerror_libnet (int error_code) {
+char *strerror_pgmlab (int error_code) {
     static char strerr[100];
 
     switch(error_code){

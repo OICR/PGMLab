@@ -36,13 +36,13 @@ endif
 
 all: cli r_package
 
-cli: libnet readline
+cli: pgmlab readline
 	make -C cli 
 
-r_package: libnet
-	make -C r_package/libnetR
+r_package: pgmlab
+	make -C r_package/pgmlabR
 
-libnet: sha gsl
+pgmlab: sha gsl
 	make -C net
 
 sha: 
@@ -77,5 +77,5 @@ make uninstall:
 clean:
 	make -C net clean; \
 	make -C cli clean; \
-	make -C r_package/libnetR clean; \
+	make -C r_package/pgmlabR clean; \
 	rm bin/*
