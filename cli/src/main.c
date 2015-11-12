@@ -1,7 +1,7 @@
 /*******************************************************************************
-* C interface to libnet
+* C interface to PGMLAB
 *    USAGE:
-*        libnet [--help] [--learning] [--inference]
+*        pgmlab [--help] [--learning] [--inference]
 * 
 *******************************************************************************/
 //for inimini
@@ -114,7 +114,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
 
         int exit_code = learning_discrete_BayNet(pairwise_interactions_filepath, logical_factorgraph_filepath, learning_observed_data_filepath, estimated_parameters_filepath, number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, MAP_flag, logging);
         if (exit_code != 0) {
-            char * strerr = strerror_libnet(exit_code);
+            char * strerr = strerror_pgmlab(exit_code);
             printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
             return 0;
         } 
@@ -157,7 +157,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             exit_code = doLBPinference(pairwise_interactions_filepath, logical_factorgraph_filepath, inference_observed_data_filepath, inference_posterior_probabilities_filepath, number_of_states);
         } 
         if (exit_code != 0) {
-             char * strerr = strerror_libnet(exit_code);
+             char * strerr = strerror_pgmlab(exit_code);
              printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
              return exit_code;
         }
@@ -443,7 +443,7 @@ int interactive_pairwise_to_factorgraph(char **pairwise_interactions_filepath, c
     int exit_code = reaction_logic_to_factorgraph(*pairwise_interactions_filepath, *factorgraph_filepath, *number_of_states);
 
     if (exit_code != 0) {
-        char * strerr = strerror_libnet(exit_code);
+        char * strerr = strerror_pgmlab(exit_code);
         printf("Failed to generate factorgraph (error code: %d): %s\n", exit_code, strerr);
         return exit_code;
     }
@@ -472,7 +472,7 @@ int interactive_learning(char **pairwise_interactions_filepath, char **logical_f
     printf("Running Learning\n");
     int exit_code = learning_discrete_BayNet(*pairwise_interactions_filepath, *logical_factorgraph_filepath, *observed_data_filepath, *estimated_parameters_filepath, *number_of_states, *em_max_iterations, *em_log_likelihood_change_limit, *em_parameters_change_limit, *MAP_flag, *logging);
     if (exit_code != 0) {
-        char * strerr = strerror_libnet(exit_code);
+        char * strerr = strerror_pgmlab(exit_code);
         printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
         return 0;
     } 
@@ -499,7 +499,7 @@ int interactive_inference(char** pairwise_interactions_filepath, char **factorgr
     printf("Running Inference\n");
     int exit_code = doLBPinference(*pairwise_interactions_filepath, *factorgraph_filepath, *observed_data_filepath, *posterior_probabilities_filepath, *number_of_states);
     if (exit_code != 0) {
-         char * strerr = strerror_libnet(exit_code);
+         char * strerr = strerror_pgmlab(exit_code);
          printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
          return exit_code;
     }
@@ -598,7 +598,7 @@ int main(int argc, char *argv[]) {
         end = arg_end(20)
     };
  
-    const char *program_name = "libnet";
+    const char *program_name = "pgmlab";
     const char *program_version = "1.0.0";
 
     int exitcode = 0;

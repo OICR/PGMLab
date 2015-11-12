@@ -50,7 +50,7 @@ DEBUGFLAGS   = -O0 -D _DEBUG
 LIBDIRS = -L$(LIBNET_LIB)
 RPATH   = -Wl,-rpath=$(LIBNET_LIB)
 
-TARGET  = libnet
+TARGET  = pgmlab
 TARGET_PATH = ../bin/$(TARGET)
 SOURCES = $(shell echo src/*.c) $(shell echo ../resources/make_hash_table/src/*.c) ../resources/minini/minIni.c
 HEADERS = $(shell echo include/*.h) $(shell echo ../resources/make_hash_table/src/*.h) ../resources/minini/minIni.h ../resources/minini/wxMinIni.h ../resources/minini/minGlue.h
@@ -69,10 +69,6 @@ $(TARGET): folders
 folders: 
 	mkdir -p ../bin 
 
-readline:
-	cd ..; \
-	make readline
-
 make install:
 	ln -s $(CWD)/../bin/$(TARGET) /usr/local/bin/$(TARGET)
 
@@ -81,6 +77,3 @@ make uninstall:
 
 clean:
 	rm -f $(TARGET) $(OBJECTS) 
-
-
-

@@ -29,7 +29,7 @@ else
         CCFLAGS += -D OSX
         LDFLAGS = -dynamiclib
         SHARED_OBJECT_EXTENSION = dylib
-        RPATH = -install_name ../net/lib/libnet.$(SHARED_OBJECT_EXTENSION)
+        RPATH = -install_name ../net/lib/pgmlab.$(SHARED_OBJECT_EXTENSION)
     endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
@@ -43,7 +43,7 @@ else
     endif
 endif
 
-TARGET		= libnet.$(SHARED_OBJECT_EXTENSION)
+TARGET		= pgmlab.$(SHARED_OBJECT_EXTENSION)
 TARGET_PATH	= $(shell pwd)/lib/$(TARGET)
 
 SOURCES	=	src/net.c \
@@ -78,7 +78,7 @@ folder:
 	mkdir -p obj lib hash_obj; 
 
 net.o: src/net.c 
-	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include $(INCLUDE_SHA) 	-DLIBNET_SO_DIR=\"$(CWD)\"
+	$(CC) $(CCFLAGS) $(CFLAGS) -w -c src/net.c -o obj/net.o -Iinclude $(INCLUDE_GSL) -I../resources/make_hash_table/include $(INCLUDE_SHA) 	-DPGMLAB_SO_DIR=\"$(CWD)\"
 
 perfect.o: ../resources/make_hash_table/src/perfect.c
 	$(CC) $(CCFLAGS) $(CFLAGS) -c ../resources/make_hash_table/src/perfect.c -o obj/perfect.o -I../resources/make_hash_table/include -w
