@@ -1,8 +1,8 @@
-#LibNet
+#PGMLAB (Probablisti Graphical Model Laboratory)
 
-Libnet performs learning and inference in large discrete baysian networks. Libnet is a standalone C library, which has command line and R interfaces. 
+PGMLAB performs learning and inference in large discrete baysian networks. PGMLAB is a standalone C library, which has command line and R interfaces. 
 
-LibNet developed to fulfill three goals: 
+PGMLAB developed to fulfill three goals: 
 
    - To perform learning and inference in extremely large graphs. 
    - To be used by both expert and non expert in the field of machine learning
@@ -14,17 +14,17 @@ LibNet developed to fulfill three goals:
    - Adam Wright 
 
 ##Wiki
-   - Please visit the LibNet wiki [here](https://github.com/OICR/LibNet/wiki) for details and theory. 
-   - Make sure to follow the input file formats specifications [here](https://github.com/OICR/LibNet/wiki/File-Formats).  
+   - Please visit the PGMLAB wiki [here](https://github.com/OICR/PGMLAB/wiki) for details and theory. 
+   - Make sure to follow the input file formats specifications [here](https://github.com/OICR/PGMLAB/wiki/File-Formats).  
 
 ##System requirements
 
-LibNet has been tested on OS X and Ubuntu 14.04.
+PGMLAB has been tested on OS X and Ubuntu 14.04.
 
-###How to download, install and Run LibNet
+###How to download, install and Run PGMLAB
 ####1. Download
 
-   - Download the latest version of LibNet from [here](https://github.com/OICR/LibNet/zipball/master) 
+   - Download the latest version of PGMLAB from [here](https://github.com/OICR/PGMLAB/zipball/master) 
 
 ####2. Installation
 
@@ -33,18 +33,18 @@ LibNet has been tested on OS X and Ubuntu 14.04.
 	Linux: sudo apt-get install texinfo
 	Mac OS X: follow the following instructions http://macappstore.org/texinfo/
 
-#####2.2 Install LibNet Package
+#####2.2 Install PGMLAB Package
 
    - Type the following commands in a terminal:
    
-        cd .../your-download-directory/LibNet  
+        cd .../your-download-directory/PGMLAB
 	make 
-        make install (this will link libnet to system paths, making LibNet accessible from anywhere on the host) 
+        make install (this will link PGMLAB to system paths, making PGMLAB accessible from anywhere on the host) 
 
 
 ####3 User Interfaces 
 
-There are two interaces to the shared object that come with this package: a command line interaface and a C interface. To make either of the interfaces you are required to have already compiled the LibNet shared object (3.2).
+There are two interaces to the shared object that come with this package: a command line interaface and a C interface. To make either of the interfaces you are required to have already compiled the PGMLAB shared object (3.2).
 
 #####3.1Command line interface
 
@@ -52,15 +52,15 @@ There are two interaces to the shared object that come with this package: a comm
 
 This command line interface can be used in two distinct ways. The first way is to supply the paths of the files in a config file, in the same way as the example config files in the config folder and flags to customize the parameters to be use and the second way is to input the information through an interactive interface. Further infromation on how to use these interface can be found in the wiki.
 
-   - Run the following commands for a description of the LibNet command line interface. 
+   - Run the following commands for a description of the PGMLAB command line interface. 
  
 	cd bin  
-	./libnet --help  
+	./pgmlab --help  
 	
    - The following will be outputed from the previous command
 
 ```
-libnet [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical-factorgraph] [--number-of-states=<int>] [--em-max-iterations=<int>] [--training-samples=<int>] [--log-likelihood-change-limit=<double>] [--parameters-change-limit=<double>] [--logging-on] [--maximum-a-posteriori-estimation] [--help] [--version] 
+pgmlab [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical-factorgraph] [--number-of-states=<int>] [--em-max-iterations=<int>] [--training-samples=<int>] [--log-likelihood-change-limit=<double>] [--parameters-change-limit=<double>] [--logging-on] [--maximum-a-posteriori-estimation] [--help] [--version] 
 
 ###Flag descriptions  
  -g, --generate-factorgraph Generate factor graph from reaction logic
@@ -82,33 +82,30 @@ libnet [-gil] [--interactive] [--file-paths=file-paths] [--inference-use-logical
 
 *If you would like to use the interactive interface select the following flag: "--interactive".
 
-*If you would like to run a new pathway you will need to rerun the generateHash program and then recompile the libnet program.
-
-
 #####3.2 R interface
 
-In order to call libnet from the R Console you will need to load the R LibNet shared object. 
+In order to call pgmlab from the R Console you will need to load the PGMLAB R shared object. 
 
-######3.2.1 Running R in order to be able to access the R LibNet shared object
+######3.2.1 Running R in order to be able to access the PGMLAB R shared object
 
    - Run on of the first two commands, depending on your OS, and then run one of the two options in the last line. 
 
-	cd r_package/libnetR/  (for Linux)  
+	cd r_package/pgmlabR/  (for Linux)  
 	cd r_package/ (for OS X)  
 	type r or rstudio  
-   
+
    - You should now be in a R prompt
 
 *The current working directory needs to be correct to have the shared obejects link to one another correctly
 
-######3.2.2 Loading the LibNet shared ojbect within R or Rstudio
+######3.2.2 Loading the PGMLAB shared ojbect within R or Rstudio
 
    - Run the following command in order to load the shared object 
 
-	dyn.load("<path to repo>/libnet/r_package/libnetR/lib/libnetR.so") (for Linux)
-	dyn.load("libnetR/lib/libnetR.so") (for OS X)
+	dyn.load("<path to repo>/pgmlab/r_package/pgmlabR/lib/pgmlabR.so") (for Linux)
+	dyn.load("pgmlabR/lib/pgmlabR.so") (for OS X)
 
-######3.2.3 Description of functions available from the R LibNet library
+######3.2.3 Description of functions available from the PGMLAB R library
 
 	r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP number_of_states_) 
 	
@@ -136,14 +133,14 @@ In order to call libnet from the R Console you will need to load the R LibNet sh
 
 *Functions will return 0 upon success and error codes otherwise. 	
 	
-####4 Libnet dependencies
+####4 PGMLAB dependencies
 
-All resources are included in the LibNet package. 
+All resources are included in the PGMLAB package. 
 
 #####4.1 Resources
 | Name                      |  Description | Link |
 |---------------------------|------------------------|------|
-|  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Bob Jenkins and is used to hashing the names of the nodes. This allows LibNet to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
+|  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Bob Jenkins and is used to hashing the names of the nodes. This allows PGMLAB to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
 
 #####4.2 External Libraries
 | Name                      |  Description | Link |

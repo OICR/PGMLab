@@ -3,8 +3,8 @@ CC = gcc
 
 R_VERSION = 3.2.2_1
 
-TARGET = libnetR
-LIBNET_LIB = ../../net/lib
+TARGET = pgmlabR
+PGMLAB_LIB = ../../net/lib
 
 
 ifeq ($(OS),Windows_NT)
@@ -24,7 +24,7 @@ else
         R_LIB = -L/usr/lib/R/lib -lR
 	INCLUDE_R = -I/usr/share/R/include
         R_FLAGS = -Wl,Bsymbolic-functions -Wl,-z,relro -std=gnu99
-        SOFLAGS +=  -Wl,-rpath=$(LIBNET_LIB),-rpath=../external_lib/gsl/lib -fPIC
+        SOFLAGS +=  -Wl,-rpath=$(PGMLAB_LIB),-rpath=../external_lib/gsl/lib -fPIC
         OFLAGS =  -std=gnu99 -DNDEBUG -fpic -g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g 
     endif
     ifeq ($(UNAME_S),Darwin)
@@ -36,7 +36,7 @@ else
         R_FLAGS = -F/Library/Frameworks/R.framework/.. -framework R -Wl,-framework -Wl,CoreFoundation
         SOFLAGS +=  -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress
         OFLAGS = -Wall -mtune=core2 -g -O2 -w 
-        XLINKER = -Xlinker $(LIBNET_LIB)
+        XLINKER = -Xlinker $(PGMLAB_LIB)
     endif
     UNAME_P := $(shell uname -p)
     ifeq ($(UNAME_P),x86_64)
@@ -51,15 +51,15 @@ else
 endif
 
 INCLUDE_GSL = -L../../external_lib/gsl/lib -I../../external_lib/gsl/include -lgsl -lgslcblas
-INCLUDE_LIBNET = -L../../net/lib -lnet -I../../net/include -I../../resources/make_hash_table/include
+INCLUDE_PGMLAB = -L../../net/lib -lnet -I../../net/include -I../../resources/make_hash_table/include
 
 all: object 
 	mkdir -p lib; \
-	$(CC) $(LDFLAGS) $(SOFLAGS) $(R_LIB) -o lib/$(TARGET).$(SHARED_OBJECT_EXTENSION) obj/$(TARGET).o $(INCLUDE_LIBNET) $(RFLAGS)
+	$(CC) $(LDFLAGS) $(SOFLAGS) $(R_LIB) -o lib/$(TARGET).$(SHARED_OBJECT_EXTENSION) obj/$(TARGET).o $(INCLUDE_PGMLAB) $(RFLAGS)
 
 object:
 	mkdir -p obj; \
-	$(CC) -DNDEBUG $(INCLUDE_R) $(OFLAGS) -c src/$(TARGET).c -o obj/$(TARGET).o $(INCLUDE_LIBNET) $(INCLUDE_GSL)  $(XLINKER)
+	$(CC) -DNDEBUG $(INCLUDE_R) $(OFLAGS) -c src/$(TARGET).c -o obj/$(TARGET).o $(INCLUDE_PGMLAB) $(INCLUDE_GSL)  $(XLINKER)
 
 clean:
 	rm lib/* obj/*
