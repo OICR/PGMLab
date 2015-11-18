@@ -8,5 +8,5 @@ pip
 
 ##installation
 
-        apt-get install python-pip  
-        pip install crossbar autobahn
+        apt-get install python-dev python-pip  
+        pip install crossbar autobahn[twisted] treq shutilwhich pyyaml pygments mistune jinja2 pytrie netaddr --upgrade
