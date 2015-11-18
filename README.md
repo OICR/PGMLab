@@ -8,5 +8,6 @@ pip
 
 ##installation
 
-	apt-get install python-pip
-        pip install crossbar
+	apt-get install python-pip 
+        pip install crossbar 
+	sudo pip install autobahn
