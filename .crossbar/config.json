@@ -38,6 +38,29 @@
                   },
                   "ws": {
                      "type": "websocket"
+                  },
+                  "upload": {
+                      "type": "upload",
+                      "realm": "realm1",
+                      "role": "anonymous",
+                      "directory": "../uploaded",
+                      "temp_directory": "../temp",
+                      "form_fields": {
+                         "file_name": "resumableFilename",
+                         "mime_type": "resumableType",
+                         "total_size": "resumableTotalSize",
+                         "chunk_number": "resumableChunkNumber",
+                         "chunk_size": "resumableChunkSize",
+                         "total_chunks": "resumableTotalChunks",
+                         "content": "file",
+                         "on_progress": "on_progress",
+                         "session": "session"
+                      },
+                      "options": {
+                         "max_file_size": 209715200,
+                         "file_permissions": "0644",
+                         "file_types": [".csv", ".txt", ".pdf", ".img"]
+                      }
                   }
                }
             }
