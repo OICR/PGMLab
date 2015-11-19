@@ -59,7 +59,7 @@
                       "options": {
                          "max_file_size": 209715200,
                          "file_permissions": "0644",
-                         "file_types": [".csv", ".txt", ".pdf", ".img"]
+                         "file_types": [".csv", ".txt", ".pdf", ".img", ".png"]
                       }
                   }
                }
