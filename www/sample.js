@@ -1,43 +1,29 @@
     var graph = {
 	"nodes": [{
-            "name": "A",
-                "group": 1
+            "name": "A"
         }, {
-            "name": "B",
-                "group": 2
+            "name": "B"
         }, {
-            "name": "C",
-                "group": 1
+            "name": "C"
         }, {
-            "name": "D",
-                "group": 2
-        }, {
-            "name": "E",
-                "group": 2
-        }, {
-            "name": "F",
-                "group": 2
+            "name": "D"
         }],
             "links": [{
             "source": 0,
-                "target": 2,
+                "target": 1,
                 "value": 1
         }, {
             "source": 0,
-                "target": 3,
+                "target": 2,
                 "value": 1
         }, {
             "source": 1,
                 "target": 3,
                 "value": 1
         }, {
-            "source": 3,
-                "target": 5,
+            "source": 2,
+                "target": 3,
 		"value": 1
-        }, {
-            "source": 4,
-                "target": 5,
-                "value": 1
         }]
     };
 

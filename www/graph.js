@@ -58,9 +58,6 @@ force.nodes(graph.nodes)
     .links(graph.links)
     .start();
 
-//Creates map from arrays given in posterior data ++
-
-
 //Create all the line svgs but without locations yet
 var link = svg.selectAll(".link")
     .data(graph.links)
@@ -76,8 +73,7 @@ var node = svg.selectAll(".node")
     .attr("class", "node")
     .attr("r", 8)
     .style("fill", function (d) {
-    //return color(d.group);
-    return color(d.state); //++
+       return color(1);
 })
     //.call(force.drag) //Replaced by node_drag    
     .on('click', connectedNodes) //Added code for highlighting nodes
@@ -131,6 +127,24 @@ $(function () {
         source: optArray
     });
 });
+
+//Inference Button
+var ramp=d3.scale.linear().domain([0,100]).range(["yellow","red"]);
+function inferenceToggle() {
+	var nodes = svg.selectAll(".node");
+	posterior_probs[0].forEach(function(pp) {		
+               console.log("pp", pp);
+	       var node_color = ramp(pp["probs"][0]*100);
+               console.log("color", node_color);
+               var selected = node.filter(function (d, i){
+ 	          return d.name == pp.name;
+	       });
+               console.log("selected", selected);
+	       selected.transition().style("fill", color(3)  );
+	});
+}
+
+//Search for Nodes
 function searchNode() {
     //find the node
     var selectedVal = document.getElementById('search').value;
