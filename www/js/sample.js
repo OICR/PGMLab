@@ -1,17 +1,21 @@
     var graph = {
 	"nodes": [{
-            "name": "A"
+            "name": "A",
+            "type": "normal"
         }, {
-            "name": "B"
+            "name": "B",
+            "type": "normal"
         }, {
-            "name": "C"
+            "name": "C",
+            "type": "logic"
         }, {
-            "name": "D"
+            "name": "D",
+            "type": "normal"
         }],
             "links": [{
             "source": 0,
                 "target": 1,
-                "value": 1
+                "value": -1
         }, {
             "source": 0,
                 "target": 2,
@@ -27,3 +31,5 @@
         }]
     };
 
+//value: -1 = Inverted
+//value: 1 = Not Inverted

@@ -1,17 +1,16 @@
-var posterior_probs = [ [{ "name": "X1",
+var posterior_probs = [ [{ "name": "A",
                           "probs": [1.000000, 0.000000]
                          },
                          {
-                          "name": "X2",
-                          "probs": [0.000000, 1.000000]
+                          "name": "B",
+                          "probs": [0.500000, 0.5000000]
                          },
  			             {
- 			               "name": "X3",
+ 			               "name": "C",
  			               "probs": [1.000000, 0.000000]
  			             },
-			             { "name": "X4",
+			             { "name": "D",
 			                "probs": [0.000000, 1.000000]
                           }
                         ]
                       ];
-//posterior_probs[0]["X1"] 

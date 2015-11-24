@@ -1,10 +1,4 @@
-.node {
-    stroke: #fff;
-    stroke-width: 1.5px;
-}
-
 .link {
-    stroke: #999;
     stroke-opacity: .6;
 }
 
@@ -13,3 +7,7 @@ d3-tip {
     color: black;
 }
 
+.node text {
+  pointer-events: none;
+  font: 11px sans-serif;
+}
