@@ -14,8 +14,8 @@
         }],
             "links": [{
             "source": 0,
-                "target": 1,
-                "value": -1
+            "target": 1,
+            "value": -1
         }, {
             "source": 0,
                 "target": 2,

@@ -1,9 +1,26 @@
-//Constants for the SVG
-var width = 1000;
+var width = 500;
     height = 500;
 
 //Set up the colour scale
 var color = d3.scale.category20();
+
+// init svg
+var outer = d3.select("#chart")
+  .append("svg:svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("pointer-events", "all");
+
+var vis = outer
+  .append('svg:g')
+    .call(d3.behavior.zoom().on("zoom", rescale))
+  .append('svg:g')
+    .on(mousedown);
+
+vis.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("fill", 'white');
 
 //Set up the force layout
 var force = d3.layout.force()
@@ -12,11 +29,6 @@ var force = d3.layout.force()
     .size([width, height])
     .gravity(0.5);
 
-//Append a SVG to the body of the html page. Assign this SVG as an object to svg
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-
 /*//Set up tooltip
 var tip = d3.tip()
     .attr('class', 'd3-tip')
@@ -24,15 +36,16 @@ var tip = d3.tip()
     .html(function (d) {
     return  d.name + "</span>";
 })
-svg.call(tip);
+vis.call(tip);
 */
 
-//Adds capability to pin nodes, single click to release
+//Adds capability to pin nodes, double click to release
 var node_drag = d3.behavior.drag()
         .on("dragstart",dragstart)
         .on("drag",dragmove)
         .on("dragend",dragend);
     function dragstart(d, i) {
+        d3.event.sourceEvent.stopPropagation()
         force.stop() //stops the force auto positioning before you start dragging
     }
     function dragmove(d, i) {
@@ -60,16 +73,16 @@ force.nodes(graph.nodes)
     .start();
 
 //Create all the line svgs but without locations yet
-var link = svg.selectAll(".link")
-    .data(graph.links)
+var link = vis.selectAll(".link")
+    .data(graph.links) //graph.links() is another option
     .enter().append("line")
     .attr("class", "link")
     .style("marker-end",  "url(#suit)") // Modified line 
     .style("stroke-width", 1)//function(d) {return Math.sqrt(d.value);})
-    .style("stroke", function(d) {if (d.value < 0){return "#b30000";} else{return "#999";};});
+    .style("stroke", function(d) {if (d.value < 0){return "#b30000";} else{return "#31a354";};});
 
 //Do the same with the shapes for the nodes 
- var node = svg.selectAll(".node")
+ var node = vis.selectAll(".node")
            .data(graph.nodes)
            .enter().append("g")
            .attr("class", "node")
@@ -142,7 +155,7 @@ $(function () {
 //Inference Button
 var ramp=d3.scale.linear().domain([0,100]).range(["yellow","red"]);
 function inferenceToggle() {
-	var nodes = svg.selectAll(".node");
+	var nodes = vis.selectAll(".node");
 	posterior_probs[0].forEach(function(pp) {		
                var selected = node.filter(function (d, i){
  	              return d.name == pp.name;
@@ -157,7 +170,7 @@ function inferenceToggle() {
 function searchNode() {
     //find the node
     var selectedVal = document.getElementById('search').value;
-    var node = svg.selectAll(".node");
+    var node = vis.selectAll(".node");
     if (selectedVal == "none") {
         node.style("stroke", "white").style("stroke-width", "1");
     } else {
@@ -165,7 +178,7 @@ function searchNode() {
             return d.name != selectedVal;
         });
         selected.style("opacity", "0");
-        var link = svg.selectAll(".link")
+        var link = vis.selectAll(".link")
 	link.style("opacity","0");
 	d3.selectAll(".node, .link").transition()
 		.duration(5000)
@@ -193,7 +206,7 @@ force.on("tick", function () {
 	  return d.target.y;
     });
     
-    svg.selectAll("polygon").attr("points", function(d) { //node.attr(
+    vis.selectAll("polygon").attr("points", function(d) {
          if (d.type == "logic") {
             var poly = [ {"x": d.x+xdiamondpadding, "y": d.y},
                          {"x": d.x, "y": d.y+ydiamondpadding},
@@ -213,33 +226,40 @@ force.on("tick", function () {
          }
    }); 
 
-    svg.selectAll("text").attr("x", function (d) { return d.x+11; })
+    vis.selectAll("text").attr("x", function (d) { return d.x+11; })
                          .attr("y", function (d) { return d.y-11; });
 
 });
 
 
-svg.append("defs").selectAll("marker")
+vis.append("defs").selectAll("marker")
     .data(["suit", "licensing", "resolved"])
   .enter().append("marker")
     .attr("id", function(d) { return d; })
     .attr("viewBox", "0 -5 10 10")
     .attr("refX", 25)
-    .attr("refY", 0)
-    .attr("markerWidth", 11)
-    .attr("markerHeight", 11)
+    .attr("refY", 0) 
+    .attr("markerWidth", 10)
+    .attr("markerHeight", 10)
     .attr("orient", "auto")
   .append("path")
-    .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+//    .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+      .attr("d","M0,-5L10,0L0,5")
     .style("stroke", "#4679BD")
-    .style("opacity", "0.8");
+    .style("fill","#4679BD")
+    .style("opacity", "0.9");
 
-//selectedVal = document.getElementById('search').value;
-//    var node = svg.selectAll(".node");
-//    if (selectedVal == "none") {
-//        node.style("stroke", "white").style("stroke-width", "1");
-//    } else {
-//        var selected = node.filter(function (d, i) {
-//            return d.name != selectedVal;
-//        });
+function mousedown() {
+    return;
+}
+
+// rescale g
+function rescale() {
+  trans=d3.event.translate;
+  scale=d3.event.scale;
+
+  vis.attr("transform",
+      "translate(" + trans + ")"
+      + " scale(" + scale + ")");
+}
 
