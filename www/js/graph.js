@@ -72,12 +72,23 @@ force.nodes(graph.nodes)
     .links(graph.links)
     .start();
 
+/*
+var data = [
+{ id: 'arrow', name: 'arrow', path: 'M 0,0 m -5,-5 L 10,0 L 0,5 Z', viewBox: '-5 -5 10 10', stroke: '#31a354', fill: '#31a354' },
+{ id: 'stub',  name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewBox: '-1 -5 2 10', stroke: '#b30000', fill: '#b30000' }
+]*/
+
+var data = [
+{ id: 'arrow', name: 'arrow', path: 'M 0,-5 L 10,0 L 0,5', viewBox: '0 -5 10 10', stroke: '#31a354', fill: '#31a354' },
+{ id: 'stub',  name: 'stub', path: 'M -1,-12 L 1,-12 L 1,12 L -1,12 L -1,-12', viewBox: '-1 -10 2 24', stroke: '#b30000', fill: '#b30000' }
+]
+
 //Create all the line svgs but without locations yet
 var link = vis.selectAll(".link")
-    .data(graph.links) //graph.links() is another option
+    .data(graph.links)
     .enter().append("line")
     .attr("class", "link")
-    .style("marker-end",  "url(#suit)") // Modified line 
+    .attr("marker-end",  function(d) {return (d.value == 1)? "url(#arrow)" : "url(#stub)";}) // Modified line 
     .style("stroke-width", 1)//function(d) {return Math.sqrt(d.value);})
     .style("stroke", function(d) {if (d.value < 0){return "#b30000";} else{return "#31a354";};});
 
@@ -93,7 +104,9 @@ var link = vis.selectAll(".link")
 
  node.append("polygon")
     //.attr("transform", function(d) { return "translate(" + d + ")"; }) //for zoom
-    .style("fill",color(1));
+     .attr("class", function(d) { return d.name}) 
+     .style("opacity", 0.9)
+     .style("fill",color(1));
 
  /* .on('mouseover', tip.show) //Added for tooltip
     .on('mouseout', tip.hide) //Added for tooltip
@@ -155,15 +168,11 @@ $(function () {
 //Inference Button
 var ramp=d3.scale.linear().domain([0,100]).range(["yellow","red"]);
 function inferenceToggle() {
-	var nodes = vis.selectAll(".node");
-	posterior_probs[0].forEach(function(pp) {		
-               var selected = node.filter(function (d, i){
- 	              return d.name == pp.name;
-	       });
-
-	       var node_color = ramp(pp["probs"][0]*100);
-	       selected.style("fill", node_color);
-	});
+    var polygons = vis.selectAll("polygon");
+    posterior_probs[0].forEach(function(pp) {		
+        var selected = polygons.filter(function (d, i){ return d.name == pp.name });
+        var node_color = ramp(pp["probs"][0]*100);
+        selected.style("fill", node_color); });
 }
 
 //Search for Nodes
@@ -233,20 +242,20 @@ force.on("tick", function () {
 
 
 vis.append("defs").selectAll("marker")
-    .data(["suit", "licensing", "resolved"])
-  .enter().append("marker")
-    .attr("id", function(d) { return d; })
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 25)
-    .attr("refY", 0) 
-    .attr("markerWidth", 10)
-    .attr("markerHeight", 10)
+  .data(data)
+  .enter().append("svg:marker")
+    .attr("id", function(d) { return d.id; })
+    .attr("viewBox", function(d) {return d.viewBox;}) 
+    .attr('markerUnits', 'strokeWidth')
+    .attr("refX", 28)
+    .attr("refY", 0)
+    .attr("markerWidth", 11)
+    .attr("markerHeight", 18)
     .attr("orient", "auto")
-  .append("path")
-//    .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
-      .attr("d","M0,-5L10,0L0,5")
-    .style("stroke", "#4679BD")
-    .style("fill","#4679BD")
+  .append("svg:path")
+    .attr("d", function(d) { return d.path;})
+    .style("stroke", function(d) {return d.stroke})
+    .style("fill", function(d) {return d.fill})
     .style("opacity", "0.9");
 
 function mousedown() {
