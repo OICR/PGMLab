@@ -159,7 +159,7 @@ for (var i = 0; i < graph.nodes.length - 1; i++) {
     optArray.push(graph.nodes[i].name);
 }
 optArray = optArray.sort();
-$(function () {
+(function () {
     $("#search").autocomplete({
         source: optArray
     });

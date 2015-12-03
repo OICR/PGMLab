@@ -1,119 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Adam Wright and Elizabeth Yang">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <meta name="author" content="Adam Wright and Elizabeth Yang">
+  <title>PGMLaB - Web Interface</title>
 
-    <title>PGMLAB</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <style>
-    body {
-        padding-top: 70px;
-        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-    }
-    #chart {
-        height:506px;
-        width: 506px;
-    }
-    </style>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- for file uploads -->
-    <script src="bower_components/resumable.js/resumable.js"></script>
-    <script src="bower_components/autobahnjs/autobahn.min.js"></script>
-
-
-
-    <!-- for stylling d3 graph -->
-    <link rel="stylesheet" type="text/css" href="css/graphics.css">
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">PGMLAB</a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <button type="button" onclick="inferenceToggle()">Inference</button>
-                    </li>
-                    <li>
-                        <a href="#">Learning</a>
-                    </li>
-                    <li>
-                        <input id="search">
-                        <button type="button" onclick="searchNode()">Search</button>
-                    </li>
-                </ul>
-           </div>
-           <!-- /.navbar-collapse --> 
-                  </div>
-        <!-- /.container -->
-    </nav>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">PGMLaB</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">Analysis</a></li>
+      </ul>
 
-    <!-- Page Content -->
-    <div class="container">
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="#">Navbar Link</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="section">
 
-<!--        <div class="ui-widget"> -->
-<!--           <button type="button" onclick="inferenceToggle()">Do Inference</button> -->
-<!--       </div> -->
-
-        <div class = "row">
-           <a href="#" id="browseButton">Select files to upload</a><br><br>
-        <!--      <div id="dropFiles" style="background-color: #aaf; width: 200px; height: 200px" >Drop files here to upload</div> -->
-           <script type"text/javascript" src="js/file_upload.js"></script>
+      <!--   Icon Section   -->
+      <div class="row">
+        <div id="app" class="col s18 m5">
+             
         </div>
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div id="chart" style="border:solid"></div>
-            </div>
+
+        <div class="col s18 m7">
+          <div class="icon-block">
+            <div id="chart" height="506" width="506" style="border:solid"></div>
+          </div>
         </div>
-        <!-- /.row -->
+      </div>
 
     </div>
-    <!-- /.container -->
-    
-    <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="bower_components/jquery-ui/jquery-ui.min.js"></script> 
-    <link href="bower_components/jquery-ui/themes/ui-lightness/jquery-ui.min.css" rel="stylesheet" type="text/css" /> 
+    <br><br>
 
-    <script type="text/javascript" src="bower_components/d3/d3.min.js"></script>
-    
-    <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
-    
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <div class="section">
 
-    <!-- D3 graph -->
-    <script src="js/sample.js"></script>
-    <script src="js/samplepp.js"></script>
-    <script src="js/graph.js"></script>
-    <!-- <script src="//d3js.org/d3.v3.min.js"></script> -->
-</body>
+    </div>
+  </div>
+
+  <footer class="page-footer orange">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Company Bio</h5>
+          <p class="grey-text text-lighten-4">PGMLaB is a machine learning tool for performing learning and inference on probablistic graphical models. </p>
+
+
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Resources</h5>
+          <ul>
+            <li><a class="white-text" href="https://oicr.github.io/PGMLaB">Web Site</a></li>
+            <li><a class="white-text" href="https://github.com/OICR/PGMLaB">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Contact</h5>
+          <ul>
+            <li><a class="white-text" href="#!">Adam Wright</a></li>
+            <li><a class="white-text" href="#!">Hossein Radfar</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="bundle.js"></script>
+  <script src="js/sample.js"></script>
+  <script src="js/samplepp.js"></script>
+  <script src="js/graph.js"></script>
+  </body>
 </html>
+
