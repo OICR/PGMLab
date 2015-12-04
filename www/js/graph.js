@@ -90,7 +90,7 @@ var link = vis.selectAll(".link")
     .attr("class", "link")
     .attr("marker-end",  function(d) {return (d.value == 1)? "url(#arrow)" : "url(#stub)";}) // Modified line 
     .style("stroke-width", 1)//function(d) {return Math.sqrt(d.value);})
-    .style("stroke", function(d) {if (d.value < 0){return "#b30000";} else{return "#31a354";};});
+    .style("stroke", function(d) {if (d.value == 1 ){return "#31a354";} else{return "#b30000";};});
 
 //Do the same with the shapes for the nodes 
  var node = vis.selectAll(".node")
@@ -105,7 +105,7 @@ var link = vis.selectAll(".link")
  node.append("polygon")
     //.attr("transform", function(d) { return "translate(" + d + ")"; }) //for zoom
      .attr("class", function(d) { return d.name}) 
-     .style("opacity", 0.9)
+     .style("opacity", 1)
      .style("fill",color(1));
 
  /* .on('mouseover', tip.show) //Added for tooltip

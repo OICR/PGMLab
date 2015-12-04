@@ -7,6 +7,6 @@
 
 ## Create bundle.js file
 
-     webpack src/app.js bundle.js
+     webpack src/entry.js bundle.js
 
 
