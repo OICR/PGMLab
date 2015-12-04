@@ -4,9 +4,12 @@ import jquery from 'jquery';
 import d3 from 'd3';
 import d3tip from 'd3-tip';
 
+import resumable from 'resumable';
+import autobahn from 'autobahn';
+
 import React from 'react';
-import { render } from 'react-dom'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+import { render } from 'react-dom';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 //import createGraph from './graph'
 

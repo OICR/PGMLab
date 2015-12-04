@@ -1,6 +1,6 @@
 module.exports = {
   context: __dirname + '/src',
-  entry: './app.js',
+  entry: './entry.js',
   output: {
     filename: 'bundle.js'
   },
@@ -10,7 +10,13 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel?stage=0'
-      }
+      },
+      { 
+        test: /autobahn\/package.json$/,
+        loader: 'json-loader'
+      },
+      { test: /\.css$/, 
+        loader: "style!css" }
     ]
   },
   resolve: {
