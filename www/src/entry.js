@@ -22,16 +22,13 @@ var App = React.createClass({
     return (
         <Tabs onSelect={this.handleSelected} selectedIndex={2}>
         <TabList>
-          <Tab>Upload/Download</Tab>
           <Tab>Select Graph</Tab>
           <Tab>Learning</Tab>
           <Tab>Inference</Tab>
         </TabList>
         <TabPanel>
-          <h2>Upload</h2>
-        </TabPanel>
-        <TabPanel>
           <h2>list of networks</h2>
+          <h2>upload graph</h2>
         </TabPanel>
         <TabPanel>
           <h2>Learning</h2>
