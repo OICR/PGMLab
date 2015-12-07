@@ -21,13 +21,13 @@ my ( $source, $target, $value, $flag);
 <$fh>;<$fh>; # skip first two lines of file
 while ( <$fh> ) {
    ($source, $target, $value, $flag) = split "\t";
-   if (($source =~ /^AND_/) || ($source =~ /^OR_/)) {
+   if (($source =~ /_AND$/) || ($source =~ /_OR$/)) {
         $unique_nodes{$source} = "logic";
    }
    else {
         $unique_nodes{$source} = "normal";
    }
-   if (($target =~ /^AND_/) || ($target =~ /^OR_/)) {
+   if (($target =~ /_AND$/) || ($target =~ /_OR$/)) {
         $unique_nodes{$target} = "logic";
    }
    else {
@@ -46,9 +46,10 @@ my (@links, %link);
 <$fh>;<$fh>;
 while ( <$fh> ) {
    ($source, $target, $value, $flag) = split "\t";
-   push @links, {  "value" =>  $value,
+   push @links, {  "value"  => $value,
                    "source" => get_index_of_node($source),
-                   "target" => get_index_of_node($target) 
+                   "target" => get_index_of_node($target),
+                   "logic"  => $flag
                  };
 }
 

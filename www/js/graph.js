@@ -1,12 +1,22 @@
-var width = 667;
-    height = 667;
+width = 667;
+height = 667;
 
 //Set up the colour scale
 var color = d3.scale.category20();
 
+/*
+//mouse event vars
+var selected_node = null,
+    selected_link = null,
+    mousedown_link = null,
+    mousedown_node = null,
+    mouseup_node = null;
+*/
+
 // init svg
 var outer = d3.select("#chart")
   .append("svg:svg")
+    .attr("style", "border:solid; border-radius:15px;")
     .attr("width", width)
     .attr("height", height)
     .attr("pointer-events", "all");
@@ -15,7 +25,9 @@ var vis = outer
   .append('svg:g')
     .call(d3.behavior.zoom().on("zoom", rescale))
   .append('svg:g')
-    .on(mousedown);
+//    .on("mousemove", mousemove)
+    .on("mousedown", mousedown);
+//    .on("mouseup", mouseup);
 
 vis.append("rect")
     .attr("width", width)
@@ -24,7 +36,7 @@ vis.append("rect")
 
 //Set up the force layout
 var force = d3.layout.force()
-    .charge(-300)
+    .charge(-2000)
     .linkDistance(200)
     .size([width, height])
     .gravity(0.5);
@@ -74,13 +86,16 @@ force.nodes(graph.nodes)
 
 /*
 var data = [
-{ id: 'arrow', name: 'arrow', path: 'M 0,0 m -5,-5 L 10,0 L 0,5 Z', viewBox: '-5 -5 10 10', stroke: '#31a354', fill: '#31a354' },
-{ id: 'stub',  name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewBox: '-1 -5 2 10', stroke: '#b30000', fill: '#b30000' }
-]*/
-
-var data = [
 { id: 'arrow', name: 'arrow', path: 'M 0,-5 L 10,0 L 0,5', viewBox: '0 -5 10 10', stroke: '#31a354', fill: '#31a354' },
 { id: 'stub',  name: 'stub', path: 'M -1,-12 L 1,-12 L 1,12 L -1,12 L -1,-12', viewBox: '-1 -10 2 24', stroke: '#b30000', fill: '#b30000' }
+]
+*/
+
+var data = [
+{ id: 'AND_arrow', name: 'arrow', path: 'M 0,-5 L 10,0 L 0,5', viewBox: '0 -5 10 10', stroke: '#756bb1', fill: '#756bb1' },
+{ id: 'OR_arrow', name: 'arrow', path: 'M 0,-5 L 10,0 L 0,5', viewBox: '0 -5 10 10', stroke: '#FF69B4', fill: '#FF69B4' },
+{ id: 'AND_stub',  name: 'stub', path: 'M -1,-12 L 1,-12 L 1,12 L -1,12 L -1,-12', viewBox: '-1 -10 2 24', stroke: '#756bb1', fill: '#756bb1' },
+{ id: 'OR_stub',  name: 'stub', path: 'M -1,-12 L 1,-12 L 1,12 L -1,12 L -1,-12', viewBox: '-1 -10 2 24', stroke: '#FF69B4' , fill: '#FF69B4'  }
 ]
 
 //Create all the line svgs but without locations yet
@@ -88,10 +103,16 @@ var link = vis.selectAll(".link")
     .data(graph.links)
     .enter().append("line")
     .attr("class", "link")
-    .attr("marker-end",  function(d) {return (d.value == 1)? "url(#arrow)" : "url(#stub)";}) // Modified line 
+    //.attr("marker-end",  function(d) {return (d.value == 1)? "url(#arrow)" : "url(#stub)";}) // Modified line 
+    .attr("marker-end", function(d) {return (d.value == 1 )? 
+                         (d.logic == 1)? "url(#OR_arrow)" : 
+                                         "url(#AND_arrow)": 
+                         (d.logic == 1)? "url(#OR_stub)" : 
+                                         "url(#AND_stub)" })
     .style("stroke-width", 1)//function(d) {return Math.sqrt(d.value);})
-    .style("stroke", function(d) {if (d.value == 1 ){return "#31a354";} else{return "#b30000";};});
-
+    //.style("stroke", function(d) {if (d.value == 1 ){return "#31a354";} else{return "#b30000";};});
+    .style("stroke", function(d) {if (d.logic == 0 ){return "#756bb1";} else{return "#FF69B4";};}); //PURPLE = AND, PINK = OR
+ 
 //Do the same with the shapes for the nodes 
  var node = vis.selectAll(".node")
            .data(graph.nodes)
@@ -106,7 +127,7 @@ var link = vis.selectAll(".link")
     //.attr("transform", function(d) { return "translate(" + d + ")"; }) //for zoom
      .attr("class", function(d) { return d.name}) 
      .style("opacity", 1)
-     .style("fill",color(1));
+     .style("fill","#0099CC");
 
  /* .on('mouseover', tip.show) //Added for tooltip
     .on('mouseout', tip.hide) //Added for tooltip
@@ -259,8 +280,22 @@ vis.append("defs").selectAll("marker")
     .style("opacity", "0.9");
 
 function mousedown() {
+/*
+  if (!mousedown_node && !mousedown_link) {
+    // allow panning if nothing is selected
+    vis.call(d3.behavior.zoom().on("zoom"), rescale);
     return;
+  }*/
+  return;
 }
+
+/*
+function resetMouseVars() {
+ mousedown_node = null;
+ mouseup_node = null;
+ mousedown_link = null;
+}
+*/
 
 // rescale g
 function rescale() {
