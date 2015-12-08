@@ -57,7 +57,7 @@ close($fh);
 
 my $graph = { "nodes" => \@nodes, "links" => \@links };
 
-say JSON->new->utf8->pretty->encode($graph);
+say "var graph = ".JSON->new->utf8->pretty->encode($graph).';';
 
 sub get_index_of_node {
    my ($node_id) = @_;
