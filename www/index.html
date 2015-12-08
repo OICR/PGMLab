@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
   <meta name="author" content="Adam Wright and Elizabeth Yang">
   <title>PGMLaB - Web Interface</title>
-
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
@@ -40,6 +39,9 @@
           <div class="icon-block">
             <input id="search">
             <button type="button" onclick="searchNode()">Search</button>
+            <button type="button" onclick="inferenceToggle()">Inference</button>
+            <button id="zoom_in">+</button>
+            <button id="zoom_out">-</button>
             <div id="chart"></div>
           </div>
         </div>
@@ -86,7 +88,9 @@
   </footer>
 
   <script src="bundle.js"></script>
-  <script src="js/HDRpseudo.js"></script>
+  <script src="js/HDRog.js"></script>
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
   <script src="js/samplepp.js"></script>
   <script src="js/graph.js"></script>
   </body>

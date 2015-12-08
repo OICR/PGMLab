@@ -1,16 +1,20 @@
     var graph = {
 	"nodes": [{
             "name": "A",
-            "type": "normal"
+            "type": "normal",
+            "longname": "longA"
         }, {
             "name": "B",
-            "type": "normal"
+            "type": "normal",
+            "longname": "longB"
         }, {
             "name": "C",
-            "type": "logic"
+            "type": "logic",
+            "longname": "longC"
         }, {
             "name": "D",
-            "type": "normal"
+            "type": "normal",
+            "longname": "longD"
         }],
             "links": [{
             "source": 0,
