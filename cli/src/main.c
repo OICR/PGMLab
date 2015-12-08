@@ -482,7 +482,7 @@ int get_max_iterations(int * em_max_iterations) {
 int get_log_likelihood_change_limit(double * em_log_likelihood_change_limit) {
     char *ptr;
     char *str = "";
-    str = readline("\tEnter the stop criteriion log likelihood change limit [default 1e-5]: ");
+    str = readline("\tEnter the stop criterion log likelihood change limit [default 1e-5]: ");
  
     if (!*str) {
         *em_log_likelihood_change_limit = 1e-5;
@@ -505,7 +505,7 @@ int get_log_likelihood_change_limit(double * em_log_likelihood_change_limit) {
 int get_parameters_change_limit(double * em_parameters_change_limit) {
     char *ptr;
     char *str = "";
-    str = readline("\tEnter the stop criteriion parameters change limit [default 1e-3]: ");
+    str = readline("\tEnter the stop criterion parameters change limit [default 1e-3]: ");
  
     if (!*str) {
         *em_parameters_change_limit = 1e-3;
