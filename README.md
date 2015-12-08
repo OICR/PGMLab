@@ -1,8 +1,8 @@
-#PGMLaB (Probablistic Graphical Model Laboratory)
+#PGMLab (Probablistic Graphical Model Laboratory)
 
-PGMLaB performs learning and inference in large discrete baysian networks. PGMLaB is a standalone C library, which has command line and R interfaces. 
+PGMLab performs learning and inference in large discrete baysian networks. PGMLab is a standalone C library, which has command line and R interfaces. 
 
-PGMLaB developed to fulfill three goals: 
+PGMLab developed to fulfill three goals: 
 
    - To perform learning and inference in extremely large graphs. 
    - To be used by both expert and non expert in the field of machine learning
@@ -14,20 +14,20 @@ PGMLaB developed to fulfill three goals:
    - Adam Wright
 
 ##Web Site
-   - Visit the PGMLaB website [here](http://oicr.github.io/PGMLaB)
+   - Visit the PGMLab website [here](http://oicr.github.io/PGMLab)
 
 ##Wiki
-   - Please visit the PGMLaB wiki [here](https://github.com/OICR/PGMLaB/wiki) for details and theory. 
-   - Make sure to follow the input file formats specifications [here](https://github.com/OICR/PGMLaB/wiki/File-Formats).  
+   - Please visit the PGMLab wiki [here](https://github.com/OICR/PGMLab/wiki) for details and theory. 
+   - Make sure to follow the input file formats specifications [here](https://github.com/OICR/PGMLab/wiki/File-Formats).  
 
 ##System requirements
 
-PGMLaB has been tested on OS X and Ubuntu 14.04.
+PGMLab has been tested on OS X and Ubuntu 14.04.
 
-###How to download, install and Run PGMLaB
+###How to download, install and Run PGMLab
 ####1. Download
 
-   - Download the latest version of PGMLaB from [here](https://github.com/OICR/PGMLaB/zipball/master) 
+   - Download the latest version of PGMLab from [here](https://github.com/OICR/PGMLab/zipball/master) 
 
 ####2. Installation
 
@@ -36,18 +36,18 @@ PGMLaB has been tested on OS X and Ubuntu 14.04.
 	Linux: sudo apt-get install texinfo
 	Mac OS X: follow the following instructions http://macappstore.org/texinfo/
 
-#####2.2 Install PGMLaB Package
+#####2.2 Install PGMLab Package
 
    - Type the following commands in a terminal:
    
-        cd .../your-download-directory/PGMLaB 
+        cd .../your-download-directory/PGMLab
         make  
-        make install (this will link PGMLaB to system paths, making PGMLaB accessible from anywhere on the host)  
+        make install (this will link PGMLab to system paths, making PGMLab accessible from anywhere on the host)  
 
 
 ####3 User Interfaces 
 
-There are two interaces to the shared object that come with this package: a command line interaface and a C interface. To make either of the interfaces you are required to have already compiled the PGMLaB shared object (3.2).
+There are two interaces to the shared object that come with this package: a command line interaface and a C interface. To make either of the interfaces you are required to have already compiled the PGMLab shared object (3.2).
 
 #####3.1Command line interface
 
@@ -55,7 +55,7 @@ There are two interaces to the shared object that come with this package: a comm
 
 This command line interface can be used in two distinct ways. The first way is to supply the paths of the files in a config file, in the same way as the example config files in the config folder and flags to customize the parameters to be use and the second way is to input the information through an interactive interface. Further infromation on how to use these interface can be found in the wiki.
 
-   - Run the following commands for a description of the PGMLaB command line interface. 
+   - Run the following commands for a description of the PGMLab command line interface. 
  
 	pgmlab --help  
 	
@@ -92,20 +92,20 @@ pgmlab [-gli] [--interactive] [--data-dir=<string>] [--pairwise-interaction-file
 
 #######3.1.3 Anaylzing multiple pathways
 
-If you want to have PGMLaB automatically process the data you will need to supply the data in a folder of your data with the "--data-dir" flag. When using this flag you will not need to specify any of the actions (infernce, learning, etc...) you will also not need to specify any files. However, if you would like to change defaults you can still use the flags to change their values for analysis. 
+If you want to have PGMLab automatically process the data you will need to supply the data in a folder of your data with the "--data-dir" flag. When using this flag you will not need to specify any of the actions (infernce, learning, etc...) you will also not need to specify any files. However, if you would like to change defaults you can still use the flags to change their values for analysis. 
 
 #######3.1.3.1 Folder structure
 
-When using the "data-dir" flag PGMLaB expects the specified folder to follow certain specifications. Inside the spefied folder there should be a list of subfolders each named based on the name of the network. Inside each sub folder there should be a pairwise interaction file with the name "\<networkname\>.pi". From the pairwise interaction file a logicall factorgraph will be created called "logical.fg" If the folder contains a learning.obs file, PGMLaB will assume that it contains the observation data for learning and will perform learning with the data in the file. The output will be a file called "learnt.fg". If there is a file called "inference.obs" PGMLaB will perform inference creating a file conatianing the posterior probabilities called "\<networkname>.pp". In the inference step PGM LAB will use the "learnt.fg" instead of "logical.fg" if it exists. 
+When using the "data-dir" flag PGMLab expects the specified folder to follow certain specifications. Inside the spefied folder there should be a list of subfolders each named based on the name of the network. Inside each sub folder there should be a pairwise interaction file with the name "\<networkname\>.pi". From the pairwise interaction file a logicall factorgraph will be created called "logical.fg" If the folder contains a learning.obs file, PGMLab will assume that it contains the observation data for learning and will perform learning with the data in the file. The output will be a file called "learnt.fg". If there is a file called "inference.obs" PGMLab will perform inference creating a file conatianing the posterior probabilities called "\<networkname>.pp". In the inference step PGM LAB will use the "learnt.fg" instead of "logical.fg" if it exists. 
 
       Files in "example" folder:  example.pi learning.obs logical.fg learnt.fg  infernece.obs example.pp
       
 
 #####3.2 R interface
 
-In order to call pgmlab from the R Console you will need to load the PGMLaB R shared object. 
+In order to call pgmlab from the R Console you will need to load the PGMLab R shared object. 
 
-######3.2.1 Running R in order to be able to access the PGMLaB R shared object
+######3.2.1 Running R in order to be able to access the PGMLab R shared object
 
    - Run on of the first two commands, depending on your OS, and then run one of the two options in the last line. 
 
@@ -117,14 +117,14 @@ In order to call pgmlab from the R Console you will need to load the PGMLaB R sh
 
 *The current working directory needs to be correct to have the shared obejects link to one another correctly
 
-######3.2.2 Loading the PGMLaB shared ojbect within R or Rstudio
+######3.2.2 Loading the PGMLab shared ojbect within R or Rstudio
 
    - Run the following command in order to load the shared object 
 
-	dyn.load("<path to repo>/PGMLaB/R/pgmlabR/lib/pgmlabR.so") (for Linux)
+	dyn.load("<path to repo>/PGMLab/R/pgmlabR/lib/pgmlabR.so") (for Linux)
 	dyn.load("pgmlabR/lib/pgmlabR.so") (for OS X)
 
-######3.2.3 Description of functions available from the PGMLaB R library
+######3.2.3 Description of functions available from the PGMLab R library
 
 	r_reaction_logic_to_factorgraph(SEXP reaction_logic_pathway_filepath_, SEXP pathway_filepath_, SEXP number_of_states_) 
 	
@@ -152,14 +152,14 @@ In order to call pgmlab from the R Console you will need to load the PGMLaB R sh
 
 *Functions will return 0 upon success and error codes otherwise. 	
 	
-####4 PGMLaB dependencies
+####4 PGMLab dependencies
 
-All resources are included in the PGMLaB package. 
+All resources are included in the PGMLab package. 
 
 #####4.1 Resources
 | Name                      |  Description | Link |
 |---------------------------|------------------------|------|
-|  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Bob Jenkins and is used to hashing the names of the nodes. This allows PGMLaB to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
+|  Minimal Perfect Hashing   | Minimal Perfect Hashing wass Created by Bob Jenkins and is used to hashing the names of the nodes. This allows PGMLab to very quickely query nodes by their unique hash  |  http://burtleburtle.net/bob/hash/perfect.html    |
 
 #####4.2 External Libraries
 | Name                      |  Description | Link |
