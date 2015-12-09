@@ -183,9 +183,9 @@ optArray = optArray.sort();
 var ramp=d3.scale.linear().domain([0,100]).range(["yellow","red"]);
 function inferenceToggle() {
     var polygons = vis.selectAll("polygon");
-    posterior_probs[0].forEach(function(pp) {		
-        var selected = polygons.filter(function (d, i){ return d.name == pp.name });
-        var node_color = ramp(pp["probs"][0]*100);
+    pp[0].forEach(function(p) {		
+        var selected = polygons.filter(function (d, i){ return d.name == p.name });
+        var node_color = ramp(p["probs"][0]*100);
         selected.style("fill", node_color); });
 }
 
