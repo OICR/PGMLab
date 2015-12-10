@@ -116,7 +116,7 @@ var link = vis.selectAll(".link")
            .on('dblclick',releasenode) //Added code for releasing nodes
            .call(node_drag); //Added code for pinning nodes
 
-
+/*
  node.append("polygon")
     //.attr("transform", function(d) { return "translate(" + d + ")"; }) //for zoom
      .attr("class", function(d) { return d.name}) 
@@ -125,12 +125,53 @@ var link = vis.selectAll(".link")
 
     .on('mouseover', tip.show) //Added for tooltip
     .on('mouseout', tip.hide); //Added for tooltip
-  
+*/
+
+//size variable enables making the node size larger
+var size = d3.scale.pow().exponent(1)
+  .domain([1,100])
+  .range([8,24]);
+
+/*
+nominal_base_node_size should remain at this number, it 
+seems to be a part of the controls that determine where
+the text is in relation to the node
+*/
+var nominal_base_node_size = 8
+
+node.append("path")
+     .attr("d", d3.svg.symbol()
+        //changing the last decimal number in the .size function below changes the node size 
+        .size(function(d) { return Math.PI*Math.pow(size(d.size)||nominal_base_node_size,2.25); })
+        .type(function(d) { return d.type; }))
+        .attr("class", function(d) { return d.name}) 
+        .style("opacity", 1)
+        .style("fill","#0099CC")
+
+    .on('mouseover', tip.show) //Added for tooltip
+    .on('mouseout', tip.hide); //Added for tooltip
+
+/* 
 node.append("text")
       .attr("dx", 10)
       .attr("dy", ".35em")
       .text(function(d) { return d.name });
       //.style("stroke", "gray");
+*/
+
+var text_center = false;
+
+var text = vis.selectAll(".text")
+    .data(graph.nodes)
+    .enter().append("text")
+    .attr("dy", ".35em");
+
+    if (text_center)
+	 text.text(function(d) { return d.name; })
+	.style("text-anchor", "middle");
+	else 
+	text.attr("dx", function(d) {return (size(d.size)||nominal_base_node_size);})
+           .text(function(d) { return '\u2002'+d.name; });
 
 //Toggle stores whether the highlighting is on
 var toggle = 0;
@@ -182,9 +223,10 @@ optArray = optArray.sort();
 //Inference Button
 var ramp=d3.scale.linear().domain([0,100]).range(["yellow","red"]);
 function inferenceToggle() {
-    var polygons = vis.selectAll("polygon");
+    //var polygons = vis.selectAll("polygon");
+    var paths = vis.selectAll("path");
     pp[0].forEach(function(p) {		
-        var selected = polygons.filter(function (d, i){ return d.name == p.name });
+        var selected = paths.filter(function (d, i){ return d.name == p.name });
         var node_color = ramp(p["probs"][0]*100);
         selected.style("fill", node_color); });
 }
@@ -209,13 +251,14 @@ function searchNode() {
    }
 }
 
+/*
 //Now we are giving the SVGs co-ordinates - the force layout is generating the co-ordinates which this code is using to update the attributes of the SVG elements
 force.on("tick", function () {
     var xdiamondpadding = 24;
     var ydiamondpadding = 12;
     var xrectpadding = 18;
     var yrectpadding = 9;
-    
+  
     link.attr("x1", function (d) {
           return d.source.x;
     })
@@ -253,7 +296,25 @@ force.on("tick", function () {
                          .attr("y", function (d) { return d.y-11; });
 
 });
+*/
 
+force.on("tick", function() {
+  	
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });  
+    
+    link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+		
+    node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+	
+    /*vis.selectAll("text").attr("x", function (d) { return d.x+11; })
+                         .attr("y", function (d) { return d.y-11; });
+*/
+});
 
 vis.append("defs").selectAll("marker")
   .data(data)
@@ -263,7 +324,7 @@ vis.append("defs").selectAll("marker")
     .attr('markerUnits', 'strokeWidth')
     .attr("refX", 28)
     .attr("refY", 0)
-    .attr("markerWidth", 11)
+    .attr("markerWidth", 10)
     .attr("markerHeight", 18)
     .attr("orient", "auto")
   .append("svg:path")
@@ -310,10 +371,8 @@ function interpolateZoom (translate, scale) {
     });
 }
 
-function zoomClick() {
-    var clicked = d3.event.target,
-        direction = 1,
-        factor = 0.2,
+function zoomClick(direction) {
+    var factor = 0.2,
         target_zoom = 1,
         center = [width / 2, height / 2],
         extent = zoom.scaleExtent(),
@@ -322,8 +381,6 @@ function zoomClick() {
         l = [],
         view = {x: translate[0], y: translate[1], k: zoom.scale()};
 
-    d3.event.preventDefault();
-    direction = (this.id === 'zoom_in') ? 1 : -1;
     target_zoom = zoom.scale() * (1 + factor * direction);
 
     if (target_zoom < extent[0] || target_zoom > extent[1]) { return false; }
@@ -338,4 +395,15 @@ function zoomClick() {
     interpolateZoom([view.x, view.y], view.k);
 }
 
-d3.selectAll('button').on('click', zoomClick);
+function vis_by_type(type)
+{
+	switch (type) {
+	  case "circle": return keyc;
+	  case "square": return keys;
+	  case "triangle-up": return keyt;
+	  case "diamond": return keyr;
+	  case "cross": return keyx;
+	  case "triangle-down": return keyd;
+	  default: return true;
+}
+}

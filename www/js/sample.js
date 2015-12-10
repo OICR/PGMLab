@@ -1,19 +1,19 @@
     var graph = {
 	"nodes": [{
             "name": "A",
-            "type": "normal",
+            "type": "circle",
             "longname": "longA"
         }, {
             "name": "B",
-            "type": "normal",
+            "type": "circle",
             "longname": "longB"
         }, {
             "name": "C",
-            "type": "logic",
+            "type": "diamond",
             "longname": "longC"
         }, {
             "name": "D",
-            "type": "normal",
+            "type": "circle",
             "longname": "longD"
         }],
             "links": [{

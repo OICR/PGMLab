@@ -31,7 +31,7 @@ while ( my $line = <$fh> ) {
        @nodes = [];
     }
     else {
-        my ($node_name, $probability) = split /\t /, $line;
+        my ($node_name, $probability) = split /\t/, $line;
         if ($node_name ne $old_node_name) {
             if (keys %node) {
                 my %new_node = %node;

@@ -5,8 +5,8 @@ var graph = {
          "type" : "normal"
       },
       {
-         "type" : "normal",
-         "name" : "5686454"
+         "type" : "logic",
+         "name" : "5686454_AND"
       },
       {
          "type" : "normal",

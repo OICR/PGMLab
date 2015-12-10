@@ -1,4 +1,4 @@
-var posterior_probs = [ [{ "name": "A",
+var pp = [ [{ "name": "A",
                           "probs": [1.000000, 0.000000]
                          },
                          {

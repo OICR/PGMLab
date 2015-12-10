@@ -20,18 +20,19 @@ my ( $source, $target, $value, $flag);
 
 <$fh>;<$fh>; # skip first two lines of file
 while ( <$fh> ) {
+   chomp();
    ($source, $target, $value, $flag) = split "\t";
    if (($source =~ /_AND$/) || ($source =~ /_OR$/)) {
-        $unique_nodes{$source} = "logic";
+        $unique_nodes{$source} = "diamond";
    }
    else {
-        $unique_nodes{$source} = "normal";
+        $unique_nodes{$source} = "circle";
    }
    if (($target =~ /_AND$/) || ($target =~ /_OR$/)) {
-        $unique_nodes{$target} = "logic";
+        $unique_nodes{$target} = "diamond";
    }
    else {
-        $unique_nodes{$target} = "normal";
+        $unique_nodes{$target} = "circle";
    }
 }
 
@@ -45,6 +46,7 @@ open ($fh, "<", $pi_file);
 my (@links, %link);
 <$fh>;<$fh>;
 while ( <$fh> ) {
+   chomp();
    ($source, $target, $value, $flag) = split "\t";
    push @links, {  "value"  => $value,
                    "source" => get_index_of_node($source),
