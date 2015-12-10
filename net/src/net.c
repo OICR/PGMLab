@@ -569,7 +569,7 @@ int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, 
         /* write the results in this file */
         for(i = 0;i < Nv;i++)
             for(kk=0;kk<num_state;kk++)
-                fprintf(pn,"%s \t %f\n",keys[i],pGraph[i].beliefs[kk]);
+                fprintf(pn,"%s\t%f\n",keys[i],pGraph[i].beliefs[kk]);
 
         fprintf(pn, "----------------------\n");
 
