@@ -1,4 +1,4 @@
-This is gsl-ref.info, produced by makeinfo version 5.1 from
+This is gsl-ref.info, produced by makeinfo version 5.2 from
 gsl-ref.texi.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
@@ -2125,6 +2125,7 @@ number-line for x,
           [ bin[0] )[ bin[1] )[ bin[2] )[ bin[3] )[ bin[4] )
        ---|---------|---------|---------|---------|---------|---  x
         r[0]      r[1]      r[2]      r[3]      r[4]      r[5]
+
 
 In this picture the values of the RANGE array are denoted by r.  On the
 left-hand side of each bin the square bracket '[' denotes an inclusive
