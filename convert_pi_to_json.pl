@@ -8,8 +8,38 @@ use autodie;
 use JSON;
 use Data::Dumper;
 
-
+use List::MoreUtils qw(zip);
 use feature qw{say};
+
+## USAGE perl conver_pi_to_json.pl <pi_file> <map_file> > out.js
+
+my $map_file = $ARGV[1];
+
+open (my $map_fh, "<", $map_file);
+
+my $header = <$map_fh>;
+chomp $header;
+my ($id_col, @attribute_names) = split /\t/, $header;
+
+if ($id_col ne 'id') {
+    say 'ERROR: First column needs to be "id"';
+    die;
+}
+
+my (%nodes_meta_data, @line);
+my ($id, @attributes);
+while ( <$map_fh> ) {
+   chomp;
+   my @line = split /\t/;
+   my $id = shift @line;
+   my %meta_data = zip @attribute_names, @line;
+   if ($line[1] ne 'Pathway') {
+     $nodes_meta_data{$id} = \%meta_data;
+   }
+}
+
+close ($map_fh);
+
 
 my $pi_file = $ARGV[0];
 
@@ -20,7 +50,7 @@ my ( $source, $target, $value, $flag);
 
 <$fh>;<$fh>; # skip first two lines of file
 while ( <$fh> ) {
-   chomp();
+   chomp;
    ($source, $target, $value, $flag) = split "\t";
    if (($source =~ /_AND$/) || ($source =~ /_OR$/)) {
         $unique_nodes{$source} = "diamond";
@@ -38,7 +68,10 @@ while ( <$fh> ) {
 
 close($fh);
 
-my @nodes = map { { "name" => $_,  "type" => $unique_nodes{$_} }  } keys %unique_nodes;
+my @nodes = map { { "name" => $_, 
+                    "type" => $unique_nodes{$_},
+                    "meta-data" => $nodes_meta_data{$_} }  } keys %unique_nodes;
+
 my $nodes_length = @nodes;
 
 open ($fh, "<", $pi_file);
@@ -46,7 +79,7 @@ open ($fh, "<", $pi_file);
 my (@links, %link);
 <$fh>;<$fh>;
 while ( <$fh> ) {
-   chomp();
+   chomp;
    ($source, $target, $value, $flag) = split "\t";
    push @links, {  "value"  => $value,
                    "source" => get_index_of_node($source),
@@ -70,5 +103,4 @@ sub get_index_of_node {
       return $i if ( $node{"name"} eq $node_id);
    }
 }
-
 
