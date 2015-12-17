@@ -1,11 +1,11 @@
 import { reactmaterialize } from 'react-materialize';
 import jquery from 'jquery';
 
-import d3 from 'd3';
-import d3tip from 'd3-tip';
+//import d3 from 'd3';
+//import d3tip from 'd3-tip';
 
-import resumable from 'resumable';
-import autobahn from 'autobahn';
+//import resumable from 'resumable';
+//import autobahn from 'autobahn';
 
 import React from 'react';
 import { render } from 'react-dom';
@@ -27,14 +27,14 @@ var App = React.createClass({
           <Tab>Inference</Tab>
         </TabList>
         <TabPanel>
-          <h2>list of networks</h2>
-          <h2>upload graph</h2>
+          <h3>list of networks</h3>
+          <h3>upload graph</h3>
         </TabPanel>
         <TabPanel>
-          <h2>Learning</h2>
+          <h3>Learning</h3>
         </TabPanel>
         <TabPanel>
-          <h2>Inference</h2>
+          <h3>Inference</h3>
         </TabPanel>
       </Tabs>
     );

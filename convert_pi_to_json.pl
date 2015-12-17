@@ -33,9 +33,9 @@ while ( <$map_fh> ) {
    my @line = split /\t/;
    my $id = shift @line;
    my %meta_data = zip @attribute_names, @line;
-   if ($line[1] ne 'Pathway') {
+#   if ($line[1] ne 'Pathway') {
      $nodes_meta_data{$id} = \%meta_data;
-   }
+ #  }
 }
 
 close ($map_fh);
@@ -68,9 +68,20 @@ while ( <$fh> ) {
 
 close($fh);
 
-my @nodes = map { { "name" => $_, 
-                    "type" => $unique_nodes{$_},
-                    "meta-data" => $nodes_meta_data{$_} }  } keys %unique_nodes;
+my %node_type_map = ( "ReferenceGeneProduct" => "circle",
+                      "ReferenceMolecule"    => "diamond",
+                      "Complex"              => "triangle-down",
+                      "DefinedSet"           => "triangle-up",
+                      "CandidateSet"         => "triangle-up",
+                      "Reaction"             => "cross",
+                      "BlackBoxEvent"        => "cross",
+                      "GenomeEncodedEntity"  => "square",
+                      "OtherEntity"          => "square" );
+
+my @nodes = map { { "name" => $_,
+                    "longname" => $nodes_meta_data{$_}{name},
+                    "type" => $nodes_meta_data{$_}{reactome_class},
+                    "shape" => $node_type_map{$nodes_meta_data{$_}{reactome_class}}} } keys %unique_nodes;
 
 my $nodes_length = @nodes;
 

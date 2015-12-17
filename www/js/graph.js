@@ -1,4 +1,4 @@
-width = 667;
+width = 880; //667
 height = 667;
 
 //for zoom button
@@ -10,11 +10,18 @@ var color = d3.scale.category20();
 
 // init svg
 var outer = d3.select("#chart")
+  .append("div")
+   .classed("svg-container", true) //container class to make it responsive
   .append("svg:svg")
     .attr("style", "border:solid; border-radius:15px;")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("pointer-events", "all");
+  //  .attr("width", width)
+   // .attr("height", height)
+    .attr("pointer-events", "all")
+    //responsive SVG needs these 2 attributes and no width and height attr
+    .attr("preserveAspectRatio", "xMinYMin meet")
+    .attr("viewBox", "0 0 1500 1500")
+    //class to make it responsive
+    .classed("svg-content-responsive", true);
 
 var vis = outer
   .append('svg:g')
@@ -41,6 +48,7 @@ var tip = d3.tip()
     .offset([-10, 0])
     .html(function (d) {
     return  d.longname + "</span>";
+console.log("tip data", d);
 })
 vis.call(tip);
 
@@ -143,7 +151,7 @@ node.append("path")
      .attr("d", d3.svg.symbol()
         //changing the last decimal number in the .size function below changes the node size 
         .size(function(d) { return Math.PI*Math.pow(size(d.size)||nominal_base_node_size,2.25); })
-        .type(function(d) { return d.type; }))
+        .type(function(d) { return d.shape; }))
         .attr("class", function(d) { return d.name}) 
         .style("opacity", 1)
         .style("fill","#0099CC")
@@ -223,6 +231,7 @@ optArray = optArray.sort();
 //Inference Button
 var ramp=d3.scale.linear().domain([0,100]).range(["yellow","red"]);
 function inferenceToggle() {
+    console.log("hello");
     //var polygons = vis.selectAll("polygon");
     var paths = vis.selectAll("path");
     pp[0].forEach(function(p) {		

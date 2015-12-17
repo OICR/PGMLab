@@ -13,40 +13,45 @@
 
 <body>
   <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">PGMLaB</a>
+    <div class="nav-wrapper" style="padding-left:40px; padding-right:30px"><a id="logo-container" href="#" class="brand-logo">PGMLaB</a>
       <ul class="right hide-on-med-and-down">
         <li><a href="http://oicr.github.io/PGMLab-GUI">About</a></li>
         <li><a href="https://github.com/OICR/PGMLab-GUI/wiki">Documentation</a></li>
       </ul>
 
       <ul id="nav-mobile" class="side-nav">
-        <li><a href="#">Navbar Link</a></li>
+        <li><a href="http://oicr.github.io/PGMLab-GUI">About</a></li>
+        <li><a href="https://github.com/OICR/PGMLab-GUI/wiki">Documentation</a></li>
       </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+      <a href="#about" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
-  <div class="container">
+<!--  <div class="container"> -->
     <div class="section">
 
       <!--   Icon Section   -->
       <div class="row">
-        <div id="app" class="col s18 m4">
-             
+        <div id="app" style="width:340px; padding-left:40px" class="col s18 m5"> <!-- s20 m5-->
         </div>
 
-        <div class="col s18 m8">
+        <div class="col s18 m8"> <!-- s20 m7-->
           <div class="icon-block">
-            <input id="search">
-            <button type="button" onclick="searchNode()">Search</button>
-            <button type="button" onclick="inferenceToggle()">Inference</button>
-            <button type="button" onclick="zoomClick(1)">+</button>
-            <button type="button" onclick="zoomClick(-1)">-</button>
+               <input id="search" style="width: 175px; height: 32px;">
+            <a class="btn-floating btn waves-effect waves-light orange" type="button" onclick="searchNode()"><i class="medium material-icons">search</i></a>
+            <a class="waves-effect waves-light orange btn white-text" type="button" onclick="inferenceToggle()">Inference</a>
+            <!-- <button type="button" onclick="searchNode()">Search</button> -->
+            <!-- <button type="button" onclick="inferenceToggle()">Inference</button> -->
+              <div class="col s18 m3"> <!-- s20 m3 -->
+                <a class="btn-floating btn waves-effect waves-light orange" type="button" onclick="zoomClick(1)"><i class="medium material-icons">zoom_in</i></a>
+                <a class="btn-floating btn waves-effect waves-light orange" type="button" onclick="zoomClick(-1)"><i class="medium material-icons">zoom_out</i></a>
+                <!-- <button type="button" onclick="zoomClick(1)">+</button> -->
+                <!-- <button type="button" onclick="zoomClick(-1)">-</button> -->
+              </div> <!--zoom bar end-->
             <div id="chart"></div>
-          </div>
         </div>
       </div>
 
-    </div>
+<!--    </div> -->
     <br><br>
 
     <div class="section">
@@ -55,7 +60,7 @@
   </div>
 
   <footer class="page-footer orange">
-    <div class="container">
+<!--    <div class="container"> -->
       <div class="row">
         <div class="col l6 s12">
           <h5 class="white-text">Company Bio</h5>
@@ -78,20 +83,24 @@
           </ul>
         </div>
       </div>
-    </div>
+<!--    </div> -->
     <div class="footer-copyright">
-      <div class="container">
+<!--      <div class="container"> -->
       Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
-      </div>
+<!--      </div> -->
     </div>
   </footer>
 
-  <script src="js/bundle.js"></script>
-  <script src="js/HDRdec10pi.js"></script>
+  <script src="js/HDRdec14diffshapespi.js"></script>
   <script src="//d3js.org/d3.v3.min.js"></script>
   <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
   <script src="js/HDRdec10pseudopp.js"></script>
-  <script src="js/graph.js"></script>
+  <script src="js/graph.js"></script> 
+  <script src="bundle.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.min.js"></script>
+  <script> $(".button-collapse").sideNav({'edge': 'left'});
+           $( document ).ready(function(){});</script>
   </body>
 </html>
 
