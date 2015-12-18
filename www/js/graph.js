@@ -86,13 +86,6 @@ force.nodes(graph.nodes)
     .links(graph.links)
     .start();
 
-/*
-var data = [
-{ id: 'arrow', name: 'arrow', path: 'M 0,-5 L 10,0 L 0,5', viewBox: '0 -5 10 10', stroke: '#31a354', fill: '#31a354' },
-{ id: 'stub',  name: 'stub', path: 'M -1,-12 L 1,-12 L 1,12 L -1,12 L -1,-12', viewBox: '-1 -10 2 24', stroke: '#b30000', fill: '#b30000' }
-]
-*/
-
 var data = [
 { id: 'AND_arrow', name: 'arrow', path: 'M 0,-5 L 10,0 L 0,5', viewBox: '0 -5 10 10', stroke: '#756bb1', fill: '#756bb1' },
 { id: 'OR_arrow', name: 'arrow', path: 'M 0,-5 L 10,0 L 0,5', viewBox: '0 -5 10 10', stroke: '#FF69B4', fill: '#FF69B4' },
@@ -124,17 +117,6 @@ var link = vis.selectAll(".link")
            .on('dblclick',releasenode) //Added code for releasing nodes
            .call(node_drag); //Added code for pinning nodes
 
-/*
- node.append("polygon")
-    //.attr("transform", function(d) { return "translate(" + d + ")"; }) //for zoom
-     .attr("class", function(d) { return d.name}) 
-     .style("opacity", 1)
-     .style("fill","#0099CC")
-
-    .on('mouseover', tip.show) //Added for tooltip
-    .on('mouseout', tip.hide); //Added for tooltip
-*/
-
 //size variable enables making the node size larger
 var size = d3.scale.pow().exponent(1)
   .domain([1,100])
@@ -150,11 +132,11 @@ var nominal_base_node_size = 8
 node.append("path")
      .attr("d", d3.svg.symbol()
         //changing the last decimal number in the .size function below changes the node size 
-        .size(function(d) { return Math.PI*Math.pow(size(d.size)||nominal_base_node_size,2.25); })
-        .type(function(d) { return d.shape; }))
-        .attr("class", function(d) { return d.name}) 
+        .size(function(d) { return Math.PI*Math.pow(size(d.size)||nominal_base_node_size,2.25) })
+        .type(function(d) { return d.shape }))
+        .attr("class", function(d) { return d.name }) 
         .style("opacity", 1)
-        .style("fill","#0099CC")
+        .style("fill",function(d) { return d.root=="true" ? "#000000" : d.leaf=="true" ? "#2B4F81" : "#0099CC" })
 
     .on('mouseover', tip.show) //Added for tooltip
     .on('mouseout', tip.hide); //Added for tooltip
