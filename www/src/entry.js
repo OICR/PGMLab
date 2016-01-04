@@ -1,23 +1,33 @@
 import { reactmaterialize } from 'react-materialize';
-import jquery from 'jquery';
 
-//import d3 from 'd3';
-//import d3tip from 'd3-tip';
+window.jquery = window.jQuery = window.$ = require('./lib/jquery');
 
-//import resumable from 'resumable';
-//import autobahn from 'autobahn';
+import style from 'style';
+
+import resumable from 'resumable';
+import autobahn from 'autobahn';
+
+import navigator from 'navigator';
+
+var pi = require('./data/HDRdec17pi.js');
+var pp = require('./data/HDRdec17pp.js');
+
+var graph = require('./bin/graph.js');
+
+graph.render(pi, pp);
+
+require('hammerjs');
+
+require('./lib/materialize.min.js');
 
 import React from 'react';
 import { render } from 'react-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-//import createGraph from './graph'
-
 var App = React.createClass({
   handleSelect: function (index, last) {
     console.log('Selected tab: ' + index + ', Last tab: ' + last);
   },
-
   render: function () {
     return (
         <Tabs onSelect={this.handleSelected} selectedIndex={2}>
@@ -40,10 +50,7 @@ var App = React.createClass({
     );
   }
 });
+render(<App />, document.getElementById('app'));
 
-render(<App />, document.getElementById('app'))
-
-//Creategraph();
-
-
-
+$(".button-collapse").sideNav({'edge': 'left'});
+$( document ).ready(function(){});
