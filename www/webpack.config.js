@@ -2,7 +2,7 @@ module.exports = {
   context: __dirname + '/src',
   entry: './entry.js',
   output: {
-    filename: 'bundle.js'
+    filename: 'js/bundle.js'
   },
   module: {
     loaders: [
@@ -16,10 +16,21 @@ module.exports = {
         loader: 'json-loader'
       },
       { test: /\.css$/, 
-        loader: "style!css" }
+        loader: "style!css" 
+      },
+      { 
+        test: /d3-svg-legend/, 
+        loader: "imports?d3=d3" 
+      },
+      { test: /d3-tip/,
+        loader: "imports?define=>false" 
+      }
     ]
   },
   resolve: {
-    extensions: [ '', '.js' ]
+    extensions: [ '', '.js' ],
+    alias: {
+                'jquery.ui.widget': 'blueimp-file-upload/jquery.ui.widget'
+            }
   }
 }

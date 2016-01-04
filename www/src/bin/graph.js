@@ -1,8 +1,5 @@
 
-//import d3 from 'd3';
-//import d3tip from 'd3-tip';
-
-function render (pi, pp) {
+function render (pi) {
 
 var width = 880;
 var height = 667;
@@ -22,13 +19,9 @@ var outer = d3.select("#chart")
    .classed("svg-container", true) //container class to make it responsive
   .append("svg:svg")
     .attr("style", "border:solid; border-radius:15px;")
-  //  .attr("width", width)
-   // .attr("height", height)
     .attr("pointer-events", "all")
-    //responsive SVG needs these 2 attributes and no width and height attr
     .attr("preserveAspectRatio", "xMinYMin meet")
     .attr("viewBox", "0 0 1500 1500")
-    //class to make it responsive
     .classed("svg-content-responsive", true);
 
 var vis = outer
@@ -209,39 +202,9 @@ optArray = optArray.sort();
     });
 });
 
-//Inference Button
-var ramp=d3.scale.linear().domain([0,100]).range(["yellow","red"]);
-function inferenceToggle() {
-    console.log("hello");
-    //var polygons = vis.selectAll("polygon");
-    var paths = vis.selectAll("path");
-    pp.data[0].forEach(function(p) {		
-        var selected = paths.filter(function (d, i){ return d.name == p.name });
-        var node_color = ramp(p["probs"][0]*100);
-        selected.style("fill", node_color); });
-}
 
-//Search for Nodes
-function searchNode() {
-    //find the node
-    var selectedVal = document.getElementById('search').value;
-    var node = vis.selectAll(".node");
-    if (selectedVal == "none") {
-        node.style("stroke", "white").style("stroke-width", "1");
-    } else {
-        var selected = node.filter(function (d, i) {
-            return d.name != selectedVal;
-        });
-        selected.style("opacity", "0");
-        var link = vis.selectAll(".link")
-	link.style("opacity","0");
-	d3.selectAll(".node, .link").transition()
-		.duration(5000)
-		.style("opacity", 1);
-   }
-}
+
 force.on("tick", function() {
-  	
     node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
     text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });  
     
@@ -252,7 +215,6 @@ force.on("tick", function() {
 		
     node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
-	
 });
 
 vis.append("defs").selectAll("marker")
@@ -272,23 +234,16 @@ vis.append("defs").selectAll("marker")
     .style("fill", function(d) {return d.fill})
     .style("opacity", "0.9");
 
+return vis;
+
+}
+
+exports.render = render;
+
 function mousedown() {
   return;
 }
 
-/*
-// rescale g
-function rescale() {
-  trans=d3.event.translate;
-  scale=d3.event.scale;
-
-  vis.attr("transform",
-      "translate(" + trans + ")"
-      + " scale(" + scale + ")");
-}
-*/
-
-//for zoom button
 function zoomed() {
     vis.attr("transform",
         "translate(" + zoom.translate() + ")" +
@@ -334,20 +289,48 @@ function zoomClick(direction) {
     interpolateZoom([view.x, view.y], view.k);
 }
 
-function vis_by_type(type)
-{
-	switch (type) {
-	  case "circle": return keyc;
-	  case "square": return keys;
-	  case "triangle-up": return keyt;
-	  case "diamond": return keyr;
-	  case "cross": return keyx;
-	  case "triangle-down": return keyd;
-	  default: return true;
-       }
+function vis_by_type(type) {
+    switch (type) {
+        case "circle": return keyc;
+        case "square": return keys;
+        case "triangle-up": return keyt;
+        case "diamond": return keyr;
+        case "cross": return keyx;
+        case "triangle-down": return keyd;
+        default: return true;
+    }
 }
 
+function searchNode() {
+    var selectedVal = document.getElementById('search').value;
+    var node = vis.selectAll(".node");
+    if (selectedVal == "none") {
+        node.style("stroke", "white").style("stroke-width", "1");
+    } else {
+        var selected = node.filter(function (d, i) {
+            return d.name != selectedVal;
+        });
+        selected.style("opacity", "0");
+        var link = vis.selectAll(".link")
+	link.style("opacity","0");
+	d3.selectAll(".node, .link").transition()
+		.duration(5000)
+		.style("opacity", 1);
+   }
+}
+exports.searchNode = searchNode;
+
+function inferenceToggle(vis, pp) {
+    var ramp=d3.scale.linear().domain([0,100]).range(["yellow","red"]);
+    console.log("hello");
+    //var polygons = vis.selectAll("polygon");
+    var paths = vis.selectAll("path");
+    pp.data[0].forEach(function(p) {		
+        var selected = paths.filter(function (d, i){ return d.name == p.name });
+        var node_color = ramp(p["probs"][0]*100);
+        selected.style("fill", node_color); });
 }
 
-exports.render = render;
+exports.inferenceToggle = inferenceToggle;
+
 
