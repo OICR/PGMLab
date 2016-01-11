@@ -1,85 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <meta name="author" content="Adam Wright and Elizabeth Yang">
-  <title>PGMLaB - Web Interface</title>
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-</head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+        <meta name="author" content="Adam Wright and Elizabeth Yang">
+        <title>PGMLaB - Genomic Network Analysis</title>
 
-<body>
-  <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper" style="padding-left:40px; padding-right:30px"><a id="logo-container" href="#" class="brand-logo">PGMLaB</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="http://oicr.github.io/PGMLab-GUI">About</a></li>
-        <li><a href="https://github.com/OICR/PGMLab-GUI/wiki">Documentation</a></li>
-      </ul>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+        <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    </head>
+    
+    <body>
+       <div id="app">
+       </div>
+    </body>
 
-      <ul id="nav-mobile" class="side-nav">
-        <li><a href="http://oicr.github.io/PGMLab-GUI">About</a></li>
-        <li><a href="https://github.com/OICR/PGMLab-GUI/wiki">Documentation</a></li>
-      </ul>
-      <a href="#about" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-    </div>
-  </nav>
-    <div class="section">
-
-      <!--   Icon Section   -->
-      <div class="row">
-        <div id="app" style="width:340px; padding-left:40px" class="col s18 m5"></div>
-
-        <div class="col s18 m8"> <!-- s20 m7-->
-          <div class="icon-block">
-               <input id="search" style="width: 175px; height: 32px;">
-            <a class="btn-floating btn waves-effect waves-light orange" type="button" onclick="searchNode()"><i class="medium material-icons">search</i></a>
-              <div class="col s18 m3"> <!-- s20 m3 -->
-                <a class="btn-floating btn waves-effect waves-light orange" type="button" onclick="zoomClick(1)"><i class="medium material-icons">zoom_in</i></a>
-                <a class="btn-floating btn waves-effect waves-light orange" type="button" onclick="zoomClick(-1)"><i class="medium material-icons">zoom_out</i></a>
-              </div> <!--zoom bar end-->
-            <div id="chart"></div>
-        </div>
-      </div>
-    <br><br>
-    <div class="section">
-
-    </div>
-  </div>
-
-  <footer class="page-footer orange">
-      <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">Company Bio</h5>
-          <p class="grey-text text-lighten-4">PGMLaB is a machine learning tool for performing learning and inference on probablistic graphical models. </p>
-
-
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Resources</h5>
-          <ul>
-            <li><a class="white-text" href="https://oicr.github.io/PGMLaB">Web Site</a></li>
-            <li><a class="white-text" href="https://github.com/OICR/PGMLaB">GitHub</a></li>
-          </ul>
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Contact</h5>
-          <ul>
-            <li><a class="white-text" href="#!">Adam Wright</a></li>
-            <li><a class="white-text" href="#!">Hossein Radfar</a></li>
-          </ul>
-        </div>
-      </div>
-    <div class="footer-copyright">
-      Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
-    </div>
-  </footer>
-  <script src="//d3js.org/d3.v3.min.js"></script>
-  <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/bundle.js"></script>
-</body>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="js/bundle.js"></script>
 </html>
 

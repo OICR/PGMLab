@@ -12,3 +12,79 @@
 .icon-block .material-icons {
 	font-size: inherit;
 } */
+
+#tabs-component {
+  width:340px;
+  padding-left:40px;
+}
+
+#search {
+  width: 175px;
+  height: 32px;
+}
+
+#dropdown1 {
+  width:1000px;
+}
+
+#container {
+  width:100%;
+}
+
+.side-nav {
+  left: 0 !important;
+}
+
+header, main, footer {
+  padding-left: 329px;
+  background-color:
+}
+
+#side-nave-filter-form {
+  height:100px;
+}
+
+
+#nav-mobile {
+  width: 329px;
+  min-height: 40px;
+}
+
+#side-nav-pathway-list {
+  padding:0px;
+  border-left-style:none;
+  border-right-style:none;
+}
+
+.pathway-list {
+  margin:0px;
+}
+
+.pathway-list a.pathway-item {
+  vertical-align: middle;
+}
+
+.logo h5 {
+  text-align:center;
+}
+
+.pathway-filter {
+  padding-left:16px;
+  padding-right:16px;
+}
+
+@media only screen  {
+   
+  .side-nav {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease; 
+  }
+
+  .side-nav.open {
+    transform: translateX(0);
+  }
+
+  header, main, footer {
+    padding-left: 0px;
+  }
+}
