@@ -1,6 +1,5 @@
 import React from 'react'
 
-import {Filter} from './Filter.jsx'
 import {PathwayNames} from './Pathwaynames.jsx'
 
 export class SideNav extends React.Component {
@@ -9,11 +8,14 @@ export class SideNav extends React.Component {
          this.state = { 
             filterText: '' 
          };
+	this.stateUpdate = this.stateUpdate.bind(this);
     };
-    stateUpdate(value) {
-        this.state = { 
-            filterText: value 
-        };
+    stateUpdate(event) {
+        console.log("event", event.target.value);
+        this.setState({ 
+            filterText: event.target.value 
+        });
+        console.log(this.state);
     };
     render () {
         var filterText = this.state.filterText;
@@ -24,8 +26,17 @@ export class SideNav extends React.Component {
                 </li>
                 <li className="logo">
                     <h5>Select Pathway</h5>
-                        <Filter filterVal={filterText}
-                              filterUpdate={this.stateUpdate} />
+                    <ul><li>
+                    <form className="pathway-filter">
+                        <input
+                         type='text'
+                         ref='filterInput'
+                         placeholder='Type to filter..'
+                         // binding the input value to state 
+                         value={filterText}
+                         onChange={this.stateUpdate} />
+                     </form>
+                   </li></ul>
                 </li>
                 <li className="search">
                 </li>

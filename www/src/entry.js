@@ -11,12 +11,6 @@
 
 //import html5shiv from 'html5shiv';
 
-var pi = require('./data/HDRdec17pi.js');
-var pp = require('./data/HDRdec17pp.js');
-var graph = require('./bin/graph.js');
-
-var pathways = require('./data/pathways.js');
-
 require('./lib/materialize.min.js');
 
 import React from 'react';
@@ -28,6 +22,11 @@ var observations_inference = [{id:"oi1", name:'one'},{id:"oi2", name:'two'},{id:
 import {Header} from './components/Header.jsx';
 import {Main} from './components/Main.jsx';
 import {Footer} from './components/Footer.jsx';
+
+// Data
+var pi       = require('./data/HDRdec17pi.js');
+var pp       = require('./data/HDRdec17pp.js');
+var pathways = require('./data/pathways.js');
 
 class App extends  React.Component {
     componentDidMount () {
@@ -42,13 +41,10 @@ class App extends  React.Component {
         return (
             <div>
                 <Header pathways={pathways}/>
-                <Main pathways={pathways} />
+                <Main pathways={pathways} 
+                      pairwise_interactions={pi} />
                 <Footer />
             </div> )
     }
 }
 render(<App />, document.getElementById('app'));
-
-graph.initialize();
-graph.render(pi);
-

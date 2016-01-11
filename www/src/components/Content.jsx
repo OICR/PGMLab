@@ -2,7 +2,13 @@ import React from 'react'
 
 import {Settings} from './Settings.jsx'
 
+var graph = require('../bin/graph.js');
+
 export class Content extends React.Component {
+   componentDidMount () {
+        graph.initialize();
+        graph.render(this.props.pairwise_interactions);
+   }
    runSearch() {
         graph.searchNode();
    }
