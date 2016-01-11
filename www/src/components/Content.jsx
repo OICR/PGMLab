@@ -4,13 +4,13 @@ import {Settings} from './Settings.jsx'
 
 export class Content extends React.Component {
    runSearch() {
- //        graph.searchNode();
+        graph.searchNode();
    }
    zoomIn() {
-   //     graph.zoomClick(1);
+        graph.zoomClick(1);
    } 
    zoomOut() {
-     //   graph.zoomClick(-1);
+        graph.zoomClick(-1);
    }
    render () {
         console.log("content");
