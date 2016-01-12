@@ -7,7 +7,7 @@ var graph = require('../bin/graph.js');
 export class Content extends React.Component {
    componentDidMount () {
         graph.initialize();
-        graph.render(this.props.pairwise_interactions);
+        graph.render(this.props.pairwiseInteractions);
    }
    runSearch() {
         graph.searchNode();
@@ -19,12 +19,10 @@ export class Content extends React.Component {
         graph.zoomClick(-1);
    }
    render () {
-        console.log("content");
-        console.log(this.props.pathways, "content");
         return (
             <div id="section">
                 <div id="tabs-component" className="col s18 m5">
-                    <Settings pathways={this.props.pathways}></Settings>
+                    <Settings pathways={this.props.pathways} activePathway={this.props.activePathway}></Settings>
                 </div>
 
                  <div className="col s18 m8 l8">

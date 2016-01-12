@@ -37,10 +37,9 @@
 
 header, main, footer {
   padding-left: 329px;
-  background-color:
 }
 
-#side-nave-filter-form {
+#side-nav-filter-form {
   height:100px;
 }
 
@@ -54,6 +53,10 @@ header, main, footer {
   padding:0px;
   border-left-style:none;
   border-right-style:none;
+}
+
+.side-nav li:hover, .side-nav li.active {
+    background-color: white;
 }
 
 .pathway-list {

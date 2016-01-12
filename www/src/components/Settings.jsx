@@ -17,7 +17,7 @@ export class Settings extends React.Component {
               <Tab>Inference</Tab>
             </TabList>
             <TabPanel>
-               <SelectGraph pathways={this.props.pathways}></SelectGraph>
+               <SelectGraph activePathway={this.props.activePathway}></SelectGraph>
             </TabPanel>
             <TabPanel>
                <Learning></Learning>

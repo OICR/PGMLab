@@ -1,19 +1,37 @@
 import React from 'react'
 
 export class SelectGraph extends React.Component {
+    getChildren(pathways) {
+       console.log("getting children");
+       return  pathways.map(function(pahtway) {
+          return  <tr key={pathway.id}><td>{pathway.name}</td><td>{pathway.id}a</td></tr>
+       });
+
+    }
+
     render () {
-        var pathways = this.props.pathways;
-        return (
+        var subGraphs = this.props.activePathway.children;
+
+           return (
            <div className="col l12">
-                <ul id="dropdown1" className="dropdown-content">
-                Pathways
-                    {pathways.tree.map(function(pathway) {
-                        return <li key={pathway.id}>{pathway.name}</li>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {subGraphs.map(function(pathway) {
+                       return <tr key={pathway.id}><td>{pathway.name}</td><td>{pathway.id}</td></tr> 
+                        if ("children" in pathway)  {
+                             console.log("sdfdf");
+                             getChildren(pathway.children); 
+                        }
+
                        })}
-                </ul>
-                <a className="btn dropdown-button" href="#!" data-activates="dropdown1">
-                    Pathways
-                </a>
+                    </tbody>
+                 </table>
             </div> )
     };
 }

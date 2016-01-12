@@ -7,8 +7,8 @@ export class Header extends React.Component {
     render () {
         return (
             <header>
-               <TopNav />
-               <SideNav pathways={this.props.pathways}/>
+               <TopNav activePathway={this.props.activePathway} />
+               <SideNav setActivePathway={this.props.setActivePathway} activePathway={this.props.activePathway} pathways={this.props.pathways}/>
             </header>
             )
     }

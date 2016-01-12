@@ -29,6 +29,15 @@ var pp       = require('./data/HDRdec17pp.js');
 var pathways = require('./data/pathways.js');
 
 class App extends  React.Component {
+    constructor () {
+        super();
+        this.state = ({activePathway: pathways.tree[0]});
+        this.setActivePathway = this.setActivePathway.bind(this);
+    }
+    setActivePathway(pathway) {
+        this.setState({activePathway: pathway});
+        console.log("settingstate globally");
+    }
     componentDidMount () {
       $('#side-nav-open').click(() => {
           $('.side-nav').toggleClass('open')
@@ -40,9 +49,13 @@ class App extends  React.Component {
     render () {
         return (
             <div>
-                <Header pathways={pathways}/>
-                <Main pathways={pathways} 
-                      pairwise_interactions={pi} />
+                <Header pathways={pathways}
+                        activePathway={this.state.activePathway}
+                        setActivePathway={this.setActivePathway} />
+                <Main pathways={pathways}  
+                      activePathway={this.state.activePathway}
+                      setActivePathway={this.props.setActivePathway}
+                      pairwiseInteractions={pi} />
                 <Footer />
             </div> )
     }

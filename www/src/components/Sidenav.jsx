@@ -4,18 +4,16 @@ import {PathwayNames} from './Pathwaynames.jsx'
 
 export class SideNav extends React.Component {
     constructor (props) { 
-         super();
-         this.state = { 
-            filterText: '' 
-         };
+        super();
+        this.state = { 
+            filterText: '',
+        };
 	this.stateUpdate = this.stateUpdate.bind(this);
     };
     stateUpdate(event) {
-        console.log("event", event.target.value);
         this.setState({ 
             filterText: event.target.value 
         });
-        console.log(this.state);
     };
     render () {
         var filterText = this.state.filterText;
@@ -41,9 +39,15 @@ export class SideNav extends React.Component {
                 <li className="search">
                 </li>
                 <li id="side-nav-pathway-list">
-                    <div className="collection ">
-                        <PathwayNames pathways={this.props.pathways} filter={filterText} />
-                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Id</th>
+                            </tr>
+                        </thead>
+                        <PathwayNames pathways={this.props.pathways} filter={filterText} activePathway={this.props.activePathway} setActivePathway={this.props.setActivePathway} />
+                    </table>
                 </li>
             </ul> )
     };
