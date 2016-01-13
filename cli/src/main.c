@@ -67,21 +67,28 @@ int is_writeable(char * filepath) {
     return FALSE;
 }    
 
-int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, int map) {
+int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, int verbose, int map) {
     DIR *dir, *subdir;
     struct dirent *ent, *subent;
 
     if ((access(data_dir, W_OK) != 0) || ((dir = opendir(data_dir)) == NULL)) {
-        printf("make sure your data-dir flag is a path to a writable directory\n");
+        printf("ERROR: Make sure your data-dir flag is a path to a writable directory\n");
         return 1;
     }
 
+    if(verbose == 1) {
+        printf("\tStarting to analyze each sub directory found in: %s\n", data_dir);
+    }
+    
     int pi_exits, logical_fg_exists, learning_obs_exists, learnt_fg_exists, inference_obs_exists, posterior_probabilities_exists;
 
     int ret;
     while ((ent = readdir(dir)) != NULL) {
         if ((strcmp(".", (ent->d_name)) == 0) || (strcmp("..", ent->d_name) == 0 )) continue;
 
+        if (verbose == 1) {
+             printf("\t\tAnlyzing sub-directory: %s\n", ent->d_name);
+        } 
 
         int network_dir_len = strlen(data_dir) + strlen(ent->d_name) + 3;//3 = zero-terminator and slashs
         char *network_dir = malloc(network_dir_len);
@@ -149,20 +156,30 @@ int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_t
             }
         }
         
-        if (!(pi_exists == 1 )) continue;
+        if (!(pi_exists == 1 )) {
+            if (verbose == 1) {
+                printf("\t\t\tSKIPPING: unable to find pairwise interaction file (should have same name as subdirectory with the extension pi\n"); 
+            }
+            continue;
+        }
 
         if (!logical_fg_exists) {
             int exit_code = reaction_logic_to_factorgraph(pi_file, logical_fg_file, number_of_states);
             if (exit_code != 0) {
                 char * strerr = strerror(exit_code);
-                printf("Failed to generate factorgraph %s (error code: %d): %s\n", logical_fg_file, exit_code, strerr);
+                printf("ERROR: Failed to generate factorgraph %s (error code: %d): %s\n", logical_fg_file, exit_code, strerr);
             } 
             else {
-               logical_fg_exists = 1;
+                logical_fg_exists = 1;
+                printf("\t\t\tlogical.fg has been generated\n");
             }
-        }
+        } 
 
         if ((learnt_fg_exists == 0) && ( learning_obs_exists == 1) && ( logical_fg_exists ==1)) {
+            if (verbose == 1 ) {
+                printf("\t\t\tPerforming learning\n");
+            }
+ 
             int exit_code = learning_discrete_BayNet(pi_file, logical_fg_file, learning_obs_file, learnt_fg_file, number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, map, 0);
             if (exit_code != 0) {
                 char * strerr = strerror_pgmlab(exit_code);
@@ -170,22 +187,45 @@ int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_t
             } 
             else {
                 learnt_fg_exists = 1;
+                if (verbose == 1) {
+                    printf("\t\t\tlearnt.fg has been generaged\n");
+                }
             }
         }
+        else if (verbose == 1) {
+            printf("\t\t\tSkipping learning: Either learnt.fg and/or learning.obs does not exit or learnt.fg has already been generated\n"); 
+        }
         if((pp_exists == 0) && ( inference_obs_exists == 1 )) {
+            if (verbose == 1) {
+                 printf("\t\t\tPerforming inference\n");
+            }
+
             int exit_code = 0;
             if(learnt_fg_exists == 1) {
+                 if (verbose == 1) {
+                      printf("\t\t\t\tUsing learnt.fg and inference.obs (pgmlab uses learnt fg if it has been generated)\n");         
+                 }
                  exit_code = doLBPinference(pi_file, learnt_fg_file, inference_obs_file, pp_file, number_of_states);
             } 
             else if (logical_fg_exists == 1) {
+                 if (verbose == 1) {
+                      printf("\t\t\t\tUsing logical.fg and inference.obs\n");         
+                 }
                  exit_code = doLBPinference(pi_file, logical_fg_file, inference_obs_file, pp_file, number_of_states);
             }
 
             if (exit_code != 0) {
                 char * strerr = strerror_pgmlab(exit_code);
                 printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
+            } 
+            else if (verbose == 1) {
+                printf("\t\t\tPosterior probability file has been generaged\n");
             }
         }
+        else if (verbose == 1) {
+            printf("\t\t\tSkipping inference because there isn't a inference.obs file available or because the posterior probability file has already been generated\n");
+        }
+
 
         free(pi_file);
         free(logical_fg_file);
@@ -690,7 +730,7 @@ int interactive_commands() {
 
 int main(int argc, char *argv[]) {
     struct arg_lit *i, *l, *g, *interactive, *logging_on, *map_off, *inference_use_logical_factorgraph;
-    struct arg_lit *help, *version;
+    struct arg_lit *help, *version, *verbose;
     struct arg_end *end;
     struct arg_str *data_dir;
     struct arg_int *em_max_iterations, *em_number_of_training_samples, *number_of_states;
@@ -721,6 +761,7 @@ int main(int argc, char *argv[]) {
         em_parameters_change_limit = arg_dbl0(NULL, "parameters-change-limit", NULL, "Stopping criteria: change in the parameters - used in learning (default 1e-3)"),
         logging_on = arg_lit0(NULL, "logging-on", "Set this flag if you would like the learning step to print out the status into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
         map_off = arg_lit0(NULL, "maximum-a-posteriori-estimation", "Use this flag to set the MAP flag to 0 (default 1)"),
+        verbose = arg_lit0("v","verbose", "will provide verbose output when using data dir"),
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
@@ -785,14 +826,16 @@ int main(int argc, char *argv[]) {
         printf("Starting analysis on specified directories\n");
         int i;
         for(i=0; i < data_dir->count; i++) {
-            printf("\tDirectory: %s\n", data_dir->sval[i]);
+            printf("\tAnalyzing Directory: %s\n", data_dir->sval[i]);
             exitcode = analyze_directory( data_dir->sval[i], 
                                           em_max_iterations->ival[0],
                                           em_number_of_training_samples->ival[0], 
                                           em_log_likelihood_change_limit->dval[0], 
                                           em_parameters_change_limit->dval[0], 
                                           number_of_states->ival[0],
+                                          (verbose->count >= 1)? 1: 0,
                                           map);
+            printf("Analysis Complete\n");
        }
        goto exit;
     }
