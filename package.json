@@ -20,7 +20,6 @@
     "d3": "~3.5.9",
     "d3-tip": "~0.6.7",
     "css-loader": "~0.23.0",
-    "autobahn": "~0.9.8",
     "when": "~3.7.5",
     "crypto-js": "~3.1.5",
     "json-loader": "~0.5.4",
@@ -32,6 +31,8 @@
     "blueimp-file-upload": "~9.11.2",
     "jquery.ui.widget": "~1.10.3",
     "imports-loader": "~0.6.5",
-    "html5shiv": "~3.7.3"
+    "html5shiv": "~3.7.3",
+    "alt": "~0.18.1",
+    "autobahn-react": "~0.3.1"
   }
 }

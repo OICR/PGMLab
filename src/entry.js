@@ -1,15 +1,7 @@
+'use strict';
+
 //require('hammerjs');
 //window.jquery = window.jQuery = window.$ = require('./lib/jquery.js');
-
-//import style from 'style';
-//require('imports?define=>false!blueimp-file-upload')
-
-//import resumable from 'resumable';
-//import autobahn from 'autobahn';
-
-//import navigator from 'navigator';
-
-//import html5shiv from 'html5shiv';
 
 require('./lib/materialize.min.js');
 
@@ -27,6 +19,22 @@ import {Footer} from './components/Footer.jsx';
 var pi       = require('./data/HDRdec17pi.js');
 var pp       = require('./data/HDRdec17pp.js');
 var pathways = require('./data/pathways.js');
+
+var AutobahnReact = require('autobahn-react');
+AutobahnReact.connect('ws://127.0.0.1:8000/ws', 'realm1');
+
+
+/*
+var isValid = require('utf-8-validate').isValidUTF8;
+//var when      = require('when'); 
+var WebSocket = require('ws');
+var autobahn  = require('autobahn');
+
+/*var connection = new autobahn.Connection({
+   url: "ws://127.0.0.1:5000/ws",
+   realm: "realm1"
+});
+*/
 
 class App extends  React.Component {
     constructor () {

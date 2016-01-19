@@ -20,7 +20,7 @@ export class SideNav extends React.Component {
         return (
             <ul id="nav-mobile" className="side-nav fixed">
                 <li>
-                    <a id="side-nav-close" href="#" data-activates="slide-out" className="button-collapse"><i className="mdi-navigation-menu small"></i></a>
+                     <a id="side-nav-close" href="#" data-activates="slide-out" className="button-collapse"><img src="./icons/close.svg" className="mdi-navigation-menu small"></img></a>
                 </li>
                 <li className="logo">
                     <h5>Select Pathway</h5>

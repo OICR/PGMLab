@@ -13,6 +13,10 @@
 	font-size: inherit;
 } */
 
+#side-nav-close {
+  padding-left: 90%;
+}
+
 #tabs-component {
   width:340px;
   padding-left:40px;
@@ -33,6 +37,11 @@
 
 .side-nav {
   left: 0 !important;
+}
+
+.side-nav a {
+  height:0px;
+  line-height:50px;
 }
 
 header, main, footer {

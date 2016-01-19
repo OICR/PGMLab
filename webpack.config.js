@@ -36,5 +36,6 @@ module.exports = {
     alias: {
                 'jquery.ui.widget': 'blueimp-file-upload/jquery.ui.widget'
             }
-  }
+  },
+"browser": { "fs": false }
 }
