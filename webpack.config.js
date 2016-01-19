@@ -2,7 +2,7 @@ module.exports = {
   context: __dirname + '/src',
   entry: './entry.js',
   output: {
-    filename: 'js/bundle.js'
+    filename: 'assets/js/bundle.js'
   },
   module: {
     loaders: [
