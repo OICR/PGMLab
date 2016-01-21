@@ -2,7 +2,7 @@ module.exports = {
   context: __dirname + '/src',
   entry: './entry.js',
   output: {
-    filename: 'assets/js/bundle.js'
+    filename: 'apps/PathwayMutationAnalyzer/bundle.js'
   },
   module: {
     loaders: [
@@ -37,5 +37,10 @@ module.exports = {
                 'jquery.ui.widget': 'blueimp-file-upload/jquery.ui.widget'
             }
   },
-"browser": { "fs": false }
+  node: {
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+    bufferutil: 'empty'
+  }
 }

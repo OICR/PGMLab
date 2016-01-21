@@ -31,3 +31,13 @@ pip
      webpack src/entry.js bundle.js
 
 
+I am wanting to use Alt (FLUX) to keep track of state.
+
+I am using autobahnJS for the WAMP protocol and Crossbar to host in production
+
+
+## to run in development
+
+     npm run ( in root directory)
+
+Now navigate to "http://localhost:8080/apps/PathwayMutationAnalyzer/index.html" in your browser"

@@ -33,6 +33,7 @@
     "imports-loader": "~0.6.5",
     "html5shiv": "~3.7.3",
     "alt": "~0.18.1",
-    "autobahn-react": "~0.3.1"
+    "autobahn-react": "~0.3.1",
+    "autobahn": "~0.9.9"
   }
 }

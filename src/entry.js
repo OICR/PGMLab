@@ -1,71 +1,68 @@
-'use strict';
+var main = require('./components/App.js');
 
-//require('hammerjs');
-//window.jquery = window.jQuery = window.$ = require('./lib/jquery.js');
+try {
+   var autobahn = require('autobahn');
+} catch (e) {
+   console.log("e", e);
+}
 
-require('./lib/materialize.min.js');
+var wsuri;
+if (document.location.origin == "file://") {
+   wsuri = "ws://127.0.0.1:9000/ws";
 
-import React from 'react';
-import { render } from 'react-dom';
+} else {
+   wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost:9000/ws";
+}
 
-var observations_learning = [{id:"ol1", name:'one'},{id:"ol2", name:'two'},{id:"ol3", name:'three'}];
-var observations_inference = [{id:"oi1", name:'one'},{id:"oi2", name:'two'},{id:"oi3", name:'three'}];
-
-import {Header} from './components/Header.jsx';
-import {Main} from './components/Main.jsx';
-import {Footer} from './components/Footer.jsx';
-
-// Data
-var pi       = require('./data/HDRdec17pi.js');
-var pp       = require('./data/HDRdec17pp.js');
-var pathways = require('./data/pathways.js');
-
-var AutobahnReact = require('autobahn-react');
-AutobahnReact.connect('ws://127.0.0.1:8000/ws', 'realm1');
-
-
-/*
-var isValid = require('utf-8-validate').isValidUTF8;
-//var when      = require('when'); 
-var WebSocket = require('ws');
-var autobahn  = require('autobahn');
-
-/*var connection = new autobahn.Connection({
-   url: "ws://127.0.0.1:5000/ws",
+// the WAMP connection to the Router
+//
+var connection = new autobahn.Connection({
+   url: wsuri,
    realm: "realm1"
 });
-*/
 
-class App extends  React.Component {
-    constructor () {
-        super();
-        this.state = ({activePathway: pathways.tree[0]});
-        this.setActivePathway = this.setActivePathway.bind(this);
-    }
-    setActivePathway(pathway) {
-        this.setState({activePathway: pathway});
-        console.log("settingstate globally");
-    }
-    componentDidMount () {
-      $('#side-nav-open').click(() => {
-          $('.side-nav').toggleClass('open')
-      });
-      $('#side-nav-close').click(() => {
-          $('.side-nav').toggleClass('open')
-      });
-    }
-    render () {
-        return (
-            <div>
-                <Header pathways={pathways}
-                        activePathway={this.state.activePathway}
-                        setActivePathway={this.setActivePathway} />
-                <Main pathways={pathways}  
-                      activePathway={this.state.activePathway}
-                      setActivePathway={this.props.setActivePathway}
-                      pairwiseInteractions={pi} />
-                <Footer />
-            </div> )
-    }
+function getPathway(session, pathways, activePathway) {
+    session.call('pgmlab.pathway.get', [activePathway.id]).then(
+          function(res) {
+               var pathway = res;
+               console.log("pathway", pathway);
+               main.init(pathways, activePathway, pathway);
+          },
+          function (err) {
+              console.log("couldn't get pathway", id, err);
+          });
 }
-render(<App />, document.getElementById('app'));
+
+
+// fired when connection is established and session attached
+connection.onopen = function (session, details) {
+   console.log("Connected");
+   session.call('pgmlab.pathways.list').then(
+         function (res) {
+            var pathways = res;
+            var activePathway = pathways[3];
+            getPathway(session, pathways, activePathway);
+         },
+         function (err) {
+            console.log("getPathwayList() error:", err);
+         });
+};
+
+
+// fired when connection was lost (or could not be established)
+connection.onclose = function (reason, details) {
+   console.log("Connection lost: " + reason);
+   if (t1) {
+      clearInterval(t1);
+      t1 = null;
+   }
+   if (t2) {
+      clearInterval(t2);
+      t2 = null;
+   }
+}
+
+
+// now actually open the connection
+//
+connection.open();

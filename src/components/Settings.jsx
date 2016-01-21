@@ -1,8 +1,8 @@
 import React from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-import {SelectGraph} from './Selectgraph.jsx'
 import {Learning} from './Learning.jsx'
+import {Inference} from './Inference.jsx'
 
 export class Settings extends React.Component {
     handleSelect (index, last) {
@@ -12,18 +12,14 @@ export class Settings extends React.Component {
         return (
             <Tabs onSelect={this.handleSelected} selectedIndex={0}>
             <TabList>
-              <Tab>Sub Graph</Tab>
               <Tab>Learning</Tab>
               <Tab>Inference</Tab>
             </TabList>
             <TabPanel>
-               <SelectGraph activePathway={this.props.activePathway}></SelectGraph>
-            </TabPanel>
-            <TabPanel>
                <Learning></Learning>
             </TabPanel>
             <TabPanel>
-    
+               <Inference></Inference>
             </TabPanel>
           </Tabs> )
     }
