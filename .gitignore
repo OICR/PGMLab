@@ -35,3 +35,7 @@ lib/
 
 #OS X files
 .DS_Store
+
+
+#This is is for securing the websocket each implementation should generate it's own 
+wamp/.crossbar/pgmlab.pem
