@@ -11,7 +11,7 @@ export class Learning extends React.Component {
         return (
             <div>  
 
-                <a className="waves-effect waves-light orange btn white-text" onClick={this.runLearning}>Run Learning</a> 
+                <a className="waves-effect waves-light orange btn white-text" onClick={this.runLearning}>Predict Impact</a> 
             </div> )
     }
 }

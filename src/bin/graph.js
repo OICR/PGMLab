@@ -9,7 +9,11 @@ var toggle = 0;
 var linkedByIndex = {};
 
 function initialize() {
-   zoom =  d3.behavior.zoom().scaleExtent([-8, 8]).on("zoom", zoomed);
+    zoom =  d3.behavior.zoom().scaleExtent([-8, 8]).on("zoom", zoomed);
+
+    //remove svg image for switching from one graph to the next
+    var chart = document.getElementById("chart");
+    chart.innerHTML = '';
 
     var outer = d3.select("#chart")
       .append("div")
@@ -29,8 +33,7 @@ function initialize() {
 exports.initialize = initialize;
 
 function render (pi) {
-
-   
+    
     var color = d3.scale.category20();
 
     vis.append("rect")
@@ -77,8 +80,8 @@ function render (pi) {
         }
     
     //Creates the graph data structure out of the json data
-    force.nodes(pi.graph.nodes)
-        .links(pi.graph.links)
+    force.nodes(pi.nodes)
+        .links(pi.links)
         .start();
     
     var data = [
@@ -89,7 +92,7 @@ function render (pi) {
     
     //Create all the line svgs but without locations yet
     var link = vis.selectAll(".link")
-        .data(pi.graph.links)
+        .data(pi.links)
         .enter().append("line")
         .attr("class", "link")
         .attr("marker-end", function(d) {return (d.value == 1 )? 
@@ -103,7 +106,7 @@ function render (pi) {
 
     //Do the same with the shapes for the nodes 
      var node = vis.selectAll(".node")
-               .data(pi.graph.nodes)
+               .data(pi.nodes)
                .enter().append("g")
                .attr("class", "node")
                .on('click', function (d) { connectedNodes(d) } ) //Added code for highlighting nodes
@@ -136,7 +139,7 @@ function render (pi) {
     var text_center = false;
     
     var text = vis.selectAll(".text")
-        .data(pi.graph.nodes)
+        .data(pi.nodes)
         .enter().append("text")
         .attr("dy", ".35em");
     
@@ -147,17 +150,17 @@ function render (pi) {
         text.attr("dx", function(d) {return (size(d.size)||nominal_base_node_size);})
                .text(function(d) { return '\u2002'+d.name; });
     
-    for (i = 0; i < pi.graph.nodes.length; i++) {
+    for (i = 0; i < pi.nodes.length; i++) {
         linkedByIndex[i + "," + i] = 1;
     };
-    pi.graph.links.forEach(function (d) {
+    pi.links.forEach(function (d) {
         linkedByIndex[d.source.index + "," + d.target.index] = 1;
     });
   
     //Search capability
     var optArray = [];
-    for (var i = 0; i < pi.graph.nodes.length - 1; i++) {
-        optArray.push(pi.graph.nodes[i].name);
+    for (var i = 0; i < pi.nodes.length - 1; i++) {
+        optArray.push(pi.nodes[i].name);
     }
     optArray = optArray.sort();
     (function () {

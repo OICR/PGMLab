@@ -8,7 +8,7 @@ export class Main extends React.Component {
            <main>
                 <div className="container" className="col l12">
                     <div className="row">
-                        <div className="col s12 m9 l10">
+                        <div className="col s12 m9 l12">
                             <Content pathways             ={this.props.pathways} 
                                      activePathway        ={this.props.activePathway}
                                      pairwiseInteractions ={this.props.pairwiseInteractions} />

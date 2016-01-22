@@ -1,6 +1,7 @@
 import React from 'react'
 
-import {Settings} from './Settings.jsx'
+//import {Settings} from './Settings.jsx'
+import {Inference} from './Inference.jsx'
 
 var graph = require('../bin/graph.js');
 
@@ -22,7 +23,8 @@ export class Content extends React.Component {
         return (
             <div id="section">
                 <div id="tabs-component" className="col s18 m5">
-                    <Settings pathways={this.props.pathways} activePathway={this.props.activePathway}></Settings>
+                     
+                    <Inference pathways={this.props.pathways} activePathway={this.props.activePathway}></Inference>
                 </div>
 
                  <div className="col s18 m8 l8">
@@ -37,7 +39,7 @@ export class Content extends React.Component {
                         <a className="btn-floating btn waves-effect waves-light orange" onClick={this.zoomOut} type="button"><i className="medium material-icons">zoom_out</i></a>
                     </div>
 
-                    <div id="chart"></div>
+                    <div style={{width:"800px"}} id="chart"></div>
                  </div>
                  <br></br>
                  <div className="section"></div>
@@ -45,3 +47,5 @@ export class Content extends React.Component {
         );
     }
 }
+
+//                    <Settings pathways={this.props.pathways} activePathway={this.props.activePathway}></Settings>

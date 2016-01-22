@@ -1,4 +1,67 @@
-var main = require('./components/App.js');
+var materialize = require('./lib/materialize.min.js');
+
+import React from 'react';
+import { render } from 'react-dom';
+
+var observations_learning = [{id:"ol1", name:'one'},{id:"ol2", name:'two'},{id:"ol3", name:'three'}];
+var observations_inference = [{id:"oi1", name:'one'},{id:"oi2", name:'two'},{id:"oi3", name:'three'}];
+
+import {Header} from './components/Header.jsx';
+import {Main}   from './components/Main.jsx';
+import {Footer} from './components/Footer.jsx';
+
+var graph = require('./bin/graph.js')
+
+// Data
+//var pi       = require('./data/HDRdec17pi.js');
+var pp       = require('./data/HDRdec17pp.js');
+
+class App extends  React.Component {
+    constructor (props) {
+        super(props);
+        this.state = ({ activePathway:       this.props.activePathway,
+                        pairwiseInteractions: this.props.pairwiseInteractions});
+                        
+        this.setActivePathway = this.setActivePathway.bind(this);
+    }
+    setActivePathway(pathway, session) {
+        console.log("prod connection", connection);
+        var self = this;
+        connection.session.call('pgmlab.pathway.get', [pathway.id]).then(
+          function(res) {
+               self.setState({activePathway: pathway,
+                              pairwiseInteractions: res});
+               graph.initialize();
+               graph.render(res);
+          },
+          function (err) {
+              console.log("couldn't get pathway", pathway.id, err);
+          });
+
+        console.log("setting active pathway");
+    }
+    componentDidMount () {
+      $('#side-nav-open').click(() => {
+          $('.side-nav').toggleClass('open')
+      });
+      $('#side-nav-close').click(() => {
+          $('.side-nav').toggleClass('open')
+      });
+    }
+    render () {
+        return (
+            <div>
+                <Header pathways={this.props.pathways}
+                        activePathway={this.state.activePathway}
+                        setActivePathway={this.setActivePathway} />
+                <Main pathways={this.props.pathways}
+                      activePathway={this.state.activePathway}
+                      setActivePathway={this.props.setActivePathway}
+                      pairwiseInteractions={this.state.pairwiseInteractions} />
+               <Footer />
+            </div> )
+    }
+}
 
 try {
    var autobahn = require('autobahn');
@@ -6,41 +69,32 @@ try {
    console.log("e", e);
 }
 
-var wsuri;
-if (document.location.origin == "file://") {
-   wsuri = "ws://127.0.0.1:9000/ws";
+var wsuri = (document.location.origin == "file://")?
+    "ws://127.0.0.1:9000/ws":
+    (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost:9000/ws";
 
-} else {
-   wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost:9000/ws";
-}
-
-// the WAMP connection to the Router
-//
 var connection = new autobahn.Connection({
-   url: wsuri,
-   realm: "realm1"
+    url: wsuri,
+    realm: "realm1"
 });
 
 function getPathway(session, pathways, activePathway) {
     session.call('pgmlab.pathway.get', [activePathway.id]).then(
           function(res) {
-               var pathway = res;
-               console.log("pathway", pathway);
-               main.init(pathways, activePathway, pathway);
+               var pairwiseInteractions = res;
+               init(pathways, activePathway, pairwiseInteractions);
           },
           function (err) {
               console.log("couldn't get pathway", id, err);
           });
 }
 
-
-// fired when connection is established and session attached
 connection.onopen = function (session, details) {
    console.log("Connected");
    session.call('pgmlab.pathways.list').then(
          function (res) {
             var pathways = res;
-            var activePathway = pathways[3];
+            var activePathway = pathways[0];
             getPathway(session, pathways, activePathway);
          },
          function (err) {
@@ -49,7 +103,6 @@ connection.onopen = function (session, details) {
 };
 
 
-// fired when connection was lost (or could not be established)
 connection.onclose = function (reason, details) {
    console.log("Connection lost: " + reason);
    if (t1) {
@@ -62,7 +115,13 @@ connection.onclose = function (reason, details) {
    }
 }
 
+function changePathway(pathayID) {
+};
 
-// now actually open the connection
-//
 connection.open();
+
+function init(pathways, activePathway, pairwiseInteractions) {
+    render(<App pathways={pathways} 
+                activePathway={activePathway}
+                pairwiseInteractions={pairwiseInteractions}  />, document.getElementById('app'));
+}

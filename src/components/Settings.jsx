@@ -19,7 +19,7 @@ export class Settings extends React.Component {
                <Learning></Learning>
             </TabPanel>
             <TabPanel>
-               <Inference></Inference>
+               <Inference activePathway={this.props.activePathway}></Inference>
             </TabPanel>
           </Tabs> )
     }
