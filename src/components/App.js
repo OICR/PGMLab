@@ -1,6 +1,4 @@
-'se strict';
-
-var materialize = require('../lib/materialize.min.js');
+'use strict';
 
 import React from 'react';
 import { render } from 'react-dom';
@@ -14,7 +12,6 @@ import {Footer} from './Footer.jsx';
 
 // Data
 var pi       = require('../data/HDRdec17pi.js');
-var pp       = require('../data/HDRdec17pp.js');
 
 class App extends  React.Component {
     constructor (props) {
@@ -52,8 +49,6 @@ class App extends  React.Component {
 
 }
 
-        /* 
-     */
 function init(pathways, activePathway) {
     render(<App pathways={pathways} 
                 activePathway={activePathway} />, document.getElementById('app'));

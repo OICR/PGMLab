@@ -10,18 +10,17 @@ import {Header} from './components/Header.jsx';
 import {Main}   from './components/Main.jsx';
 import {Footer} from './components/Footer.jsx';
 
-var graph = require('./bin/graph.js')
+var graphvis = require('./bin/graphvis.js');
 
-// Data
-//var pi       = require('./data/HDRdec17pi.js');
+//data
 var pp       = require('./data/HDRdec17pp.js');
 
 class App extends  React.Component {
     constructor (props) {
         super(props);
+        
         this.state = ({ activePathway:       this.props.activePathway,
-                        pairwiseInteractions: this.props.pairwiseInteractions});
-                        
+                        pairwiseInteractions: this.props.pairwiseInteractions});                       
         this.setActivePathway = this.setActivePathway.bind(this);
     }
     setActivePathway(pathway, session) {
@@ -31,14 +30,13 @@ class App extends  React.Component {
           function(res) {
                self.setState({activePathway: pathway,
                               pairwiseInteractions: res});
-               graph.initialize();
-               graph.render(res);
+               graphvis.render(res);
           },
           function (err) {
               console.log("couldn't get pathway", pathway.id, err);
           });
 
-        console.log("setting active pathway");
+        console.log("Entry: setting active pathway");
     }
     componentDidMount () {
       $('#side-nav-open').click(() => {
