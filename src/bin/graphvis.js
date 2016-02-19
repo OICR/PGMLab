@@ -23,7 +23,8 @@ function render(pairwiseInteractions) {
         nodes.push({ 'id': pairwiseInteractions.nodes[i].name,
                      'label': label,
                      'title': 'Name: '+ pairwiseInteractions.nodes[i].name +'<br>' +
-                              'LongName' + pairwiseInteractions.nodes[i].longname,
+                              'LongName' + pairwiseInteractions.nodes[i].longname + '<br>' +
+                              'Reactome Class' + pairwiseInteractions.nodes[i].type, 
                      'shape': pairwiseInteractions.nodes[i].shape });
     }
 

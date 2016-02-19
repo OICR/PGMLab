@@ -19,17 +19,34 @@ class App extends  React.Component {
     constructor (props) {
         super(props);
         
-        this.state = ({ activePathway:       this.props.activePathway,
+        this.state = ({ activePathway:        this.props.activePathway,
+                        mutatedGenes:         [],
                         pairwiseInteractions: this.props.pairwiseInteractions});                       
         this.setActivePathway = this.setActivePathway.bind(this);
+        this.mutateGene = this.mutateGene.bind(this);
+        this.removeMutatedGene = this.removeMutatedGene.bind(this);
+    }
+    mutateGene(gene) {
+        var found = this.state.mutatedGenes.some(function (el) { return el.name === gene.name  })
+        if (!found) {
+            var newgenelist = this.state.mutatedGenes.concat([gene])
+            this.setState({mutatedGenes: newgenelist});
+        }
+    }
+    removeMutatedGene(gene) {
+          var mutatedGenes = $.grep(this.state.mutatedGenes, function(e){ 
+              return e.name != gene.name; 
+          });
+          this.setState({mutatedGenes: mutatedGenes});
     }
     setActivePathway(pathway, session) {
         console.log("prod connection", connection);
         var self = this;
         connection.session.call('pgmlab.pathway.get', [pathway.id]).then(
           function(res) {
-               self.setState({activePathway: pathway,
-                              pairwiseInteractions: res});
+               self.setState({ activePathway: pathway,
+                               pairwiseInteractions: res,
+                               mutatedGenes: []});
                graphvis.render(res);
           },
           function (err) {
@@ -52,10 +69,13 @@ class App extends  React.Component {
                 <Header pathways={this.props.pathways}
                         activePathway={this.state.activePathway}
                         setActivePathway={this.setActivePathway} />
-                <Main pathways={this.props.pathways}
-                      activePathway={this.state.activePathway}
-                      setActivePathway={this.props.setActivePathway}
-                      pairwiseInteractions={this.state.pairwiseInteractions} />
+                <Main pathways             = {this.props.pathways}
+                      activePathway        = {this.state.activePathway}
+                      setActivePathway     = {this.props.setActivePathway}
+                      mutateGene           = {this.mutateGene}
+                      removeMutatedGene    = {this.removeMutatedGene}
+                      mutatedGenes         = {this.state.mutatedGenes}
+                      pairwiseInteractions = {this.state.pairwiseInteractions} />
                <Footer />
             </div> )
     }
