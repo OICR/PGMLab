@@ -37,9 +37,12 @@ import subprocess
 
 import os
 import os.path
+import shutil # for removing directory
 
 import json
 import string
+
+import uuid
 
 from itertools import * # for skipping lines in a file
 
@@ -55,11 +58,7 @@ class AppSession(ApplicationSession):
         def system_call(command):
              p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
              return p.stdout.read()
- 
-        def getPathwayMap():
-             pprint("sfsd")
-             #get the pathway map
-
+        
         def getFolders():
              directories = os.listdir(hosted_data)
              return directories
@@ -82,12 +81,8 @@ class AppSession(ApplicationSession):
              pathway = json.loads(json_data)
              return pathway
 
-       #      with open(filepath) as f:
-        #         for line in itertools.islice(f, 17, None):
-         #             return line
-
         yield self.register(getPathway, 'pgmlab.pathway.get')
-        self.log.info("subscribed to topic 'onhello'")
+        self.log.info("procedure getPathway(pathwayId) registered")
 
         # REGISTER a procedure for remote calling
         #
@@ -98,5 +93,74 @@ class AppSession(ApplicationSession):
             return pathwayList
 
         yield self.register(getPathwayList, 'pgmlab.pathways.list')
-        self.log.info("procedure add2() registered")
+        self.log.info("procedure getPathwayList() registered")
+
+        def createPairwiseInteractionFile(runPath, pathway):
+            filePath = runPath + "/pathway.pi";
+            numberOfNodes = len(pathway)
+            
+            pi = open(filePath, "w")
+
+            pi.write(str(numberOfNodes)+"\n\n")
+            
+            for interaction in pathway:
+                pi.write(str(interaction["source"]) + "\t")
+                pi.write(str(interaction["target"]) + "\t")
+                pi.write(str(interaction["value"])  + "\t")
+                pi.write(str(interaction["logic"])  + "\n")
+      
+            pi.close()
+
+            return numberOfNodes
+
+        def createObservationFile(runPath, observations):
+            filePath = runPath + "/inference.obs";
+            numberOfObs = len(observations)
+            
+            obs = open(filePath, "w")
+
+            obs.write("1\n\n"+str(numberOfObs)+"\n")
+            
+            for observation in observations:
+                obs.write(str(observation["name"]) + "\t" + "1" + "\n")
+      
+            obs.close()
+
+            return numberOfObs
+
+        def inferenceCommand(runPath):
+            system_call("pgmlab --inference --pairwise-interaction-file=" + str(runPath) + "/pathway.pi --estimated-parameters-file=" + str(runPath) + "/logical.fg --inference-observed-data-file=" + str(runPath) + "/inference.obs --posterior-probability-file=" + str(runPath) + "/pathway.pp --number-of-states 3")
+
+        def generateFactorgraph(runPath):
+            system_call("pgmlab --generate-factorgraph --pairwise-interaction-file=" + str(runPath) + "/pathway.pi --logical-factorgraph-file=" + str(runPath) + "/logical.fg --number-of-states 3")
+
+        def readPosteriorProbabilityFile(runPath):
+            filepath = runPath + "/pathway.pp"
+            pp = dict()
+            with open(filepath, "r") as fh:
+                for line in fh:
+                    if line.startswith("---"):
+                        return pp
+                    values = line.strip().split("\t")
+                    if not values[0] in pp.keys():
+                        pp[values[0]] = list()
+                    pp[values[0]].append(values[1])
+
+        def runInference(pathway, observations, options):
+            self.log.info("running inference")
+            runID = str(uuid.uuid4())
+            cwd = os.getcwd()
+            tmpPath = cwd + "/../tmp/"
+            runPath = tmpPath + runID
+            os.mkdir(runPath);
+            numberOfNodes = createPairwiseInteractionFile(runPath, pathway)
+            generateFactorgraph(runPath);
+            numberOfObs = createObservationFile(runPath, observations)         
+            inferenceCommand(runPath)
+            pp = readPosteriorProbabilityFile(runPath);
+            shutil.rmtree(runPath);
+            return {'run': runID, 'posteriorProbabilities':pp} 
+
+        yield self.register(runInference, 'pgmlab.inference.run')
+        self.log.info("subscribed to topic 'pgmlab.infence.run'")
 

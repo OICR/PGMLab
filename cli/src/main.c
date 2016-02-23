@@ -53,7 +53,6 @@ int is_writeable(char * filepath) {
     if( ( strlen(filepath) == 0) || (strcmp(filepath, ".") == 0) || (strcmp(filepath, "/") ==0) ) {
          return FALSE;
     }
- 
     char buf[1000];
     realpath(filepath, buf); // buff should now be full filepath
     char *ts = strdup(buf);
@@ -61,8 +60,9 @@ int is_writeable(char * filepath) {
     char *filename = basename(buf);
     char *dir = (char *) dirname(buf);
 
-    if ( (access(dir, W_OK) == 0) && (strlen(filename) > 0)) 
+    if ( (access(dir, W_OK) == 0) && (strlen(filename) > 0)) {
         return TRUE;
+    }
     
     return FALSE;
 }    
@@ -241,13 +241,12 @@ int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_t
     return 0;
 }
 
-
 int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, char *pairwise_interactions_filepath, char *logical_factorgraph_filepath, char* estimated_parameters_filepath, char *learning_observed_data_filepath, char* inference_factorgraph_file, char *inference_observed_data_filepath, char* posterior_probabilities_filepath, int g_count, int l_count, int i_count, int logging, int MAP_flag) {
 
     if (g_count > 0) {
         printf("Generating factorgraph with:\n\t\tnumber of states\t%d\n", number_of_states);
 
-        if ( is_writeable(logical_factorgraph_filepath))  {
+        if ( is_writeable(logical_factorgraph_filepath) == 0)  {
             printf("Pathway filepath not specified correctly\n");
             return 1;
         }
@@ -255,7 +254,6 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             printf("Pairwise interactions filepath not specified correctly\n");
             return 1;
         }
-
         int exit_code = reaction_logic_to_factorgraph(pairwise_interactions_filepath, logical_factorgraph_filepath, number_of_states);
 
         if (exit_code != 0) {
@@ -290,7 +288,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             printf("Learning observed data filepath not specified correctly\n");
             return 1;
         }
-        if ( is_writeable(estimated_parameters_filepath) ) {
+        if ( is_writeable(estimated_parameters_filepath) == 0  ) {
             printf("Estimated Parameters filepath not specified correctly\n");
             return 1;
         }
@@ -316,7 +314,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             printf("Observed data filepath not specified correctly\n");
             return 1;
         }
-        if ( is_writeable(posterior_probabilities_filepath) ) {
+        if ( is_writeable(posterior_probabilities_filepath) == 0) {
             printf("Posterior probabilities filepath not specified correctly\n");
             return 1;
         }
@@ -845,20 +843,20 @@ int main(int argc, char *argv[]) {
         interactive_command();
         goto exit;
     }
-
+printf("inference obs %s\n", posterior_probability_file->filename[0]);
     /* Command line parsing is complete, do the main processing */
     exitcode = non_interactive_command( em_max_iterations->ival[0],
                                         em_number_of_training_samples->ival[0], 
                                         em_log_likelihood_change_limit->dval[0], 
                                         em_parameters_change_limit->dval[0], 
                                         number_of_states->ival[0], 
-                                        (pairwise_interaction_file->count == 1)?    pairwise_interaction_file->filename   : "", 
-                                        (logical_factorgraph_file->count == 1)?     logical_factorgraph_file->filename    : "",
-                                        (estimated_parameters_file->count == 1)?    estimated_parameters_file->filename   : "",
-                                        (learning_observed_data_file->count == 1)?  learning_observed_data_file->filename : "",
-                                        (inference_factorgraph_file->count == 1)?   inference_factorgraph_file->filename  : "",
-                                        (inference_observed_data_file->count == 1)? inference_observed_data_file->filename: "",
-                                        (posterior_probability_file->count == 1)?   posterior_probability_file->filename  : "",
+                                        (pairwise_interaction_file->count == 1)?    pairwise_interaction_file->filename[0]    : "", 
+                                        (logical_factorgraph_file->count == 1)?     logical_factorgraph_file->filename[0]     : "",
+                                        (estimated_parameters_file->count == 1)?    estimated_parameters_file->filename[0]    : "",
+                                        (learning_observed_data_file->count == 1)?  learning_observed_data_file->filename[0]  : "",
+                                        (inference_factorgraph_file->count == 1)?   inference_factorgraph_file->filename[0]   : "",
+                                        (inference_observed_data_file->count == 1)? inference_observed_data_file->filename[0] : "",
+                                        (posterior_probability_file->count == 1)?   posterior_probability_file->filename[0]   : "",
                                         g->count, l->count, i->count, logging, map);
 exit:
     /* deallocate each non-null entry in argtable[] */
