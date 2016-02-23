@@ -12,7 +12,7 @@ export class MutationList extends React.Component {
                  var geneName = (gene.longname != null)? gene.longname: gene.id;
                  return (
                           <tr key={i} style={{padding: "0px"}}>
-                            <td>{geneName}</td>
+                            <td style={{width: "100%"}}>{geneName}</td>
                             <td onClick={self.props.removeMutatedGene.bind(self, gene)} >X</td>
                            </tr>) ;
                })}

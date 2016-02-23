@@ -6,13 +6,6 @@ import {MutationList} from './MutationList.jsx';
 import {SelectObservationLearning} from './Selectobservationlearning.jsx'
 
 export class ControlPanel extends React.Component {
-    constructor() {
-        super();
-        this. _runInference = this. _runInference.bind(this);
-    }
-    _runInference() {
-        console.log("running inference", this)
-    }
     render() {
         var activePathway = this.props.activePathway.name
         var self = this;
@@ -32,7 +25,10 @@ export class ControlPanel extends React.Component {
                           mutatedGenes          = {this.props.mutatedGenes}
                           pairwiseInteractions  = {this.props.pairwiseInteractions} />
                 <br /><br />
-                <div className="waves-effect waves-light orange btn white-text" style={{width: "300px"}} onClick={self._runInference}>Predict Impact</div> 
+                <div className="waves-effect waves-light orange btn white-text" style={{width: "300px"}} onClick={self.props.runInference}>Predict Impact</div> 
             </div> )
     }
+
 }
+
+

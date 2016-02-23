@@ -12,25 +12,42 @@ import {Footer} from './components/Footer.jsx';
 
 var graphvis = require('./bin/graphvis.js');
 
-//data
-var pp       = require('./data/HDRdec17pp.js');
-
 class App extends  React.Component {
     constructor (props) {
         super(props);
         
-        this.state = ({ activePathway:        this.props.activePathway,
-                        mutatedGenes:         [],
-                        pairwiseInteractions: this.props.pairwiseInteractions});                       
+        this.state = ({ activePathway:          this.props.activePathway,
+                        mutatedGenes:           [],
+                        posteriorProbabilities: {},
+                        pairwiseInteractions:   this.props.pairwiseInteractions});                       
+
         this.setActivePathway = this.setActivePathway.bind(this);
         this.mutateGene = this.mutateGene.bind(this);
         this.removeMutatedGene = this.removeMutatedGene.bind(this);
+        this.runInference = this.runInference.bind(this);
+    }
+    runInference() {
+        console.log("running Inference", this.props.pairwiseInteractions.links, this.state.mutatedGenes);
+        var self = this;
+
+        connection.session.call('pgmlab.inference.run', [self.props.pairwiseInteractions.links, self.state.mutatedGenes, []]).then(
+          function(response) {
+               console.log("response", response)
+               self.setState({"posteriorProbabilities": response["posteriorProbabilities"]})
+               graphvis.render(self.state.pairwiseInteractions, self.state.mutatedGenes, self.state.posteriorProbabilities)
+               console.log("state", self.state)
+          },
+          function (err) {
+              console.log("couldn't run inference", err);
+          });
+
     }
     mutateGene(gene) {
         var found = this.state.mutatedGenes.some(function (el) { return el.name === gene.name  })
         if (!found) {
             var newgenelist = this.state.mutatedGenes.concat([gene])
             this.setState({mutatedGenes: newgenelist});
+            graphvis.render(this.state.pairwiseInteractions, this.state.mutatedGenes, this.state.posteriorprobabilities);
         }
     }
     removeMutatedGene(gene) {
@@ -38,6 +55,7 @@ class App extends  React.Component {
               return e.name != gene.name; 
           });
           this.setState({mutatedGenes: mutatedGenes});
+          graphvis.render(this.state.pairwiseInteractions, this.state.mutatedGenes, this.state.posteriorprobabilities);
     }
     setActivePathway(pathway, session) {
         console.log("prod connection", connection);
@@ -46,8 +64,10 @@ class App extends  React.Component {
           function(res) {
                self.setState({ activePathway: pathway,
                                pairwiseInteractions: res,
-                               mutatedGenes: []});
-               graphvis.render(res);
+                               mutatedGenes: [],
+                               posteriorProbabilities: {}});
+              console.log("state", self.state);
+              graphvis.render(res, self.state.mutatedGenes, self.state.posteriorprobabilities);
           },
           function (err) {
               console.log("couldn't get pathway", pathway.id, err);
@@ -75,6 +95,7 @@ class App extends  React.Component {
                       mutateGene           = {this.mutateGene}
                       removeMutatedGene    = {this.removeMutatedGene}
                       mutatedGenes         = {this.state.mutatedGenes}
+                      runInference         = {this.runInference}
                       pairwiseInteractions = {this.state.pairwiseInteractions} />
                <Footer />
             </div> )

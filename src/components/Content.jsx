@@ -19,6 +19,7 @@ export class Content extends React.Component {
                                   mutateGene           = {this.props.mutateGene}
                                   removeMutatedGene    = {this.props.removeMutatedGene}
                                   mutatedGenes         = {this.props.mutatedGenes}
+                                  runInference         = {this.props.runInference}
                                   activePathway        = {this.props.activePathway} />
                 </div>
 
