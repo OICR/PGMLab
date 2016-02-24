@@ -77,5 +77,4 @@ make uninstall:
 clean:
 	make -C net clean; \
 	make -C cli clean; \
-	make -C R/pgmlabR clean; \
-	rm bin/*
+	make -C R/pgmlabR clean;
