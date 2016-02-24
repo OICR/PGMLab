@@ -324,12 +324,12 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         }
 
         int exit_code;
-        if ( access(estimated_parameters_filepath, R_OK) ) {
-            printf("Estimated parameters (learnt factorgraph) filepath not specified correctly\n");
+        if ( access(inference_factorgraph_filepath, R_OK) ) {
+            printf("Inference factorgraph filepath not specified correctly\n");
             return 1;
         }
 
-        exit_code = doLBPinference(pairwise_interactions_filepath, estimated_parameters_filepath, inference_observed_data_filepath, posterior_probabilities_filepath, number_of_states);
+        exit_code = doLBPinference(pairwise_interactions_filepath, inference_factorgraph_filepath, inference_observed_data_filepath, posterior_probabilities_filepath, number_of_states);
         if (exit_code != 0) {
              char * strerr = strerror_pgmlab(exit_code);
              printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
@@ -737,8 +737,8 @@ int main(int argc, char *argv[]) {
 
     void *argtable[] = {
         g = arg_lit0("g", "generate-factorgraph", "Generate factor graph from reaction logic [pairwise-interaction-file, logical-factorgraph-file]"),
-        l = arg_lit0("l", "learning", "Run learning using training dataset [logical-factorgraph-file, learning-observed-data-file, learnt-factorgraph-file]"),
-        i = arg_lit0("i", "inference", "Run inference given the states of visible sets [inference-factorgaph-file, inference-observed-data-file, posterior-probability-file]"),
+        l = arg_lit0("l", "learning", "Run learning using training dataset [pairwise-interaction-file, logical-factorgraph-file, learning-observed-data-file, estimated-parameters-file]"),
+        i = arg_lit0("i", "inference", "Run inference given the states of visible sets [pairwise-interaction-file, inference-factorgaph-file, inference-observed-data-file, posterior-probability-file]"),
 
         interactive = arg_lit0(NULL, "interactive", "Interactive mode"),
 

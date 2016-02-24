@@ -128,11 +128,12 @@ class AppSession(ApplicationSession):
 
             return numberOfObs
 
-        def inferenceCommand(runPath):
-            system_call("pgmlab --inference --pairwise-interaction-file=" + str(runPath) + "/pathway.pi --estimated-parameters-file=" + str(runPath) + "/logical.fg --inference-observed-data-file=" + str(runPath) + "/inference.obs --posterior-probability-file=" + str(runPath) + "/pathway.pp --number-of-states 3")
-
         def generateFactorgraph(runPath):
             system_call("pgmlab --generate-factorgraph --pairwise-interaction-file=" + str(runPath) + "/pathway.pi --logical-factorgraph-file=" + str(runPath) + "/logical.fg --number-of-states 3")
+
+
+        def inferenceCommand(runPath):
+            system_call("pgmlab --inference --pairwise-interaction-file=" + str(runPath) + "/pathway.pi --inference-factorgraph-file=" + str(runPath) + "/logical.fg --inference-observed-data-file=" + str(runPath) + "/inference.obs --posterior-probability-file=" + str(runPath) + "/pathway.pp --number-of-states 3")
 
         def readPosteriorProbabilityFile(runPath):
             filepath = runPath + "/pathway.pp"
