@@ -62,12 +62,12 @@ This command line interface can be used in two distinct ways. The first way is t
    - The following will be outputed from the previous command
 
 ```
-pgmlab [-gli] [--interactive] [--data-dir=<string>] [--pairwise-interaction-file=<file>] [--logical-factorgraph-file=<file>] [--estimated-parameters-file=<file>] [--learning-observed-data-file=<file>] [--inference-observed-data-file=<file>] [--inference-factorgraph-file=<file>] [--posterior-probability-file=<file>] [--number-of-states=<int>] [--em-max-iterations=<int>] [--training-samples=<int>] [--log-likelihood-change-limit=<double>] [--parameters-change-limit=<double>] [--logging-on] [--maximum-a-posteriori-estimation] [--help] [--version] 
+pgmlab [-gliv] [--interactive] [--data-dir=<string>] [--pairwise-interaction-file=<file>] [--logical-factorgraph-file=<file>] [--estimated-parameters-file=<file>] [--learning-observed-data-file=<file>] [--inference-observed-data-file=<file>] [--inference-factorgraph-file=<file>] [--posterior-probability-file=<file>] [--number-of-states=<int>] [--em-max-iterations=<int>] [--training-samples=<int>] [--log-likelihood-change-limit=<double>] [--parameters-change-limit=<double>] [--logging-on] [--maximum-a-posteriori-estimation] [--help] [--version]
 
 ###Flag descriptions  
  -g, --generate-factorgraph Generate factor graph from reaction logic [pairwise-interaction-file, logical-factorgraph-file]
- -l, --learning            Run learning using training dataset [logical-factorgraph-file, learning-observed-data-file, learnt-factorgraph-file]
- -i, --inference           Run inference given the states of visible sets [inference-factorgaph-file, inference-observed-data-file, posterior-probability-file]
+ -l, --learning            Run learning using training dataset [pairwise-interaction-file, logical-factorgraph-file, learning-observed-data-file, estimated-parameters-file]
+ -i, --inference           Run inference given the states of visible sets [pairwise-interaction-file, inference-factorgaph-file, inference-observed-data-file, posterior-probability-file]
  --interactive             Interactive mode
  --data-dir=<string>       Path to folder containing data in specified folder structure and naming conventions
  --pairwise-interaction-file=<file> File path to pairwise interaction file
@@ -84,8 +84,10 @@ pgmlab [-gli] [--interactive] [--data-dir=<string>] [--pairwise-interaction-file
  --parameters-change-limit=<double> Stopping criteria: change in the parameters - used in learning (default 1e-3)
  --logging-on              Set this flag if you would like the learning step to print out the status into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)
  --maximum-a-posteriori-estimation Use this flag to set the MAP flag to 0 (default 1)
+ -v, --verbose             will provide verbose output when using data dir
  --help                    Display help and exit
  --version                 Display version information and exit
+
 ```
 
 *If you would like to use the interactive interface select the following flag: "--interactive".
