@@ -121,4 +121,3 @@ sub get_index_of_node {
       return $i if ( $node{"name"} eq $node_id);
    }
 }
-

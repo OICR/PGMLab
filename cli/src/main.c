@@ -241,7 +241,7 @@ int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_t
     return 0;
 }
 
-int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, char *pairwise_interactions_filepath, char *logical_factorgraph_filepath, char* estimated_parameters_filepath, char *learning_observed_data_filepath, char* inference_factorgraph_file, char *inference_observed_data_filepath, char* posterior_probabilities_filepath, int g_count, int l_count, int i_count, int logging, int MAP_flag) {
+int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, char *pairwise_interactions_filepath, char *logical_factorgraph_filepath, char* estimated_parameters_filepath, char *learning_observed_data_filepath, char* inference_factorgraph_filepath, char *inference_observed_data_filepath, char* posterior_probabilities_filepath, int g_count, int l_count, int i_count, int logging, int MAP_flag) {
 
     if (g_count > 0) {
         printf("Generating factorgraph with:\n\t\tnumber of states\t%d\n", number_of_states);

@@ -19,7 +19,7 @@ makeHashTable/phash.*
 
 #binaries
 out/
-bin/
+bin/pgmlab
 lib/
 
 # Object files
