@@ -1,0 +1,439 @@
+[
+   {
+      "name" : "G-protein beta:gamma signalling",
+      "id" : "397795"
+   },
+   {
+      "name" : "Meiotic synapsis",
+      "id" : "1221632"
+   },
+   {
+      "name" : "Unwinding of DNA",
+      "id" : "176974"
+   },
+   {
+      "id" : "5658442",
+      "name" : "Regulation of RAS by GAPs"
+   },
+   {
+      "id" : "1358803",
+      "name" : "Downregulation of ERBB2:ERBB3 signaling"
+   },
+   {
+      "name" : "RNA Polymerase III Transcription Initiation From Type 1 Promoter",
+      "id" : "76061"
+   },
+   {
+      "name" : "Endosomal/Vacuolar pathway",
+      "id" : "1236977"
+   },
+   {
+      "id" : "75953",
+      "name" : "RNA Polymerase II Transcription Initiation"
+   },
+   {
+      "name" : "RNA Polymerase I Promoter Opening",
+      "id" : "73728"
+   },
+   {
+      "name" : "SCF-beta-TrCP mediated degradation of Emi1",
+      "id" : "174113"
+   },
+   {
+      "name" : "Non-integrin membrane-ECM interactions",
+      "id" : "3000171"
+   },
+   {
+      "id" : "73776",
+      "name" : "RNA Polymerase II Promoter Escape"
+   },
+   {
+      "name" : "Transcriptional regulation by small RNAs",
+      "id" : "5578749"
+   },
+   {
+      "name" : "TRAF6 mediated NF-kB activation",
+      "id" : "933542"
+   },
+   {
+      "name" : "RNA Polymerase III Transcription Initiation From Type 2 Promoter",
+      "id" : "76066"
+   },
+   {
+      "name" : "activated TAK1 mediates p38 MAPK activation",
+      "id" : "450302"
+   },
+   {
+      "id" : "927802",
+      "name" : "Nonsense-Mediated Decay (NMD)"
+   },
+   {
+      "name" : "Peptide chain elongation",
+      "id" : "156902"
+   },
+   {
+      "name" : "SIRT1 negatively regulates rRNA Expression",
+      "id" : "427359"
+   },
+   {
+      "id" : "5685939",
+      "name" : "HDR through MMEJ (alt-NHEJ)"
+   },
+   {
+      "name" : "RNA Polymerase I Chain Elongation",
+      "id" : "73777"
+   },
+   {
+      "name" : "Mitochondrial protein import",
+      "id" : "1268020"
+   },
+   {
+      "name" : "RNA Polymerase I Transcription Initiation",
+      "id" : "73762"
+   },
+   {
+      "id" : "71403",
+      "name" : "Citric acid cycle (TCA cycle)"
+   },
+   {
+      "name" : "JNK (c-Jun kinases) phosphorylation and  activation mediated by activated human TAK1",
+      "id" : "450321"
+   },
+   {
+      "name" : "Nephrin interactions",
+      "id" : "373753"
+   },
+   {
+      "id" : "420029",
+      "name" : "Tight junction interactions"
+   },
+   {
+      "name" : "IRAK1 recruits IKK complex",
+      "id" : "937039"
+   },
+   {
+      "id" : "442982",
+      "name" : "Ras activation uopn Ca2+ infux through NMDA receptor"
+   },
+   {
+      "name" : "RIP-mediated NFkB activation via ZBP1",
+      "id" : "1810476"
+   },
+   {
+      "name" : "CYP2E1 reactions",
+      "id" : "211999"
+   },
+   {
+      "name" : "Synthesis of PIPs at the plasma membrane",
+      "id" : "1660499"
+   },
+   {
+      "name" : "TRIF-mediated programmed cell death",
+      "id" : "2562578"
+   },
+   {
+      "id" : "198933",
+      "name" : "Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell"
+   },
+   {
+      "name" : "FCERI mediated NF-kB activation",
+      "id" : "2871837"
+   },
+   {
+      "id" : "174084",
+      "name" : "Autodegradation of Cdh1 by Cdh1:APC/C"
+   },
+   {
+      "name" : "HDR through Single Strand Annealing (SSA)",
+      "id" : "5685938"
+   },
+   {
+      "name" : "Regulation of signaling by CBL",
+      "id" : "912631"
+   },
+   {
+      "name" : "Collagen degradation",
+      "id" : "1442490"
+   },
+   {
+      "id" : "5693554",
+      "name" : "Resolution of D-loop Structures through Synthesis-Dependent Strand Annealing (SDSA)"
+   },
+   {
+      "id" : "174178",
+      "name" : "APC/C:Cdh1 mediated degradation of Cdc20 and other APC/C:Cdh1 targeted proteins in late mitosis/early G1"
+   },
+   {
+      "id" : "5676594",
+      "name" : "TNF receptor superfamily (TNFSF) members mediating non-canonical NF-kB pathway"
+   },
+   {
+      "id" : "156842",
+      "name" : "Eukaryotic Translation Elongation"
+   },
+   {
+      "id" : "76042",
+      "name" : "RNA Polymerase II Transcription Initiation And Promoter Clearance"
+   },
+   {
+      "id" : "174154",
+      "name" : "APC/C:Cdc20 mediated degradation of Securin"
+   },
+   {
+      "id" : "216083",
+      "name" : "Integrin cell surface interactions"
+   },
+   {
+      "id" : "211981",
+      "name" : "Xenobiotics"
+   },
+   {
+      "id" : "76046",
+      "name" : "RNA Polymerase III Transcription Initiation"
+   },
+   {
+      "name" : "TAK1 activates NFkB by phosphorylation and activation of IKKs complex",
+      "id" : "445989"
+   },
+   {
+      "id" : "73779",
+      "name" : "RNA Polymerase II Transcription Pre-Initiation And Promoter Opening"
+   },
+   {
+      "name" : "Pyrimidine salvage reactions",
+      "id" : "73614"
+   },
+   {
+      "name" : "Translesion synthesis by Y family DNA polymerases bypasses lesions on DNA template",
+      "id" : "110313"
+   },
+   {
+      "id" : "4641265",
+      "name" : "Repression of WNT target genes"
+   },
+   {
+      "id" : "975957",
+      "name" : "Nonsense Mediated Decay (NMD) enhanced by the Exon Junction Complex (EJC)"
+   },
+   {
+      "name" : "Establishment of Sister Chromatid Cohesion",
+      "id" : "2468052"
+   },
+   {
+      "name" : "Dual Incision in GG-NER",
+      "id" : "5696400"
+   },
+   {
+      "id" : "4641257",
+      "name" : "Degradation of AXIN"
+   },
+   {
+      "name" : "Selenocysteine synthesis",
+      "id" : "2408557"
+   },
+   {
+      "name" : "DNA methylation",
+      "id" : "5334118"
+   },
+   {
+      "name" : "Dual incision in TC-NER",
+      "id" : "6782135"
+   },
+   {
+      "name" : "AUF1 (hnRNP D0) binds and destabilizes mRNA",
+      "id" : "450408"
+   },
+   {
+      "id" : "446353",
+      "name" : "Cell-extracellular matrix interactions"
+   },
+   {
+      "id" : "112382",
+      "name" : "Formation of RNA Pol II elongation complex "
+   },
+   {
+      "name" : "mRNA Capping",
+      "id" : "72086"
+   },
+   {
+      "name" : "Negative regulation of the PI3K/AKT network",
+      "id" : "199418"
+   },
+   {
+      "id" : "212300",
+      "name" : "PRC2 methylates histones and DNA"
+   },
+   {
+      "id" : "174184",
+      "name" : "Cdc20:Phospho-APC/C mediated degradation of Cyclin A"
+   },
+   {
+      "name" : "IRAK1 recruits IKK complex upon TLR7/8 or 9 stimulation",
+      "id" : "975144"
+   },
+   {
+      "id" : "169911",
+      "name" : "Regulation of Apoptosis"
+   },
+   {
+      "id" : "211935",
+      "name" : "Fatty acids"
+   },
+   {
+      "name" : "G0 and Early G1",
+      "id" : "1538133"
+   },
+   {
+      "name" : "CASP8 activity is inhibited",
+      "id" : "5218900"
+   },
+   {
+      "name" : "Dimerization of procaspase-8",
+      "id" : "69416"
+   },
+   {
+      "name" : "Packaging Of Telomere Ends",
+      "id" : "171306"
+   },
+   {
+      "id" : "937041",
+      "name" : "IKK complex recruitment mediated by RIP1"
+   },
+   {
+      "id" : "5368286",
+      "name" : "Mitochondrial translation initiation"
+   },
+   {
+      "name" : "Activated PKN1 stimulates transcription of AR (androgen receptor) regulated genes KLK2 and KLK3",
+      "id" : "5625886"
+   },
+   {
+      "id" : "350562",
+      "name" : "Regulation of ornithine decarboxylase (ODC)"
+   },
+   {
+      "id" : "210993",
+      "name" : "Tie2 Signaling"
+   },
+   {
+      "name" : "Cytosolic tRNA aminoacylation",
+      "id" : "379716"
+   },
+   {
+      "id" : "379724",
+      "name" : "tRNA Aminoacylation"
+   },
+   {
+      "id" : "72764",
+      "name" : "Eukaryotic Translation Termination"
+   },
+   {
+      "id" : "202424",
+      "name" : "Downstream TCR signaling"
+   },
+   {
+      "name" : "HDACs deacetylate histones",
+      "id" : "3214815"
+   },
+   {
+      "name" : "Type I hemidesmosome assembly",
+      "id" : "446107"
+   },
+   {
+      "id" : "975956",
+      "name" : "Nonsense Mediated Decay (NMD) independent of the Exon Junction Complex (EJC)"
+   },
+   {
+      "id" : "429914",
+      "name" : "Deadenylation-dependent mRNA decay"
+   },
+   {
+      "name" : "TNFR1-induced NFkappaB signaling pathway",
+      "id" : "5357956"
+   },
+   {
+      "id" : "211733",
+      "name" : "Regulation of activated PAK-2p34 by proteasome mediated degradation"
+   },
+   {
+      "id" : "6782210",
+      "name" : "Gap-filling DNA repair synthesis and ligation in TC-NER"
+   },
+   {
+      "name" : "Retrograde neurotrophin signalling",
+      "id" : "177504"
+   },
+   {
+      "name" : "Pyrimidine biosynthesis",
+      "id" : "500753"
+   },
+   {
+      "name" : "Condensation of Prometaphase Chromosomes",
+      "id" : "2514853"
+   },
+   {
+      "id" : "72702",
+      "name" : "Ribosomal scanning and start codon recognition"
+   },
+   {
+      "name" : "Fanconi Anemia Pathway",
+      "id" : "6783310"
+   },
+   {
+      "name" : "Degradation of DVL",
+      "id" : "4641258"
+   },
+   {
+      "id" : "392451",
+      "name" : "G beta:gamma signalling through PI3Kgamma"
+   },
+   {
+      "name" : "Cytochrome P450 - arranged by substrate type",
+      "id" : "211897"
+   },
+   {
+      "name" : "SHC-mediated cascade:FGFR4",
+      "id" : "5654719"
+   },
+   {
+      "id" : "187577",
+      "name" : "SCF(Skp2)-mediated degradation of p27/p21"
+   },
+   {
+      "id" : "5693538",
+      "name" : "Homology Directed Repair"
+   },
+   {
+      "id" : "77075",
+      "name" : "RNA Pol II CTD phosphorylation and interaction with CE"
+   },
+   {
+      "id" : "6782315",
+      "name" : "tRNA modification in the nucleus and cytosol"
+   },
+   {
+      "name" : "Formation of the ternary complex, and subsequently, the 43S complex",
+      "id" : "72695"
+   },
+   {
+      "name" : "Condensation of Prophase Chromosomes",
+      "id" : "2299718"
+   },
+   {
+      "id" : "2408522",
+      "name" : "Selenoamino acid metabolism"
+   },
+   {
+      "id" : "5696397",
+      "name" : "Gap-filling DNA repair synthesis and ligation in GG-NER"
+   },
+   {
+      "name" : "Termination of translesion DNA synthesis",
+      "id" : "5656169"
+   },
+   {
+      "id" : "389513",
+      "name" : "CTLA4 inhibitory signaling"
+   }
+]
+
