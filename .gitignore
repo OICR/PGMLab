@@ -42,3 +42,7 @@ wamp/.crossbar/pgmlab.pem
 
 #python compiled files
 *.pyc
+
+
+#node file for running process
+wamp/.crossbar/node.pid
