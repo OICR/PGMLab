@@ -7,8 +7,7 @@ export class GeneList extends React.Component {
         return (
              <div style={{overflow: "scroll", height: "285px"}}>
                {this.props.pairwiseInteractions.nodes.map(function(gene, i) {
-                 var geneName = (gene.longname != null)? gene.longname: gene.id;
-                  
+                 var geneName = ((gene.longname !== null) && (gene.longname !== undefined))? gene.longname: gene.name;
                  var geneStyle = {width: "274px", borderBottom: "solid 1px"}
                  var geneClass = "waves-effect waves-light black-text";
                  var found = self.props.mutatedGenes.some(function (el) { return el.name === gene.name  })     

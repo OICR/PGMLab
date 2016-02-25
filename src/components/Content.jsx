@@ -8,7 +8,7 @@ var graphvis = require('../bin/graphvis.js');
 
 export class Content extends React.Component {
     componentDidMount () {
-        graphvis.render(this.props.pairwiseInteractions);
+        this.props.setActivePathway(this.props.activePathway, this);
     }
     render () {
         return (

@@ -34,8 +34,7 @@ class App extends  React.Component {
           function(response) {
                console.log("response", response)
                self.setState({"posteriorProbabilities": response["posteriorProbabilities"]})
-               graphvis.render(self.state.pairwiseInteractions, self.state.mutatedGenes, self.state.posteriorProbabilities)
-               console.log("state", self.state)
+               graphvis.addPosteriorProbabilities(self.state.posteriorProbabilities);
           },
           function (err) {
               console.log("couldn't run inference", err);
@@ -45,9 +44,11 @@ class App extends  React.Component {
     mutateGene(gene) {
         var found = this.state.mutatedGenes.some(function (el) { return el.name === gene.name  })
         if (!found) {
+            gene["state"] = 0;
             var newgenelist = this.state.mutatedGenes.concat([gene])
+
             this.setState({mutatedGenes: newgenelist});
-            graphvis.render(this.state.pairwiseInteractions, this.state.mutatedGenes, this.state.posteriorprobabilities);
+            graphvis.mutateGene(gene);
         }
     }
     removeMutatedGene(gene) {
@@ -55,7 +56,7 @@ class App extends  React.Component {
               return e.name != gene.name; 
           });
           this.setState({mutatedGenes: mutatedGenes});
-          graphvis.render(this.state.pairwiseInteractions, this.state.mutatedGenes, this.state.posteriorprobabilities);
+          graphvis.removeMutatedGene(gene);
     }
     setActivePathway(pathway, session) {
         console.log("prod connection", connection);
@@ -67,7 +68,9 @@ class App extends  React.Component {
                                mutatedGenes: [],
                                posteriorProbabilities: {}});
               console.log("state", self.state);
-              graphvis.render(res, self.state.mutatedGenes, self.state.posteriorprobabilities);
+              var graphData = graphvis.render(res);
+              console.log("returned data", graphData);
+              self.setState({"graphData": graphData});
           },
           function (err) {
               console.log("couldn't get pathway", pathway.id, err);
@@ -91,7 +94,7 @@ class App extends  React.Component {
                         setActivePathway={this.setActivePathway} />
                 <Main pathways             = {this.props.pathways}
                       activePathway        = {this.state.activePathway}
-                      setActivePathway     = {this.props.setActivePathway}
+                      setActivePathway     = {this.setActivePathway}
                       mutateGene           = {this.mutateGene}
                       removeMutatedGene    = {this.removeMutatedGene}
                       mutatedGenes         = {this.state.mutatedGenes}

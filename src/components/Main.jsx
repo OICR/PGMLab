@@ -11,6 +11,7 @@ export class Main extends React.Component {
                         <div className="col s12 m9 l12">
                             <Content pathways             = {this.props.pathways} 
                                      activePathway        = {this.props.activePathway}
+                                     setActivePathway     = {this.props.setActivePathway}
                                      mutateGene           = {this.props.mutateGene}
                                      removeMutatedGene    = {this.props.removeMutatedGene}
                                      mutatedGenes         = {this.props.mutatedGenes}

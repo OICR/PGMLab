@@ -1,7 +1,17 @@
 import vis from '../lib/vis-4.14.0/dist/vis.js';
 
+var network;
+var datasetnodes;
+var datasetedges;
 
-function render(pairwiseInteractions, mutatedGenes, posteriorProbabilities) {
+function render(pairwiseInteractions) {
+
+    if (network !== undefined) {
+        network.destroy();
+        datasetnodes = null;
+        datasetedges = null;
+    }
+
     var container = document.getElementById('chart');
     var lengthLimit = 30;
     var edges = [];
@@ -13,7 +23,6 @@ function render(pairwiseInteractions, mutatedGenes, posteriorProbabilities) {
                    });
     }
 
-    console.log("posteriorProbabilities", posteriorProbabilities);
     var nodes = [];
     var numbernodes = pairwiseInteractions.nodes.length;
     for (let i =0; i<numbernodes; i++) {
@@ -27,35 +36,14 @@ function render(pairwiseInteractions, mutatedGenes, posteriorProbabilities) {
                     'color': {},
                     'title': 'ID: '+ pairwiseInteractions.nodes[i].name +'<br>' +
                              'Name:' + pairwiseInteractions.nodes[i].longname + '<br>' +
-                             'Reactome Class:' + pairwiseInteractions.nodes[i].type, 
-                    'shape': pairwiseInteractions.nodes[i].shape };
-        if ((mutatedGenes !== undefined) &&(mutatedGenes.length > 0)) {
-            var foundMutation = $.grep(mutatedGenes, function(e){ return e.name == node["id"]; })
- 
-            if (foundMutation.length != 0) {
-               node["color"]["border"] = '#ff0000';   
-            }      
-        }
-        console.log("pplen", node, posteriorProbabilities);
-        if ((posteriorProbabilities !== undefined) &&(posteriorProbabilities[node["id"]] != undefined)) {
-            var stateProbs = posteriorProbabilities[node["id"]];
-            var r = Math.ceil(stateProbs[0]*255);
-            var g = Math.ceil(stateProbs[1]*255);
-            var b = Math.ceil(stateProbs[2]*255);
-
-            node["title"] += "<br>Probabilities:<br>"+
-                             "State 1 (down regulated): " + stateProbs[0] + "<br>" +
-                             "State 2 (no change):      " + stateProbs[1] + "<br>" +
-                             "State 3 (up regulated):   " + stateProbs[2] + "<br>" 
-
-            node["color"]["background"] =  "rgba(" + r + "," + g + "," + b + ",0.5)"
-        }
-
+                             'Reactome Class:' + (pairwiseInteractions.nodes[i].type !== null)? pairwiseInteractions.nodes[i].type: "unknown" , 
+                    'shape': pairwiseInteractions.nodes[i].shape,
+                    'scaling': {'label': {'enabled':false} }};
         nodes.push(node);
     }
 
-    var datasetnodes = new vis.DataSet(nodes);
-    var datasetedges = new vis.DataSet(edges);
+    datasetnodes = new vis.DataSet(nodes);
+    datasetedges = new vis.DataSet(edges);
 
     var data = {
         nodes: datasetnodes,
@@ -85,7 +73,57 @@ function render(pairwiseInteractions, mutatedGenes, posteriorProbabilities) {
         }
       }
     };
-    var network = new vis.Network( container, data, options);
+
+    // subscribe to any change in the DataSet
+    datasetnodes.on('*', function (event, properties, senderId) {
+       console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
+    });
+    datasetedges.on('*', function (event, properties, senderId) {
+       console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
+    });
+
+    network = new vis.Network( container, data, options);
 }
 
 exports.render = render;
+
+function mutateGene(gene) {
+   datasetnodes.update({id: gene.name, "color": {"border": '#ff0000'} });
+}
+
+exports.mutateGene = mutateGene;
+
+function removeMutatedGene(gene) {
+   datasetnodes.update({id: gene.name, "color": {"border": '##2B7CE9'} });
+}
+
+exports.removeMutatedGene = removeMutatedGene;
+
+
+function addPosteriorProbabilities(posteriorProbabilities) {
+    var numPosteriorProbabilities = posteriorProbabilities.length;
+    console.log("keys", posteriorProbabilities.keys());
+    for (var ppid in posteriorProbabilities) {
+        
+        var stateProbs = posteriorProbabilities[ppid];
+        var r = Math.ceil(stateProbs[0]*255);
+        var g = Math.ceil(stateProbs[1]*255);
+        var b = Math.ceil(stateProbs[2]*255);
+
+        var node = datasetnodes.get(ppid);
+console.log("node", ppid, datasetnodes, node);
+        var title = node["title"];
+
+        title += "<br>Probabilities:<br>" +
+                 "State 1 (down regulated): " + stateProbs[0] + "<br>" +
+                 "State 2 (no change):      " + stateProbs[1] + "<br>" +
+                 "State 3 (up regulated):   " + stateProbs[2] + "<br>";
+
+        var bgColor =  "rgba(" + r + "," + g + "," + b + ",0.5)";
+
+        console.log("bgcolor", bgColor);
+        datasetnodes.update({"id": ppid, "color" : {"background": bgColor}});
+    }
+}
+
+exports.addPosteriorProbabilities = addPosteriorProbabilities;

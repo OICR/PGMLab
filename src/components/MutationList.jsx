@@ -9,7 +9,7 @@ export class MutationList extends React.Component {
                <table style={{padding: "0px"}}>
                   <tbody>
                {self.props.mutatedGenes.map(function(gene, i) {
-                 var geneName = (gene.longname != null)? gene.longname: gene.id;
+                 var geneName = ((gene.longname !== null) && (gene.longname !== undefined))? gene.longname: gene.name;
                  return (
                           <tr key={i} style={{padding: "0px"}}>
                             <td style={{width: "100%"}}>{geneName}</td>
