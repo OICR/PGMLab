@@ -3,14 +3,10 @@ import vis from '../lib/vis-4.14.0/dist/vis.js';
 var network;
 var datasetnodes;
 var datasetedges;
+var nodes;
+
 
 function render(pairwiseInteractions) {
-
-    if (network !== undefined) {
-        network.destroy();
-        datasetnodes = null;
-        datasetedges = null;
-    }
 
     var container = document.getElementById('chart');
     var lengthLimit = 30;
@@ -23,7 +19,7 @@ function render(pairwiseInteractions) {
                    });
     }
 
-    var nodes = [];
+    nodes = [];
     var numbernodes = pairwiseInteractions.nodes.length;
     for (let i =0; i<numbernodes; i++) {
         var length = (pairwiseInteractions.nodes[i].longname != null)?
@@ -73,16 +69,24 @@ function render(pairwiseInteractions) {
         }
       }
     };
-
-    // subscribe to any change in the DataSet
-    datasetnodes.on('*', function (event, properties, senderId) {
-       console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
-    });
-    datasetedges.on('*', function (event, properties, senderId) {
-       console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
-    });
-
-    network = new vis.Network( container, data, options);
+    if (network !== undefined) {
+ //       network.destroy();
+   //     datasetnodes = null;
+     //   datasetedges = null;
+   // }
+        network.setData(data);
+    } else {
+        // subscribe to any change in the DataSet
+  /*      datasetnodes.on('*', function (event, properties, senderId) {
+           console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
+        });
+        datasetedges.on('*', function (event, properties, senderId) {
+           console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
+        });*/
+    
+        network = new vis.Network( container, data, options);
+     
+    }
 }
 
 exports.render = render;
@@ -94,7 +98,7 @@ function mutateGene(gene) {
 exports.mutateGene = mutateGene;
 
 function removeMutatedGene(gene) {
-   datasetnodes.update({id: gene.name, "color": {"border": '##2B7CE9'} });
+   datasetnodes.update({id: gene.name, "color": {"border": '#2B7CE9'} });
 }
 
 exports.removeMutatedGene = removeMutatedGene;
@@ -102,7 +106,7 @@ exports.removeMutatedGene = removeMutatedGene;
 
 function addPosteriorProbabilities(posteriorProbabilities) {
     var numPosteriorProbabilities = posteriorProbabilities.length;
-    console.log("keys", posteriorProbabilities.keys());
+    console.log("keys", Object.keys(posteriorProbabilities));
     for (var ppid in posteriorProbabilities) {
         
         var stateProbs = posteriorProbabilities[ppid];
@@ -111,7 +115,7 @@ function addPosteriorProbabilities(posteriorProbabilities) {
         var b = Math.ceil(stateProbs[2]*255);
 
         var node = datasetnodes.get(ppid);
-console.log("node", ppid, datasetnodes, node);
+console.log("node", ppid, datasetnodes, node, network["data"]);
         var title = node["title"];
 
         title += "<br>Probabilities:<br>" +
