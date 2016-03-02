@@ -91,11 +91,12 @@ function render(pairwiseInteractions) {
 
 exports.render = render;
 
-function mutateGene(gene) {
-   datasetnodes.update({id: gene.name, "color": {"border": '#ff0000'} });
+function setNodeState(gene) {
+   var stateColor=["ff0000", "ffff00", "#008000"];
+   datasetnodes.update({id: gene.name, "color": {"border": stateColor[gene.state]} });
 }
 
-exports.mutateGene = mutateGene;
+exports.setNodeState = setNodeState;
 
 function removeMutatedGene(gene) {
    datasetnodes.update({id: gene.name, "color": {"border": '#2B7CE9'} });
@@ -106,7 +107,6 @@ exports.removeMutatedGene = removeMutatedGene;
 
 function addPosteriorProbabilities(posteriorProbabilities) {
     var numPosteriorProbabilities = posteriorProbabilities.length;
-    console.log("keys", Object.keys(posteriorProbabilities));
     for (var ppid in posteriorProbabilities) {
         
         var stateProbs = posteriorProbabilities[ppid];
@@ -115,7 +115,6 @@ function addPosteriorProbabilities(posteriorProbabilities) {
         var b = Math.ceil(stateProbs[2]*255);
 
         var node = datasetnodes.get(ppid);
-console.log("node", ppid, datasetnodes, node, network["data"]);
         var title = node["title"];
 
         title += "<br>Probabilities:<br>" +

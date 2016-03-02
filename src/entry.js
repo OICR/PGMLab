@@ -1,10 +1,7 @@
-var materialize = require('./lib/materialize.min.js');
+var materialize = require('./lib/materialize.min.js')
 
-import React from 'react';
-import { render } from 'react-dom';
-
-var observations_learning = [{id:"ol1", name:'one'},{id:"ol2", name:'two'},{id:"ol3", name:'three'}];
-var observations_inference = [{id:"oi1", name:'one'},{id:"oi2", name:'two'},{id:"oi3", name:'three'}];
+import React from 'react'
+import { render } from 'react-dom'
 
 import {Header} from './components/Header.jsx';
 import {Main}   from './components/Main.jsx';
@@ -17,20 +14,21 @@ class App extends  React.Component {
         super(props);
         
         this.state = ({ activePathway:          this.props.activePathway,
-                        mutatedGenes:           [],
+                        observedNodes:          [],
                         posteriorProbabilities: {},
                         pairwiseInteractions:   this.props.pairwiseInteractions});                       
 
         this.setActivePathway = this.setActivePathway.bind(this);
-        this.mutateGene = this.mutateGene.bind(this);
-        this.removeMutatedGene = this.removeMutatedGene.bind(this);
+        this.observeNode = this.observeNode.bind(this);
+        this.removeObservedNode = this.removeObservedNode.bind(this);
         this.runInference = this.runInference.bind(this);
+        this.setNodeState = this.setNodeState.bind(this);
     }
     runInference() {
-        console.log("running Inference", this.props.pairwiseInteractions.links, this.state.mutatedGenes);
+        console.log("running Inference", this.props.pairwiseInteractions.links, this.state.observedNodes);
         var self = this;
 
-        connection.session.call('pgmlab.inference.run', [self.props.pairwiseInteractions.links, self.state.mutatedGenes, []]).then(
+        connection.session.call('pgmlab.inference.run', [self.props.pairwiseInteractions.links, self.state.observedNodes, []]).then(
           function(response) {
                console.log("response", response)
                self.setState({"posteriorProbabilities": response["posteriorProbabilities"]})
@@ -41,22 +39,38 @@ class App extends  React.Component {
           });
 
     }
-    mutateGene(gene) {
-        var found = this.state.mutatedGenes.some(function (el) { return el.name === gene.name  })
+    observeNode(node) {
+        var found = this.state.observedNodes.some(function (el) { return el.name === node.name  })
         if (!found) {
-            gene["state"] = 0;
-            var newgenelist = this.state.mutatedGenes.concat([gene])
+            node["state"] = 0;
+            graphvis.setNodeState(node);
 
-            this.setState({mutatedGenes: newgenelist});
-            graphvis.mutateGene(gene);
+            var newNodeList = this.state.observedNodes.concat([node])
+            this.setState({observedNodes: newNodeList});
         }
     }
-    removeMutatedGene(gene) {
-          var mutatedGenes = $.grep(this.state.mutatedGenes, function(e){ 
-              return e.name != gene.name; 
+    removeObservedNode(node) {
+          var observedNodes = $.grep(this.state.observedNodes, function(e){ 
+              return e.name != node.name; 
           });
-          this.setState({mutatedGenes: mutatedGenes});
-          graphvis.removeMutatedGene(gene);
+          this.setState({'observedNodes': observedNodes});
+          graphvis.removeMutatedGene(node);
+    }
+    setNodeState(node, state) {
+        console.log("inside", state, node, this.state.observedNodes)
+        var observedNodes = this.state.observedNodes
+        for (var i = 0; i < observedNodes.length; i++) {
+            var parent = observedNodes[i];
+            if (parent.id === node.id) {
+                parent.state = state.value
+            }
+        }
+
+        node["state"] = state.value
+
+        console.log("setnodestate", node)
+        graphvis.setNodeState(node)
+        this.setState({"observedNodes": observedNodes});
     }
     setActivePathway(pathway, session) {
         console.log("prod connection", connection);
@@ -65,11 +79,9 @@ class App extends  React.Component {
           function(res) {
                self.setState({ activePathway: pathway,
                                pairwiseInteractions: res,
-                               mutatedGenes: [],
+                               observedNodes: [],
                                posteriorProbabilities: {}});
-              console.log("state", self.state);
               var graphData = graphvis.render(res);
-              console.log("returned data", graphData);
               self.setState({"graphData": graphData});
           },
           function (err) {
@@ -95,10 +107,11 @@ class App extends  React.Component {
                 <Main pathways             = {this.props.pathways}
                       activePathway        = {this.state.activePathway}
                       setActivePathway     = {this.setActivePathway}
-                      mutateGene           = {this.mutateGene}
-                      removeMutatedGene    = {this.removeMutatedGene}
-                      mutatedGenes         = {this.state.mutatedGenes}
+                      observeNode          = {this.observeNode}
+                      removeObservedNode   = {this.removeObservedNode}
+                      observedNodes        = {this.state.observedNodes}
                       runInference         = {this.runInference}
+                      setNodeState         = {this.setNodeState}
                       pairwiseInteractions = {this.state.pairwiseInteractions} />
                <Footer />
             </div> )

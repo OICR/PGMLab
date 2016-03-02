@@ -6,26 +6,22 @@ export class GeneList extends React.Component {
         var self = this;
         return (
              <div style={{overflow: "scroll", height: "285px"}}>
-               {this.props.pairwiseInteractions.nodes.map(function(gene, i) {
-                 var geneName = ((gene.longname !== null) && (gene.longname !== undefined))? gene.longname: gene.name;
-                 var geneStyle = {width: "274px", borderBottom: "solid 1px"}
-                 var geneClass = "waves-effect waves-light black-text";
-                 var found = self.props.mutatedGenes.some(function (el) { return el.name === gene.name  })     
-
+               {this.props.pairwiseInteractions.nodes.map(function(node, i) {
+                 var nodeName = ((node.longname !== null) && (node.longname !== undefined))? node.longname: node.name;
+                 var nodeStyle = {width: "274px", borderBottom: "solid 1px"}
+                 var nodeClass = "waves-effect waves-light black-text";
+                 var found = self.props.observedNodes.some(function (el) { return el.name === node.name  })     
                  if (found) {
-                     geneClass += " blue"; 
+                     nodeClass += " blue"; 
                  } else {
-                     geneClass += " white";
+                     nodeClass += " white";
                  }
                  
                  return  <div key={i} 
-                              onClick={self.props.mutateGene.bind(this, gene)} 
-                              className={geneClass}
-                              style={geneStyle}>{geneName}</div>;
+                              onClick={self.props.observeNode.bind(this, node)} 
+                              className={nodeClass}
+                              style={nodeStyle}>{nodeName}</div>;
                })}
-             </div>
-
-        )
+             </div> )
      }
-
 }

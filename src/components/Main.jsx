@@ -4,6 +4,7 @@ import {Content} from './Content.jsx'
 
 export class Main extends React.Component {
     render () {
+console.log("Main", this.props);
         return (
            <main>
                 <div className="container" className="col l12">
@@ -12,9 +13,10 @@ export class Main extends React.Component {
                             <Content pathways             = {this.props.pathways} 
                                      activePathway        = {this.props.activePathway}
                                      setActivePathway     = {this.props.setActivePathway}
-                                     mutateGene           = {this.props.mutateGene}
-                                     removeMutatedGene    = {this.props.removeMutatedGene}
-                                     mutatedGenes         = {this.props.mutatedGenes}
+                                     observeNode          = {this.props.observeNode}
+                                     removeObservedNode   = {this.props.removeObservedNode}
+                                     observedNodes        = {this.props.observedNodes}
+                                     setNodeState         = {this.props.setNodeState}
                                      runInference         = {this.props.runInference}
                                      pairwiseInteractions = {this.props.pairwiseInteractions} />
                         </div>

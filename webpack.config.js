@@ -2,7 +2,7 @@ module.exports = {
   context: __dirname + '/src',
   entry: './entry.js',
   output: {
-    filename: 'apps/PathwayMutationAnalyzer/bundle.js'
+    filename: 'apps/PGMBio/bundle.js'
   },
   module: {
     loaders: [

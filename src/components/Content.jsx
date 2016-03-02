@@ -16,10 +16,11 @@ export class Content extends React.Component {
                 <div id="tabs-component" className="col s18 m5">
                      
                     <ControlPanel pairwiseInteractions = {this.props.pairwiseInteractions} 
-                                  mutateGene           = {this.props.mutateGene}
-                                  removeMutatedGene    = {this.props.removeMutatedGene}
-                                  mutatedGenes         = {this.props.mutatedGenes}
+                                  observeNode          = {this.props.observeNode}
+                                  removeObservedNode   = {this.props.removeObservedNode}
+                                  observedNodes        = {this.props.observedNodes}
                                   runInference         = {this.props.runInference}
+                                  setNodeState         = {this.props.setNodeState}
                                   activePathway        = {this.props.activePathway} />
                 </div>
 

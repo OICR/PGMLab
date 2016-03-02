@@ -12,7 +12,7 @@ export class TopNav extends React.Component {
                     </ul> 
                     <ul className="left">
                         <li><a id="side-nav-open-menu" href="#"><i className="mdi-navigation-menu"></i></a></li>
-                        <li><a style={{fontSize:"50px"}} id="logo-container" href="#" className="brand-logo"><span style={{color: "#2e7d32"}}>Path</span><span style={{color:"#9c27b0"}}>Mut</span></a>
+                        <li><a style={{fontSize:"50px"}} id="logo-container" href="#" className="brand-logo"><span style={{color: "#2e7d32"}}>PGM</span><span style={{color:"#9c27b0"}}>Bio</span></a>
                             <p style={{paddingTop:"17px",marginTop:"15px"}}>A probabilistic model to measure the impact of mutation on pathways compents</p>
                         </li>
                     </ul>
