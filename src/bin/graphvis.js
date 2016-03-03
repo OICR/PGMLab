@@ -9,7 +9,7 @@ var nodes;
 function render(pairwiseInteractions) {
 
     var container = document.getElementById('chart');
-    var lengthLimit = 30;
+    var lengthLimit = 15;
     var edges = [];
     var numberEdges = pairwiseInteractions.links.length;
     for (let i = 0;  i<numberEdges; i++) {
@@ -27,14 +27,17 @@ function render(pairwiseInteractions) {
         var label =  ( length< lengthLimit)?
                        pairwiseInteractions.nodes[i].longname:
                        pairwiseInteractions.nodes[i].name;
+        
+        var reactomeClass  =  (pairwiseInteractions.nodes[i].type !== null)? pairwiseInteractions.nodes[i].type: "unknown";
         var node = {'id': pairwiseInteractions.nodes[i].name,
                     'label': label,
-                    'color': {},
+                    'color': {"background": '#ffffff',
+                              "border":     '#000000'},
                     'title': 'ID: '+ pairwiseInteractions.nodes[i].name +'<br>' +
-                             'Name:' + pairwiseInteractions.nodes[i].longname + '<br>' +
-                             'Reactome Class:' + (pairwiseInteractions.nodes[i].type !== null)? pairwiseInteractions.nodes[i].type: "unknown" , 
-                    'shape': pairwiseInteractions.nodes[i].shape,
-                    'scaling': {'label': {'enabled':false} }};
+                             'Name: ' + pairwiseInteractions.nodes[i].longname + '<br>' +
+                             'Reactome Class: ' + reactomeClass , 
+                    'shape': 'dot',
+                    'scaling': {'label': {'enabled':false}}};
         nodes.push(node);
     }
 
@@ -85,6 +88,17 @@ function render(pairwiseInteractions) {
         });*/
     
         network = new vis.Network( container, data, options);
+/*
+        network.on( 'doubleClick', function(properties) {
+
+            var nodes = datasetnodes.get(properties.nodes);
+            var node = nodes[0];
+            console.log("nodes", nodes, node);
+            node["state"] = 0;
+            setNodeState(node);
+            console.log('double clicked node ' + properties.nodes, node);
+        });
+*/
      
     }
 }
