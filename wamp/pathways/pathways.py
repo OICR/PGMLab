@@ -122,7 +122,7 @@ class AppSession(ApplicationSession):
             obs.write("1\n\n"+str(numberOfObs)+"\n")
             
             for observation in observations:
-                obs.write(str(observation["name"]) + "\t" + "1" + "\n")
+                obs.write(str(observation["name"]) + "\t" + str(observation["state"]) + "\n")
       
             obs.close()
 
@@ -159,7 +159,7 @@ class AppSession(ApplicationSession):
             numberOfObs = createObservationFile(runPath, observations)         
             inferenceCommand(runPath)
             pp = readPosteriorProbabilityFile(runPath);
-            shutil.rmtree(runPath);
+            #shutil.rmtree(runPath);
             return {'run': runID, 'posteriorProbabilities':pp} 
 
         yield self.register(runInference, 'pgmlab.inference.run')

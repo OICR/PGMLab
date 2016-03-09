@@ -280,6 +280,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         else {
             printf("\t\tMAP\t\t\t\toff\n");
         }
+
         if ( access(logical_factorgraph_filepath, R_OK)){
             printf("Logic factorgraph filepath not specified correctly\n");
             return 1;
