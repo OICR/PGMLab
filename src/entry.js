@@ -25,12 +25,10 @@ class App extends  React.Component {
         this.setNodeState = this.setNodeState.bind(this);
     }
     runInference() {
-        console.log("running Inference", this.props.pairwiseInteractions.links, this.state.observedNodes);
         var self = this;
 
-        connection.session.call('pgmlab.inference.run', [self.props.pairwiseInteractions.links, self.state.observedNodes, []]).then(
+        connection.session.call('pgmlab.inference.run', [this.state.pairwiseInteractions.links, this.state.observedNodes, []]).then(
           function(response) {
-               console.log("response", response)
                self.setState({"posteriorProbabilities": response["posteriorProbabilities"]})
                graphvis.addPosteriorProbabilities(self.state.posteriorProbabilities);
           },
@@ -42,7 +40,7 @@ class App extends  React.Component {
     observeNode(node) {
         var found = this.state.observedNodes.some(function (el) { return el.name === node.name  })
         if (!found) {
-            node["state"] = 0;
+            node["state"] = 1;
             graphvis.setNodeState(node);
 
             var newNodeList = this.state.observedNodes.concat([node])
@@ -56,19 +54,17 @@ class App extends  React.Component {
           this.setState({'observedNodes': observedNodes});
           graphvis.removeMutatedGene(node);
     }
-    setNodeState(node, state) {
-        console.log("inside", state, node, this.state.observedNodes)
+    setNodeState(node, option) {
         var observedNodes = this.state.observedNodes
         for (var i = 0; i < observedNodes.length; i++) {
-            var parent = observedNodes[i];
-            if (parent.id === node.id) {
-                parent.state = state.value
+            var observation = observedNodes[i];
+            if (observation.name === node.name) {
+                observation.state = option.value
             }
         }
+        
+        node["state"] = option.value
 
-        node["state"] = state.value
-
-        console.log("setnodestate", node)
         graphvis.setNodeState(node)
         this.setState({"observedNodes": observedNodes});
     }
@@ -77,12 +73,12 @@ class App extends  React.Component {
         var self = this;
         connection.session.call('pgmlab.pathway.get', [pathway.id]).then(
           function(res) {
+               var pairwiseInteractions = res;
                self.setState({ activePathway: pathway,
-                               pairwiseInteractions: res,
+                               pairwiseInteractions: pairwiseInteractions,
                                observedNodes: [],
                                posteriorProbabilities: {}});
-              var graphData = graphvis.render(res);
-              self.setState({"graphData": graphData});
+               graphvis.render(pairwiseInteractions);
           },
           function (err) {
               console.log("couldn't get pathway", pathway.id, err);
@@ -169,9 +165,6 @@ connection.onclose = function (reason, details) {
       t2 = null;
    }
 }
-
-function changePathway(pathayID) {
-};
 
 connection.open();
 

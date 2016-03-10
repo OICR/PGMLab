@@ -15,7 +15,7 @@ console.log("ObservedNodeList", this.props);
                  var nodeName = ((node.longname !== null) && (node.longname !== undefined))? node.longname: node.name;
                  return (
                           <tr key={i} style={{padding: "0px"}}>
-                            <td onClick={self.props.removeObservedNode.bind(this, node)} >X</td>
+                            <td onClick={self.props.removeObservedNode.bind(this, node)} ><i className="material-icons dp48">delete</i></td>
                             <td style={{width: "100%"}}>{nodeName}</td>
                             <td><SelectNodeState state={node.state} setNodeState={self.props.setNodeState} node={node} /></td>
                            </tr>) ;

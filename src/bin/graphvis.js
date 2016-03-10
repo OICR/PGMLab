@@ -1,10 +1,8 @@
 import vis from '../lib/vis-4.14.0/dist/vis.js';
 
-var network;
-var datasetnodes;
-var datasetedges;
-var nodes;
-
+var network
+var datasetnodes
+var datasetedges
 
 function render(pairwiseInteractions) {
 
@@ -19,7 +17,7 @@ function render(pairwiseInteractions) {
                    });
     }
 
-    nodes = [];
+    var nodes = [];
     var numbernodes = pairwiseInteractions.nodes.length;
     for (let i =0; i<numbernodes; i++) {
         var length = (pairwiseInteractions.nodes[i].longname != null)?
@@ -27,7 +25,6 @@ function render(pairwiseInteractions) {
         var label =  ( length< lengthLimit)?
                        pairwiseInteractions.nodes[i].longname:
                        pairwiseInteractions.nodes[i].name;
-        
         var reactomeClass  =  (pairwiseInteractions.nodes[i].type !== null)? pairwiseInteractions.nodes[i].type: "unknown";
         var node = {'id': pairwiseInteractions.nodes[i].name,
                     'label': label,
@@ -72,13 +69,13 @@ function render(pairwiseInteractions) {
         }
       }
     };
-    if (network !== undefined) {
- //       network.destroy();
-   //     datasetnodes = null;
-     //   datasetedges = null;
-   // }
-        network.setData(data);
+
+    if (network === undefined ) {
+        network = new vis.Network( container, data, options)
     } else {
+        network.setData(data);
+    }
+    //    network.setData(data);
         // subscribe to any change in the DataSet
   /*      datasetnodes.on('*', function (event, properties, senderId) {
            console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
@@ -87,7 +84,7 @@ function render(pairwiseInteractions) {
            console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
         });*/
     
-        network = new vis.Network( container, data, options);
+
 /*
         network.on( 'doubleClick', function(properties) {
 
@@ -100,20 +97,21 @@ function render(pairwiseInteractions) {
         });
 */
      
-    }
 }
 
 exports.render = render;
 
 function setNodeState(gene) {
-   var stateColor=["ff0000", "ffff00", "#008000"];
-   datasetnodes.update({id: gene.name, "color": {"border": stateColor[gene.state]} });
+   var stateColor=["", "red", "grey", "green"];
+   datasetnodes.update({id: gene.name, "color": {"border": stateColor[gene.state]},
+                                       "borderWidth": 3 });
 }
 
 exports.setNodeState = setNodeState;
 
 function removeMutatedGene(gene) {
-   datasetnodes.update({id: gene.name, "color": {"border": '#2B7CE9'} });
+   datasetnodes.update({id: gene.name, "color": {"border": 'black'},
+                                       "borderWidth": 1 });
 }
 
 exports.removeMutatedGene = removeMutatedGene;
@@ -122,24 +120,46 @@ exports.removeMutatedGene = removeMutatedGene;
 function addPosteriorProbabilities(posteriorProbabilities) {
     var numPosteriorProbabilities = posteriorProbabilities.length;
     for (var ppid in posteriorProbabilities) {
-        
+               
         var stateProbs = posteriorProbabilities[ppid];
         var r = Math.ceil(stateProbs[0]*255);
-        var g = Math.ceil(stateProbs[1]*255);
-        var b = Math.ceil(stateProbs[2]*255);
+        var b = Math.ceil(stateProbs[1]*255);
+        var g = Math.ceil(stateProbs[2]*255);
 
+
+        var dominantState;
+        // This makes it so that we just pick to dominant state and have the color based on that state. Where state 1 is grey (all colors equal)
+        if ((r > g) &&(r > b)) {
+             g = 0
+             b = 0
+             dominantState = 1
+        } 
+        else if ((g> r) && (g> b)) {
+             r = 0
+             b = 0
+             dominantState = 3
+        } 
+        else {
+             b = 255 - b
+             g = b
+             r =  b
+             dominantState = 2
+        }
         var node = datasetnodes.get(ppid);
-        var title = node["title"];
+         
+        var title = node["title"].split("<br>Probabilities:<br>")[0];
+        node["dominantState"] = dominantState;
 
         title += "<br>Probabilities:<br>" +
+                 "Dominant State: " + dominantState + "<br>" +
                  "State 1 (down regulated): " + stateProbs[0] + "<br>" +
                  "State 2 (no change):      " + stateProbs[1] + "<br>" +
                  "State 3 (up regulated):   " + stateProbs[2] + "<br>";
 
-        var bgColor =  "rgba(" + r + "," + g + "," + b + ",0.5)";
+        var bgColor =  "rgba(" + r + "," + g + "," + b + ",.1)";
 
-        console.log("bgcolor", bgColor);
-        datasetnodes.update({"id": ppid, "color" : {"background": bgColor}});
+        datasetnodes.update({"id": ppid, "color" : {"background": bgColor},
+                             "title": title});
     }
 }
 
