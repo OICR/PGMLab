@@ -119,7 +119,7 @@ class AppSession(ApplicationSession):
             
             obs = open(filePath, "w")
 
-            obs.write("1\n\n"+str(numberOfObs)+"\n")
+            obs.write("1\n"+str(numberOfObs)+"\n")
             
             for observation in observations:
                 obs.write(str(observation["name"]) + "\t" + str(observation["state"]) + "\n")
