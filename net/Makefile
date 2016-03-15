@@ -5,6 +5,8 @@ ODIR	= obj
 
 NAME = pgmlab
 GSL_VERSION = 1.9
+MBED_VERSION = 2.2.1
+
 SHARED_OBJECT_EXTENSION =
 
 
@@ -56,11 +58,11 @@ SOURCES	=	src/net.c \
 _OBJECTS = net.o perfect.o lookupa.o recycle.o perfhex.o hash_graph_node_ids.o
 OBJECTS  = $(patsubst %,$(ODIR)/%,$(_OBJECTS)) 
 
-OBJECTS_SHA = ../external_lib/mbedtls-2.1.2/library/md5.o
+OBJECTS_SHA = ../external_lib/mbedtls-$(MBED_VERSION)/library/md5.o
 
 INCLUDE_GSL = -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/include -lgsl -lgslcblas 
 
-INCLUDE_SHA = -I$(CWD)/../external_lib/mbedtls-2.1.2/include
+INCLUDE_SHA = -I$(CWD)/../external_lib/mbedtls-$(MBED_VERSION)/include
 
 all: $(TARGET_PATH)
 
