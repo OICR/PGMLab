@@ -5,6 +5,7 @@ CWD   = $(shell pwd)
 READLINE_VERSION = 6.3
 TERMCAP_VERSION = 1.3.1
 GSL_VERSION = 2.0
+MBED_VERSION = 2.2.1
 
 ifeq ($(OS),Windows_NT)
     CCFLAGS += -D WIN32
@@ -46,7 +47,7 @@ pgmlab: sha gsl
 	make -C net
 
 sha: 
-	make -C external_lib/mbedtls-2.1.2
+	make -C external_lib/mbedtls-$(MBED_VERSION)
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
