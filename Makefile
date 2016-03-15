@@ -47,7 +47,7 @@ pgmlab: sha gsl
 	make -C net
 
 sha: 
-	make -C external_lib/mbedtls-$(MBED_VERSION)
+	make -C external_lib/mbedtls-$(MBED_VERSION) SHARED=1
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
