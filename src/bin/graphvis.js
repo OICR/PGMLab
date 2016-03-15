@@ -154,9 +154,10 @@ function addPosteriorProbabilities(posteriorProbabilities) {
                  "Dominant State: " + dominantState + "<br>" +
                  "State 1 (down regulated): " + stateProbs[0] + "<br>" +
                  "State 2 (no change):      " + stateProbs[1] + "<br>" +
-                 "State 3 (up regulated):   " + stateProbs[2] + "<br>";
+                 "State 3 (up regulated):   " + stateProbs[2] + "<br>" +
+                 " r " + r + " g "+ g + " b " + g;
 
-        var bgColor =  "rgba(" + r + "," + g + "," + b + ",.1)";
+        var bgColor =  "rgba(" + r + "," + g + "," + b + ",.5)";
 
         datasetnodes.update({"id": ppid, "color" : {"background": bgColor},
                              "title": title});

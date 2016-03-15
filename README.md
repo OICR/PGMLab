@@ -10,7 +10,7 @@ pip
 
 ### Linux
 
-        apt-get install python-dev python-pip npm
+        apt-get install python-dev python-pip npm node libffi-dev
         pip install crossbar autobahn[twisted] treq shutilwhich pyyaml pygments mistune jinja2 pytrie netaddr --upgrade  
         ln -s /usr/bin/nodejs /usr/bin/node (This was necessary on my computer)
 
@@ -23,7 +23,7 @@ pip
 
 ##Install
 
-     npm install -g webpack webpack-dev-server json-loader
+     npm install -g webpack webpack-dev-server
      npm install
 
 ## Create bundle.js file
