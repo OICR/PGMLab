@@ -46,7 +46,7 @@ import uuid
 
 from itertools import * # for skipping lines in a file
 
-hosted_data = "/home/awright/git/PGMLab/data/reactome_template/";
+hosted_data = "/home/awright/git/PGMlab/data/reactome_template/";
 
 class AppSession(ApplicationSession):
 
@@ -159,7 +159,7 @@ class AppSession(ApplicationSession):
             numberOfObs = createObservationFile(runPath, observations)         
             inferenceCommand(runPath)
             pp = readPosteriorProbabilityFile(runPath);
-            #shutil.rmtree(runPath);
+            shutil.rmtree(runPath);
             return {'run': runID, 'posteriorProbabilities':pp} 
 
         yield self.register(runInference, 'pgmlab.inference.run')

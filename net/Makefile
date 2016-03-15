@@ -60,7 +60,7 @@ OBJECTS  = $(patsubst %,$(ODIR)/%,$(_OBJECTS))
 
 OBJECTS_SHA = ../external_lib/mbedtls-$(MBED_VERSION)/library/md5.o
 
-INCLUDE_GSL = -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/include -lgsl -lgslcblas 
+INCLUDE_GSL = -Wl,-rpath=$(CWD)/../external_lib/gsl/lib -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/include -lgsl -lgslcblas 
 
 INCLUDE_SHA = -I$(CWD)/../external_lib/mbedtls-$(MBED_VERSION)/include
 
