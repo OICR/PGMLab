@@ -43,6 +43,7 @@ module.exports = {
   },
   resolve: {
     extensions: [ "", ".js" ],
+    modulesDirectories: ["node_modules"],
     alias: {
                 "jquery.ui.widget": "blueimp-file-upload/jquery.ui.widget"
             }
