@@ -73,7 +73,8 @@ while (my $row = <$fh_gistic>) {
     foreach my $genes_index (@genes_indicies) {
         $gene_list_str = $line[$genes_index];
         if($gene_list_str) {
-            my @genes = split /,/, substr $gene_list_str, 1,-1; # remove surounding quotes and split list
+            $gebe_list_str =~ s/"//g; # remove surounding quotes if they exist
+            my @genes = split /,/, $gene_list_str;
             @cnv_values = @line[6.. $#line];
             for my $x (0.. $#cnv_values) {
                 foreach my $gene (@genes) {
