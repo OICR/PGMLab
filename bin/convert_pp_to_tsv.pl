@@ -32,7 +32,6 @@ if (defined $gistic_file) {
 
 #Get data from pp file
 open(my $fh_pp, "<", $pp_file);
-
 my %sample_to_nodes_dominant_state;
 
 my $sample_number = 1;
@@ -72,13 +71,12 @@ close($fh_pp);
 print "GeneID\t";
 
 my @sample_numbers = (1..$sample_number);
-$" = "\t"; # needed for printing array
+local $" = "\t"; # needed for printing array
 if (@sample_names) {
-    say scalar(@sample_names);
-    print "@sample_names\n";
+    print "@sample_names";
 }
 else {
-    print "@sample_numbers\n";
+    print "@sample_numbers";
 }
 
 foreach my $node_name (keys %nodes) {
@@ -90,6 +88,5 @@ foreach my $node_name (keys %nodes) {
     foreach my $sample_id ((1..$sample_number)) {
          push @states, $samples->{$sample_id}{state};
     }
-    print "@states\t";
-    say "";
+    print "@states\n";
 }
