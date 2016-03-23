@@ -13,7 +13,7 @@ my $gistic_file = $ARGV[1];
 
 
 unless ( defined $pp_file ) {
-   say "USAGE: pp-to-tsv.pl <pp_file_path> [gistic file] > your_output_file.tsv";
+   say "USAGE: convert_pp_to_tsv.pl <pp_file_path> [gistic file] > your_output_file.tsv";
    say "       if gistic file is provided it will take out the list of sample names from the header";
    exit 0;
 }
