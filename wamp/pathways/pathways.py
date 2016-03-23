@@ -46,7 +46,9 @@ import uuid
 
 from itertools import * # for skipping lines in a file
 
-hosted_data = "/home/awright/git/PGMlab/data/reactome_template/";
+cwd = os.getcwd()
+
+hosted_data = cwd + "/../../data/reactome_template/";
 
 class AppSession(ApplicationSession):
 
@@ -77,7 +79,7 @@ class AppSession(ApplicationSession):
              folders = getFolders()
              folder = getFolder(pathwayId).strip()
              filePath = hosted_data + folder + "/" + folder + ".pi"
-             json_data = system_call("perl "+hosted_data +"../../bin/convert_pi_to_json.pl " + filePath + " " + hosted_data +"../../bin/db_id_to_name_mappingnew.txt")
+             json_data = system_call("perl "+ cwd +"/../../bin/convert_pi_to_json.pl " + filePath + " " + hosted_data +"db_id_to_name_mapping.txt")
              pathway = json.loads(json_data)
              return pathway
 
