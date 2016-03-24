@@ -1,0 +1,28 @@
+.link {
+    stroke-opacity: .6;
+}
+
+d3-tip {
+    line-height: 1;
+    color: black;
+}
+
+.node text {
+  pointer-events: none;
+  font: 11px sans-serif;
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
+}
