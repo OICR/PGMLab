@@ -12,23 +12,19 @@ export class Content extends React.Component {
     }
     render () {
         return (
-            <div id="section">
-                <div id="tabs-component" className="col s18 m5">
+            <div className="row">
                      
-                    <ControlPanel pairwiseInteractions = {this.props.pairwiseInteractions} 
-                                  observeNode          = {this.props.observeNode}
-                                  removeObservedNode   = {this.props.removeObservedNode}
-                                  observedNodes        = {this.props.observedNodes}
-                                  runInference         = {this.props.runInference}
-                                  setNodeState         = {this.props.setNodeState}
-                                  activePathway        = {this.props.activePathway} />
-                </div>
+                 <ControlPanel pairwiseInteractions = {this.props.pairwiseInteractions} 
+                               observeNode          = {this.props.observeNode}
+                               removeObservedNode   = {this.props.removeObservedNode}
+                               observedNodes        = {this.props.observedNodes}
+                               runInference         = {this.props.runInference}
+                               setNodeState         = {this.props.setNodeState}
+                               activePathway        = {this.props.activePathway} />
 
-                 <div className="col s18 m8 l8">
-                               <div style={{width:"800px"}} id="chart"></div>
+                 <div className="col s9 m9 l9">
+                      <div style={{width:"800px"}} id="chart"></div>
                  </div>
-                 <br></br>
-                 <div className="section"></div>
             </div>
         );
     }
