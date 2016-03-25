@@ -4,7 +4,7 @@ import React from 'react'
 import { render } from 'react-dom'
 
 import {Header} from './components/Header.jsx';
-import {Main}   from './components/Main.jsx';
+import {Body}   from './components/Body.jsx';
 import {Footer} from './components/Footer.jsx';
 
 var graphvis = require('./bin/graphvis.js');
@@ -100,7 +100,7 @@ class App extends  React.Component {
                 <Header pathways={this.props.pathways}
                         activePathway={this.state.activePathway}
                         setActivePathway={this.setActivePathway} />
-                <Main pathways             = {this.props.pathways}
+                <Body pathways             = {this.props.pathways}
                       activePathway        = {this.state.activePathway}
                       setActivePathway     = {this.setActivePathway}
                       observeNode          = {this.observeNode}
