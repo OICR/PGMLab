@@ -12,6 +12,7 @@ SHARED_OBJECT_EXTENSION =
 
 CFLAGS	= -fPIC -g
 LDFLAGS =
+GSL_FLAGS =
 
 ifeq ($(OS),Windows_NT)
     CCFLAGS += -D WIN32
@@ -27,6 +28,7 @@ else
         CCFLAGS += -D LINUX
         LDFLAGS = -shared
         SHARED_OBJECT_EXTENSION = so
+        GSL_FLAGS = -rpath=$(CWD)/../external_lib/gsl/lib
     endif
     ifeq ($(UNAME_S),Darwin)
         CCFLAGS += -D OSX
@@ -60,7 +62,7 @@ OBJECTS  = $(patsubst %,$(ODIR)/%,$(_OBJECTS))
 
 OBJECTS_SHA = ../external_lib/mbedtls-$(MBED_VERSION)/library/md5.o
 
-INCLUDE_GSL = -Wl,-rpath=$(CWD)/../external_lib/gsl/lib -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/include -lgsl -lgslcblas 
+INCLUDE_GSL = -Wl,$(GSL_FLAGS) -L$(CWD)/../external_lib/gsl/lib -I$(CWD)/../external_lib/gsl/include -lgsl -lgslcblas 
 
 INCLUDE_SHA = -I$(CWD)/../external_lib/mbedtls-$(MBED_VERSION)/include
 

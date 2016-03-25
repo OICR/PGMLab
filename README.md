@@ -33,7 +33,7 @@ PGMLab has been tested on OS X and Ubuntu 14.04.
 
 #####2.1 Dependencies
 
-	Linux: sudo apt-get install texinfo
+	Linux: sudo apt-get install texinfo r-base
 	Mac OS X: follow the following instructions http://macappstore.org/texinfo/
 
 #####2.2 Install PGMLab Package
