@@ -21,7 +21,7 @@ else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         CCFLAGS += -D LINUX
-        MBEDTLS_FLAG += SHARED=1
+        MBED_FLAGS += SHARED=1
     endif
     ifeq ($(UNAME_S),Darwin)
         CCFLAGS += -D OSX

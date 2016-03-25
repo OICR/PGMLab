@@ -11,3 +11,7 @@ This code is intended to be mainly used by the web interfaces in the PGMLab-GUI 
 	sudo apt-get install libjson-xs-perl
 	apt-get install python-dev python-pip npm node libffi-dev
         pip install crossbar autobahn[twisted] treq shutilwhich pyyaml pygments mistune jinja2 pytrie netaddr --upgrade
+
+#Browser
+
+Web Service will be running on localhost:9000
