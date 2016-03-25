@@ -10,16 +10,8 @@ pip
 
 ### Linux
 
-        apt-get install python-dev python-pip npm node libffi-dev
-        pip install crossbar autobahn[twisted] treq shutilwhich pyyaml pygments mistune jinja2 pytrie netaddr --upgrade  
+        apt-get install npm node libffi-dev
         ln -s /usr/bin/nodejs /usr/bin/node (This was necessary on my computer)
-
-### Mac OS X
-
-	http://crossbar.io/docs/Installation-on-Mac-OS-X/
-
-
-# Client side (Web Portal) portion of the PGMLaB User interface
 
 ##Install
 
@@ -28,7 +20,7 @@ pip
 
 ## Create bundle.js file
 
-     webpack src/entry.js bundle.js
+     webpack src/\<entry\>.js bundle.js
 
 
 I am wanting to use Alt (FLUX) to keep track of state.
@@ -38,6 +30,7 @@ I am using autobahnJS for the WAMP protocol and Crossbar to host in production
 
 ## to run in development
 
-     npm run ( in root directory)
+     npm run 
 
-Now navigate to "http://localhost:8080/apps/PathwayMutationAnalyzer/index.html" in your browser"
+Now navigate to "http://localhost:8080/pgmlab.html" in your browser"
+

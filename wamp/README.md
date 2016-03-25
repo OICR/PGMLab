@@ -8,7 +8,7 @@ This code is intended to be mainly used by the web interfaces in the PGMLab-GUI 
 
 ##Install
 
-	sudo apt-get install libjson-xs-perl
+	sudo apt-get install libjson-perl
 	apt-get install python-dev python-pip npm node libffi-dev
         pip install crossbar autobahn[twisted] treq shutilwhich pyyaml pygments mistune jinja2 pytrie netaddr --upgrade
 
