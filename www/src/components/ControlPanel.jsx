@@ -11,30 +11,59 @@ export class ControlPanel extends React.Component {
             $('.collapsible').collapsible({
               accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
             })
-
+            $('.tooltipped').tooltip({delay: 50});
             $('input#input_text, textarea#textarea1').characterCounter()
         })
+    }
+    runInference() {
+        Materialize.toast('Running Inference', 4000)
+    }
+    runLearning() {
+        Materialize.toast('Running Learning', 4000)
     }
     render() {
         var activePathway = this.props.activePathway.name
         var self = this;
         return (
-               <div className="col s4" style={{minWidth:"300px"}}>
+                <div className="col s4" style={{minWidth:"300px"}}>
                     <div className="section">
-                        <h5>Pathways</h5>
-                        <p>SelectedPathways</p>
-                        <ul>
-                            <li>Pathway One</li>
-                            <li>Pathway Two</li>
-                        </ul>
-                        <ul className="collapsible" data-collapsible="accordion">
+                        <h5>Upload Data</h5>
+                        <form action="#">
+                            <div className="file-field input-field">
+                                <div className="btn">
+                                    <span>Pathway(s)</span>
+                                    <input type="file" />
+                                </div>
+                                <div className="file-path-wrapper">
+                                    <input className="file-path validate" type="text" placeholder="Upload pathways" />
+                                </div>
+                            </div>
+                        </form>
+                        <form action="#">
+                            <div className="file-field input-field">
+                                <div className="btn">
+                                    <span>Observation(s)</span>
+                                    <input type="file" />
+                                </div>
+                                <div className="file-path-wrapper">
+                                    <input className="file-path validate" type="text" placeholder="Upload observations" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div className="divider"></div>
+                    <div className="section">
+                         <h5>Learning</h5>
+                         <p>Selected Pathway(s):</p>
+                         <ul><li>Pathway One</li></ul>
+                         <p>Selected Observation Set(s):</p>
+                         <ul><li>Obersvation One</li></ul>
+                         <ul className="collapsible" data-collapsible="accordion">
                             <li>
-                                <div className="collapsible-header"><i className="material-icons">group_work</i>Select Pathway</div>
+                                <div className="collapsible-header"><i className="material-icons">group_work</i>Select Pathways</div>
                                 <div className="collapsible-body">
                                     <ul>
-                                        <li>Create Pathway</li>
-                                        <li>Upload pathway</li>
-                                        <li><h6>Pathway list</h6>
+                                        <li>
                                             <table>
                                                 <thead>
                                                     <tr>
@@ -46,8 +75,8 @@ export class ControlPanel extends React.Component {
                                                     <tr>
                                                         <td>
                                                              <form action="#">
-                                                                  <input type="checkbox" className="filled-in" id="filled-in-box" />
-                                                                  <label htmlFor="filled-in-box" />
+                                                                  <input type="checkbox" className="filled-in" id="InfernecePathway1" />
+                                                                  <label htmlFor="inferncePathway1" />
                                                              </form>
                                                         </td>
                                                         <td>Cell Cycle</td>
@@ -58,13 +87,6 @@ export class ControlPanel extends React.Component {
                                     </ul>
                                 </div>
                             </li>
-                        </ul>
-                    </div>
-                    <div className="divider"></div>
-                    <div className="section">
-                        <h5>Observations</h5>
-                        <ul>
-                            <li>Obersvation One</li>
                         </ul>
                         <ul className="collapsible" data-collapsible="accordion">
                             <li>
@@ -85,8 +107,8 @@ export class ControlPanel extends React.Component {
                                                     <tr>
                                                         <td>
                                                              <form action="#">
-                                                                  <input type="checkbox" className="filled-in" id="filled-in-box" />
-                                                                  <label htmlFor="filled-in-box" />
+                                                                  <input type="checkbox" className="filled-in" id="inferenceObservation1" />
+                                                                  <label htmlFor="inferenceObservation1" />
                                                              </form>
                                                         </td>
                                                         <td>Observation 1</td>
@@ -98,15 +120,31 @@ export class ControlPanel extends React.Component {
                                 </div>
                             </li>
                         </ul>
+                        <i className="material-icons tiny right">settings</i>
+                        <a className="waves-effect waves-light btn" onClick={this.runLearning}>Run</a>
+                        <h5>Results:</h5>
+                        <ul className="collapsible" data-collapsible="accordion">
+                            <li>
+                                <div className="collapsible-header"><i className="material-icons">visibility</i>Estimated Parmeters</div>
+                                <div className="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>EstimatedParameters1</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                     <div className="divider"></div>
                     <div className="section">
-                          <i className="material-icons tiny right">settings</i>
-                          <a className="waves-effect waves-light btn">Run Learning</a>
-                    </div>
-                    <div className="divider"></div>
-                    <div className="section">
-                             <p>Selected Pathways htmlFor Inference</p>
+                          <h5>Inference</h5>
                           <ul className="collapsible" data-collapsible="accordion">
                             <li>
                                 <div className="collapsible-header"><i className="material-icons">group_work</i>Select Pathway Set</div>
@@ -126,8 +164,8 @@ export class ControlPanel extends React.Component {
                                                     <tr>
                                                         <td>
                                                              <form action="#">
-                                                                  <input type="radio" id="fg-1" />
-                                                                  <label htmlFor="fg-1" />
+                                                                  <input type="checkbox" id="inferencePathway1" />
+                                                                  <label htmlFor="inferencePathway1" />
                                                              </form>
                                                         </td>
                                                         <td>learntfg 1</td>
@@ -139,20 +177,61 @@ export class ControlPanel extends React.Component {
                                 </div>
                             </li>
                         </ul>
-
+                        <ul className="collapsible" data-collapsible="accordion">
+                            <li>
+                                <div className="collapsible-header"><i className="material-icons">visibility</i>Select Observations</div>
+                                <div className="collapsible-body">
+                                    <ul>
+                                        <li>Create New Observation</li>
+                                        <li>Upload Observation</li>
+                                        <li><h6>Observation list</h6>
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Select</th>
+                                                        <th>Name</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                             <form action="#">
+                                                                  <input type="checkbox" className="filled-in" id="learningObservation1" />
+                                                                  <label htmlFor="learningObservation1" />
+                                                             </form>
+                                                        </td>
+                                                        <td>Observation 1</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+ 
                     </div>
                     <div className="divider"></div>
                     <div className="section">
                         <i className="material-icons tiny right">settings</i>
-                        <a className="waves-effect waves-light btn">Run Inference</a>
+                        <a className="waves-effect waves-light btn" onClick={this.runInference}>Run</a>
                     </div>
-                    <ul className="collection with-header">
-                        <li className="collection-header"><h6>Posterior Probability Sets</h6></li>
-                        <li className="collection-item">pp 1</li>
-                        <li className="collection-item">pp 2</li>
-                        <li className="collection-item">pp 3</li>
-                        <li className="collection-item">pp 4</li>
-                    </ul>
+                    <h5>Results:</h5>
+                    <div className="section">
+                        <ul className="collapsible" data-collapsible="accordion">
+                            <li>
+                                <div className="collapsible-header"><i className="material-icons">assessment</i>Posterior Probabliity Sets</div>
+                                <div className="collapsible-body">
+                                    <ul>
+                                        <li>pp 1</li>
+                                        <li>pp 2</li>
+                                        <li>pp 3</li>
+                                        <li>pp 4</li>
+                                    </ul>
+                                </div>
+                           </li>
+                        </ul>
+                    </div>
                </div>)
     }
 }
