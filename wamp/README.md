@@ -6,11 +6,33 @@ All Python application code is in `pathway/patway.py`.
 
 This code is intended to be mainly used by the web interfaces in the PGMLab-GUI repository. 
 
-##Install
+##Install General
 
 	sudo apt-get install libjson-perl
 	apt-get install python-dev python-pip npm node libffi-dev
         pip install crossbar autobahn[twisted] treq shutilwhich pyyaml pygments mistune jinja2 pytrie netaddr --upgrade
+
+#Install Crossbar
+
+http://crossbar.io/docs/Installation-on-Ubuntu/
+
+##Output
+
+```
+Automatically choosing optimal Twisted reactor
+Running on Linux and optimal reactor (epoll) was installed.
+     __  __  __  __  __  __      __     __
+    /  `|__)/  \/__`/__`|__) /\ |__)  |/  \
+    \__,|  \\__/.__/.__/|__)/~~\|  \. |\__/
+                                        
+ Crossbar.io        : 0.13.0
+   Autobahn         : 0.13.0 (with JSON, MessagePack, CBOR)
+   Twisted          : 16.0.0-EPollReactor
+   LMDB             : 0.89/lmdb-0.9.18
+   Python           : 2.7.10/PyPy-5.0.0
+ OS                 : Linux-3.13.0-83-generic-x86_64-with-debian-jessie-sid
+ Machine            : x86_64
+```
 
 #Browser
 

@@ -13,17 +13,60 @@ class App extends  React.Component {
     constructor (props) {
         super(props);
         
-        this.state = ({ activePathway:          this.props.activePathway,
-                        observedNodes:          [],
-                        posteriorProbabilities: {},
-                        pairwiseInteractions:   this.props.pairwiseInteractions});                       
+        this.state = ({ activePathway            : this.props.activePathway,
+                        selectedPathwaysLearning : [],
+                        selectedPathwaysInference: [],
+                        observedNodes            : [],
+                        posteriorProbabilities   : {},
+                        pairwiseInteractions     : this.props.pairwiseInteractions})
 
-        this.setActivePathway = this.setActivePathway.bind(this);
-        this.observeNode = this.observeNode.bind(this);
-        this.removeObservedNode = this.removeObservedNode.bind(this);
-        this.runInference = this.runInference.bind(this);
-        this.setNodeState = this.setNodeState.bind(this);
+        this.setActivePathway = this.setActivePathway.bind(this)
+        this.observeNode = this.observeNode.bind(this)
+        this.removeObservedNode = this.removeObservedNode.bind(this)
+        this.runInference = this.runInference.bind(this)
+        this.setNodeState = this.setNodeState.bind(this)
+        this.removeSelectedPathwayLearning = this.removeSelectedPathwayLearning.bind(this)
+        this.selectPathwayLearning = this.selectPathwayLearning.bind(this)
+        this.removeSelectedPathwayInference = this.removeSelectedPathwayInference.bind(this)
+        this.selectPathwayInference = this.selectPathwayInference.bind(this)
     }
+
+    removeSelectedPathwayInference(pathwayID) {
+        var pathwayIDs = this.state.selectedPathwaysInference
+        var indexOfPathwayID = (pathwayIDs.length > 0)? pathwayIDs.indexOf(pathwayID) : -1
+        if ( indexOfPathwayID !== -1) {
+            pathwayIDs.splice(indexOfPathwayID)
+            this.setState({selectedPathwaysInference: pathwayIDs})
+        }
+    }
+
+    selectPathwayInference(pathwayID) {
+        var pathwayIDs = this.state.selectedPathwaysInference
+        var indexOfPathwayID = (pathwayIDs.length < 0)? pathwayIDs.indexOf(pathwayID) : -1 
+        if (indexOfPathwayID === -1) {
+            pathwayIDs.push(pathwayID)
+            this.setState({selectedPathwaysInference: pathwayIDs})
+        }
+    }
+
+    removeSelectedPathwayLearning(pathwayID) {
+        var pathwayIDs = this.state.selectedPathwaysLearning
+        var indexOfPathwayID = (pathwayIDs.length > 0)? pathwayIDs.indexOf(pathwayID) : -1
+        if ( indexOfPathwayID !== -1) {
+            pathwayIDs.splice(indexOfPathwayID)
+            this.setState({selectedPathwaysLearning: pathwayIDs})
+        }
+    }
+
+    selectPathwayLearning(pathwayID) {
+        var pathwayIDs = this.state.selectedPathwaysLearning
+        var indexOfPathwayID = (pathwayIDs.length < 0)? pathwayIDs.indexOf(pathwayID) : -1 
+        if (indexOfPathwayID === -1) {
+            pathwayIDs.push(pathwayID)
+            this.setState({selectedPathwaysLearning: pathwayIDs})
+        }
+    }
+
     runInference() {
         var self = this;
 
@@ -97,18 +140,22 @@ class App extends  React.Component {
     render () {
         return (
             <div>
-                <Header pathways={this.props.pathways}
-                        activePathway={this.state.activePathway}
-                        setActivePathway={this.setActivePathway} />
-                <Body pathways             = {this.props.pathways}
-                      activePathway        = {this.state.activePathway}
-                      setActivePathway     = {this.setActivePathway}
-                      observeNode          = {this.observeNode}
-                      removeObservedNode   = {this.removeObservedNode}
-                      observedNodes        = {this.state.observedNodes}
-                      runInference         = {this.runInference}
-                      setNodeState         = {this.setNodeState}
-                      pairwiseInteractions = {this.state.pairwiseInteractions} />
+                <Header />
+                <Body pathways                        = {this.props.pathways}
+                      activePathway                   = {this.state.activePathway}
+                      setActivePathway                = {this.setActivePathway}
+                      removeSelectedPathwayLearning   = {this.removeSelectedPathwayLearning}
+                      removeSelectedPathwayInference  = {this.removeSelectedPathwayInference}
+                      selectPathwayLearning           = {this.selectPathwayLearning}
+                      selectedPathwaysLearning        = {this.state.selectedPathwaysLearning}
+                      selectPathwayInference          = {this.selectPathwayInference}
+                      selectedPathwaysInference       = {this.state.selectedPathwaysInference}
+                      observeNode                     = {this.observeNode}
+                      removeObservedNode              = {this.removeObservedNode}
+                      observedNodes                   = {this.state.observedNodes}
+                      runInference                    = {this.runInference}
+                      setNodeState                    = {this.setNodeState}
+                      pairwiseInteractions            = {this.state.pairwiseInteractions} />
                <Footer />
             </div> )
     }

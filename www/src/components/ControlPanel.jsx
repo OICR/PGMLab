@@ -3,6 +3,9 @@ import React from 'react'
 import {GeneList} from './GeneList.jsx'
 import {ObservedNodeList} from './ObservedNodeList.jsx'
 
+import {SelectPathways} from './SelectPathways.jsx'
+import {SelectedPathways} from './SelectedPathways.jsx'
+
 import {SelectObservationLearning} from './Selectobservationlearning.jsx'
 
 export class ControlPanel extends React.Component {
@@ -22,6 +25,7 @@ export class ControlPanel extends React.Component {
         Materialize.toast('Running Learning', 4000)
     }
     render() {
+        console.log("controlPanel", this.props)
         var activePathway = this.props.activePathway.name
         var self = this;
         return (
@@ -54,43 +58,28 @@ export class ControlPanel extends React.Component {
                     <div className="divider"></div>
                     <div className="section">
                          <h5>Learning</h5>
-                         <p>Selected Pathway(s):</p>
-                         <ul><li>Pathway One</li></ul>
-                         <p>Selected Observation Set(s):</p>
-                         <ul><li>Obersvation One</li></ul>
+                         <p><strong>Selected Pathway(s):</strong></p>
+                         <SelectedPathways pathways         = {this.props.pathways}
+                                           selectedPathways = {this.props.selectedPathwaysLearning} />
                          <ul className="collapsible" data-collapsible="accordion">
                             <li>
                                 <div className="collapsible-header"><i className="material-icons">group_work</i>Select Pathways</div>
                                 <div className="collapsible-body">
-                                    <ul>
-                                        <li>
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th>Select</th>
-                                                        <th>Name</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                             <form action="#">
-                                                                  <input type="checkbox" className="filled-in" id="InfernecePathway1" />
-                                                                  <label htmlFor="inferncePathway1" />
-                                                             </form>
-                                                        </td>
-                                                        <td>Cell Cycle</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </li>
-                                    </ul>
+                                    <SelectPathways setActivePathway      = {this.props.setActivePathway} 
+                                                    activePathway         = {this.props.activePathway} 
+                                                    selectPathway         = {this.props.selectPathwayLearning}
+                                                    removeSelectedPathway = {this.props.removeSelectedPathwayLearning}
+                                                    selectedPathways      = {this.props.selectedPathwaysLearning}
+                                                    pathways              = {this.props.pathways} 
+                                                    runType               = "learning" />
                                 </div>
                             </li>
-                        </ul>
-                        <ul className="collapsible" data-collapsible="accordion">
+                         </ul>
+                         <p><strong>Selected Observation Set(s):</strong></p>
+                         <ul><li>Obersvation One</li></ul>
+                         <ul className="collapsible" data-collapsible="accordion">
                             <li>
-                                <div className="collapsible-header"><i className="material-icons">visibility</i>Select Observations</div>
+                                <div className="collapsible-header"><i className="material-icons">visibility</i>Select Observation Set</div>
                                 <div className="collapsible-body">
                                     <ul>
                                         <li>Create New Observation</li>
@@ -144,42 +133,29 @@ export class ControlPanel extends React.Component {
                     </div>
                     <div className="divider"></div>
                     <div className="section">
-                          <h5>Inference</h5>
-                          <ul className="collapsible" data-collapsible="accordion">
+                         <h5>Inference</h5>
+                         <p><strong>Selected Pathway(s):</strong></p>
+                         <SelectedPathways pathways         = {this.props.pathways}
+                                           selectedPathways = {this.props.selectedPathwaysInference} />
+                         <ul className="collapsible" data-collapsible="accordion">
                             <li>
-                                <div className="collapsible-header"><i className="material-icons">group_work</i>Select Pathway Set</div>
+                                <div className="collapsible-header"><i className="material-icons">group_work</i>Select Pathways</div>
                                 <div className="collapsible-body">
-                                    <ul>
-                                        <li>Create New Observation</li>
-                                        <li>Upload Observation</li>
-                                        <li><h6>Learnt Pathway List</h6>
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th>Select</th>
-                                                        <th>Name</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                             <form action="#">
-                                                                  <input type="checkbox" id="inferencePathway1" />
-                                                                  <label htmlFor="inferencePathway1" />
-                                                             </form>
-                                                        </td>
-                                                        <td>learntfg 1</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </li>
-                                    </ul>
-                                </div>
+                                    <SelectPathways setActivePathway      = {this.props.setActivePathway}
+                                                    activePathway         = {this.props.activePathway}
+                                                    selectPathway         = {this.props.selectPathwayInference}
+                                                    removeSelectedPathway = {this.props.removeSelectedPathwayInference}
+                                                    selectedPathways      = {this.props.selectedPathwaysInference}
+                                                    pathways              = {this.props.pathways}
+                                                    runType               = "inference" />
+                               </div>
                             </li>
                         </ul>
+                        <p><strong>Selected Observation Set(s):</strong></p>
+                        <ul><li>Obersvation One</li></ul>
                         <ul className="collapsible" data-collapsible="accordion">
                             <li>
-                                <div className="collapsible-header"><i className="material-icons">visibility</i>Select Observations</div>
+                                <div className="collapsible-header"><i className="material-icons">visibility</i>Select Observation Set</div>
                                 <div className="collapsible-body">
                                     <ul>
                                         <li>Create New Observation</li>
@@ -236,6 +212,40 @@ export class ControlPanel extends React.Component {
     }
 }
 /*
+
+                         <ul className="collapsible" data-collapsible="accordion">
+                            <li>
+                                <div className="collapsible-header"><i className="material-icons">group_work</i>Select Pathways</div>
+                                <div className="collapsible-body">
+                                    <ul>
+                                        <li>
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Select</th>
+                                                        <th>Name</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                             <form action="#">
+                                                                  <input type="checkbox" className="filled-in" id="InfernecePathway1" />
+                                                                  <label htmlFor="inferncePathway1" />
+                                                             </form>
+                                                        </td>
+                                                        <td>Cell Cycle</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+
+
+
             <div>
                 <div id="side-nav-open" href="#" className="waves-effect waves-light orange btn white-text" style={{width: "288px"}}>Select Pathway</div> 
                 <br /><br />
