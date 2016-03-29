@@ -8,10 +8,10 @@ use autodie;
 use feature qw(say);
 use Data::Dumper;
 
-my $snv_file_path = "/Users/cbaciu/Desktop/PGMLaB-old/data/GISTIC_v2_run/integrated_anal/SNV/178_donors_snv.txt";
-my $pi_file_path = "/Users/cbaciu/Desktop/PGMLab/data/brca_paths/Signaling_by_ERBB2/Signaling_by_ERBB2.pi";
+my $snv_file_path = "/Users/cbaciu/Desktop/PGMLaB-old/data/GISTIC_v2_run/integrated_anal/SNV/202_donors_snv.txt";
+my $pi_file_path = "/Users/cbaciu/Desktop/4paths_28mar16/Cell_Cycle_Checkpoints/Cell_Cycle_Checkpoints.pi";
 my $db_id_to_name_mapping = "/Users/cbaciu/Desktop/PGMLaB-old/db_id_to_name_mapping_feb22.16.txt";
-my $sample_list ="/Users/cbaciu/Desktop/PGMLaB-old/data/GISTIC_v2_run/integrated_anal/SNV/178_common_BART_Gistic";
+my $sample_list ="/Users/cbaciu/Desktop/PGMLaB-old/data/GISTIC_v2_run/integrated_anal/SNV/202_common_BART_Gistic";
 
 #Get the rectome ids to names; 
 open(my $fh_db_id, "<", $db_id_to_name_mapping);
@@ -105,7 +105,7 @@ foreach my $sample (@samples) {
      say $number_of_observed_genes;
      foreach my $gene (@observed_genes) {
          print "$gene\t";
-         my $state = (exists $sample_to_mutation{$sample}{$gene})? "1": "0";
+         my $state = (exists $sample_to_mutation{$sample}{$gene})? "1": "2";
          say $state;
      }
 }
