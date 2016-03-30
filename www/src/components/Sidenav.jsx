@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {PathwayNames} from './Pathwaynames.jsx'
+import {PathwayNames} from './PathwayNames.jsx'
 
 export class SideNav extends React.Component {
     constructor (props) { 

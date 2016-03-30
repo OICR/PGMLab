@@ -34,6 +34,13 @@ module.exports = {
         loader: "imports?define=>false" 
       },
       {
+        test: /.*\.(gif|png|jpe?g|svg)$/i,
+        loaders: [
+          'file?hash=sha512&digest=hex&name=[hash].[ext]',
+          'image-webpack?{progressive:true, optimizationLevel: 7, interlaced: false, pngquant:{quality: "65-90", speed: 4}}'
+        ]
+      },
+      {
         test: /\.jsx?$/, // A regexp to test the require path. accepts either js or jsx
         loader: "babel" // The module to load. "babel" is short for "babel-loader"
       }

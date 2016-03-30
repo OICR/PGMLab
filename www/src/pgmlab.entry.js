@@ -10,15 +10,24 @@ import {Footer} from './components/Footer.jsx';
 var graphvis = require('./bin/graphvis.js');
 
 class App extends  React.Component {
+
     constructor (props) {
         super(props);
-        
-        this.state = ({ activePathway            : this.props.activePathway,
-                        selectedPathwaysLearning : [],
-                        selectedPathwaysInference: [],
-                        observedNodes            : [],
-                        posteriorProbabilities   : {},
-                        pairwiseInteractions     : this.props.pairwiseInteractions})
+
+        var default_obs =  [{id:   1, 
+                             name: "Observation One",
+                             observedNodes: [] }]
+
+        var default_selected_obs = default_obs[0]        
+
+        this.state = { "activePathway"                   : this.props.activePathway,
+                       "selectedPathwaysLearning"        : [],
+                       "selectedPathwaysInference"       : [],
+                       "observationList"                 : default_obs,
+                       "selectedObservationSetLearning"  : default_selected_obs,
+                       "selectedObservationSetInference" : default_selected_obs,
+                       "posteriorProbabilities"       : {},
+                       "pairwiseInteractions"         : this.props.pairwiseInteractions}
 
         this.setActivePathway = this.setActivePathway.bind(this)
         this.observeNode = this.observeNode.bind(this)
@@ -36,7 +45,7 @@ class App extends  React.Component {
         var indexOfPathwayID = (pathwayIDs.length > 0)? pathwayIDs.indexOf(pathwayID) : -1
         if ( indexOfPathwayID !== -1) {
             pathwayIDs.splice(indexOfPathwayID)
-            this.setState({selectedPathwaysInference: pathwayIDs})
+            this.setState({"selectedPathwaysInference": pathwayIDs})
         }
     }
 
@@ -45,7 +54,7 @@ class App extends  React.Component {
         var indexOfPathwayID = (pathwayIDs.length < 0)? pathwayIDs.indexOf(pathwayID) : -1 
         if (indexOfPathwayID === -1) {
             pathwayIDs.push(pathwayID)
-            this.setState({selectedPathwaysInference: pathwayIDs})
+            this.setState({"selectedPathwaysInference": pathwayIDs})
         }
     }
 
@@ -54,7 +63,7 @@ class App extends  React.Component {
         var indexOfPathwayID = (pathwayIDs.length > 0)? pathwayIDs.indexOf(pathwayID) : -1
         if ( indexOfPathwayID !== -1) {
             pathwayIDs.splice(indexOfPathwayID)
-            this.setState({selectedPathwaysLearning: pathwayIDs})
+            this.setState({"selectedPathwaysLearning": pathwayIDs})
         }
     }
 
@@ -63,7 +72,7 @@ class App extends  React.Component {
         var indexOfPathwayID = (pathwayIDs.length < 0)? pathwayIDs.indexOf(pathwayID) : -1 
         if (indexOfPathwayID === -1) {
             pathwayIDs.push(pathwayID)
-            this.setState({selectedPathwaysLearning: pathwayIDs})
+            this.setState({"selectedPathwaysLearning": pathwayIDs})
         }
     }
 
@@ -77,19 +86,20 @@ class App extends  React.Component {
           },
           function (err) {
               console.log("couldn't run inference", err);
-          });
-
+          })
     }
+
     observeNode(node) {
         var found = this.state.observedNodes.some(function (el) { return el.name === node.name  })
         if (!found) {
             node["state"] = 1;
-            graphvis.setNodeState(node);
+            graphvis.setNodeState(node)
 
             var newNodeList = this.state.observedNodes.concat([node])
-            this.setState({observedNodes: newNodeList});
+            this.setState({"observedNodes": newNodeList});
         }
     }
+
     removeObservedNode(node) {
           var observedNodes = $.grep(this.state.observedNodes, function(e){ 
               return e.name != node.name; 
@@ -97,6 +107,7 @@ class App extends  React.Component {
           this.setState({'observedNodes': observedNodes});
           graphvis.removeMutatedGene(node);
     }
+
     setNodeState(node, option) {
         var observedNodes = this.state.observedNodes
         for (var i = 0; i < observedNodes.length; i++) {
@@ -111,16 +122,17 @@ class App extends  React.Component {
         graphvis.setNodeState(node)
         this.setState({"observedNodes": observedNodes});
     }
+
     setActivePathway(pathway, session) {
         console.log("prod connection", connection);
         var self = this;
         connection.session.call('pgmlab.pathway.get', [pathway.id]).then(
           function(res) {
                var pairwiseInteractions = res;
-               self.setState({ activePathway: pathway,
-                               pairwiseInteractions: pairwiseInteractions,
-                               observedNodes: [],
-                               posteriorProbabilities: {}});
+               self.setState({ "activePathway": pathway,
+                               "pairwiseInteractions": pairwiseInteractions,
+                               "observedNodes": [],
+                               "posteriorProbabilities": {}});
                graphvis.render(pairwiseInteractions);
           },
           function (err) {
@@ -129,7 +141,9 @@ class App extends  React.Component {
 
         console.log("Entry: setting active pathway");
     }
+
     componentDidMount () {
+      $('.modal-trigger').leanModal()
       $('#side-nav-open').click(() => {
           $('.side-nav').toggleClass('open')
       });
@@ -137,7 +151,9 @@ class App extends  React.Component {
           $('.side-nav').toggleClass('open')
       });
     }
+
     render () {
+       console.log("rendering app")
         return (
             <div>
                 <Header />
@@ -152,7 +168,9 @@ class App extends  React.Component {
                       selectedPathwaysInference       = {this.state.selectedPathwaysInference}
                       observeNode                     = {this.observeNode}
                       removeObservedNode              = {this.removeObservedNode}
-                      observedNodes                   = {this.state.observedNodes}
+                      selectedObservationSetLearning  = {this.state.selectedObservationSetLearning}
+                      selectedObservationSetInference = {this.state.selectedObservationSetInference}
+                      observationList                 = {this.state.observationList}
                       runInference                    = {this.runInference}
                       setNodeState                    = {this.setNodeState}
                       pairwiseInteractions            = {this.state.pairwiseInteractions} />

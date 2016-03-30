@@ -1,5 +1,7 @@
 import React from 'react'
 
+import OICRlogo from "../../assets/logos/logo_oicr_transparent.png"
+
 export class Footer extends React.Component {
     render () {
         return (
@@ -24,8 +26,8 @@ export class Footer extends React.Component {
                             <li><a className="white-text" href="#!">Hossein Radfar</a></li>
                         </ul>
                     </div>
-                    <div className="col l2 s8">
-                        <img src={'../../assets/logos/logo_oicr_transparent.png'}  width="150px" alt="oicr logo" />
+                    <div className="right col l2 s8">
+                        <img src={OICRlogo}  width="150px" alt="oicr logo" />
                     </div>
                 </div>
             </footer>
