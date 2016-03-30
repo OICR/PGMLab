@@ -10,7 +10,7 @@ use Data::Dumper;
 
 my $pp_file     = $ARGV[0];
 my $gistic_file = $ARGV[1];
-
+my $sample_column = 0; # make this be the column that the samples start appearing in the header
 
 unless ( defined $pp_file ) {
    say "USAGE: convert_pp_to_tsv.pl <pp_file_path> [gistic file] > your_output_file.tsv";
@@ -24,9 +24,8 @@ if (defined $gistic_file) {
     open(my $fh_gistic, "<", $gistic_file);
 
     my $header = <$fh_gistic>;
-    my @column_names = split /\t/, $header;
-    @sample_names = @column_names[6..$#column_names];
-
+    my @column_names = split /\t/, $header; 
+    @sample_names = @column_names[$sample_column..$#column_names];
     close($fh_gistic);
 }
 
