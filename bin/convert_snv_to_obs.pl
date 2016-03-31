@@ -6,12 +6,13 @@ use warnings;
 use autodie;
 
 use feature qw(say);
-use Data::Dumper;
 
-my $snv_file_path = "/Users/cbaciu/Desktop/PGMLaB-old/data/GISTIC_v2_run/integrated_anal/SNV/202_donors_snv.txt";
-my $pi_file_path = "/Users/cbaciu/Desktop/4paths_28mar16/Cell_Cycle_Checkpoints/Cell_Cycle_Checkpoints.pi";
-my $db_id_to_name_mapping = "/Users/cbaciu/Desktop/PGMLaB-old/db_id_to_name_mapping_feb22.16.txt";
-my $sample_list ="/Users/cbaciu/Desktop/PGMLaB-old/data/GISTIC_v2_run/integrated_anal/SNV/202_common_BART_Gistic";
+# perl conver_snv_to_obs.pl <snv_file_path> <pi_file_path> <db_id_to_name_mapping> <sample_list>  > out.obs
+
+my $snv_file_path = $ARGV[0];
+my $pi_file_path = $ARGV[1];
+my $db_id_to_name_mapping = $ARGV[2];
+my $sample_list = $ARGV[3];
 
 #Get the rectome ids to names; 
 open(my $fh_db_id, "<", $db_id_to_name_mapping);
