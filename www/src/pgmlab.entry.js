@@ -15,8 +15,9 @@ class App extends  React.Component {
         super(props);
 
         var default_obs =  [{id:   1, 
-                             name: "Observation One",
-                             observedNodes: [] }]
+                             name: "One",
+                             activeIndex: 0,
+                             observations: [{nodes:[]}] }]
 
         var default_selected_obs = default_obs[0]        
 
@@ -24,8 +25,8 @@ class App extends  React.Component {
                        "selectedPathwaysLearning"        : [],
                        "selectedPathwaysInference"       : [],
                        "observationList"                 : default_obs,
-                       "selectedObservationSetLearning"  : default_selected_obs,
-                       "selectedObservationSetInference" : default_selected_obs,
+                       "selectedObservationSetLearning"  : $.extend( true, {}, default_selected_obs),
+                       "selectedObservationSetInference" : $.extend( true, {}, default_selected_obs),
                        "posteriorProbabilities"       : {},
                        "pairwiseInteractions"         : this.props.pairwiseInteractions}
 
@@ -41,8 +42,8 @@ class App extends  React.Component {
     }
 
     removeSelectedPathwayInference(pathwayID) {
-        var pathwayIDs = this.state.selectedPathwaysInference
-        var indexOfPathwayID = (pathwayIDs.length > 0)? pathwayIDs.indexOf(pathwayID) : -1
+        let pathwayIDs = this.state.selectedPathwaysInference
+        let indexOfPathwayID = (pathwayIDs.length === 0)? -1:  pathwayIDs.indexOf(pathwayID)
         if ( indexOfPathwayID !== -1) {
             pathwayIDs.splice(indexOfPathwayID)
             this.setState({"selectedPathwaysInference": pathwayIDs})
@@ -50,8 +51,8 @@ class App extends  React.Component {
     }
 
     selectPathwayInference(pathwayID) {
-        var pathwayIDs = this.state.selectedPathwaysInference
-        var indexOfPathwayID = (pathwayIDs.length < 0)? pathwayIDs.indexOf(pathwayID) : -1 
+        let pathwayIDs = this.state.selectedPathwaysInference
+        let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
         if (indexOfPathwayID === -1) {
             pathwayIDs.push(pathwayID)
             this.setState({"selectedPathwaysInference": pathwayIDs})
@@ -59,8 +60,8 @@ class App extends  React.Component {
     }
 
     removeSelectedPathwayLearning(pathwayID) {
-        var pathwayIDs = this.state.selectedPathwaysLearning
-        var indexOfPathwayID = (pathwayIDs.length > 0)? pathwayIDs.indexOf(pathwayID) : -1
+        let pathwayIDs = this.state.selectedPathwaysLearning
+        let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
         if ( indexOfPathwayID !== -1) {
             pathwayIDs.splice(indexOfPathwayID)
             this.setState({"selectedPathwaysLearning": pathwayIDs})
@@ -68,8 +69,8 @@ class App extends  React.Component {
     }
 
     selectPathwayLearning(pathwayID) {
-        var pathwayIDs = this.state.selectedPathwaysLearning
-        var indexOfPathwayID = (pathwayIDs.length < 0)? pathwayIDs.indexOf(pathwayID) : -1 
+        let pathwayIDs = this.state.selectedPathwaysLearning
+        let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
         if (indexOfPathwayID === -1) {
             pathwayIDs.push(pathwayID)
             this.setState({"selectedPathwaysLearning": pathwayIDs})

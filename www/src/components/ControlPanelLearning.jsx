@@ -25,8 +25,20 @@ export class ControlPanelLearning extends React.Component {
         return (
              <div>
                  <div className="section">
-                     <h5>Data Selection</h5>
-                     <ul className="collapsible collapsibleLearning" data-collapsible="accordion">
+                    <h5>Data Selection</h5>
+                   
+                    <ul className="collapsible collapsibleLearning" data-collapsible="accordion">
+                        <li>
+                            <div className="collapsible-header"><i className="material-icons">visibility</i>Observation Sets</div>
+                            <div className="collapsible-body">
+                                <SelectObservationSet 
+                                        type                   = "learning"
+                                        selectedObservationSet = {this.props.selectedObservationSetLearning} 
+                                        observationList        = {this.props.observationList}/>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul className="collapsible collapsibleLearning" data-collapsible="accordion">
                         <li>
                             <div className="collapsible-header"><i className="material-icons">group_work</i>Pathways</div>
                             <div className="collapsible-body">
@@ -39,30 +51,27 @@ export class ControlPanelLearning extends React.Component {
                                                 runType               = "learning" />
                             </div>
                         </li>
-                     </ul>
-                     <ul className="collapsible collapsibleLearning" data-collapsible="accordion">
-                        <li>
-                            <div className="collapsible-header"><i className="material-icons">visibility</i>Observation Sets</div>
-                            <div className="collapsible-body">
-                                <SelectObservationSet 
-                                        type                   = "learning"
-                                        selectedObservationSet = {this.props.selectedObservationSetLearning} 
-                                        observationList        = {this.props.observationList}/>
-                            </div>
-                        </li>
                     </ul>
                 </div>
                 <div className="divider"></div>
                 <div className="section">
+                    <div className="row">
+                        <h5 className="col s11">Selected Observation Set</h5>
+                        <a className="btn-floating btn-small waves-effect waves-light blue col s1 tooltipped" 
+                           data-position="top" data-delay="50" data-tooltip="Create Observation Set">+</a>
+                    </div>
+                    <SelectedObservationSet selectedObservationSet = {this.props.selectedObservationSetLearning}
+                                            setNodeState           = {this.props.setNodeState}
+                                            observeNode            = {this.props.observeNode}
+                                            pairwiseInteractions   = {this.props.pairwiseInteractions}
+                                            removeObservedNode     = {this.props.removeObservedNode} />
                     <h5>Selected Pathway(s)</h5>
                     <SelectedPathways pathways         = {this.props.pathways}
                                       activePathway    = {this.props.activePathway}
                                       setActivePathway = {this.props.setActivePathway}
                                       type             = "learning"
                                       selectedPathways = {this.props.selectedPathwaysLearning} />
-                    <h5>Selected Observation Set</h5>
-                    <SelectedObservationSet selectedObservationSet = {this.props.selectedObservationSetLearning} /> 
-                </div>
+               </div>
                 <div className="divider"></div>
                 <div className="section">
                     <i className="material-icons tiny right">settings</i>
