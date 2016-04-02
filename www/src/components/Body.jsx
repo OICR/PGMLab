@@ -35,7 +35,7 @@ export class Body extends React.Component {
                               removeObservedNode              = {this.props.removeObservedNode}
                               selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}
                               selectedObservationSetInference = {this.props.selectedObservationSetInference}
-                              observationList                 = {this.props.observationList}
+                              observationSetList              = {this.props.observationSetList}
                               runInference                    = {this.props.runInference}
                               setNodeState                    = {this.props.setNodeState}
                               removeSelectedPathwayInference  = {this.props.removeSelectedPathwayInference}
@@ -46,26 +46,31 @@ export class Body extends React.Component {
                               selectedPathwaysLearning        = {this.props.selectedPathwaysLearning}
                               pathways                        = {this.props.pathways}
                               activePathway                   = {this.props.activePathway}
-                              setActivePathway                = {this.props.setActivePathway} />
+                              setActivePathway                = {this.props.setActivePathway}
+                              addNewPathway                   = {this.props.addNewPathway} />
 
                 <div className="col s8">
                     <nav style={{"width":"800px"}} className="light-blue lighten-1">
                         <div className="nav-wrapper">
                           <div>
-                            <a href="#!" style={{paddingLeft: "10px"}} className="breadcrumb">{this.state.toggle}</a>
+                            <a href="#!" style={{paddingLeft: "10px"}} className="breadcrumb tooltipped"
+                                              data-position="top" data-delay="50" data-tooltip="Run Type">{this.state.toggle}</a>
                             <a href="#!" 
                                style={{paddingLeft: "10px"}}
-                               className="breadcrumb">Observation Set: {(this.toggle === "Inference")? 
-                                                                                 this.props.selectedObservationSetLearning.name :
-                                                                                 this.props.selectedObservationSetInference.name}
+                               className="breadcrumb tooltipped"
+                                data-position="top" data-delay="50" data-tooltip="Observation Set"> {(this.toggle === "Inference")? 
+                                                                                 this.props.observationSetList[this.props.selectedObservationSetLearning].name :
+                                                                                 this.props.observationSetList[this.props.selectedObservationSetInference].name}
                             </a>
                             <a href="#!" 
                                style={{paddingLeft: "10px"}} 
-                               className="breadcrumb">{(this.state.toggle ==="inference")? 
-                                                                                 this.props.selectedObservationSetLearning.id :
-                                                                                 this.props.selectedObservationSetInference.id}
+                               className="breadcrumb  tooltipped"
+                                data-position="top" data-delay="50" data-tooltip="Observation ID">{(this.state.toggle ==="inference")? 
+                                                                                 this.props.observationSetList[this.props.selectedObservationSetLearning].id :
+                                                                                 this.props.observationSetList[this.props.selectedObservationSetInference].id}
                             </a>
-                           <a href="#!" style={{paddingLeft: "10px"}} className="breadcrumb">Pathway: {this.props.activePathway.name}</a>
+                           <a href="#!" style={{paddingLeft: "10px"}} className="breadcrumb tooltipped"
+                                data-position="top" data-delay="50" data-tooltip={"Active Pathway Name:"+this.props.activePathway.name}>{this.props.activePathway.name}</a>
                           </div>
                         </div>
                      </nav>

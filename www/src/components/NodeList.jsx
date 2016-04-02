@@ -1,6 +1,6 @@
 import React from 'react'
 
-export class GeneList extends React.Component {
+export class NodeList extends React.Component {
     
      render () {
         var self = this;
@@ -16,9 +16,8 @@ export class GeneList extends React.Component {
                  } else {
                      nodeClass += " white";
                  }
-                 
                  return  <div key={i} 
-                              onClick={self.props.observeNode.bind(this, node)} 
+                              onClick={self.props.observeNode.bind(this, node, self.props.runType)} 
                               className={nodeClass}
                               style={nodeStyle}>{nodeName}</div>;
                })}

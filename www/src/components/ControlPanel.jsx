@@ -12,7 +12,7 @@ export class ControlPanel extends React.Component {
                     <ControlPanelInference setActivePathway                = {this.props.setActivePathway} 
                                            activePathway                   = {this.props.activePathway} 
                                            selectedObservationSetInference = {this.props.selectedObservationSetInference}
-                                           observationList                 = {this.props.observationList}
+                                           observationSetList              = {this.props.observationSetList}
                                            selectPathwayInference          = {this.props.selectPathwayInference}
                                            removeSelectedPathwayInference  = {this.props.removeSelectedPathwayInference}
                                            removeObservedNode              = {this.props.removeObservednode}
@@ -25,7 +25,7 @@ export class ControlPanel extends React.Component {
                     <ControlPanelLearning setActivePathway                = {this.props.setActivePathway} 
                                           activePathway                   = {this.props.activePathway} 
                                           selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}
-                                          observationList                 = {this.props.observationList}
+                                          observationSetList              = {this.props.observationSetList}
                                           selectPathwayLearning           = {this.props.selectPathwayLearning}
                                           removeSelectedPathwayLearning   = {this.props.removeSelectedPathwayLearning}
                                           removeObservedNode              = {this.props.removeObservednode}
@@ -46,7 +46,7 @@ export class ControlPanel extends React.Component {
                             </label>
                         </div>
                         <div className="col s2 push-s2"> 
-                            <UploadModal />
+                            <UploadModal addNewPathway={this.props.addNewPathway} />
                             <a className="modal-trigger tooltipped" data-position="top" data-delay="50" data-tooltip="Upload / Download Data" href="#uploadModal1"><i style={{paddingRight: "20px"}} className="material-icons dp48">open_in_browser</i></a>
                         </div>
                     </div>

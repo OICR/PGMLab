@@ -1,8 +1,5 @@
 import React from 'react'
 
-import {GeneList} from './GeneList.jsx'
-import {ObservedNodeList} from './ObservedNodeList.jsx'
-
 import {SelectPathways} from './SelectPathways.jsx'
 import {SelectedPathways} from './SelectedPathways.jsx'
 
@@ -34,7 +31,7 @@ export class ControlPanelLearning extends React.Component {
                                 <SelectObservationSet 
                                         type                   = "learning"
                                         selectedObservationSet = {this.props.selectedObservationSetLearning} 
-                                        observationList        = {this.props.observationList}/>
+                                        observationSetList     = {this.props.observationSetList}/>
                             </div>
                         </li>
                     </ul>
@@ -57,15 +54,18 @@ export class ControlPanelLearning extends React.Component {
                 <div className="section">
                     <div className="row">
                         <h5 className="col s11">Selected Observation Set</h5>
-                        <a className="btn-floating btn-small waves-effect waves-light blue col s1 tooltipped" 
+                        <a className="btn-floating btn-small waves-effect waves-light light-blue lighten-1 col s1 tooltipped" 
                            data-position="top" data-delay="50" data-tooltip="Create Observation Set">+</a>
                     </div>
                     <SelectedObservationSet selectedObservationSet = {this.props.selectedObservationSetLearning}
+                                            runType                = "learning"
                                             setNodeState           = {this.props.setNodeState}
                                             observeNode            = {this.props.observeNode}
+                                            observationSetList     = {this.props.observationSetList}
                                             pairwiseInteractions   = {this.props.pairwiseInteractions}
                                             removeObservedNode     = {this.props.removeObservedNode} />
-                    <h5>Selected Pathway(s)</h5>
+                    <h5 className="tooltipped"
+                        data-position="top" data-delay="50" data-tooltip="These Pathways will be included when generating estimated parameters">Selected Pathway(s)</h5>
                     <SelectedPathways pathways         = {this.props.pathways}
                                       activePathway    = {this.props.activePathway}
                                       setActivePathway = {this.props.setActivePathway}

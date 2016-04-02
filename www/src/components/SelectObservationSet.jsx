@@ -4,9 +4,9 @@ export class SelectObservationSet extends React.Component {
 
     render() {
         var self = this
-        var numberOfObs = this.props.observationList.length
-        var observationList = this.props.observationList.map(function(observation) {
-              var typeKey = self.props.type.concat(observation.id)
+        var numberOfObs = this.props.observationSetList.length
+        var observationSetList = this.props.observationSetList.map(function(observationSet) {
+              var typeKey = self.props.type.concat(observationSet.id)
               return (
                    <tr key={typeKey}> 
                        <td><input name="group1" 
@@ -14,7 +14,7 @@ export class SelectObservationSet extends React.Component {
                                   id="test1"
                                   disabled={(numberOfObs === 0)?"disabled":""} />
                        </td>
-                       <td>{observation.name}</td>
+                       <td>{observationSet.name}</td>
                    </tr>
               )
 
@@ -23,7 +23,7 @@ export class SelectObservationSet extends React.Component {
         return (
             <table>
                 <tbody style={{display:"block", maxHeight:"800px", overflowY: "scroll"}}>
-                    {observationList}
+                    {observationSetList}
                 </tbody>
             </table>)
     }

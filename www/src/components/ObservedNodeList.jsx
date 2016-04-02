@@ -5,6 +5,7 @@ import {SelectNodeState} from './SelectNodeState.jsx';
 export class ObservedNodeList extends React.Component {
     
      render () {
+console.log("onl", this.props)
         var self = this;
         return (
              <div style={{overflow: "scroll", height: "200px"}}>
