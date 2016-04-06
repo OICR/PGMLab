@@ -28,13 +28,14 @@ while (my $reactome_map = <$fh_db_id>) {
      if ( $entity_type eq 'ReferenceGeneProduct') {
           $reactome_id_to_entity_name{$reactome_id} = $entity_name;
           unless (exists $entity_name_to_reactome_id{$entity_name}) {
-              $entity_name_to_reactome_id{$entity_name} = [$entity_name];
+              $entity_name_to_reactome_id{$entity_name} = [$reactome_id];
           }
           else {
               push @{$entity_name_to_reactome_id{$entity_name}}, $reactome_id;
           }
      }
 } 
+
 
 close($fh_db_id);
 
