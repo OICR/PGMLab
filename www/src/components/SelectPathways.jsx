@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {PathwayNames} from './Pathwaynames.jsx'
+import {PathwayNames} from './PathwayNames.jsx'
 
 export class SelectPathways extends React.Component {
     constructor (props) { 
@@ -15,9 +15,11 @@ export class SelectPathways extends React.Component {
             filterText: event.target.value 
         })
     }
+    componentDidupdate() {
+        $('.collapsibleLearning').collapsible({accordion : true})
+    }
     render () {
         var filterText = this.state.filterText
-        console.log("SelectPathways", this.props)
         return (
             <ul>
                 <li className="logo">
@@ -43,6 +45,7 @@ export class SelectPathways extends React.Component {
                                       removeSelectedPathway = {this.props.removeSelectedPathway}
                                       selectedPathways      = {this.props.selectedPathways}
                                       activePathway         = {this.props.activePathway}
+                                      runType               = {this.props.runType}
                                       setActivePathway      = {this.props.setActivePathway} />
                     </table>
                 </li>

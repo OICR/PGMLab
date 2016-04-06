@@ -6,7 +6,6 @@ use warnings;
 use autodie;
 
 use feature qw(say);
-use Data::Dumper;
 
 #perl convert_snv_to_obs.pl <snv_file_path> <pi_file_path> <db_id_to_name_mapping> <sample_list>   > out.obs
 
