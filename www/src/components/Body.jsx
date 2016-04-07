@@ -25,17 +25,20 @@ export class Body extends React.Component {
     } 
 
     render () {
+console.log("body", this.props)
         return (
             <main className="row">
                      
                 <ControlPanel pairwiseInteractions            = {this.props.pairwiseInteractions}
+                              uploadList                      = {this.props.uploadList}
+                              uploadListAddFailure            = {this.props.uploadListAddFailure}
                               toggleClick                     = {this.toggleClick}
                               toggle                          = {this.state.toggle}
                               observeNode                     = {this.props.observeNode}
                               removeObservedNode              = {this.props.removeObservedNode}
                               selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}
                               selectedObservationSetInference = {this.props.selectedObservationSetInference}
-                              observationSetList              = {this.props.observationSetList}
+                              observationSets                 = {this.props.observationSets}
                               runInference                    = {this.props.runInference}
                               setNodeState                    = {this.props.setNodeState}
                               removeSelectedPathwayInference  = {this.props.removeSelectedPathwayInference}
@@ -47,7 +50,10 @@ export class Body extends React.Component {
                               pathways                        = {this.props.pathways}
                               activePathway                   = {this.props.activePathway}
                               setActivePathway                = {this.props.setActivePathway}
-                              addNewPathway                   = {this.props.addNewPathway} />
+                              addNewPathway                   = {this.props.addNewPathway} 
+                              addNewObservationSet            = {this.props.addNewObservationSet}
+                              addNewEstimatedParameterSet     = {this.props.addNewEstimatedParameterSet}
+                              addNewPosteriorProbabilitySet   = {this.props.addNewPosteriorProbabilitySet} />
 
                 <div className="col s8">
                     <nav style={{"width":"800px"}} className="light-blue lighten-1">
@@ -58,16 +64,16 @@ export class Body extends React.Component {
                             <a href="#!" 
                                style={{paddingLeft: "10px"}}
                                className="breadcrumb tooltipped"
-                                data-position="top" data-delay="50" data-tooltip="Observation Set"> {(this.toggle === "Inference")? 
-                                                                                 this.props.observationSetList[this.props.selectedObservationSetLearning].name :
-                                                                                 this.props.observationSetList[this.props.selectedObservationSetInference].name}
+                                data-position="top" data-delay="50" data-tooltip="Observation Set"> {(this.toggle === "Inference")?
+                                                                                 this.props.observationSets[this.props.selectedObservationSetLearning].name :
+                                                                                 this.props.observationSets[this.props.selectedObservationSetInference].name}
                             </a>
                             <a href="#!" 
                                style={{paddingLeft: "10px"}} 
                                className="breadcrumb  tooltipped"
                                 data-position="top" data-delay="50" data-tooltip="Observation ID">{(this.state.toggle ==="inference")? 
-                                                                                 this.props.observationSetList[this.props.selectedObservationSetLearning].id :
-                                                                                 this.props.observationSetList[this.props.selectedObservationSetInference].id}
+                                                                                 this.props.observationSets[this.props.selectedObservationSetLearning].id :
+                                                                                 this.props.observationSets[this.props.selectedObservationSetInference].id}
                             </a>
                            <a href="#!" style={{paddingLeft: "10px"}} className="breadcrumb tooltipped"
                                 data-position="top" data-delay="50" data-tooltip={"Active Pathway Name:"+this.props.activePathway.name}>{this.props.activePathway.name}</a>

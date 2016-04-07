@@ -22,15 +22,15 @@ export class SelectedObservationSet extends React.Component {
 
     render() {
         var self = this
-        var observationsCount = this.props.observationSetList[this.props.selectedObservationSet].observations.length
-        var observations = this.props.observationSetList[this.props.selectedObservationSet].observations.map(function(observation, index) {
+        var observationsCount = this.props.observationSets[this.props.selectedObservationSet].observations.length
+        var observations = this.props.observationSets[this.props.selectedObservationSet].observations.map(function(observation, index) {
                             return (<p key={index}>
                                 <input name="group1" type="radio" id={index} disabled={(observationsCount <= 1)? "disabled": ""} />
                                 <label htmlFor={index}>{observation.id}</label>	
                             </p>)                        
                        })
-        var activeIndex = this.props.observationSetList[this.props.selectedObservationSet].activeIndex
-        var observed = this.props.observationSetList[this.props.selectedObservationSet].observations[activeIndex]
+        var activeIndex = this.props.observationSets[this.props.selectedObservationSet].activeIndex
+        var observed = this.props.observationSets[this.props.selectedObservationSet].observations[activeIndex]
 
         var editObservationView = "";
         if (this.state.editObservation === "Disable") {
@@ -61,7 +61,7 @@ export class SelectedObservationSet extends React.Component {
         return (
           <div>
             <div className="row">
-                <p>{this.props.observationSetList[this.props.selectedObservationSet].name}</p>
+                <p>{this.props.observationSets[this.props.selectedObservationSet].name}</p>
             </div>
             <div className="row">
                 <h5 className="col s11">Observation</h5>

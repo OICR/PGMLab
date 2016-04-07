@@ -18,6 +18,7 @@ export class ControlPanelLearning extends React.Component {
     }
 
     render() {
+console.log("ControlPanelLearning", this.props)
         var activePathway = this.props.activePathway.name
         return (
              <div>
@@ -31,7 +32,7 @@ export class ControlPanelLearning extends React.Component {
                                 <SelectObservationSet 
                                         type                   = "learning"
                                         selectedObservationSet = {this.props.selectedObservationSetLearning} 
-                                        observationSetList     = {this.props.observationSetList}/>
+                                        observationSets        = {this.props.observationSets}/>
                             </div>
                         </li>
                     </ul>
@@ -61,7 +62,7 @@ export class ControlPanelLearning extends React.Component {
                                             runType                = "learning"
                                             setNodeState           = {this.props.setNodeState}
                                             observeNode            = {this.props.observeNode}
-                                            observationSetList     = {this.props.observationSetList}
+                                            observationSets        = {this.props.observationSets}
                                             pairwiseInteractions   = {this.props.pairwiseInteractions}
                                             removeObservedNode     = {this.props.removeObservedNode} />
                     <h5 className="tooltipped"

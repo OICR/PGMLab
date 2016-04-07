@@ -4,8 +4,8 @@ export class SelectObservationSet extends React.Component {
 
     render() {
         var self = this
-        var numberOfObs = this.props.observationSetList.length
-        var observationSetList = this.props.observationSetList.map(function(observationSet) {
+        var numberOfObs = this.props.observationSets.length
+        var observationSets = this.props.observationSets.map(function(observationSet) {
               var typeKey = self.props.type.concat(observationSet.id)
               return (
                    <tr key={typeKey}> 
@@ -23,7 +23,7 @@ export class SelectObservationSet extends React.Component {
         return (
             <table>
                 <tbody style={{display:"block", maxHeight:"800px", overflowY: "scroll"}}>
-                    {observationSetList}
+                    {observationSets}
                 </tbody>
             </table>)
     }

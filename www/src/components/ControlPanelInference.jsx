@@ -30,7 +30,7 @@ export class ControlPanelInference extends React.Component {
                                 <SelectObservationSet
                                          type                   = "inference"
                                          selectedObservationSet = {this.props.selectedObservationSetInference}
-                                         observationSetList     = {this.props.observationSetList} />
+                                         observationSets        = {this.props.observationSets} />
                            </div>
                         </li>
                     </ul>
@@ -59,7 +59,7 @@ export class ControlPanelInference extends React.Component {
                     <SelectedObservationSet selectedObservationSet = {this.props.selectedObservationSetInference} 
                                             runType                = "inference"
                                             setNodeState           = {this.props.setNodeState}
-                                            observationSetList     = {this.props.observationSetList}
+                                            observationSets        = {this.props.observationSets}
                                             observeNode            = {this.props.observeNode}
                                             pairwiseInteractions   = {this.props.pairwiseInteractions}
                                             removeObservedNode     = {this.props.removeObservedNode} />

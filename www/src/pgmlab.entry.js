@@ -5,6 +5,7 @@ var materialize = require('./lib/materialize.min.js')
 
 import React from 'react'
 import { render } from 'react-dom'
+var moment = require('moment')
 
 import {Header} from './components/Header.jsx';
 import {Body}   from './components/Body.jsx';
@@ -17,31 +18,42 @@ class App extends  React.Component {
     constructor (props) {
         super(props);
 
+       var observationSets =  [{"id":   1, 
+                                "name": "One",
+                                "activeIndex": 0,
+                                "observations": []
+                               }]
+
         this.state = { "pathways"                        : this.props.pathways,
                        "activePathway"                   : this.props.activePathway,
+                       "uploadList"                      : [],
                        "selectedPathwaysLearning"        : [],
                        "selectedPathwaysInference"       : [],
-                       "observationSetList"              : [{id:   1, 
-                                                             name: "One",
-                                                             activeIndex: 0,
-                                                             observations: [{"id": 1,
-                                                             "nodes":[]}] }],
+                       "observationSets"                 : observationSets,
                        "selectedObservationSetLearning"  : 0,
                        "selectedObservationSetInference" : 0,
-                       "posteriorProbabilities"          : {},
+                       "posteriorProbabilitySets"        : [],
+                       "estimatedParameterSets"          : [],
                        "pairwiseInteractions"            : this.props.pairwiseInteractions}
 
-        this.addNewPathway = this.addNewPathway.bind(this)
-        this.setActivePathway = this.setActivePathway.bind(this)
-        this.observeNode = this.observeNode.bind(this)
-        this.removeObservedNode = this.removeObservedNode.bind(this)
-        this.runInference = this.runInference.bind(this)
-        this.setNodeState = this.setNodeState.bind(this)
-        this.removeSelectedPathwayLearning = this.removeSelectedPathwayLearning.bind(this)
-        this.selectPathwayLearning = this.selectPathwayLearning.bind(this)
+        this.addNewPathway                  = this.addNewPathway.bind(this)
+        this.setActivePathway               = this.setActivePathway.bind(this)
+        this.observeNode                    = this.observeNode.bind(this)
+        this.removeObservedNode             = this.removeObservedNode.bind(this)
+        this.runInference                   = this.runInference.bind(this)
+        this.setNodeState                   = this.setNodeState.bind(this)
+        this.removeSelectedPathwayLearning  = this.removeSelectedPathwayLearning.bind(this)
+        this.selectPathwayLearning          = this.selectPathwayLearning.bind(this)
         this.removeSelectedPathwayInference = this.removeSelectedPathwayInference.bind(this)
-        this.selectPathwayInference = this.selectPathwayInference.bind(this)
+        this.selectPathwayInference         = this.selectPathwayInference.bind(this)
+        this.uploadListAddFailure           = this.uploadListAddFailure.bind(this)
+        this.addNewObservationSet           = this.addNewObservationSet.bind(this)
+        this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this)
+        this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this)
+    }
 
+    static getCurrentDateTime() {
+        return moment().format('MMM D, YYYY HH:mm')
     }
 
     removeSelectedPathwayInference(pathwayID) {
@@ -96,10 +108,10 @@ class App extends  React.Component {
         console.log("observeNode", node, runType)
         var selectedObservationSet = (runType === "inference")? this.state.selectedObservationSetInference : this.state.selectedObservationSetLearning
       console.log("selectedObservationSet", selectedObservationSet)
-        var activeIndex = this.state.observationSetList[selectedObservationSet].activeIndex
+        var activeIndex = this.state.observationSets[selectedObservationSet].activeIndex
 console.log("activeIndex", activeIndex)
         console.log("obs", selectedObservationSet.observations)
-        var activeNodes =  this.state.observationSetList[selectedObservationSet].observations[activeIndex].nodes
+        var activeNodes =  this.state.observationSets[selectedObservationSet].observations[activeIndex].nodes
         
         var found = activeNodes.some(function (el) { return el.name === node.name  })
         if (!found) {
@@ -108,18 +120,18 @@ console.log("activeIndex", activeIndex)
 console.log("activeNodes", activeNodes, node)
             var newNodes = activeNodes.concat([node]);
 console.log("newNodes", newNodes, activeNodes)
-            var observationSetList = this.state.observationSetList
-            observationSetList[selectedObservationSet].observations[activeIndex].nodes = $.extend( true, [], newNodes)
+            var observationSets = this.state.observationSets
+            observationSets[selectedObservationSet].observations[activeIndex].nodes = $.extend( true, [], newNodes)
 
 console.log("nodes",           selectedObservationSet.observations[selectedObservationSet.activeIndex])
             console.log("soss", observationSet)
 
 
             if (runType ==="inference") { 
-                this.setState({"selectedObservationSetInference": observationSetList})
+                this.setState({"selectedObservationSetInference": observationSets})
             }
             else {
-                this.setState({"selectedObservationSetLearning": observationSetList})
+                this.setState({"selectedObservationSetLearning": observationSets})
             }
         }
     }
@@ -172,45 +184,150 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
          }
     }
 
-    addNewPathway(name, pairwiseInteractions) {
-        console.log("addNewPathway", name, pairwiseInteractions)
-        function guid() {
-          function s4() {
+    uploadListAddFailure(name, filetype, comment) {
+        var uploadList = this.state.uploadList
+        var guid       = App.guid()
+ 
+        var uploadSummary = { "datetime" : App.getCurrentDateTime(),
+                              "id"       : guid,
+                              "filetype" : filetype,
+                              "success"  : false,
+                              "name"     : name,
+                              "comment"  : comment}
+
+        uploadList.push(uploadSummary)
+
+        this.setState({"uploadList": uploadList})
+
+    }
+
+    static guid() {
+        function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
               .toString(16)
               .substring(1)
-          }
-          return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-            s4() + '-' + s4() + s4() + s4()
         }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
+    }
 
+    addNewPathway(name, pairwiseInteractions) {
         var pathways = this.state.pathways
-        pathways.push({ "id": guid(),
-                        "name": name,
-                        "pairwiseInteractions": pairwiseInteractions })
+        var guid = App.guid()
+ 
+        var pathway = { "id"                   : guid,
+                        "name"                 : name,
+                        "pairwiseInteractions" : pairwiseInteractions }
+
+        pathways.push(pathway)
+
         graphvis.render(pairwiseInteractions)
-        this.setState({ "activePathway": pathways,
-                        "pairwiseInteractions": pairwiseInteractions,
-                        "observedNodes": [],
-                        "posteriorProbabilities": {}})
+
+        var uploadSummary = { "datetime": App.getCurrentDateTime(),
+                              "id"      : guid,
+                              "filetype": "Pathway",
+                              "success" : true,
+                              "name"    : name,
+                              "comment" : ""}
+
+        var uploadList = this.state.uploadList
+        
+        uploadList.push(uploadSummary)
+
+        this.setState({ "pathways"               : pathways,
+                        "activePathway"          : pathway,
+                        "pairwiseInteractions"   : pairwiseInteractions,
+                        "posteriorProbabilities" : {},
+                        "uploadList"             : uploadList })
+    }
+
+    addNewObservationSet(name, observations) {
+        var guid = App.guid()
+
+        var uploadSummary = { "datetime": App.getCurrentDateTime(),
+                              "id"      : guid,
+                              "filetype": "Observation",
+                              "success" : true,
+                              "name"    : name,
+                              "comment" : ""}
+
+        var uploadList = this.state.uploadList
+        uploadList.push(uploadSummary)
+
+        var observationSet ={ "id"           : guid, 
+                              "name"         : name,
+                              "activeIndex"  : 0,
+                              "observations" : observations}
+
+        var observationSets = this.state.observationSets
+        observationSets.push(observationSet)
+
+        console.log("observationSets", observationSets)
+        this.setState({"uploadList"      : uploadList,
+                       "observationSets" : observationSets})
+
+    }
+
+    addNewEstimatedParameterSet(name, cpts) {
+        var guid = App.guid()
+
+        var uploadSummary = { "datetime": App.getCurrentDateTime(),
+                              "id"      : guid,
+                              "filetype": "Estimated Parameter",
+                              "success" : true,
+                              "name"    : name,
+                              "comment" : ""}
+
+        var uploadList = this.state.uploadList
+        uploadList.push(uploadSummary)
+
+        var estimatedParameterSet = {"id"     : guid,
+                                     "name"   : name,
+                                     "cpds"   : cpts }
+
+        var estimatedParameterSets = this.state.estimatedParameterSets 
+        estimatedParameterSets.push(estimatedParameterSet)
+
+        this.setState({"uploadList"            : uploadList,
+                      "estimatedParameterSets" : estimatedParameterSets})
+    }
+
+    addNewPosteriorProbabilitySet(name, probabilities) {
+        var guid = App.guid()
+
+        var uploadSummary = { "datetime": App.getCurrentDateTime(),
+                              "id"      : guid,
+                              "filetype": "Posterior Probability",
+                              "success" : true,
+                              "name"    : name,
+                              "comment" : ""}
+
+        var uploadList = this.state.uploadList
+ 
+        var posteriorProbabilitySet = {"id"     : guid,
+                                       "name"   : name,
+                                       "probablilies"   : probabilities }
+
+        var posteriorProbabilitySets = this.state.posteriorProbabilitySets 
+        posteriorProbabilitySets.push(posteriorProbabilitySet)
+        
+        uploadList.push(uploadSummary)
+
+        this.setState({"uploadList": uploadList,
+                       "posteriorProbabilitySets": posteriorProbabilitySets})
     }
 
     componentDidMount () {
       $('.modal-trigger').leanModal()
-      $('#side-nav-open').click(() => {
-          $('.side-nav').toggleClass('open')
-      });
-      $('#side-nav-close').click(() => {
-          $('.side-nav').toggleClass('open')
-      });
     }
 
     render () {
-       console.log("rendering app")
+       console.log("rendering app", this)
         return (
             <div>
                 <Header />
                 <Body pathways                        = {this.props.pathways}
+                      uploadList                      = {this.state.uploadList}
+                      uploadListAddFailure            = {this.uploadListAddFailure}
                       activePathway                   = {this.state.activePathway}
                       setActivePathway                = {this.setActivePathway}
                       removeSelectedPathwayLearning   = {this.removeSelectedPathwayLearning}
@@ -223,10 +340,13 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
                       removeObservedNode              = {this.removeObservedNode}
                       selectedObservationSetLearning  = {this.state.selectedObservationSetLearning}
                       selectedObservationSetInference = {this.state.selectedObservationSetInference}
-                      observationSetList              = {this.state.observationSetList}
+                      observationSets                 = {this.state.observationSets}
                       runInference                    = {this.runInference}
                       setNodeState                    = {this.setNodeState}
                       addNewPathway                   = {this.addNewPathway}
+                      addNewObservationSet            = {this.addNewObservationSet}
+                      addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
+                      addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet}
                       pairwiseInteractions            = {this.state.pairwiseInteractions} />
                <Footer />
             </div> )
