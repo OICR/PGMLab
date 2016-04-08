@@ -20,7 +20,6 @@ class App extends  React.Component {
 
        var observationSets =  [{"id":   1, 
                                 "name": "One",
-                                "activeIndex": 0,
                                 "observations": []
                                }]
 
@@ -30,8 +29,10 @@ class App extends  React.Component {
                        "selectedPathwaysLearning"        : [],
                        "selectedPathwaysInference"       : [],
                        "observationSets"                 : observationSets,
-                       "selectedObservationSetLearning"  : 0,
-                       "selectedObservationSetInference" : 0,
+                       "selectedObservationSetLearning"  : 0,  // this index of the observationSet array
+                       "selectedObservationSetInference" : 0,  // ''
+                       "selectedObservationLearning"     : 0,  // this index of the observationSet array
+                       "selectedObservationInference"    : 0,  // ''
                        "posteriorProbabilitySets"        : [],
                        "estimatedParameterSets"          : [],
                        "pairwiseInteractions"            : this.props.pairwiseInteractions}
@@ -46,6 +47,10 @@ class App extends  React.Component {
         this.selectPathwayLearning          = this.selectPathwayLearning.bind(this)
         this.removeSelectedPathwayInference = this.removeSelectedPathwayInference.bind(this)
         this.selectPathwayInference         = this.selectPathwayInference.bind(this)
+        this.selectObservationSetLearning   = this.selectObservationSetLearning.bind(this)
+        this.selectObservationSetInference  = this.selectObservationSetInference.bind(this)
+        this.selectObservationLearning      = this.selectObservationLearning.bind(this)
+        this.selectObservationInference     = this.selectObservationInference.bind(this)
         this.uploadListAddFailure           = this.uploadListAddFailure.bind(this)
         this.addNewObservationSet           = this.addNewObservationSet.bind(this)
         this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this)
@@ -316,6 +321,51 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
                        "posteriorProbabilitySets": posteriorProbabilitySets})
     }
 
+    selectObservationSetInference(index) {
+        var observationIndex = 0
+        var nodes = this.state.observationSets[index].observations[observationIndex]
+
+        graphvis.render(this.state.pairwiseInteractions)
+
+        for(let i = 0; i < nodes.length; i++) {
+              graphvis.setNodeState(nodes[i])
+        }
+
+        this.setState({"selectedObservationSetInference": index,
+                       "selectedObservationInference"   : observationIndex})
+    }
+
+    selectObservationSetLearning(index) {
+        var observationIndex = 0
+        var nodes = this.state.observationSets[index].observations[observationIndex]
+console.log("selectingObsSet")
+        graphvis.render(this.state.pairwiseInteractions)
+
+        for(let i = 0; i < nodes.length; i++) {
+              graphvis.setNodeState(nodes[i])
+        }
+
+        this.setState({"selectedObservationSetLearning" : index,
+                       "selectedObservationLearning"    : observationIndex })
+    }
+
+    selectObservationInference(index) {
+        var nodes = this.state.observationSets[this.state.selectedObservationSetInference].observations[index]
+
+        graphvis.render(this.state.pairwiseInteractions)
+
+        for(let i = 0; i < nodes.length; i++) {
+              graphvis.setNodeState(nodes[i])
+        }
+
+        console.log("selectingObservtion Inf", index)
+        this.setState({"selectedObservationInference": index})
+    }
+
+    selectObservationLearning(index) {
+        this.setState({"selectedObservationLearning": index})
+    }
+
     componentDidMount () {
       $('.modal-trigger').leanModal()
     }
@@ -343,6 +393,12 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
                       observationSets                 = {this.state.observationSets}
                       runInference                    = {this.runInference}
                       setNodeState                    = {this.setNodeState}
+                      selectObservationSetLearning    = {this.selectObservationSetLearning}
+                      selectObservationSetInference   = {this.selectObservationSetInference}
+                      selectObservationInference      = {this.selectObservationInference}
+                      selectObservationLearning       = {this.selectObservationLearning}
+                      selectedObservationInference    = {this.state.selectedObservationInference}
+                      selectedObservationLearning     = {this.state.selectedObservationLearning}
                       addNewPathway                   = {this.addNewPathway}
                       addNewObservationSet            = {this.addNewObservationSet}
                       addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}

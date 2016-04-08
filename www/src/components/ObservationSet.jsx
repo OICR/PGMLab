@@ -5,8 +5,9 @@ import {ObservedNodeList} from './ObservedNodeList.jsx'
 
 import {SelectPathways} from './SelectPathways.jsx'
 import {SelectedPathways} from './SelectedPathways.jsx'
+import {SelectObservation} from './SelectObservation.jsx'
 
-export class SelectedObservationSet extends React.Component {
+export class ObservationSet extends React.Component {
 
     constructor(props) {
         super(props)
@@ -21,6 +22,7 @@ export class SelectedObservationSet extends React.Component {
     }
 
     render() {
+console.log("OS", this.props)
         var self = this
         var observationsCount = this.props.observationSets[this.props.selectedObservationSet].observations.length
         var observations = this.props.observationSets[this.props.selectedObservationSet].observations.map(function(observation, index) {
@@ -69,9 +71,11 @@ export class SelectedObservationSet extends React.Component {
                                 data-position="top" data-delay="50" data-tooltip="Add Observation">+</a>
             </div>
             <div className="row">
-                <form action="#" className="col s11">
-                    {observations}
-                </form>
+                <SelectObservation
+                     type                = "inference"
+                     selectedObservation = {this.props.selectedObservation}
+                     selectObservation   = {this.props.selectObservation}
+                     observations        = {this.props.observationSets[this.props.selectedObservationSet].observations} />
                 <a className={"btn-floating btn-small waves-effect waves-light col s1 tooltipped ".concat( (this.state.editObservation === "Disable")? 
                                                                                                                 "red": "ligth-blue lighten-1")} 
                                 data-position="top" data-delay="50" data-tooltip={this.state.editObservation}

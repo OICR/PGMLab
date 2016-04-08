@@ -8,32 +8,43 @@ import {UploadModal} from "./UploadModal.jsx"
 export class ControlPanel extends React.Component {
 
     render() {
+        console.log("CP", this.props)
         var runPanel = (this.props.toggle === "Inference")? 
-                    <ControlPanelInference setActivePathway                = {this.props.setActivePathway} 
-                                           activePathway                   = {this.props.activePathway} 
-                                           selectedObservationSetInference = {this.props.selectedObservationSetInference}
-                                           observationSets                 = {this.props.observationSets}
-                                           selectPathwayInference          = {this.props.selectPathwayInference}
-                                           removeSelectedPathwayInference  = {this.props.removeSelectedPathwayInference}
-                                           removeObservedNode              = {this.props.removeObservednode}
-                                           setNodeState                    = {this.props.setNodeState}
-                                           observeNode                     = {this.props.observeNode}
-                                           selectedPathwaysInference       = {this.props.selectedPathwaysInference}
-                                           pairwiseInteractions            = {this.props.pairwiseInteractions}
-                                           pathways                        = {this.props.pathways} />
+                    <ControlPanelInference setActivePathway       = {this.props.setActivePathway} 
+                                           activePathway          = {this.props.activePathway} 
+                                           selectedObservationSet = {this.props.selectedObservationSetInference}
+                                           selectObservationSet   = {this.props.selectObservationSetInference}
+                                           observationSets        = {this.props.observationSets}
+                                           selectPathway          = {this.props.selectPathwayInference}
+                                           removeSelectedPathway  = {this.props.removeSelectedPathwayInference}
+                                           removeObservedNode     = {this.props.removeObservednode}
+                                           setNodeState           = {this.props.setNodeState}
+                                           observeNode            = {this.props.observeNode}
+                                           selectedPathways       = {this.props.selectedPathwaysInference}
+                                           selectObservation      = {this.props.selectObservationInference}
+                                           selectedObservation    = {this.props.selectedObservationInference}
+                                           pairwiseInteractions   = {this.props.pairwiseInteractions}
+                                           run                    = {this.props.runInfernce}
+                                           runType                = {this.props.toggle}
+                                           pathways               = {this.props.pathways} />
                     :
-                    <ControlPanelLearning setActivePathway                = {this.props.setActivePathway} 
-                                          activePathway                   = {this.props.activePathway} 
-                                          selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}
-                                          observationSets                 = {this.props.observationSets}
-                                          selectPathwayLearning           = {this.props.selectPathwayLearning}
-                                          removeSelectedPathwayLearning   = {this.props.removeSelectedPathwayLearning}
-                                          removeObservedNode              = {this.props.removeObservednode}
-                                          setNodeState                    = {this.props.setNodeState}
-                                          observeNode                     = {this.props.observeNode}
-                                          selectedPathwaysLearning        = {this.props.selectedPathwaysLearning}
-                                          pairwiseInteractions            = {this.props.pairwiseInteractions}
-                                          pathways                        = {this.props.pathways} /> 
+                    <ControlPanelLearning setActivePathway        = {this.props.setActivePathway} 
+                                          activePathway           = {this.props.activePathway} 
+                                          selectedObservationSet  = {this.props.selectedObservationSetLearning}
+                                          selectObservationSet    = {this.props.selectObservationSetLearning}
+                                          observationSets         = {this.props.observationSets}
+                                          selectPathway           = {this.props.selectPathwayLearning}
+                                          removeSelectedPathway   = {this.props.removeSelectedPathwayLearning}
+                                          removeObservedNode      = {this.props.removeObservednode}
+                                          setNodeState            = {this.props.setNodeState}
+                                          observeNode             = {this.props.observeNode}
+                                          selectedPathways        = {this.props.selectedPathwaysLearning}
+                                          selectObservation       = {this.props.selectObservationLearning}
+                                          selectedObservation     = {this.props.selectedObservationLearning}
+                                          pairwiseInteractions    = {this.props.pairwiseInteractions}
+                                          run                     = {this.props.runLearning}
+                                          runType                 = {this.props.toggle}
+                                          pathways                = {this.props.pathways} /> 
         return (
                 <div className="col s4" style={{minWidth:"300px"}}>
                     <div className="section row">

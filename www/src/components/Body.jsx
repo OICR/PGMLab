@@ -38,6 +38,10 @@ console.log("body", this.props)
                               removeObservedNode              = {this.props.removeObservedNode}
                               selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}
                               selectedObservationSetInference = {this.props.selectedObservationSetInference}
+                              selectObservationSetLearning    = {this.props.selectObservationSetLearning}
+                              selectObservationSetInference   = {this.props.selectObservationSetInference}
+                              selectedObservationInference    = {this.props.selectedObservationInference}
+                              selectedObservationLearning     = {this.props.selectedObservationLearning}
                               observationSets                 = {this.props.observationSets}
                               runInference                    = {this.props.runInference}
                               setNodeState                    = {this.props.setNodeState}
@@ -47,6 +51,8 @@ console.log("body", this.props)
                               removeSelectedPathwayLearning   = {this.props.removeSelectedPathwayLearning}
                               selectPathwayLearning           = {this.props.selectPathwayLearning}
                               selectedPathwaysLearning        = {this.props.selectedPathwaysLearning}
+                              selectObservationInference      = {this.props.selectObservationInference}
+                              selectObservationLearning       = {this.props.selectObservationLearning}
                               pathways                        = {this.props.pathways}
                               activePathway                   = {this.props.activePathway}
                               setActivePathway                = {this.props.setActivePathway}

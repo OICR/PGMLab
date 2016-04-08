@@ -66,33 +66,34 @@ export class UploadModal extends React.Component {
                            "All lines must have format <nodeFrom>\\t<NodeToo> ; will use first two columns. Trouble line: ".concat(lines[i]))
                      return
                 } 
-
-                if (!nodes.hasOwnProperty(lineParts[0])) {
-                    nodes[lineParts[0]] = ++nodeCount
-                    nodesList.push({"name":     lineParts[0],
-                                    "label":    lineParts[0],
-                                    "longname": lineParts[0],
-                                    "name":     lineParts[0], 
+                var source = lineParts[0].trim()
+                if (!nodes.hasOwnProperty(source)) {
+                    nodes[source] = ++nodeCount
+                    nodesList.push({"name":     source,
+                                    "label":    source,
+                                    "longname": source,
+                                    "name":     source, 
                                     "leaf":     null,
                                     "shape":    null,
                                     "shape3":   null,
                                     "type":     null })                              
                 }
 
-                if(!nodes.hasOwnProperty(lineParts[1])) {
-                    nodes[lineParts[1]] = ++nodeCount
-                    nodesList.push({"name":     lineParts[1],
-                                    "label":    lineParts[1],
-                                    "longname": lineParts[1],
-                                    "name":     lineParts[1],
+                var target = lineParts[0].trim()
+                if(!nodes.hasOwnProperty(target)) {
+                    nodes[target] = ++nodeCount
+                    nodesList.push({"name":     target,
+                                    "label":    target,
+                                    "longname": target,
+                                    "name":     target,
                                     "leaf":     null,
                                     "shape":    null,
                                     "shape3":   null,
                                     "type":     null })
                }
 
-               links.push({ "source": lineParts[0],
-                            "target": lineParts[1],
+               links.push({ "source": source,
+                            "target": target,
                             "logic":  0,
                             "value":  1})  
             }
@@ -137,8 +138,10 @@ export class UploadModal extends React.Component {
                 for(let nodeIndex = 1; nodeIndex <= numberOfNodes; nodeIndex++) {
                     lineIndex++
                     var lineParts = lines[lineIndex].split("\t")
-                    var node = {"name": lineParts[0],
-                                "state": lineParts[1] }
+                    var name = lineParts[0].trim()
+                    var state = lineParts[1].trim()
+                    var node = {"name":  name,
+                                "state": state }
                     nodes.push(node)
                 }
                 observations.push(nodes)
