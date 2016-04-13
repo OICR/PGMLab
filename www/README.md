@@ -34,3 +34,6 @@ I am using autobahnJS for the WAMP protocol and Crossbar to host in production
 
 Now navigate to "http://localhost:8080/pgmlab.html" in your browser"
 
+
+## In development the website will need to be able to access the pythong rest interface on the backend In order to do this add the following plugin to chrome: 
+     https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi/related?hl=en-US

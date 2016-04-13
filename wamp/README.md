@@ -10,7 +10,12 @@ This code is intended to be mainly used by the web interfaces in the PGMLab-GUI 
 
 	sudo apt-get install libjson-perl
 	apt-get install python-dev python-pip npm node libffi-dev
-        pip install crossbar autobahn[twisted] treq shutilwhich pyyaml pygments mistune jinja2 pytrie netaddr --upgrade
+        pip install crossbar autobahn[twisted] treq shutilwhich pyyaml pygments mistune jinja2 pytrie netaddr klein --upgrade
+
+- on my ubuntu install I had to run the following command to have crossbar find the packages: 
+
+        sudo cp /usr/local/lib/python2.7/dist-packages/werkzeug /opt/crossbar/site-packages/ -r
+
 
 #Install Crossbar
 

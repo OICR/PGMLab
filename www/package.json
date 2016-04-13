@@ -49,6 +49,7 @@
     "react-materialize": "~0.14.3",
     "image-webpack-loader": "~1.6.3",
     "file-loader": "~0.8.5",
-    "materialize-css": "~0.97.6"
+    "materialize-css": "~0.97.6",
+    "react-tabs": "~0.5.3"
   }
 }

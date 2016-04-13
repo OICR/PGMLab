@@ -26,6 +26,7 @@
 #
 ###############################################################################
 
+
 from twisted.internet.defer import inlineCallbacks
 from twisted.logger import Logger
 
@@ -155,15 +156,14 @@ class AppSession(ApplicationSession):
             cwd = os.getcwd()
             tmpPath = cwd + "/../tmp/"
             runPath = tmpPath + runID
-            os.mkdir(runPath);
+            os.mkdir(runPath)
             numberOfNodes = createPairwiseInteractionFile(runPath, pathway)
             generateFactorgraph(runPath);
             numberOfObs = createObservationFile(runPath, observations)         
             inferenceCommand(runPath)
-            pp = readPosteriorProbabilityFile(runPath);
-            shutil.rmtree(runPath);
+            pp = readPosteriorProbabilityFile(runPath)
+            shutil.rmtree(runPath)
             return {'run': runID, 'posteriorProbabilities':pp} 
 
         yield self.register(runInference, 'pgmlab.inference.run')
-        self.log.info("subscribed to topic 'pgmlab.infence.run'")
-
+        self.log.info("subscribed to topic 'pgmlab.inference.run'")

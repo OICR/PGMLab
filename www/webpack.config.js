@@ -43,6 +43,10 @@ module.exports = {
       {
         test: /\.jsx?$/, // A regexp to test the require path. accepts either js or jsx
         loader: "babel" // The module to load. "babel" is short for "babel-loader"
+      },
+      {
+        test: /[\/\\]node_modules[\/\\]some-module[\/\\]index\.js$/,
+        loader: "imports?this=>window"
       }
     ],
     exprContextCritical: false              // Otherwise I get "the request of a dependency is an expression" error
