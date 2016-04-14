@@ -33,8 +33,8 @@ class App extends  React.Component {
         return (
             <div>
                 <Header />
-               <Body />
-               <Footer />
+                <Body />
+                <Footer />
             </div> )
     }
 }
