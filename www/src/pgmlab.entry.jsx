@@ -1,8 +1,12 @@
+require("../assets/css/materialize.css")
+require("../assets/css/style.css")
+
 var $ = require('jquery')
 window.jQuery = $
 window.$ = $
 
 var materialize = require('./lib/materialize.min.js')
+require("material-design-icons")
 
 import React from 'react'
 import { render } from 'react-dom'
@@ -29,7 +33,6 @@ class App extends  React.Component {
     }
 
     render () {
-       console.log("rendering app", this)
         return (
             <div>
                 <Header />

@@ -154,7 +154,7 @@ class AppSession(ApplicationSession):
             self.log.info("running inference")
             runID = str(uuid.uuid4())
             cwd = os.getcwd()
-            tmpPath = cwd + "/../tmp/"
+            tmpPath = cwd + "/../../tmp/"
             runPath = tmpPath + runID
             os.mkdir(runPath)
             numberOfNodes = createPairwiseInteractionFile(runPath, pathway)

@@ -15,24 +15,33 @@ pip
 
 ##Install
 
+###Development
      npm install -g webpack webpack-dev-server
      npm install
 
-## Create bundle.js file
 
-     webpack src/\<entry\>.js bundle.js
+####run website:
+     npm run start --dev
 
-
-I am wanting to use Alt (FLUX) to keep track of state.
-
-I am using autobahnJS for the WAMP protocol and Crossbar to host in production
+####create final bundle:
+     npm run build
 
 
-## to run in development
+##Prodcution and develpment
 
-     npm run 
+     pip install autobahn[twisted] klein --upgrade
 
-Now navigate to "http://localhost:8080/pgmlab.html" in your browser"
+
+
+#### To Do
+     I am wanting to use Alt (FLUX) to keep track of state.
+
+
+###Development URL
+     "http://localhost:8080/pgmlab.html" in your browser"
+
+###Production URL
+     "http://localhost:9000/pgmlab.html" in your browser"
 
 
 ## In development the website will need to be able to access the pythong rest interface on the backend In order to do this add the following plugin to chrome: 
