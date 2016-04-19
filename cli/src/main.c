@@ -67,7 +67,7 @@ int is_writeable(char * filepath) {
     return FALSE;
 }    
 
-int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, int verbose, int map) {
+int analyze_directory( char *data_dir, int em_max_iterations, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, int verbose, int map) {
     DIR *dir, *subdir;
     struct dirent *ent, *subent;
 
@@ -241,7 +241,7 @@ int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_t
     return 0;
 }
 
-int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, char *pairwise_interactions_filepath, char *logical_factorgraph_filepath, char* estimated_parameters_filepath, char *learning_observed_data_filepath, char* inference_factorgraph_filepath, char *inference_observed_data_filepath, char* posterior_probabilities_filepath, int g_count, int l_count, int i_count, int logging, int MAP_flag) {
+int non_interactive_command(int em_max_iterations, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, char *pairwise_interactions_filepath, char *logical_factorgraph_filepath, char* estimated_parameters_filepath, char *learning_observed_data_filepath, char* inference_factorgraph_filepath, char *inference_observed_data_filepath, char* posterior_probabilities_filepath, int g_count, int l_count, int i_count, int logging, int MAP_flag) {
 
     if (g_count > 0) {
         printf("Generating factorgraph with:\n\t\tnumber of states\t%d\n", number_of_states);
@@ -732,7 +732,7 @@ int main(int argc, char *argv[]) {
     struct arg_lit *help, *version, *verbose;
     struct arg_end *end;
     struct arg_str *data_dir;
-    struct arg_int *em_max_iterations, *em_number_of_training_samples, *number_of_states;
+    struct arg_int *em_max_iterations, *number_of_states;
     struct arg_file *pairwise_interaction_file, *logical_factorgraph_file, *estimated_parameters_file, *learning_observed_data_file, *inference_observed_data_file, *inference_factorgraph_file, *posterior_probability_file;
     struct arg_dbl *em_log_likelihood_change_limit, *em_parameters_change_limit; 
 
@@ -755,7 +755,6 @@ int main(int argc, char *argv[]) {
 
         number_of_states = arg_int0(NULL, "number-of-states", NULL, "Number of states for each node (default is 2)"),
         em_max_iterations = arg_int0(NULL, "em-max-iterations", NULL , "Maximum number of iterations in the EM algorithm - used in learning (default is 4000)"),
-        em_number_of_training_samples = arg_int0(NULL, "training-samples", NULL, "Number of training samples used in expectation mimization - used in learning step(default 400)"),
         em_log_likelihood_change_limit = arg_dbl0(NULL, "log-likelihood-change-limit", NULL, "Stopping criteria: change in the ML - used in learning (default 1e-5)"),
         em_parameters_change_limit = arg_dbl0(NULL, "parameters-change-limit", NULL, "Stopping criteria: change in the parameters - used in learning (default 1e-3)"),
         logging_on = arg_lit0(NULL, "logging-on", "Set this flag if you would like the learning step to print out the status into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
@@ -774,7 +773,6 @@ int main(int argc, char *argv[]) {
 
     /* set any command line default values prior to parsing */
     em_max_iterations->ival[0] = 4000;
-    em_number_of_training_samples->ival[0] = 400;
     em_parameters_change_limit->dval[0] = 1e-3;
     em_log_likelihood_change_limit->dval[0] = 1e-5;
     number_of_states->ival[0] = 2; 
@@ -828,7 +826,6 @@ int main(int argc, char *argv[]) {
             printf("\tAnalyzing Directory: %s\n", data_dir->sval[i]);
             exitcode = analyze_directory( data_dir->sval[i], 
                                           em_max_iterations->ival[0],
-                                          em_number_of_training_samples->ival[0], 
                                           em_log_likelihood_change_limit->dval[0], 
                                           em_parameters_change_limit->dval[0], 
                                           number_of_states->ival[0],
@@ -847,7 +844,6 @@ int main(int argc, char *argv[]) {
 printf("inference obs %s\n", posterior_probability_file->filename[0]);
     /* Command line parsing is complete, do the main processing */
     exitcode = non_interactive_command( em_max_iterations->ival[0],
-                                        em_number_of_training_samples->ival[0], 
                                         em_log_likelihood_change_limit->dval[0], 
                                         em_parameters_change_limit->dval[0], 
                                         number_of_states->ival[0], 

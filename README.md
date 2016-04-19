@@ -79,7 +79,6 @@ pgmlab [-gliv] [--interactive] [--data-dir=<string>] [--pairwise-interaction-fil
  --posterior-probability-file=<file> File path to where you would like the posterior probabiliies to be written
  --number-of-states=<int>  Number of states for each node (default is 2)
  --em-max-iterations=<int> Maximum number of iterations in the EM algorithm - used in learning (default is 4000)
- --training-samples=<int>  Number of training samples used in expectation mimization - used in learning step(default 400)
  --log-likelihood-change-limit=<double> Stopping criteria: change in the ML - used in learning (default 1e-5)
  --parameters-change-limit=<double> Stopping criteria: change in the parameters - used in learning (default 1e-3)
  --logging-on              Set this flag if you would like the learning step to print out the status into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)
