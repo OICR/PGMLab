@@ -59,7 +59,7 @@ struct reroot *r;
     }
     else
     {  /* allocate a new block of nodes */
-        r->numleft = r->size*((ub4)1<<r->logsize);
+        r->numleft = r->size*((uint32_t)1<<r->logsize);
         if (r->numleft < REMAX) ++r->logsize;
         temp = (recycle *)remalloc(sizeof(recycle) + r->numleft,
                                    "recycle.c, data");
