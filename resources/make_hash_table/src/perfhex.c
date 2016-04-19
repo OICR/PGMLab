@@ -224,32 +224,32 @@ hashform *form;
    * the distinguishing bits won't cause them to stop being distinguishing.
    */
   for (i=final->lowbit; i<=final->highbit; ++i)
+  {
+    for (j=i; j<=final->highbit; ++j)
     {
-      for (j=i; j<=final->highbit; ++j)
+      x = ((a>>i)^(a>>j))&3;
+      y = ((b>>i)^(b>>j))&3;
+      z = ((c>>i)^(c>>j))&3;
+      if (x != y && x != z && y != z)
       {
-        x = ((a>>i)^(a>>j))&3;
-        y = ((b>>i)^(b>>j))&3;
-        z = ((c>>i)^(c>>j))&3;
-        if (x != y && x != z && y != z)
+        if (form->perfect == NORMAL_HP || (x != 3 && y != 3 && z != 3))
         {
-          if (form->perfect == NORMAL_HP || (x != 3 && y != 3 && z != 3))
-          {
-            /* h3i: 0x00, 0x04, 0x10 */
-            sprintf(final->line[0],
-                    "  uint32_t rsl = (((val>>%" PRId32 ") ^ (val>>%" PRId32 ")) & 3);\n", i, j);
-          }
-          else
-          {
-            /* h3j: 0x04, 0x10, 0x14 */
-            sprintf(final->line[0],
-                    "  uint32_t rsl = ((((val>>%" PRId32 ") ^ (val>>%" PRId32 ")) & 3) ^ %" PRId32 ");\n",
-                    i, j, find_adder(x,y,z));
-          }
-          return;
+          /* h3i: 0x00, 0x04, 0x10 */
+          sprintf(final->line[0],
+              "  uint32_t rsl = (((val>>%" PRId32 ") ^ (val>>%" PRId32 ")) & 3);\n", i, j);
         }
+        else
+        {
+          /* h3j: 0x04, 0x10, 0x14 */
+          sprintf(final->line[0],
+                 "  uint32_t rsl = ((((val>>%" PRId32 ") ^ (val>>%" PRId32 ")) & 3) ^ %" PRId32 ");\n",
+                    i, j, find_adder(x,y,z));
+        }
+        return;
       }
     }
-  
+  }
+
   printf("fatal error: hexthree\n");
   exit(EXIT_FAILURE);
 }
@@ -460,7 +460,7 @@ gencode *final;
           if (testfour(w,x,y,z))
           {                                                /* h4l: testcase? */
             sprintf(final->line[0],
-                    "  uint32_t rsl = (((val >> %" PRId32 ") + (val >> %" PRId32 ")) & 3);\n",
+                    "  uint32_t rsl = (((val >> %" PRId32 ") + (val >> %" PRId32 ")) & 3);\n", 
                     i, j);
             return;
           }
@@ -497,75 +497,75 @@ gencode *final;
 
   /* five instructions (quadratic in the number of diffbits) */
   for (i=final->lowbit; i<=final->highbit; ++i)
+  {
+    if (((final->diffbits >> i) & 1) != 0)
     {
-      if (((final->diffbits >> i) & 1) != 0)
+      for (j=final->lowbit; j<=final->highbit; ++j)
       {
-        for (j=final->lowbit; j<=final->highbit; ++j)
+        if (((final->diffbits >> j) & 3) != 0)
         {
-          if (((final->diffbits >> j) & 3) != 0)
-          {
-            w = ((a>>j)&3)^((a>>i)&1);
-            x = ((b>>j)&3)^((b>>i)&1);
-            y = ((c>>j)&3)^((c>>i)&1);
-            z = ((d>>j)&3)^((d>>i)&1);
-            if (testfour(w,x,y,z))
-            {                                                  /* h4o: 0,4,8,a */
-              sprintf(final->line[0],
-                      "  uint32_t rsl = (((val >> %" PRId32") & 3) ^ ((val >> %" PRId32 ") & 1));\n",
-                      j, i);
-              return;
-            }
-           
-            w = ((a>>j)&2)^((a>>i)&1);
-            x = ((b>>j)&2)^((b>>i)&1);
-            y = ((c>>j)&2)^((c>>i)&1);
-            z = ((d>>j)&2)^((d>>i)&1);
-            if (testfour(w,x,y,z))
-            {                                   /* h4p: 0x04, 0x08, 0x10, 0x14 */
-              sprintf(final->line[0],
-                      "  uint32_t rsl = (((val >> %" PRId32 ") & 2) ^ ((val >> %" PRId32 ") & 1));\n",
-                      j, i);
-              return;
-            }
-          }
-        
-          if (i==0)
-          {
-            w = ((a>>j)^(a<<1))&3;
-            x = ((b>>j)^(b<<1))&3;
-            y = ((c>>j)^(c<<1))&3;
-            z = ((d>>j)^(d<<1))&3;
-          }
-          else
-          {
-            w = ((a>>j)&3)^((a>>(i-1))&2);
-            x = ((b>>j)&3)^((b>>(i-1))&2);
-            y = ((c>>j)&3)^((c>>(i-1))&2);
-            z = ((d>>j)&3)^((d>>(i-1))&2);
-          }
+          w = ((a>>j)&3)^((a>>i)&1);
+          x = ((b>>j)&3)^((b>>i)&1);
+          y = ((c>>j)&3)^((c>>i)&1);
+          z = ((d>>j)&3)^((d>>i)&1);
           if (testfour(w,x,y,z))
-          {
-            if (i==0)                                          /* h4q: 0,4,5,8 */
-            {
-              sprintf(final->line[0],
-                      "  uint32_t rsl = (((val >> %" PRId32 ") ^ (val << 1)) & 3);\n",
-                      j);
-            }
-            else if (i==1)                         /* h4r: 0x01,0x09,0x0b,0x10 */
-            {
-              sprintf(final->line[0],
-                      "  uint32_t rsl = (((val >> %" PRId32 ") & 3) ^ (val & 2));\n",
-                      j);
-            }
-            else                                               /* h4s: 0,2,6,8 */
-            {
-              sprintf(final->line[0],
-                      "  uint32_t rsl = (((val >> %" PRId32 ") & 3) ^ ((val >> %" PRId32 ") & 2));\n",
-                      j, (i-1));
-            }
+          {                                                  /* h4o: 0,4,8,a */
+            sprintf(final->line[0],
+                    "  uint32_t rsl = (((val >> %" PRId32") & 3) ^ ((val >> %" PRId32 ") & 1));\n",
+                    j, i);
             return;
           }
-           
+         
+          w = ((a>>j)&2)^((a>>i)&1);
+          x = ((b>>j)&2)^((b>>i)&1);
+          y = ((c>>j)&2)^((c>>i)&1);
+          z = ((d>>j)&2)^((d>>i)&1);
+          if (testfour(w,x,y,z))
+          {                                   /* h4p: 0x04, 0x08, 0x10, 0x14 */
+            sprintf(final->line[0],
+                    "  uint32_t rsl = (((val >> %" PRId32 ") & 2) ^ ((val >> %" PRId32 ") & 1));\n",
+                    j, i);
+            return;
+          }
+        }
+        
+        if (i==0)
+        {
+          w = ((a>>j)^(a<<1))&3;
+          x = ((b>>j)^(b<<1))&3;
+          y = ((c>>j)^(c<<1))&3;
+          z = ((d>>j)^(d<<1))&3;
+        }
+        else
+        {
+          w = ((a>>j)&3)^((a>>(i-1))&2);
+          x = ((b>>j)&3)^((b>>(i-1))&2);
+          y = ((c>>j)&3)^((c>>(i-1))&2);
+          z = ((d>>j)&3)^((d>>(i-1))&2);
+        }
+        if (testfour(w,x,y,z))
+        {
+          if (i==0)                                          /* h4q: 0,4,5,8 */
+          {
+            sprintf(final->line[0],
+                    "  uint32_t rsl = (((val >> %" PRId32 ") ^ (val << 1)) & 3);\n",
+                    j);
+          }
+          else if (i==1)                         /* h4r: 0x01,0x09,0x0b,0x10 */
+          {
+            sprintf(final->line[0],
+                    "  uint32_t rsl = (((val >> %" PRId32 ") & 3) ^ (val & 2));\n",
+                    j);
+          }
+          else                                               /* h4s: 0,2,6,8 */
+          {
+            sprintf(final->line[0],
+                    "  uint32_t rsl = (((val >> %" PRId32 ") & 3) ^ ((val >> %" PRId32 ") & 2));\n",
+                    j, (i-1));
+          }
+          return;
+        }
+          
         w = ((a>>j)&1)^((a>>i)&2);
         x = ((b>>j)&1)^((b>>i)&2);
         y = ((c>>j)&1)^((c>>i)&2);
