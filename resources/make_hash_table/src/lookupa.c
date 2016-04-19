@@ -5,55 +5,50 @@
  Source is http://burtleburtle.net/bob/c/lookupa.c
  --------------------------------------------------------------------
  */
-#ifndef STANDARD
-#include "standard.h"
-#endif
-#ifndef LOOKUPA
 #include "lookupa.h"
-#endif
 
 /*
- --------------------------------------------------------------------
- mix -- mix 3 32-bit values reversibly.
- For every delta with one or two bit set, and the deltas of all three
+--------------------------------------------------------------------
+mix -- mix 3 32-bit values reversibly.
+For every delta with one or two bit set, and the deltas of all three
  high bits or all three low bits, whether the original value of a,b,c
  is almost all zero or is uniformly distributed,
- * If mix() is run forward or backward, at least 32 bits in a,b,c
+* If mix() is run forward or backward, at least 32 bits in a,b,c
  have at least 1/4 probability of changing.
- * If mix() is run forward, every bit of c will change between 1/3 and
+* If mix() is run forward, every bit of c will change between 1/3 and
  2/3 of the time.  (Well, 22/100 and 78/100 for some 2-bit deltas.)
- mix() was built out of 36 single-cycle latency instructions in a
+mix() was built out of 36 single-cycle latency instructions in a 
  structure that could supported 2x parallelism, like so:
- a -= b;
- a -= c; x = (c>>13);
- b -= c; a ^= x;
- b -= a; x = (a<<8);
- c -= a; b ^= x;
- c -= b; x = (b>>13);
+      a -= b; 
+      a -= c; x = (c>>13);
+      b -= c; a ^= x;
+      b -= a; x = (a<<8);
+      c -= a; b ^= x;
+      c -= b; x = (b>>13);
  ...
- Unfortunately, superscalar Pentiums and Sparcs can't take advantage
- of that parallelism.  They've also turned some of those single-cycle
- latency instructions into multi-cycle latency instructions.  Still,
- this is the fastest good hash I could find.  There were about 2^^68
- to choose from.  I only looked at a billion or so.
- --------------------------------------------------------------------
- */
+  Unfortunately, superscalar Pentiums and Sparcs can't take advantage 
+  of that parallelism.  They've also turned some of those single-cycle
+  latency instructions into multi-cycle latency instructions.  Still,
+  this is the fastest good hash I could find.  There were about 2^^68
+  to choose from.  I only looked at a billion or so.
+--------------------------------------------------------------------
+*/
 #define mix(a,b,c) \
 { \
-a -= b; a -= c; a ^= (c>>13); \
-b -= c; b -= a; b ^= (a<<8); \
-c -= a; c -= b; c ^= (b>>13); \
-a -= b; a -= c; a ^= (c>>12);  \
-b -= c; b -= a; b ^= (a<<16); \
-c -= a; c -= b; c ^= (b>>5); \
-a -= b; a -= c; a ^= (c>>3);  \
-b -= c; b -= a; b ^= (a<<10); \
-c -= a; c -= b; c ^= (b>>15); \
+  a -= b; a -= c; a ^= (c>>13); \
+  b -= c; b -= a; b ^= (a<<8); \
+  c -= a; c -= b; c ^= (b>>13); \
+  a -= b; a -= c; a ^= (c>>12);  \
+  b -= c; b -= a; b ^= (a<<16); \
+  c -= a; c -= b; c ^= (b>>5); \
+  a -= b; a -= c; a ^= (c>>3);  \
+  b -= c; b -= a; b ^= (a<<10); \
+  c -= a; c -= b; c ^= (b>>15); \
 }
 
 /*
- --------------------------------------------------------------------
- lookup() -- hash a variable-length key into a 32-bit value
+--------------------------------------------------------------------
+lookup() -- hash a variable-length key into a 32-bit value
  k     : the key (the unaligned variable-length array of bytes)
  len   : the length of the key, counting by bytes
  level : can be any 4-byte value
@@ -135,14 +130,14 @@ register uint32_t  level;    /* the previous hash, or an arbitrary value */
  */
 #define mixc(a,b,c,d,e,f,g,h) \
 { \
-a^=b<<11; d+=a; b+=c; \
-b^=c>>2;  e+=b; c+=d; \
-c^=d<<8;  f+=c; d+=e; \
-d^=e>>16; g+=d; e+=f; \
-e^=f<<10; h+=e; f+=g; \
-f^=g>>4;  a+=f; g+=h; \
-g^=h<<8;  b+=g; h+=a; \
-h^=a>>9;  c+=h; a+=b; \
+   a^=b<<11; d+=a; b+=c; \
+   b^=c>>2;  e+=b; c+=d; \
+   c^=d<<8;  f+=c; d+=e; \
+   d^=e>>16; g+=d; e+=f; \
+   e^=f<<10; h+=e; f+=g; \
+   f^=g>>4;  a+=f; g+=h; \
+   g^=h<<8;  b+=g; h+=a; \
+   h^=a>>9;  c+=h; a+=b; \
 }
 
 /*
@@ -169,12 +164,12 @@ register uint32_t  len;
 register uint32_t *state;
 {
     register uint32_t a,b,c,d,e,f,g,h,length;
-    
+
     /* Use the length and level; add in the golden ratio. */
     length = len;
     a=state[0]; b=state[1]; c=state[2]; d=state[3];
     e=state[4]; f=state[5]; g=state[6]; h=state[7];
-    
+
     /*---------------------------------------- handle most of the key */
     while (len >= 32)
     {
@@ -192,7 +187,7 @@ register uint32_t *state;
         mixc(a,b,c,d,e,f,g,h);
         k += 32; len -= 32;
     }
-    
+
     /*------------------------------------- handle the last 31 bytes */
     h += length;
     switch(len)
@@ -233,7 +228,7 @@ register uint32_t *state;
     mixc(a,b,c,d,e,f,g,h);
     mixc(a,b,c,d,e,f,g,h);
     mixc(a,b,c,d,e,f,g,h);
-    
+
     /*-------------------------------------------- report the result */
     state[0]=a; state[1]=b; state[2]=c; state[3]=d;
     state[4]=e; state[5]=f; state[6]=g; state[7]=h;

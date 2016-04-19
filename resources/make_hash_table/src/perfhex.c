@@ -83,7 +83,7 @@ gencode *final;
 
 
 /*
- * find the value to xor to a and b and c to make none of them 3
+ * find the value to xor to a and b and c to make none of them 3 
  * assert, (a,b,c) are three distinct values in (0,1,2,3).
  */
 static uint32_t find_adder(a,b,c)
@@ -125,6 +125,8 @@ hashform *form;
     printf("fatal error: duplicate keys\n");
     exit(SUCCESS);
   }
+  
+>>>>>>> origin/feature/64bit-hash
   /* one instruction */
   x = a&3; 
   y = b&3;

@@ -109,8 +109,8 @@ uint32_t       smax;                    /* scramble values should be in 0..smax-
   }
 }
 
-/*
- * Check if key1 and key2 are the same.
+/* 
+ * Check if key1 and key2 are the same. 
  * We already checked (a,b) are the same.
  */
 static void checkdup(key1, key2, form)
@@ -149,11 +149,11 @@ hashform *form;
 }
 
 
-/*
+/* 
  * put keys in tabb according to key->b_k
- * check if the initial hash might work
+ * check if the initial hash might work 
  */
-static int inittab(tabb, blen, keys, form, complete)
+static uint32_t inittab(tabb, blen, keys, form, complete)
 bstuff   *tabb;                     /* output, list of keys with b for (a,b) */
 uint32_t       blen;                                            /* length of tabb */
 key      *keys;                               /* list of keys already hashed */
@@ -186,9 +186,8 @@ int       complete;        /* TRUE means to complete init despite collisions */
     mykey->nextb_k = tabb[mykey->b_k].list_b;
     tabb[mykey->b_k].list_b = mykey;
   }
-  
 
-
+  /* no two keys have the same (a,b) pair */
   return nocollision;
 }
 
@@ -380,7 +379,7 @@ hashform *form;                                           /* user directives */
 
 
 /* Try to apply an augmenting list */
-static int apply(tabb, tabh, tabq, blen, scramble, tail, rollback)
+static uint32_t apply(tabb, tabh, tabq, blen, scramble, tail, rollback)
 bstuff *tabb;
 hstuff *tabh;
 qstuff *tabq;
@@ -542,7 +541,7 @@ hashform *form;               /* TRUE if we should do a minimal perfect hash */
 
 
 /* find a mapping that makes this a perfect hash */
-static int perfect(tabb, tabh, tabq, blen, smax, scramble, nkeys, form, fp)
+static uint32_t perfect(tabb, tabh, tabq, blen, smax, scramble, nkeys, form, fp)
 bstuff   *tabb;
 hstuff   *tabh;
 qstuff   *tabq;
@@ -575,7 +574,6 @@ hashform *form;
 	  printf("fail to map group of size %" PRId32 " for tab size %" PRId32 "\n", j, blen);
 	  return FALSE;
 	}
-
   /* Success!  We found a perfect hash of all keys into 0..nkeys-1. */
   return TRUE;
 }
@@ -1306,21 +1304,16 @@ char **inputkeys;
 int numkeys;
 char *hash_folder;
 {
-   // int      mode_given = FALSE;
-    //int      minimal_given = FALSE;
-   // int      speed_given = FALSE;
-    hashform form;
-    //char    *c;
-    
-    /* default behavior */
-    form.mode = NORMAL_HM;
-    form.hashtype = STRING_HT;
-    form.perfect = MINIMAL_HP;
-    form.speed = SLOW_HS;
+  hashform form;
+  /* default behavior */
+  form.mode = NORMAL_HM;
+  form.hashtype = STRING_HT;
+  form.perfect = MINIMAL_HP;
+  form.speed = SLOW_HS;
 
-    /* Generate the [minimal] perfect hash */
-    int exit_code = driver(&form,inputkeys,numkeys, hash_folder);
-    if (exit_code != 0 ) return exit_code;   
+  /* Generate the [minimal] perfect hash */
+  int exit_code = driver(&form,inputkeys,numkeys, hash_folder);
+  if (exit_code != 0 ) return exit_code;   
  
-    return 0;
+  return 0;
 }

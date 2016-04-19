@@ -13,37 +13,39 @@
  --------------------------------------------------------------------
  */
 
-#ifndef STANDARD
-# include "standard.h"
-#endif
-#ifndef RECYCLE
-# include "recycle.h"
-#endif
+#include "recycle.h"
+
+#include "stdio.h"  /* for std* streams, fprintf() */
+//#include "malloc.h" /* for free() */
+#include "string.h" /* for memset() */
+#include "stdlib.h" /* for exit(), EXIT_FAILURE */
+#include "stdint.h" /* for uint* types */
+
 
 reroot *remkroot(size)
 size_t  size;
 {
-    reroot *r = (reroot *)remalloc(sizeof(reroot), "recycle.c, root");
-    r->list = (recycle *)0;
-    r->trash = (recycle *)0;
-    r->size = align(size);
-    r->logsize = RESTART;
-    r->numleft = 0;
-    return r;
+   reroot *r = (reroot *)remalloc(sizeof(reroot), "recycle.c, root");
+   r->list = (recycle *)0;
+   r->trash = (recycle *)0;
+   r->size = align(size);
+   r->logsize = RESTART;
+   r->numleft = 0;
+   return r;
 }
 
 void  refree(r)
 struct reroot *r;
 {
-    recycle *temp;
-    if (temp = r->list) while (r->list)
-    {
-        temp = r->list->next;
-        free((char *)r->list);
-        r->list = temp;
-    }
-    free((char *)r);
-    return;
+   recycle *temp;
+   if (temp = r->list) while (r->list)
+   {
+      temp = r->list->next;
+      free((char *)r->list);
+      r->list = temp;
+   }
+   free((char *)r);
+   return;
 }
 
 /* to be called from the macro renew only */
@@ -63,24 +65,24 @@ struct reroot *r;
         if (r->numleft < REMAX) ++r->logsize;
         temp = (recycle *)remalloc(sizeof(recycle) + r->numleft,
                                    "recycle.c, data");
-        temp->next = r->list;
-        r->list = temp;
-        r->numleft-=r->size;
-        temp = (recycle *)((char *)(r->list+1)+r->numleft);
-    }
-    return (char *)temp;
+      temp->next = r->list;
+      r->list = temp;
+      r->numleft-=r->size;
+      temp = (recycle *)((char *)(r->list+1)+r->numleft);
+   }
+   return (char *)temp;
 }
 
 char   *remalloc(len, purpose)
 size_t  len;
 char   *purpose;
 {
-    char *x = (char *)malloc(len);
-    if (!x)
-    {
-        fprintf(stderr, "malloc of %d failed for %s\n",
-                len, purpose);
-        exit(SUCCESS);
-    }
-    return x;
+  char *x = (char *)malloc(len);
+  if (!x)
+  {
+    fprintf(stderr, "malloc of %d failed for %s\n", 
+            len, purpose);
+    exit(SUCCESS);
+  }
+  return x;
 }

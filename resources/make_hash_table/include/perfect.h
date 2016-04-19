@@ -47,6 +47,7 @@ struct gencode
   char **line;                       /* array of text lines, 80 bytes apiece */
   /*
    * The code placed here must declare "uint32_t rsl"
+   * The code placed here must declare "uint32_t rsl" 
    * and assign it the value of the perfect hash using the function inputs.
    * Later code will be tacked on which returns rsl or manipulates it according
    * to the user directives.
@@ -155,20 +156,20 @@ int inithex(/*_ key *keys, uint32_t *alen, uint32_t *blen, uint32_t smax, uint32
 static uint32_t  permute();
 static void scrambleinit();
 static void checkdup();
-static int inittab();
+static uint32_t inittab();
 static void initnorm();
 static void initinl();
 static uint32_t initkey();
 static void duplicates();
-static int apply();
-static int augment();
-static int perfect();
-static int hash_ab();
+static uint32_t apply();
+static uint32_t augment();
+static uint32_t perfect();
+static uint32_t hash_ab();
 static void initalen();
 static void getkeys();
 static void make_h();
 static void make_c();
-static int driver();
+static uint32_t driver();
 static void usage_error(FILE *fp);
 int mphash();
 
