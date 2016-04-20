@@ -13,13 +13,13 @@ those keys into a value in 0..n-1 with no collisions.
 The perfect hash function first uses a normal hash function on the key
 to determine (a,b) such that the pair (a,b) is distinct for all
 keys, then it computes a^scramble[tab[b]] to get the final perfect hash.
-tab[] is an array of 1-byte values and scramble[] is a 256-term array of
-2-byte or 4-byte values.  If there are n keys, the length of tab[] is a
+tab[] is an array of 1-byte values and scramble[] is a 256-term array of 
+2-byte or 4-byte values.  If there are n keys, the length of tab[] is a 
 power of two between n/3 and n.
 
-I found the idea of computing distinct (a,b) values in "Practical minimal
-perfect hash functions for large databases", Fox, Heath, Chen, and Daoud,
-Communications of the ACM, January 1992.  They found the idea in Chichelli
+I found the idea of computing distinct (a,b) values in "Practical minimal 
+perfect hash functions for large databases", Fox, Heath, Chen, and Daoud, 
+Communications of the ACM, January 1992.  They found the idea in Chichelli 
 (CACM Jan 1980).  Beyond that, our methods differ.
 
 The key is hashed to a pair (a,b) where a in 0..*alen*-1 and b in
@@ -87,7 +87,7 @@ uint32_t nbits;                                 /* input, number of bits in rang
   int const5 = 1+nbits/5;
   for (i=0; i<20; ++i)
   {
-    x = (x+(x<<const2)) & mask;
+    x = (x+(x<<const2)) & mask; 
     x = (x^(x>>const3));
     x = (x+(x<<const4)) & mask;
     x = (x^(x>>const5));
@@ -153,7 +153,7 @@ hashform *form;
  * put keys in tabb according to key->b_k
  * check if the initial hash might work 
  */
-static uint32_t inittab(tabb, blen, keys, form, complete)
+static int inittab(tabb, blen, keys, form, complete)
 bstuff   *tabb;                     /* output, list of keys with b for (a,b) */
 uint32_t       blen;                                            /* length of tabb */
 key      *keys;                               /* list of keys already hashed */
@@ -170,8 +170,8 @@ int       complete;        /* TRUE means to complete init despite collisions */
   {
     key *otherkey;
 
-    for (otherkey=tabb[mykey->b_k].list_b;
-         otherkey;
+    for (otherkey=tabb[mykey->b_k].list_b; 
+         otherkey; 
          otherkey=otherkey->nextb_k)
     {
       if (mykey->a_k == otherkey->a_k)
@@ -205,7 +205,7 @@ hashform *form;
   key *mykey;
   if (mylog2(alen)+mylog2(blen) > UINT32_BITS)
   {
-    uint32_t initlev = salt*0x9e3779b9;
+    uint32_t initlev = salt*0x9e3779b9;  /* the golden ratio; an arbitrary value */
 
     for (mykey=keys; mykey; mykey=mykey->next_k)
     {
@@ -216,20 +216,20 @@ hashform *form;
       mykey->b_k = state[1]&(blen-1);
     }
     final->used = 4;
-    sprintf(final->line[0],
+    sprintf(final->line[0], 
             "  uint32_t i,state[CHECKSTATE],rsl;\n");
-    sprintf(final->line[1],
+    sprintf(final->line[1], 
             "  for (i=0; i<CHECKSTATE; ++i) state[i]=0x%" PRIx32 ";\n",initlev);
     sprintf(final->line[2],
             "  checksum(key, len, state);\n");
-    sprintf(final->line[3],
-            "  rsl = ((state[0]&0x%x)^scramble[mph_%s_tab[state[1]&0x%x]]);\n",
-            alen-1, form->low_name, blen-1);
+    sprintf(final->line[3], 
+            "  rsl = ((state[0]&0x%x)^scramble[tab[state[1]&0x%x]]);\n",
+            alen-1, blen-1);
   }
   else
   {
-    uint32_t loga = mylog2(alen);
-    uint32_t initlev = salt*0x9e3779b9;
+    uint32_t loga = mylog2(alen);                            /* log based 2 of blen */
+    uint32_t initlev = salt*0x9e3779b9;  /* the golden ratio; an arbitrary value */
 
     for (mykey=keys; mykey; mykey=mykey->next_k)
     {
@@ -246,17 +246,17 @@ hashform *form;
     }
     else if (mylog2(alen) == 0)
     {
-      sprintf(final->line[1], "  rsl = mph_%s_tab[val&0x%x];\n", form->low_name, blen-1);
+      sprintf(final->line[1], "  rsl = tab[val&0x%x];\n", blen-1);
     }
     else if (blen < USE_SCRAMBLE)
     {
-      sprintf(final->line[1], "  rsl = ((val>>%" PRId32 ") ^ mph_%s_tab[val&0x%x]);\n",
-	      UINT32_BITS-mylog2(alen), form->low_name, blen-1);
+      sprintf(final->line[1], "  rsl = ((val>>%" PRId32 ") ^ tab[val&0x%x]);\n",
+	      UINT32_BITS-mylog2(alen), blen-1);
     }
     else
     {
-      sprintf(final->line[1], "  rsl = ((val>>%" PRId32 ")^scramble[mph_%s_tab[val&0x%x]]);\n",
-	      UINT32_BITS-mylog2(alen), form->low_name, blen-1);
+      sprintf(final->line[1], "  rsl = ((val>>%" PRId32 ")^scramble[tab[val&0x%x]]);\n",
+	      UINT32_BITS-mylog2(alen), blen-1);
     }
   }
 }
@@ -271,7 +271,7 @@ uint32_t       blen;                    /* (a,b) has b in 0..blen-1, a power of 
 uint32_t       smax;                           /* range of computable hash values */
 uint32_t       salt;                     /* used to initialize the hash function */
 gencode  *final;                            /* generated code for final hash */
-hashform *form;
+hashform *form;                             /* user-provided options */
 {
   key *mykey;
   uint32_t  amask = alen-1;
@@ -298,19 +298,19 @@ hashform *form;
   }
   else if (blen < USE_SCRAMBLE)
   {
-    sprintf(final->line[0], "  uint32_t rsl = ((val & 0x%" PRIx32 ") ^ mph_%s_tab[val >> %" PRIx32 "]);\n",
-            amask, form->low_name, UINT32_BITS-blog);
+    sprintf(final->line[0], "  uint32_t rsl = ((val & 0x%" PRIx32 ") ^ tab[val >> %" PRIx32 "]);\n",
+            amask, UINT32_BITS-blog);
   }
   else
   {
-    sprintf(final->line[0], "  uint32_t rsl = ((val & 0x%" PRIx32 ") ^ scramble[mph_%s_tab[val >> %" PRIx32 "]]);\n",
-            amask, form->low_name, UINT32_BITS-blog);
+    sprintf(final->line[0], "  uint32_t rsl = ((val & 0x%" PRIx32 ") ^ scramble[tab[val >> %" PRIx32 "]]);\n",
+            amask, UINT32_BITS-blog);
   }
 }
 
 
-/*
- * Run a hash function on the key to get a and b
+/* 
+ * Run a hash function on the key to get a and b 
  * Returns:
  *   0: didn't find distinct (a,b) for all keys
  *   1: found distinct (a,b) for all keys, put keys in tabb[]
@@ -354,6 +354,8 @@ gencode  *final;                                      /* code for final hash */
     sprintf(final->line[0], "  uint32_t rsl = 0;\n");
     return 2;
   }
+
+  return inittab(tabb, blen, keys, form, FALSE);
 }
  
 
@@ -379,7 +381,7 @@ hashform *form;                                           /* user directives */
 
 
 /* Try to apply an augmenting list */
-static uint32_t apply(tabb, tabh, tabq, blen, scramble, tail, rollback)
+static int apply(tabb, tabh, tabq, blen, scramble, tail, rollback)
 bstuff *tabb;
 hstuff *tabh;
 qstuff *tabq;
@@ -442,21 +444,21 @@ int     rollback;          /* FALSE applies augmenting path, TRUE rolls back */
 augment(): Add item to the mapping.
 
 Construct a spanning tree of *b*s with *item* as root, where each
-parent can have all its hashes changed (by some new val_b) with
+parent can have all its hashes changed (by some new val_b) with 
 at most one collision, and each child is the b of that collision.
 
 I got this from Tarjan's "Data Structures and Network Algorithms".  The
-path from *item* to a *b* that can be remapped with no collision is
-an "augmenting path".  Change values of tab[b] along the path so that
+path from *item* to a *b* that can be remapped with no collision is 
+an "augmenting path".  Change values of tab[b] along the path so that 
 the unmapped key gets mapped and the unused hash value gets used.
 
-Assuming 1 key per b, if m out of n hash values are still unused,
-you should expect the transitive closure to cover n/m nodes before
+Assuming 1 key per b, if m out of n hash values are still unused, 
+you should expect the transitive closure to cover n/m nodes before 
 an unused node is found.  Sum(i=1..n)(n/i) is about nlogn, so expect
 this approach to take about nlogn time to map all single-key b's.
 -------------------------------------------------------------------------------
 */
-static int augment(tabb, tabh, tabq, blen, scramble, smax, item, nkeys,
+static int augment(tabb, tabh, tabq, blen, scramble, smax, item, nkeys, 
                    highwater, form)
 bstuff   *tabb;                                        /* stuff indexed by b */
 hstuff   *tabh;  /* which key is associated with which hash, indexed by hash */
@@ -541,7 +543,7 @@ hashform *form;               /* TRUE if we should do a minimal perfect hash */
 
 
 /* find a mapping that makes this a perfect hash */
-static uint32_t perfect(tabb, tabh, tabq, blen, smax, scramble, nkeys, form, fp)
+static int perfect(tabb, tabh, tabq, blen, smax, scramble, nkeys, form, fp)
 bstuff   *tabb;
 hstuff   *tabh;
 qstuff   *tabq;
@@ -580,10 +582,10 @@ hashform *form;
 
 
 /*
- * Simple case: user gave (a,b).  No more mixing, no guessing alen or blen.
+ * Simple case: user gave (a,b).  No more mixing, no guessing alen or blen. 
  * This assumes a,b reside in (key->a_k, key->b_k), and final->form == AB_HK.
  */
-static int hash_ab(tabb, alen, blen, salt, final,
+static int hash_ab(tabb, alen, blen, salt, final, 
             scramble, smax, keys, nkeys, form, fp)
 bstuff  **tabb;           /* output, tab[] of the perfect hash, length *blen */
 uint32_t      *alen;                 /* output, 0..alen-1 is range for a of (a,b) */
@@ -623,9 +625,11 @@ FILE     *fp;
   }
 
   /* allocate working memory */
-  *tabb = (bstuff *)malloc((size_t)(sizeof(bstuff)*(*blen)));
+  *tabb = (bstuff *)malloc((size_t)(sizeof(bstuff)*(*blen))); 
   tabq  = (qstuff *)remalloc(sizeof(qstuff)*(*blen+1), "perfect.c, tabq");
-  tabh  = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ? nkeys : *smax), "perfect.c, tabh");
+  tabh  = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ? 
+                                             nkeys : *smax),
+                            "perfect.c, tabh");
 
   /* check that (a,b) are distinct and put them in tabb indexed by b */
   (void)inittab(*tabb, *blen, keys, form, FALSE);
@@ -643,7 +647,9 @@ FILE     *fp;
       free((void *)tabh);
       *smax = *smax * 2;
       scrambleinit(scramble, *smax);
-      tabh = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ? nkeys : *smax), "perfect.c, tabh");
+      tabh = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ?
+                                                nkeys : *smax),
+                               "perfect.c, tabh");
       if (!perfect(*tabb, tabh, tabq, *blen, *smax, scramble, nkeys, form, fp))
       {
           fprintf(fp, "fatal error: Cannot find perfect hash for user (A,B) pairs\n");
@@ -668,11 +674,11 @@ FILE     *fp;
   }
   else if (*blen < USE_SCRAMBLE)
   {
-    sprintf(final->line[0], "  uint32_t rsl = (a ^ mph_%s_tab[b]);\n", form->low_name);
+    sprintf(final->line[0], "  uint32_t rsl = (a ^ tab[b]);\n");
   }
   else
   {
-    sprintf(final->line[0], "  uint32_t rsl = (a ^ scramble[mph_%s_tab[b]]);\n", form->low_name);
+    sprintf(final->line[0], "  uint32_t rsl = (a ^ scramble[tab[b]]);\n");
   }
 
   fprintf(fp, "success, found a perfect hash\n");
@@ -713,10 +719,10 @@ hashform *form;                                           /* user directives */
    * We want blen as small as possible because it is the number of bytes in
    * the huge array we must create for the perfect hash.
    *
-   * When nkey <= smax*(5/8), blen=smax/4 works much more often with
+   * When nkey <= smax*(5/8), blen=smax/4 works much more often with 
    * alen=smax/8 than with alen=smax/4.  Above smax*(5/8), blen=smax/4
    * doesn't seem to care whether alen=smax/8 or alen=smax/4.  I think it
-   * has something to do with 5/8 = 1/8 * 5.  For example examine 80000,
+   * has something to do with 5/8 = 1/8 * 5.  For example examine 80000, 
    * 85000, and 90000 keys with different values of alen.  This only matters
    * if we're doing a minimal perfect hash.
    *
@@ -811,13 +817,13 @@ hashform *form;                                           /* user directives */
   }
 }
 
-/*
- ** Try to find a perfect hash function.
- ** Return the successful initializer for the initial hash.
- ** Return 0 if no perfect hash could be found.
- */
-int findhash(tabb, alen, blen, salt, final,
-              scramble, smax, keys, nkeys, form, fp)
+/* 
+** Try to find a perfect hash function.  
+** Return the successful initializer for the initial hash. 
+** Return 0 if no perfect hash could be found.
+*/
+int findhash(tabb, alen, blen, salt, final, 
+             scramble, smax, keys, nkeys, form, fp)
 bstuff  **tabb;           /* output, tab[] of the perfect hash, length *blen */
 uint32_t      *alen;                 /* output, 0..alen-1 is range for a of (a,b) */
 uint32_t      *blen;                 /* output, 0..blen-1 is range for b of (a,b) */
@@ -841,7 +847,8 @@ FILE     *fp;                                    /* for printing to log file */
 
   /* The case of (A,B) supplied by the user is a special case */
   if (form->hashtype == AB_HT)
-     return hash_ab(tabb, alen, blen, salt, final, scramble, smax, keys, nkeys, form);
+     return hash_ab(tabb, alen, blen, salt, final,
+                    scramble, smax, keys, nkeys, form);
 
   /* guess initial values for smax, alen and blen */
   *smax = ((uint32_t)1<<mylog2(nkeys));
@@ -852,10 +859,10 @@ FILE     *fp;                                    /* for printing to log file */
   maxalen = (form->perfect == MINIMAL_HP) ? *smax/2 : *smax;
 
   /* allocate working memory */
-  *tabb = (bstuff *)remalloc((size_t)(sizeof(bstuff)*(*blen)),
+  *tabb = (bstuff *)remalloc((size_t)(sizeof(bstuff)*(*blen)), 
                              "perfect.c, tabb");
   tabq  = (qstuff *)remalloc(sizeof(qstuff)*(*blen+1), "perfect.c, tabq");
-  tabh  = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ?
+  tabh  = (hstuff *)remalloc(sizeof(hstuff)*(form->perfect == MINIMAL_HP ? 
                                              nkeys : *smax),
                             "perfect.c, tabh");
 
@@ -867,7 +874,7 @@ FILE     *fp;                                    /* for printing to log file */
   {
     uint32_t rslinit;
     /* Try to find distinct (A,B) for all keys */
-
+    
 
 
     rslinit = initkey(keys, nkeys, *tabb, *alen, *blen, *smax, trysalt,
@@ -888,7 +895,7 @@ FILE     *fp;                                    /* for printing to log file */
         if (*alen < maxalen)
         {
           *alen *= 2;
-        }
+        } 
         else if (*blen < *smax)
         {
           *blen *= 2;
@@ -913,7 +920,7 @@ FILE     *fp;                                    /* for printing to log file */
     /* Given distinct (A,B) for all keys, build a perfect hash */
     if (!perfect(*tabb, tabh, tabq, *blen, *smax, scramble, nkeys, form, fp))
     {
-      if ((form->hashtype != INT_HT && ++bad_perfect >= RETRY_PERFECT) ||
+      if ((form->hashtype != INT_HT && ++bad_perfect >= RETRY_PERFECT) || 
           (form->hashtype == INT_HT && ++bad_perfect >= RETRY_HEX))
       {
         if (*blen < *smax)
@@ -955,7 +962,7 @@ Input/output type routines
 */
 
 /* get the list of keys */
-static void getkeys(keys, nkeys, textroot, keyroot, form,inputkeys,numkeys)
+static void getkeys(keys, nkeys, textroot, keyroot, form, inputkeys, numkeys)
 key      **keys;                                         /* list of all keys */
 uint32_t       *nkeys;                                          /* number of keys */
 reroot    *textroot;                          /* get space to store key text */
@@ -980,7 +987,7 @@ int numkeys;
         
     mytext = (char *)renew(textroot);
     mykey->len_k  = (uint32_t)(strlen((char *)mykey->name_k));
-        
+      
     mykey->next_k = *keys;
     *keys = mykey;
     ++*nkeys;
@@ -1008,19 +1015,19 @@ hashform *form;
 
   FILE *f;
   f = fopen(phash_header_path, "w");
-  printf(f, "/* Perfect hash definitions */\n");
-  fprintf(f, "#ifndef MPH_%s\n", form->high_name);
-  fprintf(f, "#define MPH_%s\n", form->high_name);
+  fprintf(f, "/* Perfect hash definitions */\n");
+  fprintf(f, "#ifndef MPH\n");
+  fprintf(f, "#define MPH\n");
   fprintf(f, "\n");  
   fprintf(f, "#include \"stdint.h\"\n");
   fprintf(f, "\n");
   if (blen > 0)
   {
     if (smax <= UINT8_MAX+1 || blen >= USE_SCRAMBLE)
-      fprintf(f, "extern uint8_t mph_%s_tab[];\n", form->low_name);
+      fprintf(f, "extern uint8_t tab[];\n");
     else
     {
-      fprintf(f, "extern uint16_t mph_%s_tab[];\n", form->low_name);
+      fprintf(f, "extern uint16_t tab[];\n");
       if (blen >= USE_SCRAMBLE)
       {
 	if (smax <= UINT16_MAX+1)
@@ -1029,21 +1036,21 @@ hashform *form;
 	  fprintf(f, "extern uint32_t scramble[];\n");
       }
     }
-    fprintf(f, "#define MPH_%s_LEN 0x%" PRIx32 "  /* length of hash mapping table */\n",
-	    form->high_name, blen);
+    fprintf(f, "#define MPH_LEN 0x%" PRIx32 "  /* length of hash mapping table */\n",
+	     blen);
   }
-  fprintf(f, "#define MPH_%s_NKEYS %" PRId32 "  /* How many keys were hashed */\n",
-          form->high_name, nkeys);
-  fprintf(f, "#define MPH_%s_RANGE %" PRId32 "  /* Range any input might map to */\n",
-          form->high_name, smax);
-  fprintf(f, "#define MPH_%s_SALT 0x%.8" PRIx32 " /* internal, initialize normal hash */\n",
-          form->high_name, salt*0x9e3779b9);
+  fprintf(f, "#define MPH_NKEYS %" PRId32 "  /* How many keys were hashed */\n",
+             nkeys);
+  fprintf(f, "#define MPH_RANGE %" PRId32 "  /* Range any input might map to */\n",
+          smax);
+  fprintf(f, "#define MPH_SALT 0x%.8" PRIx32 " /* internal, initialize normal hash */\n",
+           salt*0x9e3779b9);
   fprintf(f, "\n");
-  fprintf(f, "uint32_t mph_%s_s();\n", form->low_name);
+  fprintf(f, "uint32_t phash();\n");
   fprintf(f, "\n");
-  fprintf(f, "#define mph_%s(key) mph_%s_s((key), strlen((key)))\n", form->low_name, form->low_name);
+  fprintf(f, "#define mph(key) phash((key), strlen((key)))\n");
   fprintf(f, "\n");
-  fprintf(f, "#endif  /* MPH_%s */\n", form->high_name);
+  fprintf(f, "#endif  /* MPH */\n");
   fprintf(f, "\n");
   fclose(f);
 
@@ -1103,9 +1110,9 @@ char*     hash_folder;
     fprintf(f, "/* small adjustments to _a_ to make values distinct */\n");
 
     if (smax <= UINT8_MAX+1 || blen >= USE_SCRAMBLE)
-      fprintf(f, "uint8_t mph_%s_tab[] = {\n", form->low_name);
+      fprintf(f, "uint8_t tab[] = {\n");
     else
-      fprintf(f, "uint16_t mph_%s_tab[] = {\n", form->low_name);
+      fprintf(f, "uint16_t tab[] = {\n");
 
     if (blen < 16)
     {
@@ -1153,19 +1160,19 @@ char*     hash_folder;
   switch(form->mode)
   {
   case NORMAL_HM:
-    fprintf(f, "uint32_t mph_%s_s(key, len)\n", form->low_name);
+    fprintf(f, "uint32_t phash(key, len)\n");
     fprintf(f, "char *key;\n");
     fprintf(f, "int   len;\n");
     break;
   case INLINE_HM:
   case HEX_HM:
   case DECIMAL_HM:
-    fprintf(f, "uint32_t mph_%s_s(val)\n", form->low_name);
+    fprintf(f, "uint32_t phash(val)\n");
     fprintf(f, "uint32_t val;\n");
     break;
   case AB_HM:
   case ABDEC_HM:
-    fprintf(f, "uint32_t mph_%s_s(a,b)\n", form->low_name);
+    fprintf(f, "uint32_t phash(a,b)\n");
     fprintf(f, "uint32_t a;\n");
     fprintf(f, "uint32_t b;\n");
     break;
@@ -1228,25 +1235,24 @@ char* hash_folder;
 
   int exit_code; 
   /* read in the list of keywords */
-  getkeys(&keys, &nkeys, textroot, keyroot, form,inputkeys,numkeys);
+  getkeys(&keys, &nkeys, textroot, keyroot, form, inputkeys, numkeys);
   fprintf(fp, "Read in %" PRId32 " keys\n",nkeys);
 
   /* find the hash */
-  exit_code = findhash(&tab, &alen, &blen, &salt, &final, scramble, &smax, keys, nkeys, form, fp);
+  exit_code = findhash(&tab, &alen, &blen, &salt, &final,
+                       scramble, &smax, keys, nkeys, form, fp);
   if (exit_code != 0) return exit_code;
 
   /* generate the phash.h file */
   make_h(blen, smax, nkeys, salt, form, hash_folder);
-  
+
   /* generate the phash.c file */
   make_c(tab, smax, blen, scramble, &final, form, hash_folder);
-  
+
   /*clean up log file handle */
   fclose( fp );
 
   /* clean up memory sources */
-  free(form->low_name);
-  free(form->high_name);
   refree(textroot);
   refree(keyroot);
   free((void *)tab);

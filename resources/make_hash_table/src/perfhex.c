@@ -59,7 +59,7 @@ gencode *final;
   if (a == b)
   {
     printf("fatal error: duplicate keys\n");
-    exit(SUCCESS);
+    exit(EXIT_FAILURE);
   }
 
   final->used = 1;
@@ -123,10 +123,9 @@ hashform *form;
   if (a == b || a == c || b == c)
   {
     printf("fatal error: duplicate keys\n");
-    exit(SUCCESS);
+    exit(EXIT_FAILURE);
   }
   
->>>>>>> origin/feature/64bit-hash
   /* one instruction */
   x = a&3; 
   y = b&3;
@@ -252,7 +251,7 @@ hashform *form;
   }
 
   printf("fatal error: hexthree\n");
-  exit(SUCCESS);
+  exit(EXIT_FAILURE);
 }
 
 
@@ -291,7 +290,7 @@ gencode *final;
   if (a==b || a==c || a==d || b==c || b==d || c==d)
   {
     printf("fatal error: Duplicate keys\n");
-    exit(SUCCESS);
+    exit(EXIT_FAILURE);
   }
 
   final->used = 1;
@@ -815,7 +814,7 @@ gencode *final;
   }
 
   printf("fatal error: bug in hexfour!\n");
-  exit(SUCCESS);
+  exit(EXIT_FAILURE);
   return;
 }
 

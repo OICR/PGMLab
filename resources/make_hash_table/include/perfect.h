@@ -8,6 +8,8 @@ Source is http://burtleburtle.net/bob/c/perfect.h
 ------------------------------------------------------------------------------
 */
 
+#include <stdio.h>
+
 #ifndef PERFECT
 #define PERFECT
 
@@ -156,20 +158,20 @@ int inithex(/*_ key *keys, uint32_t *alen, uint32_t *blen, uint32_t smax, uint32
 static uint32_t  permute();
 static void scrambleinit();
 static void checkdup();
-static uint32_t inittab();
+static int inittab();
 static void initnorm();
 static void initinl();
 static uint32_t initkey();
 static void duplicates();
-static uint32_t apply();
-static uint32_t augment();
-static uint32_t perfect();
-static uint32_t hash_ab();
+static int apply();
+static int augment();
+static int perfect();
+static int hash_ab();
 static void initalen();
 static void getkeys();
 static void make_h();
 static void make_c();
-static uint32_t driver();
+static int driver();
 static void usage_error(FILE *fp);
 int mphash();
 

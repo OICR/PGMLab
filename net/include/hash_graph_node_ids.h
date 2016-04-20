@@ -9,7 +9,6 @@
 #ifndef Bayinfer_hash_graph_node_IDs_h
 #define Bayinfer_hash_graph_node_IDs_h
 
-
 #endif
 #include<stdio.h>
 #include<string.h>
@@ -20,10 +19,5 @@
 #include <math.h>
 #include <sys/time.h>
 #include "perfect.h"
-
-#ifndef STANDARD
-#include "standard.h"
-#endif
-
 
 int hash_graph_node_ids(char *readreactionlogicpathways, char * hash_folder);

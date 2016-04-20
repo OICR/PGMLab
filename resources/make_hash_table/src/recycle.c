@@ -1,17 +1,17 @@
 /*
- --------------------------------------------------------------------
- By Bob Jenkins, September 1996.  recycle.c
- You may use this code in any way you wish, and it is free.  No warranty.
- 
- This manages memory for commonly-allocated structures.
- It allocates RESTART to REMAX items at a time.
- Timings have shown that, if malloc is used for every new structure,
- malloc will consume about 90% of the time in a program.  This
- module cuts down the number of mallocs by an order of magnitude.
- This also decreases memory fragmentation, and freeing structures
- only requires freeing the root.
- --------------------------------------------------------------------
- */
+--------------------------------------------------------------------
+By Bob Jenkins, September 1996.  recycle.c
+You may use this code in any way you wish, and it is free.  No warranty.
+
+This manages memory for commonly-allocated structures.
+It allocates RESTART to REMAX items at a time.
+Timings have shown that, if malloc is used for every new structure,
+  malloc will consume about 90% of the time in a program.  This
+  module cuts down the number of mallocs by an order of magnitude.
+This also decreases memory fragmentation, and freeing structures
+  only requires freeing the root.
+--------------------------------------------------------------------
+*/
 
 #include "recycle.h"
 
@@ -52,18 +52,18 @@ struct reroot *r;
 char  *renewx(r)
 struct reroot *r;
 {
-    recycle *temp;
-    if (r->trash)
-    {  /* pull a node off the trash heap */
-        temp = r->trash;
-        r->trash = temp->next;
-        (void)memset((void *)temp, 0, r->size);
-    }
-    else
-    {  /* allocate a new block of nodes */
-        r->numleft = r->size*((uint32_t)1<<r->logsize);
-        if (r->numleft < REMAX) ++r->logsize;
-        temp = (recycle *)remalloc(sizeof(recycle) + r->numleft,
+   recycle *temp;
+   if (r->trash)
+   {  /* pull a node off the trash heap */
+      temp = r->trash;
+      r->trash = temp->next;
+      (void)memset((void *)temp, 0, r->size);
+   }
+   else
+   {  /* allocate a new block of nodes */
+      r->numleft = r->size*((uint32_t)1<<r->logsize);
+      if (r->numleft < REMAX) ++r->logsize;
+      temp = (recycle *)remalloc(sizeof(recycle) + r->numleft, 
                                    "recycle.c, data");
       temp->next = r->list;
       r->list = temp;
@@ -82,7 +82,8 @@ char   *purpose;
   {
     fprintf(stderr, "malloc of %d failed for %s\n", 
             len, purpose);
-    exit(SUCCESS);
+    exit(EXIT_FAILURE);
   }
   return x;
 }
+
