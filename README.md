@@ -1,6 +1,6 @@
 #PGMLab (Probablistic Graphical Model Laboratory)
 
-PGMLab performs learning and inference in large discrete baysian networks. PGMLab is a standalone C library, which has command line and R interfaces. 
+PGMLab performs learning and inference in large discrete baysian networks. PGMLab is a standalone C library, which has command line and R interfaces. (M.H. Radfar, et al.)
 
 PGMLab developed to fulfill three goals: 
 
@@ -10,8 +10,8 @@ PGMLab developed to fulfill three goals:
 
 ##Authors
 
-   - Hossein Radfar 
-   - Adam Wright
+   - Martin H. Radfar 
+   - Adam J. Wright
 
 ##Web Site
    - Visit the PGMLab website [here](http://oicr.github.io/PGMLab)
