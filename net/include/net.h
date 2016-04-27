@@ -18,11 +18,6 @@
 #define net
 #include "perfect.h"
 
-
-#ifndef STANDARD
-#include "standard.h"
-#endif
-
 #ifndef EPS
 #define  EPS 1e-300;
 #endif
