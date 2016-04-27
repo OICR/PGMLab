@@ -23,7 +23,10 @@ while (my $reactome_map = <$fh_db_id>) {
      ($reactome_id, $entity_name, $entity_type) = split /\t/, $reactome_map;
      if ( $entity_type eq 'ReferenceGeneProduct') {
           $reactome_id_to_entity_name{$reactome_id} = $entity_name;
-          $entity_name_to_reactome_id{$entity_name} = $reactome_id;
+          unless( exists $entity_name_to_reactome_id{$entity_name}) {
+              $entity_name_to_reactome_id{$entity_name} = ();
+          }
+          push @{$entity_name_to_reactome_id{$entity_name}}, $reactome_id;
      }
 } 
 
@@ -47,10 +50,6 @@ while (my $interaction = <$fh_pi>) {
 
 my @pathway_genes = keys %pi_genes;
 
-#print Dumper $entity_name_to_reactome_id{"PIK3CA"};
-#print Dumper $pi_genes{"61074"};
-
-
 close($fh_pi);
 ######
 
@@ -73,16 +72,17 @@ while (my $row = <$fh_gistic>) {
     foreach my $genes_index (@genes_indicies) {
         $gene_list_str = $line[$genes_index];
         if($gene_list_str) {
-            $gebe_list_str =~ s/"//g; # remove surounding quotes if they exist
+            $gene_list_str =~ s/"//g; # remove surounding quotes if they exist
             my @genes = split /,/, $gene_list_str;
             @cnv_values = @line[6.. $#line];
             for my $x (0.. $#cnv_values) {
                 foreach my $gene (@genes) {
                     if ($entity_name_to_reactome_id{$gene})  {
-                         my $gene_id = $entity_name_to_reactome_id{$gene};
-                         if (exists $pi_genes{$gene_id}) {
-                            $sample_gene_values{$sample_names[$x]}{$entity_name_to_reactome_id{$gene}} = $cnv_values[$x];
-                         }
+                        foreach my $reactome_id (@{$entity_name_to_reactome_id{$gene}}) {
+                            if (exists $pi_genes{$reactome_id}) {
+                                $sample_gene_values{$sample_names[$x]}{$reactome_id} = $cnv_values[$x];
+                            }
+                        }
                     }
                 }
             }
