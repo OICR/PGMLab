@@ -77,6 +77,7 @@ if (@sample_names) {
 else {
     print "@sample_numbers";
 }
+say "";
 
 foreach my $node_name (keys %nodes) {
     print "$node_name\t";
