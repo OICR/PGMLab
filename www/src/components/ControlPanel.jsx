@@ -1,17 +1,17 @@
-import React from 'react'
+import React from 'react';
 
-import {ControlPanelLearning} from "./ControlPanelLearning.jsx"
-import {ControlPanelInference} from "./ControlPanelInference.jsx"
+import {ControlPanelLearning} from "./ControlPanelLearning.jsx";
+import {ControlPanelInference} from "./ControlPanelInference.jsx";
 
-import {UploadModal} from "./UploadModal.jsx"
+import {UploadModal} from "./UploadModal.jsx";
 
 export class ControlPanel extends React.Component {
 
     render() {
         console.log("CP", this.props)
-        var runPanel = (this.props.toggle === "Inference")? 
-                    <ControlPanelInference setActivePathway       = {this.props.setActivePathway} 
-                                           activePathway          = {this.props.activePathway} 
+        var runPanel = (this.props.toggle === "Inference")?
+                    <ControlPanelInference setActivePathway       = {this.props.setActivePathway}
+                                           activePathway          = {this.props.activePathway}
                                            selectedObservationSet = {this.props.selectedObservationSetInference}
                                            selectObservationSet   = {this.props.selectObservationSetInference}
                                            observationSets        = {this.props.observationSets}
@@ -28,8 +28,8 @@ export class ControlPanel extends React.Component {
                                            runType                = {this.props.toggle}
                                            pathways               = {this.props.pathways} />
                     :
-                    <ControlPanelLearning setActivePathway        = {this.props.setActivePathway} 
-                                          activePathway           = {this.props.activePathway} 
+                    <ControlPanelLearning setActivePathway        = {this.props.setActivePathway}
+                                          activePathway           = {this.props.activePathway}
                                           selectedObservationSet  = {this.props.selectedObservationSetLearning}
                                           selectObservationSet    = {this.props.selectObservationSetLearning}
                                           observationSets         = {this.props.observationSets}
@@ -44,9 +44,9 @@ export class ControlPanel extends React.Component {
                                           pairwiseInteractions    = {this.props.pairwiseInteractions}
                                           run                     = {this.props.runLearning}
                                           runType                 = {this.props.toggle}
-                                          pathways                = {this.props.pathways} /> 
+                                          pathways                = {this.props.pathways} />
         return (
-                <div className="col s4" style={{minWidth:"300px"}}>
+          <div>
                     <div className="section row">
                         <div className="switch col s8" >
                             <label>
@@ -56,8 +56,8 @@ export class ControlPanel extends React.Component {
                                 Learning
                             </label>
                         </div>
-                        <div className="col s2 push-s2"> 
-                            <UploadModal addNewPathway                  = {this.props.addNewPathway} 
+                        <div className="col s2 push-s2">
+                            <UploadModal addNewPathway                  = {this.props.addNewPathway}
                                          addNewObservationSet           = {this.props.addNewObservationSet}
                                          addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
                                          addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet}

@@ -1,34 +1,32 @@
 import React from 'react'
 
-import {ControlPanel} from './ControlPanel.jsx'
+import {ControlPanel} from './ControlPanel.jsx';
+import {DisplayPanel} from './DisplayPanel.jsx';
 var graphvis = require('../bin/graphvis.js');
 
 export class Body extends React.Component {
+    constructor(props) {
+        super(props)
 
-    constructor(props) { 
-        super(props)  
- 
         this.state = {"toggle": "Inference"}
 
         this.toggleClick = this.toggleClick.bind(this)
-    } 
- 
-    componentDidMount() {
-        this.props.setActivePathway(this.props.activePathway, this);
     }
-
+    componentDidMount() {
+      this.props.setActivePathway(this.props.activePathway, this);
+    }
     componentDidUpdate() {
-        $('.tooltipped').tooltip({delay: 50})
+      // $('.tooltipped').tooltip({delay: 50})
     }
     toggleClick() {
-        this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"}) 
-    } 
-
+      this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"})
+    }
     render () {
-console.log("body", this.props)
-        return (
-            <main className="row">
-                     
+      console.log("body", this.props)
+      return (
+          <main className="row">
+              {/*ControlPanel: upload and manipulate data*/}
+              <div className="col s4" style={{minWidth:"300px"}}>
                 <ControlPanel pairwiseInteractions            = {this.props.pairwiseInteractions}
                               uploadList                      = {this.props.uploadList}
                               uploadListAddFailure            = {this.props.uploadListAddFailure}
@@ -56,38 +54,19 @@ console.log("body", this.props)
                               pathways                        = {this.props.pathways}
                               activePathway                   = {this.props.activePathway}
                               setActivePathway                = {this.props.setActivePathway}
-                              addNewPathway                   = {this.props.addNewPathway} 
+                              addNewPathway                   = {this.props.addNewPathway}
                               addNewObservationSet            = {this.props.addNewObservationSet}
                               addNewEstimatedParameterSet     = {this.props.addNewEstimatedParameterSet}
                               addNewPosteriorProbabilitySet   = {this.props.addNewPosteriorProbabilitySet} />
-
-                <div className="col s8">
-                    <nav style={{"width":"800px"}} className="light-blue lighten-1">
-                        <div className="nav-wrapper">
-                          <div>
-                            <a href="#!" style={{paddingLeft: "10px"}} className="breadcrumb tooltipped"
-                                              data-position="top" data-delay="50" data-tooltip="Run Type">{this.state.toggle}</a>
-                            <a href="#!" 
-                               style={{paddingLeft: "10px"}}
-                               className="breadcrumb tooltipped"
-                                data-position="top" data-delay="50" data-tooltip="Observation Set"> {(this.toggle === "Inference")?
-                                                                                 this.props.observationSets[this.props.selectedObservationSetLearning].name :
-                                                                                 this.props.observationSets[this.props.selectedObservationSetInference].name}
-                            </a>
-                            <a href="#!" 
-                               style={{paddingLeft: "10px"}} 
-                               className="breadcrumb  tooltipped"
-                                data-position="top" data-delay="50" data-tooltip="Observation ID">{(this.state.toggle ==="inference")? 
-                                                                                 this.props.observationSets[this.props.selectedObservationSetLearning].id :
-                                                                                 this.props.observationSets[this.props.selectedObservationSetInference].id}
-                            </a>
-                           <a href="#!" style={{paddingLeft: "10px"}} className="breadcrumb tooltipped"
-                                data-position="top" data-delay="50" data-tooltip={"Active Pathway Name:"+this.props.activePathway.name}>{this.props.activePathway.name}</a>
-                          </div>
-                        </div>
-                     </nav>
-                     <div style={{"width":"800px"}} id="chart"></div>
-                 </div>
-            </main> )
+              </div>
+              <div className="col s8" style={{minWidth:"800px"}}>
+                <DisplayPanel
+                  toggle = {this.state.toggle}
+                  observationSets = {this.props.observationSets}
+                  selectedObservationSetInference = {this.props.selectedObservationSetInference}
+                  selectedObservationSetLearning = {this.props.selectedObservationSetLearning}
+                  activePathway = {this.props.activePathway} />
+              </div>
+          </main> )
     }
 }
