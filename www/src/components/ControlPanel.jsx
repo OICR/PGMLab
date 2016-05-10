@@ -17,13 +17,13 @@ export class ControlPanel extends React.Component {
   handleRunType(type){
     // Only toggle if clicking a different run type
     if (type !== this.props.toggle) {
-      console.log(type, this.props.toggle);
       this.props.toggleRunType();
     };
   }
   render() {
     // console.log("CP", this.props)
-    var runPanel = (this.props.toggle === "Inference")?
+    // var runPanel = (this.props.toggle === "Inference")?
+    let runPanel = (true) ?
       <ControlPanelInference setActivePathway       = {this.props.setActivePathway}
                              activePathway          = {this.props.activePathway}
                              selectedObservationSet = {this.props.selectedObservationSetInference}
@@ -60,13 +60,11 @@ export class ControlPanel extends React.Component {
                             runType                 = {this.props.toggle}
                             pathways                = {this.props.pathways} />;
 
-    const inferenceBtnClass=classNames({
-      // 'disabled':this.props.toggle!=="Inference",
+    const inferenceBtnClass = classNames({
       'light-blue':this.props.toggle==="Inference",
       'grey':this.props.toggle!=="Inference"
     }, ['col s6 btn-large waves-effect light-blue lighten-1 white-text']);
-    const learningBtnClass=classNames({
-      // 'disabled':this.props.toggle!=="Learning"
+    const learningBtnClass = classNames({
       'light-blue':this.props.toggle==="Learning",
       'grey':this.props.toggle!=="Learning"
     }, ['col s6 btn-large waves-effect light-blue lighten-1 white-text']);
@@ -74,7 +72,7 @@ export class ControlPanel extends React.Component {
     <div>
       <div className="row">
         <div className="col s9">
-            <a className={inferenceBtnClass} onClick={()=>{this.handleRunType("Inference")}}>Inference</a>
+          <a className={inferenceBtnClass} onClick={()=>{this.handleRunType("Inference")}}>Inference</a>
             <a className={learningBtnClass} onClick={()=>{this.handleRunType("Learning")}}>Learning</a>
         </div>
         <div className="col s3 center-align">
@@ -84,12 +82,11 @@ export class ControlPanel extends React.Component {
                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet}
                        uploadList                     = {this.props.uploadList}
                        uploadListAddFailure           = {this.props.uploadListAddFailure} />
-                     {/* <a className="modal-trigger tooltipped" data-position="top" data-delay="50" data-tooltip="Upload Data" href="#uploadModal1"><i style={{paddingRight: "20px"}} className="material-icons dp48">open_in_browser</i></a> */}
           <a className="modal-trigger btn-floating btn-large" href="#uploadModal1"><i className="material-icons">open_in_browser</i></a>
         </div>
       </div>
       <div className="divider"></div>
-           {runPanel}
+      {runPanel}
     </div>
     )
   }

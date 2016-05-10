@@ -1,22 +1,17 @@
 import React from 'react'
-
 import {SelectPathways} from './SelectPathways.jsx'
 import {SelectedPathways} from './SelectedPathways.jsx'
-
 import {SelectObservationSet} from './SelectObservationSet.jsx'
 import {ObservationSet} from './ObservationSet.jsx'
 
 export class ControlPanelLearning extends React.Component {
-
     componentDidMount() {
         $('.collapsibleLearning').collapsible({accordion : true})
     }
-
     componentDidUpdate() {
         $('.tooltipped').tooltip({delay: 50})
         $('input#input_text, textarea#textarea1').characterCounter()
     }
-
     render() {
       // console.log("ControlPanelLearning", this.props)
         var activePathway = this.props.activePathway.name
