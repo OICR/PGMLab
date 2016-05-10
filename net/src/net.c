@@ -553,7 +553,7 @@ int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, 
             normalizeCPD(factorarray[i],factorarray[i],pGraph[i+Nv].numComb,num_state,1);/*flag =1 mean convert to log */
         
         /* modify factors according to observed nodes states */
-          inputBasedModifiedCPT(pGraph,factorarray,visible_values,visibleIds,cpt,Nv,num_visibles,1);
+        inputBasedModifiedCPT(pGraph,factorarray,visible_values,visibleIds,cpt,Nv,num_visibles,1);
         
         /* do inference using LPB */
         
@@ -569,8 +569,10 @@ int doLBPinference(char* readreactionlogic, char *factorgraph, char * obs_data, 
         /* write the results in this file */
         for(i = 0;i < Nv;i++)
             for(kk=0;kk<num_state;kk++)
-                fprintf(pn,"%s \t %f\n",keys[i],pGraph[i].beliefs[kk]);
-        
+                fprintf(pn,"%s\t%f\n",keys[i],pGraph[i].beliefs[kk]);
+
+        fprintf(pn, "----------------------\n");
+
         free(visible_values);
         free(visibleIds);
     }

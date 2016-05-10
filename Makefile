@@ -5,6 +5,9 @@ CWD   = $(shell pwd)
 READLINE_VERSION = 6.3
 TERMCAP_VERSION = 1.3.1
 GSL_VERSION = 2.0
+MBED_VERSION = 2.2.1
+
+MBED_FLAGS = 
 
 ifeq ($(OS),Windows_NT)
     CCFLAGS += -D WIN32
@@ -18,6 +21,7 @@ else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
         CCFLAGS += -D LINUX
+        MBED_FLAGS += SHARED=1
     endif
     ifeq ($(UNAME_S),Darwin)
         CCFLAGS += -D OSX
@@ -46,7 +50,7 @@ pgmlab: sha gsl
 	make -C net
 
 sha: 
-	make -C external_lib/mbedtls-2.1.2
+	make -C external_lib/mbedtls-$(MBED_VERSION) $(MBED_FLAGS)
 
 gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
@@ -77,5 +81,4 @@ make uninstall:
 clean:
 	make -C net clean; \
 	make -C cli clean; \
-	make -C R/pgmlabR clean; \
-	rm bin/*
+	make -C R/pgmlabR clean;

@@ -53,7 +53,6 @@ int is_writeable(char * filepath) {
     if( ( strlen(filepath) == 0) || (strcmp(filepath, ".") == 0) || (strcmp(filepath, "/") ==0) ) {
          return FALSE;
     }
- 
     char buf[1000];
     realpath(filepath, buf); // buff should now be full filepath
     char *ts = strdup(buf);
@@ -61,27 +60,35 @@ int is_writeable(char * filepath) {
     char *filename = basename(buf);
     char *dir = (char *) dirname(buf);
 
-    if ( (access(dir, W_OK) == 0) && (strlen(filename) > 0)) 
+    if ( (access(dir, W_OK) == 0) && (strlen(filename) > 0)) {
         return TRUE;
+    }
     
     return FALSE;
 }    
 
-int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, int map) {
+int analyze_directory( char *data_dir, int em_max_iterations, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, int verbose, int map) {
     DIR *dir, *subdir;
     struct dirent *ent, *subent;
 
     if ((access(data_dir, W_OK) != 0) || ((dir = opendir(data_dir)) == NULL)) {
-        printf("make sure your data-dir flag is a path to a writable directory\n");
+        printf("ERROR: Make sure your data-dir flag is a path to a writable directory\n");
         return 1;
     }
 
+    if(verbose == 1) {
+        printf("\tStarting to analyze each sub directory found in: %s\n", data_dir);
+    }
+    
     int pi_exits, logical_fg_exists, learning_obs_exists, learnt_fg_exists, inference_obs_exists, posterior_probabilities_exists;
 
     int ret;
     while ((ent = readdir(dir)) != NULL) {
         if ((strcmp(".", (ent->d_name)) == 0) || (strcmp("..", ent->d_name) == 0 )) continue;
 
+        if (verbose == 1) {
+             printf("\t\tAnlyzing sub-directory: %s\n", ent->d_name);
+        } 
 
         int network_dir_len = strlen(data_dir) + strlen(ent->d_name) + 3;//3 = zero-terminator and slashs
         char *network_dir = malloc(network_dir_len);
@@ -149,20 +156,30 @@ int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_t
             }
         }
         
-        if (!(pi_exists == 1 )) continue;
+        if (!(pi_exists == 1 )) {
+            if (verbose == 1) {
+                printf("\t\t\tSKIPPING: unable to find pairwise interaction file (should have same name as subdirectory with the extension pi\n"); 
+            }
+            continue;
+        }
 
         if (!logical_fg_exists) {
             int exit_code = reaction_logic_to_factorgraph(pi_file, logical_fg_file, number_of_states);
             if (exit_code != 0) {
                 char * strerr = strerror(exit_code);
-                printf("Failed to generate factorgraph %s (error code: %d): %s\n", logical_fg_file, exit_code, strerr);
+                printf("ERROR: Failed to generate factorgraph %s (error code: %d): %s\n", logical_fg_file, exit_code, strerr);
             } 
             else {
-               logical_fg_exists = 1;
+                logical_fg_exists = 1;
+                printf("\t\t\tlogical.fg has been generated\n");
             }
-        }
+        } 
 
         if ((learnt_fg_exists == 0) && ( learning_obs_exists == 1) && ( logical_fg_exists ==1)) {
+            if (verbose == 1 ) {
+                printf("\t\t\tPerforming learning\n");
+            }
+ 
             int exit_code = learning_discrete_BayNet(pi_file, logical_fg_file, learning_obs_file, learnt_fg_file, number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, map, 0);
             if (exit_code != 0) {
                 char * strerr = strerror_pgmlab(exit_code);
@@ -170,22 +187,45 @@ int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_t
             } 
             else {
                 learnt_fg_exists = 1;
+                if (verbose == 1) {
+                    printf("\t\t\tlearnt.fg has been generaged\n");
+                }
             }
         }
+        else if (verbose == 1) {
+            printf("\t\t\tSkipping learning: Either learnt.fg and/or learning.obs does not exit or learnt.fg has already been generated\n"); 
+        }
         if((pp_exists == 0) && ( inference_obs_exists == 1 )) {
+            if (verbose == 1) {
+                 printf("\t\t\tPerforming inference\n");
+            }
+
             int exit_code = 0;
             if(learnt_fg_exists == 1) {
+                 if (verbose == 1) {
+                      printf("\t\t\t\tUsing learnt.fg and inference.obs (pgmlab uses learnt fg if it has been generated)\n");         
+                 }
                  exit_code = doLBPinference(pi_file, learnt_fg_file, inference_obs_file, pp_file, number_of_states);
             } 
             else if (logical_fg_exists == 1) {
+                 if (verbose == 1) {
+                      printf("\t\t\t\tUsing logical.fg and inference.obs\n");         
+                 }
                  exit_code = doLBPinference(pi_file, logical_fg_file, inference_obs_file, pp_file, number_of_states);
             }
 
             if (exit_code != 0) {
                 char * strerr = strerror_pgmlab(exit_code);
                 printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
+            } 
+            else if (verbose == 1) {
+                printf("\t\t\tPosterior probability file has been generaged\n");
             }
         }
+        else if (verbose == 1) {
+            printf("\t\t\tSkipping inference because there isn't a inference.obs file available or because the posterior probability file has already been generated\n");
+        }
+
 
         free(pi_file);
         free(logical_fg_file);
@@ -201,13 +241,12 @@ int analyze_directory( char *data_dir, int em_max_iterations, int em_number_of_t
     return 0;
 }
 
-
-int non_interactive_command(int em_max_iterations, int em_number_of_training_samples, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, char *pairwise_interactions_filepath, char *logical_factorgraph_filepath, char* estimated_parameters_filepath, char *learning_observed_data_filepath, char* inference_factorgraph_file, char *inference_observed_data_filepath, char* posterior_probabilities_filepath, int g_count, int l_count, int i_count, int logging, int MAP_flag) {
+int non_interactive_command(int em_max_iterations, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, char *pairwise_interactions_filepath, char *logical_factorgraph_filepath, char* estimated_parameters_filepath, char *learning_observed_data_filepath, char* inference_factorgraph_filepath, char *inference_observed_data_filepath, char* posterior_probabilities_filepath, int g_count, int l_count, int i_count, int logging, int MAP_flag) {
 
     if (g_count > 0) {
         printf("Generating factorgraph with:\n\t\tnumber of states\t%d\n", number_of_states);
 
-        if ( is_writeable(logical_factorgraph_filepath))  {
+        if ( is_writeable(logical_factorgraph_filepath) == 0)  {
             printf("Pathway filepath not specified correctly\n");
             return 1;
         }
@@ -215,7 +254,6 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             printf("Pairwise interactions filepath not specified correctly\n");
             return 1;
         }
-
         int exit_code = reaction_logic_to_factorgraph(pairwise_interactions_filepath, logical_factorgraph_filepath, number_of_states);
 
         if (exit_code != 0) {
@@ -242,6 +280,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         else {
             printf("\t\tMAP\t\t\t\toff\n");
         }
+
         if ( access(logical_factorgraph_filepath, R_OK)){
             printf("Logic factorgraph filepath not specified correctly\n");
             return 1;
@@ -250,7 +289,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             printf("Learning observed data filepath not specified correctly\n");
             return 1;
         }
-        if ( is_writeable(estimated_parameters_filepath) ) {
+        if ( is_writeable(estimated_parameters_filepath) == 0  ) {
             printf("Estimated Parameters filepath not specified correctly\n");
             return 1;
         }
@@ -276,7 +315,7 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
             printf("Observed data filepath not specified correctly\n");
             return 1;
         }
-        if ( is_writeable(posterior_probabilities_filepath) ) {
+        if ( is_writeable(posterior_probabilities_filepath) == 0) {
             printf("Posterior probabilities filepath not specified correctly\n");
             return 1;
         }
@@ -286,12 +325,12 @@ int non_interactive_command(int em_max_iterations, int em_number_of_training_sam
         }
 
         int exit_code;
-        if ( access(estimated_parameters_filepath, R_OK) ) {
-            printf("Estimated parameters (learnt factorgraph) filepath not specified correctly\n");
+        if ( access(inference_factorgraph_filepath, R_OK) ) {
+            printf("Inference factorgraph filepath not specified correctly\n");
             return 1;
         }
 
-        exit_code = doLBPinference(pairwise_interactions_filepath, estimated_parameters_filepath, inference_observed_data_filepath, posterior_probabilities_filepath, number_of_states);
+        exit_code = doLBPinference(pairwise_interactions_filepath, inference_factorgraph_filepath, inference_observed_data_filepath, posterior_probabilities_filepath, number_of_states);
         if (exit_code != 0) {
              char * strerr = strerror_pgmlab(exit_code);
              printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
@@ -482,7 +521,7 @@ int get_max_iterations(int * em_max_iterations) {
 int get_log_likelihood_change_limit(double * em_log_likelihood_change_limit) {
     char *ptr;
     char *str = "";
-    str = readline("\tEnter the stop criteriion log likelihood change limit [default 1e-5]: ");
+    str = readline("\tEnter the stop criterion log likelihood change limit [default 1e-5]: ");
  
     if (!*str) {
         *em_log_likelihood_change_limit = 1e-5;
@@ -505,7 +544,7 @@ int get_log_likelihood_change_limit(double * em_log_likelihood_change_limit) {
 int get_parameters_change_limit(double * em_parameters_change_limit) {
     char *ptr;
     char *str = "";
-    str = readline("\tEnter the stop criteriion parameters change limit [default 1e-3]: ");
+    str = readline("\tEnter the stop criterion parameters change limit [default 1e-3]: ");
  
     if (!*str) {
         *em_parameters_change_limit = 1e-3;
@@ -690,17 +729,17 @@ int interactive_commands() {
 
 int main(int argc, char *argv[]) {
     struct arg_lit *i, *l, *g, *interactive, *logging_on, *map_off, *inference_use_logical_factorgraph;
-    struct arg_lit *help, *version;
+    struct arg_lit *help, *version, *verbose;
     struct arg_end *end;
     struct arg_str *data_dir;
-    struct arg_int *em_max_iterations, *em_number_of_training_samples, *number_of_states;
+    struct arg_int *em_max_iterations, *number_of_states;
     struct arg_file *pairwise_interaction_file, *logical_factorgraph_file, *estimated_parameters_file, *learning_observed_data_file, *inference_observed_data_file, *inference_factorgraph_file, *posterior_probability_file;
     struct arg_dbl *em_log_likelihood_change_limit, *em_parameters_change_limit; 
 
     void *argtable[] = {
         g = arg_lit0("g", "generate-factorgraph", "Generate factor graph from reaction logic [pairwise-interaction-file, logical-factorgraph-file]"),
-        l = arg_lit0("l", "learning", "Run learning using training dataset [logical-factorgraph-file, learning-observed-data-file, learnt-factorgraph-file]"),
-        i = arg_lit0("i", "inference", "Run inference given the states of visible sets [inference-factorgaph-file, inference-observed-data-file, posterior-probability-file]"),
+        l = arg_lit0("l", "learning", "Run learning using training dataset [pairwise-interaction-file, logical-factorgraph-file, learning-observed-data-file, estimated-parameters-file]"),
+        i = arg_lit0("i", "inference", "Run inference given the states of visible sets [pairwise-interaction-file, inference-factorgaph-file, inference-observed-data-file, posterior-probability-file]"),
 
         interactive = arg_lit0(NULL, "interactive", "Interactive mode"),
 
@@ -716,11 +755,11 @@ int main(int argc, char *argv[]) {
 
         number_of_states = arg_int0(NULL, "number-of-states", NULL, "Number of states for each node (default is 2)"),
         em_max_iterations = arg_int0(NULL, "em-max-iterations", NULL , "Maximum number of iterations in the EM algorithm - used in learning (default is 4000)"),
-        em_number_of_training_samples = arg_int0(NULL, "training-samples", NULL, "Number of training samples used in expectation mimization - used in learning step(default 400)"),
         em_log_likelihood_change_limit = arg_dbl0(NULL, "log-likelihood-change-limit", NULL, "Stopping criteria: change in the ML - used in learning (default 1e-5)"),
         em_parameters_change_limit = arg_dbl0(NULL, "parameters-change-limit", NULL, "Stopping criteria: change in the parameters - used in learning (default 1e-3)"),
         logging_on = arg_lit0(NULL, "logging-on", "Set this flag if you would like the learning step to print out the status into a log file (this file will have the same name as the estimate parameters file with .log appended to the end)"), 
         map_off = arg_lit0(NULL, "maximum-a-posteriori-estimation", "Use this flag to set the MAP flag to 0 (default 1)"),
+        verbose = arg_lit0("v","verbose", "will provide verbose output when using data dir"),
         help = arg_lit0(NULL,"help", "Display help and exit"),
         version = arg_lit0(NULL,"version", "Display version information and exit"),
         end = arg_end(20)
@@ -734,7 +773,6 @@ int main(int argc, char *argv[]) {
 
     /* set any command line default values prior to parsing */
     em_max_iterations->ival[0] = 4000;
-    em_number_of_training_samples->ival[0] = 400;
     em_parameters_change_limit->dval[0] = 1e-3;
     em_log_likelihood_change_limit->dval[0] = 1e-5;
     number_of_states->ival[0] = 2; 
@@ -785,14 +823,15 @@ int main(int argc, char *argv[]) {
         printf("Starting analysis on specified directories\n");
         int i;
         for(i=0; i < data_dir->count; i++) {
-            printf("\tDirectory: %s\n", data_dir->sval[i]);
+            printf("\tAnalyzing Directory: %s\n", data_dir->sval[i]);
             exitcode = analyze_directory( data_dir->sval[i], 
                                           em_max_iterations->ival[0],
-                                          em_number_of_training_samples->ival[0], 
                                           em_log_likelihood_change_limit->dval[0], 
                                           em_parameters_change_limit->dval[0], 
                                           number_of_states->ival[0],
+                                          (verbose->count >= 1)? 1: 0,
                                           map);
+            printf("Analysis Complete\n");
        }
        goto exit;
     }
@@ -802,20 +841,19 @@ int main(int argc, char *argv[]) {
         interactive_command();
         goto exit;
     }
-
+printf("inference obs %s\n", posterior_probability_file->filename[0]);
     /* Command line parsing is complete, do the main processing */
     exitcode = non_interactive_command( em_max_iterations->ival[0],
-                                        em_number_of_training_samples->ival[0], 
                                         em_log_likelihood_change_limit->dval[0], 
                                         em_parameters_change_limit->dval[0], 
                                         number_of_states->ival[0], 
-                                        (pairwise_interaction_file->count == 1)?    pairwise_interaction_file->filename   : "", 
-                                        (logical_factorgraph_file->count == 1)?     logical_factorgraph_file->filename    : "",
-                                        (estimated_parameters_file->count == 1)?    estimated_parameters_file->filename   : "",
-                                        (learning_observed_data_file->count == 1)?  learning_observed_data_file->filename : "",
-                                        (inference_factorgraph_file->count == 1)?   inference_factorgraph_file->filename  : "",
-                                        (inference_observed_data_file->count == 1)? inference_observed_data_file->filename: "",
-                                        (posterior_probability_file->count == 1)?   posterior_probability_file->filename  : "",
+                                        (pairwise_interaction_file->count == 1)?    pairwise_interaction_file->filename[0]    : "", 
+                                        (logical_factorgraph_file->count == 1)?     logical_factorgraph_file->filename[0]     : "",
+                                        (estimated_parameters_file->count == 1)?    estimated_parameters_file->filename[0]    : "",
+                                        (learning_observed_data_file->count == 1)?  learning_observed_data_file->filename[0]  : "",
+                                        (inference_factorgraph_file->count == 1)?   inference_factorgraph_file->filename[0]   : "",
+                                        (inference_observed_data_file->count == 1)? inference_observed_data_file->filename[0] : "",
+                                        (posterior_probability_file->count == 1)?   posterior_probability_file->filename[0]   : "",
                                         g->count, l->count, i->count, logging, map);
 exit:
     /* deallocate each non-null entry in argtable[] */

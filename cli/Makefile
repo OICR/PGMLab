@@ -76,4 +76,4 @@ make uninstall:
 	rm /usr/local/bin/$(TARGET)
 
 clean:
-	rm -f $(TARGET) $(OBJECTS) 
+	rm -f $(TARGET_PATH) $(OBJECTS) 

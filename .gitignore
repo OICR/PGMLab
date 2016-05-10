@@ -19,7 +19,7 @@ makeHashTable/phash.*
 
 #binaries
 out/
-bin/
+bin/pgmlab
 lib/
 
 # Object files
@@ -35,3 +35,17 @@ lib/
 
 #OS X files
 .DS_Store
+
+
+#This is is for securing the websocket each implementation should generate it's own 
+wamp/.crossbar/pgmlab.pem
+
+#python compiled files
+*.pyc
+
+
+#node file for running process
+wamp/.crossbar/node.pid
+wamp/.crossbar/node.key
+
+www/node_modules/
