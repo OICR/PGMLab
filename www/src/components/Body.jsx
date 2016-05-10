@@ -3,6 +3,7 @@ import React from 'react'
 import {ControlPanel} from './ControlPanel.jsx';
 import {DisplayPanel} from './DisplayPanel.jsx';
 var graphvis = require('../bin/graphvis.js');
+var classNames = require("classnames");
 
 export class Body extends React.Component {
     constructor(props) {
@@ -10,7 +11,7 @@ export class Body extends React.Component {
 
         this.state = {"toggle": "Inference"}
 
-        this.toggleClick = this.toggleClick.bind(this)
+        this.toggleRunType = this.toggleRunType.bind(this);
     }
     componentDidMount() {
       this.props.setActivePathway(this.props.activePathway, this);
@@ -18,7 +19,7 @@ export class Body extends React.Component {
     componentDidUpdate() {
       // $('.tooltipped').tooltip({delay: 50})
     }
-    toggleClick() {
+    toggleRunType() {
       this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"})
     }
     render () {
@@ -30,7 +31,7 @@ export class Body extends React.Component {
                 <ControlPanel pairwiseInteractions            = {this.props.pairwiseInteractions}
                               uploadList                      = {this.props.uploadList}
                               uploadListAddFailure            = {this.props.uploadListAddFailure}
-                              toggleClick                     = {this.toggleClick}
+                              toggleRunType                   = {this.toggleRunType}
                               toggle                          = {this.state.toggle}
                               observeNode                     = {this.props.observeNode}
                               removeObservedNode              = {this.props.removeObservedNode}

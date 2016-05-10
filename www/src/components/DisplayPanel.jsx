@@ -6,7 +6,7 @@ export class DisplayPanel extends React.Component {
     super(props);
   }
   componentDidUpdate(prevProps, prevState){
-    $(".tooltipped").tooltip({delay:30});
+    $("span.tooltipped").tooltip({delay:30});
   }
   breadcrumb(label,text){
     return (
