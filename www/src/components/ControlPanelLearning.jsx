@@ -19,7 +19,6 @@ export class ControlPanelLearning extends React.Component {
              <div>
                  <div className="section">
                     <h5>Data Selection</h5>
-
                     <ul className="collapsible collapsibleLearning" data-collapsible="accordion">
                         <li>
                             <div className="collapsible-header"><i className="material-icons">visibility</i>Observation Sets</div>

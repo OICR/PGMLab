@@ -19,35 +19,28 @@ export class ControlPanelInference extends React.Component {
       <div>
         <div className="section">
           <h5>Data Selection</h5>
-          <ul className="collapsible collapsibleInference" data-collapsible="accordion">
-            <li>
-              <div className="collapsible-header"><i className="material-icons">visibility</i>Observation Sets</div>
-              <div className="collapsible-body">
-                <SelectObservationSet
-                  type                   = "inference"
-                  selectedObservationSet = {this.props.selectedObservationSet}
-                  selectObservationSet   = {this.props.selectObservationSet}
-                  observationSets        = {this.props.observationSets} />
-              </div>
-            </li>
-          </ul>
-          <ul className="collapsible collapsibleInference" data-collapsible="accordion">
-            <li>
-              <div className="collapsible-header"><i className="material-icons">group_work</i>Pathways</div>
-              <div className="collapsible-body">
-                <SelectPathways
-                  setActivePathway      = {this.props.setActivePathway}
-                  activePathway         = {this.props.activePathway}
-                  selectPathway         = {this.props.selectPathway}
-                  removeSelectedPathway = {this.props.removeSelectedPathway}
-                  selectedPathways      = {this.props.selectedPathways}
-                  pathways              = {this.props.pathways}
-                  runType               = "inference" />
-              </div>
-            </li>
-          </ul>
+          <div className="row">
+            <SelectObservationSet
+              type                   = "inference"
+              selectedObservationSet = {this.props.selectedObservationSet}
+              selectObservationSet   = {this.props.selectObservationSet}
+              observationSets        = {this.props.observationSets} />
+
+            <a className="col s6 btn modal-trigger" href="#selectObservationSetModal"><i className="material-icons">visibility</i>Observation Sets</a>
+              <SelectPathways
+                setActivePathway      = {this.props.setActivePathway}
+                activePathway         = {this.props.activePathway}
+                selectPathway         = {this.props.selectPathway}
+                removeSelectedPathway = {this.props.removeSelectedPathway}
+                selectedPathways      = {this.props.selectedPathways}
+                pathways              = {this.props.pathways}
+                runType               = "inference" />
+            <a className="col s6 btn modal-trigger" href="#selectPathwayModal"><i className="material-icons">group_work</i>Pathways</a>
+          </div>
         </div>
+
         <div className="divider"></div>
+        
         <div className="section">
           <div className="row">
               <h5 className="col s11">Selected Observation Set</h5>

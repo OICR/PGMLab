@@ -19,10 +19,18 @@ export class SelectObservationSet extends React.Component {
         })
 
         return (
-            <table style={{display:"table"}}>
-                <tbody style={{display:"block", maxHeight:"800px", overflowY: "scroll"}}>
-                    {observationSets}
-                </tbody>
-            </table>)
+          <div id="selectObservationSetModal" className="modal modal-fixed-footer">
+            <div className="modal-content">
+              <table style={{display:"table"}}>
+                  <tbody style={{display:"block", maxHeight:"800px", overflowY: "scroll"}}>
+                      {observationSets}
+                  </tbody>
+              </table>
+            </div>
+            <div className="modal-footer">
+              <a href="#!" className="modal-action modal-close btn-flat">Close</a>
+            </div>
+          </div>
+        );
     }
 }

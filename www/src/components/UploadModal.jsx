@@ -48,7 +48,7 @@ export class UploadModal extends React.Component {
                 self.props.uploadListAddFailure(file.name, "Pathway", "Second line needs to be empty");
                 return;
             }
-            
+
             let nodes = {},
                 nodesList = [],
                 links = [],
@@ -252,12 +252,15 @@ export class UploadModal extends React.Component {
         uploads.reverse().map(
           (row,i)=>{
             let id=i+1;
+            // Red row if upload error
+            const errClass=classNames({"red lighten-2":!row.success});
+            const statusIcon=(row.success) ? "done":"not_interested";
             return (
-              <tr key={i} className={classNames({"red lighten-2":!row.success})}> {/* Highlight red if upload error */}
+              <tr key={i} className={errClass}>
                 <td>{row.id}</td>
                 <td>{row.datetime}</td>
                 <td>{row.filetype}</td>
-                <td><i className="small material-icons" >{(row.success)?"done":"not_interested"}</i></td>
+                <td><i className="small material-icons">{statusIcon}</i></td>
                 <td>{row.name}</td>
                 <td>{row.comment}</td>
               </tr>
@@ -269,7 +272,7 @@ export class UploadModal extends React.Component {
     render() {
         let uploadTable=this.uploadTable(this.props.uploadList);
         return (
-                <div id="uploadModal1" className="modal">
+                <div id="uploadModal1" className="modal modal-fixed-footer">
                   <div className="modal-content">
                     <div className="section">
                       <h4>Upload Files</h4>

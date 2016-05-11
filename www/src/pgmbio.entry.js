@@ -16,10 +16,7 @@ var graphvis = require('./bin/graphvis.js');
 class App extends  React.Component {
     constructor (props) {
       super(props)
-      var observationSets =  [{ "id":   1,
-                                "name": "One",
-                                "observations": []
-                              }]
+      var observationSets =  [{ "id":1, "name":"One","observations":[]}];
 
       this.state = { "pathways"                         : this.props.pathways,
                       "activePathway"                   : this.props.activePathway,
@@ -27,13 +24,14 @@ class App extends  React.Component {
                       "selectedPathwaysLearning"        : [],
                       "selectedPathwaysInference"       : [],
                       "observationSets"                 : observationSets,
+                      // "observationSets"                 : [],
                       "selectedObservationSetLearning"  : 0,  // this index of the observationSet array
                       "selectedObservationSetInference" : 0,  // ''
                       "selectedObservationLearning"     : 0,  // this index of the observationSet array
                       "selectedObservationInference"    : 0,  // ''
                       "posteriorProbabilitySets"        : [],
                       "estimatedParameterSets"          : [],
-                      "pairwiseInteractions"            : this.props.pairwiseInteractions}
+                      "pairwiseInteractions"            : this.props.pairwiseInteractions }
 
       this.addNewPathway                  = this.addNewPathway.bind(this)
       this.setActivePathway               = this.setActivePathway.bind(this)
@@ -60,6 +58,7 @@ class App extends  React.Component {
     }
 
     removeSelectedPathwayInference(pathwayID) {
+      console.log("removeSelectedPathwayInference");
         let pathwayIDs = this.state.selectedPathwaysInference
         let indexOfPathwayID = (pathwayIDs.length === 0)? -1:  pathwayIDs.indexOf(pathwayID)
         if ( indexOfPathwayID !== -1) {
@@ -69,6 +68,7 @@ class App extends  React.Component {
     }
 
     selectPathwayInference(pathwayID) {
+      console.log("selectPathwayInference");
         let pathwayIDs = this.state.selectedPathwaysInference
         let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
         if (indexOfPathwayID === -1) {
@@ -78,6 +78,7 @@ class App extends  React.Component {
     }
 
     removeSelectedPathwayLearning(pathwayID) {
+      console.log("removeSelectedPathwayLearning");
         let pathwayIDs = this.state.selectedPathwaysLearning
         let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
         if ( indexOfPathwayID !== -1) {
@@ -87,6 +88,7 @@ class App extends  React.Component {
     }
 
     selectPathwayLearning(pathwayID) {
+      console.log("selectPathwayLearning");
         let pathwayIDs = this.state.selectedPathwaysLearning
         let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
         if (indexOfPathwayID === -1) {
@@ -96,6 +98,7 @@ class App extends  React.Component {
     }
 
     runInference() {
+        console.log("runInference");
         var self = this;
         connection.session.call('pgmlab.inference.run', [this.state.pairwiseInteractions.links, this.state.observedNodes, []]).then(
           function(response) {
@@ -136,6 +139,7 @@ class App extends  React.Component {
     }
 
     removeObservedNode(node) {
+      console.log("removeObservedNode");
           var observedNodes = $.grep(this.state.observedNodes, function(e){
               return e.name != node.name;
           });
@@ -144,6 +148,7 @@ class App extends  React.Component {
     }
 
     setNodeState(node, option) {
+      console.log("setNodeState");
         var observedNodes = this.state.observedNodes
         for (var i = 0; i < observedNodes.length; i++) {
             var observation = observedNodes[i];
@@ -159,15 +164,17 @@ class App extends  React.Component {
     }
 
     setActivePathway(pathway, session) {
+      console.log("setActivePathway");
+      let self=this;
         if (pathway.hasOwnProperty("pairwiseInteractions")) {
              graphvis.render(pathway.pairwiseInteractions)
-             this.setState({ "activePathway": pathway,
+             self.setState({ "activePathway": pathway,
                              "pairwiseInteractions": pathway.pairwiseInteractions,
                              "observedNodes": [],
                              "posteriorProbabilities": {}})
         }
         else {
-            var self = this;
+            // var self = this;
             connection.session.call('pgmlab.pathway.get', [pathway.id]).then(
               function(res) {
                    var pairwiseInteractions = res;
@@ -184,6 +191,7 @@ class App extends  React.Component {
     }
 
     uploadListAddFailure(name, filetype, comment) {
+      console.log("uploadListAddFailure");
         var uploadList = this.state.uploadList
         var guid       = App.guid()
 
@@ -210,6 +218,7 @@ class App extends  React.Component {
     }
 
     addNewPathway(name, pairwiseInteractions) {
+      console.log("addNewPathway");
         var pathways = this.state.pathways
         var guid = App.guid()
 
@@ -237,10 +246,11 @@ class App extends  React.Component {
                         "activePathway"          : pathway,
                         "pairwiseInteractions"   : pairwiseInteractions,
                         "posteriorProbabilities" : {},
-                        "uploadList"             : uploadList })
+                        "uploadList"             : uploadList});
     }
 
     addNewObservationSet(name, observations) {
+      console.log("addNewObservationSet");
         var guid = App.guid()
 
         var uploadSummary = { "datetime": App.getCurrentDateTime(),
@@ -268,6 +278,7 @@ class App extends  React.Component {
     }
 
     addNewEstimatedParameterSet(name, cpts) {
+      console.log("addNewEstimatedParameterSet");
         var guid = App.guid()
 
         var uploadSummary = { "datetime": App.getCurrentDateTime(),
@@ -292,6 +303,7 @@ class App extends  React.Component {
     }
 
     addNewPosteriorProbabilitySet(name, probabilities) {
+      console.log("addNewPosteriorProbabilitySet");
         var guid = App.guid()
 
         var uploadSummary = { "datetime": App.getCurrentDateTime(),
@@ -317,6 +329,7 @@ class App extends  React.Component {
     }
 
     selectObservationSetInference(index) {
+      console.log("selectObservationSetInference");
         var observationIndex = 0
         var nodes = this.state.observationSets[index].observations[observationIndex]
 
@@ -331,6 +344,7 @@ class App extends  React.Component {
     }
 
     selectObservationSetLearning(index) {
+      console.log("selectObservationSetLearning");
         var observationIndex = 0
         var nodes = this.state.observationSets[index].observations[observationIndex]
         console.log("selectingObsSet")
@@ -345,6 +359,7 @@ class App extends  React.Component {
     }
 
     selectObservationInference(index) {
+      console.log("selectObservationInference");
         var nodes = this.state.observationSets[this.state.selectedObservationSetInference].observations[index]
 
         graphvis.render(this.state.pairwiseInteractions)
@@ -358,6 +373,7 @@ class App extends  React.Component {
     }
 
     selectObservationLearning(index) {
+      console.log("selectObservationLearning");
         this.setState({"selectedObservationLearning": index})
     }
 
@@ -434,8 +450,10 @@ connection.onopen = function (session, details) {
    console.log("Connected");
    session.call('pgmlab.pathways.list').then(
          function (res) {
+           //Init pathway
             var pathways = res;
             var activePathway = pathways[0];
+            // 
             getPathway(session, pathways, activePathway);
          },
          function (err) {
