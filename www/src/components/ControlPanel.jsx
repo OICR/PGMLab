@@ -71,7 +71,7 @@ export class ControlPanel extends React.Component {
       <div className="row">
         <div className="col s9">
           <a className={inferenceBtnClass} onClick={()=>{this.handleRunType("Inference")}}>Inference</a>
-            <a className={learningBtnClass} onClick={()=>{this.handleRunType("Learning")}}>Learning</a>
+          <a className={learningBtnClass} onClick={()=>{this.handleRunType("Learning")}}>Learning</a>
         </div>
         <div className="col s3 center-align">
           <UploadModal addNewPathway                  = {this.props.addNewPathway}
@@ -80,7 +80,10 @@ export class ControlPanel extends React.Component {
                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet}
                        uploadList                     = {this.props.uploadList}
                        uploadListAddFailure           = {this.props.uploadListAddFailure} />
-                     <a className="modal-trigger btn-floating btn-large" href="#uploadModal1"><i className="material-icons">open_in_browser</i></a>
+                     <a className="modal-trigger btn-floating btn-large tooltipped"
+                       data-position="top" data-delay="50" data-tooltip="Upload Data Files" href="#uploadModal1">
+            <i className="material-icons">open_in_browser</i>
+          </a>
         </div>
       </div>
       <div className="divider"></div>
