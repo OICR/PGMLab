@@ -16,13 +16,8 @@ export class UploadModal extends React.Component {
         e.preventDefault()
     }
     readPathwayFile(e) {
-        console.log("readPathwayFile");
         var reader = new FileReader()
-        console.log("reader");
         var file = e.target.files[0]
-        console.log("read pathway file");
-        console.log(file);
-        console.log(e.target);
         var self = this
         reader.onload = function(upload) {
             var contents = upload.target.result
@@ -104,7 +99,6 @@ export class UploadModal extends React.Component {
         }
 
         reader.readAsText(file);
-        this.uploadNotification();
     }
     readObservationFile(e) {
         var reader = new FileReader()
@@ -259,8 +253,11 @@ export class UploadModal extends React.Component {
         uploads.reverse().map(
           (row,i)=>{
             let id=i+1;
+            if (!row.success) {
+              this.uploadNotification();
+            };
             return (
-              <tr key={i}>
+              <tr key={i} className={(!row.success)?"red lighten-3":""}> {/* Highlight red if upload error */}
                 <td>{row.id}</td>
                 <td>{row.datetime}</td>
                 <td>{row.filetype}</td>
@@ -274,7 +271,8 @@ export class UploadModal extends React.Component {
       );
     }
     uploadNotification(){
-      Materialize.toast("asd", 1000);
+      const err="Error \n ID NUMBER";
+      Materialize.toast(err, 1000);
     }
     render() {
         let uploadList=this.uploadTable(this.props.uploadList);
