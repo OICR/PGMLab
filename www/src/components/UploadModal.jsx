@@ -1,6 +1,6 @@
 import React from 'react'
-
-var Dropzone = require('react-dropzone')
+var Dropzone=require('react-dropzone');
+var classNames=require("classnames");
 
 export class UploadModal extends React.Component {
     constructor(props) {
@@ -253,11 +253,8 @@ export class UploadModal extends React.Component {
         uploads.reverse().map(
           (row,i)=>{
             let id=i+1;
-            if (!row.success) {
-              this.uploadNotification();
-            };
             return (
-              <tr key={i} className={(!row.success)?"red lighten-3":""}> {/* Highlight red if upload error */}
+              <tr key={i} className={classNames({"red lighten-2":!row.success})}> {/* Highlight red if upload error */}
                 <td>{row.id}</td>
                 <td>{row.datetime}</td>
                 <td>{row.filetype}</td>
@@ -269,10 +266,6 @@ export class UploadModal extends React.Component {
           }
         )
       );
-    }
-    uploadNotification(){
-      const err="Error \n ID NUMBER";
-      Materialize.toast(err, 1000);
     }
     render() {
         let uploadList=this.uploadTable(this.props.uploadList);
