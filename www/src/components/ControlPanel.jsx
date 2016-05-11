@@ -7,8 +7,6 @@ var classNames = require("classnames");
 export class ControlPanel extends React.Component {
   constructor(props){
     super(props);
-    console.log("CONSTRUCT PROPS");
-
     this.handleRunType = this.handleRunType.bind(this);
   }
   componentDidUpdate(){

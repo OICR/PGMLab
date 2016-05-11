@@ -16,44 +16,43 @@ export class UploadModal extends React.Component {
         e.preventDefault()
     }
     readPathwayFile(e) {
-        var reader = new FileReader()
-        var file = e.target.files[0]
-        var self = this
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        let self = this;
         reader.onload = function(upload) {
-            var contents = upload.target.result
-            var lines = contents.split("\n")||[]
-            lines.pop() // There is one additional empty element on the end because of newlines on the end of the last line
-            var numberOfLines = lines.length
+            const contents = upload.target.result;
+            let lines = contents.split("\n")||[];
+            lines.pop(); // There is one additional empty element on the end because of newlines on the end of the last line
 
+            // Error handling
+            const numberOfLines = lines.length;
             if (numberOfLines < 2) {
-                self.props.uploadListAddFailure(file.name, "Pathway", "File does not follow the correct format")
-                return
+                self.props.uploadListAddFailure(file.name, "Pathway", "File does not follow the correct format");
+                return;
             }
-
-            if (numberOfLines > (100 + 2) ) {
-                self.props.uploadListAddFailure(file.name, "Pathway", "Max number of interactions allowed is 100. Larger pathways can be done on command line")
-                return
-            }
-
-            var numberOfInteractions = lines.length - 2
+            else if (numberOfLines > (100 + 2) ) {
+                self.props.uploadListAddFailure(file.name, "Pathway", "Max number of interactions allowed is 100. Larger pathways can be done on command line");
+                return;
+            };
+            const numberOfInteractions = lines.length - 2
             if (!self.isInteger(lines[0])) {
-                self.props.uploadListAddFailure(file.name, "Pathway", "First line needs to be an integer representing the number of interactions")
-                return
+                self.props.uploadListAddFailure(file.name, "Pathway", "First line needs to be an integer representing the number of interactions");
+                return;
             }
             else if (Number(lines[0]) !== numberOfInteractions ) {
-                self.props.uploadListAddFailure(file.name, "Pathway", "Number of interactions does not match number at top of file")
-                return
+                self.props.uploadListAddFailure(file.name, "Pathway", "Number of interactions does not match number at top of file");
+                return;
             }
             else if (lines[1] !== "") {
                 console.log("second line", lines[1])
-                self.props.uploadListAddFailure(file.name, "Pathway", "Second line needs to be empty")
-                return
+                self.props.uploadListAddFailure(file.name, "Pathway", "Second line needs to be empty");
+                return;
             }
-
-            var nodes = {},
+            
+            let nodes = {},
                 nodesList = [],
                 links = [],
-                nodeCount = 0
+                nodeCount = 0;
             for (let i=2; i < numberOfLines; i++) {
                 var lineParts = lines[i].split("\t")
                 if (lineParts.length < 2) {
@@ -268,7 +267,7 @@ export class UploadModal extends React.Component {
       );
     }
     render() {
-        let uploadList=this.uploadTable(this.props.uploadList);
+        let uploadTable=this.uploadTable(this.props.uploadList);
         return (
                 <div id="uploadModal1" className="modal">
                   <div className="modal-content">
@@ -294,7 +293,7 @@ export class UploadModal extends React.Component {
                             <th data-field="comment">Comments</th>
                           </tr>
                         </thead>
-                        <tbody>{uploadList}</tbody>
+                        <tbody>{uploadTable}</tbody>
                       </table>
                     </div>
                   </div>

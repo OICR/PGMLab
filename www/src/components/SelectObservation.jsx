@@ -8,13 +8,13 @@ export class SelectObservation extends React.Component {
 
 
     render() {
-console.log("SO", this.props)
+// console.log("SO", this.props)
         var self = this
         var numberOfObs = this.props.observations.length
         var observations = this.props.observations.map(function(observation, i) {
               var typeKey = self.props.type.concat("observations").concat(i)
               return (
-                   <tr key={typeKey} className={(self.props.selectedObservation === i)? "pathway-item light-blue": "collection pathway-item"}> 
+                   <tr key={typeKey} className={(self.props.selectedObservation === i)? "pathway-item light-blue": "collection pathway-item"}>
                        <td style={{minWidth: "262px"}} onClick={(self.props.selectedObservation !== i)? self.props.selectObservation.bind(this, i) : ""}>
                           {i}
                        </td>

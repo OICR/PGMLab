@@ -12,13 +12,14 @@ export class Body extends React.Component {
       this.toggleRunType = this.toggleRunType.bind(this);
     }
     componentDidMount() {
+      // Init example on first mount
       this.props.setActivePathway(this.props.activePathway, this);
     }
     toggleRunType() {
       this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"})
     }
     render () {
-      console.log("body", this.props)
+      // console.log("body", this.props)
       return (
         <main className="row">
           <div className="col s4" style={{minWidth:"300px"}}>

@@ -219,7 +219,8 @@ class App extends  React.Component {
 
         pathways.push(pathway)
 
-        graphvis.render(pairwiseInteractions)
+        //
+        // graphvis.render(pairwiseInteractions)
 
         var uploadSummary = { "datetime": App.getCurrentDateTime(),
                               "id"      : guid,
@@ -365,7 +366,7 @@ class App extends  React.Component {
     }
 
     render () {
-       console.log("rendering app", this)
+       console.log("Rendering App: ", this)
         return (
             <div>
                 <Header />
