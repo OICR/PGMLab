@@ -23,36 +23,38 @@ export class SelectPathways extends React.Component {
     return (
       <div id="selectPathwayModal" className="modal modal-fixed-footer">
         <div className="modal-content">
-          <ul>
-              <li className="logo">
-                  <ul><li>
-                  <form className="pathway-filter">
-                      {/* binding the input value to state */}
-                      <input
-                       type='text'
-                       ref='filterInput'
-                       placeholder='Type to filter..'
-
-                       value={filterText}
-                       onChange={this.stateUpdate} />
-                   </form>
-                 </li></ul>
-              </li>
-              <li className="search">
-              </li>
-              <li id="side-nav-pathway-list" >
-                  <table>
+          <div className="row">
+            <div className="col s4 center-align">
+              <a className="btn waves-effect">Show All/Show Selected</a>
+            </div>
+            <div className="col s4 center-align">
+              <a className="btn waves-effect">Uncheck All</a>
+            </div>
+            <div className="col s4 center-align">
+              <a className="btn waves-effect">Check All</a>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col s12">
+              <form className="pathway-filter">
+                  {/* binding the input value to state */}
+                  <input type='text' ref='filterInput' placeholder='Type to filter..'
+                    value={filterText} onChange={this.stateUpdate} />
+               </form>
+             </div>
+          </div>
+          <div className="row">
+            <div className="col s12">
                       <PathwayNames pathways              = {this.props.pathways}
-                                    filter                = {filterText}
+                                    filterText                = {filterText}
                                     selectPathway         = {this.props.selectPathway}
                                     removeSelectedPathway = {this.props.removeSelectedPathway}
                                     selectedPathways      = {this.props.selectedPathways}
                                     activePathway         = {this.props.activePathway}
                                     runType               = {this.props.runType}
                                     setActivePathway      = {this.props.setActivePathway} />
-                  </table>
-              </li>
-          </ul>
+                                  </div>
+          </div>
         </div>
         <div className="modal-footer">
           <a href="#!" className="modal-action modal-close btn-flat">Close</a>

@@ -58,15 +58,17 @@ class App extends  React.Component {
     }
 
     removeSelectedPathwayInference(pathwayID) {
-      console.log("removeSelectedPathwayInference");
-        let pathwayIDs = this.state.selectedPathwaysInference
-        let indexOfPathwayID = (pathwayIDs.length === 0)? -1:  pathwayIDs.indexOf(pathwayID)
+      console.log("removeSelectedPathwayInference", this.state.selectedPathwaysInference);
+        let pathwayIDs = this.state.selectedPathwaysInference;
+        // let indexOfPathwayID = (pathwayIDs.length === 0)? -1:  pathwayIDs.indexOf(pathwayID)
+        let indexOfPathwayID = pathwayIDs.indexOf(pathwayID);
         if ( indexOfPathwayID !== -1) {
-          pathwayIDs.splice(indexOfPathwayID)
-          this.setState({"selectedPathwaysInference": pathwayIDs})
+          console.log(pathwayIDs, indexOfPathwayID);
+          pathwayIDs.splice(indexOfPathwayID,1);
+          console.log(pathwayIDs);
+          this.setState({"selectedPathwaysInference": pathwayIDs});
         }
     }
-
     selectPathwayInference(pathwayID) {
       console.log("selectPathwayInference");
         let pathwayIDs = this.state.selectedPathwaysInference
@@ -86,7 +88,6 @@ class App extends  React.Component {
           this.setState({"selectedPathwaysLearning": pathwayIDs})
         }
     }
-
     selectPathwayLearning(pathwayID) {
       console.log("selectPathwayLearning");
         let pathwayIDs = this.state.selectedPathwaysLearning
@@ -382,7 +383,7 @@ class App extends  React.Component {
     }
 
     render () {
-       console.log("Rendering App: ", this)
+      //  console.log("Rendering App: ", this)
         return (
             <div>
                 <Header />
@@ -453,7 +454,7 @@ connection.onopen = function (session, details) {
            //Init pathway
             var pathways = res;
             var activePathway = pathways[0];
-            // 
+            //
             getPathway(session, pathways, activePathway);
          },
          function (err) {

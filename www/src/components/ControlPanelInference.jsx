@@ -26,26 +26,30 @@ export class ControlPanelInference extends React.Component {
               selectObservationSet   = {this.props.selectObservationSet}
               observationSets        = {this.props.observationSets} />
 
-            <a className="col s6 btn modal-trigger" href="#selectObservationSetModal"><i className="material-icons">visibility</i>Observation Sets</a>
-              <SelectPathways
-                setActivePathway      = {this.props.setActivePathway}
-                activePathway         = {this.props.activePathway}
-                selectPathway         = {this.props.selectPathway}
-                removeSelectedPathway = {this.props.removeSelectedPathway}
-                selectedPathways      = {this.props.selectedPathways}
-                pathways              = {this.props.pathways}
-                runType               = "inference" />
-            <a className="col s6 btn modal-trigger" href="#selectPathwayModal"><i className="material-icons">group_work</i>Pathways</a>
+            <a className="col s6 btn modal-trigger tooltipped" href="#selectObservationSetModal" data-position="top" data-tooltip="Observation Sets">
+                <i className="material-icons">visibility</i>
+            </a>
+            <SelectPathways
+              setActivePathway      = {this.props.setActivePathway}
+              activePathway         = {this.props.activePathway}
+              selectPathway         = {this.props.selectPathway}
+              removeSelectedPathway = {this.props.removeSelectedPathway}
+              selectedPathways      = {this.props.selectedPathways}
+              pathways              = {this.props.pathways}
+              runType               = "inference" />
+              <a className="col s6 btn modal-trigger tooltipped" href="#selectPathwayModal" data-position="top" data-tooltip="Pathways">
+                <i className="material-icons">group_work</i>
+              </a>
           </div>
         </div>
 
         <div className="divider"></div>
-        
+
         <div className="section">
           <div className="row">
               <h5 className="col s11">Selected Observation Set</h5>
               <a className="btn-floating btn-small waves-effect waves-light light-blue lighten-1 col s1 tooltipped"
-                data-position="top" data-delay="50" data-tooltip="Create Observation Set">+</a>
+                data-position="top" data-tooltip="Create Observation Set">+</a>
           </div>
           <ObservationSet selectedObservationSet = {this.props.selectedObservationSet}
                           runType                = "inference"
@@ -56,7 +60,7 @@ export class ControlPanelInference extends React.Component {
                           observeNode            = {this.props.observeNode}
                           pairwiseInteractions   = {this.props.pairwiseInteractions}
                           removeObservedNode     = {this.props.removeObservedNode} />
-          <h5 className="tooltipped" data-position="top" data-delay="50" data-tooltip="These Pathways will be included when generating posterior probabilities">Selected Pathway(s)</h5>
+          <h5 className="tooltipped" data-position="top" data-tooltip="These Pathways will be included when generating posterior probabilities">Selected Pathway(s)</h5>
           <SelectedPathways pathways         = {this.props.pathways}
                             activePathway    = {this.props.activePathway}
                             setActivePathway = {this.props.setActivePathway}
