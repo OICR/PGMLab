@@ -5,6 +5,7 @@ use warnings;
 
 use autodie;
 
+use POSIX;
 use feature qw(say);
 use Data::Dumper;
 
@@ -12,6 +13,33 @@ my $copy_number_files_path = $ARGV[0];
 my $sample_list_path = $ARGV[1];
 my $pi_file_path = $ARGV[2];
 my $db_id_to_name_mapping = $ARGV[3];
+my $ploidy_filepath = $ARGV[4];
+
+#get ploidy
+
+open(my $fh_ploidy, "<", $ploidy_filepath);
+
+my $ploidy_header = <$fh_ploidy>;
+chomp $ploidy_header;
+my @ploidy_column_names = split /\t/, $ploidy_header;
+
+my $ploidy_column_index = 0;
+my %ploidy_column_map;
+foreach my $column_name (@ploidy_column_names) {
+    $ploidy_column_map{$column_name} = $ploidy_column_index;
+    $ploidy_column_index++;
+}
+
+my %donor_ploidy;
+while (my $line = <$fh_ploidy>) {
+    chomp $line;
+    my @donor = split /\t/, $line;
+    if ($donor[$ploidy_column_map{'cnv.status'}] ne 'unusable') {
+        $donor_ploidy{$donor[$ploidy_column_map{PWName}]} = int($donor[$ploidy_column_map{tumploidy}] + 0.5);
+    }
+}
+
+close($fh_ploidy);
 
 #Get the rectome ids to names; 
 open(my $fh_db_id, "<", $db_id_to_name_mapping);
@@ -124,12 +152,16 @@ foreach my $sample_name (@sample_list) {
      my $gene_count = scalar(keys %$gene_values);
 
      say $gene_count;
+     my $state;
      foreach my $gene (keys %$gene_values) {
-         my $value = $gene_values->{$gene};
-         $value = 1 if ($value == 0);
-         $value = 3 if ($value == 4);
-         $value = 3 if ($value == 5);
-         $value = 4 if ($value > 5);
-         say $gene."\t$value";
+         my $cn = $gene_values->{$gene};
+         $state= 0 if ($cn == 0);
+         $state = 1 if (($cn == 1) || ($donor_ploidy{$sample_name} == 1) ||(($cn == 4) && ($donor_ploidy{$sample_name} == 3)));
+         $state = 2 if ($cn == 2);
+         $state = 3 if ($cn == 3 && $donor_ploidy{$sample_name} == 2);
+         $state = 4 if ($cn == 4);
+         $state = 5 if ($cn == 5);
+         $state = 6 if ($cn >5);
+         say $gene."\t$state";
      }
 }
