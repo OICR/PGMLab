@@ -155,13 +155,14 @@ foreach my $sample_name (@sample_list) {
      my $state;
      foreach my $gene (keys %$gene_values) {
          my $cn = $gene_values->{$gene};
-         $state= 0 if ($cn == 0);
-         $state = 1 if (($cn == 1) || ($donor_ploidy{$sample_name} == 1) ||(($cn == 4) && ($donor_ploidy{$sample_name} == 3)));
+         $state = 0 if ($cn == 0);
+         $state = 1 if (($cn == 1) || (($cn == 3) && ($donor_ploidy{$sample_name} == 4)));
          $state = 2 if ($cn == 2);
-         $state = 3 if ($cn == 3 && $donor_ploidy{$sample_name} == 2);
+         $state = 3 if ($cn == 3 && (($donor_ploidy{$sample_name} == 1) || ($donor_ploidy{$sample_name} == 2) ||( $donor_ploidy{$sample_name} == 3 )));
          $state = 4 if ($cn == 4);
          $state = 5 if ($cn == 5);
          $state = 6 if ($cn >5);
+         unless (defined $state) {say "ERROR:$sample_name\t".$donor_ploidy{$sample_name}."\t$cn";}
          say $gene."\t$state";
      }
 }
