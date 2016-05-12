@@ -61,11 +61,11 @@ export class ControlPanel extends React.Component {
     const inferenceBtnClass = classNames({
       'light-blue':this.props.toggle==="Inference",
       'grey':this.props.toggle!=="Inference"
-    }, ['col s6 btn-large waves-effect light-blue lighten-1 white-text']);
+    }, ['col s6 btn waves-effect light-blue lighten-1 white-text']);
     const learningBtnClass = classNames({
       'light-blue':this.props.toggle==="Learning",
       'grey':this.props.toggle!=="Learning"
-    }, ['col s6 btn-large waves-effect light-blue lighten-1 white-text']);
+    }, ['col s6 btn waves-effect light-blue lighten-1 white-text']);
     return (
     <div>
       <div className="row">
@@ -80,9 +80,9 @@ export class ControlPanel extends React.Component {
                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet}
                        uploadList                     = {this.props.uploadList}
                        uploadListAddFailure           = {this.props.uploadListAddFailure} />
-                     <a className="modal-trigger btn-floating btn-large tooltipped"
+                     <a className="modal-trigger btn-floating btn tooltipped"
                        data-position="top" data-delay="50" data-tooltip="Upload Data Files" href="#uploadModal1">
-            <i className="material-icons">open_in_browser</i>
+            <i className="material-icons">file_upload</i>
           </a>
         </div>
       </div>
