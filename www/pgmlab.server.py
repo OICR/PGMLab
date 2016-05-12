@@ -18,12 +18,13 @@ import uuid
 from itertools import * # for skipping lines in a file
 import subprocess
 
+import sys # for consoling
+
 cwd = os.getcwd()
 pp = pprint.PrettyPrinter(indent=4)
 tmpDir = cwd + "/../tmp/";
 
 app = Klein()
-
 
 @app.route('/pgmlab.html')
 def home(request):
@@ -82,7 +83,7 @@ def runinference_submit(request):
     os.mkdir(runPath)
 
     numberOfStates = int(request.args.get("inferenceNumberOfStates", [0]) [0])
-    
+
     piFilepath = runPath + "pathway.pi"
     piFile = request.args["inferencePairwiseInteractionFile"][0]
     piFh = open(piFilepath, "w")
@@ -97,6 +98,7 @@ def runinference_submit(request):
     returnCode = generateFactorgraph(runPath)
     if returnCode != "0":
         #shutil.rmtree(runPath)
+        print returnCode
         request.setResponseCode(500)
         return "Could not generate Factorgraph from Pairwise Interaction File"
 
@@ -130,11 +132,13 @@ def system_call(command):
     return str(p.returncode)
 
 def generateFactorgraph(runPath):
-    command = "pgmlab --generate-factorgraph --pairwise-interaction-file=" + str(runPath) + "pathway.pi --logical-factorgraph-file=" + str(runPath) + "logical.fg --number-of-states 3"
+    # prepend '../bin' in command instead of using symlinks on install
+    command = "../bin/pgmlab --generate-factorgraph --pairwise-interaction-file=" + str(runPath) + "pathway.pi --logical-factorgraph-file=" + str(runPath) + "logical.fg --number-of-states 3"
     return system_call(command)
 
 def inferenceCommand(runPath, numberOfStates, fg="logical.fg"):
-    return system_call("pgmlab --inference --pairwise-interaction-file=" + str(runPath) + "pathway.pi --inference-factorgraph-file=" + str(runPath) + fg + " --inference-observed-data-file=" + str(runPath) + "inference.obs --posterior-probability-file=" + str(runPath) + "pathway.pp --number-of-states " + str(numberOfStates))
+    command = "../bin/pgmlab --inference --pairwise-interaction-file=" + str(runPath) + "pathway.pi --inference-factorgraph-file=" + str(runPath) + fg + " --inference-observed-data-file=" + str(runPath) + "inference.obs --posterior-probability-file=" + str(runPath) + "pathway.pp --number-of-states " + str(numberOfStates)
+    return system_call(command)
 
 def learningCommand(runPath, numberOfStates, logLikelihoodChangeLimit, emMaxIterations):
     command = "pgmlab --learning --pairwise-interaction-file=" + str(runPath) + "pathway.pi --logical-factorgraph-file=" + str(runPath) + "logical.fg --learning-observed-data-file=" + str(runPath) + "learning.obs --estimated-parameters-file=" + str(runPath) + "learnt.fg --number-of-states " + str(numberOfStates) +" --log-likelihood-change-limit=" + logLikelihoodChangeLimit + " --em-max-iterations=" + emMaxIterations

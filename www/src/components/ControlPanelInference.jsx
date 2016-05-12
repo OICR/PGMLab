@@ -18,7 +18,7 @@ export class ControlPanelInference extends React.Component {
     }
 
     render() {
-console.log("CPI", this.props)
+// console.log("CPI", this.props)
         var activePathway = this.props.activePathway.name
         return (
             <div>
@@ -53,12 +53,12 @@ console.log("CPI", this.props)
                 </div>
                 <div className="divider"></div>
                 <div className="section">
-                    <div className="row"> 
+                    <div className="row">
                         <h5 className="col s11">Selected Observation Set</h5>
                         <a className="btn-floating btn-small waves-effect waves-light light-blue lighten-1 col s1 tooltipped"
                                             data-position="top" data-delay="50" data-tooltip="Create Observation Set">+</a>
                     </div>
-                    <ObservationSet selectedObservationSet = {this.props.selectedObservationSet} 
+                    <ObservationSet selectedObservationSet = {this.props.selectedObservationSet}
                                     runType                = "inference"
                                     setNodeState           = {this.props.setNodeState}
                                     observationSets        = {this.props.observationSets}
