@@ -20,26 +20,29 @@ export class ControlPanelInference extends React.Component {
         <div className="section">
           <h5>Data Selection</h5>
           <div className="row">
-            <SelectObservationSet
-              type                   = "inference"
-              selectedObservationSet = {this.props.selectedObservationSet}
-              selectObservationSet   = {this.props.selectObservationSet}
-              observationSets        = {this.props.observationSets} />
-
-            <a className="col s6 btn modal-trigger tooltipped" href="#selectObservationSetModal" data-position="top" data-tooltip="Observation Sets">
-                <i className="material-icons">visibility</i>
-            </a>
-            <SelectPathways
-              setActivePathway      = {this.props.setActivePathway}
-              activePathway         = {this.props.activePathway}
-              selectPathway         = {this.props.selectPathway}
-              removeSelectedPathway = {this.props.removeSelectedPathway}
-              selectedPathways      = {this.props.selectedPathways}
-              pathways              = {this.props.pathways}
-              runType               = "inference" />
-              <a className="col s6 btn modal-trigger tooltipped" href="#selectPathwayModal" data-position="top" data-tooltip="Pathways">
-                <i className="material-icons">group_work</i>
+            <div className="col s6 center-align">
+              <SelectObservationSet
+                type                   = "inference"
+                selectedObservationSet = {this.props.selectedObservationSet}
+                selectObservationSet   = {this.props.selectObservationSet}
+                observationSets        = {this.props.observationSets} />
+              <a className="btn modal-trigger tooltipped" href="#selectObservationSetModal" data-position="top" data-tooltip="Observation Sets">
+                  <i className="material-icons">visibility</i>
               </a>
+            </div>
+            <div className="col s6 center-align">
+              <SelectPathways
+                setActivePathway      = {this.props.setActivePathway}
+                activePathway         = {this.props.activePathway}
+                selectPathway         = {this.props.selectPathway}
+                removeSelectedPathway = {this.props.removeSelectedPathway}
+                selectedPathways      = {this.props.selectedPathways}
+                pathways              = {this.props.pathways}
+                runType               = "inference" />
+              <a className="btn modal-trigger tooltipped" href="#selectPathwayModal" data-position="top" data-tooltip="Pathways">
+                  <i className="material-icons">group_work</i>
+              </a>
+            </div>
           </div>
         </div>
 

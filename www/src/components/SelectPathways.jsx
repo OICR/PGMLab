@@ -7,31 +7,40 @@ export class SelectPathways extends React.Component {
     super();
     this.state = {
       filterText: '',
+      filterChecked: false
     }
-    this.stateUpdate = this.stateUpdate.bind(this);
+    this.filterTextUpdate = this.filterTextUpdate.bind(this);
+    this.filterCheckedUpdate = this.filterCheckedUpdate.bind(this);
   }
-  stateUpdate(event) {
+  filterTextUpdate(event) {
       this.setState({
           filterText: event.target.value
       })
+  }
+  filterCheckedUpdate(event){
+    this.setState({
+      filterChecked: !this.state.filterChecked
+    });
   }
   componentDidupdate() {
       $('.collapsibleLearning').collapsible({accordion : true})
   }
   render () {
-    var filterText = this.state.filterText
+    // var filterText = this.state.filterText
+    // const checkedText = this.state.filterChecked ? "Show Unselected" : "Hide Unselected";
+    // console.log(checkedText);
     return (
       <div id="selectPathwayModal" className="modal modal-fixed-footer">
         <div className="modal-content">
           <div className="row">
-            <div className="col s4 center-align">
-              <a className="btn waves-effect">Show All/Show Selected</a>
+            <div className="col s6 btn waves-effect center-align" onClick={this.filterCheckedUpdate}>
+                {this.state.filterChecked ? "Show Unselected" : "Hide Unselected"}
             </div>
-            <div className="col s4 center-align">
-              <a className="btn waves-effect">Uncheck All</a>
+            <div className="col s3 center-align btn waves-effect">
+              Uncheck All
             </div>
-            <div className="col s4 center-align">
-              <a className="btn waves-effect">Check All</a>
+            <div className="col s3 center-align btn waves-effect">
+              Check All
             </div>
           </div>
           <div className="row">
@@ -39,14 +48,15 @@ export class SelectPathways extends React.Component {
               <form className="pathway-filter">
                   {/* binding the input value to state */}
                   <input type='text' ref='filterInput' placeholder='Type to filter..'
-                    value={filterText} onChange={this.stateUpdate} />
+                    value={this.state.filterText} onChange={this.filterTextUpdate} />
                </form>
              </div>
           </div>
           <div className="row">
             <div className="col s12">
                       <PathwayNames pathways              = {this.props.pathways}
-                                    filterText                = {filterText}
+                                    filterText                = {this.state.filterText}
+                                    filterChecked = {this.state.filterChecked}
                                     selectPathway         = {this.props.selectPathway}
                                     removeSelectedPathway = {this.props.removeSelectedPathway}
                                     selectedPathways      = {this.props.selectedPathways}
