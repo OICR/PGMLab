@@ -1,3 +1,5 @@
+// COMPONENT MOVED INTO SelectPathways.jsx
+
 import React from 'react'
 var classNames = require("classnames");
 

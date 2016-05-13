@@ -32,13 +32,16 @@ export class ControlPanelInference extends React.Component {
             </div>
             <div className="col s6 center-align">
               <SelectPathways
+                removeSelectedPathways={this.props.removeSelectedPathways}
+                selectPathways={this.props.selectPathways}
+
                 setActivePathway      = {this.props.setActivePathway}
                 activePathway         = {this.props.activePathway}
                 selectPathway         = {this.props.selectPathway}
                 removeSelectedPathway = {this.props.removeSelectedPathway}
                 selectedPathways      = {this.props.selectedPathways}
                 pathways              = {this.props.pathways}
-                runType               = "inference" />
+                runType               = {this.props.runType} />
               <a className="btn modal-trigger tooltipped" href="#selectPathwayModal" data-position="top" data-tooltip="Pathways">
                   <i className="material-icons">group_work</i>
               </a>

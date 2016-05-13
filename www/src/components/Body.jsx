@@ -39,6 +39,10 @@ export class Body extends React.Component {
                           observationSets                 = {this.props.observationSets}
                           runInference                    = {this.props.runInference}
                           setNodeState                    = {this.props.setNodeState}
+
+                          removeSelectedPathways = {this.props.removeSelectedPathways}
+                          selectPathways = {this.props.selectPathways}
+
                           removeSelectedPathwayInference  = {this.props.removeSelectedPathwayInference}
                           selectPathwayInference          = {this.props.selectPathwayInference}
                           selectedPathwaysInference       = {this.props.selectedPathwaysInference}

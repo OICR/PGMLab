@@ -28,6 +28,10 @@ export class ControlPanel extends React.Component {
                              selectObservationSet   = {this.props.selectObservationSetInference}
                              observationSets        = {this.props.observationSets}
                              selectPathway          = {this.props.selectPathwayInference}
+
+                             selectPathways = {this.props.selectPathways}
+                             removeSelectedPathways = {this.props.removeSelectedPathways}
+                             
                              removeSelectedPathway  = {this.props.removeSelectedPathwayInference}
                              removeObservedNode     = {this.props.removeObservednode}
                              setNodeState           = {this.props.setNodeState}
