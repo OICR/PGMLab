@@ -86,10 +86,10 @@ class App extends  React.Component {
         case "Learning":
           this.setState({"selectedPathwaysLearning": selectedPathwayIDs});
       };
-      console.log(selectedPathwayIDs.length);
+      // console.log(selectedPathwayIDs.length);
     }
     removeSelectedPathways(pathwayIDs, runType){
-      console.log("removeSelectedPathways", pathwayIDs.length, runType);
+      console.log("removeSelectedPathways");
       let selectedPathwayIDs;
       switch (runType) {
         case "Inference":
@@ -100,12 +100,21 @@ class App extends  React.Component {
           break;
       };
       // Slow for unselecting one
-      let reducedSelected = selectedPathwayIDs.reduce((remaining,pathwayID,i)=>{
-        if (!pathwayIDs.includes(pathwayID)) {
+      // let reducedSelected = selectedPathwayIDs.reduce((remaining,pathwayID,i)=>{
+      //   if (!pathwayIDs.includes(pathwayID)) {
+      //     remaining.push(pathwayID);
+      //   };
+      //   return remaining;
+      // }, []);
+      const indices = pathwayIDs.map((pathway)=>{return selectedPathwayIDs.indexOf(pathway)});
+      // console.log(indices);
+      let reducedSelected = selectedPathwayIDs.reduce((remaining,pathwayID,index)=>{
+        if (!indices.includes(index)) {
           remaining.push(pathwayID);
         };
         return remaining;
-      }, []);
+      },[]);
+      // console.log(reducedSelected);
       switch (runType) {
         case "Inference":
           this.setState({"selectedPathwaysInference": reducedSelected});
