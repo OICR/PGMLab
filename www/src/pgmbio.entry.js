@@ -43,10 +43,6 @@ class App extends  React.Component {
       this.selectPathways = this.selectPathways.bind(this);
       this.removeSelectedPathways = this.removeSelectedPathways.bind(this);
 
-      this.removeSelectedPathwayLearning  = this.removeSelectedPathwayLearning.bind(this)
-      this.selectPathwayLearning          = this.selectPathwayLearning.bind(this)
-      this.removeSelectedPathwayInference = this.removeSelectedPathwayInference.bind(this)
-      this.selectPathwayInference         = this.selectPathwayInference.bind(this)
       this.selectObservationSetLearning   = this.selectObservationSetLearning.bind(this)
       this.selectObservationSetInference  = this.selectObservationSetInference.bind(this)
       this.selectObservationLearning      = this.selectObservationLearning.bind(this)
@@ -61,6 +57,7 @@ class App extends  React.Component {
         return moment().format('MMM D, YYYY HH:mm')
     }
 
+    // For SelectPathways modal component
     selectPathways(pathwayIDs, runType){
       console.log("selectPathways", pathwayIDs.length, runType);
       let selectedPathwayIDs;
@@ -72,22 +69,21 @@ class App extends  React.Component {
           selectedPathwayIDs=this.state.selectedPathwaysLearning;
           break;
       };
-      // console.log(selectedPathwayIDs);
       for (let pathwayID of pathwayIDs) {
         if (!selectedPathwayIDs.includes(pathwayID)) {
           selectedPathwayIDs.push(pathwayID);
         };
       };
-      // console.log(selectedPathwayIDs);
       switch (runType) {
         case "Inference":
           this.setState({"selectedPathwaysInference": selectedPathwayIDs});
           break;
         case "Learning":
           this.setState({"selectedPathwaysLearning": selectedPathwayIDs});
+          break;
       };
-      // console.log(selectedPathwayIDs.length);
     }
+    // For SelectPathways modal component
     removeSelectedPathways(pathwayIDs, runType){
       console.log("removeSelectedPathways");
       let selectedPathwayIDs;
@@ -99,22 +95,13 @@ class App extends  React.Component {
           selectedPathwayIDs=this.state.selectedPathwaysLearning;
           break;
       };
-      // Slow for unselecting one
-      // let reducedSelected = selectedPathwayIDs.reduce((remaining,pathwayID,i)=>{
-      //   if (!pathwayIDs.includes(pathwayID)) {
-      //     remaining.push(pathwayID);
-      //   };
-      //   return remaining;
-      // }, []);
       const indices = pathwayIDs.map((pathway)=>{return selectedPathwayIDs.indexOf(pathway)});
-      // console.log(indices);
-      let reducedSelected = selectedPathwayIDs.reduce((remaining,pathwayID,index)=>{
+      const reducedSelected = selectedPathwayIDs.reduce((remaining,pathwayID,index)=>{
         if (!indices.includes(index)) {
           remaining.push(pathwayID);
         };
         return remaining;
       },[]);
-      // console.log(reducedSelected);
       switch (runType) {
         case "Inference":
           this.setState({"selectedPathwaysInference": reducedSelected});
@@ -123,48 +110,6 @@ class App extends  React.Component {
           this.setState({"selectedPathwaysLearning": reducedSelected});
           break;
       };
-    }
-
-    removeSelectedPathwayInference(pathwayID) {
-      console.log("removeSelectedPathwayInference", pathwayID);
-        let pathwayIDs = this.state.selectedPathwaysInference;
-        // let indexOfPathwayID = (pathwayIDs.length === 0)? -1:  pathwayIDs.indexOf(pathwayID)
-        let indexOfPathwayID = pathwayIDs.indexOf(pathwayID);
-        if ( indexOfPathwayID !== -1) {
-          // console.log(pathwayIDs, indexOfPathwayID);
-          pathwayIDs.splice(indexOfPathwayID,1);
-          // console.log(pathwayIDs);
-          this.setState({"selectedPathwaysInference": pathwayIDs});
-        }
-    }
-    selectPathwayInference(pathwayID) {
-      console.log("selectPathwayInference");
-        let pathwayIDs = this.state.selectedPathwaysInference;
-        // let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
-        // console.log(pathwayIDs.includes(pathwayID));
-        if (!pathwayIDs.includes(pathwayID)) {
-          pathwayIDs.push(pathwayID);
-          this.setState({"selectedPathwaysInference": pathwayIDs});
-        }
-    }
-
-    removeSelectedPathwayLearning(pathwayID) {
-      console.log("removeSelectedPathwayLearning");
-        let pathwayIDs = this.state.selectedPathwaysLearning
-        let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
-        if ( indexOfPathwayID !== -1) {
-          pathwayIDs.splice(indexOfPathwayID)
-          this.setState({"selectedPathwaysLearning": pathwayIDs})
-        }
-    }
-    selectPathwayLearning(pathwayID) {
-      console.log("selectPathwayLearning");
-        let pathwayIDs = this.state.selectedPathwaysLearning
-        let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
-        if (indexOfPathwayID === -1) {
-          pathwayIDs.push(pathwayID)
-          this.setState({"selectedPathwaysLearning": pathwayIDs})
-        }
     }
 
     runInference() {

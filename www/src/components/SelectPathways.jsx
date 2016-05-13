@@ -4,7 +4,7 @@ import React from 'react'
 
 export class SelectPathways extends React.Component {
   constructor (props) {
-    super();
+    super(props);
 
     this.state = {
       filterText: '', // For filtering by text input
@@ -15,52 +15,34 @@ export class SelectPathways extends React.Component {
     this.handleSelect=this.handleSelect.bind(this);
     this.handleCheckAll=this.handleCheckAll.bind(this);
     this.handleUncheckAll=this.handleUncheckAll.bind(this);
-
-  }
-  componentDidupdate() {
-      // $('.collapsibleLearning').collapsible({accordion : true})
   }
   filterTextUpdate(event) {
-      this.setState({
-          filterText: event.target.value
-      })
+      this.setState({filterText: event.target.value})
   }
   filterCheckedUpdate(event){
-    this.setState({
-      filterChecked: !this.state.filterChecked
-    });
+    this.setState({filterChecked: !this.state.filterChecked});
   }
-
 
   // For onClick event when hiding/showing all unselected pathways
   handleSelect(pathwayID){
-    let input = this.refs[pathwayID];
-    switch (input.checked) {
+    const selected = this.refs[pathwayID].checked;
+    switch (selected) {
       case true:
-        // input.checked=false;
         this.props.removeSelectedPathways([pathwayID], this.props.runType);
         break;
       case false:
-        // input.checked=true;
         this.props.selectPathways([pathwayID], this.props.runType);
         break;
     };
   }
   // For onClick event when checking all pathways
   handleCheckAll(){
-    // for (let pathway of this.props.pathways) {
-    //   this.refs[pathway.id].checked=true;
-    //   this.props.selectPathway(pathway.id);
-    // };
     const toSelect = this.props.pathways.map((pathway)=>{return pathway.id});
     this.props.selectPathways(toSelect, this.props.runType);
-    // console.log(this.props.selectedPathways);
   }
   // For onClick event when unchecking all pathways
   handleUncheckAll(){
-    // console.log(this.props.selectedPathways);
     const selected = this.props.selectedPathways;
-    // console.log(selected);
     this.props.removeSelectedPathways(selected, this.props.runType);
   }
 
@@ -92,22 +74,19 @@ export class SelectPathways extends React.Component {
     )
   }
   render () {
-    // var filterText = this.state.filterText
-    // const checkedText = this.state.filterChecked ? "Show Unselected" : "Hide Unselected";
-    // console.log(checkedText);
     return (
       <div id="selectPathwayModal" className="modal modal-fixed-footer">
         <div className="modal-content">
           <div className="row">
-            <div className="col s6 btn waves-effect center-align" onClick={this.filterCheckedUpdate}>
+            <div className="col s10 btn waves-effect center-align" onClick={this.filterCheckedUpdate}>
                 {this.state.filterChecked ? "Show Unselected" : "Hide Unselected"}
             </div>
-            <div className="col s3 center-align" onClick={this.handleCheckAll}>
+            <div className="col s1 center-align" onClick={this.handleCheckAll}>
               <a className="btn-floating waves-effect">
                 <i className="material-icons">check_box</i>
               </a>
             </div>
-            <div className="col s3 center-align" onClick={this.handleUncheckAll}>
+            <div className="col s1 center-align" onClick={this.handleUncheckAll}>
               <a className="btn-floating waves-effect">
                 <i className="material-icons">check_box_outline_blank</i>
               </a>

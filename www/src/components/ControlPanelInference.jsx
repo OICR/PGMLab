@@ -27,7 +27,7 @@ export class ControlPanelInference extends React.Component {
                 selectObservationSet   = {this.props.selectObservationSet}
                 observationSets        = {this.props.observationSets} />
               <a className="btn modal-trigger tooltipped" href="#selectObservationSetModal" data-position="top" data-tooltip="Observation Sets">
-                  <i className="material-icons">visibility</i>
+                  Observations
               </a>
             </div>
             <div className="col s6 center-align">
@@ -43,7 +43,7 @@ export class ControlPanelInference extends React.Component {
                 pathways              = {this.props.pathways}
                 runType               = {this.props.runType} />
               <a className="btn modal-trigger tooltipped" href="#selectPathwayModal" data-position="top" data-tooltip="Pathways">
-                  <i className="material-icons">group_work</i>
+                  Pathways
               </a>
             </div>
           </div>
