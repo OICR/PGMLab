@@ -14,47 +14,45 @@ import {Footer} from './components/Footer.jsx';
 var graphvis = require('./bin/graphvis.js');
 
 class App extends  React.Component {
-
     constructor (props) {
-        super(props);
-
-       var observationSets =  [{"id":   1, 
+      super(props)
+      var observationSets =  [{ "id":   1,
                                 "name": "One",
                                 "observations": []
-                               }]
+                              }]
 
-        this.state = { "pathways"                        : this.props.pathways,
-                       "activePathway"                   : this.props.activePathway,
-                       "uploadList"                      : [],
-                       "selectedPathwaysLearning"        : [],
-                       "selectedPathwaysInference"       : [],
-                       "observationSets"                 : observationSets,
-                       "selectedObservationSetLearning"  : 0,  // this index of the observationSet array
-                       "selectedObservationSetInference" : 0,  // ''
-                       "selectedObservationLearning"     : 0,  // this index of the observationSet array
-                       "selectedObservationInference"    : 0,  // ''
-                       "posteriorProbabilitySets"        : [],
-                       "estimatedParameterSets"          : [],
-                       "pairwiseInteractions"            : this.props.pairwiseInteractions}
+      this.state = { "pathways"                         : this.props.pathways,
+                      "activePathway"                   : this.props.activePathway,
+                      "uploadList"                      : [],
+                      "selectedPathwaysLearning"        : [],
+                      "selectedPathwaysInference"       : [],
+                      "observationSets"                 : observationSets,
+                      "selectedObservationSetLearning"  : 0,  // this index of the observationSet array
+                      "selectedObservationSetInference" : 0,  // ''
+                      "selectedObservationLearning"     : 0,  // this index of the observationSet array
+                      "selectedObservationInference"    : 0,  // ''
+                      "posteriorProbabilitySets"        : [],
+                      "estimatedParameterSets"          : [],
+                      "pairwiseInteractions"            : this.props.pairwiseInteractions}
 
-        this.addNewPathway                  = this.addNewPathway.bind(this)
-        this.setActivePathway               = this.setActivePathway.bind(this)
-        this.observeNode                    = this.observeNode.bind(this)
-        this.removeObservedNode             = this.removeObservedNode.bind(this)
-        this.runInference                   = this.runInference.bind(this)
-        this.setNodeState                   = this.setNodeState.bind(this)
-        this.removeSelectedPathwayLearning  = this.removeSelectedPathwayLearning.bind(this)
-        this.selectPathwayLearning          = this.selectPathwayLearning.bind(this)
-        this.removeSelectedPathwayInference = this.removeSelectedPathwayInference.bind(this)
-        this.selectPathwayInference         = this.selectPathwayInference.bind(this)
-        this.selectObservationSetLearning   = this.selectObservationSetLearning.bind(this)
-        this.selectObservationSetInference  = this.selectObservationSetInference.bind(this)
-        this.selectObservationLearning      = this.selectObservationLearning.bind(this)
-        this.selectObservationInference     = this.selectObservationInference.bind(this)
-        this.uploadListAddFailure           = this.uploadListAddFailure.bind(this)
-        this.addNewObservationSet           = this.addNewObservationSet.bind(this)
-        this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this)
-        this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this)
+      this.addNewPathway                  = this.addNewPathway.bind(this)
+      this.setActivePathway               = this.setActivePathway.bind(this)
+      this.observeNode                    = this.observeNode.bind(this)
+      this.removeObservedNode             = this.removeObservedNode.bind(this)
+      this.runInference                   = this.runInference.bind(this)
+      this.setNodeState                   = this.setNodeState.bind(this)
+      this.removeSelectedPathwayLearning  = this.removeSelectedPathwayLearning.bind(this)
+      this.selectPathwayLearning          = this.selectPathwayLearning.bind(this)
+      this.removeSelectedPathwayInference = this.removeSelectedPathwayInference.bind(this)
+      this.selectPathwayInference         = this.selectPathwayInference.bind(this)
+      this.selectObservationSetLearning   = this.selectObservationSetLearning.bind(this)
+      this.selectObservationSetInference  = this.selectObservationSetInference.bind(this)
+      this.selectObservationLearning      = this.selectObservationLearning.bind(this)
+      this.selectObservationInference     = this.selectObservationInference.bind(this)
+      this.uploadListAddFailure           = this.uploadListAddFailure.bind(this)
+      this.addNewObservationSet           = this.addNewObservationSet.bind(this)
+      this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this)
+      this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this)
     }
 
     static getCurrentDateTime() {
@@ -65,8 +63,8 @@ class App extends  React.Component {
         let pathwayIDs = this.state.selectedPathwaysInference
         let indexOfPathwayID = (pathwayIDs.length === 0)? -1:  pathwayIDs.indexOf(pathwayID)
         if ( indexOfPathwayID !== -1) {
-            pathwayIDs.splice(indexOfPathwayID)
-            this.setState({"selectedPathwaysInference": pathwayIDs})
+          pathwayIDs.splice(indexOfPathwayID)
+          this.setState({"selectedPathwaysInference": pathwayIDs})
         }
     }
 
@@ -74,8 +72,8 @@ class App extends  React.Component {
         let pathwayIDs = this.state.selectedPathwaysInference
         let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
         if (indexOfPathwayID === -1) {
-            pathwayIDs.push(pathwayID)
-            this.setState({"selectedPathwaysInference": pathwayIDs})
+          pathwayIDs.push(pathwayID)
+          this.setState({"selectedPathwaysInference": pathwayIDs})
         }
     }
 
@@ -83,8 +81,8 @@ class App extends  React.Component {
         let pathwayIDs = this.state.selectedPathwaysLearning
         let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
         if ( indexOfPathwayID !== -1) {
-            pathwayIDs.splice(indexOfPathwayID)
-            this.setState({"selectedPathwaysLearning": pathwayIDs})
+          pathwayIDs.splice(indexOfPathwayID)
+          this.setState({"selectedPathwaysLearning": pathwayIDs})
         }
     }
 
@@ -92,8 +90,8 @@ class App extends  React.Component {
         let pathwayIDs = this.state.selectedPathwaysLearning
         let indexOfPathwayID = (pathwayIDs.length === 0)? -1: pathwayIDs.indexOf(pathwayID)
         if (indexOfPathwayID === -1) {
-            pathwayIDs.push(pathwayID)
-            this.setState({"selectedPathwaysLearning": pathwayIDs})
+          pathwayIDs.push(pathwayID)
+          this.setState({"selectedPathwaysLearning": pathwayIDs})
         }
     }
 
@@ -101,49 +99,45 @@ class App extends  React.Component {
         var self = this;
         connection.session.call('pgmlab.inference.run', [this.state.pairwiseInteractions.links, this.state.observedNodes, []]).then(
           function(response) {
-               self.setState({"posteriorProbabilities": response["posteriorProbabilities"]})
-               graphvis.addPosteriorProbabilities(self.state.posteriorProbabilities);
+            self.setState({"posteriorProbabilities": response["posteriorProbabilities"]})
+            graphvis.addPosteriorProbabilities(self.state.posteriorProbabilities);
           },
           function (err) {
-              console.log("couldn't run inference", err);
+            console.log("couldn't run inference", err);
           })
     }
 
     observeNode(node, runType) {
-        console.log("observeNode", node, runType)
-        var selectedObservationSet = (runType === "inference")? this.state.selectedObservationSetInference : this.state.selectedObservationSetLearning
+      console.log("observeNode", node, runType)
+      var selectedObservationSet = (runType === "inference")? this.state.selectedObservationSetInference : this.state.selectedObservationSetLearning
       console.log("selectedObservationSet", selectedObservationSet)
-        var activeIndex = this.state.observationSets[selectedObservationSet].activeIndex
-console.log("activeIndex", activeIndex)
-        console.log("obs", selectedObservationSet.observations)
-        var activeNodes =  this.state.observationSets[selectedObservationSet].observations[activeIndex].nodes
-        
-        var found = activeNodes.some(function (el) { return el.name === node.name  })
-        if (!found) {
-            node["state"] = 1;
-            graphvis.setNodeState(node)
-console.log("activeNodes", activeNodes, node)
-            var newNodes = activeNodes.concat([node]);
-console.log("newNodes", newNodes, activeNodes)
-            var observationSets = this.state.observationSets
-            observationSets[selectedObservationSet].observations[activeIndex].nodes = $.extend( true, [], newNodes)
-
-console.log("nodes",           selectedObservationSet.observations[selectedObservationSet.activeIndex])
-            console.log("soss", observationSet)
-
-
-            if (runType ==="inference") { 
-                this.setState({"selectedObservationSetInference": observationSets})
-            }
-            else {
-                this.setState({"selectedObservationSetLearning": observationSets})
-            }
+      var activeIndex = this.state.observationSets[selectedObservationSet].activeIndex
+      console.log("activeIndex", activeIndex)
+      console.log("obs", selectedObservationSet.observations)
+      var activeNodes =  this.state.observationSets[selectedObservationSet].observations[activeIndex].nodes
+      var found = activeNodes.some(function (el) { return el.name === node.name  })
+      if (!found) {
+        node["state"] = 1;
+        graphvis.setNodeState(node)
+        console.log("activeNodes", activeNodes, node)
+        var newNodes = activeNodes.concat([node]);
+        console.log("newNodes", newNodes, activeNodes)
+        var observationSets = this.state.observationSets
+        observationSets[selectedObservationSet].observations[activeIndex].nodes = $.extend( true, [], newNodes)
+        console.log("nodes",           selectedObservationSet.observations[selectedObservationSet.activeIndex])
+        console.log("soss", observationSet)
+        if (runType ==="inference") {
+            this.setState({"selectedObservationSetInference": observationSets})
         }
+        else {
+            this.setState({"selectedObservationSetLearning": observationSets})
+        }
+      }
     }
 
     removeObservedNode(node) {
-          var observedNodes = $.grep(this.state.observedNodes, function(e){ 
-              return e.name != node.name; 
+          var observedNodes = $.grep(this.state.observedNodes, function(e){
+              return e.name != node.name;
           });
           this.setState({'observedNodes': observedNodes});
           graphvis.removeMutatedGene(node);
@@ -157,7 +151,7 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
                 observation.state = option.value
             }
         }
-        
+
         node["state"] = option.value
 
         graphvis.setNodeState(node)
@@ -171,7 +165,7 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
                              "pairwiseInteractions": pathway.pairwiseInteractions,
                              "observedNodes": [],
                              "posteriorProbabilities": {}})
-        } 
+        }
         else {
             var self = this;
             connection.session.call('pgmlab.pathway.get', [pathway.id]).then(
@@ -192,7 +186,7 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
     uploadListAddFailure(name, filetype, comment) {
         var uploadList = this.state.uploadList
         var guid       = App.guid()
- 
+
         var uploadSummary = { "datetime" : App.getCurrentDateTime(),
                               "id"       : guid,
                               "filetype" : filetype,
@@ -218,7 +212,7 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
     addNewPathway(name, pairwiseInteractions) {
         var pathways = this.state.pathways
         var guid = App.guid()
- 
+
         var pathway = { "id"                   : guid,
                         "name"                 : name,
                         "pairwiseInteractions" : pairwiseInteractions }
@@ -235,7 +229,7 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
                               "comment" : ""}
 
         var uploadList = this.state.uploadList
-        
+
         uploadList.push(uploadSummary)
 
         this.setState({ "pathways"               : pathways,
@@ -258,7 +252,7 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
         var uploadList = this.state.uploadList
         uploadList.push(uploadSummary)
 
-        var observationSet ={ "id"           : guid, 
+        var observationSet ={ "id"           : guid,
                               "name"         : name,
                               "activeIndex"  : 0,
                               "observations" : observations}
@@ -289,7 +283,7 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
                                      "name"   : name,
                                      "cpds"   : cpts }
 
-        var estimatedParameterSets = this.state.estimatedParameterSets 
+        var estimatedParameterSets = this.state.estimatedParameterSets
         estimatedParameterSets.push(estimatedParameterSet)
 
         this.setState({"uploadList"            : uploadList,
@@ -307,14 +301,14 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
                               "comment" : ""}
 
         var uploadList = this.state.uploadList
- 
+
         var posteriorProbabilitySet = {"id"     : guid,
                                        "name"   : name,
                                        "probablilies"   : probabilities }
 
-        var posteriorProbabilitySets = this.state.posteriorProbabilitySets 
+        var posteriorProbabilitySets = this.state.posteriorProbabilitySets
         posteriorProbabilitySets.push(posteriorProbabilitySet)
-        
+
         uploadList.push(uploadSummary)
 
         this.setState({"uploadList": uploadList,
@@ -338,7 +332,7 @@ console.log("nodes",           selectedObservationSet.observations[selectedObser
     selectObservationSetLearning(index) {
         var observationIndex = 0
         var nodes = this.state.observationSets[index].observations[observationIndex]
-console.log("selectingObsSet")
+        console.log("selectingObsSet")
         graphvis.render(this.state.pairwiseInteractions)
 
         for(let i = 0; i < nodes.length; i++) {
@@ -464,7 +458,7 @@ connection.onclose = function (reason, details) {
 connection.open();
 
 function init(pathways, activePathway, pairwiseInteractions) {
-    render(<App pathways={pathways} 
+    render(<App pathways={pathways}
                 activePathway={activePathway}
                 pairwiseInteractions={pairwiseInteractions}  />, document.getElementById('app'));
 }

@@ -18,18 +18,18 @@ export class ControlPanelLearning extends React.Component {
     }
 
     render() {
-console.log("ControlPanelLearning", this.props)
+      // console.log("ControlPanelLearning", this.props)
         var activePathway = this.props.activePathway.name
         return (
              <div>
                  <div className="section">
                     <h5>Data Selection</h5>
-                   
+
                     <ul className="collapsible collapsibleLearning" data-collapsible="accordion">
                         <li>
                             <div className="collapsible-header"><i className="material-icons">visibility</i>Observation Sets</div>
                             <div className="collapsible-body">
-                                <SelectObservationSet 
+                                <SelectObservationSet
                                         type                   = "learning"
                                         selectedObservationSet = {this.props.selectedObservationSet}
                                         selectObservationSet   = {this.props.selectObservationSet}
@@ -41,12 +41,12 @@ console.log("ControlPanelLearning", this.props)
                         <li>
                             <div className="collapsible-header"><i className="material-icons">group_work</i>Pathways</div>
                             <div className="collapsible-body">
-                                <SelectPathways setActivePathway      = {this.props.setActivePathway} 
-                                                activePathway         = {this.props.activePathway} 
+                                <SelectPathways setActivePathway      = {this.props.setActivePathway}
+                                                activePathway         = {this.props.activePathway}
                                                 selectPathway         = {this.props.selectPathway}
                                                 removeSelectedPathway = {this.props.removeSelectedPathway}
                                                 selectedPathways      = {this.props.selectedPathways}
-                                                pathways              = {this.props.pathways} 
+                                                pathways              = {this.props.pathways}
                                                 runType               = "learning" />
                             </div>
                         </li>
@@ -56,7 +56,7 @@ console.log("ControlPanelLearning", this.props)
                 <div className="section">
                     <div className="row">
                         <h5 className="col s11">Selected Observation Set</h5>
-                        <a className="btn-floating btn-small waves-effect waves-light light-blue lighten-1 col s1 tooltipped" 
+                        <a className="btn-floating btn-small waves-effect waves-light light-blue lighten-1 col s1 tooltipped"
                            data-position="top" data-delay="50" data-tooltip="Create Observation Set">+</a>
                     </div>
                     <ObservationSet selectedObservationSet = {this.props.selectedObservationSet}
