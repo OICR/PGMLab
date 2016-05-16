@@ -239,8 +239,8 @@ export class UploadModal extends React.Component {
     }
     uploadBtn(label,click,tooltip){
       return (
-        <form encType="multipart/form-data" className="col s3">
-          <div className="file-field input-field btn tooltipped" data-position="top" data-delay="50" data-tooltip={tooltip} style={{"width":"100%"}}>
+        <form encType="multipart/form-data" className="">
+          <div className="file-field input-field btn tooltipped col s3" data-position="top" data-delay="50" data-tooltip={tooltip}>
               <span>{label}</span>
               <input type="file" onChange={click}/>
           </div>
@@ -275,16 +275,16 @@ export class UploadModal extends React.Component {
                 <div id="uploadModal1" className="modal modal-fixed-footer">
                   <div className="modal-content">
                     <div className="section">
-                      <h4>Upload Files</h4>
+                      <h5>Upload Files</h5>
                       <div className="row">
                         {this.uploadBtn("Pathway",this.readPathwayFile.bind(this),"Upload a pairwise interaction file")}
-                        {this.uploadBtn("Observation",this.readObservationFile.bind(this),"Upload an observation file")}
+                        {this.uploadBtn("Observations",this.readObservationFile.bind(this),"Upload an observation file")}
                         {this.uploadBtn("Estimated",this.readEstimatedParametersFile.bind(this),"Upload a pre-generated estimated parameters file")}
                         {this.uploadBtn("Posterior",this.readPosteriorProbabilityFile.bind(this),"Upload a pre-generated posterior probability file")}
                       </div>
                     </div>
                     <div className="section">
-                      <h4>Uploaded Files</h4>
+                      <h5>Uploaded Files</h5>
                       <table>
                         <thead>
                           <tr>
