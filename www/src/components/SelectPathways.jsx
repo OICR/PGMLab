@@ -50,7 +50,8 @@ export class SelectPathways extends React.Component {
   pathwayListItem(pathway){
     const checked = this.props.selectedPathways.includes(pathway.id);
     return (
-      <li key={pathway.id} href="#!" className="collection-item black-text" onClick={()=>{this.handleSelect(pathway.id)}}>
+      <li key={pathway.id} href="#!" className="collection-item black-text"
+        onClick={(evt)=>{evt.preventDefault();this.handleSelect(pathway.id)}}>
         <input ref={pathway.id} id={pathway.id} type="checkbox" className="filled-in" checked={checked}/>
         <label htmlFor={pathway.id} className="black-text">{pathway.name}</label>
       </li>

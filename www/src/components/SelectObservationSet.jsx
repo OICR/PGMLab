@@ -18,7 +18,8 @@ export class SelectObservationSet extends React.Component {
     let observationSets = [... this.props.observationSets.values()].map((observationSet)=>{
       const selected = this.props.selectedObservationSet.id === observationSet.id;
       return (
-        <li key={observationSet.id} className="collection-item" onClick={()=>{this.handleSetSelect(observationSet.id)}}>
+        <li key={observationSet.id} className="collection-item"
+          onClick={(evt)=>{evt.preventDefault();this.handleSetSelect(observationSet.id)}}>
           <input ref={observationSet.id} id={observationSet.id} type="radio" checked={selected}/>
           <label htmlFor={observationSet.id}>{observationSet.name}</label>
         </li>
