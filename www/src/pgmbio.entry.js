@@ -22,16 +22,26 @@ class App extends  React.Component {
         ['someID1',{ "id":'someID1', "name":"One","observations":[]}],
         ['someID2',{ "id":'someID2', "name":"One","observations":[]}],
         ['someID3',{ "id":'someID3', "name":"One","observations":[]}],
-        ['someID4',{ "id":'someID4', "name":"One","observations":[]}]]);
+        ['someID4',{ "id":'someID4', "name":"One","observations":[]}]
+      ]);
+      let selectedObservationSet = new Map([
+        ["Inference", new Object()],
+        ["Learning", new Object()]
+      ]);
+      let selectedObservations = new Map([
+        ["Inference", new Array()], //Array of indices
+        ["Learning", new Array()]
+      ]);
 
       this.state = { "pathways"                         : this.props.pathways,
                       "activePathway"                   : this.props.activePathway,
                       "uploadList"                      : [],
                       "selectedPathwaysLearning"        : [],
                       "selectedPathwaysInference"       : [],
-                      // Make into an object
+
                       "observationSets"                 : observationSets,
-                      // "observationSets"                 : [],
+                      "selectedObservationSet": selectedObservationSet,
+                      "selectedObservations": selectedObservations,
                       // Change to object
                       "selectedObservationSetLearning"  : 0,  // this index of the observationSet array
                       "selectedObservationSetInference" : 0,  // ''
@@ -53,14 +63,16 @@ class App extends  React.Component {
       this.removeSelectedPathways = this.removeSelectedPathways.bind(this);
       this.selectObservationSet = this.selectObservationSet.bind(this);
 
-      this.selectObservationSetLearning   = this.selectObservationSetLearning.bind(this)
-      this.selectObservationSetInference  = this.selectObservationSetInference.bind(this)
-      this.selectObservationLearning      = this.selectObservationLearning.bind(this)
-      this.selectObservationInference     = this.selectObservationInference.bind(this)
+
       this.uploadListAddFailure           = this.uploadListAddFailure.bind(this)
       this.addNewObservationSet           = this.addNewObservationSet.bind(this)
       this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this)
       this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this)
+
+      this.selectObservationSetLearning   = this.selectObservationSetLearning.bind(this)
+      this.selectObservationSetInference  = this.selectObservationSetInference.bind(this)
+      this.selectObservationLearning      = this.selectObservationLearning.bind(this)
+      this.selectObservationInference     = this.selectObservationInference.bind(this)
     }
 
     static getCurrentDateTime() {
@@ -123,22 +135,43 @@ class App extends  React.Component {
     }
 
     // For SelectObservations modal component
-    selectObservationSet(observationID, runType){
-      const selectedObservationSet = this.state.observationSets.get(observationID);
-      const selectedObservations = [];
-      console.log(selectedObservationSet);
+    selectObservationSet(observationSetID, runType){
+      // const selectedObservationSet = this.state.observationSets.get(observationSetID);
+      // const selectedObservations = [];
+
+      let selectedObservationSet = this.state.selectedObservationSet;
+      selectedObservationSet.set(runType, this.state.observationSets.get(observationSetID));
+      let selectedObservations = this.state.selectedObservations;
+      selectedObservations.set(runType, []);
+      this.setState({
+        "selectedObservationSet":selectedObservationSet,
+        "selectedObservations":selectedObservations
+      });
+
+      
+      // console.log(selectedObservationSet);
+      // switch (runType) {
+      //   case "Inference":
+      //     this.setState({
+      //       "selectedObservationSetInference": selectedObservationSet,
+      //       "selectedObservationInference": selectedObservations
+      //     });
+      //     break;
+      //   case "Learning":
+      //     this.setState({
+      //       "selectedObservationSetLearning": selectedObservationSet,
+      //       "selectedObservationLearning": selectedObservations
+      //     });
+      //     break;
+      // };
+    }
+    // For SelectObservations modal component
+    selectObservations(observationIDs, runType){
+      let selectedObservations;
       switch (runType) {
         case "Inference":
-          this.setState({
-            "selectedObservationSetInference": selectedObservationSet,
-            "selectedObservationInference": selectedObservations
-          });
           break;
         case "Learning":
-          this.setState({
-            "selectedObservationSetLearning": selectedObservationSet,
-            "selectedObservationLearning": selectedObservations
-          });
           break;
       };
     }
@@ -441,7 +474,10 @@ class App extends  React.Component {
 
                       selectPathways = {this.selectPathways}
                       removeSelectedPathways = {this.removeSelectedPathways}
+
                       selectObservationSet = {this.selectObservationSet}
+                      selectedObservationSetLearning  = {this.state.selectedObservationSetLearning}
+                      selectedObservationSetInference = {this.state.selectedObservationSetInference}
 
                       removeSelectedPathwayLearning   = {this.removeSelectedPathwayLearning}
                       removeSelectedPathwayInference  = {this.removeSelectedPathwayInference}
@@ -454,8 +490,7 @@ class App extends  React.Component {
                       selectedPathwaysInference       = {this.state.selectedPathwaysInference}
                       observeNode                     = {this.observeNode}
                       removeObservedNode              = {this.removeObservedNode}
-                      selectedObservationSetLearning  = {this.state.selectedObservationSetLearning}
-                      selectedObservationSetInference = {this.state.selectedObservationSetInference}
+
                       observationSets                 = {this.state.observationSets}
                       runInference                    = {this.runInference}
                       setNodeState                    = {this.setNodeState}

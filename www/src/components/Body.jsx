@@ -30,35 +30,40 @@ export class Body extends React.Component {
                           toggle                          = {this.state.toggle}
                           observeNode                     = {this.props.observeNode}
                           removeObservedNode              = {this.props.removeObservedNode}
-                          selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}
-                          selectedObservationSetInference = {this.props.selectedObservationSetInference}
-                          selectObservationSetLearning    = {this.props.selectObservationSetLearning}
-                          selectObservationSetInference   = {this.props.selectObservationSetInference}
-                          selectedObservationInference    = {this.props.selectedObservationInference}
-                          selectedObservationLearning     = {this.props.selectedObservationLearning}
+
+
+
                           observationSets                 = {this.props.observationSets}
                           runInference                    = {this.props.runInference}
                           setNodeState                    = {this.props.setNodeState}
 
                           removeSelectedPathways = {this.props.removeSelectedPathways}
                           selectPathways = {this.props.selectPathways}
-                          selectObservationSet = {this.props.selectObservationSet}
-
-                          removeSelectedPathwayInference  = {this.props.removeSelectedPathwayInference}
-                          selectPathwayInference          = {this.props.selectPathwayInference}
                           selectedPathwaysInference       = {this.props.selectedPathwaysInference}
-                          removeSelectedPathwayLearning   = {this.props.removeSelectedPathwayLearning}
-                          selectPathwayLearning           = {this.props.selectPathwayLearning}
                           selectedPathwaysLearning        = {this.props.selectedPathwaysLearning}
-                          selectObservationInference      = {this.props.selectObservationInference}
-                          selectObservationLearning       = {this.props.selectObservationLearning}
+
+                          selectObservationSet = {this.props.selectObservationSet}
+                          selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}
+                          selectedObservationSetInference = {this.props.selectedObservationSetInference}
+                          selectedObservationInference    = {this.props.selectedObservationInference}
+                          selectedObservationLearning     = {this.props.selectedObservationLearning}
+
                           pathways                        = {this.props.pathways}
                           activePathway                   = {this.props.activePathway}
                           setActivePathway                = {this.props.setActivePathway}
                           addNewPathway                   = {this.props.addNewPathway}
                           addNewObservationSet            = {this.props.addNewObservationSet}
                           addNewEstimatedParameterSet     = {this.props.addNewEstimatedParameterSet}
-                          addNewPosteriorProbabilitySet   = {this.props.addNewPosteriorProbabilitySet} />
+                          addNewPosteriorProbabilitySet   = {this.props.addNewPosteriorProbabilitySet}
+
+                          selectObservationSetLearning    = {this.props.selectObservationSetLearning}
+                          selectObservationSetInference   = {this.props.selectObservationSetInference}
+                          selectObservationInference      = {this.props.selectObservationInference}
+                          selectObservationLearning       = {this.props.selectObservationLearning}
+                          selectPathwayInference          = {this.props.selectPathwayInference}
+                          selectPathwayLearning           = {this.props.selectPathwayLearning}
+                          removeSelectedPathwayInference  = {this.props.removeSelectedPathwayInference}
+                          removeSelectedPathwayLearning   = {this.props.removeSelectedPathwayLearning}/>
           </div>
           <div className="col s8" style={{minWidth:"800px"}}>
             <DisplayPanel
