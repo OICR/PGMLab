@@ -25,8 +25,8 @@ class App extends  React.Component {
         ['someID4',{ "id":'someID4', "name":"One","observations":[]}]
       ]);
       let selectedObservationSet = new Map([
-        ["Inference", new Object()],
-        ["Learning", new Object()]
+        ["Inference", { "id":'someID1', "name":"One","observations":[]}],
+        ["Learning", { "id":'someID1', "name":"One","observations":[]}]
       ]);
       let selectedObservations = new Map([
         ["Inference", new Array()], //Array of indices
@@ -140,30 +140,14 @@ class App extends  React.Component {
       // const selectedObservations = [];
 
       let selectedObservationSet = this.state.selectedObservationSet;
-      selectedObservationSet.set(runType, this.state.observationSets.get(observationSetID));
+      const selectedSet = this.state.observationSets.get(observationSetID);
+      selectedObservationSet.set(runType, selectedSet);
       let selectedObservations = this.state.selectedObservations;
-      selectedObservations.set(runType, []);
+      selectedObservations.set(runType, [... selectedSet.observations.keys()]); //array of numbers, not strings
       this.setState({
         "selectedObservationSet":selectedObservationSet,
         "selectedObservations":selectedObservations
       });
-
-      
-      // console.log(selectedObservationSet);
-      // switch (runType) {
-      //   case "Inference":
-      //     this.setState({
-      //       "selectedObservationSetInference": selectedObservationSet,
-      //       "selectedObservationInference": selectedObservations
-      //     });
-      //     break;
-      //   case "Learning":
-      //     this.setState({
-      //       "selectedObservationSetLearning": selectedObservationSet,
-      //       "selectedObservationLearning": selectedObservations
-      //     });
-      //     break;
-      // };
     }
     // For SelectObservations modal component
     selectObservations(observationIDs, runType){
@@ -476,6 +460,9 @@ class App extends  React.Component {
                       removeSelectedPathways = {this.removeSelectedPathways}
 
                       selectObservationSet = {this.selectObservationSet}
+                      selectedObservationSet = {this.state.selectedObservationSet}
+                      selectedObservations = {this.state.selectedObservations}
+
                       selectedObservationSetLearning  = {this.state.selectedObservationSetLearning}
                       selectedObservationSetInference = {this.state.selectedObservationSetInference}
 

@@ -43,6 +43,9 @@ export class Body extends React.Component {
                           selectedPathwaysLearning        = {this.props.selectedPathwaysLearning}
 
                           selectObservationSet = {this.props.selectObservationSet}
+                          selectedObservationSet = {this.props.selectedObservationSet}
+                          selectedObservations = {this.props.selectedObservations}
+
                           selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}
                           selectedObservationSetInference = {this.props.selectedObservationSetInference}
                           selectedObservationInference    = {this.props.selectedObservationInference}
