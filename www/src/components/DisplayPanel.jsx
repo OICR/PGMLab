@@ -19,8 +19,11 @@ export class DisplayPanel extends React.Component {
     // console.log('DISPLAYPANEL:', this.props);
     // Breadcrumb texts
     const runType=this.props.toggle;
-    const observationSet=(this.props.toggle === "Inference") ? this.props.observationSets[this.props.selectedObservationSetLearning].name : this.props.observationSets[this.props.selectedObservationSetInference].name;
-    const observationID=(this.props.toggle === "Inference")? this.props.observationSets[this.props.selectedObservationSetLearning].id : this.props.observationSets[this.props.selectedObservationSetInference].id;
+    // Change to Map
+    // const observationSet=(this.props.toggle === "Inference") ? this.props.observationSets[this.props.selectedObservationSetLearning].name : this.props.observationSets[this.props.selectedObservationSetInference].name;
+    // const observationID=(this.props.toggle === "Inference")? this.props.observationSets[this.props.selectedObservationSetLearning].id : this.props.observationSets[this.props.selectedObservationSetInference].id;
+    const observationSet="someset";
+    const observationID="someid";
     const activePathwayName=this.props.activePathway.name;
     return (
       <div>

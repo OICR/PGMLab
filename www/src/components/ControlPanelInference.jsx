@@ -22,9 +22,10 @@ export class ControlPanelInference extends React.Component {
           <div className="row">
             <div className="col s6 center-align">
               <SelectObservationSet
-                type                   = "inference"
-                selectedObservationSet = {this.props.selectedObservationSet}
+                runType                   = {this.props.runType}
                 selectObservationSet   = {this.props.selectObservationSet}
+
+                selectedObservationSet = {this.props.selectedObservationSet}
                 observationSets        = {this.props.observationSets} />
               <a className="btn modal-trigger tooltipped" href="#selectObservationSetModal" data-position="top" data-tooltip="Observation Sets">
                   Observations

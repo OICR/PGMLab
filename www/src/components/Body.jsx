@@ -42,6 +42,7 @@ export class Body extends React.Component {
 
                           removeSelectedPathways = {this.props.removeSelectedPathways}
                           selectPathways = {this.props.selectPathways}
+                          selectObservationSet = {this.props.selectObservationSet}
 
                           removeSelectedPathwayInference  = {this.props.removeSelectedPathwayInference}
                           selectPathwayInference          = {this.props.selectPathwayInference}

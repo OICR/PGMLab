@@ -16,19 +16,28 @@ var graphvis = require('./bin/graphvis.js');
 class App extends  React.Component {
     constructor (props) {
       super(props)
-      var observationSets =  [{ "id":1, "name":"One","observations":[]}];
+      // var observationSets =  {};
+      // observationSets["someID"] = { "id":'someID', "name":"One","observations":[]};
+      let observationSets = new Map([
+        ['someID1',{ "id":'someID1', "name":"One","observations":[]}],
+        ['someID2',{ "id":'someID2', "name":"One","observations":[]}],
+        ['someID3',{ "id":'someID3', "name":"One","observations":[]}],
+        ['someID4',{ "id":'someID4', "name":"One","observations":[]}]]);
 
       this.state = { "pathways"                         : this.props.pathways,
                       "activePathway"                   : this.props.activePathway,
                       "uploadList"                      : [],
                       "selectedPathwaysLearning"        : [],
                       "selectedPathwaysInference"       : [],
+                      // Make into an object
                       "observationSets"                 : observationSets,
                       // "observationSets"                 : [],
+                      // Change to object
                       "selectedObservationSetLearning"  : 0,  // this index of the observationSet array
                       "selectedObservationSetInference" : 0,  // ''
-                      "selectedObservationLearning"     : 0,  // this index of the observationSet array
-                      "selectedObservationInference"    : 0,  // ''
+                      "selectedObservationLearning"     : [],//0,  // this index of the observationSet array
+                      "selectedObservationInference"    : [],//0,  // ''
+                      //
                       "posteriorProbabilitySets"        : [],
                       "estimatedParameterSets"          : [],
                       "pairwiseInteractions"            : this.props.pairwiseInteractions }
@@ -42,6 +51,7 @@ class App extends  React.Component {
 
       this.selectPathways = this.selectPathways.bind(this);
       this.removeSelectedPathways = this.removeSelectedPathways.bind(this);
+      this.selectObservationSet = this.selectObservationSet.bind(this);
 
       this.selectObservationSetLearning   = this.selectObservationSetLearning.bind(this)
       this.selectObservationSetInference  = this.selectObservationSetInference.bind(this)
@@ -110,6 +120,75 @@ class App extends  React.Component {
           this.setState({"selectedPathwaysLearning": reducedSelected});
           break;
       };
+    }
+
+    // For SelectObservations modal component
+    selectObservationSet(observationID, runType){
+      const selectedObservationSet = this.state.observationSets.get(observationID);
+      const selectedObservations = [];
+      console.log(selectedObservationSet);
+      switch (runType) {
+        case "Inference":
+          this.setState({
+            "selectedObservationSetInference": selectedObservationSet,
+            "selectedObservationInference": selectedObservations
+          });
+          break;
+        case "Learning":
+          this.setState({
+            "selectedObservationSetLearning": selectedObservationSet,
+            "selectedObservationLearning": selectedObservations
+          });
+          break;
+      };
+    }
+
+    selectObservationSetInference(index) {
+      console.log("selectObservationSetInference");
+        var observationIndex = 0
+        var nodes = this.state.observationSets[index].observations[observationIndex]
+
+        graphvis.render(this.state.pairwiseInteractions)
+
+        for(let i = 0; i < nodes.length; i++) {
+              graphvis.setNodeState(nodes[i])
+        }
+
+        this.setState({"selectedObservationSetInference": index,
+                       "selectedObservationInference"   : observationIndex})
+    }
+    selectObservationSetLearning(index) {
+      console.log("selectObservationSetLearning");
+        var observationIndex = 0
+        var nodes = this.state.observationSets[index].observations[observationIndex]
+        console.log("selectingObsSet")
+        graphvis.render(this.state.pairwiseInteractions)
+
+        for(let i = 0; i < nodes.length; i++) {
+              graphvis.setNodeState(nodes[i])
+        }
+
+        this.setState({"selectedObservationSetLearning" : index,
+                       "selectedObservationLearning"    : observationIndex })
+    }
+
+    selectObservationInference(index) {
+      console.log("selectObservationInference");
+        var nodes = this.state.observationSets[this.state.selectedObservationSetInference].observations[index]
+
+        graphvis.render(this.state.pairwiseInteractions)
+
+        for(let i = 0; i < nodes.length; i++) {
+              graphvis.setNodeState(nodes[i])
+        }
+
+        console.log("selectingObservtion Inf", index)
+        this.setState({"selectedObservationInference": index})
+    }
+
+    selectObservationLearning(index) {
+      console.log("selectObservationLearning");
+        this.setState({"selectedObservationLearning": index})
     }
 
     runInference() {
@@ -278,13 +357,15 @@ class App extends  React.Component {
         var uploadList = this.state.uploadList
         uploadList.push(uploadSummary)
 
-        var observationSet ={ "id"           : guid,
-                              "name"         : name,
-                              "activeIndex"  : 0,
-                              "observations" : observations}
-
-        var observationSets = this.state.observationSets
-        observationSets.push(observationSet)
+        var observationSet = { "id"           : guid,
+                               "name"         : name,
+                               "activeIndex"  : 0,
+                               "observations" : observations}
+        // Convert to object
+        // var observationSets = this.state.observationSets
+        // observationSets.push(observationSet)
+        let observationSets = this.state.observationSets;
+        observationSets.set(guid, observationSet);
 
         console.log("observationSets", observationSets)
         this.setState({"uploadList"      : uploadList,
@@ -343,55 +424,6 @@ class App extends  React.Component {
                        "posteriorProbabilitySets": posteriorProbabilitySets})
     }
 
-    selectObservationSetInference(index) {
-      console.log("selectObservationSetInference");
-        var observationIndex = 0
-        var nodes = this.state.observationSets[index].observations[observationIndex]
-
-        graphvis.render(this.state.pairwiseInteractions)
-
-        for(let i = 0; i < nodes.length; i++) {
-              graphvis.setNodeState(nodes[i])
-        }
-
-        this.setState({"selectedObservationSetInference": index,
-                       "selectedObservationInference"   : observationIndex})
-    }
-
-    selectObservationSetLearning(index) {
-      console.log("selectObservationSetLearning");
-        var observationIndex = 0
-        var nodes = this.state.observationSets[index].observations[observationIndex]
-        console.log("selectingObsSet")
-        graphvis.render(this.state.pairwiseInteractions)
-
-        for(let i = 0; i < nodes.length; i++) {
-              graphvis.setNodeState(nodes[i])
-        }
-
-        this.setState({"selectedObservationSetLearning" : index,
-                       "selectedObservationLearning"    : observationIndex })
-    }
-
-    selectObservationInference(index) {
-      console.log("selectObservationInference");
-        var nodes = this.state.observationSets[this.state.selectedObservationSetInference].observations[index]
-
-        graphvis.render(this.state.pairwiseInteractions)
-
-        for(let i = 0; i < nodes.length; i++) {
-              graphvis.setNodeState(nodes[i])
-        }
-
-        console.log("selectingObservtion Inf", index)
-        this.setState({"selectedObservationInference": index})
-    }
-
-    selectObservationLearning(index) {
-      console.log("selectObservationLearning");
-        this.setState({"selectedObservationLearning": index})
-    }
-
     componentDidMount () {
       $('.modal-trigger').leanModal()
     }
@@ -409,12 +441,16 @@ class App extends  React.Component {
 
                       selectPathways = {this.selectPathways}
                       removeSelectedPathways = {this.removeSelectedPathways}
+                      selectObservationSet = {this.selectObservationSet}
 
                       removeSelectedPathwayLearning   = {this.removeSelectedPathwayLearning}
                       removeSelectedPathwayInference  = {this.removeSelectedPathwayInference}
-                      selectPathwayLearning           = {this.selectPathwayLearning}
-                      selectedPathwaysLearning        = {this.state.selectedPathwaysLearning}
                       selectPathwayInference          = {this.selectPathwayInference}
+                      selectPathwayLearning           = {this.selectPathwayLearning}
+                      selectObservationSetLearning    = {this.selectObservationSetLearning}
+                      selectObservationSetInference   = {this.selectObservationSetInference}
+
+                      selectedPathwaysLearning        = {this.state.selectedPathwaysLearning}
                       selectedPathwaysInference       = {this.state.selectedPathwaysInference}
                       observeNode                     = {this.observeNode}
                       removeObservedNode              = {this.removeObservedNode}
@@ -423,8 +459,7 @@ class App extends  React.Component {
                       observationSets                 = {this.state.observationSets}
                       runInference                    = {this.runInference}
                       setNodeState                    = {this.setNodeState}
-                      selectObservationSetLearning    = {this.selectObservationSetLearning}
-                      selectObservationSetInference   = {this.selectObservationSetInference}
+
                       selectObservationInference      = {this.selectObservationInference}
                       selectObservationLearning       = {this.selectObservationLearning}
                       selectedObservationInference    = {this.state.selectedObservationInference}
@@ -461,7 +496,7 @@ function getPathway(session, pathways, activePathway) {
                init(pathways, activePathway, pairwiseInteractions);
           },
           function (err) {
-              console.log("couldn't get pathway", id, err);
+              console.log("couldn't get pathway", activePathway.id, err);
           });
 }
 
