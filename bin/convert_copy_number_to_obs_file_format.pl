@@ -4,10 +4,8 @@ use strict;
 use warnings;
 
 use autodie;
-
 use POSIX;
 use feature qw(say);
-use Data::Dumper;
 
 my $copy_number_files_path = $ARGV[0];
 my $sample_list_path = $ARGV[1];
