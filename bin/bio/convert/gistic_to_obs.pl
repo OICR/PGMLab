@@ -7,7 +7,7 @@ use autodie;
 use feature qw(say);
 
 use FindBin qw($Bin);
-use lib "$Bin/../../lib/perl";
+use lib "$Bin/../../../lib/perl";
 
 use PGMLab;
 use PGMLab::Bio;

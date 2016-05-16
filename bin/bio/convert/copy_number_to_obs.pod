@@ -1,0 +1,63 @@
+=head1 AUTHOR(S)
+
+Adam Wright <adam.j.wright82@gmail.com | adam.wright@oicr.on.ca>
+
+=over
+
+=item --usage
+
+=item --help
+
+=back
+
+=head1 DESCRIPTION
+
+This tool is used for converting copy number files to PGMLab observation files.
+
+=head1 NAME
+
+Copy number to observation file converter - PGMLab Bio
+
+=head1 REQUIRED
+
+=item -copy-number [=] <copy_number_filepath>
+
+Input filepath for copy number
+
+=for euclid:
+    copy_number_filepath.type = readable
+
+=item -ploidy [=] <ploidy_filepath>
+
+Input filepath for ploidy file
+
+=for euclid:
+    ploidy_filepath.type = readable
+
+=item -pairwise-interaction [=] <pi_file> | -pi [=] <pi_file>
+
+Input pairwise interaction file
+
+=for Euclid:
+    pi_file.type = readable
+
+=item -db-id-to-name-mapping [=] <db_id_to_name_mapping_file>
+
+Input file contains the mapping between reacome nodes and gene names
+
+=for Euclid:
+    db_id_to_name_mapping_file.type = readable
+
+=item -sample-list [=] <sample_list_filepath>
+
+Input filepath for sample list
+
+=for euclid:
+    sample_list_filepath.type = readable
+
+=item -[obs]ervation-file [=] <observation_file>
+
+Output obeservation file
+
+=for Euclid:
+    observation_file.type = writeable

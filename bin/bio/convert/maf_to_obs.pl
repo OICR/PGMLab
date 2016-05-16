@@ -5,11 +5,12 @@ use autodie;
 use feature qw(say);
 
 use FindBin qw($Bin);
-use lib "$Bin/../lib/perl";
+use lib "$Bin/../../../lib/perl";
 
-use PGMBio;
+use PGMLab;
+use PGMLab::Bio;
 
-use Data::Dumper;
+use Getopt::Euclid qw( :minimal_keys );
 
 
 #0 is not mutated 1 is mutated 2 unknowna
@@ -39,7 +40,7 @@ my %mutation_type_to_state = (
 
 open (my $maf_fh, $ARGV[0]);
 
-my $obs_file_path = $ARGV[1]
+my $obs_file_path = $ARGV[1];
 
 my $header = <$maf_fh>;
 chomp $header;
@@ -66,6 +67,4 @@ while(my $line = <$maf_fh>) {
 
 close($maf_fh);
 
-
-PGMBio->create_obs_file($obs_file_path, \@{keys $sample_gene_states}, $sample_gene_states)
-
+PGMLab->create_obs_file($obs_file_path, \@{keys $sample_gene_states}, $sample_gene_states)
