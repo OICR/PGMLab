@@ -97,6 +97,8 @@ export class SelectObservationSet extends React.Component {
           </li>
       );
     });
+    const observationCount = selectedObservationSet.observations.length.toString().concat(" Observations");
+    const selectedCount = selectedObservations.length.toString().concat(" Selected");
     return (
       <div>
         <h5>{selectedObservationSet.name}</h5>
@@ -106,6 +108,11 @@ export class SelectObservationSet extends React.Component {
           <form>
             <input type="text" ref="obsFilterInput" placeholder="Type to filter"
               value={this.state.obsFilterText} onChange={this.obsFilterUpdate}/>
+            <div className="row valign-wrapper">
+              <div className="col s8">{observationCount}<br/>{selectedCount}</div>
+              <div className="col s2"><a className="btn-floating waves-effect right"><i className="material-icons">check_box</i></a></div>
+              <div className="col s2"><a className="btn-floating waves-effect right"><i className="material-icons">check_box_outline_blank</i></a></div>
+            </div>
 
             <ul className="collection teal lighten-2 left-align">
               {observations}
