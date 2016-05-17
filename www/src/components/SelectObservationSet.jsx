@@ -13,6 +13,8 @@ export class SelectObservationSet extends React.Component {
     this.obsFilterUpdate = this.obsFilterUpdate.bind(this);
     this.handleSetSelect = this.handleSetSelect.bind(this);
     this.handleObsSelect = this.handleObsSelect.bind(this);
+    this.handleObsCheckAll = this.handleObsCheckAll.bind(this);
+    this.handleObsUncheckAll = this.handleObsUncheckAll.bind(this);
 
     this.observationSetList = this.observationSetList.bind(this);
     this.observationsList = this.observationsList.bind(this);
@@ -41,10 +43,14 @@ export class SelectObservationSet extends React.Component {
     };
   }
   handleObsCheckAll(){
-
+    const toSelect = this.props.selectedObservationSet.get(this.props.runType).observations.map((obs,i)=>{return i});
+    console.log(toSelect);
+    this.props.selectObservations(toSelect, this.props.runType);
   }
   handleObsUncheckAll(){
-
+    const selected = this.props.selectedObservations.get(this.props.runType);
+    console.log(selected);
+    this.props.removeSelectedObservations(selected, this.props.runType);
   }
 
   // RENDERING //
@@ -110,8 +116,16 @@ export class SelectObservationSet extends React.Component {
               value={this.state.obsFilterText} onChange={this.obsFilterUpdate}/>
             <div className="row valign-wrapper">
               <div className="col s8">{observationCount}<br/>{selectedCount}</div>
-              <div className="col s2"><a className="btn-floating waves-effect right"><i className="material-icons">check_box</i></a></div>
-              <div className="col s2"><a className="btn-floating waves-effect right"><i className="material-icons">check_box_outline_blank</i></a></div>
+              <div className="col s2">
+                <a className="btn-floating waves-effect right" onClick={this.handleObsCheckAll}>
+                  <i className="material-icons">check_box</i>
+                </a>
+              </div>
+              <div className="col s2">
+                <a className="btn-floating waves-effect right" onClick={this.handleObsUncheckAll}>
+                  <i className="material-icons">check_box_outline_blank</i>
+                </a>
+              </div>
             </div>
 
             <ul className="collection teal lighten-2 left-align">
