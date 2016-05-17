@@ -2,7 +2,11 @@ import React from 'react';
 // import {ControlPanelLearning} from "./ControlPanelLearning.jsx";
 import {UploadModal} from "./UploadModal.jsx";
 import {ControlPanelInference} from "./ControlPanelInference.jsx";
+
 import {DataSelection} from "./DataSelection.jsx";
+import {ObservationsControl} from "./ObservationsControl.jsx";
+import {PathwaysControl} from "./PathwaysControl.jsx";
+
 var classNames = require("classnames");
 
 export class ControlPanel extends React.Component {
@@ -43,8 +47,8 @@ export class ControlPanel extends React.Component {
                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet}
                        uploadList                     = {this.props.uploadList}
                        uploadListAddFailure           = {this.props.uploadListAddFailure} />
-                     <a className="modal-trigger btn-floating btn tooltipped"
-                       data-position="top" data-delay="50" data-tooltip="Upload Data Files" href="#uploadModal1">
+          <a className="modal-trigger btn-floating btn tooltipped"
+            data-position="top" data-delay="50" data-tooltip="Upload Data Files" href="#uploadModal1">
             <i className="material-icons">file_upload</i>
           </a>
         </div>
@@ -61,6 +65,17 @@ export class ControlPanel extends React.Component {
                         selectObservations = {this.props.selectObservations}
                         removeSelectedObservations = {this.props.removeSelectedObservations}
                         selectedObservations = {this.props.selectedObservations} />
+        <div className="divider"></div>
+        <ObservationsControl  runType = {this.props.toggle}
+                              selectedObservationSet = {this.props.selectedObservationSet}
+                              selectedObservations = {this.props.selectedObservations}
+
+                              setActiveObservation = {this.props.setActiveObservation}
+                              activeObservation = {this.props.activeObservation} />
+        <PathwaysControl  selectedPathways = {this.props.selectedPathways}
+                          setActivePathway = {this.props.setActivePath}
+                          activePathway = {this.props.activePathway} />
+
         <div className="divider"></div>
         <ControlPanelInference setActivePathway       = {this.props.setActivePathway}
                                activePathway          = {this.props.activePathway}

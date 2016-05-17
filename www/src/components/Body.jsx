@@ -31,17 +31,13 @@ export class Body extends React.Component {
                           observeNode                     = {this.props.observeNode}
                           removeObservedNode              = {this.props.removeObservedNode}
 
-
-
                           observationSets                 = {this.props.observationSets}
                           runInference                    = {this.props.runInference}
                           setNodeState                    = {this.props.setNodeState}
 
-                          removeSelectedPathways = {this.props.removeSelectedPathways}
                           selectPathways = {this.props.selectPathways}
+                          removeSelectedPathways = {this.props.removeSelectedPathways}
                           selectedPathways = {this.props.selectedPathways}
-                          selectedPathwaysInference       = {this.props.selectedPathwaysInference}
-                          selectedPathwaysLearning        = {this.props.selectedPathwaysLearning}
 
                           selectObservationSet = {this.props.selectObservationSet}
                           selectedObservationSet = {this.props.selectedObservationSet}
@@ -49,6 +45,8 @@ export class Body extends React.Component {
                           removeSelectedObservations = {this.props.removeSelectedObservations}
                           selectedObservations = {this.props.selectedObservations}
 
+                          setActiveObservation = {this.props.setActiveObservation}
+                          activeObservation = {this.state.activeObservation}
 
                           pathways                        = {this.props.pathways}
                           activePathway                   = {this.props.activePathway}

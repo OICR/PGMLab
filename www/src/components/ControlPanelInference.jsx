@@ -17,9 +17,6 @@ export class ControlPanelInference extends React.Component {
     var activePathway = this.props.activePathway.name
     return (
       <div>
-
-        <div className="divider"></div>
-
         <div className="section">
           <div className="row">
               <h5 className="col s11">Selected Observation Set</h5>
@@ -35,6 +32,8 @@ export class ControlPanelInference extends React.Component {
                           observeNode            = {this.props.observeNode}
                           pairwiseInteractions   = {this.props.pairwiseInteractions}
                           removeObservedNode     = {this.props.removeObservedNode} />
+
+                      
           <h5 className="tooltipped" data-position="top" data-tooltip="These Pathways will be included when generating posterior probabilities">Selected Pathway(s)</h5>
           <SelectedPathways pathways         = {this.props.pathways}
                             activePathway    = {this.props.activePathway}
@@ -42,6 +41,8 @@ export class ControlPanelInference extends React.Component {
                             type             = "inference"
                             selectedPathways = {this.props.selectedPathways} />
         </div>
+
+
         <div className="section">
             <i className="material-icons tiny right">settings</i>
             <a className="waves-effect waves-light btn" onClick={this.run}>Run</a>
