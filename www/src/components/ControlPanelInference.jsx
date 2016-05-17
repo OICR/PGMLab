@@ -17,41 +17,6 @@ export class ControlPanelInference extends React.Component {
     var activePathway = this.props.activePathway.name
     return (
       <div>
-        <div className="section">
-          <h5>Data Selection</h5>
-          <div className="row">
-            <div className="col s6 center-align">
-              <SelectObservationSet
-                runType                   = {this.props.runType}
-                observationSets        = {this.props.observationSets}
-                selectObservationSet   = {this.props.selectObservationSet}
-                selectedObservationSet = {this.props.selectedObservationSet}
-                selectObservations = {this.props.selectObservations}
-                removeSelectedObservations = {this.props.removeSelectedObservations}
-                selectedObservations = {this.props.selectedObservations} />
-
-              <a className="btn modal-trigger tooltipped" href="#selectObservationSetModal" data-position="top" data-tooltip="Observation Sets">
-                  Observations
-              </a>
-            </div>
-            <div className="col s6 center-align">
-              <SelectPathways
-                removeSelectedPathways={this.props.removeSelectedPathways}
-                selectPathways={this.props.selectPathways}
-
-                setActivePathway      = {this.props.setActivePathway}
-                activePathway         = {this.props.activePathway}
-                selectPathway         = {this.props.selectPathway}
-                removeSelectedPathway = {this.props.removeSelectedPathway}
-                selectedPathways      = {this.props.selectedPathways}
-                pathways              = {this.props.pathways}
-                runType               = {this.props.runType} />
-              <a className="btn modal-trigger tooltipped" href="#selectPathwayModal" data-position="top" data-tooltip="Pathways">
-                  Pathways
-              </a>
-            </div>
-          </div>
-        </div>
 
         <div className="divider"></div>
 

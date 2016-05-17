@@ -42,13 +42,14 @@ export class SelectPathways extends React.Component {
   }
   // For onClick event when unchecking all pathways
   handleUncheckAll(){
-    const selected = this.props.selectedPathways;
+    const selected = this.props.selectedPathways.get(this.props.runType);
     this.props.removeSelectedPathways(selected, this.props.runType);
   }
 
   // RENDERING //
   pathwayListItem(pathway){
-    const checked = this.props.selectedPathways.includes(pathway.id);
+    // const checked = this.props.selectedPathways.includes(pathway.id);
+    const checked = this.props.selectedPathways.get(this.props.runType).includes(pathway.id);
     return (
       <li key={pathway.id} className="collection-item black-text"
         onClick={(evt)=>{evt.preventDefault();this.handleSelect(pathway.id)}}>
@@ -61,7 +62,9 @@ export class SelectPathways extends React.Component {
     let self = this;
     const input = (isNaN(self.state.filterText)) ? self.state.filterText.toLowerCase() : self.state.filterText;
     const pathways = self.props.pathways;
-    const selectedPathwayIDs = self.props.selectedPathways;
+    // const selectedPathwayIDs = self.props.selectedPathways;
+    console.log(self.props.selectedPathways);
+    const selectedPathwayIDs = self.props.selectedPathways.get(this.props.runType);
     const pathwayList = pathways.map((pathway)=>{
       const textFilter = pathway.name.toLowerCase().indexOf(input) && (pathway.id.indexOf(input) == -1);
       const checkedFilter = self.state.filterChecked && !selectedPathwayIDs.includes(pathway.id);

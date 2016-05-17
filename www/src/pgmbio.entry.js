@@ -32,21 +32,22 @@ class App extends  React.Component {
         ["Inference", new Array()], //Array of indices
         ["Learning", new Array()]
       ]);
-
+      //
+      let selectedPathways = new Map([
+        ["Inference", new Array()],
+        ["Learning", new Array()]
+      ]);
       this.state = { "pathways"                         : this.props.pathways,
                       "activePathway"                   : this.props.activePathway,
                       "uploadList"                      : [],
+                      "selectedPathways": selectedPathways,
+                      //
                       "selectedPathwaysLearning"        : [],
                       "selectedPathwaysInference"       : [],
-
+                      //
                       "observationSets"                 : observationSets,
                       "selectedObservationSet": selectedObservationSet,
                       "selectedObservations": selectedObservations,
-                      // Change to object
-                      "selectedObservationSetLearning"  : 0,  // this index of the observationSet array
-                      "selectedObservationSetInference" : 0,  // ''
-                      "selectedObservationLearning"     : [],//0,  // this index of the observationSet array
-                      "selectedObservationInference"    : [],//0,  // ''
                       //
                       "posteriorProbabilitySets"        : [],
                       "estimatedParameterSets"          : [],
@@ -70,11 +71,6 @@ class App extends  React.Component {
       this.addNewObservationSet           = this.addNewObservationSet.bind(this)
       this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this)
       this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this)
-
-      this.selectObservationSetLearning   = this.selectObservationSetLearning.bind(this)
-      this.selectObservationSetInference  = this.selectObservationSetInference.bind(this)
-      this.selectObservationLearning      = this.selectObservationLearning.bind(this)
-      this.selectObservationInference     = this.selectObservationInference.bind(this)
     }
 
     static getCurrentDateTime() {
@@ -83,64 +79,35 @@ class App extends  React.Component {
 
     // For SelectPathways modal component
     selectPathways(pathwayIDs, runType){
-      console.log("selectPathways", pathwayIDs.length, runType);
-      let selectedPathwayIDs;
-      switch (runType) {
-        case "Inference":
-          selectedPathwayIDs=this.state.selectedPathwaysInference;
-          break;
-        case "Learning":
-          selectedPathwayIDs=this.state.selectedPathwaysLearning;
-          break;
-      };
+      // console.log("selectPathways", pathwayIDs.length, runType);
+      let selectedPathways = this.state.selectedPathways;
+      let selected=this.state.selectedPathways.get(runType);
       for (let pathwayID of pathwayIDs) {
-        if (!selectedPathwayIDs.includes(pathwayID)) {
-          selectedPathwayIDs.push(pathwayID);
+        if (!selected.includes(pathwayID)) {
+          selected.push(pathwayID);
         };
       };
-      switch (runType) {
-        case "Inference":
-          this.setState({"selectedPathwaysInference": selectedPathwayIDs});
-          break;
-        case "Learning":
-          this.setState({"selectedPathwaysLearning": selectedPathwayIDs});
-          break;
-      };
+      selectedPathways.set(runType, selected);
+      this.setState({"selectedPathways":selectedPathways});
     }
     // For SelectPathways modal component
     removeSelectedPathways(pathwayIDs, runType){
-      console.log("removeSelectedPathways");
-      let selectedPathwayIDs;
-      switch (runType) {
-        case "Inference":
-          selectedPathwayIDs=this.state.selectedPathwaysInference;
-          break;
-        case "Learning":
-          selectedPathwayIDs=this.state.selectedPathwaysLearning;
-          break;
-      };
-      const indices = pathwayIDs.map((pathway)=>{return selectedPathwayIDs.indexOf(pathway)});
-      const reducedSelected = selectedPathwayIDs.reduce((remaining,pathwayID,index)=>{
+      // console.log("removeSelectedPathways", pathwayIDs);
+      let selectedPathways = this.state.selectedPathways;
+      let selected = selectedPathways.get(runType);
+      const indices = pathwayIDs.map((pathway)=>{return selected.indexOf(pathway)});
+      const reducedSelected = selected.reduce((remaining,pathwayID,index)=>{
         if (!indices.includes(index)) {
           remaining.push(pathwayID);
         };
         return remaining;
       },[]);
-      switch (runType) {
-        case "Inference":
-          this.setState({"selectedPathwaysInference": reducedSelected});
-          break;
-        case "Learning":
-          this.setState({"selectedPathwaysLearning": reducedSelected});
-          break;
-      };
+      selectedPathways.set(runType, reducedSelected);
+      this.setState({"selectedPathways":selectedPathways});
     }
 
     // For SelectObservations modal component
     selectObservationSet(observationSetID, runType){
-      // const selectedObservationSet = this.state.observationSets.get(observationSetID);
-      // const selectedObservations = [];
-
       let selectedObservationSet = this.state.selectedObservationSet;
       const selectedSet = this.state.observationSets.get(observationSetID);
       selectedObservationSet.set(runType, selectedSet);
@@ -165,10 +132,10 @@ class App extends  React.Component {
       this.setState({"selectedObservations": selectedObservations})
     }
     removeSelectedObservations(observationIndices, runType){
-      console.log("removeSelectedObservations", observationIndices);
+      // console.log("removeSelectedObservations", observationIndices);
       let selectedObservations = this.state.selectedObservations;
-      let runTypeSelected = selectedObservations.get(runType);
-      const reducedSelected = runTypeSelected.reduce((remaining,observationIndex)=>{
+      let selected = selectedObservations.get(runType);
+      const reducedSelected = selected.reduce((remaining,observationIndex)=>{
         if (!observationIndices.includes(observationIndex)) {
           remaining.push(observationIndex);
         };
@@ -176,54 +143,6 @@ class App extends  React.Component {
       },[]);
       selectedObservations.set(runType,reducedSelected);
       this.setState({"selectedObservations": selectedObservations});
-    }
-
-    selectObservationSetInference(index) {
-      console.log("selectObservationSetInference");
-        var observationIndex = 0
-        var nodes = this.state.observationSets[index].observations[observationIndex]
-
-        graphvis.render(this.state.pairwiseInteractions)
-
-        for(let i = 0; i < nodes.length; i++) {
-              graphvis.setNodeState(nodes[i])
-        }
-
-        this.setState({"selectedObservationSetInference": index,
-                       "selectedObservationInference"   : observationIndex})
-    }
-    selectObservationSetLearning(index) {
-      console.log("selectObservationSetLearning");
-        var observationIndex = 0
-        var nodes = this.state.observationSets[index].observations[observationIndex]
-        console.log("selectingObsSet")
-        graphvis.render(this.state.pairwiseInteractions)
-
-        for(let i = 0; i < nodes.length; i++) {
-              graphvis.setNodeState(nodes[i])
-        }
-
-        this.setState({"selectedObservationSetLearning" : index,
-                       "selectedObservationLearning"    : observationIndex })
-    }
-
-    selectObservationInference(index) {
-      console.log("selectObservationInference");
-        var nodes = this.state.observationSets[this.state.selectedObservationSetInference].observations[index]
-
-        graphvis.render(this.state.pairwiseInteractions)
-
-        for(let i = 0; i < nodes.length; i++) {
-              graphvis.setNodeState(nodes[i])
-        }
-
-        console.log("selectingObservtion Inf", index)
-        this.setState({"selectedObservationInference": index})
-    }
-
-    selectObservationLearning(index) {
-      console.log("selectObservationLearning");
-        this.setState({"selectedObservationLearning": index})
     }
 
     runInference() {
@@ -474,6 +393,7 @@ class App extends  React.Component {
                       activePathway                   = {this.state.activePathway}
                       setActivePathway                = {this.setActivePathway}
 
+                      selectedPathways = {this.state.selectedPathways}
                       selectPathways = {this.selectPathways}
                       removeSelectedPathways = {this.removeSelectedPathways}
 
@@ -490,8 +410,6 @@ class App extends  React.Component {
                       removeSelectedPathwayInference  = {this.removeSelectedPathwayInference}
                       selectPathwayInference          = {this.selectPathwayInference}
                       selectPathwayLearning           = {this.selectPathwayLearning}
-                      selectObservationSetLearning    = {this.selectObservationSetLearning}
-                      selectObservationSetInference   = {this.selectObservationSetInference}
 
                       selectedPathwaysLearning        = {this.state.selectedPathwaysLearning}
                       selectedPathwaysInference       = {this.state.selectedPathwaysInference}
@@ -502,10 +420,6 @@ class App extends  React.Component {
                       runInference                    = {this.runInference}
                       setNodeState                    = {this.setNodeState}
 
-                      selectObservationInference      = {this.selectObservationInference}
-                      selectObservationLearning       = {this.selectObservationLearning}
-                      selectedObservationInference    = {this.state.selectedObservationInference}
-                      selectedObservationLearning     = {this.state.selectedObservationLearning}
                       addNewPathway                   = {this.addNewPathway}
                       addNewObservationSet            = {this.addNewObservationSet}
                       addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}

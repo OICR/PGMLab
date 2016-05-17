@@ -39,6 +39,7 @@ export class Body extends React.Component {
 
                           removeSelectedPathways = {this.props.removeSelectedPathways}
                           selectPathways = {this.props.selectPathways}
+                          selectedPathways = {this.props.selectedPathways}
                           selectedPathwaysInference       = {this.props.selectedPathwaysInference}
                           selectedPathwaysLearning        = {this.props.selectedPathwaysLearning}
 
@@ -48,10 +49,6 @@ export class Body extends React.Component {
                           removeSelectedObservations = {this.props.removeSelectedObservations}
                           selectedObservations = {this.props.selectedObservations}
 
-                          selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}
-                          selectedObservationSetInference = {this.props.selectedObservationSetInference}
-                          selectedObservationInference    = {this.props.selectedObservationInference}
-                          selectedObservationLearning     = {this.props.selectedObservationLearning}
 
                           pathways                        = {this.props.pathways}
                           activePathway                   = {this.props.activePathway}
@@ -59,16 +56,7 @@ export class Body extends React.Component {
                           addNewPathway                   = {this.props.addNewPathway}
                           addNewObservationSet            = {this.props.addNewObservationSet}
                           addNewEstimatedParameterSet     = {this.props.addNewEstimatedParameterSet}
-                          addNewPosteriorProbabilitySet   = {this.props.addNewPosteriorProbabilitySet}
-
-                          selectObservationSetLearning    = {this.props.selectObservationSetLearning}
-                          selectObservationSetInference   = {this.props.selectObservationSetInference}
-                          selectObservationInference      = {this.props.selectObservationInference}
-                          selectObservationLearning       = {this.props.selectObservationLearning}
-                          selectPathwayInference          = {this.props.selectPathwayInference}
-                          selectPathwayLearning           = {this.props.selectPathwayLearning}
-                          removeSelectedPathwayInference  = {this.props.removeSelectedPathwayInference}
-                          removeSelectedPathwayLearning   = {this.props.removeSelectedPathwayLearning}/>
+                          addNewPosteriorProbabilitySet   = {this.props.addNewPosteriorProbabilitySet} />
           </div>
           <div className="col s8" style={{minWidth:"800px"}}>
             <DisplayPanel

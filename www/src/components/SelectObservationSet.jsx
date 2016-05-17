@@ -27,11 +27,11 @@ export class SelectObservationSet extends React.Component {
     this.setState({obsFilterText: this.refs["obsFilterInput"].value});
   }
   handleSetSelect(observationSetID){
-    console.log("handleSetSelect");
+    // console.log("handleSetSelect");
     this.props.selectObservationSet(observationSetID, this.props.runType);
   }
   handleObsSelect(observationIndex){
-    console.log("handleObsSelect", observationIndex, this.props.selectedObservations.get(this.props.runType));
+    // console.log("handleObsSelect", observationIndex, this.props.selectedObservations.get(this.props.runType));
     const currentlySelected = this.props.selectedObservations.get(this.props.runType);
     switch (currentlySelected.includes(observationIndex)) {
       case true:
@@ -44,12 +44,12 @@ export class SelectObservationSet extends React.Component {
   }
   handleObsCheckAll(){
     const toSelect = this.props.selectedObservationSet.get(this.props.runType).observations.map((obs,i)=>{return i});
-    console.log(toSelect);
+    // console.log(toSelect);
     this.props.selectObservations(toSelect, this.props.runType);
   }
   handleObsUncheckAll(){
     const selected = this.props.selectedObservations.get(this.props.runType);
-    console.log(selected);
+    // console.log(selected);
     this.props.removeSelectedObservations(selected, this.props.runType);
   }
 
