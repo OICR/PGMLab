@@ -44,6 +44,8 @@ export class Body extends React.Component {
 
                           selectObservationSet = {this.props.selectObservationSet}
                           selectedObservationSet = {this.props.selectedObservationSet}
+                          selectObservations = {this.props.selectObservations}
+                          removeSelectedObservations = {this.props.removeSelectedObservations}
                           selectedObservations = {this.props.selectedObservations}
 
                           selectedObservationSetLearning  = {this.props.selectedObservationSetLearning}

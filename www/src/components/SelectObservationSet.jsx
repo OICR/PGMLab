@@ -29,7 +29,22 @@ export class SelectObservationSet extends React.Component {
     this.props.selectObservationSet(observationSetID, this.props.runType);
   }
   handleObsSelect(observationIndex){
-    console.log("handleObsSelect");
+    console.log("handleObsSelect", observationIndex, this.props.selectedObservations.get(this.props.runType));
+    const currentlySelected = this.props.selectedObservations.get(this.props.runType);
+    switch (currentlySelected.includes(observationIndex)) {
+      case true:
+        this.props.removeSelectedObservations([observationIndex], this.props.runType);
+        break;
+      case false:
+        this.props.selectObservations([observationIndex], this.props.runType);
+        break;
+    };
+  }
+  handleObsCheckAll(){
+
+  }
+  handleObsUncheckAll(){
+
   }
 
   // RENDERING //
@@ -43,13 +58,12 @@ export class SelectObservationSet extends React.Component {
       return (
         (textFilter) ? undefined :
         <li key={observationSet.id} className="collection-item black-text"
-          onClick={(evt)=>{this.handleSetSelect(observationSet.id)}}>
+          onClick={()=>{this.handleSetSelect(observationSet.id)}}>
           <input ref={observationSet.id} id={observationSet.id} type="radio" checked={selected} readOnly={true}/>
           <label htmlFor={observationSet.id} className="black-text">{observationSet.name}</label>
         </li>
       );
     });
-    const scrollable = {maxHeight: "210px", height:"210px", overflow: "scroll"};
     return (
       <div>
         <h5>Observation Sets</h5>
@@ -57,7 +71,7 @@ export class SelectObservationSet extends React.Component {
         <form>
           <input type="text" ref="setFilterInput" placeholder="Type to filter"
             value={this.state.setFilterText} onChange={this.setFilterUpdate}/>
-          <ul className="collection teal lighten-2 left-align" style={scrollable}>
+          <ul className="collection teal lighten-2 left-align">
             {observationSets}
           </ul>
         </form>
@@ -67,7 +81,6 @@ export class SelectObservationSet extends React.Component {
   observationsList(){
     let self = this;
     const selectedObservationSet = this.props.selectedObservationSet.get(this.props.runType);
-    console.log(selectedObservationSet);
     const textInput = isNaN(self.state.obsFilterText) ? self.state.obsFilterText.toLowerCase() : self.state.obsFilterText;
     const selectedObservations = this.props.selectedObservations.get(this.props.runType);
     let observations = selectedObservationSet.observations.map((observation,index)=>{
@@ -77,13 +90,13 @@ export class SelectObservationSet extends React.Component {
       const selected = selectedObservations.includes(index);
       return (
         (textFilter) ? undefined :
-          <li key={index} className="collection-item black-text" onClick={(evt)=>this.handleObsSelect(index)}>
+          <li key={index} className="collection-item black-text"
+            onClick={(evt)=>{evt.preventDefault();this.handleObsSelect(index)}}>
             <input ref={index} id={index} type="checkbox" className="filled-in" checked={selected} readOnly={true}/>
             <label htmlFor={index} className="black-text">{index}</label>
           </li>
       );
     });
-    const scrollable = {maxHeight: "210px", height:"210px", overflow: "scroll"};
     return (
       <div>
         <h5>{selectedObservationSet.name}</h5>
@@ -94,7 +107,7 @@ export class SelectObservationSet extends React.Component {
             <input type="text" ref="obsFilterInput" placeholder="Type to filter"
               value={this.state.obsFilterText} onChange={this.obsFilterUpdate}/>
 
-            <ul className="collection teal lighten-2 left-align" style={scrollable}>
+            <ul className="collection teal lighten-2 left-align">
               {observations}
             </ul>
           </form>
@@ -104,14 +117,15 @@ export class SelectObservationSet extends React.Component {
   }
   render() {
   // console.log("SOS", this.props)
+    const scrollable={maxHeight:"100%", height:"100%", overflow:"scroll"};
     return (
       <div id="selectObservationSetModal" className="modal modal-fixed-footer">
-        <div className="modal-content">
-          <div className="row">
-            <div className="col s6">
+        <div className="modal-content" style={{overflow:"visible"}}>
+          <div className="row" style={{height:"100%"}}>
+            <div className="col s6" style={scrollable}>
               {this.observationSetList()}
             </div>
-            <div className="col s6">
+            <div className="col s6" style={scrollable}>
               {this.observationsList()}
             </div>
           </div>

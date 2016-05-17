@@ -62,6 +62,8 @@ class App extends  React.Component {
       this.selectPathways = this.selectPathways.bind(this);
       this.removeSelectedPathways = this.removeSelectedPathways.bind(this);
       this.selectObservationSet = this.selectObservationSet.bind(this);
+      this.selectObservations = this.selectObservations.bind(this);
+      this.removeSelectedObservations = this.removeSelectedObservations.bind(this);
 
 
       this.uploadListAddFailure           = this.uploadListAddFailure.bind(this)
@@ -150,14 +152,30 @@ class App extends  React.Component {
       });
     }
     // For SelectObservations modal component
-    selectObservations(observationIDs, runType){
-      let selectedObservations;
-      switch (runType) {
-        case "Inference":
-          break;
-        case "Learning":
-          break;
+    selectObservations(observationIndices, runType){
+      console.log('selectObservations',observationIndices, runType)
+      let selectedObservations = this.state.selectedObservations;
+      const selected = selectedObservations.get(runType);
+      for (let index of observationIndices) {
+        if (!selected.includes(index)) {
+          selected.push(index);
+        };
       };
+      selectedObservations.set(runType, selected);
+      this.setState({"selectedObservations": selectedObservations})
+    }
+    removeSelectedObservations(observationIndices, runType){
+      console.log("removeSelectedObservations", observationIndices);
+      let selectedObservations = this.state.selectedObservations;
+      let runTypeSelected = selectedObservations.get(runType);
+      const reducedSelected = runTypeSelected.reduce((remaining,observationIndex)=>{
+        if (!observationIndices.includes(observationIndex)) {
+          remaining.push(observationIndex);
+        };
+        return remaining;
+      },[]);
+      selectedObservations.set(runType,reducedSelected);
+      this.setState({"selectedObservations": selectedObservations});
     }
 
     selectObservationSetInference(index) {
@@ -384,7 +402,7 @@ class App extends  React.Component {
         let observationSets = this.state.observationSets;
         observationSets.set(guid, observationSet);
 
-        console.log("observationSets", observationSets)
+        // console.log("observationSets", observationSets)
         this.setState({"uploadList"      : uploadList,
                        "observationSets" : observationSets})
 
@@ -461,6 +479,8 @@ class App extends  React.Component {
 
                       selectObservationSet = {this.selectObservationSet}
                       selectedObservationSet = {this.state.selectedObservationSet}
+                      selectObservations = {this.selectObservations}
+                      removeSelectedObservations = {this.removeSelectedObservations}
                       selectedObservations = {this.state.selectedObservations}
 
                       selectedObservationSetLearning  = {this.state.selectedObservationSetLearning}
