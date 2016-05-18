@@ -4,7 +4,7 @@ var webpack = require("webpack");
 module.exports = {
   context: __dirname + "/src",
   entry: {
-     "pgmlab": "./pgmlab.entry.jsx",
+     //"pgmlab": "./pgmlab.entry.jsx",
      "pgmbio": "./pgmbio.entry.js"
   },
   output: {
@@ -14,12 +14,7 @@ module.exports = {
   loader: "babel",
   devtool: "source-map",
   // Prevent bufferutil, utf-8-validate warnings
-  // externals: ['ws'],
-  externals: {
-    // "react": "React",
-    // "react-dom": "ReactDOM",
-    'ws':'ws'
-  },
+  externals: ['ws'],
   module: {
     noParse: ['ws'],
     loaders: [

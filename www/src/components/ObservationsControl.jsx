@@ -7,8 +7,6 @@ import {SelectPathways} from './SelectPathways.jsx'
 import {SelectedPathways} from './SelectedPathways.jsx'
 import {SelectObservation} from './SelectObservation.jsx'
 
-import RaisedButton from "material-ui/RaisedButton";
-
 var classNames = require("classnames");
 
 export class ObservationsControl extends React.Component {
@@ -20,7 +18,6 @@ export class ObservationsControl extends React.Component {
     return (
       <div className="section">
         <h5>Active Observation</h5>
-
       </div>
     );
   }

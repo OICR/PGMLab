@@ -11,9 +11,6 @@ import {Header} from './components/Header.jsx';
 import {Body}   from './components/Body.jsx';
 import {Footer} from './components/Footer.jsx';
 
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-
 var graphvis = require('./bin/graphvis.js');
 
 class App extends  React.Component {
@@ -365,10 +362,9 @@ class App extends  React.Component {
     render () {
     //  console.log("Rendering App: ", this)
       return (
-        <div>
-          <Header />
-          <MuiThemeProvider muiTheme={getMuiTheme()}>
-            <Body uploadList                      = {this.state.uploadList}
+          <div>
+              <Header />
+              <Body uploadList                      = {this.state.uploadList}
                     uploadListAddFailure            = {this.uploadListAddFailure}
                     addNewPathway                   = {this.addNewPathway}
                     addNewObservationSet            = {this.addNewObservationSet}
@@ -399,9 +395,8 @@ class App extends  React.Component {
                     removeObservedNode              = {this.removeObservedNode}
                     runInference                    = {this.runInference}
                     setNodeState                    = {this.setNodeState} />
-          </MuiThemeProvider>
-          <Footer />
-        </div>
+             <Footer />
+          </div>
       )
     }
 }
@@ -438,7 +433,7 @@ connection.onopen = function (session, details) {
          function (res) {
            //Init pathway
             var pathways = res;
-            var activePathway = pathways[2];
+            var activePathway = pathways[0];
             //
             getPathway(session, pathways, activePathway);
          },

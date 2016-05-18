@@ -22,8 +22,8 @@ export class DisplayPanel extends React.Component {
     // Change to Map
     // const observationSet=(this.props.toggle === "Inference") ? this.props.observationSets[this.props.selectedObservationSetLearning].name : this.props.observationSets[this.props.selectedObservationSetInference].name;
     // const observationID=(this.props.toggle === "Inference")? this.props.observationSets[this.props.selectedObservationSetLearning].id : this.props.observationSets[this.props.selectedObservationSetInference].id;
-    const observationSet="Observation Set 1";
-    const observationID="Observation 0";
+    const observationSet="someset";
+    const observationID="someid";
     const activePathwayName=this.props.activePathway.name;
     return (
       <div>
