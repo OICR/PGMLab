@@ -1,4 +1,4 @@
-var materialize = require('./lib/materialize.min.js')
+ var materialize = require('./lib/materialize.min.js')
 
 //require("jquery")
 //require("materialize-css") didn't work
@@ -357,7 +357,7 @@ class App extends  React.Component {
 
     //RENDERING//
     componentDidMount () {
-      $('.modal-trigger').leanModal()
+      // $('.modal-trigger').leanModal()
     }
     render () {
     //  console.log("Rendering App: ", this)

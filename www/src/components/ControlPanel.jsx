@@ -14,7 +14,8 @@ export class ControlPanel extends React.Component {
     super(props);
     this.handleRunType = this.handleRunType.bind(this);
   }
-  componentDidUpdate(){
+  componentDidMount(){
+    $('.modal-trigger').leanModal();
     // $("ul.tabs").tabs();
   }
   handleRunType(type){
@@ -72,7 +73,8 @@ export class ControlPanel extends React.Component {
 
                               setActiveObservation = {this.props.setActiveObservation}
                               activeObservation = {this.props.activeObservation} />
-        <PathwaysControl  selectedPathways = {this.props.selectedPathways}
+        <PathwaysControl  runType={this.props.toggle}
+                          selectedPathways = {this.props.selectedPathways}
                           setActivePathway = {this.props.setActivePath}
                           activePathway = {this.props.activePathway} />
 
