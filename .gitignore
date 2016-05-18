@@ -47,4 +47,5 @@ wamp/.crossbar/pgmlab.pem
 #node file for running process
 wamp/.crossbar/node.pid
 wamp/.crossbar/node.key
+
 www/node_modules/
