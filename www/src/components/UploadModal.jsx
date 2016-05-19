@@ -8,6 +8,9 @@ export class UploadModal extends React.Component {
         this.isInteger = this.isInteger.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
+    componentDidMount(){
+      $('.modal-trigger').leanModal();
+    }
     isInteger(str) {
         return /^([1-9]\d*)$/.test(str)
     }
@@ -272,38 +275,42 @@ export class UploadModal extends React.Component {
     render() {
         let uploadTable=this.uploadTable(this.props.uploadList);
         return (
-                <div id="uploadModal1" className="modal modal-fixed-footer">
-                  <div className="modal-content">
-                    <div className="section">
-                      <h5>Upload Files</h5>
-                      <div className="row">
-                        {this.uploadBtn("Pathway",this.readPathwayFile.bind(this),"Upload a pairwise interaction file")}
-                        {this.uploadBtn("Observations",this.readObservationFile.bind(this),"Upload an observation file")}
-                        {this.uploadBtn("Estimated",this.readEstimatedParametersFile.bind(this),"Upload a pre-generated estimated parameters file")}
-                        {this.uploadBtn("Posterior",this.readPosteriorProbabilityFile.bind(this),"Upload a pre-generated posterior probability file")}
-                      </div>
-                    </div>
-                    <div className="section">
-                      <h5>Uploaded Files</h5>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th data-field="id">ID</th>
-                            <th data-field="time">Datetime</th>
-                            <th data-field="type">Type</th>
-                            <th data-field="status">Status</th>
-                            <th data-field="name">Name</th>
-                            <th data-field="comment">Comments</th>
-                          </tr>
-                        </thead>
-                        <tbody>{uploadTable}</tbody>
-                      </table>
-                    </div>
+          <div>
+            <div id="uploadModal" className="modal modal-fixed-footer">
+              <div className="modal-content">
+                <div className="section">
+                  <h5>Upload Files</h5>
+                  <div className="row">
+                    {this.uploadBtn("Pathway",this.readPathwayFile.bind(this),"Upload a pairwise interaction file")}
+                    {this.uploadBtn("Observations",this.readObservationFile.bind(this),"Upload an observation file")}
+                    {this.uploadBtn("Estimated",this.readEstimatedParametersFile.bind(this),"Upload a pre-generated estimated parameters file")}
+                    {this.uploadBtn("Posterior",this.readPosteriorProbabilityFile.bind(this),"Upload a pre-generated posterior probability file")}
                   </div>
-                  <div className="modal-footer">
-                      <a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-                  </div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th data-field="id">ID</th>
+                        <th data-field="time">Datetime</th>
+                        <th data-field="type">Type</th>
+                        <th data-field="status">Status</th>
+                        <th data-field="name">Name</th>
+                        <th data-field="comment">Comments</th>
+                      </tr>
+                    </thead>
+                    <tbody>{uploadTable}</tbody>
+                  </table>
                 </div>
+              </div>
+              <div className="modal-footer">
+                  <a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+              </div>
+            </div>
+            <a className="modal-trigger btn-floating btn tooltipped"
+              data-position="top" data-delay="50" data-tooltip="Upload Data Files" href="#uploadModal">
+              <i className="material-icons">file_upload</i>
+            </a>
+
+          </div>
         );
     }
 }

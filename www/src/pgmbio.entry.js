@@ -19,18 +19,20 @@ class App extends  React.Component {
       // var observationSets =  {};
       // observationSets["someID"] = { "id":'someID', "name":"One","observations":[]};
       let observationSets = new Map([
-        ['someID1',{ "id":'someID1', "name":"One","observations":[]}],
-        ['someID2',{ "id":'someID2', "name":"One","observations":[]}],
-        ['someID3',{ "id":'someID3', "name":"One","observations":[]}],
-        ['someID4',{ "id":'someID4', "name":"One","observations":[]}]
+        // ['someID1',{ "id":'someID1', "name":"One","observations":[]}],
+        // ['someID2',{ "id":'someID2', "name":"One","observations":[]}],
+        // ['someID3',{ "id":'someID3', "name":"One","observations":[]}],
+        // ['someID4',{ "id":'someID4', "name":"One","observations":[]}]
       ]);
       let selectedObservationSet = new Map([
-        ["Inference", { "id":'someID1', "name":"One","observations":[]}],
-        ["Learning", { "id":'someID1', "name":"One","observations":[]}]
+        // ["Inference", { "id":'someID1', "name":"One","observations":[]}],
+        // ["Learning", { "id":'someID1', "name":"One","observations":[]}]
+        ["Inference", {"id":"","name":"","observations":[]}],
+        ["Learning", {"id":"","name":"","observations":[]}]
       ]);
       let selectedObservations = new Map([
-        ["Inference", new Array()], //Array of indices
-        ["Learning", new Array()]
+        ["Inference", new Map([["Indices",[]],["Active",0]])], //Array of indices
+        ["Learning", new Map([["Indices",[]],["Active",0]])]
       ]);
       //
       let selectedPathways = new Map([
@@ -113,7 +115,11 @@ class App extends  React.Component {
       const selectedSet = this.state.observationSets.get(observationSetID);
       selectedObservationSet.set(runType, selectedSet);
       let selectedObservations = this.state.selectedObservations;
-      selectedObservations.set(runType, [... selectedSet.observations.keys()]); //array of numbers, not strings
+      const obs = new Map([
+        ["Indices", [... selectedSet.observations.keys()]], //array of number values for index in set.observations
+        ["Active", 0] //first observation in set is set to active
+      ]);
+      selectedObservations.set(runType, obs); //array of numbers, not strings
       this.setState({
         "selectedObservationSet":selectedObservationSet,
         "selectedObservations":selectedObservations
@@ -123,33 +129,37 @@ class App extends  React.Component {
     selectObservations(observationIndices, runType){
       console.log('selectObservations',observationIndices, runType)
       let selectedObservations = this.state.selectedObservations;
-      const selected = selectedObservations.get(runType);
+      const indices = selectedObservations.get(runType).get("Indices");
       for (let index of observationIndices) {
-        if (!selected.includes(index)) {
-          selected.push(index);
+        if (!indices.includes(index)) {
+          indices.push(index);
         };
       };
-      selectedObservations.set(runType, selected);
+      selectedObservations.get(runType).set("Indices", indices);
       this.setState({"selectedObservations": selectedObservations})
     }
     // For SelectObservations modal component
     removeSelectedObservations(observationIndices, runType){
       // console.log("removeSelectedObservations", observationIndices);
       let selectedObservations = this.state.selectedObservations;
-      let selected = selectedObservations.get(runType);
+      let selected = selectedObservations.get(runType).get("Indices");
       const reducedSelected = selected.reduce((remaining,observationIndex)=>{
         if (!observationIndices.includes(observationIndex)) {
           remaining.push(observationIndex);
         };
         return remaining;
       },[]);
-      selectedObservations.set(runType,reducedSelected);
+      // Add checker for unselecting the active observation
+      //
+      selectedObservations.get(runType).set("Indices",reducedSelected);
       this.setState({"selectedObservations": selectedObservations});
     }
 
     // For ObservationsControl component
-    setActiveObservation(observationIndex){
-      this.setState({"activeObservation":observationIndex});
+    setActiveObservation(observationIndex, runType){ //Index in selectedObservationSet.observations
+      let selectedObservations = this.state.selectedObservations;
+      selectedObservations.get(runType).set("Active", observationIndex)
+      this.setState({"selectedObservations": selectedObservations});
     }
 
     runInference() {

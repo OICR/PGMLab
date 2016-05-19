@@ -32,7 +32,7 @@ export class SelectObservationSet extends React.Component {
   }
   handleObsSelect(observationIndex){
     // console.log("handleObsSelect", observationIndex, this.props.selectedObservations.get(this.props.runType));
-    const currentlySelected = this.props.selectedObservations.get(this.props.runType);
+    const currentlySelected = this.props.selectedObservations.get(this.props.runType).get("Indices");
     switch (currentlySelected.includes(observationIndex)) {
       case true:
         this.props.removeSelectedObservations([observationIndex], this.props.runType);
@@ -88,7 +88,7 @@ export class SelectObservationSet extends React.Component {
     let self = this;
     const selectedObservationSet = this.props.selectedObservationSet.get(this.props.runType);
     const textInput = isNaN(self.state.obsFilterText) ? self.state.obsFilterText.toLowerCase() : self.state.obsFilterText;
-    const selectedObservations = this.props.selectedObservations.get(this.props.runType);
+    const selectedObservations = this.props.selectedObservations.get(this.props.runType).get("Indices");
     let observations = selectedObservationSet.observations.map((observation,index)=>{
       // const textFilter = observationSet.name.toLowerCase().indexOf(textInput) && (observationSet.id.indexOf(textInput) == -1);
       // observations dont have names yet, are labelled by index

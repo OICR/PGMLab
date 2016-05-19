@@ -12,12 +12,117 @@ var classNames = require("classnames");
 export class ObservationsControl extends React.Component {
   constructor(props){
     super(props);
+
+    this.shiftActiveObservation = this.shiftActiveObservation.bind(this);
+    this.header = this.header.bind(this);
+    this.nodeItem = this.nodeItem.bind(this);
+    this.nodeList = this.nodeList.bind(this);
+  }
+  componentDidMount(){
+    $(".dropdown-button").dropdown({
+      inDuration:100,
+      outDuration:100,
+      constrain_width:false,
+      hover: true,
+      gutter:0,
+      belowOrigin:false,
+      alignment:"left"
+    });
+  }
+  componentDidUpdate(){
+    $(".dropdown-button").dropdown({
+      inDuration:100,
+      outDuration:100,
+      constrain_width:false,
+      hover: true,
+      gutter:0,
+      belowOrigin:false,
+      alignment:"left"
+    });
+  }
+  shiftActiveObservation(shift){
+    let direction;
+    switch (shift) {
+      case "left":
+        direction = (distance)=>{return distance < 0};
+        break;
+      case "right":
+        direction = (distance)=>{return distance > 0};
+        break;
+    };
+    const selectedObservations = this.props.selectedObservations.get(this.props.runType);
+    const currentActivatedIndex = selectedObservations.get("Active");
+    console.log(currentActivatedIndex, selectedObservations.get("Indices"))
+    const nextActivated = selectedObservations.get("Indices").reduce((best,index)=>{
+      const distance = index-currentActivatedIndex;
+      const correctDirection = direction(distance);
+      const closer = Math.abs(distance) < Math.abs(best.distance);
+      switch (correctDirection && closer) {
+        case (true):
+          return {index,distance};
+          break;
+        default:
+          return best;
+      };
+    }, {index:currentActivatedIndex,distance:Infinity});
+    console.log(nextActivated, selectedObservations.get("Indices"));
+    this.props.setActiveObservation(nextActivated.index, this.props.runType);
+  }
+
+  header(){
+    const selectedObservationSet = this.props.selectedObservationSet.get(this.props.runType);
+    const currentActivatedIndex = this.props.selectedObservations.get(this.props.runType).get("Active");
+    const activeObservation = selectedObservationSet.observations[currentActivatedIndex];
+    console.log(activeObservation, currentActivatedIndex);
+    return (
+      <ul className="pagination">
+        <li className="waves-effect blue lighten-5" onClick={()=>{this.shiftActiveObservation("left")}}>
+          <a><i className="material-icons">chevron_left</i></a>
+        </li>
+        <li className="waves-effect blue lighten-5" onClick={()=>{this.shiftActiveObservation("right")}}>
+          <a><i className="material-icons">chevron_right</i></a>
+        </li>
+        <li><a><i className="material-icons">search</i></a></li>
+        <li><strong>{"Observation ".concat(currentActivatedIndex.toString())}</strong></li>
+      </ul>
+    );
+  }
+  nodeItem(node){
+    const name = node.name;
+    const state = node.state;
+    return (
+      <div key={name} className="collection-item row valign">
+        <div className="col s10">{name}</div>
+        <a className="dropdown-button btn col s2" data-activates={name} href="#!">{state}</a>
+        <ul id={name} className="dropdown-content">
+          <li><a>0</a></li>
+          <li><a>1</a></li>
+          <li><a>2</a></li>
+        </ul>
+      </div>
+    );
+  }
+  nodeList(){
+    const selectedObservationSet = this.props.selectedObservationSet.get(this.props.runType);
+    const currentActivatedIndex = this.props.selectedObservations.get(this.props.runType).get("Active");
+    const activeObservation = selectedObservationSet.observations[currentActivatedIndex] ? selectedObservationSet.observations[currentActivatedIndex] : []; //until we get init/example data
+    const nodes = activeObservation.map((node)=>{
+      return this.nodeItem(node);
+    })
+    return nodes;
   }
   render(){
     console.log(this.props);
     return (
       <div className="section">
         <h5>Active Observation</h5>
+        {this.header()}
+        <div className="collection">
+          <div className="collection-item">
+            <input type="text" placeholder="Type to filter nodes"/>
+          </div>
+          {this.nodeList()}
+        </div>
       </div>
     );
   }

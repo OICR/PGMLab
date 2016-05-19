@@ -15,7 +15,7 @@ export class ControlPanel extends React.Component {
     this.handleRunType = this.handleRunType.bind(this);
   }
   componentDidMount(){
-    $('.modal-trigger').leanModal();
+
     // $("ul.tabs").tabs();
   }
   handleRunType(type){
@@ -48,10 +48,7 @@ export class ControlPanel extends React.Component {
                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet}
                        uploadList                     = {this.props.uploadList}
                        uploadListAddFailure           = {this.props.uploadListAddFailure} />
-          <a className="modal-trigger btn-floating btn tooltipped"
-            data-position="top" data-delay="50" data-tooltip="Upload Data Files" href="#uploadModal1">
-            <i className="material-icons">file_upload</i>
-          </a>
+
         </div>
       </div>
       <div className="divider"></div>
@@ -74,6 +71,7 @@ export class ControlPanel extends React.Component {
                               setActiveObservation = {this.props.setActiveObservation}
                               activeObservation = {this.props.activeObservation} />
         <PathwaysControl  runType={this.props.toggle}
+                          pathways={this.props.pathways}
                           selectedPathways = {this.props.selectedPathways}
                           setActivePathway = {this.props.setActivePath}
                           activePathway = {this.props.activePathway} />

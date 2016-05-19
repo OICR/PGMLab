@@ -15,8 +15,8 @@ export class ControlPanelInference extends React.Component {
   render() {
     // console.log("CPI", this.props)
     var activePathway = this.props.activePathway.name
-    return (
-      <div>
+    const observations = () => {
+      return (
         <div className="section">
           <div className="row">
               <h5 className="col s11">Selected Observation Set</h5>
@@ -33,7 +33,7 @@ export class ControlPanelInference extends React.Component {
                           pairwiseInteractions   = {this.props.pairwiseInteractions}
                           removeObservedNode     = {this.props.removeObservedNode} />
 
-                      
+
           <h5 className="tooltipped" data-position="top" data-tooltip="These Pathways will be included when generating posterior probabilities">Selected Pathway(s)</h5>
           <SelectedPathways pathways         = {this.props.pathways}
                             activePathway    = {this.props.activePathway}
@@ -41,29 +41,34 @@ export class ControlPanelInference extends React.Component {
                             type             = "inference"
                             selectedPathways = {this.props.selectedPathways} />
         </div>
-
-
+      );
+    };
+    const results = () => {
+      <div className="section">
+         <h5>Results:</h5>
+          <ul className="collapsible" data-collapsible="accordion">
+              <li>
+                  <div className="collapsible-header"><i className="material-icons">assessment</i>Posterior Probability Sets</div>
+                  <div className="collapsible-body">
+                      <ul>
+                          <li>pp 1</li>
+                          <li>pp 2</li>
+                          <li>pp 3</li>
+                          <li>pp 4</li>
+                      </ul>
+                  </div>
+             </li>
+          </ul>
+      </div>
+    };
+    return (
+      <div>
         <div className="section">
             <i className="material-icons tiny right">settings</i>
             <a className="waves-effect waves-light btn" onClick={this.run}>Run</a>
+            <a className="waves-effect waves-light btn">Results</a>
         </div>
         <div className="divider"></div>
-        <div className="section">
-           <h5>Results:</h5>
-            <ul className="collapsible" data-collapsible="accordion">
-                <li>
-                    <div className="collapsible-header"><i className="material-icons">assessment</i>Posterior Probability Sets</div>
-                    <div className="collapsible-body">
-                        <ul>
-                            <li>pp 1</li>
-                            <li>pp 2</li>
-                            <li>pp 3</li>
-                            <li>pp 4</li>
-                        </ul>
-                    </div>
-               </li>
-            </ul>
-        </div>
       </div>
     )
   }
