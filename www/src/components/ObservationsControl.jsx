@@ -12,33 +12,13 @@ var classNames = require("classnames");
 export class ObservationsControl extends React.Component {
   constructor(props){
     super(props);
+    this.state = {value:0};
 
     this.shiftActiveObservation = this.shiftActiveObservation.bind(this);
+    this.setNodeState = this.setNodeState.bind(this);
     this.header = this.header.bind(this);
     this.nodeItem = this.nodeItem.bind(this);
     this.nodeList = this.nodeList.bind(this);
-  }
-  componentDidMount(){
-    $(".dropdown-button").dropdown({
-      inDuration:100,
-      outDuration:100,
-      constrain_width:false,
-      hover: true,
-      gutter:0,
-      belowOrigin:false,
-      alignment:"left"
-    });
-  }
-  componentDidUpdate(){
-    $(".dropdown-button").dropdown({
-      inDuration:100,
-      outDuration:100,
-      constrain_width:false,
-      hover: true,
-      gutter:0,
-      belowOrigin:false,
-      alignment:"left"
-    });
   }
   shiftActiveObservation(shift){
     let direction;
@@ -68,7 +48,9 @@ export class ObservationsControl extends React.Component {
     console.log(nextActivated, selectedObservations.get("Indices"));
     this.props.setActiveObservation(nextActivated.index, this.props.runType);
   }
-
+  setNodeState(node,state){
+    console.log("setNodeState",node,state);
+  }
   header(){
     const selectedObservationSet = this.props.selectedObservationSet.get(this.props.runType);
     const currentActivatedIndex = this.props.selectedObservations.get(this.props.runType).get("Active");
@@ -92,13 +74,9 @@ export class ObservationsControl extends React.Component {
     const state = node.state;
     return (
       <div key={name} className="collection-item row valign">
-        <div className="col s10">{name}</div>
-        <a className="dropdown-button btn col s2" data-activates={name} href="#!">{state}</a>
-        <ul id={name} className="dropdown-content">
-          <li><a>0</a></li>
-          <li><a>1</a></li>
-          <li><a>2</a></li>
-        </ul>
+        <div className="col s8">{name}</div>
+        <div className="col s2">
+        </div>
       </div>
     );
   }

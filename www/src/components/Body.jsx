@@ -5,6 +5,10 @@ import {DisplayPanel} from './DisplayPanel.jsx';
 var graphvis = require('../bin/graphvis.js');
 var classNames = require("classnames");
 
+
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+
 export class Body extends React.Component {
     constructor(props) {
       super(props)
@@ -21,6 +25,7 @@ export class Body extends React.Component {
     render () {
       // console.log("body", this.props)
       return (
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="row">
           <div className="col s4" style={{minWidth:"300px"}}>
             <ControlPanel pairwiseInteractions            = {this.props.pairwiseInteractions}
@@ -65,6 +70,7 @@ export class Body extends React.Component {
               activePathway = {this.props.activePathway} />
           </div>
         </main>
+        </MuiThemeProvider>
       )
     }
 }
