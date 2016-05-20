@@ -86,7 +86,7 @@ export class ObservationsControl extends React.Component {
       <div className="section">
         <h5>Active Observation</h5>
         {this.header()}
-        <div className="collection">
+        <div className="collection" style={{"height":"275px","overflow":"scroll"}}>
           <div className="collection-item">
             <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
               value={this.state.nodeFilterText} onChange={this.nodeFilterTextUpdate}/>

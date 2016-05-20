@@ -16,18 +16,6 @@ export class NodeItem extends React.Component{
     this.handleRequestClose = this.handleRequestClose.bind(this);
     this.handleStateSet = this.handleStateSet.bind(this);
   }
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(nextProps,nextState);
-  //   //Reset modified state values when switching between active observations
-  //   // switch (nextProps.node.state == nextState.nodeState) {
-  //   //   case true:
-  //   //     return false;
-  //   //   case false:
-  //   //     this.setState({
-  //   //       nodeState:nextProps.node.state
-  //   //     }); return true;
-  //   // }
-  // }
   handleTouchTap(event){
     this.setState({
       open:true,
@@ -43,8 +31,9 @@ export class NodeItem extends React.Component{
     this.handleRequestClose();
   }
   render(){
+    const noPad = {"paddingBottom":"0px","paddingTop":"0px"};
     return (
-      <div className="collection-item row">
+      <div className="collection-item row" style={noPad}>
         <div className="col s9">
           {this.state.nodeName}
         </div>

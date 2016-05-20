@@ -53,12 +53,13 @@ export class PathwaysControl extends React.Component {
       <div className="section">
         <h5>Active Pathway</h5>
         {this.header()}
-        <div className="collection" style={{"height":"200px","overflow":"scroll"}}>
+        <div className="collection" style={{"height":"275px","overflow":"scroll"}}>
           <div className="collection-item">
             <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
               value={this.state.nodeFilterText} onChange={this.nodeFilterTextUpdate}/>
           </div>
           {this.nodeList()}
+          <div className="divider"></div>
         </div>
       </div>
     );
