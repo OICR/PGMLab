@@ -43,7 +43,6 @@ export class NodeItem extends React.Component{
     this.handleRequestClose();
   }
   render(){
-    console.log(this.state.nodeState);
     return (
       <div className="collection-item row">
         <div className="col s9">

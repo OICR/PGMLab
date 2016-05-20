@@ -12,11 +12,17 @@ var classNames = require("classnames");
 export class ObservationsControl extends React.Component {
   constructor(props){
     super(props);
-    this.state = {value:0};
+    this.state = {
+      nodeFilterText: ""
+    };
 
+    this.nodeFilterTextUpdate = this.nodeFilterTextUpdate.bind(this);
     this.shiftActiveObservation = this.shiftActiveObservation.bind(this);
     this.header = this.header.bind(this);
     this.nodeList = this.nodeList.bind(this);
+  }
+  nodeFilterTextUpdate(){
+    this.setState({nodeFilterText: this.refs["nodeFilterInput"].value})
   }
   shiftActiveObservation(shift){
     const direction = (distance)=>{
@@ -62,12 +68,16 @@ export class ObservationsControl extends React.Component {
     );
   }
   nodeList(){
+    const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
     const selectedObservationSet = this.props.selectedObservationSet.get(this.props.runType);
     const currentActivatedIndex = this.props.selectedObservations.get(this.props.runType).get("Active");
     const activeObservation = selectedObservationSet.observations[currentActivatedIndex] ? selectedObservationSet.observations[currentActivatedIndex] : []; //until we get init/example data
     const nodes = activeObservation.map((node)=>{
-      return <NodeItem key={node.name} node={node}/>
-    })
+      const textFilter = node.name.toLowerCase().indexOf(textInput);
+      return (
+        (textFilter) ? undefined : <NodeItem key={node.name} node={node}/>
+      );
+    });
     return nodes;
   }
   render(){
@@ -78,7 +88,8 @@ export class ObservationsControl extends React.Component {
         {this.header()}
         <div className="collection">
           <div className="collection-item">
-            <input type="text" placeholder="Type to filter nodes"/>
+            <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
+              value={this.state.nodeFilterText} onChange={this.nodeFilterTextUpdate}/>
           </div>
           {this.nodeList()}
         </div>
