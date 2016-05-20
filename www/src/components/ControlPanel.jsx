@@ -70,6 +70,7 @@ export class ControlPanel extends React.Component {
                               setActiveObservation = {this.props.setActiveObservation} />
         <PathwaysControl  runType={this.props.toggle}
                           pathways={this.props.pathways}
+                          pairwiseInteractions={this.props.pairwiseInteractions}
                           selectedPathways = {this.props.selectedPathways}
                           setActivePathway = {this.props.setActivePath}
                           activePathway = {this.props.activePathway} />
