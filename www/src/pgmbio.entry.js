@@ -13,22 +13,37 @@ import {Footer} from './components/Footer.jsx';
 
 var graphvis = require('./bin/graphvis.js');
 
+var EXAMPLEDATA = {
+  // For G-protein pathway
+  observationSets : new Map([
+    ["exampleID1", {"id":"exampleID1", "name":"Example 2", "observations":[
+      [ {"name":"49860","state":"1"},{"name":"58253","state":"0"},{"name":"415917","state":"0"},{"name":"61076","state":"1"}],
+      [ {"name":"49860","state":"0"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+    ]}],
+    ["exampleID2", {"id":"exampleID2", "name":"Example 1", "observations":[
+      [ {"name":"49860","state":"0"},{"name":"58253","state":"1"},{"name":"415917","state":"0"},{"name":"61076","state":"1"}],
+      [ {"name":"49860","state":"0"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"},{"name":"61074","state":"1"}]
+    ]}]
+  ])
+};
+
 class App extends  React.Component {
     constructor (props) {
       super(props)
       // var observationSets =  {};
       // observationSets["someID"] = { "id":'someID', "name":"One","observations":[]};
-      let observationSets = new Map([
-        // ['someID1',{ "id":'someID1', "name":"One","observations":[]}],
-        // ['someID2',{ "id":'someID2', "name":"One","observations":[]}],
-        // ['someID3',{ "id":'someID3', "name":"One","observations":[]}],
-        // ['someID4',{ "id":'someID4', "name":"One","observations":[]}]
-      ]);
+      // let observationSets = new Map([
+      //   // ['someID1',{ "id":'someID1', "name":"One","observations":[]}],
+      //   // ['someID2',{ "id":'someID2', "name":"One","observations":[]}],
+      //   // ['someID3',{ "id":'someID3', "name":"One","observations":[]}],
+      //   // ['someID4',{ "id":'someID4', "name":"One","observations":[]}]
+      // ]);
+      let observationSets = EXAMPLEDATA.observationSets;
       let selectedObservationSet = new Map([
         // ["Inference", { "id":'someID1', "name":"One","observations":[]}],
         // ["Learning", { "id":'someID1', "name":"One","observations":[]}]
-        ["Inference", {"id":"","name":"","observations":[]}],
-        ["Learning", {"id":"","name":"","observations":[]}]
+        ["Inference", observationSets.get("exampleID1")],
+        ["Learning", observationSets.get("exampleID2")]
       ]);
       let selectedObservations = new Map([
         ["Inference", new Map([["Indices",[]],["Active",0]])], //Array of indices
