@@ -67,9 +67,7 @@ export class ControlPanel extends React.Component {
         <ObservationsControl  runType = {this.props.toggle}
                               selectedObservationSet = {this.props.selectedObservationSet}
                               selectedObservations = {this.props.selectedObservations}
-
-                              setActiveObservation = {this.props.setActiveObservation}
-                              activeObservation = {this.props.activeObservation} />
+                              setActiveObservation = {this.props.setActiveObservation} />
         <PathwaysControl  runType={this.props.toggle}
                           pathways={this.props.pathways}
                           selectedPathways = {this.props.selectedPathways}

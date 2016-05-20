@@ -48,7 +48,7 @@ export class SelectObservationSet extends React.Component {
     this.props.selectObservations(toSelect, this.props.runType);
   }
   handleObsUncheckAll(){
-    const selected = this.props.selectedObservations.get(this.props.runType);
+    const selected = this.props.selectedObservations.get(this.props.runType).get("Indices");
     // console.log(selected);
     this.props.removeSelectedObservations(selected, this.props.runType);
   }

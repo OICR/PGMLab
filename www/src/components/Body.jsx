@@ -51,7 +51,6 @@ export class Body extends React.Component {
                           selectedObservations = {this.props.selectedObservations}
 
                           setActiveObservation = {this.props.setActiveObservation}
-                          activeObservation = {this.state.activeObservation}
 
                           pathways                        = {this.props.pathways}
                           activePathway                   = {this.props.activePathway}

@@ -4,13 +4,16 @@
 //require("materialize-css") didn't work
 
 import React from 'react'
-import { render } from 'react-dom'
-var moment = require('moment')
+import {render} from 'react-dom'
+
+import injectTapEventPlugin from "react-tap-event-plugin";
+injectTapEventPlugin();
 
 import {Header} from './components/Header.jsx';
 import {Body}   from './components/Body.jsx';
 import {Footer} from './components/Footer.jsx';
 
+var moment = require('moment')
 var graphvis = require('./bin/graphvis.js');
 
 var EXAMPLEDATA = {
@@ -21,8 +24,8 @@ var EXAMPLEDATA = {
       [ {"name":"49860","state":"0"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
     ]}],
     ["exampleID2", {"id":"exampleID2", "name":"Example 1", "observations":[
-      [ {"name":"49860","state":"0"},{"name":"58253","state":"1"},{"name":"415917","state":"0"},{"name":"61076","state":"1"}],
-      [ {"name":"49860","state":"0"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"},{"name":"61074","state":"1"}]
+      [ {"name":"58253","state":"1"},{"name":"415917","state":"0"},{"name":"61076","state":"1"},{"name":"49860","state":"0"}],
+      [ {"name":"61074","state":"1"},{"name":"49860","state":"0"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"}]
     ]}]
   ])
 };
@@ -30,65 +33,54 @@ var EXAMPLEDATA = {
 class App extends  React.Component {
     constructor (props) {
       super(props)
-      // var observationSets =  {};
-      // observationSets["someID"] = { "id":'someID', "name":"One","observations":[]};
-      // let observationSets = new Map([
-      //   // ['someID1',{ "id":'someID1', "name":"One","observations":[]}],
-      //   // ['someID2',{ "id":'someID2', "name":"One","observations":[]}],
-      //   // ['someID3',{ "id":'someID3', "name":"One","observations":[]}],
-      //   // ['someID4',{ "id":'someID4', "name":"One","observations":[]}]
-      // ]);
+      // EXAMPLE DATA ON INIT
       let observationSets = EXAMPLEDATA.observationSets;
       let selectedObservationSet = new Map([
-        // ["Inference", { "id":'someID1', "name":"One","observations":[]}],
-        // ["Learning", { "id":'someID1', "name":"One","observations":[]}]
         ["Inference", observationSets.get("exampleID1")],
         ["Learning", observationSets.get("exampleID2")]
       ]);
       let selectedObservations = new Map([
-        ["Inference", new Map([["Indices",[]],["Active",0]])], //Array of indices
-        ["Learning", new Map([["Indices",[]],["Active",0]])]
+        ["Inference", new Map([["Indices",[0]],["Active",0]])], //Array of indices
+        ["Learning", new Map([["Indices",[0,1]],["Active",1]])]
       ]);
-      //
       let selectedPathways = new Map([
         ["Inference", new Array()],
         ["Learning", new Array()]
       ]);
-      this.state = {  "pathways"                         : this.props.pathways,
-                      "activePathway"                   : this.props.activePathway,
+      // Set initial state
+      this.state = {  "pathways"                        : this.props.pathways,
+                      "pairwiseInteractions"            : this.props.pairwiseInteractions,
                       "uploadList"                      : [],
+                      //
+                      "activePathway"                   : this.props.activePathway,
                       "selectedPathways": selectedPathways,
                       //
                       "observationSets"                 : observationSets,
                       "selectedObservationSet": selectedObservationSet,
                       "selectedObservations": selectedObservations,
                       //
-                      "activeObservation": 0, //index of currently activated observationSet's .observation
-                      //
                       "posteriorProbabilitySets"        : [],
-                      "estimatedParameterSets"          : [],
-                      "pairwiseInteractions"            : this.props.pairwiseInteractions }
+                      "estimatedParameterSets"          : []
+                    };
 
-
-      this.setActivePathway               = this.setActivePathway.bind(this)
-      this.observeNode                    = this.observeNode.bind(this)
-      this.removeObservedNode             = this.removeObservedNode.bind(this)
-      this.runInference                   = this.runInference.bind(this)
-      this.setNodeState                   = this.setNodeState.bind(this)
+      this.setActivePathway               = this.setActivePathway.bind(this);
+      this.observeNode                    = this.observeNode.bind(this);
+      this.removeObservedNode             = this.removeObservedNode.bind(this);
+      this.runInference                   = this.runInference.bind(this);
+      this.setNodeState                   = this.setNodeState.bind(this);
 
       this.selectPathways = this.selectPathways.bind(this);
       this.removeSelectedPathways = this.removeSelectedPathways.bind(this);
       this.selectObservationSet = this.selectObservationSet.bind(this);
       this.selectObservations = this.selectObservations.bind(this);
       this.removeSelectedObservations = this.removeSelectedObservations.bind(this);
-
       this.setActiveObservation = this.setActiveObservation.bind(this);
 
-      this.uploadListAddFailure           = this.uploadListAddFailure.bind(this)
-      this.addNewPathway                  = this.addNewPathway.bind(this)
-      this.addNewObservationSet           = this.addNewObservationSet.bind(this)
-      this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this)
-      this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this)
+      this.uploadListAddFailure           = this.uploadListAddFailure.bind(this);
+      this.addNewPathway                  = this.addNewPathway.bind(this);
+      this.addNewObservationSet           = this.addNewObservationSet.bind(this);
+      this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this);
+      this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this);
     }
 
     static getCurrentDateTime() {
@@ -155,7 +147,7 @@ class App extends  React.Component {
     }
     // For SelectObservations modal component
     removeSelectedObservations(observationIndices, runType){
-      // console.log("removeSelectedObservations", observationIndices);
+      console.log("removeSelectedObservations", observationIndices);
       let selectedObservations = this.state.selectedObservations;
       let selected = selectedObservations.get(runType).get("Indices");
       const reducedSelected = selected.reduce((remaining,observationIndex)=>{
@@ -409,9 +401,7 @@ class App extends  React.Component {
                     selectObservations = {this.selectObservations}
                     removeSelectedObservations = {this.removeSelectedObservations}
                     selectedObservations = {this.state.selectedObservations}
-
                     setActiveObservation = {this.setActiveObservation}
-                    activeObservation = {this.state.activeObservation}
 
                     activePathway                   = {this.state.activePathway}
                     setActivePathway                = {this.setActivePathway}
