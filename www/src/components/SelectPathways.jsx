@@ -42,14 +42,14 @@ export class SelectPathways extends React.Component {
   }
   // For onClick event when unchecking all pathways
   handleUncheckAll(){
-    const selected = this.props.selectedPathways.get(this.props.runType);
+    const selected = this.props.selectedPathways.get(this.props.runType).get("Pathways");
     this.props.removeSelectedPathways(selected, this.props.runType);
   }
 
   // RENDERING //
   pathwayListItem(pathway){
     // const checked = this.props.selectedPathways.includes(pathway.id);
-    const checked = this.props.selectedPathways.get(this.props.runType).includes(pathway.id);
+    const checked = this.props.selectedPathways.get(this.props.runType).get("Pathways").includes(pathway.id);
     return (
       <li key={pathway.id} className="collection-item black-text"
         onClick={(evt)=>{evt.preventDefault();this.handleSelect(pathway.id)}}>

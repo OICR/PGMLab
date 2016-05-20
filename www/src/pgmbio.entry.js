@@ -44,8 +44,8 @@ class App extends  React.Component {
         ["Learning", new Map([["Indices",[0,1]],["Active",1]])]
       ]);
       let selectedPathways = new Map([
-        ["Inference", new Array()],
-        ["Learning", new Array()]
+        ["Inference", new Map([["Pathways", new Array("397795")],["Active","397795"]])],
+        ["Learning", new Map([["Pathways", new Array("397795")],["Active","397795"]])]
       ]);
       // Set initial state
       this.state = {  "pathways"                        : this.props.pathways,
@@ -91,20 +91,20 @@ class App extends  React.Component {
     selectPathways(pathwayIDs, runType){
       // console.log("selectPathways", pathwayIDs.length, runType);
       let selectedPathways = this.state.selectedPathways;
-      let selected=this.state.selectedPathways.get(runType);
+      let selected=this.state.selectedPathways.get(runType).get("Pathways");
       for (let pathwayID of pathwayIDs) {
         if (!selected.includes(pathwayID)) {
           selected.push(pathwayID);
         };
       };
-      selectedPathways.set(runType, selected);
+      selectedPathways.get(runType).set("Pathways", selected);
       this.setState({"selectedPathways":selectedPathways});
     }
     // For SelectPathways modal component
     removeSelectedPathways(pathwayIDs, runType){
       // console.log("removeSelectedPathways", pathwayIDs);
       let selectedPathways = this.state.selectedPathways;
-      let selected = selectedPathways.get(runType);
+      let selected = selectedPathways.get(runType).get("Pathways");
       const indices = pathwayIDs.map((pathway)=>{return selected.indexOf(pathway)});
       const reducedSelected = selected.reduce((remaining,pathwayID,index)=>{
         if (!indices.includes(index)) {
@@ -112,7 +112,7 @@ class App extends  React.Component {
         };
         return remaining;
       },[]);
-      selectedPathways.set(runType, reducedSelected);
+      selectedPathways.get(runType).set("Pathways", reducedSelected);
       this.setState({"selectedPathways":selectedPathways});
     }
 
