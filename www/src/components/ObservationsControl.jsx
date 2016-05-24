@@ -80,7 +80,7 @@ export class ObservationsControl extends React.Component {
     return nodes;
   }
   render(){
-    console.log(this.props);
+    // console.log(this.props);
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
       <div className="section" style={noPad}>

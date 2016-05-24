@@ -68,11 +68,11 @@ export class ControlPanel extends React.Component {
                               selectedObservationSet = {this.props.selectedObservationSet}
                               selectedObservations = {this.props.selectedObservations}
                               setActiveObservation = {this.props.setActiveObservation} />
-        <PathwaysControl  
+        <PathwaysControl
                           pathways={this.props.pathways}
                           pairwiseInteractions={this.props.pairwiseInteractions}
                           selectedPathways = {this.props.selectedPathways}
-                          setActivePathway = {this.props.setActivePath}
+                          setActivePathway = {this.props.setActivePathway}
                           activePathway = {this.props.activePathway} />
 
         <div className="divider"></div>
