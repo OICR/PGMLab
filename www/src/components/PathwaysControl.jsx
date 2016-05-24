@@ -36,7 +36,6 @@ export class PathwaysControl extends React.Component {
     };
     const currentActivatedIndex = currentSelected.indexOf(selectedPathways.get("Active").id);
     const nextActivated = sortedSelectedPathways.reduce((best,pathway,index)=>{
-      console.log(index, currentActivatedIndex);
       const distance = index-currentActivatedIndex;
       const correctDirection = direction(distance);
       const closer = Math.abs(distance) < Math.abs(best.distance);
@@ -46,7 +45,6 @@ export class PathwaysControl extends React.Component {
       };
     }, {pathway:selectedPathways.get("Active"), distance:Infinity});
     // Set new activePathway
-    console.log(nextActivated);
     switch (nextActivated.distance === Infinity) {
       case true: return;
       default: this.props.setActivePathway(nextActivated.pathway);
