@@ -9,7 +9,7 @@ export class NodeItem extends React.Component{
     this.state={
       open:false,
       nodeName:props.node.name,
-      nodeState:props.node.state
+      nodeState: '-1'
     };
 
     this.handleTouchTap = this.handleTouchTap.bind(this);
@@ -26,11 +26,14 @@ export class NodeItem extends React.Component{
     this.setState({open:false});
   }
   handleStateSet(newState){
-    console.log("changing state:",this.state.nodeState,newState);
-    this.setState({nodeState: newState});
+    console.log(this.props.activeType,"changing state:",this.state.nodeState,newState);
+    this.setState({
+      nodeState: newState
+    }, ()=>{this.props.setNodeItemState(this.props.node, newState, this.props.activeType)});
     this.handleRequestClose();
   }
   render(){
+    // console.log(this.props)
     const noPad = {"paddingBottom":"0px","paddingTop":"0px"};
     return (
       <div className="collection-item row" style={noPad}>

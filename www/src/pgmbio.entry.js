@@ -72,6 +72,8 @@ class App extends  React.Component {
       this.addNewObservationSet           = this.addNewObservationSet.bind(this);
       this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this);
       this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this);
+
+      this.setNodeItemState = this.setNodeItemState.bind(this);
     }
 
     static getCurrentDateTime() {
@@ -177,6 +179,12 @@ class App extends  React.Component {
         );
       };
     }
+    // For NodeItem components in Pathways/ObservationsControl
+    setNodeItemState(node,state,activeType) {
+      console.log("setNodeItemState", node, state, activeType);
+
+    }
+
 
     runInference() {
         console.log("runInference");
@@ -192,24 +200,24 @@ class App extends  React.Component {
     }
 
     observeNode(node, runType) {
-      console.log("observeNode", node, runType)
+      // console.log("observeNode", node, runType)
       var selectedObservationSet = (runType === "inference")? this.state.selectedObservationSetInference : this.state.selectedObservationSetLearning
-      console.log("selectedObservationSet", selectedObservationSet)
+      // console.log("selectedObservationSet", selectedObservationSet)
       var activeIndex = this.state.observationSets[selectedObservationSet].activeIndex
-      console.log("activeIndex", activeIndex)
-      console.log("obs", selectedObservationSet.observations)
+      // console.log("activeIndex", activeIndex)
+      // console.log("obs", selectedObservationSet.observations)
       var activeNodes =  this.state.observationSets[selectedObservationSet].observations[activeIndex].nodes
       var found = activeNodes.some(function (el) { return el.name === node.name  })
       if (!found) {
         node["state"] = 1;
         graphvis.setNodeState(node)
-        console.log("activeNodes", activeNodes, node)
+        // console.log("activeNodes", activeNodes, node)
         var newNodes = activeNodes.concat([node]);
-        console.log("newNodes", newNodes, activeNodes)
+        // console.log("newNodes", newNodes, activeNodes)
         var observationSets = this.state.observationSets
         observationSets[selectedObservationSet].observations[activeIndex].nodes = $.extend( true, [], newNodes)
-        console.log("nodes",           selectedObservationSet.observations[selectedObservationSet.activeIndex])
-        console.log("soss", observationSet)
+        // console.log("nodes",selectedObservationSet.observations[selectedObservationSet.activeIndex])
+        // console.log("soss",observationSet)
         if (runType ==="inference") {
             this.setState({"selectedObservationSetInference": observationSets})
         }
@@ -393,7 +401,9 @@ class App extends  React.Component {
                     observeNode                     = {this.observeNode}
                     removeObservedNode              = {this.removeObservedNode}
                     runInference                    = {this.runInference}
-                    setNodeState                    = {this.setNodeState} />
+                    setNodeState                    = {this.setNodeState}
+
+                    setNodeItemState = {this.setNodeItemState} />
              <Footer />
           </div>
       )

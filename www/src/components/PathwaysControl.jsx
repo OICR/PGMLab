@@ -54,11 +54,6 @@ export class PathwaysControl extends React.Component {
   // RENDERING
   header(){
     const selectedPathways = this.props.selectedPathways;
-    // const activePathwayID = selectedPathways.get("Active").id;
-    // const activePathway = this.props.pathways.find((pathway)=>{
-    //   return pathway.id === activePathwayID;
-    // });
-    // console.log(activePathwayID, activePathway);
     const activePathway = selectedPathways.get("Active");
     return (
       <ul className="pagination">
@@ -75,13 +70,14 @@ export class PathwaysControl extends React.Component {
   nodeList(){
     const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
     const pathwayNodes = this.props.pairwiseInteractions.nodes ? this.props.pairwiseInteractions.nodes : [];
+    console.log("pathwayNodes:", pathwayNodes);
     const nodes = pathwayNodes.map((node)=>{
       // Change this to filter different node.properties
       const textFilter = node.name.toLowerCase().indexOf(textInput);
       //Need a way to connect these nodes to the ones displayed in ObservationsPanel
-      const nodeProp = {name:node.name,state:"-"};
+      // const nodeProp = {name:node.name,state:"-"};
       return (
-        (textFilter) ? undefined : <NodeItem key={node.name} node={nodeProp} />
+        (textFilter) ? undefined : <NodeItem key={node.name} node={node} activeType="Pathway" setNodeItemState={this.props.setNodeItemState}/>
       );
     });
     return nodes;

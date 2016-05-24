@@ -59,15 +59,16 @@ export class Body extends React.Component {
                           addNewPathway                   = {this.props.addNewPathway}
                           addNewObservationSet            = {this.props.addNewObservationSet}
                           addNewEstimatedParameterSet     = {this.props.addNewEstimatedParameterSet}
-                          addNewPosteriorProbabilitySet   = {this.props.addNewPosteriorProbabilitySet} />
+                          addNewPosteriorProbabilitySet   = {this.props.addNewPosteriorProbabilitySet}
+
+                          setNodeItemState = {this.props.setNodeItemState}/>
           </div>
           <div className="col s8" style={{minWidth:"800px"}}>
             <DisplayPanel
               toggle = {this.state.toggle}
               selectedObservationSet = {this.props.selectedObservationSet}
               selectedObservations = {this.props.selectedObservations}
-              selectedPathways = {this.props.selectedPathways}
-              />
+              selectedPathways = {this.props.selectedPathways} />
           </div>
         </main>
         </MuiThemeProvider>

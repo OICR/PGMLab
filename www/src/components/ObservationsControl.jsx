@@ -45,11 +45,12 @@ export class ObservationsControl extends React.Component {
     }, {index:currentActivatedIndex,distance:Infinity});
     // console.log(nextActivated, selectedObservations.get("Indices"));
     switch (nextActivated.distance === Infinity) {
-      case true:
-        return;
+      case true: return;
       default: this.props.setActiveObservation(nextActivated.index);
     };
   }
+
+  // RENDERING
   header(){
     const selectedObservationSet = this.props.selectedObservationSet;
     const currentActivatedIndex = this.props.selectedObservations.get("Active");
@@ -70,17 +71,19 @@ export class ObservationsControl extends React.Component {
     const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
     const selectedObservationSet = this.props.selectedObservationSet;
     const currentActivatedIndex = this.props.selectedObservations.get("Active");
-    const activeObservation = selectedObservationSet.observations[currentActivatedIndex] ? selectedObservationSet.observations[currentActivatedIndex] : []; //until we get init/example data
+    const activeObservation = selectedObservationSet.observations[currentActivatedIndex];// ? selectedObservationSet.observations[currentActivatedIndex] : [];
+    console.log("observationNodes", activeObservation);
     const nodes = activeObservation.map((node)=>{
       const textFilter = node.name.toLowerCase().indexOf(textInput);
+      // activeType for updating either the same node in observation or pathway
       return (
-        (textFilter) ? undefined : <NodeItem key={node.name} node={node}/>
+        (textFilter) ? undefined : <NodeItem key={node.name} node={node} activeType="Observation" setNodeItemState={this.props.setNodeItemState}/>
       );
     });
     return nodes;
   }
   render(){
-    // console.log(this.props);
+    console.log(this.props.selectedObservations.get("Active"));
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
       <div className="section" style={noPad}>

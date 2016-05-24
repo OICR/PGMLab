@@ -64,11 +64,11 @@ export class ControlPanel extends React.Component {
                         removeSelectedObservations = {this.props.removeSelectedObservations}
                         selectedObservations = {this.props.selectedObservations} />
         <div className="divider"></div>
-        <ObservationsControl
+        <ObservationsControl  setNodeItemState = {this.props.setNodeItemState}
                               selectedObservationSet = {this.props.selectedObservationSet}
                               selectedObservations = {this.props.selectedObservations}
                               setActiveObservation = {this.props.setActiveObservation} />
-        <PathwaysControl
+        <PathwaysControl  setNodeItemState = {this.props.setNodeItemState}
                           pathways={this.props.pathways}
                           pairwiseInteractions={this.props.pairwiseInteractions}
                           selectedPathways = {this.props.selectedPathways}
