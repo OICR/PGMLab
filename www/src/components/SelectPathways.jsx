@@ -1,7 +1,5 @@
 import React from 'react'
 
-// import {PathwayNames} from './PathwayNames.jsx'
-
 export class SelectPathways extends React.Component {
   constructor (props) {
     super(props);
@@ -28,28 +26,27 @@ export class SelectPathways extends React.Component {
     const selected = this.refs[pathwayID].checked;
     switch (selected) {
       case true:
-        this.props.removeSelectedPathways([pathwayID], this.props.runType);
+        this.props.removeSelectedPathways([pathwayID]);
         break;
       case false:
-        this.props.selectPathways([pathwayID], this.props.runType);
+        this.props.selectPathways([pathwayID]);
         break;
     };
   }
   // For onClick event when checking all pathways
   handleCheckAll(){
     const toSelect = this.props.pathways.map((pathway)=>{return pathway.id});
-    this.props.selectPathways(toSelect, this.props.runType);
+    this.props.selectPathways(toSelect);
   }
   // For onClick event when unchecking all pathways
   handleUncheckAll(){
-    const selected = this.props.selectedPathways.get(this.props.runType).get("Pathways");
-    this.props.removeSelectedPathways(selected, this.props.runType);
+    const selected = this.props.selectedPathways.get("Pathways");
+    this.props.removeSelectedPathways(selected);
   }
 
   // RENDERING //
   pathwayListItem(pathway){
-    // const checked = this.props.selectedPathways.includes(pathway.id);
-    const checked = this.props.selectedPathways.get(this.props.runType).get("Pathways").includes(pathway.id);
+    const checked = this.props.selectedPathways.get("Pathways").includes(pathway.id);
     return (
       <li key={pathway.id} className="collection-item black-text"
         onClick={(evt)=>{evt.preventDefault();this.handleSelect(pathway.id)}}>
@@ -62,9 +59,7 @@ export class SelectPathways extends React.Component {
     let self = this;
     const input = (isNaN(self.state.filterText)) ? self.state.filterText.toLowerCase() : self.state.filterText;
     const pathways = self.props.pathways;
-    // const selectedPathwayIDs = self.props.selectedPathways;
-    // console.log(self.props.selectedPathways);
-    const selectedPathwayIDs = self.props.selectedPathways.get(this.props.runType);
+    const selectedPathwayIDs = self.props.selectedPathways;
     const pathwayList = pathways.map((pathway)=>{
       const textFilter = pathway.name.toLowerCase().indexOf(input) && (pathway.id.indexOf(input) == -1);
       const checkedFilter = self.state.filterChecked && !selectedPathwayIDs.includes(pathway.id);

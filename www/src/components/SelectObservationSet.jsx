@@ -27,37 +27,33 @@ export class SelectObservationSet extends React.Component {
     this.setState({obsFilterText: this.refs["obsFilterInput"].value});
   }
   handleSetSelect(observationSetID){
-    // console.log("handleSetSelect");
-    this.props.selectObservationSet(observationSetID, this.props.runType);
+    this.props.selectObservationSet(observationSetID);
   }
   handleObsSelect(observationIndex){
-    // console.log("handleObsSelect", observationIndex, this.props.selectedObservations.get(this.props.runType));
-    const currentlySelected = this.props.selectedObservations.get(this.props.runType).get("Indices");
+    const currentlySelected = this.props.selectedObservations.get("Indices");
     switch (currentlySelected.includes(observationIndex)) {
       case true:
-        this.props.removeSelectedObservations([observationIndex], this.props.runType);
+        this.props.removeSelectedObservations([observationIndex]);
         break;
       case false:
-        this.props.selectObservations([observationIndex], this.props.runType);
+        this.props.selectObservations([observationIndex]);
         break;
     };
   }
   handleObsCheckAll(){
-    const toSelect = this.props.selectedObservationSet.get(this.props.runType).observations.map((obs,i)=>{return i});
-    // console.log(toSelect);
-    this.props.selectObservations(toSelect, this.props.runType);
+    const toSelect = this.props.selectedObservationSet.observations.map((obs,i)=>{return i});
+    this.props.selectObservations(toSelect);
   }
   handleObsUncheckAll(){
-    const selected = this.props.selectedObservations.get(this.props.runType).get("Indices");
-    // console.log(selected);
-    this.props.removeSelectedObservations(selected, this.props.runType);
+    const selected = this.props.selectedObservations.get("Indices");
+    this.props.removeSelectedObservations(selected);
   }
 
   // RENDERING //
   observationSetList(){
     let self = this;
     const textInput = isNaN(self.state.setFilterText) ? self.state.setFilterText.toLowerCase() : self.state.setFilterText;
-    const currentSelectedSetID = self.props.selectedObservationSet.get(self.props.runType).id;
+    const currentSelectedSetID = self.props.selectedObservationSet.id;
     let observationSets = [... self.props.observationSets.values()].map((observationSet)=>{
       const textFilter = observationSet.name.toLowerCase().indexOf(textInput) && (observationSet.id.indexOf(textInput) == -1);
       const selected = currentSelectedSetID === observationSet.id;
@@ -86,11 +82,10 @@ export class SelectObservationSet extends React.Component {
   }
   observationsList(){
     let self = this;
-    const selectedObservationSet = this.props.selectedObservationSet.get(this.props.runType);
+    const selectedObservationSet = this.props.selectedObservationSet;
     const textInput = isNaN(self.state.obsFilterText) ? self.state.obsFilterText.toLowerCase() : self.state.obsFilterText;
-    const selectedObservations = this.props.selectedObservations.get(this.props.runType).get("Indices");
+    const selectedObservations = this.props.selectedObservations.get("Indices");
     let observations = selectedObservationSet.observations.map((observation,index)=>{
-      // const textFilter = observationSet.name.toLowerCase().indexOf(textInput) && (observationSet.id.indexOf(textInput) == -1);
       // observations dont have names yet, are labelled by index
       const textFilter = index.toString().indexOf(textInput) == -1;
       const selected = selectedObservations.includes(index);

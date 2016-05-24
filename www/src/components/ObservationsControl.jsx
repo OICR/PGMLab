@@ -31,7 +31,7 @@ export class ObservationsControl extends React.Component {
         case "right": return distance > 0;
       };
     };
-    const selectedObservations = this.props.selectedObservations.get(this.props.runType);
+    const selectedObservations = this.props.selectedObservations;
     const currentActivatedIndex = selectedObservations.get("Active");
     const nextActivated = selectedObservations.get("Indices").reduce((best,index)=>{
       const distance = index-currentActivatedIndex;
@@ -46,14 +46,13 @@ export class ObservationsControl extends React.Component {
     switch (nextActivated.distance === Infinity) {
       case true:
         return;
-      default: this.props.setActiveObservation(nextActivated.index, this.props.runType);
+      default: this.props.setActiveObservation(nextActivated.index);
     };
   }
   header(){
-    const selectedObservationSet = this.props.selectedObservationSet.get(this.props.runType);
-    const currentActivatedIndex = this.props.selectedObservations.get(this.props.runType).get("Active");
+    const selectedObservationSet = this.props.selectedObservationSet;
+    const currentActivatedIndex = this.props.selectedObservations.get("Active");
     const activeObservation = selectedObservationSet.observations[currentActivatedIndex];
-    // console.log(activeObservation, currentActivatedIndex);
     return (
       <ul className="pagination">
         <li className="waves-effect blue lighten-5" onClick={()=>{this.shiftActiveObservation("left")}}>
@@ -68,8 +67,8 @@ export class ObservationsControl extends React.Component {
   }
   nodeList(){
     const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
-    const selectedObservationSet = this.props.selectedObservationSet.get(this.props.runType);
-    const currentActivatedIndex = this.props.selectedObservations.get(this.props.runType).get("Active");
+    const selectedObservationSet = this.props.selectedObservationSet;
+    const currentActivatedIndex = this.props.selectedObservations.get("Active");
     const activeObservation = selectedObservationSet.observations[currentActivatedIndex] ? selectedObservationSet.observations[currentActivatedIndex] : []; //until we get init/example data
     const nodes = activeObservation.map((node)=>{
       const textFilter = node.name.toLowerCase().indexOf(textInput);

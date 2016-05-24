@@ -21,7 +21,7 @@ export class PathwaysControl extends React.Component {
   // RENDERING
   header(){
     const selectedPathways = this.props.selectedPathways;
-    const activePathwayID = selectedPathways.get(this.props.runType).get("Active");
+    const activePathwayID = selectedPathways.get("Active");
     const activePathway = this.props.pathways.find((pathway)=>{
       return pathway.id === activePathwayID;
     });

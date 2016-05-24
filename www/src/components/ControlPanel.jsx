@@ -52,7 +52,7 @@ export class ControlPanel extends React.Component {
         </div>
       </div>
         <div className="divider"></div>
-        <DataSelection  runType                = {this.props.toggle}
+        <DataSelection
                         pathways               = {this.props.pathways}
                         selectPathways = {this.props.selectPathways}
                         selectedPathways = {this.props.selectedPathways}
@@ -64,11 +64,11 @@ export class ControlPanel extends React.Component {
                         removeSelectedObservations = {this.props.removeSelectedObservations}
                         selectedObservations = {this.props.selectedObservations} />
         <div className="divider"></div>
-        <ObservationsControl  runType = {this.props.toggle}
+        <ObservationsControl
                               selectedObservationSet = {this.props.selectedObservationSet}
                               selectedObservations = {this.props.selectedObservations}
                               setActiveObservation = {this.props.setActiveObservation} />
-        <PathwaysControl  runType={this.props.toggle}
+        <PathwaysControl  
                           pathways={this.props.pathways}
                           pairwiseInteractions={this.props.pairwiseInteractions}
                           selectedPathways = {this.props.selectedPathways}

@@ -11,7 +11,6 @@ export class DataSelection extends React.Component {
         <div className="row">
           <div className="col s6 center-align">
             <SelectObservationSet
-              runType                   = {this.props.runType}
               observationSets        = {this.props.observationSets}
               selectObservationSet   = {this.props.selectObservationSet}
               selectedObservationSet = {this.props.selectedObservationSet}
@@ -25,7 +24,6 @@ export class DataSelection extends React.Component {
           </div>
           <div className="col s6 center-align">
             <SelectPathways
-              runType               = {this.props.runType}
               pathways              = {this.props.pathways}
               selectPathways={this.props.selectPathways}
               removeSelectedPathways={this.props.removeSelectedPathways}

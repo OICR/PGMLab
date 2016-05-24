@@ -35,18 +35,9 @@ class App extends  React.Component {
       super(props)
       // EXAMPLE DATA ON INIT
       let observationSets = EXAMPLEDATA.observationSets;
-      let selectedObservationSet = new Map([
-        ["Inference", observationSets.get("exampleID1")],
-        ["Learning", observationSets.get("exampleID2")]
-      ]);
-      let selectedObservations = new Map([
-        ["Inference", new Map([["Indices",[0,1]],["Active",0]])], //Array of indices
-        ["Learning", new Map([["Indices",[0,1]],["Active",1]])]
-      ]);
-      let selectedPathways = new Map([
-        ["Inference", new Map([["Pathways", new Array("397795")],["Active","397795"]])],
-        ["Learning", new Map([["Pathways", new Array("397795")],["Active","397795"]])]
-      ]);
+      let selectedObservationSet = observationSets.get("exampleID1");
+      let selectedObservations = new Map([["Indices",[0,1]],["Active",0]]);
+      let selectedPathways = new Map([["Pathways", new Array("397795")],["Active","397795"]]);
       // Set initial state
       this.state = {  "pathways"                        : this.props.pathways,
                       "pairwiseInteractions"            : this.props.pairwiseInteractions,
@@ -89,22 +80,20 @@ class App extends  React.Component {
 
     // For SelectPathways modal component
     selectPathways(pathwayIDs, runType){
-      // console.log("selectPathways", pathwayIDs.length, runType);
       let selectedPathways = this.state.selectedPathways;
-      let selected=this.state.selectedPathways.get(runType).get("Pathways");
+      let selected=this.state.selectedPathways.get("Pathways");
       for (let pathwayID of pathwayIDs) {
         if (!selected.includes(pathwayID)) {
           selected.push(pathwayID);
         };
       };
-      selectedPathways.get(runType).set("Pathways", selected);
+      selectedPathways.set("Pathways", selected);
       this.setState({"selectedPathways":selectedPathways});
     }
     // For SelectPathways modal component
     removeSelectedPathways(pathwayIDs, runType){
-      // console.log("removeSelectedPathways", pathwayIDs);
       let selectedPathways = this.state.selectedPathways;
-      let selected = selectedPathways.get(runType).get("Pathways");
+      let selected = selectedPathways.get("Pathways");
       const indices = pathwayIDs.map((pathway)=>{return selected.indexOf(pathway)});
       const reducedSelected = selected.reduce((remaining,pathwayID,index)=>{
         if (!indices.includes(index)) {
@@ -112,44 +101,39 @@ class App extends  React.Component {
         };
         return remaining;
       },[]);
-      selectedPathways.get(runType).set("Pathways", reducedSelected);
+      selectedPathways.set("Pathways", reducedSelected);
       this.setState({"selectedPathways":selectedPathways});
     }
 
     // For SelectObservations modal component
     selectObservationSet(observationSetID, runType){
-      let selectedObservationSet = this.state.selectedObservationSet;
       const selectedSet = this.state.observationSets.get(observationSetID);
-      selectedObservationSet.set(runType, selectedSet);
-      let selectedObservations = this.state.selectedObservations;
       const obs = new Map([
         ["Indices", [... selectedSet.observations.keys()]], //array of number values for index in set.observations
         ["Active", 0] //first observation in set is set to active
       ]);
-      selectedObservations.set(runType, obs); //array of numbers, not strings
       this.setState({
-        "selectedObservationSet":selectedObservationSet,
-        "selectedObservations":selectedObservations
+        "selectedObservationSet":selectedSet,
+        "selectedObservations":obs
       });
     }
     // For SelectObservations modal component
     selectObservations(observationIndices, runType){
-      console.log('selectObservations',observationIndices, runType)
       let selectedObservations = this.state.selectedObservations;
-      const indices = selectedObservations.get(runType).get("Indices");
+      const indices = selectedObservations.get("Indices");
       for (let index of observationIndices) {
         if (!indices.includes(index)) {
           indices.push(index);
         };
       };
-      selectedObservations.get(runType).set("Indices", indices);
+      selectedObservations.set("Indices", indices);
       this.setState({"selectedObservations": selectedObservations})
     }
     // For SelectObservations modal component
     removeSelectedObservations(observationIndices, runType){
       console.log("removeSelectedObservations", observationIndices);
       let selectedObservations = this.state.selectedObservations;
-      let selected = selectedObservations.get(runType).get("Indices");
+      let selected = selectedObservations.get("Indices");
       const reducedSelected = selected.reduce((remaining,observationIndex)=>{
         if (!observationIndices.includes(observationIndex)) {
           remaining.push(observationIndex);
@@ -157,15 +141,14 @@ class App extends  React.Component {
         return remaining;
       },[]);
       // Add checker for unselecting the active observation
-      //
-      selectedObservations.get(runType).set("Indices",reducedSelected);
+      selectedObservations.set("Indices",reducedSelected);
       this.setState({"selectedObservations": selectedObservations});
     }
 
     // For ObservationsControl component
     setActiveObservation(observationIndex, runType){ //Index in selectedObservationSet.observations
       let selectedObservations = this.state.selectedObservations;
-      selectedObservations.get(runType).set("Active", observationIndex)
+      selectedObservations.set("Active", observationIndex)
       this.setState({"selectedObservations": selectedObservations});
     }
 
