@@ -42,7 +42,7 @@ export class ObservationsControl extends React.Component {
         default: return best;
       };
     }, {index:currentActivatedIndex,distance:Infinity});
-    console.log(nextActivated, selectedObservations.get("Indices"));
+    // console.log(nextActivated, selectedObservations.get("Indices"));
     switch (nextActivated.distance === Infinity) {
       case true:
         return;
@@ -62,7 +62,6 @@ export class ObservationsControl extends React.Component {
         <li className="waves-effect blue lighten-5" onClick={()=>{this.shiftActiveObservation("right")}}>
           <a><i className="material-icons">chevron_right</i></a>
         </li>
-        <li><a><i className="material-icons">search</i></a></li>
         <li><strong>{"Observation ".concat(currentActivatedIndex.toString())}</strong></li>
       </ul>
     );
@@ -82,12 +81,13 @@ export class ObservationsControl extends React.Component {
   }
   render(){
     console.log(this.props);
+    const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
-      <div className="section">
+      <div className="section" style={noPad}>
         <h5>Active Observation</h5>
         {this.header()}
-        <div className="collection" style={{"height":"275px","overflow":"scroll"}}>
-          <div className="collection-item">
+        <div className="collection" style={{"maxHeight":"275px","overflow":"scroll"}}>
+          <div className="collection-item" style={noPad}>
             <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
               value={this.state.nodeFilterText} onChange={this.nodeFilterTextUpdate}/>
           </div>

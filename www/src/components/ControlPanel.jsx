@@ -51,7 +51,7 @@ export class ControlPanel extends React.Component {
 
         </div>
       </div>
-      <div className="divider"></div>
+        <div className="divider"></div>
         <DataSelection  runType                = {this.props.toggle}
                         pathways               = {this.props.pathways}
                         selectPathways = {this.props.selectPathways}

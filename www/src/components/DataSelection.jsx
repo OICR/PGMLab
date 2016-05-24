@@ -4,8 +4,9 @@ import {SelectObservationSet} from './SelectObservationSet.jsx'
 
 export class DataSelection extends React.Component {
   render() {
+    const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
-      <div className="section">
+      <div className="section" style={noPad}>
         <h5>Data Selection</h5>
         <div className="row">
           <div className="col s6 center-align">

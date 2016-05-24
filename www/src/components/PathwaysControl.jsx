@@ -29,8 +29,7 @@ export class PathwaysControl extends React.Component {
       <ul className="pagination">
         <li className="waves-effect blue lighten-5"><a><i className="material-icons">chevron_left</i></a></li>
         <li className="waves-effect blue lighten-5"><a><i className="material-icons">chevron_right</i></a></li>
-        <li><a><i className="material-icons">search</i></a></li>
-        <li><strong>{activePathway.name}</strong></li>
+        <li><strong class="truncate">{activePathway.name}</strong></li>
       </ul>
     );
   }
@@ -49,17 +48,17 @@ export class PathwaysControl extends React.Component {
     return nodes;
   }
   render() {
+    const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
-      <div className="section">
+      <div className="section" style={noPad}>
         <h5>Active Pathway</h5>
         {this.header()}
-        <div className="collection" style={{"height":"275px","overflow":"scroll"}}>
-          <div className="collection-item">
+        <div className="collection" style={{"maxHeight":"275px","overflow":"scroll"}}>
+          <div className="collection-item" style={noPad}>
             <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
               value={this.state.nodeFilterText} onChange={this.nodeFilterTextUpdate}/>
           </div>
           {this.nodeList()}
-          <div className="divider"></div>
         </div>
       </div>
     );

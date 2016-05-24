@@ -40,7 +40,7 @@ class App extends  React.Component {
         ["Learning", observationSets.get("exampleID2")]
       ]);
       let selectedObservations = new Map([
-        ["Inference", new Map([["Indices",[0]],["Active",0]])], //Array of indices
+        ["Inference", new Map([["Indices",[0,1]],["Active",0]])], //Array of indices
         ["Learning", new Map([["Indices",[0,1]],["Active",1]])]
       ]);
       let selectedPathways = new Map([
