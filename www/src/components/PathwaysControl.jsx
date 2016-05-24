@@ -10,6 +10,7 @@ export class PathwaysControl extends React.Component {
     };
 
     this.nodeFilterTextUpdate = this.nodeFilterTextUpdate.bind(this);
+    this.shiftActivePathway = this.shiftActivePathway.bind(this);
     this.header = this.header.bind(this);
     this.nodeList = this.nodeList.bind(this);
   }
@@ -17,6 +18,38 @@ export class PathwaysControl extends React.Component {
   nodeFilterTextUpdate(){
     this.setState({nodeFilterText: this.refs["nodeFilterInput"].value});
   };
+
+  shiftActivePathway(shift){
+    // Sort selectedPathway IDs
+    const selectedPathways = this.props.selectedPathways;
+    const currentSelected = selectedPathways.get("Pathways");
+    const sortedSelectedPathways = this.props.pathways.reduce((sorted, pathway)=>{
+      if (currentSelected.includes(pathway.id)) {sorted.push(pathway.id);};
+      return sorted;
+    }, []);
+    // Find currently active pathway's closest neighbour by index distance
+    const direction = (distance)=>{
+      switch (shift) {
+        case "left": return distance < 0;
+        case "right": return distance > 0;
+      };
+    };
+    const currentActivatedIndex = currentSelected.indexOf(selectedPathways.get("Active"));
+    const nextActivated = sortedSelectedPathways.reduce((best,pathway,index)=>{
+      const distance = index-currentActivatedIndex;
+      const correctDirection = direction(distance);
+      const closer = Math.abs(distance) < Math.abs(best.distance);
+      switch (correctDirection && closer) {
+        case true: return {pathway,distance};
+        default: return best;
+      };
+    }, {pathway:selectedPathways.get("Active"), distance:Infinity});
+    // Set new activePathway
+    switch (nextActivated.distance === Infinity) {
+      case true: return;
+      default: this.props.setActivePathway(nextActivated.pathway);
+    };
+  }
 
   // RENDERING
   header(){
@@ -27,8 +60,12 @@ export class PathwaysControl extends React.Component {
     });
     return (
       <ul className="pagination">
-        <li className="waves-effect blue lighten-5"><a><i className="material-icons">chevron_left</i></a></li>
-        <li className="waves-effect blue lighten-5"><a><i className="material-icons">chevron_right</i></a></li>
+        <li className="waves-effect blue lighten-5" onClick={()=>{this.shiftActivePathway("left")}}>
+          <a><i className="material-icons">chevron_left</i></a>
+        </li>
+        <li className="waves-effect blue lighten-5" onClick={()=>{this.shiftActivePathway("right")}}>
+          <a><i className="material-icons">chevron_right</i></a>
+        </li>
         <li><strong class="truncate">{activePathway.name}</strong></li>
       </ul>
     );
@@ -48,6 +85,7 @@ export class PathwaysControl extends React.Component {
     return nodes;
   }
   render() {
+    console.log(this.props);
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
       <div className="section" style={noPad}>

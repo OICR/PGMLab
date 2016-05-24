@@ -151,6 +151,33 @@ class App extends  React.Component {
       selectedObservations.set("Active", observationIndex)
       this.setState({"selectedObservations": selectedObservations});
     }
+    // For PathwaysControl components
+    setActivePathway(pathway, session) {
+      console.log("setActivePathway");
+      let self=this;
+        if (pathway.hasOwnProperty("pairwiseInteractions")) {
+             graphvis.render(pathway.pairwiseInteractions)
+             self.setState({ "activePathway": pathway,
+                             "pairwiseInteractions": pathway.pairwiseInteractions,
+                             "observedNodes": [],
+                             "posteriorProbabilities": {}})
+        }
+        else {
+            // var self = this;
+            connection.session.call('pgmlab.pathway.get', [pathway.id]).then(
+              function(res) {
+                   var pairwiseInteractions = res;
+                   graphvis.render(pairwiseInteractions)
+                   self.setState({ "activePathway": pathway,
+                                   "pairwiseInteractions": pairwiseInteractions,
+                                   "observedNodes": [],
+                                   "posteriorProbabilities": {}})
+              },
+              function (err) {
+                  console.log("couldn't get pathway", pathway.id, err)
+              })
+         }
+    }
 
     runInference() {
         console.log("runInference");
@@ -218,32 +245,7 @@ class App extends  React.Component {
         this.setState({"observedNodes": observedNodes});
     }
 
-    setActivePathway(pathway, session) {
-      console.log("setActivePathway");
-      let self=this;
-        if (pathway.hasOwnProperty("pairwiseInteractions")) {
-             graphvis.render(pathway.pairwiseInteractions)
-             self.setState({ "activePathway": pathway,
-                             "pairwiseInteractions": pathway.pairwiseInteractions,
-                             "observedNodes": [],
-                             "posteriorProbabilities": {}})
-        }
-        else {
-            // var self = this;
-            connection.session.call('pgmlab.pathway.get', [pathway.id]).then(
-              function(res) {
-                   var pairwiseInteractions = res;
-                   graphvis.render(pairwiseInteractions)
-                   self.setState({ "activePathway": pathway,
-                                   "pairwiseInteractions": pairwiseInteractions,
-                                   "observedNodes": [],
-                                   "posteriorProbabilities": {}})
-              },
-              function (err) {
-                  console.log("couldn't get pathway", pathway.id, err)
-              })
-         }
-    }
+
 
 
 

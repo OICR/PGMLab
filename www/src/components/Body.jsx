@@ -17,7 +17,8 @@ export class Body extends React.Component {
     }
     componentDidMount() {
       // Init example on first mount
-      this.props.setActivePathway(this.props.activePathway, this);
+      // this.props.setActivePathway(this.props.activePathway, this);
+      this.props.setActivePathway(this.props.activePathway);
     }
     toggleRunType() {
       this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"})

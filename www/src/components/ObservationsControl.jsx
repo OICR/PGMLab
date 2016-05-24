@@ -25,6 +25,7 @@ export class ObservationsControl extends React.Component {
     this.setState({nodeFilterText: this.refs["nodeFilterInput"].value})
   }
   shiftActiveObservation(shift){
+    // Find currently active observation's closest neighbour in selectedObservations by comparing index distances
     const direction = (distance)=>{
       switch (shift) {
         case "left": return distance < 0;
