@@ -19,12 +19,9 @@ export class DisplayPanel extends React.Component {
     // console.log('DISPLAYPANEL:', this.props);
     // Breadcrumb texts
     const runType=this.props.toggle;
-    // Change to Map
-    // const observationSet=(this.props.toggle === "Inference") ? this.props.observationSets[this.props.selectedObservationSetLearning].name : this.props.observationSets[this.props.selectedObservationSetInference].name;
-    // const observationID=(this.props.toggle === "Inference")? this.props.observationSets[this.props.selectedObservationSetLearning].id : this.props.observationSets[this.props.selectedObservationSetInference].id;
-    const observationSet="Observation 1";
-    const observationID="someid";
-    const activePathwayName=this.props.activePathway.name;
+    const observationSet=this.props.selectedObservationSet.name;
+    const observationID="Observation ".concat(this.props.selectedObservations.get("Active"));
+    const activePathwayName=this.props.selectedPathways.get("Active").name;
     return (
       <div>
         <nav style={{"width":"100%"}} className="light-blue lighten-1">

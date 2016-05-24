@@ -64,10 +64,10 @@ export class Body extends React.Component {
           <div className="col s8" style={{minWidth:"800px"}}>
             <DisplayPanel
               toggle = {this.state.toggle}
-              observationSets = {this.props.observationSets}
-              selectedObservationSetInference = {this.props.selectedObservationSetInference}
-              selectedObservationSetLearning = {this.props.selectedObservationSetLearning}
-              activePathway = {this.props.activePathway} />
+              selectedObservationSet = {this.props.selectedObservationSet}
+              selectedObservations = {this.props.selectedObservations}
+              selectedPathways = {this.props.selectedPathways}
+              />
           </div>
         </main>
         </MuiThemeProvider>
