@@ -1,23 +1,15 @@
 import React from 'react';
 
+import {NodeList} from "./NodeList.jsx";
 import {NodeItem} from "./NodeItem.jsx";
 
 export class PathwaysControl extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      nodeFilterText: ""
-    };
 
-    this.nodeFilterTextUpdate = this.nodeFilterTextUpdate.bind(this);
     this.shiftActivePathway = this.shiftActivePathway.bind(this);
     this.header = this.header.bind(this);
-    this.nodeList = this.nodeList.bind(this);
   }
-
-  nodeFilterTextUpdate(){
-    this.setState({nodeFilterText: this.refs["nodeFilterInput"].value});
-  };
 
   shiftActivePathway(shift){
     // Sort selectedPathway IDs
@@ -53,8 +45,7 @@ export class PathwaysControl extends React.Component {
 
   // RENDERING
   header(){
-    const selectedPathways = this.props.selectedPathways;
-    const activePathway = selectedPathways.get("Active");
+    const activePathway = this.props.selectedPathways.get("Active");
     return (
       <ul className="pagination">
         <li className="waves-effect blue lighten-5" onClick={()=>{this.shiftActivePathway("left")}}>
@@ -63,25 +54,9 @@ export class PathwaysControl extends React.Component {
         <li className="waves-effect blue lighten-5" onClick={()=>{this.shiftActivePathway("right")}}>
           <a><i className="material-icons">chevron_right</i></a>
         </li>
-        <li><strong>{activePathway.name}</strong></li>
+        <li><strong>{`${activePathway.name}`}</strong></li>
       </ul>
     );
-  }
-  nodeList(){
-    const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
-    const pathwayNodes = this.props.pairwiseInteractions.nodes ? this.props.pairwiseInteractions.nodes : [];
-    console.log("pathwayNodes:", pathwayNodes);
-    const nodes = pathwayNodes.map((node)=>{
-      // Change this to filter different node.properties
-      const textFilter = node.name.toLowerCase().indexOf(textInput);
-      //Need a way to connect these nodes to the ones displayed in ObservationsPanel
-      // const nodeProp = {name:node.name,state:"-"};
-      const nodeState = "-1"
-      return (
-        (textFilter) ? undefined : <NodeItem key={node.name} node={node} activeType="Pathway" setNodeItemState={this.props.setNodeItemState}/>
-      );
-    });
-    return nodes;
   }
   render(){
     // console.log(this.props);
@@ -90,13 +65,10 @@ export class PathwaysControl extends React.Component {
       <div className="section" style={noPad}>
         <h5>Active Pathway</h5>
         {this.header()}
-        <div className="collection" style={{"maxHeight":"275px","overflow":"scroll"}}>
-          <div className="collection-item" style={noPad}>
-            <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
-              value={this.state.nodeFilterText} onChange={this.nodeFilterTextUpdate}/>
-          </div>
-          {this.nodeList()}
-        </div>
+        <NodeList activeType="Pathway"
+                  selectedObservationSet={this.props.selectedObservationSet}
+                  selectedObservations={this.props.selectedObservations}
+                  pairwiseInteractions={this.props.pairwiseInteractions} />
       </div>
     );
   }
