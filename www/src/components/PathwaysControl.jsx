@@ -68,7 +68,8 @@ export class PathwaysControl extends React.Component {
         <NodeList activeType="Pathway"
                   selectedObservationSet={this.props.selectedObservationSet}
                   selectedObservations={this.props.selectedObservations}
-                  pairwiseInteractions={this.props.pairwiseInteractions} />
+                  pairwiseInteractions={this.props.pairwiseInteractions}
+                  setNodeItemState={this.props.setNodeItemState}/>
       </div>
     );
   }

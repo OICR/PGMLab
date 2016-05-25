@@ -62,7 +62,8 @@ export class ObservationsControl extends React.Component {
         <NodeList activeType="Observation"
                   selectedObservationSet={this.props.selectedObservationSet}
                   selectedObservations={this.props.selectedObservations}
-                  pairwiseInteractions={this.props.pairwiseInteractions} />
+                  pairwiseInteractions={this.props.pairwiseInteractions}
+                  setNodeItemState={this.props.setNodeItemState}/>
       </div>
     );
   }

@@ -16,34 +16,57 @@ export class NodeList extends React.Component {
   nodeFilterTextUpdate(){
     this.setState({"nodeFilterText": this.refs["nodeFilterInput"].value});
   }
-
+  handleSetState(name,state){
+    this.props.setNodeItemState(name,state);
+  }
 
   // RENDERING
   observationsList(){
+    // Construct pathwaysMap to check which nodes in observationNodes exist in pathwayNodes
+    const pathwayNodes = this.props.pairwiseInteractions.nodes; //may need to add ternary
+    const pathwayMap = new Map(pathwayNodes.map(node => [node.name, undefined]));
     const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
     const currentActivatedIndex = this.props.selectedObservations.get("Active");
     const observationNodes = this.props.selectedObservationSet.observations[currentActivatedIndex];
-    console.log("observationNodes:", observationNodes);
-    return observationNodes.map((node)=>{
-      const textFilter = node.name.toLowerCase().indexOf(textInput);
-      return (
-        textFilter ? undefined : <NodeItem key={node.name} node={node} />
-      );
+    // console.log("observationNodes:", observationNodes);
+    return observationNodes.map(node => {
+      let nodeItem;
+      if (node.name.toLowerCase().indexOf(textInput)) {
+        nodeItem = undefined;
+      }
+      else {
+        if (pathwayMap.has(node.name)) {
+          nodeItem = <NodeItem key={node.name} node={node} nodeState={node.state} shared={true} setNodeItemState={this.props.setNodeItemState}/>
+        }
+        else {
+          nodeItem = <NodeItem key={node.name} node={node} nodeState={node.state} shared={false} setNodeItemState={this.props.setNodeItemState}/>
+        }
+      };
+      return nodeItem;
     });
   }
   pathwaysList(){
+    // Construct observationStateMap to check which nodes in pathwayNodes have observed states
+    const observationNodes = this.props.selectedObservationSet.observations[this.props.selectedObservations.get("Active")];
+    const observationStateMap = new Map(observationNodes.map(node => [node.name, node.state]));
     const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
     const pathwayNodes = this.props.pairwiseInteractions.nodes ? this.props.pairwiseInteractions.nodes : [];
-    console.log("pathwayNodes:", pathwayNodes);
+    // console.log("pathwayNodes:", pathwayNodes);
     return pathwayNodes.map((node)=>{
-      const textFilter = node.name.toLowerCase().indexOf(textInput);
-      return (
-        textFilter ? undefined : <NodeItem key={node.name} node={node} />
-      );
+      let nodeItem;
+      if (node.name.toLowerCase().indexOf(textInput)) {
+        nodeItem = undefined;
+      }
+      else if (observationStateMap.has(node.name)) {
+        nodeItem = <NodeItem key={node.name} node={node} nodeState={observationStateMap.get(node.name)} shared={true} setNodeItemState={this.props.setNodeItemState}/>
+      }
+      else {
+        nodeItem = <NodeItem key={node.name} node={node} nodeState={"-"} shared={false} setNodeItemState={this.props.setNodeItemState}/>
+      };
+      return nodeItem;
     });
   }
   render(){
-    console.log("NodeList:", this.props);
     const scrollable={"maxHeight":"275px","overflow":"scroll"};
     const noPad={"paddingBottom":"0px","paddingTop":"0px"};
     let nodeList;

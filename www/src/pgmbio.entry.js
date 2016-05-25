@@ -174,9 +174,23 @@ class App extends  React.Component {
       };
     }
     // For NodeItem components in Pathways/ObservationsControl
-    setNodeItemState(node,state,activeType){
-      console.log("setNodeItemState", node, state, activeType);
-
+    setNodeItemState(name,state){
+      // console.log("setNodeItemState", name, state);
+      let selectedObservationSet = this.state.selectedObservationSet;
+      let observation = selectedObservationSet.observations[this.state.selectedObservations.get("Active")];
+      const posn = observation.findIndex((node)=>node.name===name);
+      switch (state) {
+        case ("-"):
+          if (posn !== -1) { observation.splice(posn,1); };
+          break;
+        default:
+          switch (posn) {
+            case (-1): observation.splice(0,0,{name,state}); break;
+            default: observation[posn].state = state;
+          };
+      };
+      selectedObservationSet.observations[this.state.selectedObservations.get("Active")] = observation;
+      this.setState({"selectedObservationSet":selectedObservationSet});
     }
 
 
