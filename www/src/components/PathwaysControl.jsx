@@ -76,6 +76,7 @@ export class PathwaysControl extends React.Component {
       const textFilter = node.name.toLowerCase().indexOf(textInput);
       //Need a way to connect these nodes to the ones displayed in ObservationsPanel
       // const nodeProp = {name:node.name,state:"-"};
+      const nodeState = "-1"
       return (
         (textFilter) ? undefined : <NodeItem key={node.name} node={node} activeType="Pathway" setNodeItemState={this.props.setNodeItemState}/>
       );
