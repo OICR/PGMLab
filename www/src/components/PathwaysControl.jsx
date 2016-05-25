@@ -83,7 +83,7 @@ export class PathwaysControl extends React.Component {
     });
     return nodes;
   }
-  render() {
+  render(){
     // console.log(this.props);
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (

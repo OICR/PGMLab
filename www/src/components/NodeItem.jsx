@@ -5,7 +5,6 @@ import {FlatButton, Popover, Menu, MenuItem, IconButton} from "material-ui";
 export class NodeItem extends React.Component{
   constructor(props){
     super(props);
-    // console.log(props);
     this.state={
       open:false
     };

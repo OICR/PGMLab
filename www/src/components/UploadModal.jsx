@@ -1,5 +1,4 @@
 import React from 'react'
-var Dropzone=require('react-dropzone');
 var classNames=require("classnames");
 
 export class UploadModal extends React.Component {

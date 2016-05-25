@@ -1,9 +1,10 @@
 import React from 'react'
+
 import {SelectPathways} from './SelectPathways.jsx'
 import {SelectObservationSet} from './SelectObservationSet.jsx'
 
 export class DataSelection extends React.Component {
-  render() {
+  render(){
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
       <div className="section" style={noPad}>

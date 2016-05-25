@@ -1,8 +1,3 @@
- var materialize = require('./lib/materialize.min.js')
-
-//require("jquery")
-//require("materialize-css") didn't work
-
 import React from 'react'
 import {render} from 'react-dom'
 
@@ -13,6 +8,7 @@ import {Header} from './components/Header.jsx';
 import {Body}   from './components/Body.jsx';
 import {Footer} from './components/Footer.jsx';
 
+var materialize = require('./lib/materialize.min.js')
 var moment = require('moment')
 var graphvis = require('./bin/graphvis.js');
 
@@ -31,7 +27,7 @@ var EXAMPLEDATA = {
 };
 
 class App extends  React.Component {
-    constructor (props) {
+    constructor(props){
       super(props)
       // EXAMPLE DATA ON INIT
       let observationSets = EXAMPLEDATA.observationSets;
@@ -76,9 +72,7 @@ class App extends  React.Component {
       this.setNodeItemState = this.setNodeItemState.bind(this);
     }
 
-    static getCurrentDateTime() {
-        return moment().format('MMM D, YYYY HH:mm')
-    }
+    static getCurrentDateTime(){return moment().format('MMM D, YYYY HH:mm')}
 
     // For SelectPathways modal component
     selectPathways(pathwayIDs, runType){
@@ -154,7 +148,7 @@ class App extends  React.Component {
       this.setState({"selectedObservations": selectedObservations});
     }
     // For PathwaysControl components
-    setActivePathway(pathway) {
+    setActivePathway(pathway){
       let self = this;
       let selectedPathways = this.state.selectedPathways;
       selectedPathways.set("Active", pathway);
@@ -180,13 +174,13 @@ class App extends  React.Component {
       };
     }
     // For NodeItem components in Pathways/ObservationsControl
-    setNodeItemState(node,state,activeType) {
+    setNodeItemState(node,state,activeType){
       console.log("setNodeItemState", node, state, activeType);
 
     }
 
 
-    runInference() {
+    runInference(){
         console.log("runInference");
         var self = this;
         connection.session.call('pgmlab.inference.run', [this.state.pairwiseInteractions.links, this.state.observedNodes, []]).then(
@@ -199,7 +193,7 @@ class App extends  React.Component {
           })
     }
 
-    observeNode(node, runType) {
+    observeNode(node, runType){
       // console.log("observeNode", node, runType)
       var selectedObservationSet = (runType === "inference")? this.state.selectedObservationSetInference : this.state.selectedObservationSetLearning
       // console.log("selectedObservationSet", selectedObservationSet)
@@ -227,7 +221,7 @@ class App extends  React.Component {
       }
     }
 
-    removeObservedNode(node) {
+    removeObservedNode(node){
       console.log("removeObservedNode");
           var observedNodes = $.grep(this.state.observedNodes, function(e){
               return e.name != node.name;
@@ -236,7 +230,7 @@ class App extends  React.Component {
           graphvis.removeMutatedGene(node);
     }
 
-    setNodeState(node, option) {
+    setNodeState(node, option){
       console.log("setNodeState");
         var observedNodes = this.state.observedNodes
         for (var i = 0; i < observedNodes.length; i++) {
@@ -252,10 +246,6 @@ class App extends  React.Component {
         this.setState({"observedNodes": observedNodes});
     }
 
-
-
-
-
     static guid() {
       function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
@@ -264,7 +254,8 @@ class App extends  React.Component {
       }
       return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
     }
-    uploadListAddFailure(name, filetype, comment) {
+
+    uploadListAddFailure(name, filetype, comment){
       console.log("uploadListAddFailure");
       var uploadList = this.state.uploadList
       var guid       = App.guid()
@@ -277,7 +268,7 @@ class App extends  React.Component {
       uploadList.push(uploadSummary)
       this.setState({"uploadList": uploadList})
     }
-    addNewPathway(name, pairwiseInteractions) {
+    addNewPathway(name, pairwiseInteractions){
       console.log("addNewPathway");
       var pathways = this.state.pathways
       var guid = App.guid()
@@ -301,7 +292,7 @@ class App extends  React.Component {
                       "posteriorProbabilities" : {},
                       "uploadList"             : uploadList});
     }
-    addNewObservationSet(name, observations) {
+    addNewObservationSet(name, observations){
       console.log("addNewObservationSet");
       var guid = App.guid()
       var uploadSummary = { "datetime": App.getCurrentDateTime(),
@@ -325,7 +316,7 @@ class App extends  React.Component {
       this.setState({"uploadList"      : uploadList,
                      "observationSets" : observationSets})
     }
-    addNewEstimatedParameterSet(name, cpts) {
+    addNewEstimatedParameterSet(name, cpts){
       console.log("addNewEstimatedParameterSet");
       var guid = App.guid()
       var uploadSummary = { "datetime": App.getCurrentDateTime(),
@@ -344,7 +335,7 @@ class App extends  React.Component {
       this.setState({"uploadList"            : uploadList,
                     "estimatedParameterSets" : estimatedParameterSets})
     }
-    addNewPosteriorProbabilitySet(name, probabilities) {
+    addNewPosteriorProbabilitySet(name, probabilities){
       console.log("addNewPosteriorProbabilitySet");
       var guid = App.guid()
       var uploadSummary = { "datetime": App.getCurrentDateTime(),
@@ -365,56 +356,53 @@ class App extends  React.Component {
     }
 
     //RENDERING//
-    componentDidMount () {
-      // $('.modal-trigger').leanModal()
-    }
-    render () {
+    render(){
     //  console.log("Rendering App: ", this)
       return (
-          <div>
-              <Header />
-              <Body uploadList                      = {this.state.uploadList}
-                    uploadListAddFailure            = {this.uploadListAddFailure}
-                    addNewPathway                   = {this.addNewPathway}
-                    addNewObservationSet            = {this.addNewObservationSet}
-                    addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
-                    addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet}
+        <div>
+          <Header />
+          <Body uploadList                      = {this.state.uploadList}
+                uploadListAddFailure            = {this.uploadListAddFailure}
+                addNewPathway                   = {this.addNewPathway}
+                addNewObservationSet            = {this.addNewObservationSet}
+                addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
+                addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet}
 
-                    pathways                        = {this.props.pathways}
-                    pairwiseInteractions            = {this.state.pairwiseInteractions}
-                    observationSets                 = {this.state.observationSets}
+                pathways                        = {this.props.pathways}
+                pairwiseInteractions            = {this.state.pairwiseInteractions}
+                observationSets                 = {this.state.observationSets}
 
-                    selectPathways = {this.selectPathways}
-                    removeSelectedPathways = {this.removeSelectedPathways}
-                    selectedPathways = {this.state.selectedPathways}
+                selectPathways = {this.selectPathways}
+                removeSelectedPathways = {this.removeSelectedPathways}
+                selectedPathways = {this.state.selectedPathways}
 
-                    selectObservationSet = {this.selectObservationSet}
-                    selectedObservationSet = {this.state.selectedObservationSet}
-                    selectObservations = {this.selectObservations}
-                    removeSelectedObservations = {this.removeSelectedObservations}
-                    selectedObservations = {this.state.selectedObservations}
-                    setActiveObservation = {this.setActiveObservation}
+                selectObservationSet = {this.selectObservationSet}
+                selectedObservationSet = {this.state.selectedObservationSet}
+                selectObservations = {this.selectObservations}
+                removeSelectedObservations = {this.removeSelectedObservations}
+                selectedObservations = {this.state.selectedObservations}
+                setActiveObservation = {this.setActiveObservation}
 
-                    activePathway                   = {this.state.activePathway}
-                    setActivePathway                = {this.setActivePathway}
+                activePathway                   = {this.state.activePathway}
+                setActivePathway                = {this.setActivePathway}
 
-                    observeNode                     = {this.observeNode}
-                    removeObservedNode              = {this.removeObservedNode}
-                    runInference                    = {this.runInference}
-                    setNodeState                    = {this.setNodeState}
+                observeNode                     = {this.observeNode}
+                removeObservedNode              = {this.removeObservedNode}
+                runInference                    = {this.runInference}
+                setNodeState                    = {this.setNodeState}
 
-                    setNodeItemState = {this.setNodeItemState} />
-             <Footer />
-          </div>
+                setNodeItemState = {this.setNodeItemState} />
+          <Footer />
+        </div>
       )
     }
-}
+};
 
 try {
    var autobahn = require('autobahn');
 } catch (e) {
    console.log("e", e);
-}
+};
 
 var wsuri = (document.location.origin == "file://")?
     "ws://127.0.0.1:9000/ws":
@@ -434,7 +422,7 @@ function getPathway(session, pathways, activePathway) {
           function (err) {
               console.log("couldn't get pathway", activePathway.id, err);
           });
-}
+};
 
 connection.onopen = function (session, details) {
    console.log("Connected");
@@ -457,12 +445,12 @@ connection.onclose = function (reason, details) {
    if (t1) {
       clearInterval(t1);
       t1 = null;
-   }
+   };
    if (t2) {
       clearInterval(t2);
       t2 = null;
-   }
-}
+   };
+};
 
 connection.open();
 
@@ -470,4 +458,4 @@ function init(pathways, activePathway, pairwiseInteractions) {
     render(<App pathways={pathways}
                 activePathway={activePathway}
                 pairwiseInteractions={pairwiseInteractions}  />, document.getElementById('app'));
-}
+};

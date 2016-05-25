@@ -1,19 +1,21 @@
 import React from 'react'
 
-import {SideNav} from './Sidenav.jsx'
-import {TopNav}  from './Topnav.jsx'
-
 export class Header extends React.Component {
-    render () {
-        return (
-            <header className="row">
-               <TopNav activePathway={this.props.activePathway} />
-            </header>
-            )
-    }
+  render(){
+    return (
+      <header className="row">
+        <nav className="light-blue lighten-1" role="navigation">
+          <div className="nav-wrapper">
+            <a style={{fontSize:"50px"}}  clasName="brand-logo center" href="#">
+              <span style={{color: "#2e7d32"}}>PGM</span><span style={{color:"#9c27b0"}}>Lab</span>
+            </a>
+            <ul id="nav-mobile" className="right hide-on-med-and-down" style={{width:"175px"}}>
+                <li><a href="http://github.com/OICR/PGMLab-GUI">Code</a></li>
+                <li><a href="https://github.com/OICR/PGMLab-GUI/wiki">Wiki</a></li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+    )
+  }
 }
-
-
-
-
-//<SideNav setActivePathway={this.props.setActivePathway} activePathway={this.props.activePathway} pathways={this.props.pathways}/>

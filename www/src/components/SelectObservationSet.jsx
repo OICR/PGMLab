@@ -131,7 +131,7 @@ export class SelectObservationSet extends React.Component {
       </div>
     );
   }
-  render() {
+  render(){
   // console.log("SOS", this.props)
     const scrollable={maxHeight:"100%", height:"100%", overflow:"scroll"};
     return (

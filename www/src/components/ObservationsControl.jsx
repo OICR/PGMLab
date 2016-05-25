@@ -1,49 +1,8 @@
 import React from 'react'
 
 import {NodeItem} from "./NodeItem.jsx";
-import {ObservedNodeList} from './ObservedNodeList.jsx';
-
-import {SelectPathways} from './SelectPathways.jsx'
-import {SelectedPathways} from './SelectedPathways.jsx'
-import {SelectObservation} from './SelectObservation.jsx'
 
 var classNames = require("classnames");
-
-// const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
-// const selectedObservationSet = this.props.selectedObservationSet;
-// const currentActivatedIndex = this.props.selectedObservations.get("Active");
-// const activeObservation = selectedObservationSet.observations[currentActivatedIndex];// ? selectedObservationSet.observations[currentActivatedIndex] : [];
-// console.log("observationNodes", activeObservation);
-// const nodes = activeObservation.map((node)=>{
-//   console.log(node.state);
-//   const textFilter = node.name.toLowerCase().indexOf(textInput);
-//   // activeType for updating either the same node in observation or pathway
-//   return (
-//     (textFilter) ? undefined : <NodeItem key={node.name} node={node} nodeState={node.state} activeType="Observation" setNodeItemState={this.props.setNodeItemState}/>
-//   );
-// });
-// return nodes;
-
-// class ObservationNodeList extends React.Component {
-//  constructor(props){
-//    super(props);
-//
-//  }
-//
-//  render(){
-//    const nodes = this.props.nodes.map((node)=>{
-//      return (
-//        <NodeItem key={node.name} node={node} nodeState={node.state} activeType="Observation" setNodeItemState={this.props.setNodeItemState} />
-//      )
-//    });
-//    console.log(nodes);
-//    return (
-//      <div>
-//        {nodes}
-//      </div>
-//    );
-//  }
-// }
 
 export class ObservationsControl extends React.Component {
   constructor(props){
@@ -55,7 +14,6 @@ export class ObservationsControl extends React.Component {
     this.nodeFilterTextUpdate = this.nodeFilterTextUpdate.bind(this);
     this.shiftActiveObservation = this.shiftActiveObservation.bind(this);
     this.header = this.header.bind(this);
-    this.nodeListUpdate = this.nodeListUpdate.bind(this);
     this.nodeList = this.nodeList.bind(this);
   }
   nodeFilterTextUpdate(){
@@ -103,21 +61,6 @@ export class ObservationsControl extends React.Component {
         <li><strong>{"Observation ".concat(currentActivatedIndex.toString())}</strong></li>
       </ul>
     );
-  }
-  nodeListUpdate(nodes){
-    const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
-    const selectedObservationSet = this.props.selectedObservationSet;
-    const currentActivatedIndex = this.props.selectedObservations.get("Active");
-    const activeObservation = selectedObservationSet.observations[currentActivatedIndex];// ? selectedObservationSet.observations[currentActivatedIndex] : [];
-    return ()=>{
-      return nodes.map((node)=>{
-        const textFilter = node.name.toLowerCase().indexOf(textInput);
-        // activeType for updating either the same node in observation or pathway
-        return (
-          (textFilter) ? undefined : <NodeItem key={node.name} node={node} nodeState={node.state} activeType="Observation" setNodeItemState={this.props.setNodeItemState}/>
-        );
-      });
-    };
   }
   nodeList(){
     const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;

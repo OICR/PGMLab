@@ -16,8 +16,6 @@ export class DisplayPanel extends React.Component {
     );
   }
   render(){
-    // console.log('DISPLAYPANEL:', this.props);
-    // Breadcrumb texts
     const runType=this.props.toggle;
     const observationSet=this.props.selectedObservationSet.name;
     const observationID="Observation ".concat(this.props.selectedObservations.get("Active"));
@@ -26,12 +24,12 @@ export class DisplayPanel extends React.Component {
       <div>
         <nav style={{"width":"100%"}} className="light-blue lighten-1">
           <div className="nav-wrapper">
-              {this.breadcrumb("Run Type",runType)}
-              {this.breadcrumb("Observation Set",observationSet)}
-              {this.breadcrumb("Observation ID",observationID)}
-              {this.breadcrumb("Active Pathway Name",activePathwayName)}
+            {this.breadcrumb("Run Type",runType)}
+            {this.breadcrumb("Observation Set",observationSet)}
+            {this.breadcrumb("Observation ID",observationID)}
+            {this.breadcrumb("Active Pathway Name",activePathwayName)}
           </div>
-         </nav>
+        </nav>
          <div style={{"width":"100%"}} id="chart"></div>
        </div>
     )

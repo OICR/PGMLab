@@ -72,7 +72,7 @@ export class SelectPathways extends React.Component {
       <ul className="collection left-align">{pathwayList}</ul>
     )
   }
-  render () {
+  render(){
     return (
       <div id="selectPathwayModal" className="modal modal-fixed-footer">
         <div className="modal-content">
@@ -102,7 +102,7 @@ export class SelectPathways extends React.Component {
           </div>
           <div className="row">
             <div className="col s12">
-                {this.pathwayList()}
+              {this.pathwayList()}
             </div>
           </div>
         </div>
