@@ -197,10 +197,10 @@ class App extends  React.Component {
 
 
     runInference(){
-      console.log("runInference", this.state.observedNodes);
+      // console.log("runInference", this.state.observedNodes);
       var self = this;
       let observations = this.state.selectedObservationSet.observations[this.state.selectedObservations.get("Active")];
-      console.log(observations);
+      // console.log(observations);
       // observations = observations.map(node => {node.name:node.state});
       // console.log(observations);
       connection.session
@@ -208,7 +208,7 @@ class App extends  React.Component {
         .call("pgmlab.inference.run", [this.state.pairwiseInteractions.links, observations,[]])
         .then(
           function(response) {
-            console.log("response:", response);
+            // console.log("response:", response);
             self.setState({"posteriorProbabilities": response["posteriorProbabilities"]})
             graphvis.addPosteriorProbabilities(self.state.posteriorProbabilities);
           },
