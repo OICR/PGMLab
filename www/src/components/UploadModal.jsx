@@ -1,82 +1,78 @@
 import React from 'react'
-
-var Dropzone = require('react-dropzone')
+var classNames=require("classnames");
 
 export class UploadModal extends React.Component {
-
     constructor(props) {
         super(props)
-
         this.isInteger = this.isInteger.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
-
+    componentDidMount(){
+      $('.modal-trigger').leanModal();
+    }
     isInteger(str) {
         return /^([1-9]\d*)$/.test(str)
     }
-
     handleSubmit(e) {
+      console.log("handleSubmit");
         e.preventDefault()
     }
-
     readPathwayFile(e) {
-        var reader = new FileReader()
-        var file = e.target.files[0]
-
-        var self = this
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        let self = this;
         reader.onload = function(upload) {
-            var contents = upload.target.result
-            var lines = contents.split("\n")||[]
-            lines.pop() // There is one additional empty element on the end because of newlines on the end of the last line
-            var numberOfLines = lines.length
+            const contents = upload.target.result;
+            let lines = contents.split("\n")||[];
+            lines.pop(); // There is one additional empty element on the end because of newlines on the end of the last line
 
+            // Error handling
+            const numberOfLines = lines.length;
             if (numberOfLines < 2) {
-                self.props.uploadListAddFailure(file.name, "Pathway", "File does not follow the correct format")
-                return
+                self.props.uploadListAddFailure(file.name, "Pathway", "File does not follow the correct format");
+                return;
             }
-
-            if (numberOfLines > (100 + 2) ) {
-                self.props.uploadListAddFailure(file.name, "Pathway", "Max number of interactions allowed is 100. Larger pathways can be done on command line")
-                return
-            }             
-
-            var numberOfInteractions = lines.length - 2
+            else if (numberOfLines > (100 + 2) ) {
+                self.props.uploadListAddFailure(file.name, "Pathway", "Max number of interactions allowed is 100. Larger pathways can be done on command line");
+                return;
+            };
+            const numberOfInteractions = lines.length - 2
             if (!self.isInteger(lines[0])) {
-                self.props.uploadListAddFailure(file.name, "Pathway", "First line needs to be an integer representing the number of interactions")
-                return
+                self.props.uploadListAddFailure(file.name, "Pathway", "First line needs to be an integer representing the number of interactions");
+                return;
             }
             else if (Number(lines[0]) !== numberOfInteractions ) {
-                self.props.uploadListAddFailure(file.name, "Pathway", "Number of interactions does not match number at top of file")
-                return
-            } 
+                self.props.uploadListAddFailure(file.name, "Pathway", "Number of interactions does not match number at top of file");
+                return;
+            }
             else if (lines[1] !== "") {
                 console.log("second line", lines[1])
-                self.props.uploadListAddFailure(file.name, "Pathway", "Second line needs to be empty")
-                return
+                self.props.uploadListAddFailure(file.name, "Pathway", "Second line needs to be empty");
+                return;
             }
 
-            var nodes = {},
+            let nodes = {},
                 nodesList = [],
                 links = [],
-                nodeCount = 0
+                nodeCount = 0;
             for (let i=2; i < numberOfLines; i++) {
                 var lineParts = lines[i].split("\t")
                 if (lineParts.length < 2) {
                      self.props.uploadListAddFailure(file.name, "Pathway",
                            "All lines must have format <nodeFrom>\\t<NodeToo> ; will use first two columns. Trouble line: ".concat(lines[i]))
                      return
-                } 
+                }
                 var source = lineParts[0].trim()
                 if (!nodes.hasOwnProperty(source)) {
                     nodes[source] = ++nodeCount
                     nodesList.push({"name":     source,
                                     "label":    source,
                                     "longname": source,
-                                    "name":     source, 
+                                    "name":     source,
                                     "leaf":     null,
                                     "shape":    null,
                                     "shape3":   null,
-                                    "type":     null })                              
+                                    "type":     null })
                 }
 
                 var target = lineParts[0].trim()
@@ -95,17 +91,16 @@ export class UploadModal extends React.Component {
                links.push({ "source": source,
                             "target": target,
                             "logic":  0,
-                            "value":  1})  
+                            "value":  1})
             }
 
-            var pairwiseInteractions = { "nodes": nodesList, 
+            var pairwiseInteractions = { "nodes": nodesList,
                                          "links": links}
             self.props.addNewPathway(file.name, pairwiseInteractions)
         }
-       
-        reader.readAsText(file)
-    }
 
+        reader.readAsText(file);
+    }
     readObservationFile(e) {
         var reader = new FileReader()
         var file = e.target.files[0]
@@ -116,7 +111,7 @@ export class UploadModal extends React.Component {
             var lines = contents.split("\n")||[]
             lines.pop() // There is one additional empty element on the end because of newlines on the end of the last line
             var numberOfLines = lines.length
-            
+
             if (numberOfLines < 2) {
                 self.props.uploadListAddFailure(file.name, "observations", "File does not follow correct formatting - empty")
                 return
@@ -126,7 +121,7 @@ export class UploadModal extends React.Component {
             var numberOfObservations = lines[0]
             if (!self.isInteger(numberOfObservations)) {
                 self.props.uploadListAddFailure(file.name, "observations", "First line needs to be the number of observations")
-                return 
+                return
             }
 
             var lineIndex = 0
@@ -148,10 +143,9 @@ export class UploadModal extends React.Component {
             }
             self.props.addNewObservationSet(file.name, observations)
         }
- 
+
         reader.readAsText(file)
     }
- 
     readEstimatedParametersFile(e) {
         var reader = new FileReader()
         var file = e.target.files[0]
@@ -199,11 +193,10 @@ export class UploadModal extends React.Component {
 
         reader.readAsText(file)
     }
-
     readPosteriorProbabilityFile(e) {
         var reader = new FileReader()
         var file = e.target.files[0]
- 
+
         var self = this
         reader.onload = function(upload) {
             var contents = upload.target.result
@@ -233,7 +226,7 @@ export class UploadModal extends React.Component {
                     var probability = lineParts[1]
                     if (node !== currentNode) {
                         if (currentNode !== -1) {
-                             probabilitySet.push({"node": node, "probability": probabilities})   
+                             probabilitySet.push({"node": node, "probability": probabilities})
                         }
                         probabilities = [probability]
                     }
@@ -246,86 +239,77 @@ export class UploadModal extends React.Component {
         }
         reader.readAsText(file)
     }
-
+    uploadBtn(label,click,tooltip){
+      return (
+        <form encType="multipart/form-data" className="">
+          <div className="file-field input-field btn tooltipped col s3" data-position="top" data-delay="50" data-tooltip={tooltip}>
+              <span>{label}</span>
+              <input type="file" onChange={click}/>
+          </div>
+        </form>
+      );
+    }
+    uploadTable(uploads){
+      return (
+        uploads.reverse().map(
+          (row,i)=>{
+            let id=i+1;
+            // Red row if upload error
+            const errClass=classNames({"red lighten-2":!row.success});
+            const statusIcon=(row.success) ? "done":"not_interested";
+            return (
+              <tr key={i} className={errClass}>
+                <td>{row.id}</td>
+                <td>{row.datetime}</td>
+                <td>{row.filetype}</td>
+                <td><i className="small material-icons">{statusIcon}</i></td>
+                <td>{row.name}</td>
+                <td>{row.comment}</td>
+              </tr>
+            );
+          }
+        )
+      );
+    }
     render() {
-        var uploadList = this.props.uploadList.reverse().map(function(row, i)  {
-               var id = i+1
-               return (<tr key={i}>
-                          <td>{row.id}</td>
-                          <td>{row.datetime}</td>
-                          <td>{row.filetype}</td>
-                          <td className="tooltipped" data-position="top" data-delay="50" data-tooltip={(row.success)? "Success":"Failure"}>
-                                 <i className="small material-icons" >{(row.success)? "done": "not_interested"}</i>
-                          </td>
-                          <td>{row.name}</td>
-                          <td>{row.comment}</td>
-                       </tr>)})
-
-
+        let uploadTable=this.uploadTable(this.props.uploadList);
         return (
-                <div id="uploadModal1" className="modal">
-                    <div className="modal-content">
-                        <h4>Upload Files</h4>
-                        <div className="row">
-                            <form onSubmit={this.handleSubmit} encType="multipart/form-data" className="col s3">
-                                <div className="file-field input-field">
-                                    <div className="btn tooltipped"
-                                            data-position="top" data-delay="50" data-tooltip="Upload a pairwise interaction file">
-                                        <span>Pathway</span>
-                                        <input type="file" onChange={this.readPathwayFile.bind(this)}/>
-                                    </div>
-                                </div>
-                            </form>
-                            <form action="#" className="col s3">
-                                <div className="file-field input-field">
-                                    <div className="btn tooltipped"
-                                            data-position="top" data-delay="50" data-tooltip="Upload an observation file">
-                                        <span>Observation</span>
-                                        <input type="file" onChange={this.readObservationFile.bind(this)} />
-                                    </div>
-                                </div>
-                            </form>
-                            <form action="#" className="col s3">
-            		    <div className="file-field input-field">
-            			<div className="btn tooltipped"
-                                            data-position="top" data-delay="50" data-tooltip="Upload a pre-generated estimated parameters File">
-            			    <span>Estimated</span>
-            			    <input type="file" onChange={this.readEstimatedParametersFile.bind(this)} />
-            			</div>
-            		    </div>
-                		</form>
-                            <form action="#" className="col s3">
-               		    <div className="file-field input-field">
-               			<div className="btn tooltipped"
-                                            data-position="top" data-delay="50" data-tooltip="Upload a pre-generated posterior probability File">
-               			    <span>Posterior</span>
-               			    <input type="file" onChange={this.readPosteriorProbabilityFile.bind(this)} />
-               			</div>
-                	    </div>
-               		</form>
-                        </div>
-                        <h4>Uploaded Files</h4>
-                        <table>
-                            <thead>
-                              <tr>
-                                  <th data-field="id">ID</th>
-                                  <th data-field="time">Datetime</th>
-                                  <th data-field="type">Type</th>
-                                  <th data-field="status">Status</th>
-                                  <th data-field="name">Name</th>
-                                  <th data-field="comment">comments</th>
-                              </tr>
-                            </thead> 
-                            <tbody>
-                                  {uploadList}
-                            </tbody>
-                        </table>
-        	    </div>
-                    <div className="modal-footer">
-                        <a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-                    </div>
-                </div>)
+          <div>
+            <div id="uploadModal" className="modal modal-fixed-footer">
+              <div className="modal-content">
+                <div className="section">
+                  <h5>Upload Files</h5>
+                  <div className="row">
+                    {this.uploadBtn("Pathway",this.readPathwayFile.bind(this),"Upload a pairwise interaction file")}
+                    {this.uploadBtn("Observations",this.readObservationFile.bind(this),"Upload an observation file")}
+                    {this.uploadBtn("Estimated",this.readEstimatedParametersFile.bind(this),"Upload a pre-generated estimated parameters file")}
+                    {this.uploadBtn("Posterior",this.readPosteriorProbabilityFile.bind(this),"Upload a pre-generated posterior probability file")}
+                  </div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th data-field="id">ID</th>
+                        <th data-field="time">Datetime</th>
+                        <th data-field="type">Type</th>
+                        <th data-field="status">Status</th>
+                        <th data-field="name">Name</th>
+                        <th data-field="comment">Comments</th>
+                      </tr>
+                    </thead>
+                    <tbody>{uploadTable}</tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="modal-footer">
+                  <a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+              </div>
+            </div>
+            <a className="modal-trigger btn-floating btn tooltipped"
+              data-position="top" data-delay="50" data-tooltip="Upload Data Files" href="#uploadModal">
+              <i className="material-icons">file_upload</i>
+            </a>
+
+          </div>
+        );
     }
 }
-
-

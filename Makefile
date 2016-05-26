@@ -56,13 +56,13 @@ gsl:
 	cd ./external_lib/gsl-$(GSL_VERSION); \
 	./configure  --prefix=$(CWD)/external_lib/gsl; \
 	make; \
-	make install; 
+	make install 
 
 readline: termcap
 	cd ./external_lib/readline-$(READLINE_VERSION); \
 	./configure --prefix=$(CWD)/external_lib/readline; \
 	make; \
-	make install;
+	make install
 
 termcap:
 	cd ./external_lib/termcap-$(TERMCAP_VERSION); \
@@ -72,11 +72,11 @@ termcap:
 
 make install:
 	make -C net install; \
-	make -C cli install
+	make -C cli install;
 
 make uninstall:
 	make -C net uninstall; \
-	make -C cli uninstall
+	make -C cli uninstall;
 
 clean:
 	make -C net clean; \

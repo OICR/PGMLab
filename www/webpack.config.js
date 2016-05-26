@@ -13,29 +13,32 @@ module.exports = {
   },
   loader: "babel",
   devtool: "source-map",
+  // Prevent bufferutil, utf-8-validate warnings
+  externals: ['ws'],
   module: {
+    noParse: ['ws'],
     loaders: [
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: "url-loader?limit=10000&minetype=application/font-woff"
       },
-      { 
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
-        loader: "file-loader" 
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: "file-loader"
       },
-      { 
+      {
         test: /autobahn\/package.json$/,
         loader: 'json-loader'
       },
-      { test: /\.css$/, 
-        loader: "style!css" 
+      { test: /\.css$/,
+        loader: "style!css"
       },
-      { 
-        test: /d3-svg-legend/, 
-        loader: "imports?d3=d3" 
+      {
+        test: /d3-svg-legend/,
+        loader: "imports?d3=d3"
       },
       { test: /d3-tip/,
-        loader: "imports?define=>false" 
+        loader: "imports?define=>false"
       },
       {
         test: /.*\.(gif|png|jpe?g|svg)$/i,
@@ -46,7 +49,7 @@ module.exports = {
       },
       {
         test: /\.(js|jsx)$/, // A regexp to test the require path. accepts either js or jsx
-        exclude: /(node_modules)/, 
+        exclude: /(node_modules)/,
         loader: "babel", // The module to load. "babel" is short for "babel-loader"
         query: {
           presets: ['react', 'es2015']
