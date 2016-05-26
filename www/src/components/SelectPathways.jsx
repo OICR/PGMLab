@@ -59,7 +59,7 @@ export class SelectPathways extends React.Component {
     let self = this;
     const input = (isNaN(self.state.filterText)) ? self.state.filterText.toLowerCase() : self.state.filterText;
     const pathways = self.props.pathways;
-    const selectedPathwayIDs = self.props.selectedPathways;
+    const selectedPathwayIDs = self.props.selectedPathways.get("Pathways");
     const pathwayList = pathways.map((pathway)=>{
       const textFilter = pathway.name.toLowerCase().indexOf(input) && (pathway.id.indexOf(input) == -1);
       const checkedFilter = self.state.filterChecked && !selectedPathwayIDs.includes(pathway.id);
