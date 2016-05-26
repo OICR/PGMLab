@@ -1,21 +1,22 @@
-import vis from '../lib/vis-4.14.0/dist/vis.js';
+import vis from "../lib/vis-4.14.0/dist/vis.js";
 
-var network
-var datasetnodes
-var datasetedges
+var network;
+var datasetnodes;
+var datasetedges;
 
 function render(pairwiseInteractions) {
 
-    var container = document.getElementById('chart');
+    var container = document.getElementById("chart");
     var lengthLimit = 15;
     var edges = [];
     var numberEdges = pairwiseInteractions.links.length;
     for (let i = 0;  i<numberEdges; i++) {
-        edges.push({from: pairwiseInteractions.links[i].source,
-                    to: pairwiseInteractions.links[i].target,
-                    'arrows':'to',
-                   });
-    }
+      edges.push({
+        from: pairwiseInteractions.links[i].source,
+        to: pairwiseInteractions.links[i].target,
+        arrows: "to",
+      });
+    };
 
     var nodes = [];
     var numbernodes = pairwiseInteractions.nodes.length;
@@ -26,15 +27,19 @@ function render(pairwiseInteractions) {
                        pairwiseInteractions.nodes[i].longname:
                        pairwiseInteractions.nodes[i].name;
         var reactomeClass  =  (pairwiseInteractions.nodes[i].type !== null)? pairwiseInteractions.nodes[i].type: "unknown";
-        var node = {'id': pairwiseInteractions.nodes[i].name,
-                    'label': label,
-                    'color': {"background": '#ffffff',
-                              "border":     '#000000'},
-                    'title': 'ID: '+ pairwiseInteractions.nodes[i].name +'<br>' +
-                             'Name: ' + pairwiseInteractions.nodes[i].longname + '<br>' +
-                             'Reactome Class: ' + reactomeClass , 
-                    'shape': 'dot',
-                    'scaling': {'label': {'enabled':false}}};
+        var node = {
+          id: pairwiseInteractions.nodes[i].name,
+          label: label,
+          color: {
+            background: "#ffffff",
+            border:     "#000000"
+          },
+          title:  "ID: " + pairwiseInteractions.nodes[i].name + "<br>" +
+                  "Name: " + pairwiseInteractions.nodes[i].longname + "<br>" +
+                  "Reactome Class: " + reactomeClass,
+          shape: "dot",
+          scaling: {label: {enabled:false}}
+        };
         nodes.push(node);
     }
 
@@ -47,7 +52,9 @@ function render(pairwiseInteractions) {
     };
 
     var options = {
-      height: "800px",
+      // height: "800px",
+      height: "100%",
+      width: "100%",
       interaction: {
         navigationButtons: true,
         keyboard: true,
@@ -64,8 +71,8 @@ function render(pairwiseInteractions) {
           treeSpacing: 200,
           blockShifting: true,
           edgeMinimization: true,
-          direction: 'UD',        // UD, DU, LR, RL
-          sortMethod: 'directed'   // hubsize, directed
+          direction: "UD",        // UD, DU, LR, RL
+          sortMethod: "directed"   // hubsize, directed
         }
       }
     };
@@ -83,11 +90,10 @@ function render(pairwiseInteractions) {
         datasetedges.on('*', function (event, properties, senderId) {
            console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
         });*/
-    
+
 
 /*
         network.on( 'doubleClick', function(properties) {
-
             var nodes = datasetnodes.get(properties.nodes);
             var node = nodes[0];
             console.log("nodes", nodes, node);
@@ -96,31 +102,32 @@ function render(pairwiseInteractions) {
             console.log('double clicked node ' + properties.nodes, node);
         });
 */
-     
 }
-
 exports.render = render;
 
 function setNodeState(gene) {
-   var stateColor=["", "red", "grey", "green"];
-   datasetnodes.update({id: gene.name, "color": {"border": stateColor[gene.state]},
-                                       "borderWidth": 3 });
+  var stateColor=["", "red", "grey", "green"];
+  datasetnodes.update({
+    id: gene.name,
+    color: {border: stateColor[gene.state]},
+    borderWidth: 3
+  });
 }
-
 exports.setNodeState = setNodeState;
 
 function removeMutatedGene(gene) {
-   datasetnodes.update({id: gene.name, "color": {"border": 'black'},
-                                       "borderWidth": 1 });
+  datasetnodes.update({
+    id: gene.name,
+    color: {border: "black"},
+    borderWidth: 1
+  });
 }
-
 exports.removeMutatedGene = removeMutatedGene;
-
 
 function addPosteriorProbabilities(posteriorProbabilities) {
     var numPosteriorProbabilities = posteriorProbabilities.length;
     for (var ppid in posteriorProbabilities) {
-               
+
         var stateProbs = posteriorProbabilities[ppid];
         var r = Math.ceil(stateProbs[0]*255);
         var b = Math.ceil(stateProbs[1]*255);
@@ -133,12 +140,12 @@ function addPosteriorProbabilities(posteriorProbabilities) {
              g = 0
              b = 0
              dominantState = 1
-        } 
+        }
         else if ((g> r) && (g> b)) {
              r = 0
              b = 0
              dominantState = 3
-        } 
+        }
         else {
              b = 255 - b
              g = b
@@ -146,7 +153,7 @@ function addPosteriorProbabilities(posteriorProbabilities) {
              dominantState = 2
         }
         var node = datasetnodes.get(ppid);
-         
+
         var title = node["title"].split("<br>Probabilities:<br>")[0];
         node["dominantState"] = dominantState;
 
@@ -163,5 +170,4 @@ function addPosteriorProbabilities(posteriorProbabilities) {
                              "title": title});
     }
 }
-
 exports.addPosteriorProbabilities = addPosteriorProbabilities;
