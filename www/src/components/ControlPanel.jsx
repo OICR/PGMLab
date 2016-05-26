@@ -75,7 +75,8 @@ export class ControlPanel extends React.Component {
                           selectedObservations = {this.props.selectedObservations} />
 
         <div className="divider"></div>
-        <ResultsControl />
+        <ResultsControl runInference={this.props.runInference}
+                        toggle={this.props.toggle}/>
     </div>
     )
   }

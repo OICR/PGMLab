@@ -16,12 +16,12 @@ var EXAMPLEDATA = {
   // For G-protein pathway
   observationSets : new Map([
     ["exampleID1", {"id":"exampleID1", "name":"Example 1", "observations":[
-      [ {"name":"49860","state":"1"},{"name":"58253","state":"0"},{"name":"415917","state":"0"},{"name":"61076","state":"1"}],
-      [ {"name":"49860","state":"0"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+      [ {"name":"49860","state":"1"},{"name":"58253","state":"2"},{"name":"415917","state":"3"},{"name":"61076","state":"1"}],
+      [ {"name":"49860","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
     ]}],
     ["exampleID2", {"id":"exampleID2", "name":"Example 2", "observations":[
-      [ {"name":"58253","state":"1"},{"name":"415917","state":"0"},{"name":"61076","state":"1"},{"name":"49860","state":"0"}],
-      [ {"name":"61074","state":"1"},{"name":"49860","state":"0"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"}]
+      [ {"name":"58253","state":"1"},{"name":"415917","state":"2"},{"name":"61076","state":"1"},{"name":"49860","state":"2"}],
+      [ {"name":"61074","state":"1"},{"name":"49860","state":"2"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"}]
     ]}]
   ])
 };
@@ -55,9 +55,11 @@ class App extends  React.Component {
       this.removeObservedNode             = this.removeObservedNode.bind(this);
       this.runInference                   = this.runInference.bind(this);
       this.setNodeState                   = this.setNodeState.bind(this);
+      this.setNodeItemState = this.setNodeItemState.bind(this);
 
       this.selectPathways = this.selectPathways.bind(this);
       this.removeSelectedPathways = this.removeSelectedPathways.bind(this);
+
       this.selectObservationSet = this.selectObservationSet.bind(this);
       this.selectObservations = this.selectObservations.bind(this);
       this.removeSelectedObservations = this.removeSelectedObservations.bind(this);
@@ -69,7 +71,7 @@ class App extends  React.Component {
       this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this);
       this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this);
 
-      this.setNodeItemState = this.setNodeItemState.bind(this);
+
     }
 
     static getCurrentDateTime(){return moment().format('MMM D, YYYY HH:mm')}
@@ -195,16 +197,25 @@ class App extends  React.Component {
 
 
     runInference(){
-        console.log("runInference");
-        var self = this;
-        connection.session.call('pgmlab.inference.run', [this.state.pairwiseInteractions.links, this.state.observedNodes, []]).then(
+      console.log("runInference", this.state.observedNodes);
+      var self = this;
+      let observations = this.state.selectedObservationSet.observations[this.state.selectedObservations.get("Active")];
+      console.log(observations);
+      // observations = observations.map(node => {node.name:node.state});
+      // console.log(observations);
+      connection.session
+        // .call('pgmlab.inference.run', [this.state.pairwiseInteractions.links, this.state.observedNodes, []])
+        .call("pgmlab.inference.run", [this.state.pairwiseInteractions.links, observations,[]])
+        .then(
           function(response) {
+            console.log("response:", response);
             self.setState({"posteriorProbabilities": response["posteriorProbabilities"]})
             graphvis.addPosteriorProbabilities(self.state.posteriorProbabilities);
           },
           function (err) {
-            console.log("couldn't run inference", err);
-          })
+            console.log("Error running inference:", err);
+          }
+        );
     }
 
     observeNode(node, runType){

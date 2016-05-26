@@ -49,7 +49,7 @@ from itertools import * # for skipping lines in a file
 
 cwd = os.getcwd()
 
-hosted_data = cwd + "/../../data/reactome_template/";
+hosted_data = cwd + "/../../data/reactome_template/"
 
 class AppSession(ApplicationSession):
 
@@ -59,30 +59,34 @@ class AppSession(ApplicationSession):
     def onJoin(self, details):
 
         def system_call(command):
-             p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
-             return p.stdout.read()
-        
+            self.log.info("system_call")
+            p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
+            return p.stdout.read()
+
         def getFolders():
-             directories = os.listdir(hosted_data)
-             return directories
+            self.log.info("getFolders")
+            directories = os.listdir(hosted_data)
+            return directories
 
         def getFolder(pathwayId):
-             f = open(hosted_data+"folder_to_reactome_id.txt");
-             for line in f:
-                 kv = line.split("\t")
-                 if kv[0] == pathwayId:
-                     return kv[1]
-             return None
+            self.log.info("getFolder")
+            f = open(hosted_data+"folder_to_reactome_id.txt");
+            for line in f:
+             kv = line.split("\t")
+             if kv[0] == pathwayId:
+                 return kv[1]
+            return None
 
         # SUBSCRIBE to a topic and receive events
         #
         def getPathway(pathwayId):
-             folders = getFolders()
-             folder = getFolder(pathwayId).strip()
-             filePath = hosted_data + folder + "/" + folder + ".pi"
-             json_data = system_call("perl "+ cwd +"/../../bin/convert_pi_to_json.pl " + filePath + " " + hosted_data +"db_id_to_name_mapping.txt")
-             pathway = json.loads(json_data)
-             return pathway
+            self.log.info("getPathway")
+            folders = getFolders()
+            folder = getFolder(pathwayId).strip()
+            filePath = hosted_data + folder + "/" + folder + ".pi"
+            json_data = system_call("perl "+ cwd +"/../../bin/convert_pi_to_json.pl " + filePath + " " + hosted_data +"db_id_to_name_mapping.txt")
+            pathway = json.loads(json_data)
+            return pathway
 
         yield self.register(getPathway, 'pgmlab.pathway.get')
         self.log.info("procedure getPathway(pathwayId) registered")
@@ -99,46 +103,51 @@ class AppSession(ApplicationSession):
         self.log.info("procedure getPathwayList() registered")
 
         def createPairwiseInteractionFile(runPath, pathway):
+            self.log.info("createPairwiseInteractionFile")
             filePath = runPath + "/pathway.pi";
             numberOfNodes = len(pathway)
-            
+
             pi = open(filePath, "w")
 
             pi.write(str(numberOfNodes)+"\n\n")
-            
+
             for interaction in pathway:
                 pi.write(str(interaction["source"]) + "\t")
                 pi.write(str(interaction["target"]) + "\t")
                 pi.write(str(interaction["value"])  + "\t")
                 pi.write(str(interaction["logic"])  + "\n")
-      
+
             pi.close()
 
             return numberOfNodes
 
         def createObservationFile(runPath, observations):
-            filePath = runPath + "/inference.obs";
+            self.log.info("createObservationFile")
+            filePath = runPath + "/inference.obs"
             numberOfObs = len(observations)
-            
+
             obs = open(filePath, "w")
 
             obs.write("1\n"+str(numberOfObs)+"\n")
-            
+
             for observation in observations:
                 obs.write(str(observation["name"]) + "\t" + str(observation["state"]) + "\n")
-      
+
             obs.close()
 
             return numberOfObs
 
         def generateFactorgraph(runPath):
-            system_call("pgmlab --generate-factorgraph --pairwise-interaction-file=" + str(runPath) + "/pathway.pi --logical-factorgraph-file=" + str(runPath) + "/logical.fg --number-of-states 3")
+            self.log.info("generateFactorgraph")
+            system_call(str(cwd)+"/../../bin/pgmlab --generate-factorgraph --pairwise-interaction-file=" + str(runPath) + "/pathway.pi --logical-factorgraph-file=" + str(runPath) + "/logical.fg --number-of-states 3")
 
 
         def inferenceCommand(runPath):
+            self.log.info("inferenceCommand")
             system_call("pgmlab --inference --pairwise-interaction-file=" + str(runPath) + "/pathway.pi --inference-factorgraph-file=" + str(runPath) + "/logical.fg --inference-observed-data-file=" + str(runPath) + "/inference.obs --posterior-probability-file=" + str(runPath) + "/pathway.pp --number-of-states 3")
 
         def readPosteriorProbabilityFile(runPath):
+            self.log.info("readPosteriorProbabilityFile")
             filepath = runPath + "/pathway.pp"
             pp = dict()
             with open(filepath, "r") as fh:
@@ -151,19 +160,20 @@ class AppSession(ApplicationSession):
                     pp[values[0]].append(values[1])
 
         def runInference(pathway, observations, options):
-            self.log.info("running inference")
+            self.log.info("runInference")
             runID = str(uuid.uuid4())
             cwd = os.getcwd()
             tmpPath = cwd + "/../../tmp/"
             runPath = tmpPath + runID
             os.mkdir(runPath)
+
             numberOfNodes = createPairwiseInteractionFile(runPath, pathway)
             generateFactorgraph(runPath);
-            numberOfObs = createObservationFile(runPath, observations)         
+            numberOfObs = createObservationFile(runPath, observations)
             inferenceCommand(runPath)
             pp = readPosteriorProbabilityFile(runPath)
-            shutil.rmtree(runPath)
-            return {'run': runID, 'posteriorProbabilities':pp} 
+            # shutil.rmtree(runPath)
+            return {"run":runID, "posteriorProbabilities":pp}
 
         yield self.register(runInference, 'pgmlab.inference.run')
         self.log.info("subscribed to topic 'pgmlab.inference.run'")
