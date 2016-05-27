@@ -157,12 +157,18 @@ function addPosteriorProbabilities(posteriorProbabilities) {
 }
 exports.addPosteriorProbabilities = addPosteriorProbabilities;
 
-exports.focusNode = (node)=>{
-  console.log("focusNode", node);
-  network.selectNodes([node.name], true);
+exports.handleNodeFocus = (node)=>{
+  const nodeID = node.name;
+  const focused = network.getSelectedNodes();
+  network.selectNodes(
+    focused.includes(nodeID) ?
+      focused.filter(id => id!==nodeID):
+      focused.concat(nodeID), true);
 }
-
 exports.unfocusAll = ()=>{
-  console.log("unfocusAll");
-  network.selectNodes([]);
+  network.unselectAll();
+}
+exports.isFocused = (node)=>{
+  const nodeID = node.name;
+  return network !== undefined ? network.getSelectedNodes().includes(nodeID) : false;
 }
