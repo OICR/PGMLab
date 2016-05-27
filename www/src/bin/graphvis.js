@@ -113,6 +113,7 @@ exports.removeMutatedGene = removeMutatedGene;
 
 function addPosteriorProbabilities(posteriorProbabilities) {
     for (let ppid in posteriorProbabilities) {
+      // console.log(ppid);
         const stateProbs = posteriorProbabilities[ppid];
 
         // why is it not rgb?
@@ -155,3 +156,13 @@ function addPosteriorProbabilities(posteriorProbabilities) {
     }
 }
 exports.addPosteriorProbabilities = addPosteriorProbabilities;
+
+exports.focusNode = (node)=>{
+  console.log("focusNode", node);
+  network.selectNodes([node.name], true);
+}
+
+exports.unfocusAll = ()=>{
+  console.log("unfocusAll");
+  network.selectNodes([]);
+}
