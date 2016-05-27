@@ -45,9 +45,10 @@ function render(pairwiseInteractions) {
       width: "100%",
       interaction: {
         navigationButtons: true,
-        keyboard: true,
-        tooltipDelay: 200,
-        hideEdgesOnDrag: true
+        keyboard: false,
+        tooltipDelay: 50,
+        hideEdgesOnDrag: true,
+        selectable: false
       },
       layout: {
         randomSeed: undefined,
@@ -157,13 +158,15 @@ function addPosteriorProbabilities(posteriorProbabilities) {
 }
 exports.addPosteriorProbabilities = addPosteriorProbabilities;
 
-exports.handleNodeFocus = (node)=>{
-  const nodeID = node.name;
-  const focused = network.getSelectedNodes();
-  network.selectNodes(
-    focused.includes(nodeID) ?
-      focused.filter(id => id!==nodeID):
-      focused.concat(nodeID), true);
+exports.focusNodes = (nodeIDs)=>{
+  // const nodeID = node.name;
+  // const focused = network.getSelectedNodes();
+  // network.selectNodes(
+  //   focused.includes(nodeID) ?
+  //     focused.filter(id => id!==nodeID):
+  //     focused.concat(nodeID), true);
+  console.log(nodeIDs);
+  network.selectNodes(nodeIDs, true);
 }
 exports.unfocusAll = ()=>{
   network.unselectAll();
