@@ -34,8 +34,14 @@ class App extends  React.Component {
       let selectedObservationSet = observationSets.get("exampleID1");
       let selectedObservations = new Map([["Indices",[0,1]],["Active",0]]);
       let selectedPathways = new Map([["Pathways", new Array("397795")],["Active",{id:"397795",name:"G-protein beta:gamma signalling"}]]);
+      //
+      let pathwayMap = this.props.pathwayMap;
+      pathwayMap.set("Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]]));
+      pathwayMap.set("Active", {id:"397795",name:"G-protein beta:gamma signalling"});
       // Set initial state
-      this.state = {  "pathways"                        : this.props.pathways,
+      this.state = {
+                      "pathwayMap" : pathwayMap,
+                      "pathways"                        : this.props.pathways,
                       "pairwiseInteractions"            : this.props.pairwiseInteractions,
                       "uploadList"                      : [],
                       //
@@ -76,30 +82,46 @@ class App extends  React.Component {
     static getCurrentDateTime(){return moment().format('MMM D, YYYY HH:mm')}
 
     // For SelectPathways modal component
-    selectPathways(pathwayIDs, runType){
-      let selectedPathways = this.state.selectedPathways;
-      let selected=this.state.selectedPathways.get("Pathways");
+    selectPathways(pathwayIDs){
+      // let selectedPathways = this.state.selectedPathways;
+      // let selected=this.state.selectedPathways.get("Pathways");
+      // for (let pathwayID of pathwayIDs) {
+      //   if (!selected.includes(pathwayID)) {
+      //     selected.push(pathwayID);
+      //   };
+      // };
+      // selectedPathways.set("Pathways", selected);
+      // this.setState({"selectedPathways":selectedPathways});
+      let pathwayMap = this.state.pathwayMap;
       for (let pathwayID of pathwayIDs) {
-        if (!selected.includes(pathwayID)) {
-          selected.push(pathwayID);
+        if (!pathwayMap.get("Selected").has(pathwayID)) {
+          const pathwayObj = pathwayMap.get("All").get(pathwayID);
+          pathwayMap.get("Selected").set(pathwayID, pathwayObj);
         };
       };
-      selectedPathways.set("Pathways", selected);
-      this.setState({"selectedPathways":selectedPathways});
+      this.setState({pathwayMap});
     }
     // For SelectPathways modal component
-    removeSelectedPathways(pathwayIDs, runType){
-      let selectedPathways = this.state.selectedPathways;
-      let selected = selectedPathways.get("Pathways");
-      const indices = pathwayIDs.map((pathway)=>{return selected.indexOf(pathway)});
-      const reducedSelected = selected.reduce((remaining,pathwayID,index)=>{
-        if (!indices.includes(index)) {
-          remaining.push(pathwayID);
+    removeSelectedPathways(pathwayIDs){
+      // let selectedPathways = this.state.selectedPathways;
+      // let selected = selectedPathways.get("Pathways");
+      // const indices = pathwayIDs.map((pathway)=>{return selected.indexOf(pathway)});
+      // const reducedSelected = selected.reduce((remaining,pathwayID,index)=>{
+      //   if (!indices.includes(index)) {
+      //     remaining.push(pathwayID);
+      //   };
+      //   return remaining;
+      // },[]);
+      // selectedPathways.set("Pathways", reducedSelected);
+      // this.setState({"selectedPathways":selectedPathways});
+      //
+      let pathwayMap = this.state.pathwayMap;
+      for (let pathwayID of pathwayIDs) {
+        if (pathwayMap.get("Selected").has(pathwayID)) {
+          pathwayMap.get("Selected").delete(pathwayID);
         };
-        return remaining;
-      },[]);
-      selectedPathways.set("Pathways", reducedSelected);
-      this.setState({"selectedPathways":selectedPathways});
+      };
+      this.setState({pathwayMap});
     }
 
     // For SelectObservations modal component
@@ -392,6 +414,7 @@ class App extends  React.Component {
                 addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
                 addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet}
 
+                pathwayMap = {this.state.pathwayMap}
                 pathways                        = {this.props.pathways}
                 pairwiseInteractions            = {this.state.pairwiseInteractions}
                 observationSets                 = {this.state.observationSets}
@@ -440,7 +463,7 @@ function getPathway(session, pathways, initPathway) {
     session.call('pgmlab.pathway.get', [initPathway.id]).then(
           function(res) {
                const pairwiseInteractions = res;
-               console.log("getPathway:", res);
+              //  console.log("getPathway:", res);
                init(pathways, pairwiseInteractions);
           },
           function (err) {
@@ -455,7 +478,7 @@ connection.onopen = function (session, details) {
             //Init pathway
             const pathways = res;
             const initPathway = pathways[0]; // This should correspond to the mock data in the App constructor
-            console.log("connection.onopen:", res);
+            // console.log("connection.onopen:", res);
             //
             getPathway(session, pathways, initPathway);
          },
@@ -480,7 +503,9 @@ connection.onclose = function (reason, details) {
 connection.open();
 
 function init(pathways, pairwiseInteractions) {
-  console.log("init:", pathways, pairwiseInteractions);
-  render(<App pathways={pathways}
+  // console.log("init:", pathways, pairwiseInteractions);
+  const pathwayMap = new Map([["All", new Map(pathways.map(p => [p.id, p]))]]);
+  render(<App pathwayMap={pathwayMap}
+              pathways={pathways}
               pairwiseInteractions={pairwiseInteractions} />, document.getElementById('app'));
 };

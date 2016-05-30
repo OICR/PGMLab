@@ -15,7 +15,7 @@ export class SelectObservationSet extends React.Component {
     this.handleObsSelect = this.handleObsSelect.bind(this);
     this.handleObsCheckAll = this.handleObsCheckAll.bind(this);
     this.handleObsUncheckAll = this.handleObsUncheckAll.bind(this);
-    
+
     this.observationSetList = this.observationSetList.bind(this);
     this.observationsList = this.observationsList.bind(this);
   }
@@ -135,6 +135,7 @@ export class SelectObservationSet extends React.Component {
     );
   }
   render(){
+    // console.log(this.props.pathwayMap);
     const scrollable={maxHeight:"100%", height:"100%", overflow:"scroll"};
     return (
       <div>

@@ -29,7 +29,9 @@ export class Body extends React.Component {
         <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="row">
           <div className="col s4" style={{minWidth:"300px"}}>
-            <ControlPanel pathways                        = {this.props.pathways}
+            <ControlPanel
+                          pathwayMap = {this.props.pathwayMap}
+                          pathways                        = {this.props.pathways}
                           pairwiseInteractions            = {this.props.pairwiseInteractions}
                           observationSets                 = {this.props.observationSets}
 
