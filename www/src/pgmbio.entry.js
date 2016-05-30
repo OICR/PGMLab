@@ -436,15 +436,15 @@ var connection = new autobahn.Connection({
     realm: "realm1"
 });
 
-function getPathway(session, pathways, activePathway) {
-    session.call('pgmlab.pathway.get', [activePathway.id]).then(
+function getPathway(session, pathways, initPathway) {
+    session.call('pgmlab.pathway.get', [initPathway.id]).then(
           function(res) {
-               var pairwiseInteractions = res;
+               const pairwiseInteractions = res;
                console.log("getPathway:", res);
-               init(pathways, activePathway, pairwiseInteractions);
+               init(pathways, pairwiseInteractions);
           },
           function (err) {
-              console.log("couldn't get pathway", activePathway.id, err);
+              console.log("couldn't get pathway", initPathway.id, err);
           });
 };
 
@@ -452,12 +452,12 @@ connection.onopen = function (session, details) {
    console.log("Connected");
    session.call('pgmlab.pathways.list').then(
          function (res) {
-           //Init pathway
-            var pathways = res;
-            var activePathway = pathways[0];
+            //Init pathway
+            const pathways = res;
+            const initPathway = pathways[0]; // This should correspond to the mock data in the App constructor
             console.log("connection.onopen:", res);
             //
-            getPathway(session, pathways, activePathway);
+            getPathway(session, pathways, initPathway);
          },
          function (err) {
             console.log("getPathwayList() error:", err);
@@ -479,8 +479,8 @@ connection.onclose = function (reason, details) {
 
 connection.open();
 
-function init(pathways, activePathway, pairwiseInteractions) {
-  console.log("init:", pathways, activePathway, pairwiseInteractions);
+function init(pathways, pairwiseInteractions) {
+  console.log("init:", pathways, pairwiseInteractions);
   render(<App pathways={pathways}
-              pairwiseInteractions={pairwiseInteractions}  />, document.getElementById('app'));
+              pairwiseInteractions={pairwiseInteractions} />, document.getElementById('app'));
 };
