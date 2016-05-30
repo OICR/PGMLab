@@ -11,10 +11,10 @@ export class NodeItem extends React.Component {
     this.state={
       open:false,
       nodeStates: [
-        {val:"-",label:" | Remove"},
-        {val:"1",label:" | Down regulated"},
-        {val:"2",label:" | No regulation"},
-        {val:"3",label:" | Up regulated"}
+        {val:"-",label:"Unobserved"},
+        {val:"1",label:"1 | Down regulated"},
+        {val:"2",label:"2 | No regulation"},
+        {val:"3",label:"3 | Up regulated"}
       ]
     };
 
@@ -56,7 +56,7 @@ export class NodeItem extends React.Component {
     const header = <MenuItem key="header" primaryText="State" disabled={true}/>;
     const states = this.state.nodeStates.map(state=>
       <MenuItem key={state.val}
-                primaryText={`${state.val}${state.label}`}
+                primaryText={`${state.label}`}
                 onTouchTap={()=>{this.handleNodeState(state.val)}}
                 insetChildren={true}
                 checked={this.props.nodeState === state.val}/>
