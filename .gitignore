@@ -51,3 +51,6 @@ wamp/.crossbar/key.priv
 wamp/.crossbar/key.pub
 
 www/node_modules/
+
+#tmp files created from running PGMLab
+tmp/*

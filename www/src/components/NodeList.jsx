@@ -2,22 +2,40 @@ import React from "react";
 
 import {NodeItem} from "./NodeItem.jsx";
 
+var graphvis = require("./../bin/graphvis.js");
+
 export class NodeList extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      nodeFilterText: ""
+      nodeFilterText: "",
+      focused: new Set() //will be separate for ActivePathway/Observation, move up one node level (or into root)?
     };
 
     this.nodeFilterTextUpdate=this.nodeFilterTextUpdate.bind(this);
+    this.handleNodeFocus = this.handleNodeFocus.bind(this);
+    this.handleUnfocusAll = this.handleUnfocusAll.bind(this);
     this.observationsList=this.observationsList.bind(this);
     this.pathwaysList=this.pathwaysList.bind(this);
+
   }
   nodeFilterTextUpdate(){
     this.setState({"nodeFilterText": this.refs["nodeFilterInput"].value});
   }
   handleSetState(name,state){
     this.props.setNodeItemState(name,state);
+  }
+
+  handleNodeFocus(node){
+    const nodeID = node.name;
+    let focused = this.state.focused;
+    focused.has(nodeID) ? focused.delete(nodeID) : focused.add(nodeID);
+    this.setState({focused}, ()=>{graphvis.focusNodes([...focused])});
+  }
+  handleUnfocusAll(){
+    let focused = this.state.focused;
+    focused.clear();
+    this.setState({focused}, ()=>{graphvis.unfocusAll()});
   }
 
   // RENDERING
@@ -35,12 +53,10 @@ export class NodeList extends React.Component {
         nodeItem = undefined;
       }
       else {
-        if (pathwayMap.has(node.name)) {
-          nodeItem = <NodeItem key={node.name} node={node} nodeState={node.state} shared={true} setNodeItemState={this.props.setNodeItemState}/>
-        }
-        else {
-          nodeItem = <NodeItem key={node.name} node={node} nodeState={node.state} shared={false} setNodeItemState={this.props.setNodeItemState}/>
-        }
+        nodeItem = <NodeItem  key={node.name} node={node}
+                              nodeState={node.state} shared={pathwayMap.has(node.name)}
+                              setNodeItemState={this.props.setNodeItemState}
+                              handleNodeFocus={this.handleNodeFocus} handleUnfocusAll={this.handleUnfocusAll}/>
       };
       return nodeItem;
     });
@@ -57,12 +73,12 @@ export class NodeList extends React.Component {
       if (node.name.toLowerCase().indexOf(textInput)) {
         nodeItem = undefined;
       }
-      else if (observationStateMap.has(node.name)) {
-        nodeItem = <NodeItem key={node.name} node={node} nodeState={observationStateMap.get(node.name)} shared={true} setNodeItemState={this.props.setNodeItemState}/>
-      }
       else {
-        nodeItem = <NodeItem key={node.name} node={node} nodeState={"-"} shared={false} setNodeItemState={this.props.setNodeItemState}/>
-      };
+        const [nodeState, shared] = observationStateMap.has(node.name) ? [observationStateMap.get(node.name), true] : ["-", false];
+        nodeItem = <NodeItem  key={node.name} node={node} nodeState={nodeState}
+                              shared={shared} setNodeItemState={this.props.setNodeItemState}
+                              handleNodeFocus={this.handleNodeFocus} handleUnfocusAll={this.handleUnfocusAll}/>
+      }
       return nodeItem;
     });
   }

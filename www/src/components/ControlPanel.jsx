@@ -46,7 +46,7 @@ export class ControlPanel extends React.Component {
 
         </div>
       </div>
-        <div className="divider"></div>
+        <div className="divider"></div><div className="divider"></div>
         <DataSelection
                         pathways               = {this.props.pathways}
                         selectPathways = {this.props.selectPathways}
@@ -58,7 +58,7 @@ export class ControlPanel extends React.Component {
                         selectObservations = {this.props.selectObservations}
                         removeSelectedObservations = {this.props.removeSelectedObservations}
                         selectedObservations = {this.props.selectedObservations} />
-        <div className="divider"></div>
+        <div className="divider"></div><div className="divider"></div>
         <ObservationsControl  setNodeItemState = {this.props.setNodeItemState}
                               selectedObservationSet = {this.props.selectedObservationSet}
                               selectedObservations = {this.props.selectedObservations}
@@ -74,7 +74,7 @@ export class ControlPanel extends React.Component {
                           selectedObservationSet = {this.props.selectedObservationSet}
                           selectedObservations = {this.props.selectedObservations} />
 
-        <div className="divider"></div>
+        <div className="divider"></div><div className="divider"></div>
         <ResultsControl runInference={this.props.runInference}
                         toggle={this.props.toggle}/>
     </div>

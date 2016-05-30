@@ -9,6 +9,7 @@ export class UploadModal extends React.Component {
     }
     componentDidMount(){
       $('.modal-trigger').leanModal();
+      $(".tooltipped").tooltip({delay: 25});
     }
     isInteger(str) {
         return /^([1-9]\d*)$/.test(str)
@@ -305,7 +306,7 @@ export class UploadModal extends React.Component {
               </div>
             </div>
             <a className="modal-trigger btn-floating btn tooltipped"
-              data-position="top" data-delay="50" data-tooltip="Upload Data Files" href="#uploadModal">
+              data-position="top" data-tooltip="Upload Data Files" href="#uploadModal">
               <i className="material-icons">file_upload</i>
             </a>
 

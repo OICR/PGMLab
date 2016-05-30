@@ -442,6 +442,7 @@ function getPathway(session, pathways, activePathway) {
     session.call('pgmlab.pathway.get', [activePathway.id]).then(
           function(res) {
                var pairwiseInteractions = res;
+               console.log("getPathway:", res);
                init(pathways, activePathway, pairwiseInteractions);
           },
           function (err) {
@@ -456,6 +457,7 @@ connection.onopen = function (session, details) {
            //Init pathway
             var pathways = res;
             var activePathway = pathways[0];
+            console.log("connection.onopen:", res);
             //
             getPathway(session, pathways, activePathway);
          },
@@ -480,7 +482,8 @@ connection.onclose = function (reason, details) {
 connection.open();
 
 function init(pathways, activePathway, pairwiseInteractions) {
-    render(<App pathways={pathways}
-                activePathway={activePathway}
-                pairwiseInteractions={pairwiseInteractions}  />, document.getElementById('app'));
+  console.log("init:", pathways, activePathway, pairwiseInteractions);
+  render(<App pathways={pathways}
+              activePathway={activePathway}
+              pairwiseInteractions={pairwiseInteractions}  />, document.getElementById('app'));
 };
