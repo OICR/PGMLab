@@ -15,9 +15,12 @@ export class SelectObservationSet extends React.Component {
     this.handleObsSelect = this.handleObsSelect.bind(this);
     this.handleObsCheckAll = this.handleObsCheckAll.bind(this);
     this.handleObsUncheckAll = this.handleObsUncheckAll.bind(this);
-
+    
     this.observationSetList = this.observationSetList.bind(this);
     this.observationsList = this.observationsList.bind(this);
+  }
+  componentDidMount(){
+    $(".tooltipped").tooltip({delay: 25});
   }
 
   setFilterUpdate(){
@@ -132,23 +135,28 @@ export class SelectObservationSet extends React.Component {
     );
   }
   render(){
-  // console.log("SOS", this.props)
     const scrollable={maxHeight:"100%", height:"100%", overflow:"scroll"};
     return (
-      <div id="selectObservationSetModal" className="modal modal-fixed-footer">
-        <div className="modal-content" style={{overflow:"visible"}}>
-          <div className="row" style={{height:"100%"}}>
-            <div className="col s6" style={scrollable}>
-              {this.observationSetList()}
-            </div>
-            <div className="col s6" style={scrollable}>
-              {this.observationsList()}
+      <div>
+        <div id="selectObservationSetModal" className="modal modal-fixed-footer">
+          <div className="modal-content" style={{overflow:"visible"}}>
+            <div className="row" style={{height:"100%"}}>
+              <div className="col s6" style={scrollable}>
+                {this.observationSetList()}
+              </div>
+              <div className="col s6" style={scrollable}>
+                {this.observationsList()}
+              </div>
             </div>
           </div>
+          <div className="modal-footer">
+            <a href="#!" className="modal-action modal-close btn-flat">Close</a>
+          </div>
         </div>
-        <div className="modal-footer">
-          <a href="#!" className="modal-action modal-close btn-flat">Close</a>
-        </div>
+        <a  className="btn modal-trigger tooltipped" href="#selectObservationSetModal"
+            data-position="top" data-tooltip="Select observation data to work with">
+            Observations
+        </a>
       </div>
     );
   }

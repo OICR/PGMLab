@@ -4,6 +4,9 @@ import {SelectPathways} from './SelectPathways.jsx'
 import {SelectObservationSet} from './SelectObservationSet.jsx'
 
 export class DataSelection extends React.Component {
+  componentDidMount() {
+    $(".tooltipped").tooltip({delay: 25});
+  }
   render(){
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
@@ -18,10 +21,6 @@ export class DataSelection extends React.Component {
               selectObservations = {this.props.selectObservations}
               removeSelectedObservations = {this.props.removeSelectedObservations}
               selectedObservations = {this.props.selectedObservations} />
-
-            <a className="btn modal-trigger tooltipped" href="#selectObservationSetModal" data-position="top" data-tooltip="Observation Sets">
-                Observations
-            </a>
           </div>
           <div className="col s6 center-align">
             <SelectPathways
@@ -29,9 +28,6 @@ export class DataSelection extends React.Component {
               selectPathways={this.props.selectPathways}
               removeSelectedPathways={this.props.removeSelectedPathways}
               selectedPathways      = {this.props.selectedPathways} />
-            <a className="btn modal-trigger tooltipped" href="#selectPathwayModal" data-position="top" data-tooltip="Pathways">
-                Pathways
-            </a>
           </div>
         </div>
       </div>
