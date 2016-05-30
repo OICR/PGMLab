@@ -39,7 +39,6 @@ class App extends  React.Component {
                       "pairwiseInteractions"            : this.props.pairwiseInteractions,
                       "uploadList"                      : [],
                       //
-                      "activePathway"                   : this.props.activePathway,
                       "selectedPathways": selectedPathways,
                       //
                       "observationSets"                 : observationSets,
@@ -408,7 +407,6 @@ class App extends  React.Component {
                 selectedObservations = {this.state.selectedObservations}
                 setActiveObservation = {this.setActiveObservation}
 
-                activePathway                   = {this.state.activePathway}
                 setActivePathway                = {this.setActivePathway}
 
                 observeNode                     = {this.observeNode}
@@ -484,6 +482,5 @@ connection.open();
 function init(pathways, activePathway, pairwiseInteractions) {
   console.log("init:", pathways, activePathway, pairwiseInteractions);
   render(<App pathways={pathways}
-              activePathway={activePathway}
               pairwiseInteractions={pairwiseInteractions}  />, document.getElementById('app'));
 };

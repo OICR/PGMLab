@@ -17,7 +17,8 @@ export class Body extends React.Component {
     }
     componentDidMount(){
       // Init example on first mount
-      this.props.setActivePathway(this.props.activePathway);
+      const active = this.props.selectedPathways.get("Active");
+      this.props.setActivePathway(this.props.pathways.find(p=>p.id === active.id));
     }
     toggleRunType(){
       this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"})
@@ -46,7 +47,6 @@ export class Body extends React.Component {
                           selectPathways = {this.props.selectPathways}
                           removeSelectedPathways = {this.props.removeSelectedPathways}
                           selectedPathways = {this.props.selectedPathways}
-                          activePathway                   = {this.props.activePathway}
                           setActivePathway                = {this.props.setActivePathway}
 
                           selectObservationSet = {this.props.selectObservationSet}
