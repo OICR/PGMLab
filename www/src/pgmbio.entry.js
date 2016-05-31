@@ -306,51 +306,47 @@ class App extends  React.Component {
     }
     addNewPathway(name, pairwiseInteractions){
       console.log("addNewPathway");
-      var pathways = this.state.pathways
-      var guid = App.guid()
-      var pathway = { "id"                   : guid,
+      // var pathways = this.state.pathways
+      const guid = App.guid()
+      const pathway = { "id"                   : guid,
                       "name"                 : name,
                       "pairwiseInteractions" : pairwiseInteractions }
-      pathways.push(pathway)
+      // pathways.push(pathway)
+
+      let pathwayMap = this.state.pathwayMap;
+      pathwayMap.get("All").set(guid, pathway)
       //
       // graphvis.render(pairwiseInteractions)
-      var uploadSummary = { "datetime": App.getCurrentDateTime(),
+      const uploadSummary = { "datetime": App.getCurrentDateTime(),
                             "id"      : guid,
                             "filetype": "Pathway",
                             "success" : true,
                             "name"    : name,
                             "comment" : ""}
-      var uploadList = this.state.uploadList
-      uploadList.push(uploadSummary)
-      this.setState({ "pathways"               : pathways,
-                      "activePathway"          : pathway,
-                      "pairwiseInteractions"   : pairwiseInteractions,
-                      "posteriorProbabilities" : {},
+      let uploadList = this.state.uploadList;
+      uploadList.push(uploadSummary);
+      this.setState({ pathwayMap,
                       "uploadList"             : uploadList});
     }
     addNewObservationSet(name, observations){
       console.log("addNewObservationSet");
-      var guid = App.guid()
-      var uploadSummary = { "datetime": App.getCurrentDateTime(),
+      let uploadList = this.state.uploadList;
+      const guid = App.guid()
+      const uploadSummary = { "datetime": App.getCurrentDateTime(),
                             "id"      : guid,
                             "filetype": "Observation",
                             "success" : true,
                             "name"    : name,
-                            "comment" : ""}
-      var uploadList = this.state.uploadList
+                            "comment" : ""};
       uploadList.push(uploadSummary)
-      var observationSet = { "id"           : guid,
+      let observationMap = this.state.observationMap;
+      const observationSet = { "id"           : guid,
                              "name"         : name,
-                             "activeIndex"  : 0,
                              "observations" : observations}
-      // Convert to object
-      // var observationSets = this.state.observationSets
-      // observationSets.push(observationSet)
-      let observationSets = this.state.observationSets;
-      observationSets.set(guid, observationSet);
-      // console.log("observationSets", observationSets)
-      this.setState({"uploadList"      : uploadList,
-                     "observationSets" : observationSets})
+
+      observationMap.get("All").set(guid, observationSet);
+      this.setState({ observationMap,
+                      "uploadList"      : uploadList});
     }
     addNewEstimatedParameterSet(name, cpts){
       console.log("addNewEstimatedParameterSet");
