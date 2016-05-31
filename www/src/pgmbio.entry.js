@@ -179,7 +179,10 @@ class App extends  React.Component {
         connection.session
           .call("pgmlab.pathway.get", [pathway.id])
           .then(
-            pairwiseInteractionsResult=>{update(pathway, pairwiseInteractionsResult)},
+            pairwiseInteractionsResult=>{
+              console.log("pgmlab.pathway.get", pairwiseInteractionsResult);
+              update(pathway, pairwiseInteractionsResult)
+            },
             err=>{console.log("Couldn't Get Pathway", pathway.id, err)}
           );
     }

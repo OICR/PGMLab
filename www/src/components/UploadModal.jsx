@@ -57,13 +57,13 @@ export class UploadModal extends React.Component {
                 links = [],
                 nodeCount = 0;
             for (let i=2; i < numberOfLines; i++) {
-                var lineParts = lines[i].split("\t")
+                const lineParts = lines[i].split("\t")
                 if (lineParts.length < 2) {
                      self.props.uploadListAddFailure(file.name, "Pathway",
                            "All lines must have format <nodeFrom>\\t<NodeToo> ; will use first two columns. Trouble line: ".concat(lines[i]))
                      return
                 }
-                var source = lineParts[0].trim()
+                const source = lineParts[0].trim()
                 if (!nodes.hasOwnProperty(source)) {
                     nodes[source] = ++nodeCount
                     nodesList.push({"name":     source,
@@ -76,7 +76,7 @@ export class UploadModal extends React.Component {
                                     "type":     null })
                 }
 
-                var target = lineParts[0].trim()
+                const target = lineParts[1].trim();
                 if(!nodes.hasOwnProperty(target)) {
                     nodes[target] = ++nodeCount
                     nodesList.push({"name":     target,
@@ -89,10 +89,9 @@ export class UploadModal extends React.Component {
                                     "type":     null })
                }
 
-               links.push({ "source": source,
-                            "target": target,
-                            "logic":  0,
-                            "value":  1})
+               const logic = lineParts[2].trim();
+               const value = lineParts[3].trim();
+               links.push({source, target, logic, value});
             }
 
             var pairwiseInteractions = { "nodes": nodesList,
