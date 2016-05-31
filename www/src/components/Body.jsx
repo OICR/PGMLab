@@ -17,7 +17,7 @@ export class Body extends React.Component {
     }
     componentDidMount(){
       // Init example on first mount
-      this.props.setActivePathway(this.props.activePathway);
+      this.props.setActivePathway(this.props.pathwayMap.get("Active"));
     }
     toggleRunType(){
       this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"})
@@ -28,9 +28,11 @@ export class Body extends React.Component {
         <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="row">
           <div className="col s4" style={{minWidth:"300px"}}>
-            <ControlPanel pathways                        = {this.props.pathways}
+            <ControlPanel
+                          observationMap = {this.props.observationMap}
+                          pathwayMap = {this.props.pathwayMap}
+
                           pairwiseInteractions            = {this.props.pairwiseInteractions}
-                          observationSets                 = {this.props.observationSets}
 
                           uploadList                      = {this.props.uploadList}
                           uploadListAddFailure            = {this.props.uploadListAddFailure}
@@ -45,16 +47,12 @@ export class Body extends React.Component {
 
                           selectPathways = {this.props.selectPathways}
                           removeSelectedPathways = {this.props.removeSelectedPathways}
-                          selectedPathways = {this.props.selectedPathways}
-                          activePathway                   = {this.props.activePathway}
                           setActivePathway                = {this.props.setActivePathway}
 
                           selectObservationSet = {this.props.selectObservationSet}
-                          selectedObservationSet = {this.props.selectedObservationSet}
 
                           selectObservations = {this.props.selectObservations}
                           removeSelectedObservations = {this.props.removeSelectedObservations}
-                          selectedObservations = {this.props.selectedObservations}
                           setActiveObservation = {this.props.setActiveObservation}
 
                           addNewPathway                   = {this.props.addNewPathway}
@@ -65,10 +63,7 @@ export class Body extends React.Component {
                           setNodeItemState = {this.props.setNodeItemState} />
           </div>
           <div className="col s8" style={{minWidth:"800px"}}>
-            <DisplayPanel toggle = {this.state.toggle}
-                          selectedObservationSet = {this.props.selectedObservationSet}
-                          selectedObservations = {this.props.selectedObservations}
-                          selectedPathways = {this.props.selectedPathways} />
+            <DisplayPanel />
           </div>
         </main>
         </MuiThemeProvider>

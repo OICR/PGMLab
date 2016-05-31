@@ -23,7 +23,15 @@ var EXAMPLEDATA = {
       [ {"name":"58253","state":"1"},{"name":"415917","state":"2"},{"name":"61076","state":"1"},{"name":"49860","state":"2"}],
       [ {"name":"61074","state":"1"},{"name":"49860","state":"2"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"}]
     ]}]
-  ])
+  ]),
+  current: {
+    set : {"id":"exampleID1", "name":"Example 1", "observations":[
+      [ {"name":"49860","state":"1"},{"name":"58253","state":"2"},{"name":"415917","state":"3"},{"name":"61076","state":"1"}],
+      [ {"name":"49860","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+    ]},
+    selected: [0, 1],
+    active: 0
+  }
 };
 
 class App extends  React.Component {
@@ -34,18 +42,24 @@ class App extends  React.Component {
       let selectedObservationSet = observationSets.get("exampleID1");
       let selectedObservations = new Map([["Indices",[0,1]],["Active",0]]);
       let selectedPathways = new Map([["Pathways", new Array("397795")],["Active",{id:"397795",name:"G-protein beta:gamma signalling"}]]);
+      //
+      let pathwayMap = this.props.pathwayMap;
+      pathwayMap.set("Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]]));
+      pathwayMap.set("Active", {id:"397795",name:"G-protein beta:gamma signalling"});
+
+      let observationMap = new Map([
+        ["All", EXAMPLEDATA.observationSets],
+        ["Current", new Map([
+          ["Set", EXAMPLEDATA.current.set],
+          ["Selected Observations", EXAMPLEDATA.current.selected],
+          ["Active Observation", EXAMPLEDATA.current.active]
+        ])]
+      ]);
       // Set initial state
-      this.state = {  "pathways"                        : this.props.pathways,
+      this.state = {  "observationMap": observationMap,
+                      "pathwayMap" : pathwayMap,
                       "pairwiseInteractions"            : this.props.pairwiseInteractions,
                       "uploadList"                      : [],
-                      //
-                      "activePathway"                   : this.props.activePathway,
-                      "selectedPathways": selectedPathways,
-                      //
-                      "observationSets"                 : observationSets,
-                      "selectedObservationSet": selectedObservationSet,
-                      "selectedObservations": selectedObservations,
-                      //
                       "posteriorProbabilitySets"        : [],
                       "estimatedParameterSets"          : []
                     };
@@ -77,122 +91,122 @@ class App extends  React.Component {
     static getCurrentDateTime(){return moment().format('MMM D, YYYY HH:mm')}
 
     // For SelectPathways modal component
-    selectPathways(pathwayIDs, runType){
-      let selectedPathways = this.state.selectedPathways;
-      let selected=this.state.selectedPathways.get("Pathways");
+    // [pathwayIDs] =>  and adds to list of possible active pathways
+    selectPathways(pathwayIDs){
+      let pathwayMap = this.state.pathwayMap;
       for (let pathwayID of pathwayIDs) {
-        if (!selected.includes(pathwayID)) {
-          selected.push(pathwayID);
+        if (!pathwayMap.get("Selected").has(pathwayID)) {
+          const pathwayObj = pathwayMap.get("All").get(pathwayID);
+          pathwayMap.get("Selected").set(pathwayID, pathwayObj);
         };
       };
-      selectedPathways.set("Pathways", selected);
-      this.setState({"selectedPathways":selectedPathways});
+      this.setState({pathwayMap});
     }
     // For SelectPathways modal component
-    removeSelectedPathways(pathwayIDs, runType){
-      let selectedPathways = this.state.selectedPathways;
-      let selected = selectedPathways.get("Pathways");
-      const indices = pathwayIDs.map((pathway)=>{return selected.indexOf(pathway)});
-      const reducedSelected = selected.reduce((remaining,pathwayID,index)=>{
-        if (!indices.includes(index)) {
-          remaining.push(pathwayID);
+    // [pathwayIDs] removes them from list of possible active pathways
+    removeSelectedPathways(pathwayIDs){
+      let pathwayMap = this.state.pathwayMap;
+      for (let pathwayID of pathwayIDs) {
+        if (pathwayMap.get("Selected").has(pathwayID)) {
+          pathwayMap.get("Selected").delete(pathwayID);
         };
-        return remaining;
-      },[]);
-      selectedPathways.set("Pathways", reducedSelected);
-      this.setState({"selectedPathways":selectedPathways});
+      };
+      this.setState({pathwayMap});
     }
 
     // For SelectObservations modal component
-    selectObservationSet(observationSetID, runType){
-      const selectedSet = this.state.observationSets.get(observationSetID);
-      const obs = new Map([
-        ["Indices", [... selectedSet.observations.keys()]], //array of number values for index in set.observations
-        ["Active", 0] //first observation in set is set to active
-      ]);
-      this.setState({
-        "selectedObservationSet":selectedSet,
-        "selectedObservations":obs
-      });
+    // observationSetID =>  changes observationMap.Current to that new set
+    selectObservationSet(observationSetID){
+      let observationMap = this.state.observationMap;
+      const selectedSet = observationMap.get("All").get(observationSetID);
+      observationMap.set("Current", new Map([
+        ["Set", selectedSet],
+        ["Selected Observations", [...selectedSet.observations.keys()]],
+        ["Active Observation", 0]
+      ]));
+      this.setState({observationMap});
     }
     // For SelectObservations modal component
-    selectObservations(observationIndices, runType){
-      let selectedObservations = this.state.selectedObservations;
-      const indices = selectedObservations.get("Indices");
-      for (let index of observationIndices) {
-        if (!indices.includes(index)) {
-          indices.push(index);
-        };
-      };
-      selectedObservations.set("Indices", indices);
-      this.setState({"selectedObservations": selectedObservations})
+    // [indices (from current set's observation property) of to be selected observations]
+    //  => adds them to list of possible active observations
+    selectObservations(observationIndices){
+      let observationMap = this.state.observationMap;
+      const currentSet = new Set(observationMap.get("Current").get("Selected Observations"));
+      const toAddSet = new Set(observationIndices);
+      const mergeSet = new Set([...currentSet, ...toAddSet]);
+      observationMap.get("Current").set("Selected Observations", [...mergeSet]);
+      this.setState({observationMap});
     }
     // For SelectObservations modal component
-    removeSelectedObservations(observationIndices, runType){
-      console.log("removeSelectedObservations", observationIndices);
-      let selectedObservations = this.state.selectedObservations;
-      let selected = selectedObservations.get("Indices");
-      const reducedSelected = selected.reduce((remaining,observationIndex)=>{
-        if (!observationIndices.includes(observationIndex)) {
-          remaining.push(observationIndex);
-        };
-        return remaining;
-      },[]);
+    // [indices (from current set's observation property) of to be removed observations]
+    //  => removes them from list of possible active observations
+    removeSelectedObservations(observationIndices){
+      let observationMap = this.state.observationMap;
+      const selectedSet = new Set(observationMap.get("Current").get("Selected Observations"));
+      const toRemoveSet = new Set(observationIndices);
+      const differenceSet = new Set([...selectedSet].filter(o=> !toRemoveSet.has(o)));
+      observationMap.get("Current").set("Selected Observations", [...differenceSet]);
+      this.setState({observationMap});
       // Add checker for unselecting the active observation
-      selectedObservations.set("Indices",reducedSelected);
-      this.setState({"selectedObservations": selectedObservations});
     }
 
     // For ObservationsControl component
-    setActiveObservation(observationIndex, runType){ //Index in selectedObservationSet.observations
-      let selectedObservations = this.state.selectedObservations;
-      selectedObservations.set("Active", observationIndex)
-      this.setState({"selectedObservations": selectedObservations});
+    // Posn of selected activeObservation in current.set.observations => sets current.active
+    setActiveObservation(observationIndex){
+      let observationMap = this.state.observationMap;
+      observationMap.get("Current").set("Active Observation", observationIndex);
+      this.setState({observationMap});
     }
     // For PathwaysControl components
+    // Pathway object => sets pathwayMap.active, pairwiseInteractions, resets posteriorProbabilities
+    //  then draws
     setActivePathway(pathway){
       let self = this;
-      let selectedPathways = this.state.selectedPathways;
-      selectedPathways.set("Active", pathway);
-      const updatePairwise = (pairwiseInteractions) => {
+      const update = (pathway, pairwiseInteractions) => {
+        let pathwayMap = self.state.pathwayMap;
+        pathwayMap.set("Active", pathway);
         self.setState({
-          "selectedPathways":selectedPathways,
+          pathwayMap,
           "pairwiseInteractions":pairwiseInteractions,
-          "observedNodes":[],
+          // "observedNodes":[],
           "posteriorProbabilities":{}
         }, ()=>{graphvis.render(pairwiseInteractions)});
       };
-      // If uploaded, use the uploaded pairwiseInteractions
-      if (pathway.hasOwnProperty("pairwiseInteractions")) {
-        updatePairwise(pathway.pairwiseInteractions);
-      }
-      // Else get from server
-      else {
-        connection.session.call("pgmlab.pathway.get", [pathway.id])
-        .then(
-          (pairwiseInteractionsResult)=>{updatePairwise(pairwiseInteractionsResult)},
-          (err)=>{console.log("Couldn't Get Pathway", pathway.id, err)}
-        );
-      };
+      pathway.hasOwnProperty("pairwiseInteractions") ?
+        // If uploaded, use the uploaded pairwiseInteractions
+        update(pathway, pathway.pairwiseInteractions) :
+        // Else get from server
+        connection.session
+          .call("pgmlab.pathway.get", [pathway.id])
+          .then(
+            pairwiseInteractionsResult=>{
+              console.log("pgmlab.pathway.get", pairwiseInteractionsResult);
+              update(pathway, pairwiseInteractionsResult)
+            },
+            err=>{console.log("Couldn't Get Pathway", pathway.id, err)}
+          );
     }
     // For NodeItem components in Pathways/ObservationsControl
+    // node name, state to change to => changes observation node state value in current.set.observations[active]
     setNodeItemState(name,state){
-      // console.log("setNodeItemState", name, state);
-      let selectedObservationSet = this.state.selectedObservationSet;
-      let observation = selectedObservationSet.observations[this.state.selectedObservations.get("Active")];
-      const posn = observation.findIndex((node)=>node.name===name);
-      switch (state) {
-        case ("-"):
-          if (posn !== -1) { observation.splice(posn,1); };
-          break;
-        default:
-          switch (posn) {
-            case (-1): observation.splice(0,0,{name,state}); break;
-            default: observation[posn].state = state;
-          };
-      };
-      selectedObservationSet.observations[this.state.selectedObservations.get("Active")] = observation;
-      this.setState({"selectedObservationSet":selectedObservationSet});
+      let observationMap = this.state.observationMap;
+      let observationSet = observationMap.get("Current").get("Set");
+      const activeObservationPosn = observationMap.get("Current").get("Active Observation");
+      const nodes = observationSet.observations[activeObservationPosn];
+      observationSet.observations[activeObservationPosn] = [... new Set(
+        state === "-" ?
+          nodes.filter(node => node.name !== name) :
+          [...
+            [...nodes, {name,state}]
+                .reduce((accumulator,node) => {
+                  accumulator.set(node.name, node);
+                  return accumulator;
+                }, new Map())
+                .values()
+          ]
+      )];
+      observationMap.get("Current").set("Set",observationSet);
+      this.setState({observationMap});
     }
 
 
@@ -295,51 +309,47 @@ class App extends  React.Component {
     }
     addNewPathway(name, pairwiseInteractions){
       console.log("addNewPathway");
-      var pathways = this.state.pathways
-      var guid = App.guid()
-      var pathway = { "id"                   : guid,
+      // var pathways = this.state.pathways
+      const guid = App.guid()
+      const pathway = { "id"                   : guid,
                       "name"                 : name,
                       "pairwiseInteractions" : pairwiseInteractions }
-      pathways.push(pathway)
+      // pathways.push(pathway)
+
+      let pathwayMap = this.state.pathwayMap;
+      pathwayMap.get("All").set(guid, pathway)
       //
       // graphvis.render(pairwiseInteractions)
-      var uploadSummary = { "datetime": App.getCurrentDateTime(),
+      const uploadSummary = { "datetime": App.getCurrentDateTime(),
                             "id"      : guid,
                             "filetype": "Pathway",
                             "success" : true,
                             "name"    : name,
                             "comment" : ""}
-      var uploadList = this.state.uploadList
-      uploadList.push(uploadSummary)
-      this.setState({ "pathways"               : pathways,
-                      "activePathway"          : pathway,
-                      "pairwiseInteractions"   : pairwiseInteractions,
-                      "posteriorProbabilities" : {},
+      let uploadList = this.state.uploadList;
+      uploadList.push(uploadSummary);
+      this.setState({ pathwayMap,
                       "uploadList"             : uploadList});
     }
     addNewObservationSet(name, observations){
       console.log("addNewObservationSet");
-      var guid = App.guid()
-      var uploadSummary = { "datetime": App.getCurrentDateTime(),
+      let uploadList = this.state.uploadList;
+      const guid = App.guid()
+      const uploadSummary = { "datetime": App.getCurrentDateTime(),
                             "id"      : guid,
                             "filetype": "Observation",
                             "success" : true,
                             "name"    : name,
-                            "comment" : ""}
-      var uploadList = this.state.uploadList
+                            "comment" : ""};
       uploadList.push(uploadSummary)
-      var observationSet = { "id"           : guid,
+      let observationMap = this.state.observationMap;
+      const observationSet = { "id"           : guid,
                              "name"         : name,
-                             "activeIndex"  : 0,
                              "observations" : observations}
-      // Convert to object
-      // var observationSets = this.state.observationSets
-      // observationSets.push(observationSet)
-      let observationSets = this.state.observationSets;
-      observationSets.set(guid, observationSet);
-      // console.log("observationSets", observationSets)
-      this.setState({"uploadList"      : uploadList,
-                     "observationSets" : observationSets})
+
+      observationMap.get("All").set(guid, observationSet);
+      this.setState({ observationMap,
+                      "uploadList"      : uploadList});
     }
     addNewEstimatedParameterSet(name, cpts){
       console.log("addNewEstimatedParameterSet");
@@ -393,22 +403,18 @@ class App extends  React.Component {
                 addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
                 addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet}
 
-                pathways                        = {this.props.pathways}
+                pathwayMap = {this.state.pathwayMap}
                 pairwiseInteractions            = {this.state.pairwiseInteractions}
-                observationSets                 = {this.state.observationSets}
 
                 selectPathways = {this.selectPathways}
                 removeSelectedPathways = {this.removeSelectedPathways}
-                selectedPathways = {this.state.selectedPathways}
 
+                observationMap = {this.state.observationMap}
                 selectObservationSet = {this.selectObservationSet}
-                selectedObservationSet = {this.state.selectedObservationSet}
                 selectObservations = {this.selectObservations}
                 removeSelectedObservations = {this.removeSelectedObservations}
-                selectedObservations = {this.state.selectedObservations}
                 setActiveObservation = {this.setActiveObservation}
 
-                activePathway                   = {this.state.activePathway}
                 setActivePathway                = {this.setActivePathway}
 
                 observeNode                     = {this.observeNode}
@@ -438,15 +444,15 @@ var connection = new autobahn.Connection({
     realm: "realm1"
 });
 
-function getPathway(session, pathways, activePathway) {
-    session.call('pgmlab.pathway.get', [activePathway.id]).then(
+function getPathway(session, pathways, initPathway) {
+    session.call('pgmlab.pathway.get', [initPathway.id]).then(
           function(res) {
-               var pairwiseInteractions = res;
-               console.log("getPathway:", res);
-               init(pathways, activePathway, pairwiseInteractions);
+               const pairwiseInteractions = res;
+              //  console.log("getPathway:", res);
+               init(pathways, pairwiseInteractions);
           },
           function (err) {
-              console.log("couldn't get pathway", activePathway.id, err);
+              console.log("couldn't get pathway", initPathway.id, err);
           });
 };
 
@@ -454,12 +460,12 @@ connection.onopen = function (session, details) {
    console.log("Connected");
    session.call('pgmlab.pathways.list').then(
          function (res) {
-           //Init pathway
-            var pathways = res;
-            var activePathway = pathways[0];
-            console.log("connection.onopen:", res);
+            //Init pathway
+            const pathways = res;
+            const initPathway = pathways[0]; // This should correspond to the mock data in the App constructor
+            // console.log("connection.onopen:", res);
             //
-            getPathway(session, pathways, activePathway);
+            getPathway(session, pathways, initPathway);
          },
          function (err) {
             console.log("getPathwayList() error:", err);
@@ -481,9 +487,9 @@ connection.onclose = function (reason, details) {
 
 connection.open();
 
-function init(pathways, activePathway, pairwiseInteractions) {
-  console.log("init:", pathways, activePathway, pairwiseInteractions);
-  render(<App pathways={pathways}
-              activePathway={activePathway}
-              pairwiseInteractions={pairwiseInteractions}  />, document.getElementById('app'));
+function init(pathways, pairwiseInteractions) {
+  // console.log("init:", pathways, pairwiseInteractions);
+  const pathwayMap = new Map([["All", new Map(pathways.map(p => [p.id, p]))]]);
+  render(<App pathwayMap={pathwayMap}
+              pairwiseInteractions={pairwiseInteractions} />, document.getElementById('app'));
 };

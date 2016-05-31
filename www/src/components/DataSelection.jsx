@@ -15,6 +15,8 @@ export class DataSelection extends React.Component {
         <div className="row">
           <div className="col s6 center-align">
             <SelectObservationSet
+              observationMap = {this.props.observationMap}
+
               observationSets        = {this.props.observationSets}
               selectObservationSet   = {this.props.selectObservationSet}
               selectedObservationSet = {this.props.selectedObservationSet}
@@ -24,10 +26,11 @@ export class DataSelection extends React.Component {
           </div>
           <div className="col s6 center-align">
             <SelectPathways
-              pathways              = {this.props.pathways}
+              pathwayMap = {this.props.pathwayMap}
+
               selectPathways={this.props.selectPathways}
               removeSelectedPathways={this.props.removeSelectedPathways}
-              selectedPathways      = {this.props.selectedPathways} />
+              />
           </div>
         </div>
       </div>

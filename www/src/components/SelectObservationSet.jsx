@@ -15,7 +15,7 @@ export class SelectObservationSet extends React.Component {
     this.handleObsSelect = this.handleObsSelect.bind(this);
     this.handleObsCheckAll = this.handleObsCheckAll.bind(this);
     this.handleObsUncheckAll = this.handleObsUncheckAll.bind(this);
-    
+
     this.observationSetList = this.observationSetList.bind(this);
     this.observationsList = this.observationsList.bind(this);
   }
@@ -33,7 +33,9 @@ export class SelectObservationSet extends React.Component {
     this.props.selectObservationSet(observationSetID);
   }
   handleObsSelect(observationIndex){
-    const currentlySelected = this.props.selectedObservations.get("Indices");
+    // const currentlySelected = this.props.selectedObservations.get("Indices");
+    const currentlySelected = this.props.observationMap.get("Current").get("Selected Observations");
+    // console.log(currentlySelected, currentlySelected2);
     switch (currentlySelected.includes(observationIndex)) {
       case true:
         this.props.removeSelectedObservations([observationIndex]);
@@ -44,26 +46,28 @@ export class SelectObservationSet extends React.Component {
     };
   }
   handleObsCheckAll(){
-    const toSelect = this.props.selectedObservationSet.observations.map((obs,i)=>{return i});
+    const toSelect = this.props.observationMap.get("Current").get("Set").observations.map((obs,i)=>i);
     this.props.selectObservations(toSelect);
   }
   handleObsUncheckAll(){
-    const selected = this.props.selectedObservations.get("Indices");
+    const selected = this.props.observationMap.get("Current").get("Set").observations.map((obs,i)=>i);
     this.props.removeSelectedObservations(selected);
   }
 
   // RENDERING //
   observationSetList(){
+    let observationMap = this.props.observationMap;
     let self = this;
     const textInput = isNaN(self.state.setFilterText) ? self.state.setFilterText.toLowerCase() : self.state.setFilterText;
-    const currentSelectedSetID = self.props.selectedObservationSet.id;
-    let observationSets = [... self.props.observationSets.values()].map((observationSet)=>{
+    // const currentSelectedSetID = self.props.selectedObservationSet.id;
+    const currentSelectedSetID = observationMap.get("Current").get("Set").id;
+    let observationSets = [... observationMap.get("All").values()].map((observationSet)=>{
       const textFilter = observationSet.name.toLowerCase().indexOf(textInput) && (observationSet.id.indexOf(textInput) == -1);
       const selected = currentSelectedSetID === observationSet.id;
       return (
         (textFilter) ? undefined :
         <li key={observationSet.id} className="collection-item black-text"
-          onClick={()=>{this.handleSetSelect(observationSet.id)}}>
+          onClick={(evt)=>{evt.preventDefault();this.handleSetSelect(observationSet.id)}}>
           <input ref={observationSet.id} id={observationSet.id} type="radio" checked={selected} readOnly={true}/>
           <label htmlFor={observationSet.id} className="black-text">{observationSet.name}</label>
         </li>
@@ -85,13 +89,13 @@ export class SelectObservationSet extends React.Component {
   }
   observationsList(){
     let self = this;
+    const observationMap = this.props.observationMap;
     const selectedObservationSet = this.props.selectedObservationSet;
     const textInput = isNaN(self.state.obsFilterText) ? self.state.obsFilterText.toLowerCase() : self.state.obsFilterText;
-    const selectedObservations = this.props.selectedObservations.get("Indices");
-    let observations = selectedObservationSet.observations.map((observation,index)=>{
+    let observations = observationMap.get("Current").get("Set").observations.map((observation,index)=>{
       // observations dont have names yet, are labelled by index
       const textFilter = index.toString().indexOf(textInput) == -1;
-      const selected = selectedObservations.includes(index);
+      const selected = observationMap.get("Current").get("Selected Observations").includes(index);
       return (
         (textFilter) ? undefined :
           <li key={index} className="collection-item black-text"
@@ -101,14 +105,14 @@ export class SelectObservationSet extends React.Component {
           </li>
       );
     });
-    const observationCount = selectedObservationSet.observations.length.toString().concat(" Observations");
-    const selectedCount = selectedObservations.length.toString().concat(" Selected");
+    const observationCount = `${observationMap.get("Current").get("Selected Observations").length} Observations`;
+    const selectedCount = `${observationMap.get("Current").get("Selected Observations").length} Selected`;
     return (
       <div>
-        <h5>{selectedObservationSet.name}</h5>
+        <h5>{observationMap.get("Current").get("Set").name}</h5>
         <div className="divider"></div>
         {
-          (selectedObservationSet.observations.length===0) ? <h5>No Observations!</h5> :
+          (observationMap.get("Current").get("Set").observations.length===0) ? <h5>No Observations!</h5> :
           <form>
             <input type="text" ref="obsFilterInput" placeholder="Type to filter"
               value={this.state.obsFilterText} onChange={this.obsFilterUpdate}/>

@@ -9,29 +9,27 @@ var classNames = require("classnames");
 export class ObservationsControl extends React.Component {
   constructor(props){
     super(props);
-    
+
     this.handleObservationChange = this.handleObservationChange.bind(this);
     this.header = this.header.bind(this);
   }
 
   handleObservationChange(newActiveIndex){
-    if (this.props.selectedObservations.get("Active") !== newActiveIndex) {
+    if (this.props.observationMap.get("Current").get("Active Observation") !== newActiveIndex) {
       this.props.setActiveObservation(newActiveIndex);
     };
   }
 
   // RENDERING
   header(){
-    const selectedObservations = this.props.selectedObservations;
-    const observationIndices = selectedObservations.get("Indices");
-    const activeObservationIndex = selectedObservations.get("Active");
-    const observationItems = observationIndices.map(i => {
-      return (
-        <MenuItem key={i} value={i}  primaryText={`Observation ${i}`} />
-      );
-    })
+    let observationMap = this.props.observationMap;
+    const activeObservationPosn = observationMap.get("Current").get("Active Observation");
+    const selectedObservations = observationMap.get("Current").get("Selected Observations");
+    const observationItems = selectedObservations.map(posn =>
+      <MenuItem key={posn} value={posn} primaryText={`Observation ${posn}`} />
+    );
     return (
-      <SelectField  value={activeObservationIndex}
+      <SelectField  value={activeObservationPosn}
                     onChange={(evt,idx,val)=>{this.handleObservationChange(val)}}
                     fullWidth={true} floatingLabelText={"Active Observation"}
                     children={observationItems} />
@@ -43,8 +41,7 @@ export class ObservationsControl extends React.Component {
       <div className="section" style={noPad}>
         {this.header()}
         <NodeList activeType="Observation"
-                  selectedObservationSet={this.props.selectedObservationSet}
-                  selectedObservations={this.props.selectedObservations}
+                  observationMap = {this.props.observationMap}
                   pairwiseInteractions={this.props.pairwiseInteractions}
                   setNodeItemState={this.props.setNodeItemState}/>
       </div>
