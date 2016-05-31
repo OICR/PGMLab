@@ -68,10 +68,7 @@ export class Body extends React.Component {
                           setNodeItemState = {this.props.setNodeItemState} />
           </div>
           <div className="col s8" style={{minWidth:"800px"}}>
-            <DisplayPanel toggle = {this.state.toggle}
-                          selectedObservationSet = {this.props.selectedObservationSet}
-                          selectedObservations = {this.props.selectedObservations}
-                          selectedPathways = {this.props.selectedPathways} />
+            <DisplayPanel />
           </div>
         </main>
         </MuiThemeProvider>
