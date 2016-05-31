@@ -50,34 +50,22 @@ export class ControlPanel extends React.Component {
         <DataSelection
                         observationMap = {this.props.observationMap}
                         pathwayMap = {this.props.pathwayMap}
-                        pathways               = {this.props.pathways}
                         selectPathways = {this.props.selectPathways}
-                        selectedPathways = {this.props.selectedPathways}
                         removeSelectedPathways = {this.props.removeSelectedPathways}
-                        observationSets        = {this.props.observationSets}
                         selectObservationSet = {this.props.selectObservationSet}
-                        selectedObservationSet = {this.props.selectedObservationSet}
                         selectObservations = {this.props.selectObservations}
-                        removeSelectedObservations = {this.props.removeSelectedObservations}
-                        selectedObservations = {this.props.selectedObservations} />
+                        removeSelectedObservations = {this.props.removeSelectedObservations} />
         <div className="divider"></div><div className="divider"></div>
         <ObservationsControl  observationMap = {this.props.observationMap}
                               pairwiseInteractions={this.props.pairwiseInteractions}
                               setNodeItemState = {this.props.setNodeItemState}
-                              selectedObservationSet = {this.props.selectedObservationSet}
-                              selectedObservations = {this.props.selectedObservations}
                               setActiveObservation = {this.props.setActiveObservation} />
         <PathwaysControl  observationMap = {this.props.observationMap}
                           pathwayMap = {this.props.pathwayMap}
 
                           setNodeItemState = {this.props.setNodeItemState}
-                          pathways={this.props.pathways}
                           pairwiseInteractions={this.props.pairwiseInteractions}
-                          selectedPathways = {this.props.selectedPathways}
-                          setActivePathway = {this.props.setActivePathway}
-
-                          selectedObservationSet = {this.props.selectedObservationSet}
-                          selectedObservations = {this.props.selectedObservations} />
+                          setActivePathway = {this.props.setActivePathway} />
 
         <div className="divider"></div><div className="divider"></div>
         <ResultsControl runInference={this.props.runInference}

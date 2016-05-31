@@ -13,7 +13,7 @@ export class NodeItem extends React.Component {
       nodeStates: [
         {val:"-",label:"Unobserved"},
         {val:"1",label:"1 | Down regulated"},
-        {val:"2",label:"2 | No regulation"},
+        {val:"2",label:"2 | Unchanged"},
         {val:"3",label:"3 | Up regulated"}
       ]
     };

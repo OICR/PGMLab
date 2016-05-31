@@ -46,15 +46,11 @@ export class SelectObservationSet extends React.Component {
     };
   }
   handleObsCheckAll(){
-    const toSelect = this.props.selectedObservationSet.observations.map((obs,i)=>{return i});
-    const toSelect2 = this.props.observationMap.get("Current").get("Set").observations.map((obs,i)=>i);
-    console.log(toSelect, toSelect2);
+    const toSelect = this.props.observationMap.get("Current").get("Set").observations.map((obs,i)=>i);
     this.props.selectObservations(toSelect);
   }
   handleObsUncheckAll(){
-    const selected = this.props.selectedObservations.get("Indices");
-    const selected2 = this.props.observationMap.get("Current").get("Set").observations.map((obs,i)=>i);
-    console.log(selected, selected2);
+    const selected = this.props.observationMap.get("Current").get("Set").observations.map((obs,i)=>i);
     this.props.removeSelectedObservations(selected);
   }
 
@@ -113,10 +109,10 @@ export class SelectObservationSet extends React.Component {
     const selectedCount = `${observationMap.get("Current").get("Selected Observations").length} Selected`;
     return (
       <div>
-        <h5>{selectedObservationSet.name}</h5>
+        <h5>{observationMap.get("Current").get("Set").name}</h5>
         <div className="divider"></div>
         {
-          (selectedObservationSet.observations.length===0) ? <h5>No Observations!</h5> :
+          (observationMap.get("Current").get("Set").observations.length===0) ? <h5>No Observations!</h5> :
           <form>
             <input type="text" ref="obsFilterInput" placeholder="Type to filter"
               value={this.state.obsFilterText} onChange={this.obsFilterUpdate}/>

@@ -17,8 +17,7 @@ export class Body extends React.Component {
     }
     componentDidMount(){
       // Init example on first mount
-      const active = this.props.selectedPathways.get("Active");
-      this.props.setActivePathway(this.props.pathways.find(p=>p.id === active.id));
+      this.props.setActivePathway(this.props.pathwayMap.get("Active"));
     }
     toggleRunType(){
       this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"})
@@ -32,9 +31,8 @@ export class Body extends React.Component {
             <ControlPanel
                           observationMap = {this.props.observationMap}
                           pathwayMap = {this.props.pathwayMap}
-                          pathways                        = {this.props.pathways}
+
                           pairwiseInteractions            = {this.props.pairwiseInteractions}
-                          observationSets                 = {this.props.observationSets}
 
                           uploadList                      = {this.props.uploadList}
                           uploadListAddFailure            = {this.props.uploadListAddFailure}
@@ -49,15 +47,12 @@ export class Body extends React.Component {
 
                           selectPathways = {this.props.selectPathways}
                           removeSelectedPathways = {this.props.removeSelectedPathways}
-                          selectedPathways = {this.props.selectedPathways}
                           setActivePathway                = {this.props.setActivePathway}
 
                           selectObservationSet = {this.props.selectObservationSet}
-                          selectedObservationSet = {this.props.selectedObservationSet}
 
                           selectObservations = {this.props.selectObservations}
                           removeSelectedObservations = {this.props.removeSelectedObservations}
-                          selectedObservations = {this.props.selectedObservations}
                           setActiveObservation = {this.props.setActiveObservation}
 
                           addNewPathway                   = {this.props.addNewPathway}

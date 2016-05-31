@@ -152,11 +152,15 @@ class AppSession(ApplicationSession):
             pp = dict()
             with open(filepath, "r") as fh:
                 for line in fh:
-                    if line.startswith("---"):
+                    if line.startswith("---"): #splits different observations
                         return pp
                     values = line.strip().split("\t")
                     if not values[0] in pp.keys():
+                        # makes empty list
                         pp[values[0]] = list()
+                    # then pushs values
+                    # values is array of probabilities,
+                    # values[0] is gene name
                     pp[values[0]].append(values[1])
 
         def runInference(pathway, observations, options):

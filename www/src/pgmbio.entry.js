@@ -58,16 +58,8 @@ class App extends  React.Component {
       // Set initial state
       this.state = {  "observationMap": observationMap,
                       "pathwayMap" : pathwayMap,
-                      "pathways"                        : this.props.pathways,
                       "pairwiseInteractions"            : this.props.pairwiseInteractions,
                       "uploadList"                      : [],
-                      //
-                      "selectedPathways": selectedPathways,
-                      //
-                      "observationSets"                 : observationSets,
-                      "selectedObservationSet": selectedObservationSet,
-                      "selectedObservations": selectedObservations,
-                      //
                       "posteriorProbabilitySets"        : [],
                       "estimatedParameterSets"          : []
                     };
@@ -149,7 +141,6 @@ class App extends  React.Component {
     // [indices (from current set's observation property) of to be removed observations]
     //  => removes them from list of possible active observations
     removeSelectedObservations(observationIndices){
-      console.log("removeSelectedObservations", observationIndices);
       let observationMap = this.state.observationMap;
       const selectedSet = new Set(observationMap.get("Current").get("Selected Observations"));
       const toRemoveSet = new Set(observationIndices);
@@ -414,20 +405,15 @@ class App extends  React.Component {
                 addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet}
 
                 pathwayMap = {this.state.pathwayMap}
-                pathways                        = {this.props.pathways}
                 pairwiseInteractions            = {this.state.pairwiseInteractions}
-                observationSets                 = {this.state.observationSets}
 
                 selectPathways = {this.selectPathways}
                 removeSelectedPathways = {this.removeSelectedPathways}
-                selectedPathways = {this.state.selectedPathways}
 
                 observationMap = {this.state.observationMap}
                 selectObservationSet = {this.selectObservationSet}
-                selectedObservationSet = {this.state.selectedObservationSet}
                 selectObservations = {this.selectObservations}
                 removeSelectedObservations = {this.removeSelectedObservations}
-                selectedObservations = {this.state.selectedObservations}
                 setActiveObservation = {this.setActiveObservation}
 
                 setActivePathway                = {this.setActivePathway}
@@ -506,6 +492,5 @@ function init(pathways, pairwiseInteractions) {
   // console.log("init:", pathways, pairwiseInteractions);
   const pathwayMap = new Map([["All", new Map(pathways.map(p => [p.id, p]))]]);
   render(<App pathwayMap={pathwayMap}
-              pathways={pathways}
               pairwiseInteractions={pairwiseInteractions} />, document.getElementById('app'));
 };
