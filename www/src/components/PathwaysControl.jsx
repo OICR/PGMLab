@@ -13,24 +13,20 @@ export class PathwaysControl extends React.Component {
   }
 
   handlePathwayChange(pathwayID){
-    if (pathwayID !== this.props.selectedPathways.get("Active").id) {
-      const pathway = this.props.pathways.find(p=>p.id===pathwayID);
-      this.props.setActivePathway(pathway);
-    };
+    if (this.props.pathwayMap.get("Active").id !== pathwayID) {
+      this.props.setActivePathway(this.props.pathwayMap.get("Selected").get(pathwayID));
+    }
   }
 
   // RENDERING
   header(){
-    const selectedPathways = this.props.selectedPathways;
-    const currentSelected = selectedPathways.get("Pathways");
-    const allPathways = this.props.pathways;
-    const pathwayItems = currentSelected.map((id)=>{
-      const found = allPathways.find(p=>p.id === id);
-      return <MenuItem  key={found.id} value={found.id}
-                        primaryText={`${found.name}`} label={`${found.name}`}/>
-    });
+    let pathwayMap = this.props.pathwayMap;
+    const pathwayItems = [...pathwayMap.get("Selected").values()].map(pathway =>
+      <MenuItem key={pathway.id} value={pathway.id}
+                primaryText={`${pathway.name}`} label={`${pathway.name}`} />
+    );
     return (
-      <SelectField  value={selectedPathways.get("Active").id}
+      <SelectField  value={pathwayMap.get("Active").id}
                     onChange={(evt,idx,val)=>{this.handlePathwayChange(val)}}
                     fullWidth={true} floatingLabelText={"Active Pathway"}
                     children={pathwayItems} />
@@ -43,8 +39,7 @@ export class PathwaysControl extends React.Component {
       <div className="section" style={noPad}>
         {this.header()}
         <NodeList activeType="Pathway"
-                  selectedObservationSet={this.props.selectedObservationSet}
-                  selectedObservations={this.props.selectedObservations}
+                  observationMap={this.props.observationMap}
                   pairwiseInteractions={this.props.pairwiseInteractions}
                   setNodeItemState={this.props.setNodeItemState}/>
       </div>

@@ -67,7 +67,10 @@ export class ControlPanel extends React.Component {
                               selectedObservationSet = {this.props.selectedObservationSet}
                               selectedObservations = {this.props.selectedObservations}
                               setActiveObservation = {this.props.setActiveObservation} />
-        <PathwaysControl  setNodeItemState = {this.props.setNodeItemState}
+        <PathwaysControl  observationMap = {this.props.observationMap}
+                          pathwayMap = {this.props.pathwayMap}
+
+                          setNodeItemState = {this.props.setNodeItemState}
                           pathways={this.props.pathways}
                           pairwiseInteractions={this.props.pairwiseInteractions}
                           selectedPathways = {this.props.selectedPathways}

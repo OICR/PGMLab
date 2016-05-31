@@ -64,19 +64,16 @@ export class NodeItem extends React.Component {
     return [header].concat(states);
   }
   focusMenuItem(){
-    const focusLabel = graphvis.isFocused(this.props.node) ? "Unhighlight on graph" : "Highlight on graph";
+    const focusLabel = "Toggle highlight node on graph";
     const focusNode = <MenuItem key="focusNode" primaryText={focusLabel} onTouchTap={this.handleNodeFocus}/>;
     const unfocusAll = <MenuItem key="unfocusAll" primaryText="Unhighlight all" onTouchTap={this.handleUnfocusAll}/>;
     return [focusNode, unfocusAll];
   }
   render(){
-    // console.log(this.props);
     const noPad = {"paddingBottom":"0px","paddingTop":"0px"};
     const itemClass = classNames({"blue-grey lighten-5": this.props.shared}, ["collection-item row"]);
     const nodeName = this.props.node.name;
     const stateLabel = this.props.nodeState;
-    // const focusIcon = <FontIcon className="material-icons">{graphvis.isFocused(this.props.node) ? "remove_red_eye" : ""}</FontIcon>;
-    const focusLabel = graphvis.isFocused(this.props.node) ? "Unhighlight on graph" : "Highlight on graph";
     return (
       <div className={itemClass} style={noPad}>
         <div className="col s8">{nodeName}</div>

@@ -15,6 +15,8 @@ export class NodeList extends React.Component {
     this.nodeFilterTextUpdate=this.nodeFilterTextUpdate.bind(this);
     this.handleNodeFocus = this.handleNodeFocus.bind(this);
     this.handleUnfocusAll = this.handleUnfocusAll.bind(this);
+
+    this.nodeItem=this.nodeItem.bind(this);
     this.observationsList=this.observationsList.bind(this);
     this.pathwaysList=this.pathwaysList.bind(this);
 
@@ -39,47 +41,34 @@ export class NodeList extends React.Component {
   }
 
   // RENDERING
+  nodeItem(node, nodeState, shared){
+    return <NodeItem  key={node.name} node={node}
+                      nodeState={nodeState} shared={shared}
+                      setNodeItemState={this.props.setNodeItemState}
+                      handleNodeFocus={this.handleNodeFocus} handleUnfocusAll={this.handleUnfocusAll} />
+  }
   observationsList(){
     // Construct pathwaysMap to check which nodes in observationNodes exist in pathwayNodes
     const pathwayNodes = this.props.pairwiseInteractions.nodes; //may need to add ternary
     const pathwayMap = new Map(pathwayNodes.map(node => [node.name, undefined]));
     const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
-    const currentActivatedIndex = this.props.selectedObservations.get("Active");
-    const observationNodes = this.props.selectedObservationSet.observations[currentActivatedIndex];
-    // console.log("observationNodes:", observationNodes);
+    let observationMap = this.props.observationMap;
+    const activeObservationPosn = observationMap.get("Current").get("Active Observation");
+    const observationNodes = observationMap.get("Current").get("Set").observations[activeObservationPosn];
     return observationNodes.map(node => {
-      let nodeItem;
-      if (node.name.toLowerCase().indexOf(textInput)) {
-        nodeItem = undefined;
-      }
-      else {
-        nodeItem = <NodeItem  key={node.name} node={node}
-                              nodeState={node.state} shared={pathwayMap.has(node.name)}
-                              setNodeItemState={this.props.setNodeItemState}
-                              handleNodeFocus={this.handleNodeFocus} handleUnfocusAll={this.handleUnfocusAll}/>
-      };
-      return nodeItem;
+      let [nodeState, shared] = [node.state, pathwayMap.has(node.name)];
+      return node.name.toLowerCase().indexOf(textInput) ? undefined : this.nodeItem(node,nodeState,shared);
     });
   }
   pathwaysList(){
     // Construct observationStateMap to check which nodes in pathwayNodes have observed states
-    const observationNodes = this.props.selectedObservationSet.observations[this.props.selectedObservations.get("Active")];
+    const observationNodes = this.props.observationMap.get("Current").get("Set").observations[this.props.observationMap.get("Current").get("Active Observation")];
     const observationStateMap = new Map(observationNodes.map(node => [node.name, node.state]));
     const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
-    const pathwayNodes = this.props.pairwiseInteractions.nodes ? this.props.pairwiseInteractions.nodes : [];
-    // console.log("pathwayNodes:", pathwayNodes);
-    return pathwayNodes.map((node)=>{
-      let nodeItem;
-      if (node.name.toLowerCase().indexOf(textInput)) {
-        nodeItem = undefined;
-      }
-      else {
-        const [nodeState, shared] = observationStateMap.has(node.name) ? [observationStateMap.get(node.name), true] : ["-", false];
-        nodeItem = <NodeItem  key={node.name} node={node} nodeState={nodeState}
-                              shared={shared} setNodeItemState={this.props.setNodeItemState}
-                              handleNodeFocus={this.handleNodeFocus} handleUnfocusAll={this.handleUnfocusAll}/>
-      }
-      return nodeItem;
+    const pathwayNodes = this.props.pairwiseInteractions.nodes;
+    return pathwayNodes.map(node => {
+      const [nodeState, shared] = observationStateMap.has(node.name) ? [observationStateMap.get(node.name), true] : ["-", false];
+      return node.name.toLowerCase().indexOf(textInput) ? undefined : this.nodeItem(node,nodeState,shared);
     });
   }
   render(){

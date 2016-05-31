@@ -167,49 +167,52 @@ class App extends  React.Component {
       this.setState({observationMap});
     }
     // For PathwaysControl components
+    // Pathway object => sets pathwayMap.active, pairwiseInteractions, resets posteriorProbabilities
+    //  then draws
     setActivePathway(pathway){
       let self = this;
-      let selectedPathways = this.state.selectedPathways;
-      selectedPathways.set("Active", pathway);
-      const updatePairwise = (pairwiseInteractions) => {
+      const update = (pathway, pairwiseInteractions) => {
+        let pathwayMap = self.state.pathwayMap;
+        pathwayMap.set("Active", pathway);
         self.setState({
-          "selectedPathways":selectedPathways,
+          pathwayMap,
           "pairwiseInteractions":pairwiseInteractions,
-          "observedNodes":[],
+          // "observedNodes":[],
           "posteriorProbabilities":{}
         }, ()=>{graphvis.render(pairwiseInteractions)});
       };
-      // If uploaded, use the uploaded pairwiseInteractions
-      if (pathway.hasOwnProperty("pairwiseInteractions")) {
-        updatePairwise(pathway.pairwiseInteractions);
-      }
-      // Else get from server
-      else {
-        connection.session.call("pgmlab.pathway.get", [pathway.id])
-        .then(
-          (pairwiseInteractionsResult)=>{updatePairwise(pairwiseInteractionsResult)},
-          (err)=>{console.log("Couldn't Get Pathway", pathway.id, err)}
-        );
-      };
+      pathway.hasOwnProperty("pairwiseInteractions") ?
+        // If uploaded, use the uploaded pairwiseInteractions
+        update(pathway, pathway.pairwiseInteractions) :
+        // Else get from server
+        connection.session
+          .call("pgmlab.pathway.get", [pathway.id])
+          .then(
+            pairwiseInteractionsResult=>{update(pathway, pairwiseInteractionsResult)},
+            err=>{console.log("Couldn't Get Pathway", pathway.id, err)}
+          );
     }
     // For NodeItem components in Pathways/ObservationsControl
+    // node name, state to change to => changes observation node state value in current.set.observations[active]
     setNodeItemState(name,state){
-      // console.log("setNodeItemState", name, state);
-      let selectedObservationSet = this.state.selectedObservationSet;
-      let observation = selectedObservationSet.observations[this.state.selectedObservations.get("Active")];
-      const posn = observation.findIndex((node)=>node.name===name);
-      switch (state) {
-        case ("-"):
-          if (posn !== -1) { observation.splice(posn,1); };
-          break;
-        default:
-          switch (posn) {
-            case (-1): observation.splice(0,0,{name,state}); break;
-            default: observation[posn].state = state;
-          };
-      };
-      selectedObservationSet.observations[this.state.selectedObservations.get("Active")] = observation;
-      this.setState({"selectedObservationSet":selectedObservationSet});
+      let observationMap = this.state.observationMap;
+      let observationSet = observationMap.get("Current").get("Set");
+      const activeObservationPosn = observationMap.get("Current").get("Active Observation");
+      const nodes = observationSet.observations[activeObservationPosn];
+      observationSet.observations[activeObservationPosn] = [... new Set(
+        state === "-" ?
+          nodes.filter(node => node.name !== name) :
+          [...
+            [...nodes, {name,state}]
+                .reduce((accumulator,node) => {
+                  accumulator.set(node.name, node);
+                  return accumulator;
+                }, new Map())
+                .values()
+          ]
+      )];
+      observationMap.get("Current").set("Set",observationSet);
+      this.setState({observationMap});
     }
 
 

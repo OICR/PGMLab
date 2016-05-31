@@ -23,8 +23,8 @@ export class ObservationsControl extends React.Component {
   // RENDERING
   header(){
     let observationMap = this.props.observationMap;
-    const selectedObservations = observationMap.get("Current").get("Selected Observations");
     const activeObservationPosn = observationMap.get("Current").get("Active Observation");
+    const selectedObservations = observationMap.get("Current").get("Selected Observations");
     const observationItems = selectedObservations.map(posn =>
       <MenuItem key={posn} value={posn} primaryText={`Observation ${posn}`} />
     );
@@ -41,8 +41,7 @@ export class ObservationsControl extends React.Component {
       <div className="section" style={noPad}>
         {this.header()}
         <NodeList activeType="Observation"
-                  selectedObservationSet={this.props.selectedObservationSet}
-                  selectedObservations={this.props.selectedObservations}
+                  observationMap = {this.props.observationMap}
                   pairwiseInteractions={this.props.pairwiseInteractions}
                   setNodeItemState={this.props.setNodeItemState}/>
       </div>
