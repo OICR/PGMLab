@@ -99,6 +99,7 @@ class App extends  React.Component {
     static getCurrentDateTime(){return moment().format('MMM D, YYYY HH:mm')}
 
     // For SelectPathways modal component
+    // [pathwayIDs] =>  and adds to list of possible active pathways
     selectPathways(pathwayIDs){
       let pathwayMap = this.state.pathwayMap;
       for (let pathwayID of pathwayIDs) {
@@ -110,6 +111,7 @@ class App extends  React.Component {
       this.setState({pathwayMap});
     }
     // For SelectPathways modal component
+    // [pathwayIDs] removes them from list of possible active pathways
     removeSelectedPathways(pathwayIDs){
       let pathwayMap = this.state.pathwayMap;
       for (let pathwayID of pathwayIDs) {
@@ -121,6 +123,7 @@ class App extends  React.Component {
     }
 
     // For SelectObservations modal component
+    // observationSetID =>  changes observationMap.Current to that new set
     selectObservationSet(observationSetID){
       let observationMap = this.state.observationMap;
       const selectedSet = observationMap.get("All").get(observationSetID);
@@ -132,6 +135,8 @@ class App extends  React.Component {
       this.setState({observationMap});
     }
     // For SelectObservations modal component
+    // [indices (from current set's observation property) of to be selected observations]
+    //  => adds them to list of possible active observations
     selectObservations(observationIndices){
       let observationMap = this.state.observationMap;
       const currentSet = new Set(observationMap.get("Current").get("Selected Observations"));
@@ -141,6 +146,8 @@ class App extends  React.Component {
       this.setState({observationMap});
     }
     // For SelectObservations modal component
+    // [indices (from current set's observation property) of to be removed observations]
+    //  => removes them from list of possible active observations
     removeSelectedObservations(observationIndices){
       console.log("removeSelectedObservations", observationIndices);
       let observationMap = this.state.observationMap;
@@ -153,10 +160,11 @@ class App extends  React.Component {
     }
 
     // For ObservationsControl component
-    setActiveObservation(observationIndex, runType){ //Index in selectedObservationSet.observations
-      let selectedObservations = this.state.selectedObservations;
-      selectedObservations.set("Active", observationIndex)
-      this.setState({"selectedObservations": selectedObservations});
+    // Posn of selected activeObservation in current.set.observations => sets current.active
+    setActiveObservation(observationIndex){
+      let observationMap = this.state.observationMap;
+      observationMap.get("Current").set("Active Observation", observationIndex);
+      this.setState({observationMap});
     }
     // For PathwaysControl components
     setActivePathway(pathway){
