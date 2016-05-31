@@ -30,6 +30,7 @@ export class Body extends React.Component {
         <main className="row">
           <div className="col s4" style={{minWidth:"300px"}}>
             <ControlPanel
+                          observationMap = {this.props.observationMap}
                           pathwayMap = {this.props.pathwayMap}
                           pathways                        = {this.props.pathways}
                           pairwiseInteractions            = {this.props.pairwiseInteractions}

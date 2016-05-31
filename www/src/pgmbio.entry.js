@@ -23,7 +23,15 @@ var EXAMPLEDATA = {
       [ {"name":"58253","state":"1"},{"name":"415917","state":"2"},{"name":"61076","state":"1"},{"name":"49860","state":"2"}],
       [ {"name":"61074","state":"1"},{"name":"49860","state":"2"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"}]
     ]}]
-  ])
+  ]),
+  current: {
+    set : {"id":"exampleID1", "name":"Example 1", "observations":[
+      [ {"name":"49860","state":"1"},{"name":"58253","state":"2"},{"name":"415917","state":"3"},{"name":"61076","state":"1"}],
+      [ {"name":"49860","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+    ]},
+    selected: [0, 1],
+    active: 0
+  }
 };
 
 class App extends  React.Component {
@@ -38,8 +46,17 @@ class App extends  React.Component {
       let pathwayMap = this.props.pathwayMap;
       pathwayMap.set("Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]]));
       pathwayMap.set("Active", {id:"397795",name:"G-protein beta:gamma signalling"});
+
+      let observationMap = new Map([
+        ["All", EXAMPLEDATA.observationSets],
+        ["Current", new Map([
+          ["Set", EXAMPLEDATA.current.set],
+          ["Selected Observations", EXAMPLEDATA.current.selected],
+          ["Active Observation", EXAMPLEDATA.current.active]
+        ])]
+      ]);
       // Set initial state
-      this.state = {
+      this.state = {  "observationMap": observationMap,
                       "pathwayMap" : pathwayMap,
                       "pathways"                        : this.props.pathways,
                       "pairwiseInteractions"            : this.props.pairwiseInteractions,
@@ -83,15 +100,6 @@ class App extends  React.Component {
 
     // For SelectPathways modal component
     selectPathways(pathwayIDs){
-      // let selectedPathways = this.state.selectedPathways;
-      // let selected=this.state.selectedPathways.get("Pathways");
-      // for (let pathwayID of pathwayIDs) {
-      //   if (!selected.includes(pathwayID)) {
-      //     selected.push(pathwayID);
-      //   };
-      // };
-      // selectedPathways.set("Pathways", selected);
-      // this.setState({"selectedPathways":selectedPathways});
       let pathwayMap = this.state.pathwayMap;
       for (let pathwayID of pathwayIDs) {
         if (!pathwayMap.get("Selected").has(pathwayID)) {
@@ -103,18 +111,6 @@ class App extends  React.Component {
     }
     // For SelectPathways modal component
     removeSelectedPathways(pathwayIDs){
-      // let selectedPathways = this.state.selectedPathways;
-      // let selected = selectedPathways.get("Pathways");
-      // const indices = pathwayIDs.map((pathway)=>{return selected.indexOf(pathway)});
-      // const reducedSelected = selected.reduce((remaining,pathwayID,index)=>{
-      //   if (!indices.includes(index)) {
-      //     remaining.push(pathwayID);
-      //   };
-      //   return remaining;
-      // },[]);
-      // selectedPathways.set("Pathways", reducedSelected);
-      // this.setState({"selectedPathways":selectedPathways});
-      //
       let pathwayMap = this.state.pathwayMap;
       for (let pathwayID of pathwayIDs) {
         if (pathwayMap.get("Selected").has(pathwayID)) {
@@ -125,43 +121,35 @@ class App extends  React.Component {
     }
 
     // For SelectObservations modal component
-    selectObservationSet(observationSetID, runType){
-      const selectedSet = this.state.observationSets.get(observationSetID);
-      const obs = new Map([
-        ["Indices", [... selectedSet.observations.keys()]], //array of number values for index in set.observations
-        ["Active", 0] //first observation in set is set to active
-      ]);
-      this.setState({
-        "selectedObservationSet":selectedSet,
-        "selectedObservations":obs
-      });
+    selectObservationSet(observationSetID){
+      let observationMap = this.state.observationMap;
+      const selectedSet = observationMap.get("All").get(observationSetID);
+      observationMap.set("Current", new Map([
+        ["Set", selectedSet],
+        ["Selected Observations", [...selectedSet.observations.keys()]],
+        ["Active Observation", 0]
+      ]));
+      this.setState({observationMap});
     }
     // For SelectObservations modal component
-    selectObservations(observationIndices, runType){
-      let selectedObservations = this.state.selectedObservations;
-      const indices = selectedObservations.get("Indices");
-      for (let index of observationIndices) {
-        if (!indices.includes(index)) {
-          indices.push(index);
-        };
-      };
-      selectedObservations.set("Indices", indices);
-      this.setState({"selectedObservations": selectedObservations})
+    selectObservations(observationIndices){
+      let observationMap = this.state.observationMap;
+      const currentSet = new Set(observationMap.get("Current").get("Selected Observations"));
+      const toAddSet = new Set(observationIndices);
+      const mergeSet = new Set([...currentSet, ...toAddSet]);
+      observationMap.get("Current").set("Selected Observations", [...mergeSet]);
+      this.setState({observationMap});
     }
     // For SelectObservations modal component
-    removeSelectedObservations(observationIndices, runType){
+    removeSelectedObservations(observationIndices){
       console.log("removeSelectedObservations", observationIndices);
-      let selectedObservations = this.state.selectedObservations;
-      let selected = selectedObservations.get("Indices");
-      const reducedSelected = selected.reduce((remaining,observationIndex)=>{
-        if (!observationIndices.includes(observationIndex)) {
-          remaining.push(observationIndex);
-        };
-        return remaining;
-      },[]);
+      let observationMap = this.state.observationMap;
+      const selectedSet = new Set(observationMap.get("Current").get("Selected Observations"));
+      const toRemoveSet = new Set(observationIndices);
+      const differenceSet = new Set([...selectedSet].filter(o=> !toRemoveSet.has(o)));
+      observationMap.get("Current").set("Selected Observations", [...differenceSet]);
+      this.setState({observationMap});
       // Add checker for unselecting the active observation
-      selectedObservations.set("Indices",reducedSelected);
-      this.setState({"selectedObservations": selectedObservations});
     }
 
     // For ObservationsControl component
@@ -423,6 +411,7 @@ class App extends  React.Component {
                 removeSelectedPathways = {this.removeSelectedPathways}
                 selectedPathways = {this.state.selectedPathways}
 
+                observationMap = {this.state.observationMap}
                 selectObservationSet = {this.selectObservationSet}
                 selectedObservationSet = {this.state.selectedObservationSet}
                 selectObservations = {this.selectObservations}

@@ -48,6 +48,7 @@ export class ControlPanel extends React.Component {
       </div>
         <div className="divider"></div><div className="divider"></div>
         <DataSelection
+                        observationMap = {this.props.observationMap}
                         pathwayMap = {this.props.pathwayMap}
                         pathways               = {this.props.pathways}
                         selectPathways = {this.props.selectPathways}

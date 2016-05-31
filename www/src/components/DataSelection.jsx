@@ -15,7 +15,8 @@ export class DataSelection extends React.Component {
         <div className="row">
           <div className="col s6 center-align">
             <SelectObservationSet
-              pathwayMap = {this.props.pathwayMap}
+              observationMap = {this.props.observationMap}
+
               observationSets        = {this.props.observationSets}
               selectObservationSet   = {this.props.selectObservationSet}
               selectedObservationSet = {this.props.selectedObservationSet}
