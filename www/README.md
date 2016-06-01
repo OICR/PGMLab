@@ -32,6 +32,12 @@ pip
      pip install autobahn[twisted] klein --upgrade
 
 
+## Adding TLS
+
+To Setup: http://klein.readthedocs.io/en/latest/introduction/2-twistdtap.html 
+
+To Run (Command): sudo twistd -n web --class=pgmlabServer.resource -c ~/cert.pem -k ~/privkey.pem --https=443
+
 
 #### To Do
      I am wanting to use Alt (FLUX) to keep track of state.
