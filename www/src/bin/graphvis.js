@@ -4,7 +4,8 @@ var network;
 var datasetnodes;
 var datasetedges;
 
-function render(pairwiseInteractions) {
+exports.render = function render(pairwiseInteractions) {
+  console.log("graphvis: render");
     const edges = pairwiseInteractions.links.map(link=>{
       return {
         from: link.source,
@@ -71,46 +72,34 @@ function render(pairwiseInteractions) {
       case false: network.setData(data); break;
     };
 
-        // subscribe to any change in the DataSet
-  /*      datasetnodes.on('*', function (event, properties, senderId) {
-           console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
-        });
-        datasetedges.on('*', function (event, properties, senderId) {
-           console.log('event:', event, 'properties:', properties, 'senderId:', senderId);
-        });*/
-
-
-/*
-        network.on( 'doubleClick', function(properties) {
-            var nodes = datasetnodes.get(properties.nodes);
-            var node = nodes[0];
-            console.log("nodes", nodes, node);
-            node["state"] = 0;
-            setNodeState(node);
-            console.log('double clicked node ' + properties.nodes, node);
-        });
-*/
+    return datasetnodes;
 }
-exports.render = render;
+// exports.render = render;
 
-function setNodeState(node) {
-  const stateColor=["", "red", "grey", "green"];
+exports.setNodeState = function setNodeState(node) {
+  console.log("setNodeState");
+  const stateColor={
+    1:"red",
+    2:"grey",
+    3:"green"
+  };
+  // ["", "red", "grey", "green"];
   datasetnodes.update({
     id: node.name,
     color: {border: stateColor[node.state]},
     borderWidth: 3
   });
 }
-exports.setNodeState = setNodeState;
+// exports.setNodeState = setNodeState;
 
-function removeMutatedGene(node) {
-  datasetnodes.update({
-    id: node.name,
-    color: {border: "black"},
-    borderWidth: 1
+function initializeObservation(observation) {
+  console.log("initializeObservation");
+  observation.forEach((node) => {
+    // console.log(node);
+    setNodeState(node);
   });
 }
-exports.removeMutatedGene = removeMutatedGene;
+exports.initializeObservation = initializeObservation;
 
 function addPosteriorProbabilities(posteriorProbabilities) {
     for (let ppid in posteriorProbabilities) {
@@ -158,7 +147,7 @@ function addPosteriorProbabilities(posteriorProbabilities) {
 }
 exports.addPosteriorProbabilities = addPosteriorProbabilities;
 
-exports.focusNodes = (nodeIDs)=>{
+exports.focusNodes = function focusNodes(nodeIDs) {
   // const nodeID = node.name;
   // const focused = network.getSelectedNodes();
   // network.selectNodes(

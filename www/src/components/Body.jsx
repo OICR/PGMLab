@@ -17,13 +17,13 @@ export class Body extends React.Component {
     }
     componentDidMount(){
       // Init example on first mount
-      this.props.setActivePathway(this.props.pathwayMap.get("Active"));
+      // this.props.initializePathwayObservation();
     }
     toggleRunType(){
       this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"})
     }
     render(){
-      // console.log("body", this.props)
+      console.log("<Body> render()");
       return (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="row">
@@ -36,10 +36,6 @@ export class Body extends React.Component {
 
                           uploadList                      = {this.props.uploadList}
                           uploadListAddFailure            = {this.props.uploadListAddFailure}
-
-                          observeNode                     = {this.props.observeNode}
-                          removeObservedNode              = {this.props.removeObservedNode}
-                          setNodeState                    = {this.props.setNodeState}
 
                           toggleRunType                   = {this.toggleRunType}
                           toggle                          = {this.state.toggle}

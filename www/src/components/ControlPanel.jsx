@@ -20,7 +20,7 @@ export class ControlPanel extends React.Component {
     };
   }
   render(){
-    // console.log("CP", this.props)
+    console.log("<ControlPanel> render()");
     const inferenceBtnClass = classNames({
       'light-blue':this.props.toggle==="Inference",
       'grey':this.props.toggle!=="Inference"
