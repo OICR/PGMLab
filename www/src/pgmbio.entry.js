@@ -28,10 +28,11 @@ connection.onopen = function (session, details) {
          function (res) {
             //Init pathway
             const pathways = res;
-            const initPathway = pathways[0]; // This should correspond to the mock data in the App constructor
-            // console.log("connection.onopen:", res);
+            // const initPathway = pathways[0]; // This should correspond to the mock data in the App constructor
+            // // console.log("connection.onopen:", res);
             //
-            getPairwiseInteraction(session, pathways, initPathway);
+            initializeApp(pathways);
+            // getPairwiseInteraction(session, pathways, initPathway);
          },
          function (err) {
             console.log("getPathwayList() error:", err);
@@ -53,24 +54,25 @@ connection.onclose = function (reason, details) {
 
 connection.open();
 
-function getPairwiseInteraction(session, pathways, initPathway) {
-  console.log("getPathway");
-  session.call('pgmlab.pathway.get', [initPathway.id]).then(
-        res => {
-             const pairwiseInteractions = res;
-             init(pathways, pairwiseInteractions);
-        },
-        err => console.log("couldn't get pathway", initPathway.id, err)
-      );
-};
+// function getPairwiseInteraction(session, pathways, initPathway) {
+//   console.log("getPairwiseInteraction", initPathway);
+//   session.call('pgmlab.pathway.get', [initPathway.id]).then(
+//         res => {
+//              const pairwiseInteractions = res;
+//              console.log(res);
+//              init(pathways, pairwiseInteractions);
+//         },
+//         err => console.log("couldn't get pathway", initPathway.id, err)
+//       );
+// };
 function getReactomePathway(pathway) {
   return connection.session.call("pgmlab.pathway.get", [pathway.id]);
 };
 
-function init(pathways, pairwiseInteractions) {
+function initializeApp(reactomePathways) {
   // console.log("init:", pathways, pairwiseInteractions);
   render(
-    <App reactomePathways={pathways} getReactomePathway={getReactomePathway} pairwiseInteractions={pairwiseInteractions} />,
+    <App reactomePathways={reactomePathways} getReactomePathway={getReactomePathway} />,
     document.getElementById('app')
   );
 };

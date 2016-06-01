@@ -112,7 +112,7 @@ export class SelectObservationSet extends React.Component {
         <h5>{observationMap.get("Current").get("Set").name}</h5>
         <div className="divider"></div>
         {
-          (observationMap.get("Current").get("Set").observations.length===0) ? <h5>No Observations!</h5> :
+          (observationMap.get("Current").get("Set").observations.length===0) ? <h5>No Observations</h5> :
           <form>
             <input type="text" ref="obsFilterInput" placeholder="Type to filter"
               value={this.state.obsFilterText} onChange={this.obsFilterUpdate}/>

@@ -54,7 +54,8 @@ export class App extends  React.Component {
       ]);
       // Set initial state
       this.state = {
-        "pairwiseInteractions"        : this.props.pairwiseInteractions,
+        // "pairwiseInteractions"        : this.props.pairwiseInteractions,
+        "pairwiseInteractions": {links: [], nodes: []},
         "observationMap"              : observationMap,
         "pathwayMap"                  : pathwayMap,
         "runType"                     : "Inference",
