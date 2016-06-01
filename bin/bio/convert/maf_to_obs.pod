@@ -48,7 +48,7 @@ Input file contains the list of files
 =for Euclid:
     sample_list_file.type = readable
 
-=item -[obs]ervation-file [=] <observation_file>
+=item -obs[ervation-file] [=] <observation_file>
 
 Output obeservation file
 
