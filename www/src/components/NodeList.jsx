@@ -49,9 +49,10 @@ export class NodeList extends React.Component {
   }
   observationsList(){
     let observationMap = this.props.observationMap;
+    const observationSet = observationMap.get("Current").get("Set");
     const activeObservationPosn = observationMap.get("Current").get("Active Observation");
-    const observationNodes = observationMap.get("Current").get("Set").observations[activeObservationPosn];
-    if (observationNodes.length === 0) {
+    // On init it will be null, otherwise check if activeObservtion has any nodes
+    if (activeObservationPosn === null || observationSet.observations[activeObservationPosn].length === 0) {
       // No nodes to list
       return (
         <div className="collection-item center-align" style={{"paddingBottom":"0px", "paddingTop":"0px"}}>
@@ -64,6 +65,8 @@ export class NodeList extends React.Component {
       const pathwayNodes = this.props.pairwiseInteractions.nodes; //may need to add ternary
       const pathwayMap = new Map(pathwayNodes.map(node => [node.name, undefined]));
       const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
+      // Get observation nodes to list
+      const observationNodes = observationMap.get("Current").get("Set").observations[activeObservationPosn];
       return observationNodes.map(node => {
         let [nodeState, shared] = [node.state, pathwayMap.has(node.name)];
         return node.name.toLowerCase().indexOf(textInput) ? undefined : this.nodeItem(node,nodeState,shared);

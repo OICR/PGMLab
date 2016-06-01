@@ -19,8 +19,8 @@ export class ControlPanel extends React.Component {
   render(){
     console.log("<ControlPanel> render()");
     const btnClass = "col s6 btn waves-effect lighten-1 white-text";
-    const inferenceBtnClass = `${btnClass} ${this.props.runType==="Inference" ? "light-blue": "grey"}`;
-    const learningBtnClass = `${btnClass} ${this.props.runType==="Learning" ? "light-blue": "grey"}`;
+    const inferenceBtnClass = `${btnClass} ${this.props.runType==="Inference" ? "light-blue" : "grey"}`;
+    const learningBtnClass = `${btnClass} ${this.props.runType==="Learning" ? "light-blue" : "grey"}`;
     return (
     <div>
       <div className="row">

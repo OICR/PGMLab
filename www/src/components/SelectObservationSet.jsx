@@ -56,23 +56,25 @@ export class SelectObservationSet extends React.Component {
 
   // RENDERING //
   observationSetList(){
-    let observationMap = this.props.observationMap;
     let self = this;
     const textInput = isNaN(self.state.setFilterText) ? self.state.setFilterText.toLowerCase() : self.state.setFilterText;
-    // const currentSelectedSetID = self.props.selectedObservationSet.id;
-    const currentSelectedSetID = observationMap.get("Current").get("Set").id;
-    let observationSets = [... observationMap.get("All").values()].map((observationSet)=>{
-      const textFilter = observationSet.name.toLowerCase().indexOf(textInput) && (observationSet.id.indexOf(textInput) == -1);
-      const selected = currentSelectedSetID === observationSet.id;
-      return (
-        (textFilter) ? undefined :
-        <li key={observationSet.id} className="collection-item black-text"
-          onClick={(evt)=>{evt.preventDefault();this.handleSetSelect(observationSet.id)}}>
-          <input ref={observationSet.id} id={observationSet.id} type="radio" checked={selected} readOnly={true}/>
-          <label htmlFor={observationSet.id} className="black-text">{observationSet.name}</label>
-        </li>
-      );
-    });
+
+    let observationMap = self.props.observationMap;
+    let observationSets = (observationMap.get("All").size === 0) ?
+      <div className="collection-item black-text"><span>No Observation Sets</span></div>
+      :
+      [... observationMap.get("All").values()].map((observationSet)=>{
+        const textFilter = observationSet.name.toLowerCase().indexOf(textInput) && (observationSet.id.indexOf(textInput) == -1);
+        const selected = observationMap.get("Current").get("Set").id === observationSet.id;
+        return (
+          (textFilter) ? undefined :
+          <li key={observationSet.id} className="collection-item black-text"
+            onClick={(evt)=>{evt.preventDefault();this.handleSetSelect(observationSet.id)}}>
+            <input ref={observationSet.id} id={observationSet.id} type="radio" checked={selected} readOnly={true}/>
+            <label htmlFor={observationSet.id} className="black-text">{observationSet.name}</label>
+          </li>
+        );
+      });
     return (
       <div>
         <h5>Observation Sets</h5>
@@ -89,30 +91,40 @@ export class SelectObservationSet extends React.Component {
   }
   observationsList(){
     let self = this;
-    const observationMap = this.props.observationMap;
-    const selectedObservationSet = this.props.selectedObservationSet;
     const textInput = isNaN(self.state.obsFilterText) ? self.state.obsFilterText.toLowerCase() : self.state.obsFilterText;
-    let observations = observationMap.get("Current").get("Set").observations.map((observation,index)=>{
-      // observations dont have names yet, are labelled by index
-      const textFilter = index.toString().indexOf(textInput) == -1;
-      const selected = observationMap.get("Current").get("Selected Observations").includes(index);
-      return (
-        (textFilter) ? undefined :
-          <li key={index} className="collection-item black-text"
-            onClick={(evt)=>{evt.preventDefault();this.handleObsSelect(index)}}>
-            <input ref={index} id={index} type="checkbox" className="filled-in" checked={selected} readOnly={true}/>
-            <label htmlFor={index} className="black-text">{index}</label>
-          </li>
-      );
-    });
+
+    const observationMap = this.props.observationMap;
+    const observationSet = observationMap.get("Current").get("Set");
+    const header = (observationSet.name === null) ?
+      "Select an Observation" : observationSet.name;
+    const observationsList = (
+      <ul className="collection teal lighten-2 left-align">
+        {
+          (observationSet.observations.length === 0) ?
+            <div className="collection-item"><span>No Observations</span></div>
+            :
+            observationSet.observations.map((observation,index) => {
+              const textFilter = index.toString().indexOf(textInput) == -1;
+              const selected = observationMap.get("Current").get("Selected Observations").includes(index);
+              return (
+                (textFilter) ? undefined :
+                  <li key={index} className="collection-item black-text"
+                      onClick={evt=>{evt.preventDefault();this.handleObsSelect(index)}}>
+                    <input  ref={index} id={index} type="checkbox" className="filled-in"
+                            checked={selected} readOnly={true}/>
+                    <label htmlFor={index} className="black-text">{index}</label>
+                  </li>
+              );
+            })
+        }
+      </ul>
+    );
     const observationCount = `${observationMap.get("Current").get("Selected Observations").length} Observations`;
     const selectedCount = `${observationMap.get("Current").get("Selected Observations").length} Selected`;
     return (
       <div>
-        <h5>{observationMap.get("Current").get("Set").name}</h5>
-        <div className="divider"></div>
-        {
-          (observationMap.get("Current").get("Set").observations.length===0) ? <h5>No Observations</h5> :
+          <h5>{header}</h5>
+          <div className="divider"></div>
           <form>
             <input type="text" ref="obsFilterInput" placeholder="Type to filter"
               value={this.state.obsFilterText} onChange={this.obsFilterUpdate}/>
@@ -129,12 +141,8 @@ export class SelectObservationSet extends React.Component {
                 </a>
               </div>
             </div>
-
-            <ul className="collection teal lighten-2 left-align">
-              {observations}
-            </ul>
+            {observationsList}
           </form>
-        }
       </div>
     );
   }
