@@ -39,12 +39,6 @@ export class App extends  React.Component {
           active: 0
         }
       };
-      const pathwayMap = new Map([
-        ["All", new Map(this.props.reactomePathways.map(p => [p.id, p]))],
-        ["Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]])],
-        ["Active", {id:"397795",name:"G-protein beta:gamma signalling"}]
-      ]);
-
       const observationMap = new Map([
         ["All", EXAMPLEDATA.observationSets],
         ["Current", new Map([
@@ -53,51 +47,58 @@ export class App extends  React.Component {
           ["Active Observation", EXAMPLEDATA.current.active] //Index of active in .observations
         ])]
       ]);
+      const pathwayMap = new Map([
+        ["All", new Map(this.props.reactomePathways.map(p => [p.id, p]))],
+        ["Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]])],
+        ["Active", {id:"397795",name:"G-protein beta:gamma signalling"}]
+      ]);
       // Set initial state
       this.state = {
-        "observationMap": observationMap,
-        "pathwayMap" : pathwayMap,
-        "pairwiseInteractions"            : this.props.pairwiseInteractions,
-        "uploadList"                      : [],
-        "posteriorProbabilitySets"        : [],
-        "estimatedParameterSets"          : []
+        "pairwiseInteractions"        : this.props.pairwiseInteractions,
+        "observationMap"              : observationMap,
+        "pathwayMap"                  : pathwayMap,
+        "runType"                     : "Inference",
+        "uploadList"                  : [],
+        "posteriorProbabilitySets"    : [],
+        "estimatedParameterSets"      : []
       };
 
       // Function binding
-      this.selectPathways = this.selectPathways.bind(this);
-      this.removeSelectedPathways = this.removeSelectedPathways.bind(this);
-
-      this.selectObservationSet = this.selectObservationSet.bind(this);
-      this.selectObservations = this.selectObservations.bind(this);
-      this.removeSelectedObservations = this.removeSelectedObservations.bind(this);
-
+      this.selectPathways                 = this.selectPathways.bind(this);
+      this.removeSelectedPathways         = this.removeSelectedPathways.bind(this);
       this.setActivePathway               = this.setActivePathway.bind(this);
 
+      this.selectObservationSet           = this.selectObservationSet.bind(this);
+      this.selectObservations             = this.selectObservations.bind(this);
+      this.removeSelectedObservations     = this.removeSelectedObservations.bind(this);
+      this.setActiveObservation           = this.setActiveObservation.bind(this);
+
+      this.setNodeItemState               = this.setNodeItemState.bind(this);
+
+      this.toggleRunType                  = this.toggleRunType.bind(this);
       this.runInference                   = this.runInference.bind(this);
-      this.setNodeItemState = this.setNodeItemState.bind(this);
-
-
-
-
-      this.setActiveObservation = this.setActiveObservation.bind(this);
 
       this.uploadListAddFailure           = this.uploadListAddFailure.bind(this);
       this.addNewPathway                  = this.addNewPathway.bind(this);
       this.addNewObservationSet           = this.addNewObservationSet.bind(this);
       this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this);
       this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this);
-
-      this.initializePathwayObservation = this.initializePathwayObservation.bind(this);
     }
 
     componentDidMount(){
-      console.log("componentDidMount", this.state.pathwayMap.get("Active").id);
+      const initializeData = () => {
+        console.log("initializeData");
+          // this.setActivePathway(this.state.pathwayMap.get("Active"));
+            // this.setActiveObservation(0);
+      };
+      console.log("componentDidMount");
+      initializeData();
     }
 
     // For SelectPathways modal component
     // [pathwayIDs] =>  and adds to list of possible active pathways
     selectPathways(pathwayIDs){
-      console.log("selectPat")
+      console.log("selectPathway")
       let pathwayMap = this.state.pathwayMap;
       for (let pathwayID of pathwayIDs) {
         if (!pathwayMap.get("Selected").has(pathwayID)) {
@@ -125,6 +126,7 @@ export class App extends  React.Component {
     setActivePathway(pathway){
       console.log("setActivePathway");
       let self = this;
+      // Define update function for new activePathway
       const update = (pathway, pairwiseInteractions) => {
         let pathwayMap = self.state.pathwayMap;
         pathwayMap.set("Active", pathway);
@@ -139,11 +141,10 @@ export class App extends  React.Component {
         // If uploaded, use the uploaded pairwiseInteractions
         update(pathway, pathway.pairwiseInteractions) :
         // Else get from server
-        connection.session
-          .call("pgmlab.pathway.get", [pathway.id])
+        self.props.getReactomePathway(pathway)
           .then(
             pairwiseInteractionsResult=>{
-              console.log("pgmlab.pathway.get", pairwiseInteractionsResult);
+              // console.log("pgmlab.pathway.get", pairwiseInteractionsResult);
               update(pathway, pairwiseInteractionsResult)
             },
             err=>{console.log("Couldn't Get Pathway", pathway.id, err)}
@@ -233,13 +234,10 @@ export class App extends  React.Component {
       console.log("drayPathway");
       var datasetnodes = graphvis.render(pairwiseInteractions);
     }
-    initializePathwayObservation(){
-      console.log("initializePathwayObservation");
-        // this.setActivePathway(this.state.pathwayMap.get("Active"));
-          // this.setActiveObservation(0);
+
+    toggleRunType(){
+      this.setState({ "runType": (this.state.toggle === "Inference")? "Learning": "Inference"})
     }
-
-
     runInference(){
       // console.log("runInference", this.state.observedNodes);
       var self = this;
@@ -364,18 +362,7 @@ export class App extends  React.Component {
       return (
         <div>
           <Header />
-          <Body uploadList                      = {this.state.uploadList}
-                uploadListAddFailure            = {this.uploadListAddFailure}
-                addNewPathway                   = {this.addNewPathway}
-                addNewObservationSet            = {this.addNewObservationSet}
-                addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
-                addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet}
-
-                pathwayMap = {this.state.pathwayMap}
-                pairwiseInteractions            = {this.state.pairwiseInteractions}
-
-                selectPathways = {this.selectPathways}
-                removeSelectedPathways = {this.removeSelectedPathways}
+          <Body pairwiseInteractions            = {this.state.pairwiseInteractions}
 
                 observationMap = {this.state.observationMap}
                 selectObservationSet = {this.selectObservationSet}
@@ -383,12 +370,23 @@ export class App extends  React.Component {
                 removeSelectedObservations = {this.removeSelectedObservations}
                 setActiveObservation = {this.setActiveObservation}
 
+                pathwayMap = {this.state.pathwayMap}
+                selectPathways = {this.selectPathways}
+                removeSelectedPathways = {this.removeSelectedPathways}
                 setActivePathway                = {this.setActivePathway}
 
+                setNodeItemState = {this.setNodeItemState}
+
+                runType = {this.state.runType}
+                toggleRunType = {this.toggleRunType}
                 runInference                    = {this.runInference}
 
-                setNodeItemState = {this.setNodeItemState}
-                initializePathwayObservation = {this.initializePathwayObservation} />
+                uploadList                      = {this.state.uploadList}
+                uploadListAddFailure            = {this.uploadListAddFailure}
+                addNewPathway                   = {this.addNewPathway}
+                addNewObservationSet            = {this.addNewObservationSet}
+                addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
+                addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet} />
           <Footer />
         </div>
       )

@@ -31,7 +31,7 @@ connection.onopen = function (session, details) {
             const initPathway = pathways[0]; // This should correspond to the mock data in the App constructor
             // console.log("connection.onopen:", res);
             //
-            getPathway(session, pathways, initPathway);
+            getPairwiseInteraction(session, pathways, initPathway);
          },
          function (err) {
             console.log("getPathwayList() error:", err);
@@ -53,7 +53,7 @@ connection.onclose = function (reason, details) {
 
 connection.open();
 
-function getPathway(session, pathways, initPathway) {
+function getPairwiseInteraction(session, pathways, initPathway) {
   console.log("getPathway");
   session.call('pgmlab.pathway.get', [initPathway.id]).then(
         res => {
@@ -63,11 +63,14 @@ function getPathway(session, pathways, initPathway) {
         err => console.log("couldn't get pathway", initPathway.id, err)
       );
 };
+function getReactomePathway(pathway) {
+  return connection.session.call("pgmlab.pathway.get", [pathway.id]);
+};
 
 function init(pathways, pairwiseInteractions) {
   // console.log("init:", pathways, pairwiseInteractions);
   render(
-    <App reactomePathways={pathways} pairwiseInteractions={pairwiseInteractions} />,
+    <App reactomePathways={pathways} getReactomePathway={getReactomePathway} pairwiseInteractions={pairwiseInteractions} />,
     document.getElementById('app')
   );
 };
