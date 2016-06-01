@@ -6,23 +6,21 @@ import {ObservationsControl} from "./ObservationsControl.jsx";
 import {PathwaysControl} from "./PathwaysControl.jsx";
 import {ResultsControl} from "./ResultsControl.jsx";
 
-var classNames = require("classnames");
-
 export class ControlPanel extends React.Component {
   constructor(props){
     super(props);
     this.handleRunType = this.handleRunType.bind(this);
   }
   handleRunType(type){
-    if (type !== this.props.toggle) {
+    if (type !== this.props.runType) {
       this.props.toggleRunType();
     };
   }
   render(){
     console.log("<ControlPanel> render()");
-    const btnClass = "col s6 btn waves-effect light-blue lighten-1 white-text";
-    const inferenceBtnClass = `${btnClass} ${this.props.toggle==="Inference" ? "light-blue grey": ""}`;
-    const learningBtnClass = `${btnClass} ${this.props.toggle==="Learning" ? "light-blue grey": ""}`;
+    const btnClass = "col s6 btn waves-effect lighten-1 white-text";
+    const inferenceBtnClass = `${btnClass} ${this.props.runType==="Inference" ? "light-blue": "grey"}`;
+    const learningBtnClass = `${btnClass} ${this.props.runType==="Learning" ? "light-blue": "grey"}`;
     return (
     <div>
       <div className="row">

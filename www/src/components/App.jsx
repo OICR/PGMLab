@@ -237,7 +237,7 @@ export class App extends  React.Component {
     }
 
     toggleRunType(){
-      this.setState({ "runType": (this.state.toggle === "Inference")? "Learning": "Inference"})
+      this.setState({ "runType": (this.state.runType === "Inference") ? "Learning" : "Inference"})
     }
     runInference(){
       // console.log("runInference", this.state.observedNodes);
