@@ -65,48 +65,60 @@ export class App extends  React.Component {
     }
 
     componentDidMount(){
-      const initializeReactomeData = () => {
-        // EXAMPLE DATA ON INIT
-        const EXAMPLEDATA = {
-          // For G-protein pathway
-          observationSets : new Map([
-            ["exampleID1", {"id":"exampleID1", "name":"Example 1", "observations":[
-              [ ],
-              [ {"name":"49860","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
-            ]}],
-            ["exampleID2", {"id":"exampleID2", "name":"Example 2", "observations":[
-              [ {"name":"58253","state":"1"},{"name":"415917","state":"2"},{"name":"61076","state":"1"},{"name":"49860","state":"2"}],
-              [ {"name":"61074","state":"1"},{"name":"49860","state":"2"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"}]
-            ]}]
-          ]),
-          current: {
-            set : {"id":"exampleID1", "name":"Example 1", "observations":[
-              [],
-              [ {"name":"49860","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
-            ]},
-            selected: [0, 1],
-            active: 0
-          }
-        };
-        const observationMap = new Map([
-          ["All", EXAMPLEDATA.observationSets],
-          ["Current", new Map([
-            ["Set", EXAMPLEDATA.current.set],
-            ["Selected Observations", EXAMPLEDATA.current.selected], //Indices of .observations
-            ["Active Observation", EXAMPLEDATA.current.active] //Index of active in .observations
-          ])]
-        ]);
-        const pathwayMap = new Map([
-          ["All", new Map(this.props.reactomePathways.map(p => [p.id, p]))],
-          ["Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]])],
-          ["Active", {id:"397795",name:"G-protein beta:gamma signalling"}]
-        ]);
-        console.log("initializeData");
-          // this.setActivePathway(this.state.pathwayMap.get("Active"));
-            // this.setActiveObservation(0);
+      console.log("componentDidMount: initializeData");
+      // EXAMPLE DATA ON INIT
+      const EXAMPLEDATA = {
+        // For G-protein pathway
+        observationSets : new Map([
+          ["exampleID1", {"id":"exampleID1", "name":"Example 1", "observations":[
+            [ ],
+            [ {"name":"49860","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+          ]}],
+          ["exampleID2", {"id":"exampleID2", "name":"Example 2", "observations":[
+            [ {"name":"58253","state":"1"},{"name":"415917","state":"2"},{"name":"61076","state":"1"},{"name":"49860","state":"2"}],
+            [ {"name":"61074","state":"1"},{"name":"49860","state":"2"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"}]
+          ]}]
+        ]),
+        current: {
+          set : {"id":"exampleID1", "name":"Example 1", "observations":[
+            [],
+            [ {"name":"49860","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+          ]},
+          selected: [0, 1],
+          active: 1
+        }
       };
-      console.log("componentDidMount");
-      // initializeReactomeData();
+      const observationMap = new Map([
+        ["All", EXAMPLEDATA.observationSets],
+        ["Current", new Map([
+          ["Set", EXAMPLEDATA.current.set],
+          ["Selected Observations", EXAMPLEDATA.current.selected], //Indices of .observations
+          ["Active Observation", EXAMPLEDATA.current.active] //Index of active in .observations
+        ])]
+      ]);
+      const pathwayMap = new Map([
+        ["All", new Map(this.props.reactomePathways.map(p => [p.id, p]))],
+        ["Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]])],
+        ["Active", {id:"397795",name:"G-protein beta:gamma signalling"}]
+      ]);
+      console.log(this);
+
+
+      this.props.getReactomePathway(pathwayMap.get("Active")).then(
+        pairwiseInteractions => {
+          this.setState(
+            {observationMap, pathwayMap, pairwiseInteractions},
+            ()=>{
+              const observation = observationMap.get("Current").get("Set").observations[observationMap.get("Current").get("Active Observation")];
+              const observedStates = new Map(observation.map(node=>[node.name, node.state]));
+              graphvis.initialize(observedStates, pairwiseInteractions);
+            }
+          );
+        },
+        err => {console.log("Could not get initial pairwiseInteraction: ", err)}
+      );
+
+      ;
     }
 
     // For SelectPathways modal component

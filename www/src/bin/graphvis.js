@@ -4,79 +4,140 @@ var network;
 var datasetnodes;
 var datasetedges;
 
-exports.render = function render(pairwiseInteractions) {
-  console.log("graphvis: render");
-    const edges = pairwiseInteractions.links.map(link=>{
-      return {
-        from: link.source,
-        to: link.target,
-        arrows: "to"
-      };
-    });
-
-    const lengthLimit = 15;
-    const nodes = pairwiseInteractions.nodes.map(node=>{
-      const id = node.name;
-      const label = (node.longname !== null ? node.longname.length < lengthLimit : false)  ? node.longname : node.name;
-      const reactomeClass = node.type !== null ? node.type : "unknown";
-      return {
-        id, label,
-        color: {
-          background: "#FFFFFF",
-          border: "#000000"
-        },
-        title: `ID: ${id}<br>Name: ${label}<br>Reactome Class: ${reactomeClass}`,
-        shape: "dot",
-        scaling: {label: {enabled: false}}
-      };
-    });
-
-    const container = document.getElementById("chart");
-    datasetedges = new vis.DataSet(edges);
-    datasetnodes = new vis.DataSet(nodes);
-
-    const data = {
-        nodes: datasetnodes,
-        edges: datasetedges
+// Initialize graphvis after <App> component mounts
+function initialize(observedStates, pairwiseInteractions){
+  console.log("graphvis.initialize", observedStates, pairwiseInteractions);
+  const stateColor={
+    // 1:"red",
+    1:"FF0000",
+    // 2:"grey",
+    2:"808080",
+    // 3:"green"
+    3:"008000"
+  };
+  const edges = pairwiseInteractions.links.map(link=>{
+    return {
+      from: link.source,
+      to: link.target,
+      arrows: "to"
     };
-
-    const options = {
-      // height: "800px",
-      height: "100%",
-      width: "100%",
-      interaction: {
-        navigationButtons: true,
-        keyboard: false,
-        tooltipDelay: 50,
-        hideEdgesOnDrag: true,
-        selectable: false
-      },
-      layout: {
-        randomSeed: undefined,
-        improvedLayout:true,
-        hierarchical: {
-          enabled:true,
-          levelSeparation: 150,
-          nodeSpacing: 100,
-          treeSpacing: 200,
-          blockShifting: true,
-          edgeMinimization: true,
-          direction: "UD",        // UD, DU, LR, RL
-          sortMethod: "directed"   // hubsize, directed
-        }
+  });
+  const lengthLimit = 15;
+  const nodes = pairwiseInteractions.nodes.map(node=>{
+    const id = node.name;
+    const label = (node.longname !== null ? node.longname.length < lengthLimit : false)  ? node.longname : node.name;
+    const border = observedStates.has(id) ? stateColor[observedStates.get(id)] : "#000000";
+    return {
+      id, label,
+      color: { background: "#FFFFFF", border},
+      title: `ID: ${id}<br>Name: ${label}<br>Reactome Class: ${node.type !== null ? node.type : "unknown"}`,
+      shape: "dot",
+      scaling: {label: {enabled: false}}
+    };
+  });
+  const container = document.getElementById("chart");
+  const options = {
+    height: "100%",
+    width: "100%",
+    interaction: {
+      navigationButtons: true,
+      keyboard: false,
+      tooltipDelay: 50,
+      hideEdgesOnDrag: true,
+      selectable: false
+    },
+    layout: {
+      randomSeed: undefined,
+      improvedLayout:true,
+      hierarchical: {
+        enabled:true,
+        levelSeparation: 150,
+        nodeSpacing: 100,
+        treeSpacing: 200,
+        blockShifting: true,
+        edgeMinimization: true,
+        direction: "UD",        // UD, DU, LR, RL
+        sortMethod: "directed"   // hubsize, directed
       }
-    };
+    }
+  };
+  datasetedges = new vis.DataSet(edges);
+  datasetnodes = new vis.DataSet(nodes);
+  const data = {
+      nodes: datasetnodes,
+      edges: datasetedges
+  };
+  network = new vis.Network(container,data,options);
 
-    switch (network === undefined) {
-      case true: network = new vis.Network(container,data,options); break;
-      case false: network.setData(data); break;
-    };
 
-    return datasetnodes;
 }
-// exports.render = render;
+exports.initialize = initialize;
 
-exports.setNodeState = function setNodeState(node) {
+function render(pairwiseInteractions) {
+  console.log("graphvis.render");
+  const edges = pairwiseInteractions.links.map(link=>{
+    return {
+      from: link.source,
+      to: link.target,
+      arrows: "to"
+    };
+  });
+
+  const lengthLimit = 15;
+  const nodes = pairwiseInteractions.nodes.map(node=>{
+    return {
+      id: node.name,
+      label: (node.longname !== null ? node.longname.length < lengthLimit : false)  ? node.longname : node.name,
+      color: { background: "#FFFFFF", border: "#000000" },
+      title: `ID: ${id}<br>Name: ${label}<br>Reactome Class: ${node.type !== null ? node.type : "unknown"}`,
+      shape: "dot",
+      scaling: {label: {enabled: false}}
+    };
+  });
+
+  const container = document.getElementById("chart");
+  datasetedges = new vis.DataSet(edges);
+  datasetnodes = new vis.DataSet(nodes);
+
+  const data = {
+      nodes: datasetnodes,
+      edges: datasetedges
+  };
+
+  const options = {
+    height: "100%",
+    width: "100%",
+    interaction: {
+      navigationButtons: true,
+      keyboard: false,
+      tooltipDelay: 50,
+      hideEdgesOnDrag: true,
+      selectable: false
+    },
+    layout: {
+      randomSeed: undefined,
+      improvedLayout:true,
+      hierarchical: {
+        enabled:true,
+        levelSeparation: 150,
+        nodeSpacing: 100,
+        treeSpacing: 200,
+        blockShifting: true,
+        edgeMinimization: true,
+        direction: "UD",        // UD, DU, LR, RL
+        sortMethod: "directed"   // hubsize, directed
+      }
+    }
+  };
+
+  switch (network === undefined) {
+    case true: network = new vis.Network(container,data,options); break;
+    case false: network.setData(data); break;
+  };
+}
+exports.render = render;
+
+function setNodeState(node) {
   console.log("setNodeState");
   const stateColor={
     1:"red",
@@ -90,16 +151,7 @@ exports.setNodeState = function setNodeState(node) {
     borderWidth: 3
   });
 }
-// exports.setNodeState = setNodeState;
-
-function initializeObservation(observation) {
-  console.log("initializeObservation");
-  observation.forEach((node) => {
-    // console.log(node);
-    setNodeState(node);
-  });
-}
-exports.initializeObservation = initializeObservation;
+exports.setNodeState = setNodeState;
 
 function addPosteriorProbabilities(posteriorProbabilities) {
     for (let ppid in posteriorProbabilities) {
