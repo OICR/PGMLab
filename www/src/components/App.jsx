@@ -72,7 +72,7 @@ export class App extends  React.Component {
         observationSets : new Map([
           ["exampleID1", {"id":"exampleID1", "name":"Example 1", "observations":[
             [ ],
-            [ {"name":"49860","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+            [ {"name":"49865","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
           ]}],
           ["exampleID2", {"id":"exampleID2", "name":"Example 2", "observations":[
             [ {"name":"58253","state":"1"},{"name":"415917","state":"2"},{"name":"61076","state":"1"},{"name":"49860","state":"2"}],
@@ -82,7 +82,7 @@ export class App extends  React.Component {
         current: {
           set : {"id":"exampleID1", "name":"Example 1", "observations":[
             [],
-            [ {"name":"49860","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+            [ {"name":"49865","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
           ]},
           selected: [0, 1],
           active: 1
@@ -101,7 +101,6 @@ export class App extends  React.Component {
         ["Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]])],
         ["Active", {id:"397795",name:"G-protein beta:gamma signalling"}]
       ]);
-      console.log(this);
 
 
       this.props.getReactomePathway(pathwayMap.get("Active")).then(
@@ -117,8 +116,6 @@ export class App extends  React.Component {
         },
         err => {console.log("Could not get initial pairwiseInteraction: ", err)}
       );
-
-      ;
     }
 
     // For SelectPathways modal component
@@ -222,10 +219,8 @@ export class App extends  React.Component {
       let observationMap = this.state.observationMap;
       observationMap.get("Current").set("Active Observation", observationIndex);
       this.setState({observationMap},()=>{
-        const activeObservationIndex = observationMap.get("Current").get("Active Observation");
-        // console.log(activeObservationIndex);
-        // console.log(observationMap.get("Current").get("Set").observations[activeObservationIndex]);
-        graphvis.initializeObservation(observationMap.get("Current").get("Set").observations[activeObservationIndex]);
+        const activeObservation = observationMap.get("Current").get("Set").observations[observationMap.get("Current").get("Active Observation")];
+        graphvis.setNodesState(activeObservation);
       });
     }
 
@@ -251,7 +246,7 @@ export class App extends  React.Component {
       )];
       observationMap.get("Current").set("Set",observationSet);
       this.setState({observationMap}, ()=>{
-        graphvis.setNodeState({name,state});
+        graphvis.setSingleNodeState({name,state});
       });
     }
 

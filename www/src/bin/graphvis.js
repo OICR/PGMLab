@@ -64,7 +64,7 @@ const renderNetwork = (nodes, edges)=>{
     }, config.networkOptions);
     // On stabilization, fit (also possible in config.options)
     network.on("stabilized", (done)=>{
-      console.log(done);
+      // console.log(done);
     });
   }
   else {
@@ -83,19 +83,13 @@ const drawPairwiseInteractions = (pairwiseInteractions, observedStates=new Map()
     // Set node styling and properties
     const id = node.name;
     const label = (node.longname !== null ? (node.longname.length<config.labelLengthLimit):false) ? node.longname:node.name;
-    const [border, background, highlight, hover] = observedStates.has(id) ?
-      [
-        config.stateColors[observedStates.get(id)],
-        "#D2E5FF",
-        {border: "#2B7CE9", background: "#D2E5FF"},
-        {border: "#2B7CE9", background: "#D2E5FF"}
-      ]:[
-        "#2B7CE9",
-        "#D2E5FF",
-        {border: "#2B7CE9", background: "#D2E5FF"},
-        {border: "#2B7CE9", background: "#D2E5FF"}
-      ]
-    const color = {border,background,highlight,hover};
+    const border = observedStates.has(id) ? config.stateColors[observedStates.get(id)]:"#2B7CE9";
+    const color = {
+      border,
+      background: "#D2E5FF",
+      highlight: {border: "#2B7CE9", background: "#D2E5FF"},
+      hover: {border: "#2B7CE9", background: "#D2E5FF"}
+    };
     return {
       id, label,
       color,
@@ -120,27 +114,37 @@ exports.render = (pairwiseInteractions) => {
   console.log("graphvis.render");
 };
 
-exports.setNodeState = (node) => {
-  console.log("setNodeState");
-  datasetnodes.update({
-    id: node.name,
-    color: {
-      border: config.stateColors[node.state],
-      background: "#D2E5FF",
-      highlight: {border: "#2B7CE9", background: "#D2E5FF"},
-      hover: {border: "#2B7CE9", background: "#D2E5FF"}
-    }
-  });
+exports.setSingleNodeState = (node) => {
+  console.log("setSingleNodeState");
+  const datasetnodesMap = new Map(datasetnodes.get().map(graphNode => [graphNode.id, graphNode]));
+  if (datasetnodesMap.has(node.name)) {
+    const graphNode = datasetnodesMap.get(node.name);
+    graphNode.color.border = config.stateColors[node.state];
+    console.log(graphNode);
+    datasetnodes.update(graphNode);
+  };
 };
-// function setNodeState(node) {
-//   console.log("setNodeState");
-//   datasetnodes.update({
-//     id: node.name,
-//     color: {border: stateColor[node.state]},
-//     borderWidth: 3
-//   });
-// }
-// exports.setNodeState = setNodeState;
+exports.setNodesState = (observedNodes) => {
+  console.log("setNodeState");
+  const datasetnodesMap = new Map(datasetnodes.get().map(graphNode => [graphNode.id, graphNode]));
+  const updatenodesMap = new Map(observedNodes.map(node => [node.name, node.state]));
+  // Nodes in datasetnodes but not observed set to unobserved
+  const unchanged = [...datasetnodesMap.values()]
+    .filter(graphNode => !updatenodesMap.has(graphNode.id))
+    .reduce((unchanged, graphNode) => {
+      graphNode.color.border = "#2B7CE9";
+      return [...unchanged, graphNode];
+    },[]);
+  // Nodes in observedNode are set to their state color
+  const toChange = observedNodes.reduce((toChange, node) => {
+    if (datasetnodesMap.has(node.name)) {
+      const graphNode = datasetnodesMap.get(node.name);
+      graphNode.color.border = config.stateColors[node.state];
+      return [...toChange, graphNode];
+    } else { return toChange };
+  }, []);
+  datasetnodes.update([...unchanged, ...toChange]);
+};
 
 function addPosteriorProbabilities(posteriorProbabilities) {
     for (let ppid in posteriorProbabilities) {
