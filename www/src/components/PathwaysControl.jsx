@@ -39,8 +39,8 @@ export class PathwaysControl extends React.Component {
       <div className="section" style={noPad}>
         {this.header()}
         <NodeList activeType="Pathway"
-                  observationMap={this.props.observationMap}
                   pairwiseInteractions={this.props.pairwiseInteractions}
+                  observationMap={this.props.observationMap}
                   setNodeItemState={this.props.setNodeItemState}/>
       </div>
     );

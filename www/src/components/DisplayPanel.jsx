@@ -7,9 +7,7 @@ export class DisplayPanel extends React.Component {
   }
   render(){
     return (
-      <div>
-         <div style={{"width":"100%"}} id="chart"></div>
-       </div>
+      <div id="canvas"></div>
     )
   }
 

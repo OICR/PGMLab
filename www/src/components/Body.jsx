@@ -12,58 +12,18 @@ var classNames = require("classnames");
 export class Body extends React.Component {
     constructor(props){
       super(props)
-      this.state = {"toggle": "Inference"}
-      this.toggleRunType = this.toggleRunType.bind(this);
-    }
-    componentDidMount(){
-      // Init example on first mount
-      this.props.setActivePathway(this.props.pathwayMap.get("Active"));
-    }
-    toggleRunType(){
-      this.setState({ "toggle": (this.state.toggle === "Inference")? "Learning": "Inference"})
     }
     render(){
-      // console.log("body", this.props)
+      console.log("<Body> render()");
+      const canvasSize = {minWidth:"800px", minHeight:"600px"};
       return (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="row">
           <div className="col s4" style={{minWidth:"300px"}}>
-            <ControlPanel
-                          observationMap = {this.props.observationMap}
-                          pathwayMap = {this.props.pathwayMap}
-
-                          pairwiseInteractions            = {this.props.pairwiseInteractions}
-
-                          uploadList                      = {this.props.uploadList}
-                          uploadListAddFailure            = {this.props.uploadListAddFailure}
-
-                          observeNode                     = {this.props.observeNode}
-                          removeObservedNode              = {this.props.removeObservedNode}
-                          setNodeState                    = {this.props.setNodeState}
-
-                          toggleRunType                   = {this.toggleRunType}
-                          toggle                          = {this.state.toggle}
-                          runInference                    = {this.props.runInference}
-
-                          selectPathways = {this.props.selectPathways}
-                          removeSelectedPathways = {this.props.removeSelectedPathways}
-                          setActivePathway                = {this.props.setActivePathway}
-
-                          selectObservationSet = {this.props.selectObservationSet}
-
-                          selectObservations = {this.props.selectObservations}
-                          removeSelectedObservations = {this.props.removeSelectedObservations}
-                          setActiveObservation = {this.props.setActiveObservation}
-
-                          addNewPathway                   = {this.props.addNewPathway}
-                          addNewObservationSet            = {this.props.addNewObservationSet}
-                          addNewEstimatedParameterSet     = {this.props.addNewEstimatedParameterSet}
-                          addNewPosteriorProbabilitySet   = {this.props.addNewPosteriorProbabilitySet}
-
-                          setNodeItemState = {this.props.setNodeItemState} />
+            <ControlPanel {...this.props}/>
           </div>
-          <div className="col s8" style={{minWidth:"800px"}}>
-            <DisplayPanel />
+          <div className="col s8" style={canvasSize}>
+            <div id="canvas"></div>
           </div>
         </main>
         </MuiThemeProvider>

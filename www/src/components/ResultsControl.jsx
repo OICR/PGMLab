@@ -11,7 +11,7 @@ export class ResultsControl extends React.Component {
   }
 
   handleRun(){
-    switch (this.props.toggle) {
+    switch (this.props.runType) {
       case "Inference":
         this.props.runInference(); break;
       case "Learning":
