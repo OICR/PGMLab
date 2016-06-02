@@ -35,6 +35,8 @@ bin/pgmlab
 #OS X files
 .DS_Store
 
+#net library
+net/lib
 
 #This is is for securing the websocket each implementation should generate it's own
 wamp/.crossbar/pgmlab.pem

@@ -14,8 +14,10 @@ use PGMLab::Bio;
 
 use Getopt::Euclid qw( :minimal_keys );
 
-my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = PGMLab::Bio->get_rectome_ids_to_names_maps($ARGV{'db-id-to-name-mapping'});
-my $pi_genes = PGMLab::Bio->get_genes_in_pi_file($ARGV{'pairwise-interaction'});
-my $sample_gene_states = PGMLab::Bio->get_gistic_gene_states($ARGV{'gistic'}, $entity_name_to_reactome_id, $pi_genes);
+use Data::Dumper;
 
-PGMLab->create_obs_file->($ARGV{'observation_file'}, $sample_gene_states);
+my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = PGMLab::Bio->get_rectome_ids_to_names_maps($ARGV{'db_id_to_name_mapping'});
+my $pi_genes = PGMLab::Bio->get_genes_in_pi_file($ARGV{'pairwise_interaction'});
+my ($sample_gene_states, $sample_list) = PGMLab::Bio->get_gistic_gene_states($ARGV{'gistic'}, $entity_name_to_reactome_id, $pi_genes);
+
+PGMLab->create_obs_file($ARGV{'observation_file'}, $sample_gene_states, $sample_list);

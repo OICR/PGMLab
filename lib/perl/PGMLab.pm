@@ -4,17 +4,16 @@ use strict;
 use warnings;
 
 use autodie;
+use feature qw(say);
 use Data::Dumper;
 
 sub create_obs_file {
-    print $_[0];
-die;
-    my ( $obs_filepath, $sample_gene_states, $sample_list) = @_;
+    my ($class, $obs_filepath, $sample_gene_states, $sample_list) = @_;
 
-    $sample_list //= \@{keys %{$sample_gene_states}};
+    $sample_list //= [keys %{$sample_gene_states}];
 
     open(my $obs_fh, ">", $obs_filepath);
-    print Dumper $sample_gene_states;
+
     say $obs_fh scalar (keys %{$sample_gene_states});
     foreach my $sample_name (@{$sample_list}) {
          my $gene_values = $sample_gene_states->{$sample_name};

@@ -53,7 +53,7 @@ sub get_sample_list {
 
 
 sub get_rectome_ids_to_names_maps {
-    my ($db_id_to_name_mapping) = @_;
+    my ($class, $db_id_to_name_mapping) = @_;
 
     open(my $fh_db_id, "<", $db_id_to_name_mapping);
     
@@ -63,7 +63,7 @@ sub get_rectome_ids_to_names_maps {
     while (my $reactome_map = <$fh_db_id>) {
          chomp $reactome_map;
          ($reactome_id, $entity_name, $entity_type) = split /\t/, $reactome_map;
-         if ( $entity_type eq 'ReferenceGeneProduct') {
+         if (( $entity_type eq 'ReferenceGeneProduct') || ($entity_type eq 'ReferenceRNASequence') || ($entity_type eq 'ReferenceDNASequence')) {
               $reactome_id_to_entity_name{$reactome_id} = $entity_name;
               unless( exists $entity_name_to_reactome_id{$entity_name}) {
                  $entity_name_to_reactome_id{$entity_name} = ();
@@ -78,7 +78,7 @@ sub get_rectome_ids_to_names_maps {
 }
 
 sub get_genes_in_pi_file {
-    my ($pi_file_path) = @_;
+    my ($class, $pi_file_path) = @_;
 
     open(my $fh_pi, "<", $pi_file_path);
     
@@ -178,7 +178,7 @@ verlaps});
 }
 
 sub get_gistic_gene_states {
-    my ($gistic_file_path, $entity_name_to_reactome_id, $pi_genes) = @_;
+    my ($class, $gistic_file_path, $entity_name_to_reactome_id, $pi_genes) = @_;
 
     #getting information from gistic
     open(my $fh_gistic, "<", $gistic_file_path);
@@ -218,7 +218,7 @@ sub get_gistic_gene_states {
     
     close($fh_gistic);
     
-    return \%sample_gene_states;
+    return (\%sample_gene_states, \@sample_names);
 }
 
 sub get_samples_from_sample_file {
