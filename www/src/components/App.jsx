@@ -158,7 +158,13 @@ export class App extends  React.Component {
           "pairwiseInteractions":pairwiseInteractions,
           // "observedNodes":[],
           "posteriorProbabilities":{}
-        }, self.drawPathway(pairwiseInteractions));
+        }, ()=>{
+          let observationMap = self.state.observationMap;
+          const activeObservationPosn = observationMap.get("Current").get("Active Observation");
+          const observations = observationMap.get("Current").get("Set").observations[activeObservationPosn];
+          const observedStates = new Map(observations.map(node => [node.name, node.state]));
+          graphvis.render(pairwiseInteractions, observedStates);
+        });
       };
       pathway.hasOwnProperty("pairwiseInteractions") ?
         // If uploaded, use the uploaded pairwiseInteractions
@@ -249,13 +255,6 @@ export class App extends  React.Component {
         graphvis.setSingleNodeState({name,state});
       });
     }
-
-    // Initialize Pathway/Observation
-    drawPathway(pairwiseInteractions){
-      console.log("drayPathway");
-      var datasetnodes = graphvis.render(pairwiseInteractions);
-    }
-
     toggleRunType(){
       this.setState({ "runType": (this.state.runType === "Inference") ? "Learning" : "Inference"})
     }

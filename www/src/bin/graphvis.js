@@ -62,16 +62,14 @@ const renderNetwork = (nodes, edges)=>{
       nodes: datasetnodes,
       edges: datasetedges
     }, config.networkOptions);
-    // On stabilization, fit (also possible in config.options)
-    network.on("stabilized", (done)=>{
-      // console.log(done);
-    });
   }
   else {
-
+    datasetnodes = new vis.DataSet(nodes);
+    datasetedges = new vis.DataSet(edges);
+    network.setData({nodes: datasetnodes, edges: datasetedges});
   }
 };
-const drawPairwiseInteractions = (pairwiseInteractions, observedStates=new Map())=>{
+const getNodesEdges = (pairwiseInteractions, observedStates=new Map())=>{
   const edges = pairwiseInteractions.links.map(link=>{
     return {
       from: link.source,
@@ -106,26 +104,27 @@ const drawPairwiseInteractions = (pairwiseInteractions, observedStates=new Map()
 // Initialize graphvis after <App> component mounts
 exports.initialize = (pairwiseInteractions, observedStates) => {
   console.log("graphvis.initialize");
-  const [nodes, edges] = drawPairwiseInteractions(pairwiseInteractions, observedStates);
+  const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
   renderNetwork(nodes, edges);
 };
 
-exports.render = (pairwiseInteractions) => {
+exports.render = (pairwiseInteractions, observedStates) => {
   console.log("graphvis.render");
+  const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
+  renderNetwork(nodes,edges);
 };
 
 exports.setSingleNodeState = (node) => {
-  console.log("setSingleNodeState");
+  // console.log("setSingleNodeState", node);
   const datasetnodesMap = new Map(datasetnodes.get().map(graphNode => [graphNode.id, graphNode]));
   if (datasetnodesMap.has(node.name)) {
+
     const graphNode = datasetnodesMap.get(node.name);
     graphNode.color.border = config.stateColors[node.state];
-    console.log(graphNode);
     datasetnodes.update(graphNode);
   };
 };
 exports.setNodesState = (observedNodes) => {
-  console.log("setNodeState");
   const datasetnodesMap = new Map(datasetnodes.get().map(graphNode => [graphNode.id, graphNode]));
   const updatenodesMap = new Map(observedNodes.map(node => [node.name, node.state]));
   // Nodes in datasetnodes but not observed set to unobserved
