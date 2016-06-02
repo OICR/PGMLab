@@ -1,10 +1,11 @@
-import vis from "../lib/vis-4.14.0/dist/vis.js";
+// import vis from "../lib/vis-4.14.0/dist/vis.js";
+import vis from "vis"; //npm, draws graph slower but with more clustering
 
+// Globals
 var network;
 var datasetnodes;
 var datasetedges;
 
-// config
 const config = {
   // For vis.network
   networkOptions: {
@@ -19,7 +20,7 @@ const config = {
     },
     layout: {
       randomSeed: undefined,
-      improvedLayout:true,
+      improvedLayout: true,
       hierarchical: {
         enabled:true,
         levelSeparation: 175,
@@ -30,17 +31,47 @@ const config = {
         direction: "UD",
         sortMethod: "directed"
       }
+    },
+    physics: {
+      enabled: true,
+      maxVelocity: 50,
+      minVelocity: 1,
+      stabilization: {
+        enabled: true,
+        iterations: 5000,
+        fit: true
+      },
+      timestep: 1,
+      adaptiveTimestep: true
     }
   },
   labelLengthLimit: 15,
   stateColors: { //Materialize colors
-    1: "#D50000", //red accent-4
-    2: "#424242", //grey darken-3
-    3: "#43A047" //green darken-1
+    '-': "#2B7CE9", //default
+    '1': "#D50000", //red accent-4
+    '2': "#424242", //grey darken-3
+    '3': "#43A047" //green darken-1
   }
 }
 
-const  drawPairwiseInteractions = (pairwiseInteractions, observedStates=new Map())=>{
+const renderNetwork = (nodes, edges)=>{
+  if (network===undefined) {
+    datasetnodes = new vis.DataSet(nodes);
+    datasetedges = new vis.DataSet(edges);
+    network = new vis.Network(document.getElementById("canvas"),{
+      nodes: datasetnodes,
+      edges: datasetedges
+    }, config.networkOptions);
+    // On stabilization, fit (also possible in config.options)
+    network.on("stabilized", (done)=>{
+      console.log(done);
+    });
+  }
+  else {
+
+  }
+};
+const drawPairwiseInteractions = (pairwiseInteractions, observedStates=new Map())=>{
   const edges = pairwiseInteractions.links.map(link=>{
     return {
       from: link.source,
@@ -52,15 +83,13 @@ const  drawPairwiseInteractions = (pairwiseInteractions, observedStates=new Map(
     // Set node styling and properties
     const id = node.name;
     const label = (node.longname !== null ? (node.longname.length<config.labelLengthLimit):false) ? node.longname:node.name;
-    const [borderWidth, border, background, highlight, hover] = observedStates.has(id) ?
+    const [border, background, highlight, hover] = observedStates.has(id) ?
       [
-        2,
         config.stateColors[observedStates.get(id)],
         "#D2E5FF",
         {border: "#2B7CE9", background: "#D2E5FF"},
         {border: "#2B7CE9", background: "#D2E5FF"}
       ]:[
-        1,
         "#2B7CE9",
         "#D2E5FF",
         {border: "#2B7CE9", background: "#D2E5FF"},
@@ -79,48 +108,39 @@ const  drawPairwiseInteractions = (pairwiseInteractions, observedStates=new Map(
   });
   return [nodes, edges];
 };
-const renderNetwork = (nodes, edges)=>{
-  if (network===undefined) {
-    datasetnodes = new vis.DataSet(nodes);
-    datasetedges = new vis.DataSet(edges);
-    network = new vis.Network(document.getElementById("canvas"),{
-      nodes: datasetnodes,
-      edges: datasetedges
-    }, config.networkOptions);
-  }
-  else {
-
-  }
-};
 
 // Initialize graphvis after <App> component mounts
-function initialize(pairwiseInteractions, observedStates){
+exports.initialize = (pairwiseInteractions, observedStates) => {
   console.log("graphvis.initialize");
   const [nodes, edges] = drawPairwiseInteractions(pairwiseInteractions, observedStates);
   renderNetwork(nodes, edges);
-}
-exports.initialize = initialize;
+};
 
-function render(pairwiseInteractions) {
+exports.render = (pairwiseInteractions) => {
   console.log("graphvis.render");
-}
-exports.render = render;
+};
 
-function setNodeState(node) {
+exports.setNodeState = (node) => {
   console.log("setNodeState");
-  const stateColor={
-    1:"red",
-    2:"grey",
-    3:"green"
-  };
-  // ["", "red", "grey", "green"];
   datasetnodes.update({
     id: node.name,
-    color: {border: stateColor[node.state]},
-    borderWidth: 3
+    color: {
+      border: config.stateColors[node.state],
+      background: "#D2E5FF",
+      highlight: {border: "#2B7CE9", background: "#D2E5FF"},
+      hover: {border: "#2B7CE9", background: "#D2E5FF"}
+    }
   });
-}
-exports.setNodeState = setNodeState;
+};
+// function setNodeState(node) {
+//   console.log("setNodeState");
+//   datasetnodes.update({
+//     id: node.name,
+//     color: {border: stateColor[node.state]},
+//     borderWidth: 3
+//   });
+// }
+// exports.setNodeState = setNodeState;
 
 function addPosteriorProbabilities(posteriorProbabilities) {
     for (let ppid in posteriorProbabilities) {
@@ -168,20 +188,11 @@ function addPosteriorProbabilities(posteriorProbabilities) {
 }
 exports.addPosteriorProbabilities = addPosteriorProbabilities;
 
-exports.focusNodes = function focusNodes(nodeIDs) {
-  // const nodeID = node.name;
-  // const focused = network.getSelectedNodes();
-  // network.selectNodes(
-  //   focused.includes(nodeID) ?
-  //     focused.filter(id => id!==nodeID):
-  //     focused.concat(nodeID), true);
-  console.log(nodeIDs);
-  network.selectNodes(nodeIDs, true);
-}
-exports.unfocusAll = ()=>{
-  network.unselectAll();
-}
-exports.isFocused = (node)=>{
-  const nodeID = node.name;
-  return network !== undefined ? network.getSelectedNodes().includes(nodeID) : false;
-}
+
+
+exports.focusNodes = (nodeIDs) => {network.selectNodes(nodeIDs, true);};
+exports.unfocusAll = () => {network.unselectAll();};
+exports.isFocused = (node) => {
+  //Check if node is in network by its ID (node.name)
+  return network !== undefined ? network.getSelectedNodes().includes(node.name) : false;
+};
