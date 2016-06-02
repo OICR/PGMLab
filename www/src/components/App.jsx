@@ -156,7 +156,6 @@ export class App extends  React.Component {
         self.setState({
           pathwayMap,
           "pairwiseInteractions":pairwiseInteractions,
-          // "observedNodes":[],
           "posteriorProbabilities":{}
         }, ()=>{
           let observationMap = self.state.observationMap;
@@ -166,9 +165,11 @@ export class App extends  React.Component {
           graphvis.render(pairwiseInteractions, observedStates);
         });
       };
-      pathway.hasOwnProperty("pairwiseInteractions") ?
+      if (pathway.hasOwnProperty("pairwiseInteractions")) {
         // If uploaded, use the uploaded pairwiseInteractions
-        update(pathway, pathway.pairwiseInteractions) :
+        update(pathway, pathway.pairwiseInteractions);
+      }
+      else {
         // Else get from server
         self.props.getReactomePathway(pathway)
           .then(
@@ -178,6 +179,7 @@ export class App extends  React.Component {
             },
             err=>{console.log("Couldn't Get Pathway", pathway.id, err)}
           );
+      };
     }
 
     // For SelectObservations modal component
@@ -256,27 +258,23 @@ export class App extends  React.Component {
       });
     }
     toggleRunType(){
-      this.setState({ "runType": (this.state.runType === "Inference") ? "Learning" : "Inference"})
+      this.setState({
+        "runType": (this.state.runType==="Inference") ? "Learning":"Inference"
+      });
     }
     runInference(){
-      // console.log("runInference", this.state.observedNodes);
-      var self = this;
-      let observations = this.state.selectedObservationSet.observations[this.state.selectedObservations.get("Active")];
-      // console.log(observations);
-      // observations = observations.map(node => {node.name:node.state});
-      // console.log(observations);
-      connection.session
-        // .call('pgmlab.inference.run', [this.state.pairwiseInteractions.links, this.state.observedNodes, []])
-        .call("pgmlab.inference.run", [this.state.pairwiseInteractions.links, observations,[]])
+      const observationMap = this.state.observationMap;
+      const activeObservationPosn = observationMap.get("Current").get("Active Observation");
+      const observation = observationMap.get("Current").get("Set").observations[activeObservationPosn];
+      const links = this.state.pairwiseInteractions.links;
+      // CHANGE BACKEND TO SEND IN WHOLE SET
+      this.props.PGMLabInference(links, observation)
         .then(
-          function(response) {
-            // console.log("response:", response);
-            self.setState({"posteriorProbabilities": response["posteriorProbabilities"]})
-            graphvis.addPosteriorProbabilities(self.state.posteriorProbabilities);
-          },
-          function (err) {
-            console.log("Error running inference:", err);
-          }
+          response =>
+            this.setState({"posteriorProbabilities": response["posteriorProbabilities"]},
+              () => graphvis.addPosteriorProbabilities(this.state.posteriorProbabilities)
+            ),
+          err => console.log("Error running inference:", err)
         );
     }
 
@@ -295,17 +293,12 @@ export class App extends  React.Component {
     }
     addNewPathway(name, pairwiseInteractions){
       console.log("addNewPathway");
-      // var pathways = this.state.pathways
       const guid = App.guid()
       const pathway = { "id"                   : guid,
                       "name"                 : name,
                       "pairwiseInteractions" : pairwiseInteractions }
-      // pathways.push(pathway)
-
       let pathwayMap = this.state.pathwayMap;
       pathwayMap.get("All").set(guid, pathway)
-      //
-      // graphvis.render(pairwiseInteractions)
       const uploadSummary = { "datetime": App.getCurrentDateTime(),
                             "id"      : guid,
                             "filetype": "Pathway",

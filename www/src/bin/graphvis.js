@@ -54,21 +54,9 @@ const config = {
   }
 }
 
-const renderNetwork = (nodes, edges)=>{
-  if (network===undefined) {
-    datasetnodes = new vis.DataSet(nodes);
-    datasetedges = new vis.DataSet(edges);
-    network = new vis.Network(document.getElementById("canvas"),{
-      nodes: datasetnodes,
-      edges: datasetedges
-    }, config.networkOptions);
-  }
-  else {
-    datasetnodes = new vis.DataSet(nodes);
-    datasetedges = new vis.DataSet(edges);
-    network.setData({nodes: datasetnodes, edges: datasetedges});
-  }
-};
+
+// Converts pairwiseInteractions to nodes and edges for graphvis
+//  Styles nodes according to if they are observed or not
 const getNodesEdges = (pairwiseInteractions, observedStates=new Map())=>{
   const edges = pairwiseInteractions.links.map(link=>{
     return {
@@ -101,26 +89,31 @@ const getNodesEdges = (pairwiseInteractions, observedStates=new Map())=>{
   return [nodes, edges];
 };
 
-// Initialize graphvis after <App> component mounts
+// Initialize graphvis after <App> component mounts, called once
 exports.initialize = (pairwiseInteractions, observedStates) => {
   console.log("graphvis.initialize");
   const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
-  renderNetwork(nodes, edges);
+  datasetnodes = new vis.DataSet(nodes);
+  datasetedges = new vis.DataSet(edges);
+  network = new vis.Network(document.getElementById("canvas"),{
+    nodes: datasetnodes,
+    edges: datasetedges
+  }, config.networkOptions);
 };
-
+// For setting new activePathway
 exports.render = (pairwiseInteractions, observedStates) => {
   console.log("graphvis.render");
   const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
-  renderNetwork(nodes,edges);
+  datasetnodes = new vis.DataSet(nodes);
+  datasetedges = new vis.DataSet(edges);
+  network.setData({nodes: datasetnodes, edges: datasetedges});
 };
 
-exports.setSingleNodeState = (node) => {
-  // console.log("setSingleNodeState", node);
+exports.setSingleNodeState = (observedNode) => {
   const datasetnodesMap = new Map(datasetnodes.get().map(graphNode => [graphNode.id, graphNode]));
-  if (datasetnodesMap.has(node.name)) {
-
-    const graphNode = datasetnodesMap.get(node.name);
-    graphNode.color.border = config.stateColors[node.state];
+  if (datasetnodesMap.has(observedNode.name)) {
+    const graphNode = datasetnodesMap.get(observedNode.name);
+    graphNode.color.border = config.stateColors[observedNode.state];
     datasetnodes.update(graphNode);
   };
 };
@@ -145,53 +138,51 @@ exports.setNodesState = (observedNodes) => {
   datasetnodes.update([...unchanged, ...toChange]);
 };
 
-function addPosteriorProbabilities(posteriorProbabilities) {
-    for (let ppid in posteriorProbabilities) {
-      // console.log(ppid);
-        const stateProbs = posteriorProbabilities[ppid];
+exports.addPosteriorProbabilities = (posteriorProbabilities) => {
+  console.log("posterior", posteriorProbabilities);
+  for (let ppid in posteriorProbabilities) {
+    // console.log(ppid);
+      const stateProbs = posteriorProbabilities[ppid];
 
-        // why is it not rgb?
-        let [r, b, g] = stateProbs.map(probability=>Math.ceil(probability*255));
-        let dominantState;
-        // This makes it so that we just pick to dominant state and have the color based on that state. Where state 1 is grey (all colors equal)
-        if ((r > g) &&(r > b)) {
-             g = 0;
-             b = 0;
-             dominantState = 1;
-        }
-        else if ((g> r) && (g> b)) {
-             r = 0;
-             b = 0;
-             dominantState = 3;
-        }
-        else {
-             b = 255 - b;
-             g = b;
-             r =  b;
-             dominantState = 2;
-        };
+      // why is it not rgb?
+      let [r, b, g] = stateProbs.map(probability=>Math.ceil(probability*255));
+      let dominantState;
+      // This makes it so that we just pick to dominant state and have the color based on that state. Where state 1 is grey (all colors equal)
+      if ((r > g) &&(r > b)) {
+           g = 0;
+           b = 0;
+           dominantState = 1;
+      }
+      else if ((g> r) && (g> b)) {
+           r = 0;
+           b = 0;
+           dominantState = 3;
+      }
+      else {
+           b = 255 - b;
+           g = b;
+           r =  b;
+           dominantState = 2;
+      };
 
-        let node = datasetnodes.get(ppid);
-        let title = node["title"].split("<br>Probabilities:<br>")[0];
-        title += "<br>Probabilities:<br>" +
-                 "Dominant State: " + dominantState + "<br>" +
-                 "State 1 (down regulated): " + stateProbs[0] + "<br>" +
-                 "State 2 (no change):      " + stateProbs[1] + "<br>" +
-                 "State 3 (up regulated):   " + stateProbs[2] + "<br>" +
-                 " r " + r + " g "+ g + " b " + g;
+      let node = datasetnodes.get(ppid);
+      let title = node["title"].split("<br>Probabilities:<br>")[0];
+      title += "<br>Probabilities:<br>" +
+               "Dominant State: " + dominantState + "<br>" +
+               "State 1 (down regulated): " + stateProbs[0] + "<br>" +
+               "State 2 (no change):      " + stateProbs[1] + "<br>" +
+               "State 3 (up regulated):   " + stateProbs[2] + "<br>" +
+               " r " + r + " g "+ g + " b " + g;
 
-        const bgColor =  "rgba(" + r + "," + g + "," + b + ",.5)";
+      const bgColor =  "rgba(" + r + "," + g + "," + b + ",.5)";
 
-        datasetnodes.update({
-          id: ppid,
-          color: {background: bgColor},
-          title: title
-        });
-    }
-}
-exports.addPosteriorProbabilities = addPosteriorProbabilities;
-
-
+      datasetnodes.update({
+        id: ppid,
+        color: {background: bgColor},
+        title: title
+      });
+  }
+};
 
 exports.focusNodes = (nodeIDs) => {network.selectNodes(nodeIDs, true);};
 exports.unfocusAll = () => {network.unselectAll();};
