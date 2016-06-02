@@ -111,7 +111,7 @@ export class App extends  React.Component {
             ()=>{
               const observation = observationMap.get("Current").get("Set").observations[observationMap.get("Current").get("Active Observation")];
               const observedStates = new Map(observation.map(node=>[node.name, node.state]));
-              graphvis.initialize(observedStates, pairwiseInteractions);
+              graphvis.initialize(pairwiseInteractions, observedStates);
             }
           );
         },

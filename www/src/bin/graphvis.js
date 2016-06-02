@@ -4,17 +4,43 @@ var network;
 var datasetnodes;
 var datasetedges;
 
-// Initialize graphvis after <App> component mounts
-function initialize(observedStates, pairwiseInteractions){
-  console.log("graphvis.initialize", observedStates, pairwiseInteractions);
-  const stateColor={
-    // 1:"red",
-    1:"FF0000",
-    // 2:"grey",
-    2:"808080",
-    // 3:"green"
-    3:"008000"
-  };
+// config
+const config = {
+  // For vis.network
+  networkOptions: {
+    height: "575px",
+    width: "100%",
+    clickToUse: true,
+    interaction: {
+      hideEdgesOnDrag: true,
+      keyboard: false,
+      navigationButtons: true,
+      tooltipDelay: 50
+    },
+    layout: {
+      randomSeed: undefined,
+      improvedLayout:true,
+      hierarchical: {
+        enabled:true,
+        levelSeparation: 175,
+        nodeSpacing: 125,
+        treeSpacing: 225,
+        blockShifting: true,
+        edgeMinimization: true,
+        direction: "UD",
+        sortMethod: "directed"
+      }
+    }
+  },
+  labelLengthLimit: 15,
+  stateColors: { //Materialize colors
+    1: "#D50000", //red accent-4
+    2: "#424242", //grey darken-3
+    3: "#43A047" //green darken-1
+  }
+}
+
+const  drawPairwiseInteractions = (pairwiseInteractions, observedStates=new Map())=>{
   const edges = pairwiseInteractions.links.map(link=>{
     return {
       from: link.source,
@@ -22,118 +48,61 @@ function initialize(observedStates, pairwiseInteractions){
       arrows: "to"
     };
   });
-  const lengthLimit = 15;
   const nodes = pairwiseInteractions.nodes.map(node=>{
+    // Set node styling and properties
     const id = node.name;
-    const label = (node.longname !== null ? node.longname.length < lengthLimit : false)  ? node.longname : node.name;
-    const border = observedStates.has(id) ? stateColor[observedStates.get(id)] : "#000000";
+    const label = (node.longname !== null ? (node.longname.length<config.labelLengthLimit):false) ? node.longname:node.name;
+    const [borderWidth, border, background, highlight, hover] = observedStates.has(id) ?
+      [
+        2,
+        config.stateColors[observedStates.get(id)],
+        "#D2E5FF",
+        {border: "#2B7CE9", background: "#D2E5FF"},
+        {border: "#2B7CE9", background: "#D2E5FF"}
+      ]:[
+        1,
+        "#2B7CE9",
+        "#D2E5FF",
+        {border: "#2B7CE9", background: "#D2E5FF"},
+        {border: "#2B7CE9", background: "#D2E5FF"}
+      ]
+    const color = {border,background,highlight,hover};
     return {
       id, label,
-      color: { background: "#FFFFFF", border},
-      title: `ID: ${id}<br>Name: ${label}<br>Reactome Class: ${node.type !== null ? node.type : "unknown"}`,
-      shape: "dot",
-      scaling: {label: {enabled: false}}
+      color,
+      title: `
+        ID: ${id}<br>
+        Name: ${label}<br>
+        Reactome Class: ${node.type!==null ? node.type:"unknown"}`,
+      shape: "dot"
     };
   });
-  const container = document.getElementById("chart");
-  const options = {
-    height: "100%",
-    width: "100%",
-    interaction: {
-      navigationButtons: true,
-      keyboard: false,
-      tooltipDelay: 50,
-      hideEdgesOnDrag: true,
-      selectable: false
-    },
-    layout: {
-      randomSeed: undefined,
-      improvedLayout:true,
-      hierarchical: {
-        enabled:true,
-        levelSeparation: 150,
-        nodeSpacing: 100,
-        treeSpacing: 200,
-        blockShifting: true,
-        edgeMinimization: true,
-        direction: "UD",        // UD, DU, LR, RL
-        sortMethod: "directed"   // hubsize, directed
-      }
-    }
-  };
-  datasetedges = new vis.DataSet(edges);
-  datasetnodes = new vis.DataSet(nodes);
-  const data = {
+  return [nodes, edges];
+};
+const renderNetwork = (nodes, edges)=>{
+  if (network===undefined) {
+    datasetnodes = new vis.DataSet(nodes);
+    datasetedges = new vis.DataSet(edges);
+    network = new vis.Network(document.getElementById("canvas"),{
       nodes: datasetnodes,
       edges: datasetedges
-  };
-  network = new vis.Network(container,data,options);
+    }, config.networkOptions);
+  }
+  else {
 
+  }
+};
 
+// Initialize graphvis after <App> component mounts
+function initialize(pairwiseInteractions, observedStates){
+  console.log("graphvis.initialize");
+  const [nodes, edges] = drawPairwiseInteractions(pairwiseInteractions, observedStates);
+  renderNetwork(nodes, edges);
 }
 exports.initialize = initialize;
 
 function render(pairwiseInteractions) {
   console.log("graphvis.render");
-  const edges = pairwiseInteractions.links.map(link=>{
-    return {
-      from: link.source,
-      to: link.target,
-      arrows: "to"
-    };
-  });
-
-  const lengthLimit = 15;
-  const nodes = pairwiseInteractions.nodes.map(node=>{
-    return {
-      id: node.name,
-      label: (node.longname !== null ? node.longname.length < lengthLimit : false)  ? node.longname : node.name,
-      color: { background: "#FFFFFF", border: "#000000" },
-      title: `ID: ${id}<br>Name: ${label}<br>Reactome Class: ${node.type !== null ? node.type : "unknown"}`,
-      shape: "dot",
-      scaling: {label: {enabled: false}}
-    };
-  });
-
-  const container = document.getElementById("chart");
-  datasetedges = new vis.DataSet(edges);
-  datasetnodes = new vis.DataSet(nodes);
-
-  const data = {
-      nodes: datasetnodes,
-      edges: datasetedges
-  };
-
-  const options = {
-    height: "100%",
-    width: "100%",
-    interaction: {
-      navigationButtons: true,
-      keyboard: false,
-      tooltipDelay: 50,
-      hideEdgesOnDrag: true,
-      selectable: false
-    },
-    layout: {
-      randomSeed: undefined,
-      improvedLayout:true,
-      hierarchical: {
-        enabled:true,
-        levelSeparation: 150,
-        nodeSpacing: 100,
-        treeSpacing: 200,
-        blockShifting: true,
-        edgeMinimization: true,
-        direction: "UD",        // UD, DU, LR, RL
-        sortMethod: "directed"   // hubsize, directed
-      }
-    }
-  };
-
-  switch (network === undefined) {
-    case true: network = new vis.Network(container,data,options); break;
-    case false: network.setData(data); break;
-  };
 }
 exports.render = render;
 

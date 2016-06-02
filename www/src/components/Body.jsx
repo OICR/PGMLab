@@ -15,14 +15,15 @@ export class Body extends React.Component {
     }
     render(){
       console.log("<Body> render()");
+      const canvasSize = {minWidth:"800px", minHeight:"600px"};
       return (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="row">
           <div className="col s4" style={{minWidth:"300px"}}>
             <ControlPanel {...this.props}/>
           </div>
-          <div className="col s8" style={{minWidth:"800px"}}>
-            <DisplayPanel />
+          <div className="col s8" style={canvasSize}>
+            <div id="canvas"></div>
           </div>
         </main>
         </MuiThemeProvider>
