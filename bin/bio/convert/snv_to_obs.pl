@@ -9,17 +9,18 @@ use feature qw(say);
 use FindBin qw($Bin);
 use lib "$Bin/../../../lib/perl";
 
-use PGMLab;
-use PGMLab::Bio;
+use PGMLab qw(create_obs_file);
+use PGMLab::Bio qw(get_reactome_ids_to_names_maps get_genes_in_pi_file get_samples_from_sample_file get_snv_sample_gene_state);
 
 use Getopt::Euclid qw( :minimal_keys );
+use Data::Dumper;
 
-my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = PGMLab::Bio->get_rectome_ids_to_names_maps($ARGV{'db-id-to-name-mapping'});
+my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($ARGV{'db_id_to_name_mapping'});
 
-my $pi_genes = PGMLab::Bio->get_genes_in_pi_file($ARGV{'pi'});
+my $pi_genes = get_genes_in_pi_file($ARGV{'pi'});
 
-my $sample_list = PGMLab::Bio->get_samples_from_sample_file($ARGV{'sample-list'});
+my $sample_list = get_samples_from_sample_file($ARGV{'sample_list'});
 
-my ($observed_genes, $sample_gene_states) = PGMLab::Bio->get_snv_sample_gene_state($ARGV{'snv'}, $pi_genes, $entity_name_to_reactome_id);
+my ($observed_genes, $sample_gene_states) = get_snv_sample_gene_state($ARGV{'snv'}, $pi_genes, $entity_name_to_reactome_id);
 
-PGMLab->create_obs_file($ARGV{'obs'}, $sample_gene_states, $sample_list);
+create_obs_file($ARGV{'observation_file'}, $sample_gene_states, $sample_list);
