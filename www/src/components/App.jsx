@@ -62,7 +62,6 @@ export class App extends  React.Component {
 
       this.toggleRunType                  = this.toggleRunType.bind(this);
       this.runInference                   = this.runInference.bind(this);
-
       this.uploadListAddFailure           = this.uploadListAddFailure.bind(this);
       this.addNewPathway                  = this.addNewPathway.bind(this);
       this.addNewObservationSet           = this.addNewObservationSet.bind(this);
@@ -407,6 +406,7 @@ export class App extends  React.Component {
                 runType = {this.state.runType}
                 toggleRunType = {this.toggleRunType}
                 runInference                    = {this.runInference}
+                posteriorProbabilities = {this.state.posteriorProbabilities}
 
                 uploadList                      = {this.state.uploadList}
                 uploadListAddFailure            = {this.uploadListAddFailure}

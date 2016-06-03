@@ -5,6 +5,7 @@ import {DataSelection} from "./DataSelection.jsx";
 import {ObservationsControl} from "./ObservationsControl.jsx";
 import {PathwaysControl} from "./PathwaysControl.jsx";
 import {ResultsControl} from "./ResultsControl.jsx";
+import {PosteriorProbabilitiesControl} from "./PosteriorProbabilitiesControl.jsx";
 
 export class ControlPanel extends React.Component {
   constructor(props){
@@ -58,7 +59,10 @@ export class ControlPanel extends React.Component {
 
       <div className="divider"></div><div className="divider"></div>
       <ResultsControl   runType={this.props.runType}
-                        runInference={this.props.runInference} />
+                        runInference={this.props.runInference}/>
+      <div className="divider"></div><div className="divider"></div>
+      <PosteriorProbabilitiesControl
+          posteriorProbabilities={this.props.posteriorProbabilities} />
     </div>
     )
   }
