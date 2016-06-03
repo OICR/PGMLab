@@ -6,29 +6,21 @@ import {ObservationsControl} from "./ObservationsControl.jsx";
 import {PathwaysControl} from "./PathwaysControl.jsx";
 import {ResultsControl} from "./ResultsControl.jsx";
 
-var classNames = require("classnames");
-
 export class ControlPanel extends React.Component {
   constructor(props){
     super(props);
     this.handleRunType = this.handleRunType.bind(this);
   }
   handleRunType(type){
-    // Only toggle if clicking a different run type
-    if (type !== this.props.toggle) {
+    if (type !== this.props.runType) {
       this.props.toggleRunType();
     };
   }
   render(){
-    // console.log("CP", this.props)
-    const inferenceBtnClass = classNames({
-      'light-blue':this.props.toggle==="Inference",
-      'grey':this.props.toggle!=="Inference"
-    }, ['col s6 btn waves-effect light-blue lighten-1 white-text']);
-    const learningBtnClass = classNames({
-      'light-blue':this.props.toggle==="Learning",
-      'grey':this.props.toggle!=="Learning"
-    }, ['col s6 btn waves-effect light-blue lighten-1 white-text']);
+    console.log("<ControlPanel> render()");
+    const btnClass = "col s6 btn waves-effect lighten-1 white-text";
+    const inferenceBtnClass = `${btnClass} ${this.props.runType==="Inference" ? "light-blue" : "grey"}`;
+    const learningBtnClass = `${btnClass} ${this.props.runType==="Learning" ? "light-blue" : "grey"}`;
     return (
     <div>
       <div className="row">
@@ -37,39 +29,36 @@ export class ControlPanel extends React.Component {
           <a className={learningBtnClass} onClick={()=>{this.handleRunType("Learning")}}>Learning</a>
         </div>
         <div className="col s3 center-align">
-          <UploadModal addNewPathway                  = {this.props.addNewPathway}
-                       addNewObservationSet           = {this.props.addNewObservationSet}
-                       addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
-                       addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet}
-                       uploadList                     = {this.props.uploadList}
-                       uploadListAddFailure           = {this.props.uploadListAddFailure} />
-
+          <UploadModal  uploadList                     = {this.props.uploadList}
+                        uploadListAddFailure           = {this.props.uploadListAddFailure}
+                        addNewPathway                  = {this.props.addNewPathway}
+                        addNewObservationSet           = {this.props.addNewObservationSet}
+                        addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
+                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
         </div>
       </div>
-        <div className="divider"></div><div className="divider"></div>
-        <DataSelection
+      <div className="divider"></div><div className="divider"></div>
+      <DataSelection  observationMap = {this.props.observationMap}
+                      selectObservationSet = {this.props.selectObservationSet}
+                      selectObservations = {this.props.selectObservations}
+                      removeSelectedObservations = {this.props.removeSelectedObservations}
+                      pathwayMap = {this.props.pathwayMap}
+                      selectPathways = {this.props.selectPathways}
+                      removeSelectedPathways = {this.props.removeSelectedPathways} />
+      <div className="divider"></div><div className="divider"></div>
+      <ObservationsControl  pairwiseInteractions={this.props.pairwiseInteractions}
+                            observationMap = {this.props.observationMap}
+                            setActiveObservation = {this.props.setActiveObservation}
+                            setNodeItemState = {this.props.setNodeItemState} />
+      <PathwaysControl  pairwiseInteractions={this.props.pairwiseInteractions}
                         observationMap = {this.props.observationMap}
                         pathwayMap = {this.props.pathwayMap}
-                        selectPathways = {this.props.selectPathways}
-                        removeSelectedPathways = {this.props.removeSelectedPathways}
-                        selectObservationSet = {this.props.selectObservationSet}
-                        selectObservations = {this.props.selectObservations}
-                        removeSelectedObservations = {this.props.removeSelectedObservations} />
-        <div className="divider"></div><div className="divider"></div>
-        <ObservationsControl  observationMap = {this.props.observationMap}
-                              pairwiseInteractions={this.props.pairwiseInteractions}
-                              setNodeItemState = {this.props.setNodeItemState}
-                              setActiveObservation = {this.props.setActiveObservation} />
-        <PathwaysControl  observationMap = {this.props.observationMap}
-                          pathwayMap = {this.props.pathwayMap}
+                        setActivePathway = {this.props.setActivePathway}
+                        setNodeItemState = {this.props.setNodeItemState} />
 
-                          setNodeItemState = {this.props.setNodeItemState}
-                          pairwiseInteractions={this.props.pairwiseInteractions}
-                          setActivePathway = {this.props.setActivePathway} />
-
-        <div className="divider"></div><div className="divider"></div>
-        <ResultsControl runInference={this.props.runInference}
-                        toggle={this.props.toggle}/>
+      <div className="divider"></div><div className="divider"></div>
+      <ResultsControl   runType={this.props.runType}
+                        runInference={this.props.runInference} />
     </div>
     )
   }
