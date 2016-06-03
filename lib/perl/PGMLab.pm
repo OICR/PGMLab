@@ -5,10 +5,13 @@ use warnings;
 
 use autodie;
 use feature qw(say);
-use Data::Dumper;
+
+use base "Exporter";
+use vars qw(@EXPORT_OK);
+@EXPORT_OK = qw(create_obs_file);
 
 sub create_obs_file {
-    my ($class, $obs_filepath, $sample_gene_states, $sample_list) = @_;
+    my ($obs_filepath, $sample_gene_states, $sample_list) = @_;
 
     $sample_list //= [keys %{$sample_gene_states}];
 

@@ -2,12 +2,18 @@ package PGMLab::Bio;
 
 use strict;
 use warnings;
+use feature qw(say);
 
 use autodie;
 
+use base "Exporter";
+use vars qw(@EXPORT_OK);
+@EXPORT_OK = qw(get_donor_ploidy get_reactome_ids_to_names_maps get_genes_in_pi_file get_sample_list get_copy_number_gene_states get_gistic_gene_states);
+
 sub get_donor_ploidy {
-    my($ploidy_filepath) = @_; 
+    my ($ploidy_filepath) = @_; 
     
+    print $ploidy_filepath;
     open(my $fh_ploidy, "<", $ploidy_filepath);
 
     my $ploidy_header = <$fh_ploidy>;
@@ -52,8 +58,8 @@ sub get_sample_list {
 
 
 
-sub get_rectome_ids_to_names_maps {
-    my ($class, $db_id_to_name_mapping) = @_;
+sub get_reactome_ids_to_names_maps {
+    my ($db_id_to_name_mapping) = @_;
 
     open(my $fh_db_id, "<", $db_id_to_name_mapping);
     
@@ -78,7 +84,7 @@ sub get_rectome_ids_to_names_maps {
 }
 
 sub get_genes_in_pi_file {
-    my ($class, $pi_file_path) = @_;
+    my ($pi_file_path) = @_;
 
     open(my $fh_pi, "<", $pi_file_path);
     
@@ -137,7 +143,6 @@ sub get_copy_number_gene_states {
             $column_map{$column_name} = $column_index;
             $column_index++;
         }
-
         my ($copy_number, $coding_full, $partial_genes, $overlaps);
         while (my $line = <$fh_sample_file>) {
             chomp $line;
@@ -147,8 +152,7 @@ sub get_copy_number_gene_states {
             $copy_number = $line_data[$column_map{CN}];
 
             my (@genes, $gene_list, $gene_list_str);
-            my @genes_indicies = ($column_map{Coding_full}, $column_map{Coding_partial}, $column_map{CDS_o
-verlaps});
+            my @genes_indicies = ($column_map{Coding_full}, $column_map{Coding_partial}, $column_map{CDS_overlaps});
             foreach my $genes_index (@genes_indicies) {
                 $gene_list_str = $line_data[$genes_index];
                 if($gene_list_str) {
@@ -157,14 +161,13 @@ verlaps});
                     foreach my $gene (@genes) {
                         if (exists $entity_name_to_reactome_id->{$gene})  {
                             foreach my $reactome_id (@{$entity_name_to_reactome_id->{$gene}}) {
-                                my $cn = $entity_name_to_reactome_id->{$gene}{$reactome_id};
                                 if (exists $pi_genes->{$reactome_id}) {
-                                    $sample_gene_state{$sample_name}{$reactome_id} = ($cn == 0)? 0 :
-                                        (($cn == 1) || (($cn == 3) && ($donor_ploidy->{$sample_name} == 4)))? 1:
-                                        ($cn == 2)? 2:
-                                        ($cn == 3 && (($donor_ploidy->{$sample_name} == 1) || ($donor_ploidy->{$sample_name} == 2) ||( $donor_ploidy->{$sample_name} == 3 )))? 3:
-                                        ($cn == 4)? 4:
-                                        ($cn == 5)? 5: 6;
+                                    $sample_gene_state{$sample_name}{$reactome_id} = ($copy_number == 0)? 0 :
+                                        (($copy_number == 1) || (($copy_number == 3) && ($donor_ploidy->{$sample_name} == 4)))? 1:
+                                        ($copy_number == 2)? 2:
+                                        ($copy_number == 3 && (($donor_ploidy->{$sample_name} == 1) || ($donor_ploidy->{$sample_name} == 2) ||( $donor_ploidy->{$sample_name} == 3 )))? 3:
+                                        ($copy_number == 4)? 4:
+                                        ($copy_number == 5)? 5: 6;
                                 }
                             }
                         }
@@ -178,7 +181,7 @@ verlaps});
 }
 
 sub get_gistic_gene_states {
-    my ($class, $gistic_file_path, $entity_name_to_reactome_id, $pi_genes) = @_;
+    my ($gistic_file_path, $entity_name_to_reactome_id, $pi_genes) = @_;
 
     #getting information from gistic
     open(my $fh_gistic, "<", $gistic_file_path);
