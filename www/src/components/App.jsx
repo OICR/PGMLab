@@ -101,8 +101,6 @@ export class App extends  React.Component {
         ["Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]])],
         ["Active", {id:"397795",name:"G-protein beta:gamma signalling"}]
       ]);
-
-
       this.props.getReactomePathway(pathwayMap.get("Active")).then(
         pairwiseInteractions => {
           this.setState(
@@ -268,12 +266,17 @@ export class App extends  React.Component {
       const observation = observationMap.get("Current").get("Set").observations[activeObservationPosn];
       const links = this.state.pairwiseInteractions.links;
       // CHANGE BACKEND TO SEND IN WHOLE SET
-      this.props.PGMLabInference(links, observation)
+      const observationSet = observationMap.get("Current").get("Set");
+      console.log("Set:", observationSet);
+      console.log("ActiveObservation:", observation);
+      this.props.PGMLabInference(links, observation, observationSet)
         .then(
-          response =>
-            this.setState({"posteriorProbabilities": response["posteriorProbabilities"]},
-              () => graphvis.addPosteriorProbabilities(this.state.posteriorProbabilities)
-            ),
+          response => {
+            console.log("response:", response);
+          },
+            // this.setState({"posteriorProbabilities": response["posteriorProbabilities"]},
+            //   () => graphvis.addPosteriorProbabilities(this.state.posteriorProbabilities)
+            // ),
           err => console.log("Error running inference:", err)
         );
     }

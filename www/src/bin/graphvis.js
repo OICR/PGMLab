@@ -157,7 +157,7 @@ exports.applyPosteriorProbabilities = (posteriorProbabilities) => {
 };
 
 exports.addPosteriorProbabilities = (posteriorProbabilities) => {
-  console.log("posterior", posteriorProbabilities);
+  // console.log("posterior", posteriorProbabilities);
   for (let ppid in posteriorProbabilities) {
     // console.log(ppid);
       const stateProbs = posteriorProbabilities[ppid];
