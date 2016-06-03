@@ -39,7 +39,7 @@ function getReactomePathway(pathway) {
 };
 function PGMLabInference(links, observationSet) {
   // RUN INFERENCE OVER ALL OBSERVATIONS IN OBSERVATIONSET
-  const options = [];
+  const options = {info: false}; //Don't give extra info
   return connection.session.call("pgmlab.inference.run", [links, observationSet, options]);
 }
 

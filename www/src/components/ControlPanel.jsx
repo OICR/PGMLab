@@ -62,7 +62,8 @@ export class ControlPanel extends React.Component {
                         runInference={this.props.runInference}/>
       <div className="divider"></div><div className="divider"></div>
       <PosteriorProbabilitiesControl
-          posteriorProbabilities={this.props.posteriorProbabilities} />
+          posteriorProbabilities={this.props.posteriorProbabilities}
+          setActivePosteriorProbability={this.props.setActivePosteriorProbability} />
     </div>
     )
   }

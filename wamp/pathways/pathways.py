@@ -177,7 +177,17 @@ class AppSession(ApplicationSession):
             inferenceCommand(runPath)
             posteriorProbabilitiesSet = readPosteriorProbabilityFile(runPath)
             # shutil.rmtree(runPath)
-            return {"runID":runID, "posteriorProbabilitiesSet":posteriorProbabilitiesSet}
+            if options["info"]:
+                return {
+                    "runID":runID,
+                    "posteriorProbabilitiesSet":posteriorProbabilitiesSet,
+                    "observationSet":observationSet
+                }
+            else:
+                return {
+                    "runID":runID,
+                    "posteriorProbabilitiesSet":posteriorProbabilitiesSet,
+                }
 
         yield self.register(runInference, 'pgmlab.inference.run')
         self.log.info("subscribed to topic 'pgmlab.inference.run'")

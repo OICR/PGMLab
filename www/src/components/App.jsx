@@ -33,7 +33,7 @@ export class App extends  React.Component {
         ["Active", {id: null, name: null}]
       ]);
       const posteriorProbabilities = new Map([
-        ["Results", new Map()],
+        ["All", new Map()],
         ["Active", {id: null, index: null}] //id
       ]);
       // Set initial state
@@ -62,6 +62,9 @@ export class App extends  React.Component {
 
       this.toggleRunType                  = this.toggleRunType.bind(this);
       this.runInference                   = this.runInference.bind(this);
+
+      this.setActivePosteriorProbability  = this.setActivePosteriorProbability.bind(this);
+
       this.uploadListAddFailure           = this.uploadListAddFailure.bind(this);
       this.addNewPathway                  = this.addNewPathway.bind(this);
       this.addNewObservationSet           = this.addNewObservationSet.bind(this);
@@ -76,7 +79,7 @@ export class App extends  React.Component {
         // For G-protein pathway
         observationSets : new Map([
           ["exampleID1", {"id":"exampleID1", "name":"Example 1", "observations":[
-            [ ],
+            [ {"name":"49865","state":"3"}],
             [ {"name":"49865","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
           ]}],
           ["exampleID2", {"id":"exampleID2", "name":"Example 2", "observations":[
@@ -279,7 +282,7 @@ export class App extends  React.Component {
             const posteriorProbabilities = this.state.posteriorProbabilities;
             const runID = runResponse.runID;
             const postProbsSet = runResponse.posteriorProbabilitiesSet
-            posteriorProbabilities.get("Results").set(runID, postProbsSet);
+            posteriorProbabilities.get("All").set(runID, postProbsSet);
             this.setState({posteriorProbabilities}, () => {
               console.log("Added posteriorProbabilities", runID);
             });
@@ -289,6 +292,15 @@ export class App extends  React.Component {
             // ),
           err => console.log("Error running inference:", err)
         );
+    }
+    setActivePosteriorProbability(id,index){
+      const posteriorProbabilities = this.state.posteriorProbabilities;
+      posteriorProbabilities.set("Active", {id, index});
+      this.setState({posteriorProbabilities}, ()=>{
+        // Render on graph
+        // graphvis.addPosteriorProbabilities(posteriorProbabilities.get("All").get(id)[index]);
+        graphvis.applyPosteriorProbabilities(posteriorProbabilities.get("All").get(id)[index]);
+      });
     }
 
     uploadListAddFailure(name, filetype, comment){
@@ -406,7 +418,9 @@ export class App extends  React.Component {
                 runType = {this.state.runType}
                 toggleRunType = {this.toggleRunType}
                 runInference                    = {this.runInference}
+
                 posteriorProbabilities = {this.state.posteriorProbabilities}
+                setActivePosteriorProbability = {this.setActivePosteriorProbability}
 
                 uploadList                      = {this.state.uploadList}
                 uploadListAddFailure            = {this.uploadListAddFailure}

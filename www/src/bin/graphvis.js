@@ -29,6 +29,9 @@ const config = {
         sortMethod: "directed"
       }
     },
+    nodes: {
+      borderWidth: 3
+    },
     physics: {
       enabled: true,
       maxVelocity: 50,
@@ -88,8 +91,6 @@ const getNodesEdges = (pairwiseInteractions, observedStates=new Map())=>{
 
 const configNetwork = () => {
   if (network===undefined) {
-    // datasetnodes = new vis.DataSet(nodes);
-    // datasetedges = new vis.DataSet(edges);
     datasetnodes = new vis.DataSet();
     datasetedges = new vis.DataSet();
     network = new vis.Network(document.getElementById("canvas"),{
@@ -113,13 +114,6 @@ exports.initialize = (pairwiseInteractions, observedStates) => {
   console.log("graphvis.initialize");
   configNetwork();
   render(pairwiseInteractions, observedStates);
-  // const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
-  // datasetnodes = new vis.DataSet(nodes);
-  // datasetedges = new vis.DataSet(edges);
-  // network = new vis.Network(document.getElementById("canvas"),{
-  //   nodes: datasetnodes,
-  //   edges: datasetedges
-  // }, config.networkOptions);
 };
 
 
@@ -154,53 +148,68 @@ exports.setNodesState = (observedNodes) => {
 
 exports.applyPosteriorProbabilities = (posteriorProbabilities) => {
   console.log("applyPosteriorProbabilities");
+  const toUpdate = Object.keys(posteriorProbabilities)
+    .map(key => { return {name:key, stateProbs:posteriorProbabilities[key]}})
+    .map(node => {
+      const dominantState = node.stateProbs
+        .map(prob => new Number(prob))
+        .reduce((dominant, stateProb, index)=>{
+          return (dominant.stateProb < stateProb) ? {index,stateProb} : dominant;
+        }, {index: 0, stateProb: 0}).index;
+      const dominantColor = (dominantState===0) ? 'red' : (dominantState===1) ? "blue" : "green";
+      return {
+        id: node.name,
+        color: {background: dominantColor}
+      }
+    });
+  datasetnodes.update(toUpdate);
 };
 
-exports.addPosteriorProbabilities = (posteriorProbabilities) => {
-  // console.log("posterior", posteriorProbabilities);
-  for (let ppid in posteriorProbabilities) {
-    // console.log(ppid);
-      const stateProbs = posteriorProbabilities[ppid];
-
-      // why is it not rgb?
-      let [r, b, g] = stateProbs.map(probability=>Math.ceil(probability*255));
-      let dominantState;
-      // This makes it so that we just pick to dominant state and have the color based on that state. Where state 1 is grey (all colors equal)
-      if ((r > g) &&(r > b)) {
-           g = 0;
-           b = 0;
-           dominantState = 1;
-      }
-      else if ((g> r) && (g> b)) {
-           r = 0;
-           b = 0;
-           dominantState = 3;
-      }
-      else {
-           b = 255 - b;
-           g = b;
-           r =  b;
-           dominantState = 2;
-      };
-
-      let node = datasetnodes.get(ppid);
-      let title = node["title"].split("<br>Probabilities:<br>")[0];
-      title += "<br>Probabilities:<br>" +
-               "Dominant State: " + dominantState + "<br>" +
-               "State 1 (down regulated): " + stateProbs[0] + "<br>" +
-               "State 2 (no change):      " + stateProbs[1] + "<br>" +
-               "State 3 (up regulated):   " + stateProbs[2] + "<br>" +
-               " r " + r + " g "+ g + " b " + g;
-
-      const bgColor =  "rgba(" + r + "," + g + "," + b + ",.5)";
-
-      datasetnodes.update({
-        id: ppid,
-        color: {background: bgColor},
-        title: title
-      });
-  }
-};
+// exports.addPosteriorProbabilities = (posteriorProbabilities) => {
+//   console.log("posterior", posteriorProbabilities);
+//   for (let ppid in posteriorProbabilities) {
+//     console.log(ppid);
+//       const stateProbs = posteriorProbabilities[ppid];
+//
+//       // why is it not rgb?
+//       let [r, b, g] = stateProbs.map(probability=>Math.ceil(probability*255));
+//       let dominantState;
+//       // This makes it so that we just pick to dominant state and have the color based on that state. Where state 1 is grey (all colors equal)
+//       if ((r > g) &&(r > b)) {
+//            g = 0;
+//            b = 0;
+//            dominantState = 1;
+//       }
+//       else if ((g> r) && (g> b)) {
+//            r = 0;
+//            b = 0;
+//            dominantState = 3;
+//       }
+//       else {
+//            b = 255 - b;
+//            g = b;
+//            r =  b;
+//            dominantState = 2;
+//       };
+//
+//       let node = datasetnodes.get(ppid);
+//       let title = node["title"].split("<br>Probabilities:<br>")[0];
+//       title += "<br>Probabilities:<br>" +
+//                "Dominant State: " + dominantState + "<br>" +
+//                "State 1 (down regulated): " + stateProbs[0] + "<br>" +
+//                "State 2 (no change):      " + stateProbs[1] + "<br>" +
+//                "State 3 (up regulated):   " + stateProbs[2] + "<br>" +
+//                " r " + r + " g "+ g + " b " + g;
+//
+//       const bgColor =  "rgba(" + r + "," + g + "," + b + ",.5)";
+//
+//       datasetnodes.update({
+//         id: ppid,
+//         color: {background: bgColor},
+//         title: title
+//       });
+//   }
+// };
 
 exports.focusNodes = (nodeIDs) => {network.selectNodes(nodeIDs, true);};
 exports.unfocusAll = () => {network.unselectAll();};
