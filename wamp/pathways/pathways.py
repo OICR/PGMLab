@@ -51,6 +51,7 @@ cwd = os.getcwd()
 
 hosted_data = cwd + "/../../data/reactome_template/"
 
+import sys
 class AppSession(ApplicationSession):
 
     log = Logger()
@@ -105,42 +106,48 @@ class AppSession(ApplicationSession):
         def createPairwiseInteractionFile(runPath, pathway):
             self.log.info("createPairwiseInteractionFile")
             filePath = runPath + "/pathway.pi";
-            numberOfNodes = len(pathway)
-
             pi = open(filePath, "w")
-
+            numberOfNodes = len(pathway)
             pi.write(str(numberOfNodes)+"\n\n")
-
             for interaction in pathway:
                 pi.write(str(interaction["source"]) + "\t")
                 pi.write(str(interaction["target"]) + "\t")
                 pi.write(str(interaction["value"])  + "\t")
                 pi.write(str(interaction["logic"])  + "\n")
-
             pi.close()
-
             return numberOfNodes
 
-        def createObservationFile(runPath, observations):
+        def createObservationFile(runPath, observations, observationSet):
             self.log.info("createObservationFile")
             filePath = runPath + "/inference.obs"
-            numberOfObs = len(observations)
-
             obs = open(filePath, "w")
 
-            obs.write("1\n"+str(numberOfObs)+"\n")
-
+            observations = observationSet["observations"]
+            numberObs = len(observations)
+            obs.write(str(numberObs)+"\n")
+            # print("numberObs", numberObs)
             for observation in observations:
-                obs.write(str(observation["name"]) + "\t" + str(observation["state"]) + "\n")
-
+                # print("observation", observation)
+                numberNodes = len(observation)
+                obs.write(str(numberNodes)+"\n")
+                for node in observation:
+                    # print("node", node)
+                    obs.write(str(node["name"])+"\t"+str(node["state"])+"\n")
             obs.close()
-
-            return numberOfObs
+            # print(observationSet)
+            # print(observations)
+            # numberOfObs = len(observations)
+            # obs.write("1\n"+str(numberOfObs)+"\n")
+            # print("Loop");
+            # for observation in observations:
+            #     print(observation);
+            #     obs.write(str(observation["name"]) + "\t" + str(observation["state"]) + "\n")
+            # obs.close()
+            return numberObs
 
         def generateFactorgraph(runPath):
             self.log.info("generateFactorgraph")
             system_call(str(cwd)+"/../../bin/pgmlab --generate-factorgraph --pairwise-interaction-file=" + str(runPath) + "/pathway.pi --logical-factorgraph-file=" + str(runPath) + "/logical.fg --number-of-states 3")
-
 
         def inferenceCommand(runPath):
             self.log.info("inferenceCommand")
@@ -149,35 +156,53 @@ class AppSession(ApplicationSession):
         def readPosteriorProbabilityFile(runPath):
             self.log.info("readPosteriorProbabilityFile")
             filepath = runPath + "/pathway.pp"
+            ppfile = open(filepath, "r")
+            posteriorprobabilities = list()
             pp = dict()
-            with open(filepath, "r") as fh:
-                for line in fh:
-                    if line.startswith("---"): #splits different observations
-                        return pp
-                    values = line.strip().split("\t")
-                    if not values[0] in pp.keys():
-                        # makes empty list
-                        pp[values[0]] = list()
-                    # then pushs values
-                    # values is array of probabilities,
-                    # values[0] is gene name
-                    pp[values[0]].append(values[1])
+            for line in ppfile:
+                if line.startswith("---"):
+                    posteriorprobabilities.append(pp);
+                    pp = dict()
+                    continue
+                print("line",line.strip().split("\t"))
+                line = line.strip().split("\t")
+                nodename = line[0]
+                nodestateprob = line[1]
+                if nodename not in pp.keys():
+                    pp[nodename] = list()
+                pp[nodename].append(nodestateprob)
+            return posteriorprobabilities
 
-        def runInference(pathway, observations, options):
+            # with open(filepath, "r") as fh:
+            #     for line in fh:
+            #         if line.startswith("---"): #splits different observations
+            #             return pp
+            #         values = line.strip().split("\t")
+            #         if not values[0] in pp.keys():
+            #             # makes empty list
+            #             pp[values[0]] = list()
+            #         # then pushs values
+            #         # values is array of probabilities,
+            #         # values[0] is gene name
+            #         pp[values[0]].append(values[1])
+
+        def runInference(pathway, observations, observationSet, options):
             self.log.info("runInference")
+            # print(observationSet);
             runID = str(uuid.uuid4())
+
             cwd = os.getcwd()
             tmpPath = cwd + "/../../tmp/"
             runPath = tmpPath + runID
             os.mkdir(runPath)
 
             numberOfNodes = createPairwiseInteractionFile(runPath, pathway)
-            generateFactorgraph(runPath);
-            numberOfObs = createObservationFile(runPath, observations)
+            generateFactorgraph(runPath)
+            numberOfObs = createObservationFile(runPath, observations, observationSet)
             inferenceCommand(runPath)
-            pp = readPosteriorProbabilityFile(runPath)
+            pps = readPosteriorProbabilityFile(runPath)
             # shutil.rmtree(runPath)
-            return {"run":runID, "posteriorProbabilities":pp}
+            return {"runID":runID, "posteriorProbabilities":pps}
 
         yield self.register(runInference, 'pgmlab.inference.run')
         self.log.info("subscribed to topic 'pgmlab.inference.run'")
