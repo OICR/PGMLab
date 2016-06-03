@@ -20,6 +20,6 @@ my $pi_genes = get_genes_in_pi_file($ARGV{'pi'});
 
 my $sample_list = get_samples_from_sample_file($ARGV{'sample_list'});
 
-my ($observed_genes, $sample_gene_states) = get_snv_sample_gene_state($ARGV{'snv'}, $pi_genes, $entity_name_to_reactome_id);
+my $sample_gene_states = get_snv_sample_gene_state($ARGV{'snv'}, $pi_genes, $entity_name_to_reactome_id);
 
 create_obs_file($ARGV{'observation_file'}, $sample_gene_states, $sample_list);
