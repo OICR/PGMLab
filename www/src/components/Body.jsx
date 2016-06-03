@@ -23,7 +23,7 @@ export class Body extends React.Component {
             <ControlPanel {...this.props}/>
           </div>
           <div className="col s8" style={canvasSize}>
-            <div id="canvas"></div>
+            <DisplayPanel />
           </div>
         </main>
         </MuiThemeProvider>

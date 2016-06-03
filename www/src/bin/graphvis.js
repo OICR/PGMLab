@@ -1,10 +1,7 @@
-// import vis from "../lib/vis-4.14.0/dist/vis.js";
-import vis from "vis"; //npm, draws graph slower but with more clustering
+import vis from "vis"; //Stylesheet refered to in pgmbio.html
 
 // Globals
-var network;
-var datasetnodes;
-var datasetedges;
+var network, datasetnodes, datasetedges;
 
 const config = {
   // For vis.network
@@ -15,11 +12,11 @@ const config = {
     interaction: {
       hideEdgesOnDrag: true,
       keyboard: false,
+      multiselect: true,
       navigationButtons: true,
       tooltipDelay: 50
     },
     layout: {
-      randomSeed: undefined,
       improvedLayout: true,
       hierarchical: {
         enabled:true,
@@ -89,25 +86,42 @@ const getNodesEdges = (pairwiseInteractions, observedStates=new Map())=>{
   return [nodes, edges];
 };
 
-// Initialize graphvis after <App> component mounts, called once
-exports.initialize = (pairwiseInteractions, observedStates) => {
-  console.log("graphvis.initialize");
-  const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
-  datasetnodes = new vis.DataSet(nodes);
-  datasetedges = new vis.DataSet(edges);
-  network = new vis.Network(document.getElementById("canvas"),{
-    nodes: datasetnodes,
-    edges: datasetedges
-  }, config.networkOptions);
-};
+const configNetwork = () => {
+  if (network===undefined) {
+    // datasetnodes = new vis.DataSet(nodes);
+    // datasetedges = new vis.DataSet(edges);
+    datasetnodes = new vis.DataSet();
+    datasetedges = new vis.DataSet();
+    network = new vis.Network(document.getElementById("canvas"),{
+      nodes: datasetnodes,
+      edges: datasetedges
+    }, config.networkOptions);
+ };
+}
 // For setting new activePathway
-exports.render = (pairwiseInteractions, observedStates) => {
+const render = (pairwiseInteractions, observedStates) => {
   console.log("graphvis.render");
   const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
   datasetnodes = new vis.DataSet(nodes);
   datasetedges = new vis.DataSet(edges);
   network.setData({nodes: datasetnodes, edges: datasetedges});
 };
+exports.render = render;
+
+// Initialize graphvis after <App> component mounts, called once
+exports.initialize = (pairwiseInteractions, observedStates) => {
+  console.log("graphvis.initialize");
+  configNetwork();
+  render(pairwiseInteractions, observedStates);
+  // const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
+  // datasetnodes = new vis.DataSet(nodes);
+  // datasetedges = new vis.DataSet(edges);
+  // network = new vis.Network(document.getElementById("canvas"),{
+  //   nodes: datasetnodes,
+  //   edges: datasetedges
+  // }, config.networkOptions);
+};
+
 
 exports.setSingleNodeState = (observedNode) => {
   const datasetnodesMap = new Map(datasetnodes.get().map(graphNode => [graphNode.id, graphNode]));
@@ -136,6 +150,10 @@ exports.setNodesState = (observedNodes) => {
     } else { return toChange };
   }, []);
   datasetnodes.update([...unchanged, ...toChange]);
+};
+
+exports.applyPosteriorProbabilities = (posteriorProbabilities) => {
+  console.log("applyPosteriorProbabilities");
 };
 
 exports.addPosteriorProbabilities = (posteriorProbabilities) => {
