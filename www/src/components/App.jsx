@@ -282,23 +282,19 @@ export class App extends  React.Component {
             const posteriorProbabilities = this.state.posteriorProbabilities;
             const runID = runResponse.runID;
             const postProbsSet = runResponse.posteriorProbabilitiesSet
-            posteriorProbabilities.get("All").set(runID, postProbsSet);
             this.setState({posteriorProbabilities}, () => {
               console.log("Added posteriorProbabilities", runID);
             });
           },
-            // this.setState({"posteriorProbabilities": response["posteriorProbabilities"]},
-            //   () => graphvis.addPosteriorProbabilities(this.state.posteriorProbabilities)
-            // ),
           err => console.log("Error running inference:", err)
         );
     }
     setActivePosteriorProbability(id,index){
+      // May not match activeObservation
       const posteriorProbabilities = this.state.posteriorProbabilities;
       posteriorProbabilities.set("Active", {id, index});
       this.setState({posteriorProbabilities}, ()=>{
         // Render on graph
-        // graphvis.addPosteriorProbabilities(posteriorProbabilities.get("All").get(id)[index]);
         graphvis.applyPosteriorProbabilities(posteriorProbabilities.get("All").get(id)[index]);
       });
     }
