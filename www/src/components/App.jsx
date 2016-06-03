@@ -14,6 +14,7 @@ export class App extends  React.Component {
       const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
       return `${s4()+s4()} - ${s4()} - ${s4()} - ${s4()} - ${s4()+s4()+s4()}`;
     }
+
     constructor(props){
       super(props)
       console.log("<App> constructor");
@@ -31,12 +32,17 @@ export class App extends  React.Component {
         ["Selected", new Map()],
         ["Active", {id: null, name: null}]
       ]);
+      const posteriorProbabilities = new Map([
+        ["Results", new Map()],
+        ["Active", {id: null, index: null}] //id
+      ]);
       // Set initial state
       this.state = {
         "pairwiseInteractions"        : pairwiseInteractions,
         "observationMap"              : observationMap,
         "pathwayMap"                  : pathwayMap,
         "runType"                     : "Inference",
+        "posteriorProbabilities"      : posteriorProbabilities,
         "uploadList"                  : [],
         "posteriorProbabilitySets"    : [],
         "estimatedParameterSets"      : []
@@ -267,12 +273,17 @@ export class App extends  React.Component {
       const links = this.state.pairwiseInteractions.links;
       // CHANGE BACKEND TO SEND IN WHOLE SET
       const observationSet = observationMap.get("Current").get("Set");
-      console.log("Set:", observationSet);
-      console.log("ActiveObservation:", observation);
-      this.props.PGMLabInference(links, observation, observationSet)
+      this.props.PGMLabInference(links, observationSet)
         .then(
-          response => {
-            console.log("response:", response);
+          runResponse => {
+            console.log("response:", runResponse);
+            const posteriorProbabilities = this.state.posteriorProbabilities;
+            const runID = runResponse.runID;
+            const postProbsSet = runResponse.posteriorProbabilitiesSet
+            posteriorProbabilities.get("Results").set(runID, postProbsSet);
+            this.setState({posteriorProbabilities}, () => {
+              console.log("Added posteriorProbabilities", runID);
+            });
           },
             // this.setState({"posteriorProbabilities": response["posteriorProbabilities"]},
             //   () => graphvis.addPosteriorProbabilities(this.state.posteriorProbabilities)
@@ -353,7 +364,7 @@ export class App extends  React.Component {
                     "estimatedParameterSets" : estimatedParameterSets})
     }
     addNewPosteriorProbabilitySet(name, probabilities){
-      console.log("addNewPosteriorProbabilitySet");
+      console.log("addNewPosteriorProbabilitySet: need to add to new this.state.posteriorProbabilitiesSet");
       var guid = App.guid()
       var uploadSummary = { "datetime": App.getCurrentDateTime(),
                             "id"      : guid,
@@ -365,7 +376,7 @@ export class App extends  React.Component {
       var posteriorProbabilitySet = {"id"     : guid,
                                      "name"   : name,
                                      "probablilies"   : probabilities }
-      var posteriorProbabilitySets = this.state.posteriorProbabilitySets
+      var posteriorProbabilitySets = this.state.posteriorProbabilitySets //this.state.posteriorProbabilities
       posteriorProbabilitySets.push(posteriorProbabilitySet)
       uploadList.push(uploadSummary)
       this.setState({"uploadList": uploadList,

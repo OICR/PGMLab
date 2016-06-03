@@ -117,7 +117,7 @@ class AppSession(ApplicationSession):
             pi.close()
             return numberOfNodes
 
-        def createObservationFile(runPath, observations, observationSet):
+        def createObservationFile(runPath, observationSet):
             self.log.info("createObservationFile")
             filePath = runPath + "/inference.obs"
             obs = open(filePath, "w")
@@ -134,15 +134,6 @@ class AppSession(ApplicationSession):
                     # print("node", node)
                     obs.write(str(node["name"])+"\t"+str(node["state"])+"\n")
             obs.close()
-            # print(observationSet)
-            # print(observations)
-            # numberOfObs = len(observations)
-            # obs.write("1\n"+str(numberOfObs)+"\n")
-            # print("Loop");
-            # for observation in observations:
-            #     print(observation);
-            #     obs.write(str(observation["name"]) + "\t" + str(observation["state"]) + "\n")
-            # obs.close()
             return numberObs
 
         def generateFactorgraph(runPath):
@@ -164,7 +155,6 @@ class AppSession(ApplicationSession):
                     posteriorprobabilities.append(pp);
                     pp = dict()
                     continue
-                print("line",line.strip().split("\t"))
                 line = line.strip().split("\t")
                 nodename = line[0]
                 nodestateprob = line[1]
@@ -173,24 +163,9 @@ class AppSession(ApplicationSession):
                 pp[nodename].append(nodestateprob)
             return posteriorprobabilities
 
-            # with open(filepath, "r") as fh:
-            #     for line in fh:
-            #         if line.startswith("---"): #splits different observations
-            #             return pp
-            #         values = line.strip().split("\t")
-            #         if not values[0] in pp.keys():
-            #             # makes empty list
-            #             pp[values[0]] = list()
-            #         # then pushs values
-            #         # values is array of probabilities,
-            #         # values[0] is gene name
-            #         pp[values[0]].append(values[1])
-
-        def runInference(pathway, observations, observationSet, options):
+        def runInference(pathway, observationSet, options):
             self.log.info("runInference")
-            # print(observationSet);
             runID = str(uuid.uuid4())
-
             cwd = os.getcwd()
             tmpPath = cwd + "/../../tmp/"
             runPath = tmpPath + runID
@@ -198,11 +173,11 @@ class AppSession(ApplicationSession):
 
             numberOfNodes = createPairwiseInteractionFile(runPath, pathway)
             generateFactorgraph(runPath)
-            numberOfObs = createObservationFile(runPath, observations, observationSet)
+            numberOfObs = createObservationFile(runPath, observationSet)
             inferenceCommand(runPath)
-            pps = readPosteriorProbabilityFile(runPath)
+            posteriorProbabilitiesSet = readPosteriorProbabilityFile(runPath)
             # shutil.rmtree(runPath)
-            return {"runID":runID, "posteriorProbabilities":pps}
+            return {"runID":runID, "posteriorProbabilitiesSet":posteriorProbabilitiesSet}
 
         yield self.register(runInference, 'pgmlab.inference.run')
         self.log.info("subscribed to topic 'pgmlab.inference.run'")

@@ -37,10 +37,10 @@ connection.open();
 function getReactomePathway(pathway) {
   return connection.session.call("pgmlab.pathway.get", [pathway.id]);
 };
-function PGMLabInference(links, observation, observationSet) {
+function PGMLabInference(links, observationSet) {
   // RUN INFERENCE OVER ALL OBSERVATIONS IN OBSERVATIONSET
   const options = [];
-  return connection.session.call("pgmlab.inference.run", [links,observation,observationSet, options]);
+  return connection.session.call("pgmlab.inference.run", [links, observationSet, options]);
 }
 
 function initializeApp(reactomePathways) {
