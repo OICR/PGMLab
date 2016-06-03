@@ -15,7 +15,6 @@ use vars qw(@EXPORT_OK);
 sub get_donor_ploidy {
     my ($ploidy_filepath) = @_; 
     
-    print $ploidy_filepath;
     open(my $fh_ploidy, "<", $ploidy_filepath);
 
     my $ploidy_header = <$fh_ploidy>;
@@ -269,17 +268,12 @@ sub get_snv_sample_gene_state {
 
     my @observed_genes = keys %genes_observed;
 
-    say "observed genes";
-
     my %sample_gene_state;
     foreach my $sample_name (keys %sample_gene_mutation) {
-say $sample_name;
          foreach my $gene (@observed_genes) {
-say $gene;
-             $sample_gene_state{$sample}{$gene} = 1; #= (exists $sample_gene_mutation{$sample}{$gene})? "1": "2";
+             $sample_gene_state{$sample_name}{$gene} = (defined $sample_gene_mutation{$sample_name}{$gene})? "1": "2";
          }
     }
- print Dumper \%sample_gene_state;
     return \%sample_gene_state;
 }
 

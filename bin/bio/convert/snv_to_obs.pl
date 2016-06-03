@@ -13,7 +13,6 @@ use PGMLab qw(create_obs_file);
 use PGMLab::Bio qw(get_reactome_ids_to_names_maps get_genes_in_pi_file get_samples_from_sample_file get_snv_sample_gene_state);
 
 use Getopt::Euclid qw( :minimal_keys );
-use Data::Dumper;
 
 my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($ARGV{'db_id_to_name_mapping'});
 
