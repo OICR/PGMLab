@@ -17,7 +17,6 @@ use Getopt::Euclid qw( :minimal_keys );
 
 use Data::Dumper;
 
-print Dumper \%ARGV;
 
 my $donor_ploidy = get_donor_ploidy($ARGV{'ploidy'});
 
@@ -28,9 +27,5 @@ my $pi_genes = get_genes_in_pi_file($ARGV{'pi'});
 my $sample_list = get_sample_list($ARGV{'sample_list'});
 
 my $sample_gene_states = get_copy_number_gene_states($ARGV{'copy_number'}, $sample_list, $entity_name_to_reactome_id, $donor_ploidy, $pi_genes);
-
-say $ARGV{observation_file};
-say $sample_gene_states;
-say $sample_list;
 
 create_obs_file($ARGV{'observation_file'}, $sample_gene_states, $sample_list);
