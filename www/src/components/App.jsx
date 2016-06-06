@@ -415,7 +415,13 @@ export class App extends  React.Component {
       return (
         <div>
           <Header tab = {this.state.tab}
-                  setTab = {this.setTab} />
+                  setTab = {this.setTab}
+                  uploadList                      = {this.state.uploadList}
+                  uploadListAddFailure            = {this.uploadListAddFailure}
+                  addNewPathway                   = {this.addNewPathway}
+                  addNewObservationSet            = {this.addNewObservationSet}
+                  addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
+                  addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet} />
           <Body tab = {this.state.tab}
 
                 pairwiseInteractions            = {this.state.pairwiseInteractions}
@@ -438,14 +444,7 @@ export class App extends  React.Component {
                 runInference                    = {this.runInference}
 
                 posteriorProbabilitiesMap = {this.state.posteriorProbabilitiesMap}
-                setActivePosteriorProbability = {this.setActivePosteriorProbability}
-
-                uploadList                      = {this.state.uploadList}
-                uploadListAddFailure            = {this.uploadListAddFailure}
-                addNewPathway                   = {this.addNewPathway}
-                addNewObservationSet            = {this.addNewObservationSet}
-                addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
-                addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet} />
+                setActivePosteriorProbability = {this.setActivePosteriorProbability} />
           <Footer />
         </div>
       )

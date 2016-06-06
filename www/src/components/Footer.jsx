@@ -8,11 +8,16 @@ export class Footer extends React.Component {
     return (
       <footer className="page-footer light-blue">
         <div className="row" style={noPad}>
-          <div className="col s2">
-            <img src={OICRlogo}  width="150px" alt="oicr logo" />
-          </div>
           <div className="col s8">
-            <h5 className="white-text">Informatics and Bio-Computing - Machine Learning Group</h5>
+            <img src={OICRlogo}  width="150px" alt="oicr logo" />
+            <br/>
+            <strong className="white-text">Informatics and Bio-Computing - Machine Learning Group</strong>
+          </div>
+          <div className="col s2">
+            <ul>
+              <li><a className="white-text" href="http://github.com/OICR/PGMLab">Git</a></li>
+              <li><a className="white-text" href="https://github.com/OICR/PGMLab/wiki">Wiki</a></li>
+            </ul>
           </div>
           <div className="col s2 right-align">
             <h5 className="white-text">Contact</h5>

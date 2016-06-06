@@ -1,6 +1,5 @@
 import React from 'react';
 
-import {UploadModal} from "./UploadModal.jsx";
 import {DataSelection} from "./DataSelection.jsx";
 import {ObservationsControl} from "./ObservationsControl.jsx";
 import {PathwaysControl} from "./PathwaysControl.jsx";
@@ -32,17 +31,9 @@ export class ControlPanel extends React.Component {
     return (
     <div>
       <div className="row">
-        <div className="col s9">
-          <a className={inferenceBtnClass} onClick={()=>{this.handleRunType("Inference")}}>Inference</a>
+        <div className="col s12 center-align">
           <a className={learningBtnClass} onClick={()=>{this.handleRunType("Learning")}}>Learning</a>
-        </div>
-        <div className="col s3 center-align">
-          <UploadModal  uploadList                     = {this.props.uploadList}
-                        uploadListAddFailure           = {this.props.uploadListAddFailure}
-                        addNewPathway                  = {this.props.addNewPathway}
-                        addNewObservationSet           = {this.props.addNewObservationSet}
-                        addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
-                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
+          <a className={inferenceBtnClass} onClick={()=>{this.handleRunType("Inference")}}>Inference</a>
         </div>
       </div>
       <div className="divider" /><div className="divider" />

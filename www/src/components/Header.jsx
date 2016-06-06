@@ -1,7 +1,15 @@
 import React from 'react'
 
+import {UploadModal} from "./UploadModal.jsx";
+
 var classNames = require("classnames");
 export class Header extends React.Component {
+  componentDidMount(){
+    $(".dropdown-button").dropdown();
+    $(".tooltipped").tooltip({delay: 25});
+
+  }
+
   handleSetTab(tab){
     this.props.setTab(tab);
     this.tabs = this.tabs.bind(this);
@@ -17,20 +25,30 @@ export class Header extends React.Component {
   render(){
     return (
       <header className="row">
+        <UploadModal  uploadList                     = {this.props.uploadList}
+                      uploadListAddFailure           = {this.props.uploadListAddFailure}
+                      addNewPathway                  = {this.props.addNewPathway}
+                      addNewObservationSet           = {this.props.addNewObservationSet}
+                      addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
+                      addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
         <nav className="light-blue lighten-1" role="navigation">
           <div className="nav-wrapper">
-            <a className="brand-logo center" href="#!" style={{fontSize:"50px"}}>
-              PGMBio
-            </a>
-            <ul id="nav-mobile" className="left hide-on-med-and-down" style={{width:"175px"}}>
+            <ul id="nav-mobile" className="left hide-on-med-and-down">
               {this.tabs()}
+              <li>
+                <a  href="#!" onClick={()=>{$("#uploadModal").openModal()}}
+                    className="tooltipped" data-position="bottom" data-tooltip="Upload Data Files">
+                  <i className="material-icons">file_upload</i>
+                </a>
+              </li>
+
             </ul>
-            <ul id="nav-mobile" className="right hide-on-med-and-down" style={{width:"175px"}}>
-                <li><a href="http://github.com/OICR/PGMLab">Git</a></li>
-                <li><a href="https://github.com/OICR/PGMLab/wiki">Wiki</a></li>
-            </ul>
+            <a className="brand-logo center" href="#!">
+              <h4><span style={{color: "#2e7d32"}}>PGM</span><span style={{color:"#9c27b0"}}>Bio</span></h4>
+            </a>
           </div>
         </nav>
+
       </header>
     )
   }

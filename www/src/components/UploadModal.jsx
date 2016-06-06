@@ -7,10 +7,6 @@ export class UploadModal extends React.Component {
         this.isInteger = this.isInteger.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
-    componentDidMount(){
-      $('.modal-trigger').leanModal();
-      $(".tooltipped").tooltip({delay: 25});
-    }
     isInteger(str) {
         return /^([1-9]\d*)$/.test(str)
     }
@@ -272,44 +268,38 @@ export class UploadModal extends React.Component {
       );
     }
     render() {
-        let uploadTable=this.uploadTable(this.props.uploadList);
-        return (
-          <div>
-            <div id="uploadModal" className="modal modal-fixed-footer">
-              <div className="modal-content">
-                <div className="section">
-                  <h5>Upload Files</h5>
-                  <div className="row">
-                    {this.uploadBtn("Pathway",this.readPathwayFile.bind(this),"Upload a pairwise interaction file")}
-                    {this.uploadBtn("Observations",this.readObservationFile.bind(this),"Upload an observation file")}
-                    {this.uploadBtn("Estimated",this.readEstimatedParametersFile.bind(this),"Upload a pre-generated estimated parameters file")}
-                    {this.uploadBtn("Posterior",this.readPosteriorProbabilityFile.bind(this),"Upload a pre-generated posterior probability file")}
-                  </div>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th data-field="id">ID</th>
-                        <th data-field="time">Datetime</th>
-                        <th data-field="type">Type</th>
-                        <th data-field="status">Status</th>
-                        <th data-field="name">Name</th>
-                        <th data-field="comment">Comments</th>
-                      </tr>
-                    </thead>
-                    <tbody>{uploadTable}</tbody>
-                  </table>
+      const noPad = {paddingBottom: "0px", paddingTop: "0px"};
+      const uploadTable=this.uploadTable(this.props.uploadList);
+      return (
+          <div id="uploadModal" className="modal modal-fixed-footer">
+            <div className="modal-content">
+              <div className="section" style={noPad}>
+                <h5 className="center-align" style={noPad}>Upload Files</h5>
+                <div className="row">
+                  {this.uploadBtn("Pathway",this.readPathwayFile.bind(this),"Upload a pairwise interaction file")}
+                  {this.uploadBtn("Observations",this.readObservationFile.bind(this),"Upload an observation file")}
+                  {this.uploadBtn("Estimated",this.readEstimatedParametersFile.bind(this),"Upload a pre-generated estimated parameters file")}
+                  {this.uploadBtn("Posterior",this.readPosteriorProbabilityFile.bind(this),"Upload a pre-generated posterior probability file")}
                 </div>
-              </div>
-              <div className="modal-footer">
-                  <a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+                <table>
+                  <thead>
+                    <tr>
+                      <th data-field="id">ID</th>
+                      <th data-field="time">Datetime</th>
+                      <th data-field="type">Type</th>
+                      <th data-field="status">Status</th>
+                      <th data-field="name">Name</th>
+                      <th data-field="comment">Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody>{uploadTable}</tbody>
+                </table>
               </div>
             </div>
-            <a className="modal-trigger btn-floating btn tooltipped"
-              data-position="top" data-tooltip="Upload Data Files" href="#uploadModal">
-              <i className="material-icons">file_upload</i>
-            </a>
-
+            <div className="modal-footer">
+                <a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
           </div>
-        );
+      );
     }
 }
