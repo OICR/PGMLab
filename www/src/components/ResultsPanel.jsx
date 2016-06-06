@@ -12,7 +12,7 @@ export class ResultsPanel extends React.Component {
     return (
       <div>
         <PosteriorProbabilitiesControl
-            posteriorProbabilities={this.props.posteriorProbabilities}
+            posteriorProbabilitiesMap={this.props.posteriorProbabilitiesMap}
             setActivePosteriorProbability={this.props.setActivePosteriorProbability} />
         <div className="divider" /><div className="divider" />
       </div>

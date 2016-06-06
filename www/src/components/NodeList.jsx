@@ -93,7 +93,6 @@ export class NodeList extends React.Component {
         return node.name.toLowerCase().indexOf(textInput) ? undefined : this.nodeItem(node,nodeState,shared);
       });
     };
-
   }
   render(){
     const scrollable={"maxHeight":"200px","overflow":"scroll"};

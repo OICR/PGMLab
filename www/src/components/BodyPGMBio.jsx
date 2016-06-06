@@ -14,15 +14,15 @@ export class Body extends React.Component {
       super(props)
     }
     render(){
-      console.log("<Body> render()");
+      // console.log("<Body> render()");
       let leftPanel;
       switch (this.props.tab) {
         case "Run":
-          console.log("Run tab");
+          // console.log("Run tab");
           leftPanel = <ControlPanel {...this.props}/>;
           break;
         case "Results":
-          console.log("Results");
+          // console.log("Results");
           leftPanel = <ResultsPanel {...this.props}/>;
           break;
       };

@@ -8,7 +8,6 @@ export class PosteriorProbabilitiesControl extends React.Component {
 
     this.showPostProbs = this.showPostProbs.bind(this);
     this.postProbsSetList = this.postProbsSetList.bind(this);
-    this.postProbsList = this.postProbsList.bind(this);
   }
 
   showPostProbs(id, index){
@@ -17,37 +16,29 @@ export class PosteriorProbabilitiesControl extends React.Component {
   }
 
   // RENDERING
-  postProbsList(postProbs){
-    return postProbs.map((pp,index) => <MenuItem key={index} primaryText={index} />);
-  }
   postProbsSetList(){
-    const posteriorProbabilities = this.props.posteriorProbabilities;
-    const all = posteriorProbabilities.get("All");
-    const setList = [...all].map((pair)=>{return {id:pair[0],results:pair[1]}})
-      .map(pp => {
-        console.log("pp", pp);
-        const menuItems = pp.results.map((obj, index)=>{
-          return (
-            <MenuItem key={index} primaryText={`Observation ${index}`}
-              onTouchTap={()=>{this.showPostProbs(pp.id,index)}}/>
-          );
-        });
-        return (
-          <MenuItem key={pp.id} primaryText={pp.id} menuItems={menuItems}/>
-        );
-      });
-    return setList;
+    const posteriorProbabilitiesMap = this.props.posteriorProbabilitiesMap;
+    const runSets = [...posteriorProbabilitiesMap.get("All").values()]
+      .filter(ppSet => ppSet.type === "Run")
+      .map(ppSet => (
+        <a key={ppSet.id} className="collection-item black-text">
+            <strong>{ppSet.id}</strong><br/>
+              Observation Set: {ppSet.observationSet.name}<br/>
+              Run submitted: {ppSet.dateTime}
+        </a>
+      ));
+    return (
+      <div className="collection">
+        {runSets}
+      </div>
+    );
   }
   render(){
-    console.log(this.props.posteriorProbabilities);
     return (
       <div className="section">
-        <h5>Posterior Probabilities</h5>
+        <h5>Posterior Probability Sets</h5>
         <div className="row">
-            <Menu desktop={true}>
-              <MenuItem primaryText={"Reset"} />
-              {this.postProbsSetList()}
-            </Menu>
+            {this.postProbsSetList()}
         </div>
       </div>
     );

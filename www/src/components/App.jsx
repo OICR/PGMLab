@@ -17,7 +17,7 @@ export class App extends  React.Component {
 
     constructor(props){
       super(props)
-      console.log("<App> constructor");
+      // console.log("<App> constructor");
       const pairwiseInteractions = {links: new Array(), nodes: new Array()};
       const observationMap = new Map([
         ["All", new Map()],
@@ -32,7 +32,7 @@ export class App extends  React.Component {
         ["Selected", new Map()],
         ["Active", {id: null, name: null}]
       ]);
-      const posteriorProbabilities = new Map([
+      const posteriorProbabilitiesMap = new Map([
         ["All", new Map()],
         ["Active", {id: null, index: null}] //id
       ]);
@@ -43,7 +43,7 @@ export class App extends  React.Component {
         "observationMap"              : observationMap,
         "pathwayMap"                  : pathwayMap,
         "runType"                     : "Inference",
-        "posteriorProbabilities"      : posteriorProbabilities,
+        "posteriorProbabilitiesMap"      : posteriorProbabilitiesMap,
         "uploadList"                  : [],
         "posteriorProbabilitySets"    : [],
         "estimatedParameterSets"      : []
@@ -286,11 +286,17 @@ export class App extends  React.Component {
         .then(
           runResponse => {
             console.log("response:", runResponse);
-            const posteriorProbabilities = this.state.posteriorProbabilities;
-            const runID = runResponse.runID;
-            const postProbsSet = runResponse.posteriorProbabilitiesSet
-            this.setState({posteriorProbabilities}, () => {
-              console.log("Added posteriorProbabilities", runID);
+            const posteriorProbabilitiesMap = this.state.posteriorProbabilitiesMap;
+            const toAdd = {
+              type: "Run",
+              dateTime: runResponse.submitDateTime,
+              id: runResponse.runID,
+              posteriorProbabilitiesSet: runResponse.posteriorProbabilitiesSet,
+              observationSet: runResponse.observationSet
+            };
+            posteriorProbabilitiesMap.get("All").set(toAdd.id, toAdd);
+            this.setState({posteriorProbabilitiesMap}, () => {
+              console.log("Added posteriorProbabilities", toAdd.id);
             });
           },
           err => console.log("Error running inference:", err)
@@ -399,7 +405,7 @@ export class App extends  React.Component {
 
     //RENDERING//
     render(){
-      console.log("<App> render()");
+      // console.log("<App> render()");
       return (
         <div>
           <Header tab = {this.state.tab}
@@ -425,7 +431,7 @@ export class App extends  React.Component {
                 toggleRunType = {this.toggleRunType}
                 runInference                    = {this.runInference}
 
-                posteriorProbabilities = {this.state.posteriorProbabilities}
+                posteriorProbabilitiesMap = {this.state.posteriorProbabilitiesMap}
                 setActivePosteriorProbability = {this.setActivePosteriorProbability}
 
                 uploadList                      = {this.state.uploadList}
