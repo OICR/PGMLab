@@ -2,7 +2,7 @@ import React from 'react'
 import {render} from 'react-dom'
 
 import {Header} from './Header.jsx';
-import {Body}   from './Body.jsx';
+import {Body}   from './BodyPGMBio.jsx';
 import {Footer} from './Footer.jsx';
 
 var moment = require('moment')
@@ -38,6 +38,7 @@ export class App extends  React.Component {
       ]);
       // Set initial state
       this.state = {
+        "tab": "Run", // || "Results"
         "pairwiseInteractions"        : pairwiseInteractions,
         "observationMap"              : observationMap,
         "pathwayMap"                  : pathwayMap,
@@ -49,6 +50,8 @@ export class App extends  React.Component {
       };
 
       // Function binding
+      this.setTab = this.setTab.bind(this);
+
       this.selectPathways                 = this.selectPathways.bind(this);
       this.removeSelectedPathways         = this.removeSelectedPathways.bind(this);
       this.setActivePathway               = this.setActivePathway.bind(this);
@@ -122,6 +125,10 @@ export class App extends  React.Component {
         },
         err => {console.log("Could not get initial pairwiseInteraction: ", err)}
       );
+    }
+    // For ControlPanel vs ResultsPanel
+    setTab(tab){
+      this.setState({tab});
     }
 
     // For SelectPathways modal component
@@ -395,8 +402,11 @@ export class App extends  React.Component {
       console.log("<App> render()");
       return (
         <div>
-          <Header />
-          <Body pairwiseInteractions            = {this.state.pairwiseInteractions}
+          <Header tab = {this.state.tab}
+                  setTab = {this.setTab} />
+          <Body tab = {this.state.tab}
+
+                pairwiseInteractions            = {this.state.pairwiseInteractions}
 
                 observationMap = {this.state.observationMap}
                 selectObservationSet = {this.selectObservationSet}

@@ -96,7 +96,7 @@ export class NodeList extends React.Component {
 
   }
   render(){
-    const scrollable={"maxHeight":"275px","overflow":"scroll"};
+    const scrollable={"maxHeight":"200px","overflow":"scroll"};
     const noPad={"paddingBottom":"0px","paddingTop":"0px"};
     let nodeList;
     switch (this.props.activeType) {

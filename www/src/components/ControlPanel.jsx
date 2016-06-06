@@ -4,17 +4,24 @@ import {UploadModal} from "./UploadModal.jsx";
 import {DataSelection} from "./DataSelection.jsx";
 import {ObservationsControl} from "./ObservationsControl.jsx";
 import {PathwaysControl} from "./PathwaysControl.jsx";
-import {ResultsControl} from "./ResultsControl.jsx";
-import {PosteriorProbabilitiesControl} from "./PosteriorProbabilitiesControl.jsx";
 
 export class ControlPanel extends React.Component {
   constructor(props){
     super(props);
     this.handleRunType = this.handleRunType.bind(this);
+    this.handleRun = this.handleRun.bind(this);
   }
   handleRunType(type){
     if (type !== this.props.runType) {
       this.props.toggleRunType();
+    };
+  }
+  handleRun(){
+    switch (this.props.runType) {
+      case "Inference":
+        this.props.runInference(); break;
+      case "Learning":
+        console.log("runLearning"); break;
     };
   }
   render(){
@@ -38,7 +45,7 @@ export class ControlPanel extends React.Component {
                         addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
         </div>
       </div>
-      <div className="divider"></div><div className="divider"></div>
+      <div className="divider" /><div className="divider" />
       <DataSelection  observationMap = {this.props.observationMap}
                       selectObservationSet = {this.props.selectObservationSet}
                       selectObservations = {this.props.selectObservations}
@@ -46,7 +53,6 @@ export class ControlPanel extends React.Component {
                       pathwayMap = {this.props.pathwayMap}
                       selectPathways = {this.props.selectPathways}
                       removeSelectedPathways = {this.props.removeSelectedPathways} />
-      <div className="divider"></div><div className="divider"></div>
       <ObservationsControl  pairwiseInteractions={this.props.pairwiseInteractions}
                             observationMap = {this.props.observationMap}
                             setActiveObservation = {this.props.setActiveObservation}
@@ -57,13 +63,12 @@ export class ControlPanel extends React.Component {
                         setActivePathway = {this.props.setActivePathway}
                         setNodeItemState = {this.props.setNodeItemState} />
 
-      <div className="divider"></div><div className="divider"></div>
-      <ResultsControl   runType={this.props.runType}
-                        runInference={this.props.runInference}/>
-      <div className="divider"></div><div className="divider"></div>
-      <PosteriorProbabilitiesControl
-          posteriorProbabilities={this.props.posteriorProbabilities}
-          setActivePosteriorProbability={this.props.setActivePosteriorProbability} />
+      <div className="divider" /><div className="divider" />
+      <div className="row">
+        <div className="col s12 center-align">
+          <a className="waves-effect waves-light btn" onClick={this.handleRun}>Run</a>
+        </div>
+      </div>
     </div>
     )
   }
