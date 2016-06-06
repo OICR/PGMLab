@@ -18,29 +18,22 @@ export class PosteriorProbabilitiesControl extends React.Component {
   // RENDERING
   postProbsSetList(){
     const posteriorProbabilitiesMap = this.props.posteriorProbabilitiesMap;
-    const runSets = [...posteriorProbabilitiesMap.get("All").values()]
+    const postProbsSets = [...posteriorProbabilitiesMap.get("All").values()]
       .filter(ppSet => ppSet.type === "Run")
       .map(ppSet => (
-        <a key={ppSet.id} className="collection-item black-text">
-            <strong>{ppSet.id}</strong><br/>
-              Observation Set: {ppSet.observationSet.name}<br/>
-              Run submitted: {ppSet.dateTime}
+        <a key={ppSet.id} className="collection-item black-text"
+            onClick={()=>{this.showPostProbs(ppSet.id,0)}}>
+          <strong>{ppSet.id}</strong><br/>
+            Observation Set: {ppSet.observationSet.name}<br/>
+            Run submitted: {ppSet.dateTime}
         </a>
       ));
-    return (
-      <div className="collection">
-        {runSets}
-      </div>
-    );
+    return postProbsSets;
   }
   render(){
-    const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
-      <div className="section" style={noPad}>
-        <h5>Posterior Probability Sets</h5>
-        <div className="row">
-            {this.postProbsSetList()}
-        </div>
+      <div className="collection">
+        {this.postProbsSetList()}
       </div>
     );
   }

@@ -27,16 +27,18 @@ export class Body extends React.Component {
           leftPanel = <ResultsPanel {...this.props}/>;
           break;
       };
-      const canvasSize = {minWidth:"800px", minHeight:"600px"};
+      const LeftPanel = this.props.tab==="Run" ? <ControlPanel {...this.props} />:<ResultsPanel {...this.props} />;
       const noMargin = {marginBottom:"0px",marginTop:"0px"};
+      const leftStyle = {minWidth:"300px", paddingTop:"10px"};
+      const canvasSize = {minWidth:"800px", minHeight:"600px"};
       return (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <main className="row" style={noMargin}>
-          <div className="col s4 grey lighten-5" style={{minWidth:"300px"}}>
+        <main className="row grey lighten-5" style={noMargin}>
+          <div className="col s4" style={leftStyle}>
             <RunTypePanel tab={this.props.tab}
                           runType = {this.props.runType}
                           toggleRunType = {this.props.toggleRunType} />
-            {leftPanel}
+            {LeftPanel}
           </div>
           <div className="col s8" style={canvasSize}>
             <DisplayPanel />
