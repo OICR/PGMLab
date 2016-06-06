@@ -4,10 +4,10 @@ import OICRlogo from "../../assets/logos/logo_oicr_transparent.png"
 
 export class Footer extends React.Component {
   render(){
-    const noPad = {paddingBottom:"0px"}
+    const noPadMargin = {paddingBottom:"0px",paddingTop:"0px",marginTop:"0px"}
     return (
-      <footer className="page-footer light-blue">
-        <div className="row" style={noPad}>
+      <footer className="page-footer light-blue" style={noPadMargin}>
+        <div className="row">
           <div className="col s8">
             <img src={OICRlogo}  width="150px" alt="oicr logo" />
             <br/>

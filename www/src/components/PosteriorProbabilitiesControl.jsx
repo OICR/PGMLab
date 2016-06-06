@@ -34,8 +34,9 @@ export class PosteriorProbabilitiesControl extends React.Component {
     );
   }
   render(){
+    const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
-      <div className="section">
+      <div className="section" style={noPad}>
         <h5>Posterior Probability Sets</h5>
         <div className="row">
             {this.postProbsSetList()}

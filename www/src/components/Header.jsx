@@ -23,15 +23,16 @@ export class Header extends React.Component {
     ));
   }
   render(){
+    const noMargin = {marginBottom: "0px"}
     return (
-      <header className="row">
+      <header className="row" style={noMargin}>
         <UploadModal  uploadList                     = {this.props.uploadList}
                       uploadListAddFailure           = {this.props.uploadListAddFailure}
                       addNewPathway                  = {this.props.addNewPathway}
                       addNewObservationSet           = {this.props.addNewObservationSet}
                       addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
                       addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
-        <nav className="light-blue lighten-1" role="navigation">
+        <nav className="light-blue" role="navigation">
           <div className="nav-wrapper">
             <ul id="nav-mobile" className="left hide-on-med-and-down">
               {this.tabs()}
@@ -48,7 +49,6 @@ export class Header extends React.Component {
             </a>
           </div>
         </nav>
-
       </header>
     )
   }

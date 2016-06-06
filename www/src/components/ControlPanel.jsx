@@ -7,13 +7,7 @@ import {PathwaysControl} from "./PathwaysControl.jsx";
 export class ControlPanel extends React.Component {
   constructor(props){
     super(props);
-    this.handleRunType = this.handleRunType.bind(this);
     this.handleRun = this.handleRun.bind(this);
-  }
-  handleRunType(type){
-    if (type !== this.props.runType) {
-      this.props.toggleRunType();
-    };
   }
   handleRun(){
     switch (this.props.runType) {
@@ -25,18 +19,8 @@ export class ControlPanel extends React.Component {
   }
   render(){
     // console.log("<ControlPanel> render()");
-    const btnClass = "col s6 btn waves-effect lighten-1 white-text";
-    const inferenceBtnClass = `${btnClass} ${this.props.runType==="Inference" ? "light-blue" : "grey"}`;
-    const learningBtnClass = `${btnClass} ${this.props.runType==="Learning" ? "light-blue" : "grey"}`;
     return (
     <div>
-      <div className="row">
-        <div className="col s12 center-align">
-          <a className={learningBtnClass} onClick={()=>{this.handleRunType("Learning")}}>Learning</a>
-          <a className={inferenceBtnClass} onClick={()=>{this.handleRunType("Inference")}}>Inference</a>
-        </div>
-      </div>
-      <div className="divider" /><div className="divider" />
       <DataSelection  observationMap = {this.props.observationMap}
                       selectObservationSet = {this.props.selectObservationSet}
                       selectObservations = {this.props.selectObservations}
@@ -53,8 +37,6 @@ export class ControlPanel extends React.Component {
                         pathwayMap = {this.props.pathwayMap}
                         setActivePathway = {this.props.setActivePathway}
                         setNodeItemState = {this.props.setNodeItemState} />
-
-      <div className="divider" /><div className="divider" />
       <div className="row">
         <div className="col s12 center-align">
           <a className="waves-effect waves-light btn" onClick={this.handleRun}>Run</a>
