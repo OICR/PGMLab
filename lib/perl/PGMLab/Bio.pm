@@ -251,10 +251,11 @@ sub get_snv_sample_gene_state {
 
     <$fh_snv>; # getting the header
     
-    my (%sample_gene_mutation, %genes_observed, $gene, $sample, $gene_ids);
+    my (%sample_gene_mutation, %genes_observed, $gene, $sample, $gene_ids, %sample_map);
     while (my $mutation = <$fh_snv>) {
         chomp $mutation;
         ($gene, $sample) = split "\t", $mutation;
+        $sample_map{$sample} = 1;
         $gene_ids = $entity_name_to_reactome_id->{$gene};
         foreach my $gene_id (@$gene_ids) {
             if (exists $pi_genes->{$gene_id}) {
@@ -263,17 +264,16 @@ sub get_snv_sample_gene_state {
             }
         }
     }
-    
+
     close($fh_snv);
 
-    my @observed_genes = keys %genes_observed;
-
     my %sample_gene_state;
-    foreach my $sample_name (keys %sample_gene_mutation) {
-         foreach my $gene (@observed_genes) {
+    foreach my $sample_name (keys %sample_map) {
+         foreach my $gene (keys %genes_observed) {
              $sample_gene_state{$sample_name}{$gene} = (defined $sample_gene_mutation{$sample_name}{$gene})? "1": "2";
          }
     }
+
     return \%sample_gene_state;
 }
 
