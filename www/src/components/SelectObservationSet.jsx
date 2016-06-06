@@ -19,10 +19,6 @@ export class SelectObservationSet extends React.Component {
     this.observationSetList = this.observationSetList.bind(this);
     this.observationsList = this.observationsList.bind(this);
   }
-  componentDidMount(){
-    // $(".modal-trigger").leanModal();
-    // $(".tooltipped").tooltip({delay: 25});
-  }
 
   setFilterUpdate(){
     this.setState({setFilterText: this.refs["setFilterInput"].value});

@@ -6,9 +6,11 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import {RunTypePanel} from "./RunTypePanel.jsx";
 import {ControlPanel} from './ControlPanel.jsx';
 import {ResultsPanel} from "./ResultsPanel.jsx";
-import {DisplayPanel} from './DisplayPanel.jsx';
+import {GraphPanel} from './GraphPanel.jsx';
+import {HeatMapPanel} from "./HeatMapPanel.jsx";
 
 var graphvis = require('../bin/graphvis.js');
+var classNames = require("classnames");
 
 export class Body extends React.Component {
     constructor(props){
@@ -16,18 +18,10 @@ export class Body extends React.Component {
     }
     render(){
       // console.log("<Body> render()");
-      let leftPanel;
-      switch (this.props.tab) {
-        case "Run":
-          // console.log("Run tab");
-          leftPanel = <ControlPanel {...this.props}/>;
-          break;
-        case "Results":
-          // console.log("Results");
-          leftPanel = <ResultsPanel {...this.props}/>;
-          break;
-      };
-      const LeftPanel = this.props.tab==="Run" ? <ControlPanel {...this.props} />:<ResultsPanel {...this.props} />;
+      const tab = this.props.tab;
+      const LeftPanel = tab==="Run" ?
+        <ControlPanel {...this.props} /> :
+        <ResultsPanel {...this.props} />;
       const noMargin = {marginBottom:"0px",marginTop:"0px"};
       const leftStyle = {minWidth:"300px", paddingTop:"10px"};
       const canvasSize = {minWidth:"800px", minHeight:"600px"};
@@ -41,7 +35,12 @@ export class Body extends React.Component {
             {LeftPanel}
           </div>
           <div className="col s8" style={canvasSize}>
-            <DisplayPanel />
+            <div className={classNames({"hide":tab!=="Run"})}>
+              <GraphPanel/>
+            </div>
+            <div className={classNames({"hide":tab!=="Results"})}>
+              <HeatMapPanel />
+            </div>
           </div>
         </main>
         </MuiThemeProvider>
