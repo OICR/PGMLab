@@ -8,12 +8,15 @@ import {Footer} from './Footer.jsx';
 var moment = require('moment')
 var graphvis = require('./../bin/graphvis.js');
 
+import {Snackbar} from "material-ui";
+
 export class App extends  React.Component {
     static getCurrentDateTime(){return moment().format('MMM D, YYYY HH:mm')}
     static guid() {
       const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
       return `${s4()+s4()} - ${s4()} - ${s4()} - ${s4()} - ${s4()+s4()+s4()}`;
     }
+    static notify(message, duration) {Materialize.toast(message, duration, "rounded")} //Can be moved to its own Notifier component
 
     constructor(props){
       super(props)
@@ -295,8 +298,11 @@ export class App extends  React.Component {
               observationSet: runResponse.observationSet
             };
             posteriorProbabilitiesMap.get("All").set(toAdd.id, toAdd);
-            this.setState({posteriorProbabilitiesMap}, () => {
-              console.log("Added posteriorProbabilities", toAdd.id);
+            this.setState({
+              posteriorProbabilitiesMap
+            }, () => {
+              App.notify(`Job Complete: ${toAdd.id}`, 1500);
+              // console.log("Added posteriorProbabilities", toAdd.id);
             });
           },
           err => console.log("Error running inference:", err)
