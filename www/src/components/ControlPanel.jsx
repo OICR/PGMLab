@@ -9,6 +9,9 @@ export class ControlPanel extends React.Component {
     super(props);
     this.handleRun = this.handleRun.bind(this);
   }
+  componentDidMount(){
+    console.log("Control Mount");
+  }
   handleRun(){
     switch (this.props.runType) {
       case "Inference":

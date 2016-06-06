@@ -20,6 +20,7 @@ export class SelectObservationSet extends React.Component {
     this.observationsList = this.observationsList.bind(this);
   }
   componentDidMount(){
+    $(".modal-trigger").leanModal();
     $(".tooltipped").tooltip({delay: 25});
   }
 

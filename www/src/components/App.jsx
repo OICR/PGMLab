@@ -310,11 +310,11 @@ export class App extends  React.Component {
     }
     setActivePosteriorProbability(id,index){
       // May not match activeObservation
-      const posteriorProbabilities = this.state.posteriorProbabilities;
-      posteriorProbabilities.set("Active", {id, index});
-      this.setState({posteriorProbabilities}, ()=>{
+      const posteriorProbabilities = this.state.posteriorProbabilitiesMap;
+      posteriorProbabilitiesMap.set("Active", {id, index});
+      this.setState({posteriorProbabilitiesMap}, ()=>{
         // Render on graph
-        graphvis.applyPosteriorProbabilities(posteriorProbabilities.get("All").get(id)[index]);
+        graphvis.applyPosteriorProbabilities(posteriorProbabilitiesMap.get("All").get(id)[index]);
       });
     }
 

@@ -12,7 +12,14 @@ export class ResultsPanel extends React.Component {
     }
   }
   componentDidMount(){
-    $("ul.tabs").tabs()
+    $("ul.tabs").tabs();
+    console.log("Results Mount");
+  }
+
+  selectPosteriorProbabilitySet(ppSet){
+    this.setState({
+      activePosteriorProbability: ppSet
+    })
   }
 
   // RENDERING
