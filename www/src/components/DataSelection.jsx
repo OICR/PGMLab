@@ -5,6 +5,7 @@ import {SelectObservationSet} from './SelectObservationSet.jsx'
 
 export class DataSelection extends React.Component {
   componentDidMount() {
+    $(".modal-trigger").leanModal();
     $(".tooltipped").tooltip({delay: 25});
   }
   render(){

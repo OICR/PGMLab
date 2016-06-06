@@ -22,7 +22,7 @@ export class RunTypePanel extends React.Component {
       <div>
       <div className="row">
         <div className="col s12 center-align">
-          <div className="chip grey lighten-1">{tabPrompt}</div>
+          <div className="chip grey lighten-5">{tabPrompt}</div>
         </div>
       </div>
       <div className="row">

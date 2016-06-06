@@ -15,7 +15,8 @@ export class SelectPathways extends React.Component {
     this.handleUncheckAll=this.handleUncheckAll.bind(this);
   }
   componentDidMount(){
-    $(".tooltipped").tooltip({delay: 25});
+    // $(".modal-trigger").leanModal();
+    // $(".tooltipped").tooltip({delay: 25});
   }
 
   filterTextUpdate(event) {
