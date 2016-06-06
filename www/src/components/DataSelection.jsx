@@ -12,7 +12,11 @@ export class DataSelection extends React.Component {
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
       <div className="section" style={noPad}>
-        <h5 className="center-align">Data Selection</h5>
+        <div className="row">
+          <div className="col s12 center-align">
+            <div className="chip grey lighten-5">Data Selection</div>
+          </div>
+        </div>
         <div className="row">
           <div className="col s6 center-align">
             <SelectObservationSet observationMap = {this.props.observationMap}
