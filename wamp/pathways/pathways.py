@@ -48,10 +48,13 @@ import uuid
 from itertools import * # for skipping lines in a file
 
 cwd = os.getcwd()
-
+print cwd
 hosted_data = cwd + "/../../data/reactome_template/"
 
 import sys
+
+import imp
+inchlib_clust = imp.load_source("inchlib_clust", cwd+ "/../../external_lib/inchlib_clust-0.1.4")
 class AppSession(ApplicationSession):
 
     log = Logger()
@@ -90,7 +93,7 @@ class AppSession(ApplicationSession):
             return pathway
 
         yield self.register(getPathway, 'pgmlab.pathway.get')
-        self.log.info("procedure getPathway(pathwayId) registered")
+        # self.log.info("procedure getPathway(pathwayId) registered")
 
         # REGISTER a procedure for remote calling
         #
@@ -101,7 +104,7 @@ class AppSession(ApplicationSession):
             return pathwayList
 
         yield self.register(getPathwayList, 'pgmlab.pathways.list')
-        self.log.info("procedure getPathwayList() registered")
+        # self.log.info("procedure getPathwayList() registered")
 
         def createPairwiseInteractionFile(runPath, pathway):
             self.log.info("createPairwiseInteractionFile")
@@ -185,4 +188,61 @@ class AppSession(ApplicationSession):
             }
 
         yield self.register(runInference, 'pgmlab.inference.run')
-        self.log.info("subscribed to topic 'pgmlab.inference.run'")
+        # self.log.info("subscribed to topic 'pgmlab.inference.run'")
+
+        # InCHlib clustering returns formatted JSON data to pass to js library
+        # Expects array of posterior probability sets {nodeID: [s1,s2,s3] ...}
+        def inchlibCSV(runPath, fileName, stateData, obsCount):
+            filePath = runPath+"/"+fileName+".csv"
+            csv = open(filePath, "w")
+            csv.write(reduce(lambda prev,curr: prev+",Observation "+str(curr), range(obsCount), "id"))
+            csv.write("\n")
+            for nodeID, obsStates in stateData.items():
+                csv.write((
+                    str(nodeID)+
+                    reduce(lambda prev,curr: prev+","+str(curr),obsStates,"")+
+                    "\n"))
+            csv.close()
+        def transformPosteriorProbs(posteriorProbsData):
+            state1 = {}
+            state2 = {}
+            state3 = {}
+            stateD = {}
+            for obsIdx, observation in enumerate(posteriorProbsData):
+                for nodeID,states in observation.items():
+                    if nodeID in state1:
+                        state1[nodeID].append(states[0])
+                    else:
+                        # May not need [False]*obsIdx assuming PGMLab results filter out extraneous nodes
+                        state1[nodeID] = [False]*obsIdx + [states[0]]
+                    if nodeID in state2:
+                        state2[nodeID].append(states[1])
+                    else:
+                        state2[nodeID] = [False]*obsIdx + [states[1]]
+                    if nodeID in state3:
+                        state3[nodeID].append(states[2])
+                    else:
+                        state3[nodeID] = [False]*obsIdx + [states[2]]
+                    if nodeID in stateD:
+                        stateD[nodeID].append('SOMEMAX')
+                    else:
+                        stateD[nodeID] = [False]*obsIdx + ["SOMEMAX"]
+            return {"state1":state1, "state2":state2, "state3":state3, "stateD":stateD}
+        def inchlibCluster(posteriorProbsData):
+            self.log.info("inchlibCluster")
+            # Group into state1,state2,state3,stateDominant
+            states = transformPosteriorProbs(posteriorProbsData)
+
+            cwd = os.getcwd()
+            tempID = str(uuid.uuid4())
+            tempPath = cwd + "/../../tmp/"
+            runPath = tempPath + tempID
+            os.mkdir(runPath)
+
+            obsCount = len(posteriorProbsData)
+            for filename, stateData in states.items():
+                inchlibCSV(runPath, filename, stateData, obsCount)
+                # c = inchlib_clust.Cluster()
+
+            return {}
+        yield self.register(inchlibCluster, "inchlib.cluster")
