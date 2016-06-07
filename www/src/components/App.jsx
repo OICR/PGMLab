@@ -70,6 +70,7 @@ export class App extends  React.Component {
       this.runInference                   = this.runInference.bind(this);
 
       this.setActivePosteriorProbability  = this.setActivePosteriorProbability.bind(this);
+      this.inchlibCluster = this.inchlibCluster.bind(this);
 
       this.uploadListAddFailure           = this.uploadListAddFailure.bind(this);
       this.addNewPathway                  = this.addNewPathway.bind(this);
@@ -273,6 +274,7 @@ export class App extends  React.Component {
         graphvis.setSingleNodeState({name,state});
       });
     }
+
     toggleRunType(){
       this.setState({
         "runType": (this.state.runType==="Inference") ? "Learning":"Inference"
@@ -308,6 +310,15 @@ export class App extends  React.Component {
           err => console.log("Error running inference:", err)
         );
     }
+    inchlibCluster(posteriorProbsData){
+      this.props.callInCHlibCluster(posteriorProbsData)
+        .then(
+          inchlibJSON => {
+            // console.log("inchlibJSON", inchlibJSON);
+          },
+          err => console.log("Error inchlibCluster", err)
+        )
+    }
     setActivePosteriorProbability(id,index){
       // May not match activeObservation
       const posteriorProbabilities = this.state.posteriorProbabilitiesMap;
@@ -318,6 +329,7 @@ export class App extends  React.Component {
       });
     }
 
+    // UPLOADING
     uploadListAddFailure(name, filetype, comment){
       console.log("uploadListAddFailure");
       var uploadList = this.state.uploadList
@@ -444,7 +456,9 @@ export class App extends  React.Component {
                 runInference                    = {this.runInference}
 
                 posteriorProbabilitiesMap = {this.state.posteriorProbabilitiesMap}
-                setActivePosteriorProbability = {this.setActivePosteriorProbability} />
+                setActivePosteriorProbability = {this.setActivePosteriorProbability}
+
+                inchlibCluster = {this.inchlibCluster}/>
           <Footer />
         </div>
       )

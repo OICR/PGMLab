@@ -31,16 +31,16 @@ export class PosteriorProbabilitiesControl extends React.Component {
     return postProbsSets;
   }
   render(){
+    const emptySetPrompt = (
+      <div className="collection-item center-align" style={{"paddingBottom":"0px", "paddingTop":"0px"}}>
+        <span>No Posterior Probabilities To Show</span>
+      </div>
+    );
     const postProbsSetList = this.postProbsSetList();
     return (
       <div className="collection">
         {
-          postProbsSetList.length===0 ?
-            <div className="collection-item center-align" style={{"paddingBottom":"0px", "paddingTop":"0px"}}>
-              <span>No Posterior Probabilities To Show</span>
-            </div>
-            :
-            postProbsSetList
+          postProbsSetList.length===0 ? emptySetPrompt:postProbsSetList
         }
       </div>
     );

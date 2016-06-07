@@ -5,21 +5,10 @@ import {PosteriorProbabilitiesControl} from "./PosteriorProbabilitiesControl.jsx
 export class ResultsPanel extends React.Component {
   constructor(props){
     super(props);
-
-    this.state = {
-      activePosteriorProbability: null,
-      activeObservation: null
-    }
   }
   componentDidMount(){
     $("ul.tabs").tabs();
     console.log("Results Mount");
-  }
-
-  selectPosteriorProbabilitySet(ppSet){
-    this.setState({
-      activePosteriorProbability: ppSet
-    })
   }
 
   // RENDERING
