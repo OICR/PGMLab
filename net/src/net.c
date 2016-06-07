@@ -1747,8 +1747,10 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
     }
 
     for(i = 0;i < Nv;i++)
-        for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
+        for (k=0;k<pow(nstate,fGraph[i].numVariables);k++) {
             factorarray[i][k]  = (1e-3)/(nstate-1);
+            vote[i][k] = 100;
+        }
     
     /*   multiply indexes of CPT by +1 or -1 depending that the interaction is positive or negative*/
     for(i = 0;i < Nv;i++)
@@ -1762,12 +1764,13 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
 
 
     /*    OR resembles max and AND resembles min */
- if (nstate == 3)
+    if (nstate == 3)
     {
         int Small_num_for_OR ; /* to find max*/
         int Big_Num_for_AND;   /*to find min*/
         for(i = 0;i < Nv;i++)
         {
+            //  printf("number of variables in node = %d \n ",fGraph[i].numVariables);
             for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
             {
                 Small_num_for_OR   = -1e5;
@@ -1776,50 +1779,7 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
                 {
                     if (fGraph[i].type_interaction[h]== 1)
                     {
-                        if (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] > Small_num_for_OR)
-                        {
-                            Small_num_for_OR =  cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)];
-                            if (Small_num_for_OR !=2 && Small_num_for_OR !=-2)
-                                    vote[i][k] = Small_num_for_OR;
-                        }
-                    }
-                    else if (fGraph[i].type_interaction[h]== 0)
-                    {
-                        if (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] < Big_Num_for_AND)
-                        {
-                            Big_Num_for_AND =  cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)];
-                            if (Big_Num_for_AND!=2 && Big_Num_for_AND !=-2)
-                                vote[i][k] = Big_Num_for_AND;
-                        }
-                    }
-                }
-                /* if all parents all 2s*/
-                if (vote[i][k] == 1e5|| vote[i][k]== -1e5)
-                    vote[i][k] = 2;
-                
-                /* substract from the output state */
-                vote[i][k] -= cpt[i][k];
-                /* we compare the closeness to zero so the absolute value*/
-                vote[i][k]  = inAbsolute(vote[i][k]);
-                //printf("%f %d\n",vote[i][k],cpt[i][k]);
-            }
-        }
-    }
-    else /*  for case other than nstate = 3 */
-    {
-        int Small_num_for_OR;  /* to find max*/
-        int Big_Num_for_AND;   /*to find min*/
-        for(i = 0;i < Nv;i++)
-        {
-            for (k=0;k<pow(nstate,fGraph[i].numVariables);k++)
-            {
-                Small_num_for_OR = -1e5;
-                Big_Num_for_AND = 1e5;
-                for (h=1;h < fGraph[i].numVariables;h++)
-                {
-                    if (fGraph[i].type_interaction[h]== 1)
-                    {
-                        if (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] > Small_num_for_OR)
+                        if (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] > Small_num_for_OR && cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]!=0)
                         {
                             Small_num_for_OR =  cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)];
                             vote[i][k] = Small_num_for_OR;
@@ -1827,19 +1787,22 @@ int reaction_logic_to_factorgraph(char *readreactionlogic,char * writefactorgrap
                     }
                     else if (fGraph[i].type_interaction[h]== 0)
                     {
-                        if (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] < Big_Num_for_AND)
+                        if (cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)] < Big_Num_for_AND && cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)]!=0)
                         {
                             Big_Num_for_AND =  cpt[i][k+h*(int)pow(nstate,fGraph[i].numVariables)];
                             vote[i][k] = Big_Num_for_AND;
                         }
                     }
                 }
-                
+                /* if all parents all 2s*/
+                if (vote[i][k] == 100)
+                    vote[i][k] = 0;
+   
                 /* substract from the output state */
                 vote[i][k] -= cpt[i][k];
                 /* we compare the closeness to zero so the absolute value*/
                 vote[i][k]  = inAbsolute(vote[i][k]);
-                //printf("%f %d\n",vote[i][k],cpt[i][k]);
+                // printf("%d\t%f \t%d\n",k,vote[i][k],cpt[i][k]);
             }
         }
     }
