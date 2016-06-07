@@ -28,8 +28,10 @@ export class ResultsPanel extends React.Component {
     return (
       <div>
         <div className="section" style={noPad}>
-          <h5 className="center-align">Posterior Probabilities</h5>
           <div className="row">
+            <div className="col s12 center-align">
+              <div className="chip grey lighten-5">Inspect Posterior Probabilities</div>
+            </div>
             <div className="col s12">
               <ul className="tabs grey lighten-5">
                 <li className="tab col s4"><a href="#ppSets">Sets</a></li>

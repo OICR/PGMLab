@@ -29,10 +29,13 @@ export class ObservationsControl extends React.Component {
       <MenuItem key={posn} value={posn} primaryText={`Observation ${posn}`} />
     );
     return (
-      <SelectField  value={activeObservationPosn}
-                    onChange={(evt,idx,val)=>{this.handleObservationChange(val)}}
-                    fullWidth={true} floatingLabelText={"Active Observation"}
-                    children={observationItems} />
+      <div className="center-align">
+        <div className="chip grey lighten-5">Inspect an observation and its node states</div>
+        <SelectField  value={activeObservationPosn}
+                      onChange={(evt,idx,val)=>{this.handleObservationChange(val)}}
+                      fullWidth={true}
+                      children={observationItems} />
+      </div>
     );
   }
   render(){

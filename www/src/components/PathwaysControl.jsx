@@ -26,10 +26,13 @@ export class PathwaysControl extends React.Component {
                 primaryText={`${pathway.name}`} label={`${pathway.name}`} />
     );
     return (
-      <SelectField  value={pathwayMap.get("Active").id}
-                    onChange={(evt,idx,val)=>{this.handlePathwayChange(val)}}
-                    fullWidth={true} floatingLabelText={"Active Pathway"}
-                    children={pathwayItems} />
+      <div className="center-align">
+        <div className="chip grey lighten-5">Inspect a pathway and its node states</div>
+        <SelectField  value={pathwayMap.get("Active").id}
+                      onChange={(evt,idx,val)=>{this.handlePathwayChange(val)}}
+                      fullWidth={true}
+                      children={pathwayItems} />
+      </div>
     );
   }
   render(){
