@@ -14,7 +14,7 @@ export class App extends  React.Component {
     static getCurrentDateTime(){return moment().format('MMM D, YYYY HH:mm')}
     static guid() {
       const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-      return `${s4()+s4()} - ${s4()} - ${s4()} - ${s4()} - ${s4()+s4()+s4()}`;
+      return `${s4()+s4()}-${s4()}-${s4()}-${s4()}-${s4()+s4()+s4()}`;
     }
     static notify(message, duration) {Materialize.toast(message, duration, "rounded")} //Can be moved to its own Notifier component
 
@@ -68,6 +68,7 @@ export class App extends  React.Component {
 
       this.toggleRunType                  = this.toggleRunType.bind(this);
       this.runInference                   = this.runInference.bind(this);
+      this.handleInferenceResponse = this.handleInferenceResponse.bind(this);
 
       this.setActivePosteriorProbability  = this.setActivePosteriorProbability.bind(this);
       this.inchlibCluster = this.inchlibCluster.bind(this);
@@ -280,33 +281,36 @@ export class App extends  React.Component {
         "runType": (this.state.runType==="Inference") ? "Learning":"Inference"
       });
     }
+    handleInferenceResponse(runResponse){
+      console.log("response:", runResponse);
+      const posteriorProbabilitiesMap = this.state.posteriorProbabilitiesMap;
+      const toAdd = {
+        type: "Run",
+        dateTime: runResponse.submitDateTime,
+        id: runResponse.runID,
+        posteriorProbabilitiesSet: runResponse.posteriorProbabilitiesSet,
+        observationSet: runResponse.observationSet
+      };
+      posteriorProbabilitiesMap.get("All").set(toAdd.id, toAdd);
+      this.setState({
+        posteriorProbabilitiesMap
+      }, () => {
+        App.notify(`Job Complete: ${toAdd.id}`, 1500);
+        // console.log("Added posteriorProbabilities", toAdd.id);
+      });
+    }
     runInference(){
       const observationMap = this.state.observationMap;
-      const activeObservationPosn = observationMap.get("Current").get("Active Observation");
-      const observation = observationMap.get("Current").get("Set").observations[activeObservationPosn];
-      const links = this.state.pairwiseInteractions.links;
-      // CHANGE BACKEND TO SEND IN WHOLE SET
       const observationSet = observationMap.get("Current").get("Set");
-      this.props.PGMLabInference(links, observationSet)
+      const links = this.state.pairwiseInteractions.links;
+      const pathways = [...this.state.pathwayMap.get("Selected")].reduce(
+        (prev,curr) => {
+          prev[curr[0]] = curr[1];
+          return prev;
+        }, Object.create(null));
+      this.props.PGMLabInference(links, observationSet, pathways)
         .then(
-          runResponse => {
-            console.log("response:", runResponse);
-            const posteriorProbabilitiesMap = this.state.posteriorProbabilitiesMap;
-            const toAdd = {
-              type: "Run",
-              dateTime: runResponse.submitDateTime,
-              id: runResponse.runID,
-              posteriorProbabilitiesSet: runResponse.posteriorProbabilitiesSet,
-              observationSet: runResponse.observationSet
-            };
-            posteriorProbabilitiesMap.get("All").set(toAdd.id, toAdd);
-            this.setState({
-              posteriorProbabilitiesMap
-            }, () => {
-              App.notify(`Job Complete: ${toAdd.id}`, 1500);
-              // console.log("Added posteriorProbabilities", toAdd.id);
-            });
-          },
+          runResponse => { this.handleInferenceResponse(runResponse) },
           err => console.log("Error running inference:", err)
         );
     }

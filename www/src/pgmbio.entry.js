@@ -39,10 +39,11 @@ function getReactomePathway(pathway) {
 };
 // Nodes returned will only be for given pathway described by links
 //  when passing this processed info to callInChlibCluster, extraneous observed nodes will be ignored
-function PGMLabInference(links, observationSet) {
-  // RUN INFERENCE OVER ALL OBSERVATIONS IN OBSERVATIONSET
+function PGMLabInference(links, observationSet, pathways) {
   const options = {submitDateTime: App.getCurrentDateTime()}; //Don't give extra info
-  return connection.session.call("pgmlab.inference.run", [links, observationSet, options]);
+  // RUN INFERENCE OVER ALL OBSERVATIONS IN OBSERVATIONSET
+  console.log(pathways);
+  return connection.session.call("pgmlab.inference.run", [links, observationSet, pathways, options]);
 }
 function callInCHlibCluster(posteriorProbsData) {
   return connection.session.call("inchlib.cluster", [posteriorProbsData]);

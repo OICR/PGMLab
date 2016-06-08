@@ -159,7 +159,7 @@ class AppSession(ApplicationSession):
                 pp[nodename].append(nodestateprob)
             return posteriorprobabilities
 
-        def runInference(pathway, observationSet, options):
+        def runInference(pathway, observationSet, pathways, options):
             self.log.info("runInference")
             runID = str(uuid.uuid4())
             cwd = os.getcwd()
@@ -167,17 +167,31 @@ class AppSession(ApplicationSession):
             runPath = tmpPath + runID
             os.mkdir(runPath)
 
-            numberOfNodes = createPairwiseInteractionFile(runPath, pathway)
-            generateFactorgraph(runPath)
-            numberOfObs = createObservationFile(runPath, observationSet)
-            inferenceCommand(runPath)
-            posteriorProbabilitiesSet = readPosteriorProbabilityFile(runPath)
+            posteriorProbabilities = {}
+            for id,pathway in pathways.items():
+                if "pairwiseInteractions" in pathway:
+                    links = pathway["pairwiseInteractions"]["links"]
+                    print "links", links
+                else:
+                    reactomePathway = getPathway(id)
+                    links = reactomePathway["links"]
+                    print 'reactome', reactomePathway
+                numberOfNodes = createPairwiseInteractionFile(runPath, links)
+                generateFactorgraph(runPath)
+                numberOfObs = createObservationFile(runPath, observationSet)
+                inferenceCommand(runPath)
+                posteriorProbabilitiesSet = readPosteriorProbabilityFile(runPath)
+                # Load into response object
+                posteriorProbabilities[id] = posteriorProbabilitiesSet
+
             # shutil.rmtree(runPath)
             return {
                 "runID":runID,
                 "submitDateTime":options["submitDateTime"],
+                "posteriorProbabilities":posteriorProbabilities,
                 "posteriorProbabilitiesSet":posteriorProbabilitiesSet,
-                "observationSet":observationSet
+                "observationSet":observationSet,
+                "selectedPathways":pathways
             }
 
         yield self.register(runInference, 'pgmlab.inference.run')
