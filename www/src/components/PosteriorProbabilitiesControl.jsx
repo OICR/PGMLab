@@ -6,26 +6,27 @@ export class PosteriorProbabilitiesControl extends React.Component {
   constructor(props){
     super(props);
 
-    this.showPostProbs = this.showPostProbs.bind(this);
+    this.selectPostProbs = this.selectPostProbs.bind(this);
     this.postProbsSetList = this.postProbsSetList.bind(this);
   }
 
-  showPostProbs(id, index){
-    console.log("showPostProbs:", id, index);
-    this.props.setActivePosteriorProbability(id,index);
+  selectPostProbs(pp){
+    console.log("selectPostProbs:", pp);
+    // this.props.setActivePosteriorProbability(id,index);
+    this.props.selectPostProbs(pp)
   }
 
   // RENDERING
   postProbsSetList(){
     const posteriorProbabilitiesMap = this.props.posteriorProbabilitiesMap;
     const postProbsSets = [...posteriorProbabilitiesMap.get("All").values()]
-      .filter(ppSet => ppSet.type === "Run")
-      .map(ppSet => (
-        <a key={ppSet.id} className="collection-item black-text"
-            onClick={()=>{this.showPostProbs(ppSet.id,0)}}>
-          <strong>{ppSet.id}</strong><br/>
-            Observation Set: {ppSet.observationSet.name}<br/>
-            Run submitted: {ppSet.dateTime}
+      .filter(pp => pp.type === "Run")
+      .map(pp => (
+        <a key={pp.id} className="collection-item grey-text" onClick={()=>{this.selectPostProbs(pp)}}>
+          {"ID: "}<span className="black-text">{pp.id}<br/></span>
+          {"Observation Set: "}<span className="black-text">{pp.observationSet.name}<br/></span>
+          {"Number of Pathways: "}<span className="black-text">{Object.keys(pp).length}<br/></span>
+          {"Run submitted: "}<span className="black-text">{pp.dateTime}</span>
         </a>
       ));
     return postProbsSets;

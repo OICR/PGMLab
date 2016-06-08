@@ -70,7 +70,7 @@ export class App extends  React.Component {
       this.runInference                   = this.runInference.bind(this);
       this.handleInferenceResponse = this.handleInferenceResponse.bind(this);
 
-      this.setActivePosteriorProbability  = this.setActivePosteriorProbability.bind(this);
+      // this.setActivePosteriorProbability  = this.setActivePosteriorProbability.bind(this);
       this.inchlibCluster = this.inchlibCluster.bind(this);
 
       this.uploadListAddFailure           = this.uploadListAddFailure.bind(this);
@@ -288,8 +288,10 @@ export class App extends  React.Component {
         type: "Run",
         dateTime: runResponse.submitDateTime,
         id: runResponse.runID,
+        posteriorProbabilities: runResponse.posteriorProbabilities,
         posteriorProbabilitiesSet: runResponse.posteriorProbabilitiesSet,
-        observationSet: runResponse.observationSet
+        observationSet: runResponse.observationSet,
+        selectedPathways: runResponse.selectedPathways
       };
       posteriorProbabilitiesMap.get("All").set(toAdd.id, toAdd);
       this.setState({
@@ -323,15 +325,15 @@ export class App extends  React.Component {
           err => console.log("Error inchlibCluster", err)
         )
     }
-    setActivePosteriorProbability(id,index){
-      // May not match activeObservation
-      const posteriorProbabilities = this.state.posteriorProbabilitiesMap;
-      posteriorProbabilitiesMap.set("Active", {id, index});
-      this.setState({posteriorProbabilitiesMap}, ()=>{
-        // Render on graph
-        graphvis.applyPosteriorProbabilities(posteriorProbabilitiesMap.get("All").get(id)[index]);
-      });
-    }
+    // setActivePosteriorProbability(id,index){
+    //   // May not match activeObservation
+    //   const posteriorProbabilities = this.state.posteriorProbabilitiesMap;
+    //   posteriorProbabilitiesMap.set("Active", {id, index});
+    //   this.setState({posteriorProbabilitiesMap}, ()=>{
+    //     // Render on graph
+    //     graphvis.applyPosteriorProbabilities(posteriorProbabilitiesMap.get("All").get(id)[index]);
+    //   });
+    // }
 
     // UPLOADING
     uploadListAddFailure(name, filetype, comment){

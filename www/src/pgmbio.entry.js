@@ -42,7 +42,7 @@ function getReactomePathway(pathway) {
 function PGMLabInference(links, observationSet, pathways) {
   const options = {submitDateTime: App.getCurrentDateTime()}; //Don't give extra info
   // RUN INFERENCE OVER ALL OBSERVATIONS IN OBSERVATIONSET
-  console.log(pathways);
+  // console.log(pathways);
   return connection.session.call("pgmlab.inference.run", [links, observationSet, pathways, options]);
 }
 function callInCHlibCluster(posteriorProbsData) {

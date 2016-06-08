@@ -30,7 +30,8 @@ export class PathwaysControl extends React.Component {
         <div className="chip grey lighten-5">Inspect a pathway and its node states</div>
         <SelectField  value={pathwayMap.get("Active").id}
                       onChange={(evt,idx,val)=>{this.handlePathwayChange(val)}}
-                      fullWidth={true}
+                      autoWidth={true}
+                      style={{width:"100%"}}
                       children={pathwayItems} />
       </div>
     );
