@@ -39,12 +39,18 @@ export class InferencePosteriorProbabilities extends React.Component {
     );
     const postProbsSetList = this.postProbsSetList();
     return (
-      <div className="row">
-        <div className="col s12 center-align chip grey lighten-5">Posterior Probabilities</div>
-        <div className="collection">
-          {
-            postProbsSetList.length===0 ? emptyPrompt:postProbsSetList
-          }
+      <div className="section">
+        <div className="card-panel">
+          <div className="center-align">
+            <div className="chip grey lighten-5">
+              Posterior Probabilities
+            </div>
+          </div>
+          <div className="collection">
+            {
+              postProbsSetList.length===0 ? emptyPrompt:postProbsSetList
+            }
+          </div>
         </div>
       </div>
     );

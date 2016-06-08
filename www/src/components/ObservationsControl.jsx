@@ -42,12 +42,14 @@ export class ObservationsControl extends React.Component {
   render(){
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
-      <div className="section" style={noPad}>
-        {this.header()}
-        <NodeList activeType="Observation"
-                  pairwiseInteractions={this.props.pairwiseInteractions}
-                  observationMap = {this.props.observationMap}
-                  setNodeItemState={this.props.setNodeItemState}/>
+      <div id="ObservationsControl" className="section" style={noPad}>
+        <div className="card-panel">
+          {this.header()}
+          <NodeList activeType="Observation"
+                    pairwiseInteractions={this.props.pairwiseInteractions}
+                    observationMap = {this.props.observationMap}
+                    setNodeItemState={this.props.setNodeItemState}/>
+        </div>
       </div>
     );
   }

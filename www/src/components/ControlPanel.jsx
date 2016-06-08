@@ -11,6 +11,7 @@ export class ControlPanel extends React.Component {
   }
   componentDidMount(){
     console.log("Control Mount");
+    $("ul.tabs").tabs()
   }
   handleRun(){
     switch (this.props.runType) {
@@ -31,15 +32,27 @@ export class ControlPanel extends React.Component {
                       pathwayMap = {this.props.pathwayMap}
                       selectPathways = {this.props.selectPathways}
                       removeSelectedPathways = {this.props.removeSelectedPathways} />
-      <ObservationsControl  pairwiseInteractions={this.props.pairwiseInteractions}
-                            observationMap = {this.props.observationMap}
-                            setActiveObservation = {this.props.setActiveObservation}
-                            setNodeItemState = {this.props.setNodeItemState} />
-      <PathwaysControl  pairwiseInteractions={this.props.pairwiseInteractions}
-                        observationMap = {this.props.observationMap}
-                        pathwayMap = {this.props.pathwayMap}
-                        setActivePathway = {this.props.setActivePathway}
-                        setNodeItemState = {this.props.setNodeItemState} />
+      <div className="row">
+        <div className="col s12">
+          <ul className="tabs">
+            <li className="tab col s6">
+              <a href="#ObservationsControl">Observations</a>
+            </li>
+            <li className="tab col s6">
+              <a href="#PathwaysControl">Pathways</a>
+            </li>
+          </ul>
+        </div>
+        <ObservationsControl  pairwiseInteractions={this.props.pairwiseInteractions}
+                              observationMap = {this.props.observationMap}
+                              setActiveObservation = {this.props.setActiveObservation}
+                              setNodeItemState = {this.props.setNodeItemState} />
+        <PathwaysControl  pairwiseInteractions={this.props.pairwiseInteractions}
+                          observationMap = {this.props.observationMap}
+                          pathwayMap = {this.props.pathwayMap}
+                          setActivePathway = {this.props.setActivePathway}
+                          setNodeItemState = {this.props.setNodeItemState} />
+      </div>
       <div className="row">
         <div className="col s12 center-align">
           <a className="waves-effect waves-light btn" onClick={this.handleRun}>Run</a>

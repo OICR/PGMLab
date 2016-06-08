@@ -20,7 +20,7 @@ export class RunTypePanel extends React.Component {
       "View PGMLab job results and uploaded data";
     return (
       <div>
-      <div className="row">
+      <div className="row" style={{paddingBottom:"0px"}}>
         <div className="col s12 center-align">
           <div className="chip grey lighten-5">{tabPrompt}</div>
         </div>

@@ -40,12 +40,14 @@ export class PathwaysControl extends React.Component {
     // console.log(this.props);
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
-      <div className="section" style={noPad}>
-        {this.header()}
-        <NodeList activeType="Pathway"
-                  pairwiseInteractions={this.props.pairwiseInteractions}
-                  observationMap={this.props.observationMap}
-                  setNodeItemState={this.props.setNodeItemState}/>
+      <div id="PathwaysControl" className="section" style={noPad}>
+        <div className="card-panel">
+          {this.header()}
+          <NodeList activeType="Pathway"
+                    pairwiseInteractions={this.props.pairwiseInteractions}
+                    observationMap={this.props.observationMap}
+                    setNodeItemState={this.props.setNodeItemState}/>
+        </div>
       </div>
     );
   }
