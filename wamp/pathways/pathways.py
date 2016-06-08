@@ -34,27 +34,20 @@ from autobahn.twisted.util import sleep
 from autobahn.twisted.wamp import ApplicationSession
 from autobahn.wamp.exception import ApplicationError
 
-import subprocess
-
-import os
-import os.path
-import shutil # for removing directory
-
-import json
-import string
-
-import uuid
-
 from itertools import * # for skipping lines in a file
+
+import sys, os, os.path, shutil, subprocess, json, string, uuid
+
+# sys.path.append("/usr/local/lib/python2.7/site-packages")
+# sys.path.append("/Library/Python/2.7/site-packages")
+
+# import inchlib_clust
 
 cwd = os.getcwd()
 print cwd
 hosted_data = cwd + "/../../data/reactome_template/"
 
-import sys
 
-import imp
-inchlib_clust = imp.load_source("inchlib_clust", cwd+ "/../../external_lib/inchlib_clust-0.1.4")
 class AppSession(ApplicationSession):
 
     log = Logger()
