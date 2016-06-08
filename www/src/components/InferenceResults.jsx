@@ -59,6 +59,22 @@ export class InferenceResults extends React.Component {
     );
   }
   heatmapCard(){
+    const selectedPostProbs = this.state.selectedPostProbs;
+    const [postProbsPrompt, children] = selectedPostProbs===null ?
+      [
+        "Select a posterior probability set below",
+        undefined
+      ]:[
+        this.state.selectedPostProbs.id,
+        [...Object.keys(selectedPostProbs.selectedPathways)]
+          .map(k => selectedPostProbs.selectedPathways[k])
+          .map(pathway => {
+            console.log(pathway);
+            return (
+              <MenuItem key={pathway.id} value={pathway} primaryText={pathway.name} />
+            );
+          })
+      ];
     const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
       <div className="section" style={noPad}>
@@ -67,14 +83,19 @@ export class InferenceResults extends React.Component {
           <div className="card">
             <div className="card-content row center-align" style={{paddingBottom:"0px"}}>
               <div className="col s12 chip">
-                {
-                  this.state.selectedPostProbs===null ?
-                  "Select a posterior probability set below":
-                  this.state.selectedPostProbs.id
-                }
+                {postProbsPrompt}
               </div>
               <div className="col s12">
-                {this.selectFieldPathway()}
+                {
+                  selectedPostProbs===null ?
+                    undefined
+                    :
+                    <SelectField  value={this.state.selectedPathway}
+                                  onChange={(evt,idx,val) => {this.selectPathway(val)}}
+                                  autoWidth={true}
+                                  style={{width:"100%"}}
+                                  children={children} />
+                }
               </div>
             </div>
             <div className="card-action center-align">
@@ -89,7 +110,7 @@ export class InferenceResults extends React.Component {
   render(){
     return (
       <div>
-        { this.heatmapCard() }
+        {this.heatmapCard()}
         <InferencePosteriorProbabilities
             selectPostProbs={this.selectPostProbs}
             posteriorProbabilitiesMap={this.props.posteriorProbabilitiesMap}
