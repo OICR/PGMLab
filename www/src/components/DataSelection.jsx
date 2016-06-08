@@ -40,16 +40,10 @@ export class DataSelection extends React.Component {
         <div className="row">
           <div className="col s12">
             <div className="card">
-              <div className="card-content center-align" style={{paddingBottom:"0px", paddingTop:"0px"}}>
-                <span className="card-title activator">
-                  Data Selection
-                </span>
-              </div>
-              <div className="card-reveal center-align black white-text">
-                <span className="card-title chip black white-text">
-                  {"Select data PGMLab will use"}
-                </span>
-
+              <div className="card-content row center-align" style={{paddingBottom:"0px"}}>
+                <div className="col s12 chip">
+                  {"Select data to be used by PGMLab"}
+                </div>
               </div>
               <div className="card-action center-align">
                 <a  className="modal-trigger tooltipped" href="#selectObservationSetModal"
@@ -60,9 +54,6 @@ export class DataSelection extends React.Component {
                     data-position="top" data-tooltip="Select pathways to work with">
                     Pathways
                 </a>
-
-
-
               </div>
             </div>
           </div>

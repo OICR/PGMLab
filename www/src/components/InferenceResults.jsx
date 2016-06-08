@@ -59,8 +59,10 @@ export class InferenceResults extends React.Component {
     );
   }
   heatmapCard(){
+    const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
-      <div className="row">
+      <div className="section" style={noPad}>
+      <div className="row" style={{marginBottom:"0px"}}>
         <div className="col s12">
           <div className="card">
             <div className="card-content row center-align" style={{paddingBottom:"0px"}}>
@@ -81,21 +83,17 @@ export class InferenceResults extends React.Component {
           </div>
         </div>
       </div>
+      </div>
     );
   }
   render(){
-    const noPad={paddingBottom:"0px", paddingTop:"0px"};
     return (
       <div>
-        <div className="section" style={noPad}>
-          { this.heatmapCard() }
-          <div className="row">
-            <InferencePosteriorProbabilities
-                selectPostProbs={this.selectPostProbs}
-                posteriorProbabilitiesMap={this.props.posteriorProbabilitiesMap}
-                setActivePosteriorProbability={this.props.setActivePosteriorProbability} />
-          </div>
-        </div>
+        { this.heatmapCard() }
+        <InferencePosteriorProbabilities
+            selectPostProbs={this.selectPostProbs}
+            posteriorProbabilitiesMap={this.props.posteriorProbabilitiesMap}
+            setActivePosteriorProbability={this.props.setActivePosteriorProbability} />
       </div>
     );
   }

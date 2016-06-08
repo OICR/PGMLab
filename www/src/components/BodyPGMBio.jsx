@@ -23,7 +23,7 @@ export class Body extends React.Component {
         <ControlPanel {...this.props} />:<InferenceResults {...this.props} />;
       const noMargin = {marginBottom:"0px",marginTop:"0px"};
       const leftStyle = {minWidth:"300px", paddingTop:"10px"};
-      const canvasSize = {minWidth:"800px", minHeight:"600px"};
+      const canvasSize = {minWidth:"800px", minHeight:"650px"};
       return (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="row grey lighten-5" style={noMargin}>
@@ -33,8 +33,8 @@ export class Body extends React.Component {
                           toggleRunType = {this.props.toggleRunType} />
             {LeftPanel}
           </div>
-          <div className="col s8" style={canvasSize}>
-            <div className={classNames({"hide":tab!=="Run"})}>
+          <div className="col s8">
+            <div className={classNames({"hide":tab!=="Run"})} style={canvasSize}>
               <GraphPanel />
             </div>
             <div className={classNames({"hide":tab!=="Results"})}>

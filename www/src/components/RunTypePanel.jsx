@@ -20,12 +20,10 @@ export class RunTypePanel extends React.Component {
       "View PGMLab job results and uploaded data";
     return (
       <div>
-      <div className="row" style={{paddingBottom:"0px"}}>
+      <div className="row">
         <div className="col s12 center-align">
           <div className="chip grey lighten-5">{tabPrompt}</div>
         </div>
-      </div>
-      <div className="row">
         <div className="col s12 center-align">
           <a className={learningBtnClass} onClick={()=>{this.handleRunType("Learning")}}>Learning</a>
           <a className={inferenceBtnClass} onClick={()=>{this.handleRunType("Inference")}}>Inference</a>

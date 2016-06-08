@@ -32,7 +32,7 @@ export class HeatMapPanel extends React.Component {
   }
   render(){
     return (
-      <div>
+      <div className="card-panel">
         <div className="btn" onClick={this.inchlibCluster}>cluster</div>
         <div id="heatmapContainer"></div>
       </div>
