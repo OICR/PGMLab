@@ -146,7 +146,6 @@ export class SelectObservationSet extends React.Component {
   render(){
     const scrollable={maxHeight:"100%", height:"100%", overflow:"scroll"};
     return (
-      <div>
         <div id="selectObservationSetModal" className="modal modal-fixed-footer">
           <div className="modal-content" style={{overflow:"visible"}}>
             <div className="row" style={{height:"100%"}}>
@@ -162,11 +161,6 @@ export class SelectObservationSet extends React.Component {
             <a href="#!" className="modal-action modal-close btn-flat">Close</a>
           </div>
         </div>
-        <a  className="btn modal-trigger tooltipped" href="#selectObservationSetModal"
-            data-position="top" data-tooltip="Select observation data to work with">
-            Observations
-        </a>
-      </div>
     );
   }
 }

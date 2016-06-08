@@ -62,9 +62,9 @@ export class InferenceResults extends React.Component {
     return (
       <div className="row">
         <div className="col s12">
-          <div className="card-panel">
-            <div className="card-content row center-align">
-              <div className="col s12">
+          <div className="card">
+            <div className="card-content row center-align" style={{paddingBottom:"0px"}}>
+              <div className="col s12 chip">
                 {
                   this.state.selectedPostProbs===null ?
                   "Select a posterior probability set below":
@@ -75,7 +75,7 @@ export class InferenceResults extends React.Component {
                 {this.selectFieldPathway()}
               </div>
             </div>
-            <div className="card-action">
+            <div className="card-action center-align">
               <a href="#!">Generate Heatmap</a>
             </div>
           </div>

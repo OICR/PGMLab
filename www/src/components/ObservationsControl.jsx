@@ -33,6 +33,7 @@ export class ObservationsControl extends React.Component {
         <div className="chip grey lighten-5">Inspect an observation and its node states</div>
         <SelectField  value={activeObservationPosn}
                       onChange={(evt,idx,val)=>{this.handleObservationChange(val)}}
+                      autoWidth={true}
                       style={{width:"100%"}}
                       children={observationItems} />
       </div>

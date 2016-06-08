@@ -75,7 +75,7 @@ export class SelectPathways extends React.Component {
   }
   render(){
     return (
-      <div>
+
         <div id="selectPathwayModal" className="modal modal-fixed-footer">
           <div className="modal-content">
             <div className="row">
@@ -112,11 +112,6 @@ export class SelectPathways extends React.Component {
             <a href="#!" className="modal-action modal-close btn-flat">Close</a>
           </div>
         </div>
-        <a  className="btn modal-trigger tooltipped" href="#selectPathwayModal"
-            data-position="top" data-tooltip="Select pathways to work with">
-            Pathways
-        </a>
-      </div>
     )
   }
 }
