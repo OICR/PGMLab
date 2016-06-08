@@ -2,7 +2,7 @@ import React from "react";
 
 import {Menu, MenuItem, Paper} from "material-ui";
 
-export class PosteriorProbabilitiesControl extends React.Component {
+export class InferencePosteriorProbabilities extends React.Component {
   constructor(props){
     super(props);
 
@@ -32,17 +32,20 @@ export class PosteriorProbabilitiesControl extends React.Component {
     return postProbsSets;
   }
   render(){
-    const emptySetPrompt = (
+    const emptyPrompt = (
       <div className="collection-item center-align" style={{"paddingBottom":"0px", "paddingTop":"0px"}}>
-        <span>No Posterior Probabilities To Show</span>
+        <span>No posterior probability sets to show</span>
       </div>
     );
     const postProbsSetList = this.postProbsSetList();
     return (
-      <div className="collection">
-        {
-          postProbsSetList.length===0 ? emptySetPrompt:postProbsSetList
-        }
+      <div className="row">
+        <div className="col s12 center-align chip grey lighten-5">Posterior Probabilities</div>
+        <div className="collection">
+          {
+            postProbsSetList.length===0 ? emptyPrompt:postProbsSetList
+          }
+        </div>
       </div>
     );
   }

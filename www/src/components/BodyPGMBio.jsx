@@ -5,7 +5,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import {RunTypePanel} from "./RunTypePanel.jsx";
 import {ControlPanel} from "./ControlPanel.jsx";
-import {ResultsPanel} from "./ResultsPanel.jsx";
+import {InferenceResults} from "./InferenceResults.jsx";
 import {GraphPanel} from "./GraphPanel.jsx";
 import {HeatMapPanel} from "./HeatMapPanel.jsx";
 
@@ -20,7 +20,7 @@ export class Body extends React.Component {
       // console.log("<Body> render()");
       const tab = this.props.tab;
       const LeftPanel = tab==="Run" ?
-        <ControlPanel {...this.props} />:<ResultsPanel {...this.props} />;
+        <ControlPanel {...this.props} />:<InferenceResults {...this.props} />;
       const noMargin = {marginBottom:"0px",marginTop:"0px"};
       const leftStyle = {minWidth:"300px", paddingTop:"10px"};
       const canvasSize = {minWidth:"800px", minHeight:"600px"};
