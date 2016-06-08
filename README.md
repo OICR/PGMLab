@@ -12,6 +12,7 @@ PGMLab developed to fulfill three goals:
 
    - Martin H. Radfar 
    - Adam J. Wright (Lead Developer)
+   - Martin D. Pham (Co-op Developer)
 
 ##Web Site
    - Visit the PGMLab website [here](http://oicr.github.io/PGMLab)
