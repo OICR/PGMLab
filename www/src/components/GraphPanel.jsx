@@ -9,7 +9,7 @@ export class GraphPanel extends React.Component {
   }
   render(){
     return (
-      <div className="card-panel" style={{margin:"0px"}}>
+      <div className="card-panel">
         <div id="canvas"></div>
       </div>
     )

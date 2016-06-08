@@ -32,7 +32,7 @@ export class ControlPanel extends React.Component {
                       pathwayMap = {this.props.pathwayMap}
                       selectPathways = {this.props.selectPathways}
                       removeSelectedPathways = {this.props.removeSelectedPathways} />
-      <div className="row">
+      <div className="row" style={{marginBottom:"0px"}}>
         <div className="col s12">
           <ul className="tabs">
             <li className="tab col s6">
@@ -53,8 +53,8 @@ export class ControlPanel extends React.Component {
                           setActivePathway = {this.props.setActivePathway}
                           setNodeItemState = {this.props.setNodeItemState} />
       </div>
-      <div className="row">
-        <div className="col s12 center-align">
+      <div className="section" style={{paddingBottom:"0px",paddingTop:"0px"}}>
+        <div className="card-panel center-align">
           <a className="waves-effect waves-light btn" onClick={this.handleRun}>Run</a>
         </div>
       </div>

@@ -45,7 +45,7 @@ export class Header extends React.Component {
 
             </ul>
             <a className="brand-logo center" href="#!">
-              <h4><span style={{color: "#2e7d32"}}>PGM</span><span style={{color:"#9c27b0"}}>Bio</span></h4>
+              <h4><span style={{color: "#2e7d32"}}>PGMLab</span>{"::"}<span style={{color:"#9c27b0"}}>Bio</span></h4>
             </a>
           </div>
         </nav>
