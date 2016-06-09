@@ -238,7 +238,7 @@ class AppSession(ApplicationSession):
         def inchlibCluster(heatmapData):
             self.log.info("inchlibCluster")
             # Group into state1,state2,state3,stateDominant
-            states = sortHeatmapData(heatmapData)
+            states = sortHeatmapData(heatmapData["posteriorProbsData"])
 
             cwd = os.getcwd()
             tempID = str(uuid.uuid4())
