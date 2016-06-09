@@ -10,6 +10,8 @@ var graphvis = require('./../bin/graphvis.js');
 
 import {Snackbar} from "material-ui";
 
+import example from "json!./example.json";
+
 export class App extends  React.Component {
     static getCurrentDateTime(){return moment().format('MMM D, YYYY HH:mm')}
     static guid() {
@@ -72,6 +74,7 @@ export class App extends  React.Component {
       this.handleInferenceResponse = this.handleInferenceResponse.bind(this);
 
       // this.setActivePosteriorProbability  = this.setActivePosteriorProbability.bind(this);
+      this.updateHeatmapData = this.updateHeatmapData.bind(this);
       this.inchlibCluster = this.inchlibCluster.bind(this);
 
       this.uploadListAddFailure           = this.uploadListAddFailure.bind(this);
@@ -317,17 +320,20 @@ export class App extends  React.Component {
           err => console.log("Error running inference:", err)
         );
     }
+
+    updateHeatmapData(posteriorProbsData, pathway){
+      this.setState({
+        heatmapData: {posteriorProbsData, pathway}
+      });
+    }
     inchlibCluster(posteriorProbsData){
-      return this.props.callInCHlibCluster(posteriorProbsData)
+      const inchlibJSON = this.props
+        .callInCHlibCluster(this.state.heatmapData.posteriorProbsData)
         .then(
-          inchlibJSON => {
-            console.log("inchlibJSON", inchlibJSON);
-            return {
-              dendrogram:"data"
-            };
-          },
+          inchlibJSON => inchlibJSON,
           err => console.log("Error inchlibCluster", err)
-        )
+        );
+      return example;
     }
     // setActivePosteriorProbability(id,index){
     //   // May not match activeObservation
@@ -469,7 +475,8 @@ export class App extends  React.Component {
                 setActivePosteriorProbability = {this.setActivePosteriorProbability}
 
                 inchlibCluster = {this.inchlibCluster}
-                heatmapData = {this.state.heatmapData}/>
+                heatmapData = {this.state.heatmapData}
+                updateHeatmapData = {this.updateHeatmapData}/>
           <Footer />
         </div>
       )

@@ -1,28 +1,34 @@
 import React from "react";
 
 import InChlib from "biojs-vis-inchlib";
-import example from "json!./example.json";
+
 
 export class HeatMapPanel extends React.Component {
   constructor(props){
     super(props);
     // console.log(InChlib);
-    this.heatmapUpdate = this.heatmapUpdate.bind(this);
+
+    this.heatmap = this.heatmap.bind(this);
   }
   //Use lifecycle methods
   componentDidMount(){
   }
   componentWillReceiveProps(props) {//next props
     // Update heatmap here
-
-    this.heatmapUpdate(props.heatmapData);
+    if (props.heatmapData===null) {
+      console.log("heatmapData null")
+    }
+    else {
+      this.heatmap();
+    }
   }
-  heatmapUpdate(data){
+
+  // RENDERING
+  heatmap(){
     // Pass to server to get JSON input of inchlib
-    const inchlibJSON = this.props.inchlibCluster(data);
-    // const data = [...this.props.posteriorProbabilitiesMap.get("All").values()][0].posteriorProbabilitiesSet;
-    console.log(data);
     // const inchlibJSON = this.props.inchlibCluster(data);
+    // const data = [...this.props.posteriorProbabilitiesMap.get("All").values()][0].posteriorProbabilitiesSet;
+    const inchlibJSON = this.props.inchlibCluster();//returns example.json
     // Set inchlibJSON data, put draw into callback on setState
     var heatmap = new InChlib({
       target: "heatmapContainer",
@@ -34,7 +40,7 @@ export class HeatMapPanel extends React.Component {
       metadata_colors: "Reds"
     });
     // console.log(example);
-    heatmap.read_data(example);
+    heatmap.read_data(inchlibJSON);
     heatmap.draw();
   }
   render(){

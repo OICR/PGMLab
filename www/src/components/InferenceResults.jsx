@@ -13,6 +13,8 @@ export class InferenceResults extends React.Component {
       selectedPathway: null
     };
 
+    this.updateHeatmapData = this.updateHeatmapData.bind(this);
+
     this.selectPostProbs = this.selectPostProbs.bind(this);
     this.selectPathway = this.selectPathway.bind(this);
 
@@ -22,12 +24,10 @@ export class InferenceResults extends React.Component {
   componentDidMount(){
     $("ul.tabs").tabs();
   }
-  // Takes next props and state
-  componentWillUpdate(props,state) {
-    //Change heatmap here with methods to manipulate heatmap
-    //  change App prop inchlibData
-
-
+  //Change heatmap here with methods to manipulate heatmap
+  //  change App prop inchlibData
+  updateHeatmapData(postProbs,pathway){
+    // this.props.updateHeatmapData(postProbs,pathway);
   }
   selectPostProbs(selectedPostProbs){
     this.setState({
@@ -36,9 +36,11 @@ export class InferenceResults extends React.Component {
     });
   }
   selectPathway(selectedPathway){
-    console.log(selectedPathway)
+    // console.log(selectedPathway)
     this.setState({
       selectedPathway
+    },() => {
+      this.props.updateHeatmapData(this.state.selectedPostProbs,selectedPathway);
     });
   }
 
