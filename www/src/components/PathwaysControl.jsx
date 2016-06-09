@@ -8,10 +8,16 @@ export class PathwaysControl extends React.Component {
   constructor(props){
     super(props);
 
+    this.state = {
+      nodeFilterText: ""
+    }
+    this.nodeFilterTextUpdate = this.nodeFilterTextUpdate.bind(this);
     this.handlePathwayChange = this.handlePathwayChange.bind(this);
     this.header = this.header.bind(this);
   }
-
+  nodeFilterTextUpdate(){
+    this.setState({"nodeFilterText": this.refs["nodeFilterInput"].value});
+  }
   handlePathwayChange(pathwayID){
     if (this.props.pathwayMap.get("Active").id !== pathwayID) {
       this.props.setActivePathway(this.props.pathwayMap.get("Selected").get(pathwayID));
@@ -25,6 +31,8 @@ export class PathwaysControl extends React.Component {
       <MenuItem key={pathway.id} value={pathway.id}
                 primaryText={`${pathway.name}`} label={`${pathway.name}`} />
     );
+    // const noPad={paddingBottom:"0px", paddingTop:"0px"};
+    const noPad={};
     return (
       <div className="center-align">
         <div className="chip grey lighten-5">Inspect a pathway and its node states</div>
@@ -33,6 +41,10 @@ export class PathwaysControl extends React.Component {
                       autoWidth={true}
                       style={{width:"100%"}}
                       children={pathwayItems} />
+        <div className="collection-item" style={noPad}>
+          <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
+            value={this.state.nodeFilterText} onChange={this.nodeFilterTextUpdate} />
+        </div>
       </div>
     );
   }
@@ -46,7 +58,8 @@ export class PathwaysControl extends React.Component {
           <NodeList activeType="Pathway"
                     pairwiseInteractions={this.props.pairwiseInteractions}
                     observationMap={this.props.observationMap}
-                    setNodeItemState={this.props.setNodeItemState}/>
+                    setNodeItemState={this.props.setNodeItemState}
+                    nodeFilterText={this.state.nodeFilterText}/>
         </div>
       </div>
     );

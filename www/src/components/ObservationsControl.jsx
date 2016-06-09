@@ -10,10 +10,16 @@ export class ObservationsControl extends React.Component {
   constructor(props){
     super(props);
 
+    this.state = {
+      nodeFilterText: ""
+    }
+    this.nodeFilterTextUpdate = this.nodeFilterTextUpdate.bind(this);
     this.handleObservationChange = this.handleObservationChange.bind(this);
     this.header = this.header.bind(this);
   }
-
+  nodeFilterTextUpdate(){
+    this.setState({"nodeFilterText": this.refs["nodeFilterInput"].value});
+  }
   handleObservationChange(newActiveIndex){
     if (this.props.observationMap.get("Current").get("Active Observation") !== newActiveIndex) {
       this.props.setActiveObservation(newActiveIndex);
@@ -28,6 +34,8 @@ export class ObservationsControl extends React.Component {
     const observationItems = selectedObservations.map(posn =>
       <MenuItem key={posn} value={posn} primaryText={`Observation ${posn}`} />
     );
+    // const noPad={paddingBottom:"0px", paddingTop:"0px"};
+    const noPad={};
     return (
       <div className="center-align">
         <div className="chip grey lighten-5">Inspect an observation and its node states</div>
@@ -36,6 +44,10 @@ export class ObservationsControl extends React.Component {
                       autoWidth={true}
                       style={{width:"100%"}}
                       children={observationItems} />
+        <div className="collection-item" style={noPad}>
+          <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
+            value={this.state.nodeFilterText} onChange={this.nodeFilterTextUpdate} />
+        </div>
       </div>
     );
   }
@@ -48,7 +60,8 @@ export class ObservationsControl extends React.Component {
           <NodeList activeType="Observation"
                     pairwiseInteractions={this.props.pairwiseInteractions}
                     observationMap = {this.props.observationMap}
-                    setNodeItemState={this.props.setNodeItemState}/>
+                    setNodeItemState={this.props.setNodeItemState}
+                    nodeFilterText={this.state.nodeFilterText}/>
         </div>
       </div>
     );
