@@ -22,6 +22,13 @@ export class InferenceResults extends React.Component {
   componentDidMount(){
     $("ul.tabs").tabs();
   }
+  // Takes next props and state
+  componentWillUpdate(props,state) {
+    //Change heatmap here with methods to manipulate heatmap
+    //  change App prop inchlibData
+
+
+  }
   selectPostProbs(selectedPostProbs){
     this.setState({
       selectedPostProbs,

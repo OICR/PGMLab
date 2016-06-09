@@ -47,6 +47,7 @@ export class App extends  React.Component {
         "pathwayMap"                  : pathwayMap,
         "runType"                     : "Inference",
         "posteriorProbabilitiesMap"      : posteriorProbabilitiesMap,
+        "heatmapData" : null,
         "uploadList"                  : [],
         "posteriorProbabilitySets"    : [],
         "estimatedParameterSets"      : []
@@ -317,10 +318,13 @@ export class App extends  React.Component {
         );
     }
     inchlibCluster(posteriorProbsData){
-      this.props.callInCHlibCluster(posteriorProbsData)
+      return this.props.callInCHlibCluster(posteriorProbsData)
         .then(
           inchlibJSON => {
-            // console.log("inchlibJSON", inchlibJSON);
+            console.log("inchlibJSON", inchlibJSON);
+            return {
+              dendrogram:"data"
+            };
           },
           err => console.log("Error inchlibCluster", err)
         )
@@ -464,7 +468,8 @@ export class App extends  React.Component {
                 posteriorProbabilitiesMap = {this.state.posteriorProbabilitiesMap}
                 setActivePosteriorProbability = {this.setActivePosteriorProbability}
 
-                inchlibCluster = {this.inchlibCluster}/>
+                inchlibCluster = {this.inchlibCluster}
+                heatmapData = {this.state.heatmapData}/>
           <Footer />
         </div>
       )

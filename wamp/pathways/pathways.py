@@ -210,7 +210,7 @@ class AppSession(ApplicationSession):
                     reduce(lambda prev,curr: prev+","+str(curr),obsStates,"")+
                     "\n"))
             csv.close()
-        def transformPosteriorProbs(posteriorProbsData):
+        def sortHeatmapData(heatmapData):
             state1 = {}
             state2 = {}
             state3 = {}
@@ -235,10 +235,10 @@ class AppSession(ApplicationSession):
                     else:
                         stateD[nodeID] = [False]*obsIdx + ["SOMEMAX"]
             return {"state1":state1, "state2":state2, "state3":state3, "stateD":stateD}
-        def inchlibCluster(posteriorProbsData):
+        def inchlibCluster(heatmapData):
             self.log.info("inchlibCluster")
             # Group into state1,state2,state3,stateDominant
-            states = transformPosteriorProbs(posteriorProbsData)
+            states = sortHeatmapData(heatmapData)
 
             cwd = os.getcwd()
             tempID = str(uuid.uuid4())

@@ -7,15 +7,22 @@ export class HeatMapPanel extends React.Component {
   constructor(props){
     super(props);
     // console.log(InChlib);
-    this.inchlibCluster = this.inchlibCluster.bind(this);
+    this.heatmapUpdate = this.heatmapUpdate.bind(this);
   }
+  //Use lifecycle methods
   componentDidMount(){
   }
-  inchlibCluster(){
-    // console.log(this.props.posteriorProbabilitiesMap);
-    const data = [...this.props.posteriorProbabilitiesMap.get("All").values()][0].posteriorProbabilitiesSet;
-    // console.log(data);
+  componentWillReceiveProps(props) {//next props
+    // Update heatmap here
+
+    this.heatmapUpdate(props.heatmapData);
+  }
+  heatmapUpdate(data){
+    // Pass to server to get JSON input of inchlib
     const inchlibJSON = this.props.inchlibCluster(data);
+    // const data = [...this.props.posteriorProbabilitiesMap.get("All").values()][0].posteriorProbabilitiesSet;
+    console.log(data);
+    // const inchlibJSON = this.props.inchlibCluster(data);
     // Set inchlibJSON data, put draw into callback on setState
     var heatmap = new InChlib({
       target: "heatmapContainer",

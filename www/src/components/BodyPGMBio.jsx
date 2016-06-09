@@ -40,6 +40,7 @@ export class Body extends React.Component {
             <div className={classNames({"hide":tab!=="Results"})}>
               <HeatMapPanel
                 posteriorProbabilitiesMap={this.props.posteriorProbabilitiesMap}
+                heatmapData={this.props.heatmapData}
                 inchlibCluster={this.props.inchlibCluster}/>
             </div>
           </div>
