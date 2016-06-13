@@ -6,23 +6,22 @@ export class InferencePosteriorProbabilities extends React.Component {
   constructor(props){
     super(props);
 
-    this.selectPostProbs = this.selectPostProbs.bind(this);
+    this.handleSetActivePostProbs = this.handleSetActivePostProbs.bind(this);
     this.postProbsSetList = this.postProbsSetList.bind(this);
   }
 
-  selectPostProbs(pp){
-    console.log("selectPostProbs:", pp);
-    // this.props.setActivePosteriorProbability(id,index);
-    this.props.selectPostProbs(pp)
+  handleSetActivePostProbs(ppID){
+    // console.log("handleSetActivePostProbs:", ppID);
+    this.props.setActivePosteriorProbability(ppID);
   }
 
   // RENDERING
   postProbsSetList(){
-    const posteriorProbabilitiesMap = this.props.posteriorProbabilitiesMap;
-    const postProbsSets = [...posteriorProbabilitiesMap.get("All").values()]
+    const postProbsMap = this.props.posteriorProbabilitiesMap;
+    const postProbsSets = [...postProbsMap.get("All").values()]
       .filter(pp => pp.type === "Run")
       .map(pp => (
-        <a key={pp.id} className="collection-item grey-text" onClick={()=>{this.selectPostProbs(pp)}}>
+        <a key={pp.id} className="collection-item grey-text" onClick={()=>{this.handleSetActivePostProbs(pp.id)}}>
           {"ID: "}<span className="black-text">{pp.id}<br/></span>
           {"Observation Set: "}<span className="black-text">{pp.observationSet.name}<br/></span>
           {"Number of Pathways: "}<span className="black-text">{Object.keys(pp).length}<br/></span>
@@ -47,9 +46,7 @@ export class InferencePosteriorProbabilities extends React.Component {
             </div>
           </div>
           <div className="collection">
-            {
-              postProbsSetList.length===0 ? emptyPrompt:postProbsSetList
-            }
+            { postProbsSetList.length===0 ? emptyPrompt:postProbsSetList }
           </div>
         </div>
       </div>

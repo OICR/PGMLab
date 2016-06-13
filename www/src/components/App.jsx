@@ -39,7 +39,7 @@ export class App extends  React.Component {
       ]);
       const posteriorProbabilitiesMap = new Map([
         ["All", new Map()],
-        ["Active", {id: null, index: null}] //id
+        ["Active", null] //id
       ]);
       // Set initial state
       this.state = {
@@ -49,9 +49,7 @@ export class App extends  React.Component {
         "pathwayMap"                  : pathwayMap,
         "runType"                     : "Inference",
         "posteriorProbabilitiesMap"      : posteriorProbabilitiesMap,
-        "heatmapData" : null,
         "uploadList"                  : [],
-        "posteriorProbabilitySets"    : [],
         "estimatedParameterSets"      : []
       };
 
@@ -73,8 +71,7 @@ export class App extends  React.Component {
       this.runInference                   = this.runInference.bind(this);
       this.handleInferenceResponse = this.handleInferenceResponse.bind(this);
 
-      // this.setActivePosteriorProbability  = this.setActivePosteriorProbability.bind(this);
-      this.updateHeatmapData = this.updateHeatmapData.bind(this);
+      this.setActivePosteriorProbability  = this.setActivePosteriorProbability.bind(this);
       this.inchlibCluster = this.inchlibCluster.bind(this);
 
       this.uploadListAddFailure           = this.uploadListAddFailure.bind(this);
@@ -285,26 +282,7 @@ export class App extends  React.Component {
         "runType": (this.state.runType==="Inference") ? "Learning":"Inference"
       });
     }
-    handleInferenceResponse(runResponse){
-      console.log("response:", runResponse);
-      const posteriorProbabilitiesMap = this.state.posteriorProbabilitiesMap;
-      const toAdd = {
-        type: "Run",
-        dateTime: runResponse.submitDateTime,
-        id: runResponse.runID,
-        posteriorProbabilities: runResponse.posteriorProbabilities,
-        posteriorProbabilitiesSet: runResponse.posteriorProbabilitiesSet,
-        observationSet: runResponse.observationSet,
-        selectedPathways: runResponse.selectedPathways
-      };
-      posteriorProbabilitiesMap.get("All").set(toAdd.id, toAdd);
-      this.setState({
-        posteriorProbabilitiesMap
-      }, () => {
-        App.notify(`Job Complete: ${toAdd.id}`, 1500);
-        // console.log("Added posteriorProbabilities", toAdd.id);
-      });
-    }
+
     runInference(){
       const observationMap = this.state.observationMap;
       const observationSet = observationMap.get("Current").get("Set");
@@ -320,30 +298,39 @@ export class App extends  React.Component {
           err => console.log("Error running inference:", err)
         );
     }
-
-    updateHeatmapData(posteriorProbsData, pathway){
+    handleInferenceResponse(runResponse){
+      // console.log("response:", runResponse);
+      const posteriorProbabilitiesMap = this.state.posteriorProbabilitiesMap;
+      const toAdd = {
+        type: "Run",
+        dateTime: runResponse.submitDateTime,
+        id: runResponse.runID,
+        posteriorProbabilities: runResponse.posteriorProbabilities,
+        observationSet: runResponse.observationSet,
+        pathwaySet: runResponse.pathwaySet
+      };
+      posteriorProbabilitiesMap.get("All").set(toAdd.id, toAdd);
       this.setState({
-        heatmapData: {posteriorProbsData, pathway}
+        posteriorProbabilitiesMap
+      }, () => {
+        App.notify(`Job Complete: ${toAdd.id}`, 1500);
+        // console.log("Added posteriorProbabilities", toAdd.id);
       });
     }
-    inchlibCluster(posteriorProbsData){
-      const inchlibJSON = this.props
-        .callInCHlibCluster(this.state.heatmapData.posteriorProbsData)
-        .then(
-          inchlibJSON => inchlibJSON,
-          err => console.log("Error inchlibCluster", err)
-        );
-      return example;
+    setActivePosteriorProbability(ppID){
+      const posteriorProbabilitiesMap = this.state.posteriorProbabilitiesMap;
+      const activePostProbs = posteriorProbabilitiesMap.get("All").get(ppID);
+      posteriorProbabilitiesMap.set("Active", activePostProbs);
+      this.setState({
+        posteriorProbabilitiesMap
+      });
     }
-    // setActivePosteriorProbability(id,index){
-    //   // May not match activeObservation
-    //   const posteriorProbabilities = this.state.posteriorProbabilitiesMap;
-    //   posteriorProbabilitiesMap.set("Active", {id, index});
-    //   this.setState({posteriorProbabilitiesMap}, ()=>{
-    //     // Render on graph
-    //     graphvis.applyPosteriorProbabilities(posteriorProbabilitiesMap.get("All").get(id)[index]);
-    //   });
-    // }
+    inchlibCluster(pathway){
+      // const postProbsMap = this.state.posteriorProbabilitiesMap;
+      // const activePostProb = postProbsMap.get("Active")
+      // return this.props.callInchlibCluster(pathway, posterior);
+    }
+
 
     // UPLOADING
     uploadListAddFailure(name, filetype, comment){
@@ -475,8 +462,7 @@ export class App extends  React.Component {
                 setActivePosteriorProbability = {this.setActivePosteriorProbability}
 
                 inchlibCluster = {this.inchlibCluster}
-                heatmapData = {this.state.heatmapData}
-                updateHeatmapData = {this.updateHeatmapData}/>
+                />
           <Footer />
         </div>
       )

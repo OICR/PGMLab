@@ -1,10 +1,11 @@
 import React from 'react';
 
+import {RunTypePanel} from "./RunTypePanel.jsx";
 import {DataSelection} from "./DataSelection.jsx";
 import {ObservationsControl} from "./ObservationsControl.jsx";
 import {PathwaysControl} from "./PathwaysControl.jsx";
 
-export class ControlPanel extends React.Component {
+export class RunControlPanel extends React.Component {
   constructor(props){
     super(props);
     this.handleRun = this.handleRun.bind(this);
@@ -25,6 +26,9 @@ export class ControlPanel extends React.Component {
     // console.log("<ControlPanel> render()");
     return (
     <div>
+      <RunTypePanel tab={this.props.tab}
+                    runType = {this.props.runType}
+                    toggleRunType = {this.props.toggleRunType} />
       <DataSelection  observationMap = {this.props.observationMap}
                       selectObservationSet = {this.props.selectObservationSet}
                       selectObservations = {this.props.selectObservations}

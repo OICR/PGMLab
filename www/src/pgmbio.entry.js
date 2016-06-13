@@ -38,8 +38,8 @@ const wsuri = (document.location.origin == "file://") ?
     "ws://127.0.0.1:9000/ws" :
     (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost:9000/ws";
 var connection = new autobahn.Connection({
-  url:decodeURI (wsuri),
-  realm:decodeURI("realm1")
+  url: wsuri,
+  realm: "realm1"
 });
 connection.onopen = function(session, details) {
   console.log("autobahn connected");
@@ -59,9 +59,9 @@ function getReactomePathway(pathway) {
 //  when passing this processed info to callInChlibCluster, extraneous observed nodes will be ignored
 function PGMLabInference(links, observationSet, pathways) {
   const options = {submitDateTime: App.getCurrentDateTime()}; //Don't give extra info
-  return connection.session.call("reactome.inference.run", [links, observationSet, pathways, options]);
+  return connection.session.call("pgmlab.inference.run", [links, observationSet, pathways, options]);
 }
-function callInCHlibCluster(posteriorProbsData) {
+function callInchlibCluster(posteriorProbsData) {
   return connection.session.call("inchlib.cluster", [posteriorProbsData]);
 }
 
@@ -70,7 +70,7 @@ function initializeApp(reactomePathways) {
     <App  reactomePathways={reactomePathways}
           getReactomePathway={getReactomePathway}
           PGMLabInference={PGMLabInference}
-          callInCHlibCluster={callInCHlibCluster}/>,
+          callInchlibCluster={callInchlibCluster}/>,
     document.getElementById('app')
   );
 };

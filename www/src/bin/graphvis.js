@@ -91,7 +91,7 @@ const getNodesEdges = (pairwiseInteractions, observedStates=new Map())=>{
 
 // For setting new activePathway
 const render = (pairwiseInteractions, observedStates) => {
-  console.log("graphvis.render");
+  // console.log("graphvis.render");
   const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
   datasetnodes = new vis.DataSet(nodes);
   datasetedges = new vis.DataSet(edges);
@@ -101,7 +101,7 @@ exports.render = render;
 
 // Initialize graphvis after <App> component mounts, called once
 exports.initialize = (pairwiseInteractions, observedStates) => {
-  console.log("graphvis.initialize");
+  // console.log("graphvis.initialize");
   datasetnodes = new vis.DataSet();
   datasetedges = new vis.DataSet();
   network = new vis.Network(document.getElementById("canvas"),{
