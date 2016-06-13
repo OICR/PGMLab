@@ -101,8 +101,6 @@ export class HeatMapPanel extends React.Component {
   render(){
     return (
       <div className="card-panel">
-        { this.header() }
-        <div className="divider"></div>
         <div id="heatmapContainer"></div>
       </div>
     );

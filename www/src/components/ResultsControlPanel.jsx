@@ -39,11 +39,19 @@ export class ResultsControlPanel extends React.Component {
   }
   render(){
     return (
-      <div>
-        {this.heatmapCard()}
-        <InferencePosteriorProbabilities
-            posteriorProbabilitiesMap={this.props.posteriorProbabilitiesMap}
-            setActivePosteriorProbability={this.props.setActivePosteriorProbability} />
+      <div className="card">
+        <div className="card-content row center-align">
+          <div className="col s4">
+            <div className="btn">
+              {"Posterior Probabilities"}
+            </div>
+          </div>
+          <div className="col s4">
+            <div className="btn">
+              {"State dropdown"}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
