@@ -31,7 +31,7 @@ export class ObservationsControl extends React.Component {
     let observationMap = this.props.observationMap;
     const activeObservationPosn = observationMap.get("Current").get("Active Observation");
     const selectedObservations = observationMap.get("Current").get("Selected Observations");
-    const observationItems = selectedObservations.map(posn =>
+    const observationItems = [...selectedObservations.values()].map(posn =>
       <MenuItem key={posn} value={posn} primaryText={`Observation ${posn}`} />
     );
     // const noPad={paddingBottom:"0px", paddingTop:"0px"};

@@ -30,12 +30,9 @@ export class RunControlPanel extends React.Component {
                     runType = {this.props.runType}
                     toggleRunType = {this.props.toggleRunType} />
       <DataSelection  observationMap = {this.props.observationMap}
-                      selectObservationSet = {this.props.selectObservationSet}
-                      selectObservations = {this.props.selectObservations}
-                      removeSelectedObservations = {this.props.removeSelectedObservations}
+                      updateObservationMap = {this.props.updateObservationMap}
                       pathwayMap = {this.props.pathwayMap}
-                      selectPathways = {this.props.selectPathways}
-                      removeSelectedPathways = {this.props.removeSelectedPathways} />
+                      selectPathways = {this.props.selectPathways}/>
       <div className="row" style={{marginBottom:"0px"}}>
         <div className="col s12">
           <ul className="tabs">

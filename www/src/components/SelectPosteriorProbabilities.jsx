@@ -52,11 +52,11 @@ export class SelectPosteriorProbabilities extends React.Component {
   postProbsSetList(){
     const emptyPrompt = (
       <div className="collection-item center-align">
-        <span>No posterior probability sets to show</span>
+        {"No posterior probability sets to show"}
       </div>
     );
     const postProbsMap = this.state.postProbsMap;
-    const itemClass = (ppID) => classNames(
+    const itemClass = ppID => classNames(
       {"active":postProbsMap.get("Active")===null ? false : postProbsMap.get("Active").id===ppID},
       ["collection-item grey-text"]
     );
@@ -64,13 +64,13 @@ export class SelectPosteriorProbabilities extends React.Component {
       .filter(pp => pp.type === "Run")
       .filter(pp => pp.id.indexOf(this.state.setsText)!==-1)
       .map(pp => (
-        <a  key={pp.id} className={itemClass(pp.id)}
-            onClick={()=>{this.handleSetActivePostProbs(pp.id)}}>
+        <div  key={pp.id} className={itemClass(pp.id)}
+              onClick={()=>{this.handleSetActivePostProbs(pp.id)}}>
           {"ID: "}<span className="black-text">{pp.id}<br/></span>
           {"Observation Set: "}<span className="black-text">{pp.observationSet.name}<br/></span>
           {"Number of Pathways: "}<span className="black-text">{Object.keys(pp).length}<br/></span>
           {"Run submitted: "}<span className="black-text">{pp.dateTime}</span>
-        </a>
+        </div>
       ));
     const scrollable={maxHeight:"70%", overflow:"scroll"};
     return (
@@ -86,9 +86,9 @@ export class SelectPosteriorProbabilities extends React.Component {
       </div>
     );
     const activePostProb = this.state.postProbsMap.get("Active");
-    const itemClass = pathway => classNames({
-      "active": this.state.selectedPathways.has(pathway.id)
-    }, "collection-item");
+    const itemClass = pathway => classNames(
+      {"active": this.state.selectedPathways.has(pathway.id)},
+      ["collection-item"]);
     const postProbPathways = activePostProb===null ?
       emptyPrompt:
       activePostProb.pathwaySet.length===0 ?

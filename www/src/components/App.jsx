@@ -28,7 +28,8 @@ export class App extends  React.Component {
         ["All", new Map()],
         ["Current", new Map([
           ["Set", {id:null, name: null, observations: new Array()}], //Indices of .observations
-          ["Selected Observations", new Array()],//Index of active in .observations
+          // ["Selected Observations", new Array()],//Index of active in .observations
+          ["Selected Observations", new Set()],
           ["Active Observation", null]
         ])]
       ]);
@@ -60,9 +61,7 @@ export class App extends  React.Component {
       this.removeSelectedPathways         = this.removeSelectedPathways.bind(this);
       this.setActivePathway               = this.setActivePathway.bind(this);
 
-      this.selectObservationSet           = this.selectObservationSet.bind(this);
-      this.selectObservations             = this.selectObservations.bind(this);
-      this.removeSelectedObservations     = this.removeSelectedObservations.bind(this);
+      this.updateObservationMap = this.updateObservationMap.bind(this);
       this.setActiveObservation           = this.setActiveObservation.bind(this);
 
       this.setNodeItemState               = this.setNodeItemState.bind(this);
@@ -109,7 +108,8 @@ export class App extends  React.Component {
         ["All", EXAMPLEDATA.observationSets],
         ["Current", new Map([
           ["Set", EXAMPLEDATA.current.set],
-          ["Selected Observations", EXAMPLEDATA.current.selected], //Indices of .observations
+          // ["Selected Observations", EXAMPLEDATA.current.selected], //Indices of .observations
+          ["Selected Observations", new Set(EXAMPLEDATA.current.selected)],
           ["Active Observation", EXAMPLEDATA.current.active] //Index of active in .observations
         ])]
       ]);
@@ -205,42 +205,8 @@ export class App extends  React.Component {
     }
 
     // For SelectObservations modal component
-    // observationSetID =>  changes observationMap.Current to that new set
-    selectObservationSet(observationSetID){
-      console.log("selectObservationSet");
-      let observationMap = this.state.observationMap;
-      const selectedSet = observationMap.get("All").get(observationSetID);
-      observationMap.set("Current", new Map([
-        ["Set", selectedSet],
-        ["Selected Observations", [...selectedSet.observations.keys()]],
-        ["Active Observation", 0]
-      ]));
-      this.setState({observationMap});
-    }
-    // For SelectObservations modal component
-    // [indices (from current set's observation property) of to be selected observations]
-    //  => adds them to list of possible active observations
-    selectObservations(observationIndices){
-      console.log("selectObservations");
-      let observationMap = this.state.observationMap;
-      const currentSet = new Set(observationMap.get("Current").get("Selected Observations"));
-      const toAddSet = new Set(observationIndices);
-      const mergeSet = new Set([...currentSet, ...toAddSet]);
-      observationMap.get("Current").set("Selected Observations", [...mergeSet]);
-      this.setState({observationMap});
-    }
-    // For SelectObservations modal component
-    // [indices (from current set's observation property) of to be removed observations]
-    //  => removes them from list of possible active observations
-    removeSelectedObservations(observationIndices){
-      console.log("removeSelectedObservations");
-      let observationMap = this.state.observationMap;
-      const selectedSet = new Set(observationMap.get("Current").get("Selected Observations"));
-      const toRemoveSet = new Set(observationIndices);
-      const differenceSet = new Set([...selectedSet].filter(o=> !toRemoveSet.has(o)));
-      observationMap.get("Current").set("Selected Observations", [...differenceSet]);
-      this.setState({observationMap});
-      // Add checker for unselecting the active observation
+    updateObservationMap(obsMap, callback){
+      this.setState({observationMap:obsMap}, callback);
     }
     // For ObservationsControl component
     // Posn of selected activeObservation in current.set.observations => sets current.active
@@ -444,10 +410,8 @@ export class App extends  React.Component {
 
                 pairwiseInteractions            = {this.state.pairwiseInteractions}
 
+                updateObservationMap={this.updateObservationMap}
                 observationMap = {this.state.observationMap}
-                selectObservationSet = {this.selectObservationSet}
-                selectObservations = {this.selectObservations}
-                removeSelectedObservations = {this.removeSelectedObservations}
                 setActiveObservation = {this.setActiveObservation}
 
                 pathwayMap = {this.state.pathwayMap}
