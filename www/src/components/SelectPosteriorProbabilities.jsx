@@ -45,6 +45,7 @@ export class SelectPosteriorProbabilities extends React.Component {
     this.setState({open:false})
   }
   handleGenerate(){
+    //Send data to server, turn on loader and only close after
     this.setState({open:false})
   }
   // RENDERING
