@@ -40,17 +40,6 @@ export class HeatMapPanel extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps){
-    const postProbsMap = this.props.posteriorProbabilitiesMap;
-    const activePostProb = postProbsMap.get("Active");
-    const nextPostProbsMap = nextProps.posteriorProbabilitiesMap;
-    const nextActivePostProb = nextPostProbsMap.get("Active");
-    console.log(activePostProb, nextActivePostProb);
-    if (activePostProb===null && nextActivePostProb!==null) {
-      // New active post prob
-      console.log("new active post prob");
-    };
-  }
   // RENDERING
   header(){
     const postProbsMap = this.props.posteriorProbabilitiesMap;

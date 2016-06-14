@@ -134,7 +134,10 @@ export class App extends  React.Component {
     }
     // For ControlPanel vs ResultsPanel
     setTab(tab){
-      this.setState({tab});
+      if (this.state.tab!==tab) {
+        this.setState({tab});
+      };
+
     }
 
     // For SelectPathways modal component

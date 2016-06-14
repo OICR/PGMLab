@@ -148,7 +148,7 @@ export class SelectObservationSet extends React.Component {
     return (
         <div id="selectObservationSetModal" className="modal modal-fixed-footer">
           <div className="modal-content" style={{overflow:"visible"}}>
-            <div className="row" style={{height:"100%"}}>
+            <div className="row" style={{height:"500px"}}>
               <div className="col s6" style={scrollable}>
                 {this.observationSetList()}
               </div>
