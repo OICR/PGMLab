@@ -53,7 +53,12 @@ export class SelectObservationSet extends React.Component {
     });
   }
   handleCancel(){
-    this.setState({open:false});
+    console.log(this.props.observationMap);
+    console.log(this.state.obsMap);
+    this.setState({
+      obsMap: this.props.observationMap,
+      open:false
+    });
   }
   handleConfirm(){
     // Set ObservationMap in App then close
@@ -117,7 +122,7 @@ export class SelectObservationSet extends React.Component {
   }
   render(){
     const actions = [
-      <FlatButton label="Cancel" primary={true} onTouchTap={this.handleCancel} />,
+      <FlatButton label="Cancel" primary={true} onTouchTap={()=>{this.handleCancel()}} />,
       <FlatButton label="Confirm" primary={true} onTouchTap={this.handleConfirm} />
     ];
     return (

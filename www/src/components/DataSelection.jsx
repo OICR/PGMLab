@@ -19,24 +19,22 @@ export class DataSelection extends React.Component {
                 <div className="col s12 chip">
                   {"Select data to be used by PGMLab"}
                 </div>
+                <div className="divider"></div>
                 <div className="col s6">
                   <SelectObservationSet observationMap = {this.props.observationMap}
                                         updateObservationMap = {this.props.updateObservationMap} />
                 </div>
-              </div>
-              <div className="card-action center-align">
-                <a  className="modal-trigger tooltipped" href="#selectPathwayModal"
-                    data-position="top" data-tooltip="Select pathways to work with">
-                    Pathways
-                </a>
+                <div className="col s6">
+                  <SelectPathways pathwayMap = {this.props.pathwayMap}
+                                  pathwayMap2 = {this.props.pathwayMap2}
+                                  updatePathwayMap = {this.props.updatePathwayMap} />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <SelectPathways pathwayMap = {this.props.pathwayMap}
-                        selectPathways={this.props.selectPathways}
-                        removeSelectedPathways={this.props.removeSelectedPathways} />
+
       </div>
     );
   }

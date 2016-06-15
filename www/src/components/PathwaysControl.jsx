@@ -39,7 +39,7 @@ export class PathwaysControl extends React.Component {
                           children={pathwayItems} />
             <div className="collection-item" style={noPad}>
               <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
-                value={this.state.nodeFilterText} onChange={(evt)=>{this.setState({nodeFilterText:evt.target.value})}} />
+                value={this.state.nodeFilterText} onChange={evt=>{this.setState({nodeFilterText:evt.target.value})}} />
             </div>
           </div>
           <NodeList activeType="Pathway"

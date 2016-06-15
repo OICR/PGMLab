@@ -1,5 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
+var Immutable = require("immutable");
+var update = require("react-addons-update");
 
 import {Header} from './Header.jsx';
 import {Body}   from './BodyPGMBio.jsx';
@@ -7,6 +9,7 @@ import {Footer} from './Footer.jsx';
 
 var moment = require('moment')
 var graphvis = require('./../bin/graphvis.js');
+
 
 import {Snackbar} from "material-ui";
 
@@ -19,7 +22,6 @@ export class App extends  React.Component {
       return `${s4()+s4()}-${s4()}-${s4()}-${s4()}-${s4()+s4()+s4()}`;
     }
     static notify(message, duration) {Materialize.toast(message, duration, "rounded")} //Can be moved to its own Notifier component
-
     constructor(props){
       super(props)
       // console.log("<App> constructor");
@@ -38,6 +40,15 @@ export class App extends  React.Component {
         ["Selected", new Map()],
         ["Active", {id: null, name: null}]
       ]);
+      const pathwayMap2 = Immutable.Map({
+        "All": Immutable.Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]]),
+        "Selected": Immutable.Map(),
+        "Active": {id:null,name:null}});
+      // const pathwayMap2 = {
+      //   "All": {"397795": {id:"397795",name:"G-protein beta:gamma signalling"}},
+      //   "Selected": {},
+      //   "Active": {}
+      // };
       const posteriorProbabilitiesMap = new Map([
         ["All", new Map()],
         ["Active", null] //id
@@ -48,6 +59,7 @@ export class App extends  React.Component {
         "pairwiseInteractions"        : pairwiseInteractions,
         "observationMap"              : observationMap,
         "pathwayMap"                  : pathwayMap,
+        "pathwayMap2":pathwayMap2,
         "runType"                     : "Inference",
         "posteriorProbabilitiesMap"      : posteriorProbabilitiesMap,
         "uploadList"                  : [],
@@ -57,11 +69,12 @@ export class App extends  React.Component {
       // Function binding
       this.setTab = this.setTab.bind(this);
 
-      this.selectPathways                 = this.selectPathways.bind(this);
-      this.removeSelectedPathways         = this.removeSelectedPathways.bind(this);
+      this.updatePathwayMap = {
+        updatePathwaySelect: this.updatePathwaySelect.bind(this)
+      }
+
       this.setActivePathway               = this.setActivePathway.bind(this);
 
-      this.updateObservationMap = this.updateObservationMap.bind(this);
       this.setActiveObservation           = this.setActiveObservation.bind(this);
 
       this.setNodeItemState               = this.setNodeItemState.bind(this);
@@ -134,37 +147,12 @@ export class App extends  React.Component {
     }
     // For ControlPanel vs ResultsPanel
     setTab(tab){
-      if (this.state.tab!==tab) {
-        this.setState({tab});
-      };
-
+      if (this.state.tab!==tab) {this.setState({tab});};
     }
 
-    // For SelectPathways modal component
-    // [pathwayIDs] =>  and adds to list of possible active pathways
-    selectPathways(pathwayIDs){
-      console.log("selectPathway")
-      let pathwayMap = this.state.pathwayMap;
-      for (let pathwayID of pathwayIDs) {
-        if (!pathwayMap.get("Selected").has(pathwayID)) {
-          const pathwayObj = pathwayMap.get("All").get(pathwayID);
-          pathwayMap.get("Selected").set(pathwayID, pathwayObj);
-        };
-      };
-      this.setState({pathwayMap});
+    updatePathwaySelect(pathway){
     }
-    // For SelectPathways modal component
-    // [pathwayIDs] removes them from list of possible active pathways
-    removeSelectedPathways(pathwayIDs){
-      console.log("removeSelectedPathways");
-      let pathwayMap = this.state.pathwayMap;
-      for (let pathwayID of pathwayIDs) {
-        if (pathwayMap.get("Selected").has(pathwayID)) {
-          pathwayMap.get("Selected").delete(pathwayID);
-        };
-      };
-      this.setState({pathwayMap});
-    }
+
     // For PathwaysControl components
     // Pathway object => sets pathwayMap.active, pairwiseInteractions, resets posteriorProbabilities
     //  then draws
@@ -204,10 +192,6 @@ export class App extends  React.Component {
       };
     }
 
-    // For SelectObservations modal component
-    updateObservationMap(obsMap, callback){
-      this.setState({observationMap:obsMap}, callback);
-    }
     // For ObservationsControl component
     // Posn of selected activeObservation in current.set.observations => sets current.active
     setActiveObservation(observationIndex){
@@ -410,11 +394,15 @@ export class App extends  React.Component {
 
                 pairwiseInteractions            = {this.state.pairwiseInteractions}
 
-                updateObservationMap={this.updateObservationMap}
                 observationMap = {this.state.observationMap}
+                selectObservationSet = {this.selectObservationSet}
+                selectObservations = {this.selectObservations}
+                removeSelectedObservations = {this.removeSelectedObservations}
                 setActiveObservation = {this.setActiveObservation}
 
                 pathwayMap = {this.state.pathwayMap}
+                pathwayMap2 = {this.state.pathwayMap2}
+                updatePathwayMap = {this.updatePathwayMap}
                 selectPathways = {this.selectPathways}
                 removeSelectedPathways = {this.removeSelectedPathways}
                 setActivePathway                = {this.setActivePathway}
