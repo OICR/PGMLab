@@ -1,7 +1,5 @@
 import React from 'react'
 import {render} from 'react-dom'
-var Immutable = require("immutable");
-var update = require("react-addons-update");
 
 import {Header} from './Header.jsx';
 import {Body}   from './BodyPGMBio.jsx';
@@ -40,15 +38,6 @@ export class App extends  React.Component {
         ["Selected", new Map()],
         ["Active", {id: null, name: null}]
       ]);
-      const pathwayMap2 = Immutable.Map({
-        "All": Immutable.Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]]),
-        "Selected": Immutable.Map(),
-        "Active": {id:null,name:null}});
-      // const pathwayMap2 = {
-      //   "All": {"397795": {id:"397795",name:"G-protein beta:gamma signalling"}},
-      //   "Selected": {},
-      //   "Active": {}
-      // };
       const posteriorProbabilitiesMap = new Map([
         ["All", new Map()],
         ["Active", null] //id
