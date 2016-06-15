@@ -48,7 +48,6 @@ export class App extends  React.Component {
         "pairwiseInteractions"        : pairwiseInteractions,
         "observationMap"              : observationMap,
         "pathwayMap"                  : pathwayMap,
-        "pathwayMap2":pathwayMap2,
         "runType"                     : "Inference",
         "posteriorProbabilitiesMap"      : posteriorProbabilitiesMap,
         "uploadList"                  : [],
