@@ -26,7 +26,6 @@ export class DataSelection extends React.Component {
                 </div>
                 <div className="col s6">
                   <SelectPathways pathwayMap = {this.props.pathwayMap}
-                                  pathwayMap2 = {this.props.pathwayMap2}
                                   updatePathwayMap = {this.props.updatePathwayMap} />
                 </div>
               </div>

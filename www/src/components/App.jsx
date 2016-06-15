@@ -390,7 +390,6 @@ export class App extends  React.Component {
                 setActiveObservation = {this.setActiveObservation}
 
                 pathwayMap = {this.state.pathwayMap}
-                pathwayMap2 = {this.state.pathwayMap2}
                 updatePathwayMap = {this.updatePathwayMap}
                 selectPathways = {this.selectPathways}
                 removeSelectedPathways = {this.removeSelectedPathways}

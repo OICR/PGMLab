@@ -32,7 +32,6 @@ export class RunControlPanel extends React.Component {
       <DataSelection  observationMap = {this.props.observationMap}
                       updateObservationMap = {this.props.updateObservationMap}
                       pathwayMap = {this.props.pathwayMap}
-                      pathwayMap2 = {this.props.pathwayMap2}
                       updatePathwayMap = {this.props.updatePathwayMap} />
       <div className="row" style={{marginBottom:"0px"}}>
         <div className="col s12">
