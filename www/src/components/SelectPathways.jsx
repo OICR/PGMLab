@@ -1,28 +1,25 @@
 import React from 'react'
 
+import {Dialog, FlatButton, TextField} from "material-ui";
+
+var classNames = require("classnames");
+
 export class SelectPathways extends React.Component {
   constructor (props) {
     super(props);
-
     this.state = {
-      filterText: '', // For filtering by text input
-      filterChecked: false // For hiding/showing unselected
+      pathsMap: this.props.pathwayMap,
+      open: false,
+      pathwaysText: "",
+
     };
-    this.filterTextUpdate = this.filterTextUpdate.bind(this);
-    this.filterCheckedUpdate = this.filterCheckedUpdate.bind(this);
     this.handleSelect=this.handleSelect.bind(this);
     this.handleCheckAll=this.handleCheckAll.bind(this);
     this.handleUncheckAll=this.handleUncheckAll.bind(this);
-  }
-  componentDidMount(){
-    $(".tooltipped").tooltip({delay: 25});
-  }
 
-  filterTextUpdate(event) {
-      this.setState({filterText: event.target.value})
-  }
-  filterCheckedUpdate(event){
-    this.setState({filterChecked: !this.state.filterChecked});
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
   }
 
   // For onClick event when hiding/showing all unselected pathways
@@ -48,78 +45,83 @@ export class SelectPathways extends React.Component {
     this.props.removeSelectedPathways(selected);
   }
 
-  // RENDERING //
-  pathwayListItem(pathway){
-    const checked = this.props.pathwayMap.get("Selected").has(pathway.id);
-    return (
-      <li key={pathway.id} className="collection-item black-text"
-        onClick={(evt)=>{evt.preventDefault();this.handleSelect(pathway.id)}}>
-        <input ref={pathway.id} id={pathway.id} type="checkbox" className="filled-in" checked={checked} readOnly={true}/>
-        <label htmlFor={pathway.id} className="black-text">{pathway.name}</label>
-      </li>
-    );
+  // HANDLING
+  handlePathwaySelect(pathway){
+    // this.props.updatePathwayMap.updatePathwaySelect(pathway);
+    const pathsMap = this.state.pathsMap; //same reference so .state is mutated, we don't want this.
+    if (pathsMap.get("Selected").has(pathway.id)) {
+      pathsMap.get("Selected").delete(pathway.id);
+    }
+    else {
+      pathsMap.get("Selected").set(pathway.id, pathway);
+    };
+    this.setState({pathsMap});
   }
-  pathwayList(){
-    let self = this;
-    const input = (isNaN(self.state.filterText)) ? self.state.filterText.toLowerCase() : self.state.filterText;
-    const pathways = [... self.props.pathwayMap.get("All").values()];
-    const selectedPathwayIDs = [... this.props.pathwayMap.get("Selected").keys()];
-    const pathwayList = pathways.map((pathway)=>{
-      const textFilter = pathway.name.toLowerCase().indexOf(input) && (pathway.id.indexOf(input) == -1);
-      const checkedFilter = self.state.filterChecked && !selectedPathwayIDs.includes(pathway.id);
-      return (
-        (textFilter) ? undefined :
-          (checkedFilter) ? undefined : self.pathwayListItem(pathway)
-      );
+  handleOpen(){
+    // console.log("bopen", this.state.pathsMap.get("Selected").size, this.props.pathwayMap.get("Selected").size);
+    this.setState({
+      pathsMap: this.props.pathwayMap,
+      open:true
     });
-    return (
-      <ul className="collection left-align">{pathwayList}</ul>
-    )
   }
+  handleCancel(){
+    // console.log("bcancel", this.state.pathsMap.get("Selected").size, this.props.pathwayMap.get("Selected").size);
+    this.setState({
+      open:false
+    });
+  }
+  handleConfirm(){
+    // this.props.updatePathwayMap(
+    //   this.state.pathsMap,
+    //   ()=>{this.setState({open:false})}
+    // );
+  }
+
+  // RENDERING
   render(){
+    const actions = [
+      <FlatButton label="Cancel" primary={true} onTouchTap={()=>{this.handleCancel()}} />,
+      <FlatButton label="Confirm" primary={true} onTouchTap={this.handleConfirm} />
+    ];
+    const scrollable={maxHeight:"70%", overflow:"scroll"};
+    const emptyPrompt = (
+      <div className="collection-item">
+        {"No pathways to show"}
+      </div>
+    );
+    const pathsMap = this.state.pathsMap;
+    console.log(pathsMap.get("Selected"));
+    const itemClass = (pathwayID) => {return classNames(
+      {"active": pathsMap.get("Selected").has(pathwayID)},
+      ["collection-item"]
+    )};
+
+    const pathways = [...pathsMap.get("All").values()]
+    const pathsList = pathways
+      .filter(pathway => pathway.name.toLowerCase().indexOf(this.state.pathwaysText)!==-1)
+      .map(pathway => (
+        <div  key={pathway.id} className={itemClass(pathway.id)}
+              onClick={()=>{this.handlePathwaySelect(pathway)}}>
+          {pathway.name}
+        </div>
+      ));
     return (
       <div>
-        <div id="selectPathwayModal" className="modal modal-fixed-footer">
-          <div className="modal-content">
-            <div className="row">
-              <div className="col s10 btn waves-effect center-align" onClick={this.filterCheckedUpdate}>
-                  {this.state.filterChecked ? "Show Unselected" : "Hide Unselected"}
-              </div>
-              <div className="col s1 center-align" onClick={this.handleCheckAll}>
-                <a className="btn-floating waves-effect">
-                  <i className="material-icons">check_box</i>
-                </a>
-              </div>
-              <div className="col s1 center-align" onClick={this.handleUncheckAll}>
-                <a className="btn-floating waves-effect">
-                  <i className="material-icons">check_box_outline_blank</i>
-                </a>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col s12">
-                <form className="pathway-filter">
-                    {/* binding the input value to state */}
-                    <input type='text' ref='filterInput' placeholder='Type to filter..'
-                      value={this.state.filterText} onChange={this.filterTextUpdate} />
-                 </form>
-               </div>
-            </div>
-            <div className="row">
-              <div className="col s12">
-                {this.pathwayList()}
+        <FlatButton label="Pathways" onTouchTap={this.handleOpen}/>
+        <Dialog modal={true} open={this.state.open} contentStyle={{overflow:"visible"}}
+                actions={actions}>
+          <div className="row" style={{height:"500px"}}>
+            <div className="col s12" style={{height:"100%"}}>
+              <div className="center-align">{"Pathways"}</div>
+              <TextField  hintText={"Pathway Name"} floatingLabelText={"Filter"} floatingLabelFixed={true}
+                          fullWidth={true} onChange={evt=>{this.setState({pathwaysText: evt.target.value.toLowerCase()})}}/>
+              <div className="collection" style={scrollable}>
+                {pathsList.length===0 ? emptyPrompt:pathsList}
               </div>
             </div>
           </div>
-          <div className="modal-footer">
-            <a href="#!" className="modal-action modal-close btn-flat">Close</a>
-          </div>
-        </div>
-        <a  className="btn modal-trigger tooltipped" href="#selectPathwayModal"
-            data-position="top" data-tooltip="Select pathways to work with">
-            Pathways
-        </a>
+        </Dialog>
       </div>
-    )
+    );
   }
 }

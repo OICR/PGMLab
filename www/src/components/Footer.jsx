@@ -4,29 +4,28 @@ import OICRlogo from "../../assets/logos/logo_oicr_transparent.png"
 
 export class Footer extends React.Component {
   render(){
+    const noPadMargin = {paddingBottom:"0px",paddingTop:"0px",marginTop:"0px"}
     return (
-      <footer className="page-footer light-blue">
+      <footer className="page-footer light-blue" style={noPadMargin}>
         <div className="row">
-          <div className="col l5 s12">
-            <h5 className="white-text">OICR</h5>
-            <p className="white-text">Informatics and Bio-Computing - Machine Learning Group</p>
+          <div className="col s8">
+            <img src={OICRlogo}  width="150px" alt="oicr logo" />
+            <br/>
+            <strong className="white-text">Informatics and Bio-Computing - Machine Learning Group</strong>
           </div>
-          <div className="col l2 s8">
-            <h5 className="white-text">Resources</h5>
+          <div className="col s2">
             <ul>
-              <li><a className="white-text" href="https://oicr.github.io/PGMLaB">Web Site</a></li>
-              <li><a className="white-text" href="https://github.com/OICR/PGMLaB">GitHub</a></li>
+              <li><a className="white-text" href="http://github.com/OICR/PGMLab">Git</a></li>
+              <li><a className="white-text" href="https://github.com/OICR/PGMLab/wiki">Wiki</a></li>
             </ul>
           </div>
-          <div className="col l2 s8">
+          <div className="col s2 right-align">
             <h5 className="white-text">Contact</h5>
             <ul>
-              <li><a className="white-text" href="#!">Adam Wright</a></li>
               <li><a className="white-text" href="#!">Hossein Radfar</a></li>
+              <li><a className="white-text" href="#!">Adam Wright</a></li>
+              <li><a className="white-text" href="#!">Martin Pham</a></li>
             </ul>
-          </div>
-          <div className="right col l2 s8">
-            <img src={OICRlogo}  width="150px" alt="oicr logo" />
           </div>
         </div>
       </footer>

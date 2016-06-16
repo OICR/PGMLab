@@ -8,11 +8,11 @@ export class NodeList extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      nodeFilterText: "",
+      // nodeFilterText: "",
       focused: new Set() //will be separate for ActivePathway/Observation, move up one node level (or into root)?
     };
 
-    this.nodeFilterTextUpdate=this.nodeFilterTextUpdate.bind(this);
+    // this.nodeFilterTextUpdate=this.nodeFilterTextUpdate.bind(this);
     this.handleNodeFocus = this.handleNodeFocus.bind(this);
     this.handleUnfocusAll = this.handleUnfocusAll.bind(this);
 
@@ -20,9 +20,6 @@ export class NodeList extends React.Component {
     this.observationsList=this.observationsList.bind(this);
     this.pathwaysList=this.pathwaysList.bind(this);
 
-  }
-  nodeFilterTextUpdate(){
-    this.setState({"nodeFilterText": this.refs["nodeFilterInput"].value});
   }
   handleSetState(name,state){
     this.props.setNodeItemState(name,state);
@@ -64,7 +61,8 @@ export class NodeList extends React.Component {
       // Construct pathwaysMap to check which nodes in observationNodes exist in pathwayNodes
       const pathwayNodes = this.props.pairwiseInteractions.nodes; //may need to add ternary
       const pathwayMap = new Map(pathwayNodes.map(node => [node.name, undefined]));
-      const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
+      // const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
+      const textInput = isNaN(this.props.nodeFilterText) ? this.props.nodeFilterText.toLowerCase() : this.props.nodeFilterText;
       // Get observation nodes to list
       const observationNodes = observationMap.get("Current").get("Set").observations[activeObservationPosn];
       return observationNodes.map(node => {
@@ -86,17 +84,16 @@ export class NodeList extends React.Component {
       // Construct observationStateMap to check which nodes in pathwayNodes have observed states
       const observationNodes = this.props.observationMap.get("Current").get("Set").observations[this.props.observationMap.get("Current").get("Active Observation")];
       const observationStateMap = new Map(observationNodes.map(node => [node.name, node.state]));
-      const textInput = isNaN(this.state.nodeFilterText) ? this.state.nodeFilterText.toLowerCase() : this.state.nodeFilterText;
+      const textInput = isNaN(this.props.nodeFilterText) ? this.props.nodeFilterText.toLowerCase() : this.props.nodeFilterText;
 
       return pathwayNodes.map(node => {
         const [nodeState, shared] = observationStateMap.has(node.name) ? [observationStateMap.get(node.name), true] : ["-", false];
         return node.name.toLowerCase().indexOf(textInput) ? undefined : this.nodeItem(node,nodeState,shared);
       });
     };
-
   }
   render(){
-    const scrollable={"maxHeight":"275px","overflow":"scroll"};
+    const scrollable={"height":"200px","overflow":"scroll"};
     const noPad={"paddingBottom":"0px","paddingTop":"0px"};
     let nodeList;
     switch (this.props.activeType) {
@@ -107,11 +104,8 @@ export class NodeList extends React.Component {
     };
     return (
       <div className="collection" style={scrollable}>
-        <div className="collection-item" style={noPad}>
-          <input type="text" ref="nodeFilterInput" placeholder="Type to filter nodes"
-            value={this.state.nodeFilterText} onChange={this.nodeFilterTextUpdate} />
-        </div>
         {nodeList}
+        <div className="collection-item"></div>
       </div>
     );
   }
