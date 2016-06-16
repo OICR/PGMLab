@@ -11,9 +11,9 @@ require("material-design-icons")
 import React from 'react'
 import { render } from 'react-dom'
 
-import {Header} from './components/Header.jsx'
-import {Body}   from './components/BodyPGMLab.jsx'
-import {Footer} from './components/Footer.jsx'
+import {Header} from './components/PGMLab/Header.jsx'
+import {Body}   from './components/PGMLab/BodyPGMLab.jsx'
+import {Footer} from './components/PGMLab/Footer.jsx'
 
 var moment = require('moment')
 
