@@ -1,38 +1,27 @@
-import re
-
-from twisted.web.static import File
 from klein import Klein
-import json
-import pprint
-
-import os
-import os.path
-import shutil # for removing directory
-
-import json
-import string
-
-import cgi
-import uuid
-
+from twisted.web.static import File
+from twisted.internet.defer import inlineCallbacks, returnValue
+from autobahn.twisted.wamp import Application
+import os, os.path, subprocess, shutil, json, string, pprint, cgi, uuid
 from itertools import * # for skipping lines in a file
-import subprocess
 
-import sys # for consoling
+app = Klein()
+wampapp = Application()
 
 cwd = os.getcwd()
 pp = pprint.PrettyPrinter(indent=4)
 tmpDir = cwd + "/../tmp/";
-
-app = Klein()
+print 'tmpDir', tmpDir
 
 @app.route('/pgmlab.html')
 def home(request):
-    return File("./pgmlab.html")
+    # return File("./pgmlab.html")
+    return File("./../pgmlab.html")
 
 @app.route('/', branch=True)
 def js(request):
-    return File('./js/')
+    # return File('./js/')
+    return File("./../js/")
 
 
 @app.route('/runlearning/submit')
@@ -76,10 +65,16 @@ def runlearning_submit(request):
     shutil.rmtree(runPath)
     return (logicalfgFile)
 
-@app.route('/runinference/submit')
+@wampapp.register("run.inference.submit")
+def run_inference_submit(request):
+    print "run_inference_submit", request
+# @app.route("/run/inference/submit")
+@app.route('/runinference/submit', methods=["POST"])
+@inlineCallbacks
 def runinference_submit(request):
     runID = str(uuid.uuid4())
     runPath = tmpDir + runID + "/"
+    print 'runPath:', runPath
     os.mkdir(runPath)
 
     numberOfStates = int(request.args.get("inferenceNumberOfStates", [0]) [0])
@@ -98,7 +93,7 @@ def runinference_submit(request):
     returnCode = generateFactorgraph(runPath)
     if returnCode != "0":
         #shutil.rmtree(runPath)
-        print returnCode
+        print 'returnCode', returnCode
         request.setResponseCode(500)
         return "Could not generate Factorgraph from Pairwise Interaction File"
 
@@ -144,5 +139,12 @@ def learningCommand(runPath, numberOfStates, logLikelihoodChangeLimit, emMaxIter
     command = "../bin/pgmlab --learning --pairwise-interaction-file=" + str(runPath) + "pathway.pi --logical-factorgraph-file=" + str(runPath) + "logical.fg --learning-observed-data-file=" + str(runPath) + "learning.obs --estimated-parameters-file=" + str(runPath) + "learnt.fg --number-of-states " + str(numberOfStates) +" --log-likelihood-change-limit=" + logLikelihoodChangeLimit + " --em-max-iterations=" + emMaxIterations
     return system_call(command)
 
-resource = app.resource
-#app.run("localhost", 8080)
+if __name__ == "__main__":
+    import sys
+    # from twisted.python import log
+    from twisted.web.server import Site
+    from twisted.internet import reactor
+    # log.startLogging(sys.stdout)
+
+    reactor.listenTCP(9002, Site(app.resource()))
+    wampapp.run(u"ws://localhost:9001/ws", u"realm1")

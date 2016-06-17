@@ -6,11 +6,11 @@ import Tabs, { TabPane } from 'rc-tabs'
 export class Body extends React.Component {
 
     constructor(props) {
-        super(props) 
-
-        this.state = ({jobs     : [], 
-                       activeKey: "tab 2"})
- 
+        super(props)
+        this.state = ({
+          jobs     : [],
+          activeKey: "tab 2"
+        });
         this.onTabsChange = this.onTabsChange.bind(this)
     }
 
@@ -26,13 +26,13 @@ export class Body extends React.Component {
             var inputs = $(this).serializeArray()
             var runType = (self.state.activeKey === "tab 2")? "inference": "learning"
             inputs =  (runType === "inference")? inputs.slice(-5): inputs.slice(0,-5)
-               
+
             var jobData = { "status": "running",
                             "time":   new Date().toLocaleString(),
                             "inputs": inputs }
             var jobs = self.state.jobs.slice()
-            var jobIndex = jobs.push(jobData)               
-            var formURL = "http://localhost:9001/run"+ runType + "/submit"
+            var jobIndex = jobs.push(jobData)
+            var formURL = "http://localhost:9002/run"+ runType + "/submit"
             $.ajax(
             {
                 url : formURL,
@@ -40,13 +40,13 @@ export class Body extends React.Component {
                 data : new FormData(this),
                 processData: false,
                 contentType: false,
-                success:function(data, textStatus, jqXHR) 
+                success:function(data, textStatus, jqXHR)
                 {
                     var data = new Blob([data], {type: 'text/plain'});
                     var downloadURL = window.URL.createObjectURL(data)
                     var tempLink = document.createElement('a');
                     tempLink.href = downloadURL;
-                    var filename = (runType === "inference")? 
+                    var filename = (runType === "inference")?
                                    "pathway-" + (jobIndex+1)  + ".pp":
                                    "learnt-" + (jobIndex+1)  + ".fg"
                     tempLink.setAttribute('download', filename);
@@ -56,7 +56,7 @@ export class Body extends React.Component {
                     currentJobs[jobIndex] = jobData
                     self.setState({jobs:jobs})
                 },
-                error: function(jqXHR, textStatus, errorThrown) 
+                error: function(jqXHR, textStatus, errorThrown)
                 {
                     var currentJobs = self.state.jobs.slice()
                     jobData.status = "failed"
@@ -82,13 +82,13 @@ export class Body extends React.Component {
         var self=this
         var jobs = this.state.jobs.sort(compare).map(function(job, i) {
                  var id = self.state.jobs.length-i
-                 var inputs = job.inputs.map(function(input, i) { 
+                 var inputs = job.inputs.map(function(input, i) {
                                   return (<tr key={i} style={{padding: "5px"}}>
                                              <td style={{padding: "5px"}}>
                                                  <strong>{input.name.replace(/([A-Z]+)/g, " $1").replace(/([A-Z][a-z])/g, " $1").capitalizeFirstLetter()}</strong>
                                              </td>
                                              <td>{input.value}</td>
-                                          </tr>) 
+                                          </tr>)
                               })
                  return( <tr key={i}>
                             <td>{id}</td>
@@ -112,7 +112,7 @@ export class Body extends React.Component {
                                 "failed" : (<i className="material-icons">error</i>)
                               }[job.status]}
                             </td>
-                            <td> 
+                            <td>
                                  <table><tbody>
                                      {inputs}
                                  </tbody></table>
@@ -124,7 +124,7 @@ export class Body extends React.Component {
                })
 
 
-        return (<main> 
+        return (<main>
         <div className="row">
             <div className="col s6">
               <form name="runForm" id="runForm" method="POST">
@@ -140,7 +140,7 @@ export class Body extends React.Component {
                            <div className="file-path-wrapper">
                                 <input className="file-path validate" name="pairwiseInteractionFilename" type="text" />
                            </div>
-                        </div>  
+                        </div>
                         <div className="file-field input-field">
                            <p>Observation File</p>
                            <div className="btn light-blue lighten-1">
@@ -223,7 +223,7 @@ export class Body extends React.Component {
                           <th data-field="comments">Comments</th>
                       </tr>
                   </thead>
-            
+
                   <tbody>
                       {jobs}
                   </tbody>
