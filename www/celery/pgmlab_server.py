@@ -1,7 +1,8 @@
 from twisted.web.static import File
 from twisted.internet.defer import inlineCallbacks, returnValue
-import os, os.path, subprocess, shutil, json, string, pprint, cgi, uuid
+import os, os.path, shutil, json, string, pprint, cgi, uuid
 from itertools import * # for skipping lines in a file
+import pgmlab_commands
 
 from klein import Klein
 klein = Klein()
@@ -126,9 +127,8 @@ def run_inference_task(self):
 
 @wamp.register("run.inference")
 def run_inference(request):
-    print "run_inference", request
     task = run_inference_task.apply_async()
-    print "task.id: ", task.id
+    print "run_inference: task: ", task
     return task.id
 
 @klein.route('/run/inference/submit', methods=["POST"])
@@ -137,25 +137,6 @@ def run_inference_submit(request):
     print "run_inference_submit"
     res = yield wamp.session.call("run.inference", "requestDATA")
     returnValue(res)
-#
-#
-def system_call(command):
-    p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
-    p.wait()
-    return str(p.returncode)
-
-def generateFactorgraph(runPath):
-    # prepend '../bin' in command instead of using symlinks on install
-    command = "../bin/pgmlab --generate-factorgraph --pairwise-interaction-file=" + str(runPath) + "pathway.pi --logical-factorgraph-file=" + str(runPath) + "logical.fg --number-of-states 3"
-    return system_call(command)
-
-def inferenceCommand(runPath, numberOfStates, fg="logical.fg"):
-    command = "../bin/pgmlab --inference --pairwise-interaction-file=" + str(runPath) + "pathway.pi --inference-factorgraph-file=" + str(runPath) + fg + " --inference-observed-data-file=" + str(runPath) + "inference.obs --posterior-probability-file=" + str(runPath) + "pathway.pp --number-of-states " + str(numberOfStates)
-    return system_call(command)
-
-def learningCommand(runPath, numberOfStates, logLikelihoodChangeLimit, emMaxIterations):
-    command = "../bin/pgmlab --learning --pairwise-interaction-file=" + str(runPath) + "pathway.pi --logical-factorgraph-file=" + str(runPath) + "logical.fg --learning-observed-data-file=" + str(runPath) + "learning.obs --estimated-parameters-file=" + str(runPath) + "learnt.fg --number-of-states " + str(numberOfStates) +" --log-likelihood-change-limit=" + logLikelihoodChangeLimit + " --em-max-iterations=" + emMaxIterations
-    return system_call(command)
 
 if __name__ == "__main__":
     import sys
