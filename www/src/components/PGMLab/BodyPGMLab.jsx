@@ -32,7 +32,7 @@ export class Body extends React.Component {
                             "inputs": inputs }
             var jobs = self.state.jobs.slice()
             var jobIndex = jobs.push(jobData)
-            var formURL = "http://localhost:9002/run"+ runType + "/submit"
+            var formURL = "http://localhost:9002/run/"+ runType + "/submit"
             $.ajax(
             {
                 url : formURL,
@@ -42,27 +42,29 @@ export class Body extends React.Component {
                 contentType: false,
                 success:function(data, textStatus, jqXHR)
                 {
-                    var data = new Blob([data], {type: 'text/plain'});
-                    var downloadURL = window.URL.createObjectURL(data)
-                    var tempLink = document.createElement('a');
-                    tempLink.href = downloadURL;
-                    var filename = (runType === "inference")?
-                                   "pathway-" + (jobIndex+1)  + ".pp":
-                                   "learnt-" + (jobIndex+1)  + ".fg"
-                    tempLink.setAttribute('download', filename);
-                    tempLink.click()
-                    var currentJobs = self.state.jobs.slice()
-                    jobData.status = "success"
-                    currentJobs[jobIndex] = jobData
-                    self.setState({jobs:jobs})
+                    // console.log("ajax.success:", data,textStatus,jqXHR);
+                    // var data = new Blob([data], {type: 'text/plain'});
+                    // var downloadURL = window.URL.createObjectURL(data)
+                    // var tempLink = document.createElement('a');
+                    // tempLink.href = downloadURL;
+                    // var filename = (runType === "inference")?
+                    //                "pathway-" + (jobIndex+1)  + ".pp":
+                    //                "learnt-" + (jobIndex+1)  + ".fg"
+                    // tempLink.setAttribute('download', filename);
+                    // tempLink.click()
+                    // var currentJobs = self.state.jobs.slice()
+                    // jobData.status = "success"
+                    // currentJobs[jobIndex] = jobData
+                    // self.setState({jobs:jobs})
                 },
                 error: function(jqXHR, textStatus, errorThrown)
                 {
-                    var currentJobs = self.state.jobs.slice()
-                    jobData.status = "failed"
-                    jobData.comments = jqXHR.responseText
-                    currentJobs[jobIndex] = jobData
-                    self.setState({jobs: jobs})
+                    // console.log("ajax.error:", jqXHR, textStatus, errorThrown)
+                    // var currentJobs = self.state.jobs.slice()
+                    // jobData.status = "failed"
+                    // jobData.comments = jqXHR.responseText
+                    // currentJobs[jobIndex] = jobData
+                    // self.setState({jobs: jobs})
                 }
             })
             self.setState({jobs: jobs})

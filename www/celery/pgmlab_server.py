@@ -1,30 +1,20 @@
-from klein import Klein
 from twisted.web.static import File
 from twisted.internet.defer import inlineCallbacks, returnValue
-from autobahn.twisted.wamp import Application
 import os, os.path, subprocess, shutil, json, string, pprint, cgi, uuid
 from itertools import * # for skipping lines in a file
 
-app = Klein()
-wampapp = Application()
+from klein import Klein
+klein = Klein()
+from autobahn.twisted.wamp import Application
+wamp = Application()
+from celery import Celery
+celery = Celery("pgmlab_server", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
 
 cwd = os.getcwd()
 pp = pprint.PrettyPrinter(indent=4)
 tmpDir = cwd + "/../tmp/";
-print 'tmpDir', tmpDir
 
-@app.route('/pgmlab.html')
-def home(request):
-    # return File("./pgmlab.html")
-    return File("./../pgmlab.html")
-
-@app.route('/', branch=True)
-def js(request):
-    # return File('./js/')
-    return File("./../js/")
-
-
-@app.route('/runlearning/submit')
+@klein.route('/runlearning/submit')
 def runlearning_submit(request):
     runID = str(uuid.uuid4())
     runPath = tmpDir + runID + "/"
@@ -65,62 +55,90 @@ def runlearning_submit(request):
     shutil.rmtree(runPath)
     return (logicalfgFile)
 
-@wampapp.register("run.inference.submit")
-def run_inference_submit(request):
-    print "run_inference_submit", request
-# @app.route("/run/inference/submit")
-@app.route('/runinference/submit', methods=["POST"])
+# INFERENCE
+import random, time
+@celery.task(bind=True)
+def run_inference_task(self):
+    # runID = str(uuid.uuid4())
+    # runPath = tmpDir + runID + "/"
+    # print 'runPath:', runPath
+    # os.mkdir(runPath)
+    #
+    # numberOfStates = int(request.args.get("inferenceNumberOfStates", [0]) [0])
+    #
+    # piFilepath = runPath + "pathway.pi"
+    # piFile = request.args["inferencePairwiseInteractionFile"][0]
+    # piFh = open(piFilepath, "w")
+    # piFh.write(piFile)
+    # piFh.close()
+    #
+    # obsFilepath = runPath + "inference.obs"
+    # observationFile = request.args["inferenceObservationFile"][0]
+    # obsFh = open(obsFilepath, "w")
+    # obsFh.write(observationFile)
+    # obsFh.close()
+    # returnCode = generateFactorgraph(runPath)
+    # if returnCode != "0":
+    #     #shutil.rmtree(runPath)
+    #     print 'returnCode', returnCode
+    #     request.setResponseCode(500)
+    #     return "Could not generate Factorgraph from Pairwise Interaction File"
+    #
+    # learntfgFilename = request.args["learntFactorgraphFilename"]
+    # if learntfgFilename[0] != "":
+    #     learntfgFilepath = runPath + "learnt.fg"
+    #     learntfgFh = open(learntfgFilepath, "w")
+    #     learntfgFile = request.args["learntFactorgraphFile"][0]
+    #     learntfgFh.write(learntfgFile)
+    #     learntfgFh.close()
+    #     returncode = inferenceCommand(runPath, numberOfStates, "learnt.fg")
+    # else:
+    #     returnCode = inferenceCommand(runPath, numberOfStates)
+    #
+    # if returnCode == None:
+    #     #shutil.rmtree(runPath)
+    #     request.setResponseCode(500)
+    #     return "Error while running inference"
+    #
+    # ppFilepath = runPath + "pathway.pp"
+    # ppFh = open(ppFilepath)
+    # ppFile = ppFh.read()
+    # ppFh.close()
+    #
+    # #shutil.rmtree(runPath)
+    # return (ppFile)
+    verb = ['Starting up', 'Booting', 'Repairing', 'Loading', 'Checking']
+    adjective = ['master', 'radiant', 'silent', 'harmonic', 'fast']
+    noun = ['solar array', 'particle reshaper', 'cosmic ray', 'orbiter', 'bit']
+    message = ''
+    total = random.randint(10, 50)
+    for i in range(total):
+        if not message or random.random() < 0.25:
+            message = '{0} {1} {2}...'.format(random.choice(verb),
+                                              random.choice(adjective),
+                                              random.choice(noun))
+        self.update_state(state='PROGRESS',
+                          meta={'current': i, 'total': total,
+                                'status': message})
+        time.sleep(1)
+    return {'current': 100, 'total': 100, 'status': 'Task completed!',
+            'result': 42}
+
+@wamp.register("run.inference")
+def run_inference(request):
+    print "run_inference", request
+    task = run_inference_task.apply_async()
+    print "task.id: ", task.id
+    return task.id
+
+@klein.route('/run/inference/submit', methods=["POST"])
 @inlineCallbacks
-def runinference_submit(request):
-    runID = str(uuid.uuid4())
-    runPath = tmpDir + runID + "/"
-    print 'runPath:', runPath
-    os.mkdir(runPath)
-
-    numberOfStates = int(request.args.get("inferenceNumberOfStates", [0]) [0])
-
-    piFilepath = runPath + "pathway.pi"
-    piFile = request.args["inferencePairwiseInteractionFile"][0]
-    piFh = open(piFilepath, "w")
-    piFh.write(piFile)
-    piFh.close()
-
-    obsFilepath = runPath + "inference.obs"
-    observationFile = request.args["inferenceObservationFile"][0]
-    obsFh = open(obsFilepath, "w")
-    obsFh.write(observationFile)
-    obsFh.close()
-    returnCode = generateFactorgraph(runPath)
-    if returnCode != "0":
-        #shutil.rmtree(runPath)
-        print 'returnCode', returnCode
-        request.setResponseCode(500)
-        return "Could not generate Factorgraph from Pairwise Interaction File"
-
-    learntfgFilename = request.args["learntFactorgraphFilename"]
-    if learntfgFilename[0] != "":
-        learntfgFilepath = runPath + "learnt.fg"
-        learntfgFh = open(learntfgFilepath, "w")
-        learntfgFile = request.args["learntFactorgraphFile"][0]
-        learntfgFh.write(learntfgFile)
-        learntfgFh.close()
-        returncode = inferenceCommand(runPath, numberOfStates, "learnt.fg")
-    else:
-        returnCode = inferenceCommand(runPath, numberOfStates)
-
-    if returnCode == None:
-        #shutil.rmtree(runPath)
-        request.setResponseCode(500)
-        return "Error while running inference"
-
-    ppFilepath = runPath + "pathway.pp"
-    ppFh = open(ppFilepath)
-    ppFile = ppFh.read()
-    ppFh.close()
-
-    #shutil.rmtree(runPath)
-    return (ppFile)
-
+def run_inference_submit(request):
+    print "run_inference_submit"
+    res = yield wamp.session.call("run.inference", "requestDATA")
+    returnValue(res)
+#
+#
 def system_call(command):
     p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     p.wait()
@@ -146,5 +164,5 @@ if __name__ == "__main__":
     from twisted.internet import reactor
     # log.startLogging(sys.stdout)
 
-    reactor.listenTCP(9002, Site(app.resource()))
-    wampapp.run(u"ws://localhost:9001/ws", u"realm1")
+    reactor.listenTCP(9002, Site(klein.resource()))
+    wamp.run(u"ws://localhost:9001/ws", u"realm1")
