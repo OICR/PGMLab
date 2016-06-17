@@ -42,7 +42,7 @@ export class Body extends React.Component {
                 contentType: false,
                 success:function(data, textStatus, jqXHR)
                 {
-                    // console.log("ajax.success:", data,textStatus,jqXHR);
+                    console.log("ajax.success:", data,textStatus,jqXHR);
                     // var data = new Blob([data], {type: 'text/plain'});
                     // var downloadURL = window.URL.createObjectURL(data)
                     // var tempLink = document.createElement('a');
@@ -59,7 +59,7 @@ export class Body extends React.Component {
                 },
                 error: function(jqXHR, textStatus, errorThrown)
                 {
-                    // console.log("ajax.error:", jqXHR, textStatus, errorThrown)
+                    console.log("ajax.error:", jqXHR, textStatus, errorThrown)
                     // var currentJobs = self.state.jobs.slice()
                     // jobData.status = "failed"
                     // jobData.comments = jqXHR.responseText

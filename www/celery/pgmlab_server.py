@@ -2,8 +2,16 @@ from twisted.web.static import File
 from twisted.internet.defer import inlineCallbacks, returnValue
 import os, os.path, shutil, json, string, pprint, cgi, uuid
 from itertools import * # for skipping lines in a file
-import pgmlab_commands
 
+
+# Modules
+import pgmlab_commands
+import pgmlab_db
+
+print pgmlab_db.session
+
+
+# Application services
 from klein import Klein
 klein = Klein()
 from autobahn.twisted.wamp import Application
