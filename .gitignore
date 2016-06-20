@@ -57,3 +57,6 @@ www/node_modules/
 
 #tmp files created from running PGMLab
 tmp/*
+
+#Data files created from running PGMLab queueing
+data/pgmlab/*

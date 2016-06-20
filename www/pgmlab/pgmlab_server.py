@@ -16,8 +16,10 @@ from celery import Celery
 celery = Celery("pgmlab_server", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
 
 cwd = os.getcwd()
+inference_path = cwd+"/../../data/pgmlab/inference/"
+learning_path = cwd+"/../../data/pgmlab/learning/"
 pp = pprint.PrettyPrinter(indent=4)
-tmpDir = cwd + "/../tmp/";
+# tmpDir = cwd + "/../tmp/";
 
 # LEARNING
 @celery.task(bind=True)
@@ -26,14 +28,26 @@ def run_learning_task(self, **kwargs):
     print "run_learning_task"
     pp.pprint(kwargs)
     # Define Task and push to db
+    task_id = self.request.id
     learning_task = Task(
-        task_id=self.request.id,
+        task_id=task_id,
         task_type="learning",
         completed=False,
         submitted=datetime.datetime.now()
     )
     session.add(learning_task)
     session.commit()
+    #
+    run_path = learning_path+task_id+"/"
+    os.mkdir(run_path)
+    #
+    pi_file = kwargs["pi_file"]
+    pi_filepath = run_path+"pathway.pi"
+    pi = open(pi_filepath, "w")
+    pi.write(pi_file)
+    pi.close()
+    #
+
     return
 @wamp.register("run.learning")
 def run_learning(data):
@@ -58,8 +72,7 @@ def run_learning_submit(request):
         "max_iterations": em_max_iterations
     }
     # pp.pprint(data)
-    # res = yield wamp.session.call("run.learning", data)
-    res = yield wamp.session.call("run.learning", request)
+    res = yield wamp.session.call("run.learning", data)
     returnValue(res)
 
 # INFERENCE
