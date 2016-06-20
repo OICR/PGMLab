@@ -5,7 +5,7 @@ from itertools import * # for skipping lines in a file
 
 # PGMLab related modules
 import pgmlab_commands
-from pgmlab_db import session, Inference
+from pgmlab_db import session, Task
 
 # Application services
 from klein import Klein
@@ -19,84 +19,88 @@ cwd = os.getcwd()
 pp = pprint.PrettyPrinter(indent=4)
 tmpDir = cwd + "/../tmp/";
 
-@klein.route('/runlearning/submit')
-def runlearning_submit(request):
-    runID = str(uuid.uuid4())
-    runPath = tmpDir + runID + "/"
-    os.mkdir(runPath)
-
-    piFilepath = runPath + "pathway.pi"
-    piFile = request.args["learningPairwiseInteractionFile"][0]
-    piFh = open(piFilepath, "w")
-    piFh.write(piFile)
-    piFh.close()
-
-    returnCode = generateFactorgraph(runPath)
-    if returnCode != "0":
-        shutil.rmtree(runPath)
-        request.setResponseCode(500)
-        return "Could not generate Factorgraph from Pairwise Interaction File"
-
-    obsFilepath = runPath + "learning.obs"
-    learningObservationFile = request.args["learningObservationFile"][0]
-    obsFh = open(obsFilepath, "w")
-    obsFh.write(learningObservationFile)
-    obsFh.close()
-
-    numberOfStates = int(request.args.get("learningNumberOfStates", [0]) [0])
-    logLikelihoodChangeLimit = request.args.get("logLikelihoodChangeLimit", [0])[0]
-    emMaxIterations = request.args.get("emMaxIterations", [0])[0]
-    returnCode = learningCommand(runPath, numberOfStates, logLikelihoodChangeLimit, emMaxIterations)
-    if returnCode != "0":
-        shutil.rmtree(runPath)
-        request.setResponseCode(500)
-        return "Could not run learning with provided parameters"
-
-    logicalfgFilepath = runPath + "logical.fg"
-    logicalfgFh = open(logicalfgFilepath)
-    logicalfgFile = logicalfgFh.read()
-    logicalfgFh.close()
-
-    shutil.rmtree(runPath)
-    return (logicalfgFile)
+# LEARNING
+@celery.task(bind=True)
+def run_learning_task(self, **kwargs):
+    # print "run_learning_task", kwargs
+    print "run_learning_task"
+    pp.pprint(kwargs)
+    # Define Task and push to db
+    learning_task = Task(
+        task_id=self.request.id,
+        task_type="learning",
+        completed=False,
+        submitted=datetime.datetime.now()
+    )
+    session.add(learning_task)
+    session.commit()
+    return
+@wamp.register("run.learning")
+def run_learning(data):
+    # print "run_learning"
+    # pp.pprint(data)
+    task = run_learning_task.apply_async(kwargs=data)
+    return task.id
+@klein.route('/run/learning/submit', methods=["POST"])
+@inlineCallbacks
+def run_learning_submit(request):
+    # print "run_learning_submit"
+    pi_file = request.args["learningPairwiseInteractionFile"][0]
+    obs_file = request.args["learningObservationFile"][0]
+    number_states = int(request.args["learningNumberOfStates"][0])
+    log_likelihood_change_limit = request.args["logLikelihoodChangeLimit"][0]
+    em_max_iterations = request.args["emMaxIterations"][0]
+    data = {
+        "pi_file": pi_file,
+        "obs_file": obs_file,
+        "number_states": number_states,
+        "change_limit": log_likelihood_change_limit,
+        "max_iterations": em_max_iterations
+    }
+    # pp.pprint(data)
+    # res = yield wamp.session.call("run.learning", data)
+    res = yield wamp.session.call("run.learning", request)
+    returnValue(res)
 
 # INFERENCE
 import random, time, datetime
 @celery.task(bind=True)
 def run_inference_task(self, **kwargs):
-    print "run_inference_task", kwargs
-    verb = ['Starting up', 'Booting', 'Repairing', 'Loading', 'Checking']
-    adjective = ['master', 'radiant', 'silent', 'harmonic', 'fast']
-    noun = ['solar array', 'particle reshaper', 'cosmic ray', 'orbiter', 'bit']
-    message = ''
-    total = random.randint(1, 2)
-    for i in range(total):
-        if not message or random.random() < 0.25:
-            message = '{0} {1} {2}...'.format(random.choice(verb),
-                                              random.choice(adjective),
-                                              random.choice(noun))
-        self.update_state(state='PROGRESS',
-                          meta={'current': i, 'total': total,
-                                'status': message})
-        time.sleep(1)
-    test = Inference(task_id=self.request.id, completed=False, submitted=datetime.datetime.now())
-    session.add(test)
+    # print "run_inference_task", kwargs
+    print "run_inference_task"
+    pp.pprint(kwargs)
+    inference_task = Task(
+        task_id=self.request.id,
+        task_type="inference",
+        completed=False,
+        submitted=datetime.datetime.now()
+    )
+    session.add(inference_task)
     session.commit()
-    print session.query(Inference).all()
-    return {'current': 100, 'total': 100, 'status': 'Task completed!',
-            'result': 42}
-
+    return
 @wamp.register("run.inference")
-def run_inference(request):
-    task = run_inference_task.apply_async(kwargs={"test":request})
-    print "run_inference: task: ", task
+def run_inference(data):
+    # print "run_inference"
+    # pp.pprint(request)
+    task = run_inference_task.apply_async(kwargs=data)
     return task.id
-
 @klein.route('/run/inference/submit', methods=["POST"])
 @inlineCallbacks
 def run_inference_submit(request):
     # print "run_inference_submit"
-    res = yield wamp.session.call("run.inference", "requestDATA")
+    # pp.pprint(request)
+    # pp.pprint(request.args)
+    pi_file = request.args["inferencePairwiseInteractionFile"][0]
+    obs_file = request.args["inferenceObservationFile"][0]
+    fg_file = request.args["learntFactorgraphFile"][0]
+    number_states = int(request.args["inferenceNumberOfStates"][0])
+    data = {
+        "pi_file": pi_file,
+        "obs_file": obs_file,
+        "fg_file": fg_file,
+        "number_states": number_states
+    }
+    res = yield wamp.session.call("run.inference", data)
     returnValue(res)
 
 if __name__ == "__main__":
@@ -107,6 +111,45 @@ if __name__ == "__main__":
     reactor.listenTCP(9002, Site(klein.resource()))
     wamp.run(u"ws://localhost:9001/ws", u"realm1")
 
+# LEARNING
+# runID = str(uuid.uuid4())
+# runPath = tmpDir + runID + "/"
+# os.mkdir(runPath)
+#
+# piFilepath = runPath + "pathway.pi"
+# piFile = request.args["learningPairwiseInteractionFile"][0]
+# piFh = open(piFilepath, "w")
+# piFh.write(piFile)
+# piFh.close()
+#
+# returnCode = generateFactorgraph(runPath)
+# if returnCode != "0":
+#     shutil.rmtree(runPath)
+#     request.setResponseCode(500)
+#     return "Could not generate Factorgraph from Pairwise Interaction File"
+#
+# obsFilepath = runPath + "learning.obs"
+# learningObservationFile = request.args["learningObservationFile"][0]
+# obsFh = open(obsFilepath, "w")
+# obsFh.write(learningObservationFile)
+# obsFh.close()
+#
+# numberOfStates = int(request.args.get("learningNumberOfStates", [0]) [0])
+# logLikelihoodChangeLimit = request.args.get("logLikelihoodChangeLimit", [0])[0]
+# emMaxIterations = request.args.get("emMaxIterations", [0])[0]
+# returnCode = learningCommand(runPath, numberOfStates, logLikelihoodChangeLimit, emMaxIterations)
+# if returnCode != "0":
+#     shutil.rmtree(runPath)
+#     request.setResponseCode(500)
+#     return "Could not run learning with provided parameters"
+#
+# logicalfgFilepath = runPath + "logical.fg"
+# logicalfgFh = open(logicalfgFilepath)
+# logicalfgFile = logicalfgFh.read()
+# logicalfgFh.close()
+#
+# shutil.rmtree(runPath)
+# return (logicalfgFile)
 
 # INFERENCE
     # runID = str(uuid.uuid4())

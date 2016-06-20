@@ -6,11 +6,13 @@ Base = declarative_base()
 
 from sqlalchemy import Column, String, Boolean, DateTime
 import datetime
-class Inference(Base):
-    __tablename__ = "inference_tasks"
+class Task(Base):
+    __tablename__ = "tasks"
     task_id = Column(String, primary_key=True)
+    task_type = Column(String)
     completed = Column(Boolean)
     submitted = Column(DateTime)
+
 Base.metadata.create_all(engine)
 
 from sqlalchemy.orm import sessionmaker, scoped_session
