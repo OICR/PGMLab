@@ -3,13 +3,9 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 import os, os.path, shutil, json, string, pprint, cgi, uuid
 from itertools import * # for skipping lines in a file
 
-
-# Modules
+# PGMLab related modules
 import pgmlab_commands
-import pgmlab_db
-
-print pgmlab_db.session
-
+from pgmlab_db import session, Inference
 
 # Application services
 from klein import Klein
@@ -65,9 +61,54 @@ def runlearning_submit(request):
     return (logicalfgFile)
 
 # INFERENCE
-import random, time
+import random, time, datetime
 @celery.task(bind=True)
-def run_inference_task(self):
+def run_inference_task(self, **kwargs):
+    print "run_inference_task", kwargs
+    verb = ['Starting up', 'Booting', 'Repairing', 'Loading', 'Checking']
+    adjective = ['master', 'radiant', 'silent', 'harmonic', 'fast']
+    noun = ['solar array', 'particle reshaper', 'cosmic ray', 'orbiter', 'bit']
+    message = ''
+    total = random.randint(1, 2)
+    for i in range(total):
+        if not message or random.random() < 0.25:
+            message = '{0} {1} {2}...'.format(random.choice(verb),
+                                              random.choice(adjective),
+                                              random.choice(noun))
+        self.update_state(state='PROGRESS',
+                          meta={'current': i, 'total': total,
+                                'status': message})
+        time.sleep(1)
+    test = Inference(task_id=self.request.id, completed=False, submitted=datetime.datetime.now())
+    session.add(test)
+    session.commit()
+    print session.query(Inference).all()
+    return {'current': 100, 'total': 100, 'status': 'Task completed!',
+            'result': 42}
+
+@wamp.register("run.inference")
+def run_inference(request):
+    task = run_inference_task.apply_async(kwargs={"test":request})
+    print "run_inference: task: ", task
+    return task.id
+
+@klein.route('/run/inference/submit', methods=["POST"])
+@inlineCallbacks
+def run_inference_submit(request):
+    # print "run_inference_submit"
+    res = yield wamp.session.call("run.inference", "requestDATA")
+    returnValue(res)
+
+if __name__ == "__main__":
+    import sys
+    from twisted.web.server import Site
+    from twisted.internet import reactor
+
+    reactor.listenTCP(9002, Site(klein.resource()))
+    wamp.run(u"ws://localhost:9001/ws", u"realm1")
+
+
+# INFERENCE
     # runID = str(uuid.uuid4())
     # runPath = tmpDir + runID + "/"
     # print 'runPath:', runPath
@@ -116,42 +157,3 @@ def run_inference_task(self):
     #
     # #shutil.rmtree(runPath)
     # return (ppFile)
-    verb = ['Starting up', 'Booting', 'Repairing', 'Loading', 'Checking']
-    adjective = ['master', 'radiant', 'silent', 'harmonic', 'fast']
-    noun = ['solar array', 'particle reshaper', 'cosmic ray', 'orbiter', 'bit']
-    message = ''
-    total = random.randint(10, 50)
-    for i in range(total):
-        if not message or random.random() < 0.25:
-            message = '{0} {1} {2}...'.format(random.choice(verb),
-                                              random.choice(adjective),
-                                              random.choice(noun))
-        self.update_state(state='PROGRESS',
-                          meta={'current': i, 'total': total,
-                                'status': message})
-        time.sleep(1)
-    return {'current': 100, 'total': 100, 'status': 'Task completed!',
-            'result': 42}
-
-@wamp.register("run.inference")
-def run_inference(request):
-    task = run_inference_task.apply_async()
-    print "run_inference: task: ", task
-    return task.id
-
-@klein.route('/run/inference/submit', methods=["POST"])
-@inlineCallbacks
-def run_inference_submit(request):
-    print "run_inference_submit"
-    res = yield wamp.session.call("run.inference", "requestDATA")
-    returnValue(res)
-
-if __name__ == "__main__":
-    import sys
-    # from twisted.python import log
-    from twisted.web.server import Site
-    from twisted.internet import reactor
-    # log.startLogging(sys.stdout)
-
-    reactor.listenTCP(9002, Site(klein.resource()))
-    wamp.run(u"ws://localhost:9001/ws", u"realm1")
