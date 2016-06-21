@@ -3,9 +3,8 @@ import React from "react"
 export class JobResultTable extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      jobs: []
-    }
+  }
+  componentDidMount(){
   }
 
   render(){

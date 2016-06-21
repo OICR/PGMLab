@@ -24,14 +24,14 @@ var connection = new autobahn.Connection({
 
 connection.onopen = function(session, details) {
   console.log("autobahn connected", session);
-  initializeApp();
+  initializeApp(session);
 }
 connection.open()
 
 
-function initializeApp(){
+function initializeApp(session){
   render(
-    <App />,
+    <App session={session}/>,
     document.getElementById('app')
   );
 }

@@ -47,7 +47,6 @@ def run_learning_task(self, **kwargs):
     pi.write(pi_file)
     pi.close()
     #
-
     return
 @wamp.register("run.learning")
 def run_learning(data):
