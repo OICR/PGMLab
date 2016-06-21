@@ -2,6 +2,7 @@ from twisted.web.static import File
 from twisted.internet.defer import inlineCallbacks, returnValue
 import os, os.path, shutil, json, string, pprint, cgi, uuid
 from itertools import * # for skipping lines in a file
+import datetime
 
 # PGMLab related modules
 import pgmlab_commands
@@ -12,16 +13,42 @@ from klein import Klein
 klein = Klein()
 from autobahn.twisted.wamp import Application
 wamp = Application()
-from celery import Celery
-celery = Celery("pgmlab_server", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
+from celery import Celery, chain
+celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
 
 cwd = os.getcwd()
 inference_path = cwd+"/../../data/pgmlab/inference/"
 learning_path = cwd+"/../../data/pgmlab/learning/"
 pp = pprint.PrettyPrinter(indent=4)
-# tmpDir = cwd + "/../tmp/";
+
+# from autobahn.twisted.wamp import ApplicationRunner, ApplicationSession
+# class MyComponent(ApplicationSession):
+#     def __init__(self, realm="realm1"):
+#         ApplicationSession.__init__(self)
+#         self._realm = realm
+#
+#     def onConnect(self):
+#         self.join(self._realm)
+#
+#     @inlineCallbacks
+#     def onJoin(self, details):
+#         if not self.factory._myAppSession:
+#             self.factory._myAppSession = self
+#
+#         print("session ready")
+#
+#         def run_learning(data):
+#             task = run_learning_task.apply_async(kwargs=data)
+#             return task.id
+#         yield self.register(run_learning, "run.learning")
+#
+#         self.publish("celery.tasks", ['all tasks here'])
 
 # LEARNING
+@wamp.register("publish.tasks")
+def publish_tasks():
+    print("PUBLISH TASKS")
+    yield wamp.session.publish("celery.tasks", session.query(Task).all())
 @celery.task(bind=True)
 def run_learning_task(self, **kwargs):
     # print "run_learning_task", kwargs
@@ -37,27 +64,17 @@ def run_learning_task(self, **kwargs):
     )
     session.add(learning_task)
     session.commit()
-    #
-    run_path = learning_path+task_id+"/"
-    os.mkdir(run_path)
-    #
-    pi_file = kwargs["pi_file"]
-    pi_filepath = run_path+"pathway.pi"
-    pi = open(pi_filepath, "w")
-    pi.write(pi_file)
-    pi.close()
-    #
-    return
+    # res = yield wamp.session.call("publish.tasks")
+    # res = yield wamp.session.publish("celery.tasks", session.query(Task).all())
 @wamp.register("run.learning")
 def run_learning(data):
-    # print "run_learning"
-    # pp.pprint(data)
+    # res = chain(run_learning_task.s(kwargs=data), publish_tasks.s())()
+    # res.get()
     task = run_learning_task.apply_async(kwargs=data)
     return task.id
 @klein.route('/run/learning/submit', methods=["POST"])
 @inlineCallbacks
 def run_learning_submit(request):
-    # print "run_learning_submit"
     pi_file = request.args["learningPairwiseInteractionFile"][0]
     obs_file = request.args["learningObservationFile"][0]
     number_states = int(request.args["learningNumberOfStates"][0])
@@ -70,12 +87,10 @@ def run_learning_submit(request):
         "change_limit": log_likelihood_change_limit,
         "max_iterations": em_max_iterations
     }
-    # pp.pprint(data)
     res = yield wamp.session.call("run.learning", data)
     returnValue(res)
 
 # INFERENCE
-import random, time, datetime
 @celery.task(bind=True)
 def run_inference_task(self, **kwargs):
     # print "run_inference_task", kwargs
@@ -92,8 +107,6 @@ def run_inference_task(self, **kwargs):
     return
 @wamp.register("run.inference")
 def run_inference(data):
-    # print "run_inference"
-    # pp.pprint(request)
     task = run_inference_task.apply_async(kwargs=data)
     return task.id
 @klein.route('/run/inference/submit', methods=["POST"])
@@ -122,6 +135,8 @@ if __name__ == "__main__":
 
     reactor.listenTCP(9002, Site(klein.resource()))
     wamp.run(u"ws://localhost:9001/ws", u"realm1")
+    # wamp = ApplicationRunner(url=u"ws://localhost:9001/ws", realm=u"realm1")
+    # wamp.run(MyComponent)
 
 # LEARNING
 # runID = str(uuid.uuid4())
