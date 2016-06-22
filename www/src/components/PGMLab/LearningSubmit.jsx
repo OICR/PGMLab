@@ -67,9 +67,7 @@ export class LearningSubmit extends React.Component {
   }
 
   submitLearning(evt){
-    console.log("learning", evt);
     evt.preventDefault()
-    console.log(this.refs.learningForm)
     $.ajax({
       type: "POST",
       url: "http://localhost:9002/run/learning/submit",
