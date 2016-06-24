@@ -10,7 +10,7 @@ import datetime, shutil, json, string, cgi, uuid
 
 # PGMLab related modules
 import pgmlab_commands
-# from pgmlab_db import db_session, Task
+from pgmlab_db import db_session, Task
 from pgmlab_db import Task
 
 # Klein for POST that starts Celery task
@@ -95,41 +95,49 @@ def run_inference_submit(request):
 import threading
 import time
 class MonitorThread(object):
-    def __init__(self, celery_app, interval=1):
+    def __init__(self, celery_app, wamp_app, db_session, interval=1):
         self.celery_app = celery_app
         self.interval = interval
         self.state = self.celery_app.events.State()
-        # print threading
         self.thread = threading.Thread(target=self.run, args=())
         self.thread.daemon = True
         self.thread.start()
+        #
+        self.wamp_app = wamp_app
+        self.db_session = db_session
 
-    def catchall(self, event):
-        print event["type"]
-        if event["type"] != "worker-heartbeat":
-            self.state.event(event)
-        if event["type"] == "task-sent":
-            print("task-sent", event)
-        if event["type"] == "task-succeeded":
-            print("task-succeeded", event)
-            wamp.session.publish("celery.tasks", 'DONE TASKS')
+    def handle_task_sent(self, event):
+        print("task-sent", event["uuid"])
+
+    def handle_task_received(self, event):
+        print("task-received", event)
+
+    def handle_task_started(self, event):
+        print("task-started", event)
+
+    def handle_task_succeeded(self, event):
+        print("task-succeeded", event)
+
+    def handle_task_failed(self, event):
+        print("task-failed", event)
+
 
     def run(self):
         while True:
             try:
                 with self.celery_app.connection() as connection:
                     recv = self.celery_app.events.Receiver(connection, handlers={
-                        '*': self.catchall
+                        "task-sent": self.handle_task_sent,
+                        "task-received": self.handle_task_received,
+                        "task-started": self.handle_task_started,
+                        "task-succeeded": self.handle_task_succeeded,
+                        "task-failed": self.handle_task_failed
                     })
                     recv.capture(limit=None, timeout=None, wakeup=True)
-
             except (KeyboardInterrupt, SystemExit):
                 raise
-
-            except Exception:
-                # unable to capture
+            except Exception: # unable to capture
                 pass
-
             time.sleep(self.interval)
 
 if __name__ == "__main__":
@@ -138,6 +146,6 @@ if __name__ == "__main__":
     from twisted.internet import reactor
 
     reactor.listenTCP(9002, Site(klein.resource()))
-    MonitorThread(celery)
+    MonitorThread(celery, wamp, db_session)
     # celery.start()
     wamp.run(u"ws://localhost:9001/ws", u"realm1")
