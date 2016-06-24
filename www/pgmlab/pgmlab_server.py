@@ -11,7 +11,6 @@ import datetime, shutil, json, string, cgi, uuid
 # PGMLab related modules
 import pgmlab_commands
 from pgmlab_db import db_session, Task
-from pgmlab_db import Task
 
 # Klein for POST that starts Celery task
 from klein import Klein
@@ -26,26 +25,21 @@ celery.conf.CELERY_SEND_EVENTS = True
 # celery.conf.update(CELERY_SEND_EVENTS=True)
 
 # RPC to register a wamp.publish on <App> mount (loop over all users in db)
-@wamp.register("publish.tasks")
-def publish_tasks():
-    print("Publishing {} tasks...".format(len(db_session.query(Task).all())))
-    yield wamp.session.publish("celery.tasks", len(db_session.query(Task).all()))
+@wamp.register("all.tasks")
+def get_all_tasks():
+    tasks = db_session.query(Task).all()
+    tasks_dict = {}
+    for task in tasks:
+        print task, dir(task)
+    # return tasks_dict
+    return len(tasks)
 
 # LEARNING
 @celery.task(bind=True)
 def run_learning_task(self, **kwargs):
     print "run_learning_task"
     pp.pprint(kwargs)
-    # Define Task and push to db
     task_id = self.request.id
-    learning_task = Task(
-        task_id=task_id,
-        task_type="learning",
-        completed=False,
-        submitted=datetime.datetime.now()
-    )
-    # db_session.add(learning_task)
-    # db_session.commit()
     # pgmlab stuff
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
@@ -59,7 +53,9 @@ def run_learning_submit(request):
         "obs_file": obs_file,
         "number_states": number_states,
         "change_limit": log_likelihood_change_limit,
-        "max_iterations": em_max_iterations
+        "max_iterations": em_max_iterations,
+        "task_type": "learning",
+        "submit_datetime": str(datetime.datetime.now())
     }
     task = run_learning_task.apply_async(kwargs=data)
     return task.id
@@ -69,12 +65,12 @@ def run_learning_submit(request):
 def run_inference_task(self, **kwargs):
     print "run_inference_task"
     pp.pprint(kwargs)
-    inference_task = Task(
-        task_id=self.request.id,
-        task_type="inference",
-        completed=False,
-        submitted=datetime.datetime.now()
-    )
+    # inference_task = Task(
+    #     task_id=self.request.id,
+    #     task_type=kwargs["task_type"],
+    #     completed=False,
+    #     submit_datetime=kwargs["submit_datetime"]
+    # )
     # db_session.add(inference_task)
     # db_session.commit()
 @klein.route('/run/inference/submit', methods=["POST"])
@@ -87,58 +83,14 @@ def run_inference_submit(request):
         "pi_file": pi_file,
         "obs_file": obs_file,
         "fg_file": fg_file,
-        "number_states": number_states
+        "number_states": number_states,
+        "task_type": "learning",
+        "submit_datetime": datetime.datetime.now()
     }
     task = run_inference_task.apply_async(kwargs=data)
     return task.id
 
-import threading
-import time
-class MonitorThread(object):
-    def __init__(self, celery_app, wamp_app, db_session, interval=1):
-        self.celery_app = celery_app
-        self.interval = interval
-        self.state = self.celery_app.events.State()
-        self.thread = threading.Thread(target=self.run, args=())
-        self.thread.daemon = True
-        self.thread.start()
-        #
-        self.wamp_app = wamp_app
-        self.db_session = db_session
 
-    def handle_task_sent(self, event):
-        print("task-sent", event["uuid"])
-
-    def handle_task_received(self, event):
-        print("task-received", event)
-
-    def handle_task_started(self, event):
-        print("task-started", event)
-
-    def handle_task_succeeded(self, event):
-        print("task-succeeded", event)
-
-    def handle_task_failed(self, event):
-        print("task-failed", event)
-
-
-    def run(self):
-        while True:
-            try:
-                with self.celery_app.connection() as connection:
-                    recv = self.celery_app.events.Receiver(connection, handlers={
-                        "task-sent": self.handle_task_sent,
-                        "task-received": self.handle_task_received,
-                        "task-started": self.handle_task_started,
-                        "task-succeeded": self.handle_task_succeeded,
-                        "task-failed": self.handle_task_failed
-                    })
-                    recv.capture(limit=None, timeout=None, wakeup=True)
-            except (KeyboardInterrupt, SystemExit):
-                raise
-            except Exception: # unable to capture
-                pass
-            time.sleep(self.interval)
 
 if __name__ == "__main__":
     import sys
@@ -146,6 +98,7 @@ if __name__ == "__main__":
     from twisted.internet import reactor
 
     reactor.listenTCP(9002, Site(klein.resource()))
-    MonitorThread(celery, wamp, db_session)
+    from celery_monitor import MonitorThread
+    MonitorThread(celery, wamp, db_session, Task)
     # celery.start()
     wamp.run(u"ws://localhost:9001/ws", u"realm1")

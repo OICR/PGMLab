@@ -5,7 +5,11 @@ export class JobResultTable extends React.Component {
     super(props);
   }
   componentDidMount(){
-
+    this.props.session
+      .call("all.tasks")
+      .then(res => {
+        console.log("all.tasks: ", res)
+      })
   }
   render(){
     return (

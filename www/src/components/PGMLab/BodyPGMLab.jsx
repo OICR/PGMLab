@@ -16,7 +16,7 @@ export class Body extends React.Component {
             <JobSubmitForm />
           </div>
           <div classname="col s6">
-            <JobResultTable />
+            <JobResultTable session={this.props.session}/>
           </div>
         </main>
       )

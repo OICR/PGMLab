@@ -16,7 +16,13 @@ class Task(Base):
     __tablename__ = "tasks"
     task_id = Column(String, primary_key=True)
     task_type = Column(String)
-    completed = Column(Boolean)
-    submitted = Column(DateTime)
+    # submit_datetime = Column(DateTime)
+    status = Column(String)
+
+    def to_dict(self):
+        print(task_id, task_type, submit_datetime, status)
+        # return {
+        #     "task_id":
+        # }
 
 Base.metadata.create_all(engine)

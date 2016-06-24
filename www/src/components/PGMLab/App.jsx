@@ -23,7 +23,7 @@ export class App extends  React.Component {
     return (
       <div>
         <Header />
-        <Body />
+        <Body session={this.props.session}/>
         <Footer />
       </div>
     );
