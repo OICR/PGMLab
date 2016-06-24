@@ -3,16 +3,13 @@ import React from "react"
 export class LearningSubmit extends React.Component {
   constructor(props){
     super(props);
-
     this.state = {
       //defaultValues
       numberStates: 3,
       maxIterations: 4000
     }
-
     this.submitLearning = this.submitLearning.bind(this);
   }
-
   componentDidMount(){
     var self = this
     $("#runForm").submit(function(e){

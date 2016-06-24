@@ -5,12 +5,12 @@ export class JobResultTable extends React.Component {
     super(props);
   }
   componentDidMount(){
-    
-  }
 
+  }
   render(){
     return (
-      <div>TABLE</div>
+      <div>TABLE
+      </div>
     );
   }
 }

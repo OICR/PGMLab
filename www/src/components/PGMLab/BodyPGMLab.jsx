@@ -5,7 +5,6 @@ import {JobSubmitForm} from "./JobSubmitForm.jsx"
 import {JobResultTable} from "./JobResultTable.jsx"
 
 export class Body extends React.Component {
-
     constructor(props) {
         super(props)
     }
