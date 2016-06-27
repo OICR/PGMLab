@@ -60,4 +60,3 @@ tmp/*
 
 #Data files created from running PGMLab queueing
 data/pgmlab/*
-www/pgmlab/pgmlab.db
