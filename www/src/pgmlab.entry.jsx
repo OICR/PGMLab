@@ -1,45 +1,37 @@
-require("../assets/css/materialize.css")
-require("../assets/css/style.css")
+import React from "react";
+import { render } from "react-dom";
 
-var $ = require('jquery')
-window.jQuery = $
-window.$ = $
+require("../assets/css/materialize.css");
+require("../assets/css/style.css");
+require("material-design-icons");
+var $ = require("jquery");
+window.jQuery = $;
+window.$ = $;
+var materialize = require("./lib/materialize.min.js");
 
-var materialize = require('./lib/materialize.min.js')
-require("material-design-icons")
+import {App} from "./components/PGMLab/App.jsx";
 
-import React from 'react'
-import { render } from 'react-dom'
+try {var autobahn = require("autobahn")}
+catch (err) {console.log("autobahn error: ", e)};
 
-import {Header} from './components/Header.jsx'
-import {Body}   from './components/BodyPGMLab.jsx'
-import {Footer} from './components/Footer.jsx'
+const wsuri = (document.location.origin == "file://") ?
+  "ws://127.0.0.1:9001/ws" :
+  (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost:9001/ws";
+var connection = new autobahn.Connection({
+  url: wsuri,
+  realm: "realm1"
+});
 
-var moment = require('moment')
-
-class App extends  React.Component {
-
-    constructor (props) {
-        super(props)
-
-    }
-
-    static getCurrentDateTime() {
-        return moment().format('MMM D, YYYY HH:mm')
-    }
-
-    componentDidMount () {
-      $('.modal-trigger').leanModal()
-    }
-
-    render () {
-        return (
-            <div>
-                <Header />
-                <Body />
-                <Footer />
-            </div> )
-    }
+connection.onopen = function(session, details) {
+  console.log("autobahn connected", session);
+  initializeApp(session);
 }
+connection.open()
 
-render(<App />, document.getElementById('app'))
+
+function initializeApp(session){
+  render(
+    <App session={session}/>,
+    document.getElementById('app')
+  );
+}

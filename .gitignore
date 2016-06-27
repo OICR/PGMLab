@@ -46,7 +46,8 @@ wamp/.crossbar/pgmlab.pem
 
 
 #node file for running process
-www/klein/.crossbar/
+www/pgmbio/.crossbar/*
+www/pgmlab/.crossbar/*
 */.crossbar/node.pid
 */.crossbar/node.key
 */.crossbar/key.priv
@@ -56,3 +57,6 @@ www/node_modules/
 
 #tmp files created from running PGMLab
 tmp/*
+
+#Data files created from running PGMLab queueing
+data/pgmlab/*
