@@ -17,6 +17,7 @@ class MonitorThread(object):
 
     def db_task_add(self, task):
         self.db_session.add(task)
+        
     def db_commit_publish(self, task):
         self.db_session.commit()
         self.wamp_app.session.publish("celery.task.update", task=task.to_dict())

@@ -6,15 +6,15 @@ export class JobResultTable extends React.Component {
     this.state = {
       tasks: {}
     }
-    this.updateTask = this.updateTask.bind(this);
+    // this.updateTask = this.updateTask.bind(this);
+    this.updateTask = (task) => {
+      let tasks = this.state.tasks;
+      tasks[task["task_id"]] = task;
+      this.setState({
+        tasks
+      });
+    }
     this.tasksTableBody = this.tasksTableBody.bind(this);
-  }
-  updateTask(task){
-    let tasks = this.state.tasks;
-    tasks[task["task_id"]] = task;
-    this.setState({
-      tasks
-    });
   }
   componentWillMount(){
     this.props.session
@@ -27,7 +27,7 @@ export class JobResultTable extends React.Component {
     this.props.session
       .call("celery.tasks")
       .then(tasks => {
-        console.log("all.tasks: ", tasks)
+        console.log("celery.tasks: ", tasks)
         this.setState({
           tasks
         })

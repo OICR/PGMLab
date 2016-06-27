@@ -29,17 +29,15 @@ def get_all_tasks():
     tasks = db_session.query(Task).all()
     tasks_dict = {}
     for task in tasks:
-        # print task, dir(task)
         tasks_dict[task.task_id] = task.to_dict()
-    # return tasks_dict
     return tasks_dict
 
 # LEARNING
 import time
 @celery.task(bind=True)
 def run_learning_task(self, **kwargs):
-    print "run_learning_task"
-    pp.pprint(kwargs)
+    # print "run_learning_task"
+    # pp.pprint(kwargs)
     task_id = self.request.id
     time.sleep(10)
     # pgmlab stuff
@@ -85,12 +83,10 @@ def run_inference_submit(request):
     return task.id
 
 if __name__ == "__main__":
-    import sys
-    from twisted.web.server import Site
-    from twisted.internet import reactor
-
     from celery_monitor import MonitorThread
     MonitorThread(celery, wamp)
-
+    
+    from twisted.web.server import Site
+    from twisted.internet import reactor
     reactor.listenTCP(9002, Site(klein.resource()))
     wamp.run(u"ws://localhost:9001/ws", u"realm1")
