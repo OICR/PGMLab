@@ -6,7 +6,7 @@ learning_path = cwd+"/../../data/pgmlab/learning/"
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 from itertools import * # for skipping lines in a file
-import datetime, shutil, json, string, cgi, uuid
+import datetime, shutil, json, string, cgi, uuid, requests
 
 # PGMLab related modules
 import pgmlab_commands
@@ -19,7 +19,8 @@ klein = Klein()
 from autobahn.twisted.wamp import Application
 wamp = Application()
 # Queue and run tasks async
-from celery import Celery
+from celery import Celery, states
+from celery.exceptions import InvalidTaskError
 celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
 celery.conf.CELERY_SEND_EVENTS = True
 
@@ -33,14 +34,38 @@ def get_all_tasks():
     return tasks_dict
 
 # LEARNING
-import time
 @celery.task(bind=True)
 def run_learning_task(self, **kwargs):
     # print "run_learning_task"
-    # pp.pprint(kwargs)
+    pp.pprint(kwargs)
+    # PGMLab
     task_id = self.request.id
-    time.sleep(10)
-    # pgmlab stuff
+    run_path = learning_path+task_id+"/"
+    os.mkdir(run_path)
+    # Pairwise Interaction
+    pi_file = kwargs["pi_file"]
+    pgmlab_commands.generate_pairwise_interaction(run_path, pi_file)
+    # Factorgraph
+    return_code = pgmlab_commands.generate_logical_factorgraph(run_path)
+    if return_code != "0":
+        shutil.rmtree(run_path)
+        self.update_state(state=states.FAILURE, meta="reason for failure")
+        raise InvalidTaskError()
+        # return "Could not generate factorgraph from pairwise interaction file"
+    # Observation
+    obs_file = kwargs["obs_file"]
+    run_type = kwargs["task_type"]
+    pgmlab_commands.generate_observation(run_path, obs_file, run_type)
+    # Learning
+    number_states = kwargs["number_states"]
+    change_limit = kwargs["change_limit"]
+    max_iterations = kwargs["max_iterations"]
+    return_code = pgmlab_commands.learning(run_path, number_states, change_limit, max_iterations)
+    if return_code != "0":
+        shutil.rmtree(run_path)
+        raise InvalidTaskError()
+        # return "Could not run learning with provided parameters"
+
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
     pi_file = request.args["learningPairwiseInteractionFile"][0]
@@ -63,18 +88,51 @@ def run_learning_submit(request):
 # INFERENCE
 @celery.task(bind=True)
 def run_inference_task(self, **kwargs):
-    print "run_inference_task"
+    # print "run_inference_task"
     pp.pprint(kwargs)
+    # PGMLab
+    task_id = self.request.id
+    run_path = inference_path+task_id+"/"
+    os.mkdir(run_path)
+    # Pairwise Interaction
+    pi_file = kwargs["pi_file"]
+    pgmlab_commands.generate_pairwise_interaction(run_path, pi_file)
+    # Observation
+    obs_file = kwargs["obs_file"]
+    run_type = kwargs["task_type"]
+    pgmlab_commands.generate_observation(run_path, obs_file, run_type)
+    # Logical Factorgraph
+    return_code = pgmlab_commands.generate_logical_factorgraph(run_path)
+    if return_code != "0":
+        shutil.rmtree(run_path)
+        raise InvalidTaskError()
+        # return "Could not generate factorgraph from pairwise interaction file"
+    # Learnt factorgraph (optional)
+    lfg_file = kwargs["lfg_file"]
+    if lfg_file != "":
+        pgmlab_commands.generate_learnt_factorgraph(run_path, lfg_file)
+        fg_name = "learnt.fg"
+    else:
+        fg_name = "logical.fg"
+    # Inference
+    number_states = kwargs["number_states"]
+    return_code = pgmlab_commands.inference(run_path, number_states, fg_name)
+    if return_code != "0":
+        # Catch errors: self.request.... (call fail event?)
+        shutil.rmtree(run_path)
+        raise InvalidTaskError()
+        # return "Could not run inference with provided parameters"
+
 @klein.route('/run/inference/submit', methods=["POST"])
 def run_inference_submit(request):
     pi_file = request.args["inferencePairwiseInteractionFile"][0]
     obs_file = request.args["inferenceObservationFile"][0]
-    fg_file = request.args["learntFactorgraphFile"][0]
+    lfg_file = request.args["learntFactorgraphFile"][0]
     number_states = int(request.args["inferenceNumberOfStates"][0])
     data = {
         "pi_file": pi_file,
         "obs_file": obs_file,
-        "fg_file": fg_file,
+        "lfg_file": lfg_file,
         "number_states": number_states,
         "task_type": "inference",
         "submit_datetime": str(datetime.datetime.now())
@@ -85,7 +143,7 @@ def run_inference_submit(request):
 if __name__ == "__main__":
     from celery_monitor import MonitorThread
     MonitorThread(celery, wamp)
-    
+
     from twisted.web.server import Site
     from twisted.internet import reactor
     reactor.listenTCP(9002, Site(klein.resource()))
