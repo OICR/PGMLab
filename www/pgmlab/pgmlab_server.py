@@ -22,24 +22,26 @@ wamp = Application()
 from celery import Celery
 celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
 celery.conf.CELERY_SEND_EVENTS = True
-# celery.conf.update(CELERY_SEND_EVENTS=True)
 
 # RPC to register a wamp.publish on <App> mount (loop over all users in db)
-@wamp.register("all.tasks")
+@wamp.register("celery.tasks")
 def get_all_tasks():
     tasks = db_session.query(Task).all()
     tasks_dict = {}
     for task in tasks:
-        print task, dir(task)
+        # print task, dir(task)
+        tasks_dict[task.task_id] = task.to_dict()
     # return tasks_dict
-    return len(tasks)
+    return tasks_dict
 
 # LEARNING
+import time
 @celery.task(bind=True)
 def run_learning_task(self, **kwargs):
     print "run_learning_task"
     pp.pprint(kwargs)
     task_id = self.request.id
+    time.sleep(10)
     # pgmlab stuff
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
@@ -65,14 +67,6 @@ def run_learning_submit(request):
 def run_inference_task(self, **kwargs):
     print "run_inference_task"
     pp.pprint(kwargs)
-    # inference_task = Task(
-    #     task_id=self.request.id,
-    #     task_type=kwargs["task_type"],
-    #     completed=False,
-    #     submit_datetime=kwargs["submit_datetime"]
-    # )
-    # db_session.add(inference_task)
-    # db_session.commit()
 @klein.route('/run/inference/submit', methods=["POST"])
 def run_inference_submit(request):
     pi_file = request.args["inferencePairwiseInteractionFile"][0]
@@ -84,21 +78,19 @@ def run_inference_submit(request):
         "obs_file": obs_file,
         "fg_file": fg_file,
         "number_states": number_states,
-        "task_type": "learning",
-        "submit_datetime": datetime.datetime.now()
+        "task_type": "inference",
+        "submit_datetime": str(datetime.datetime.now())
     }
     task = run_inference_task.apply_async(kwargs=data)
     return task.id
-
-
 
 if __name__ == "__main__":
     import sys
     from twisted.web.server import Site
     from twisted.internet import reactor
 
-    reactor.listenTCP(9002, Site(klein.resource()))
     from celery_monitor import MonitorThread
     MonitorThread(celery, wamp)
-    # celery.start()
+
+    reactor.listenTCP(9002, Site(klein.resource()))
     wamp.run(u"ws://localhost:9001/ws", u"realm1")

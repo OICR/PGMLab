@@ -20,9 +20,12 @@ class Task(Base):
     status = Column(String)
 
     def to_dict(self):
-        print(task_id, task_type, submit_datetime, status)
-        # return {
-        #     "task_id":
-        # }
+        # print(self.task_id, self.task_type, self.submit_datetime, self.status)
+        return {
+            "task_id": self.task_id,
+            "task_type": self.task_type,
+            "submit_datetime": self.submit_datetime,
+            "status": self.status
+        }
 
 Base.metadata.create_all(engine)

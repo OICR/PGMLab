@@ -72,7 +72,8 @@ export class LearningSubmit extends React.Component {
       contentType: false,
       data: new FormData(this.refs.learningForm),
       success: (data, textStatus, jqXHR) => {
-        console.log("ajax.success:", data, textStatus, jqXHR);
+        // console.log("ajax.success:", data, textStatus, jqXHR);
+        console.log("ajax.sucess", data)
       },
       error: (jqXHR, textStatus, error) => {
         console.log("ajax.error:", jqXHR, textStatus, error);

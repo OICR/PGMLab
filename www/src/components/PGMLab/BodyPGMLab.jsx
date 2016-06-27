@@ -12,12 +12,8 @@ export class Body extends React.Component {
       const fullSize = {height:"1000px"}
       return (
         <main className="row grey lighten-4" style={fullSize}>
-          <div className="col s6">
             <JobSubmitForm />
-          </div>
-          <div classname="col s6">
             <JobResultTable session={this.props.session}/>
-          </div>
         </main>
       )
     }

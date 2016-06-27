@@ -13,18 +13,20 @@ export class JobSubmitForm extends React.Component {
   }
   render(){
     return (
-      <div className="row">
-        <div className="col s12">
-          <ul className="tabs grey lighten-4">
-            <li className="tab col s6"><a href="#Learning">Learning</a></li>
-            <li className="tab col s6"><a href="#Inference">Inference</a></li>
-          </ul>
-        </div>
-        <div id="Learning" className="col s12">
-          <LearningSubmit />
-        </div>
-        <div id="Inference" className="col s12">
-          <InferenceSubmit />
+      <div className="col s4">
+        <div className="row">
+          <div className="col s12">
+            <ul className="tabs grey lighten-4">
+              <li className="tab col s6"><a href="#Learning">Learning</a></li>
+              <li className="tab col s6"><a href="#Inference">Inference</a></li>
+            </ul>
+          </div>
+          <div id="Learning" className="col s12">
+            <LearningSubmit />
+          </div>
+          <div id="Inference" className="col s12">
+            <InferenceSubmit />
+          </div>
         </div>
       </div>
     );

@@ -15,49 +15,54 @@ class MonitorThread(object):
 
         self.wamp_app = wamp_app
 
-    def handle_task_sent(self, event):
-        print("task-sent", event["uuid"])
+    def db_task_add(self, task):
+        self.db_session.add(task)
+    def db_commit_publish(self, task):
+        self.db_session.commit()
+        self.wamp_app.session.publish("celery.task.update", task=task.to_dict())
 
     def handle_task_received(self, event):
+        print("task-received", event["uuid"])
         kwargs = ast.literal_eval(event["kwargs"])
         task_id = event["uuid"]
         task_type = kwargs["task_type"]
         submit_datetime = kwargs["submit_datetime"]
-        status = "received"
-        print("task-received", event["uuid"])
-        print(task_id, task_type, submit_datetime, status)
+        status = u"received"
         task = self.Task(
-            task_id = task_id,
+            task_id = task_id, #unicode
             task_type = task_type,
             submit_datetime = submit_datetime,
             status = status
         )
-        self.db_session.add(task)
-        self.db_session.commit()
-        self.wamp_app.publish("celery.tasks", "added task")
-
-
-        # print db_session
-        # db_session.add(task)
-        # db_session.commit()
-
+        self.db_task_add(task=task)
+        self.db_commit_publish(task=task)
 
     def handle_task_started(self, event):
         print("task-started", event["uuid"])
+        task_id = event["uuid"]
+        task = self.db_session.query(self.Task).get(task_id)
+        task.status = u"started"
+        self.db_commit_publish(task=task)
 
     def handle_task_succeeded(self, event):
         print("task-succeeded", event["uuid"])
+        task_id = event["uuid"]
+        task = self.db_session.query(self.Task).get(task_id)
+        task.status = u"succeeded"
+        self.db_commit_publish(task=task)
 
     def handle_task_failed(self, event):
         print("task-failed", event["uuid"])
-
+        task_id = event["uuid"]
+        task = self.db_session.query(self.Task).get(task_id)
+        task.status = u"failed"
+        self.db_commit_publish(task=task)
 
     def run(self):
         while True:
             try:
                 with self.celery_app.connection() as connection:
                     recv = self.celery_app.events.Receiver(connection, handlers={
-                        "task-sent": self.handle_task_sent,
                         "task-received": self.handle_task_received,
                         "task-started": self.handle_task_started,
                         "task-succeeded": self.handle_task_succeeded,
