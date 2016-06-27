@@ -3,50 +3,40 @@ import time
 import ast
 
 class MonitorThread(object):
-    from pgmlab_db import Task
-    db_session = None
-    wamp_app = None
-    Task = None
-    def __init__(self, celery_app, wamp_app, db_session, Task, interval=1):
+    from pgmlab_db import db_session, Task
+
+    def __init__(self, celery_app, wamp_app, interval=1):
         self.celery_app = celery_app
         self.interval = interval
         self.state = self.celery_app.events.State()
         self.thread = threading.Thread(target=self.run, args=())
         self.thread.daemon = True
         self.thread.start()
-        # This works but needs to be moved outside of __init__
-        db_session = db_session
-        wamp_app = wamp_app
-        task = Task(
-            task_id = 'task',
-            task_type = "k_type",
-            # submit_datetime = submit_datetime,
-            status = "status"
-        )
-        print db_session
-        db_session.add(task)
-        db_session.commit()
-        print db_session
-        #
+
+        self.wamp_app = wamp_app
+
     def handle_task_sent(self, event):
         print("task-sent", event["uuid"])
 
     def handle_task_received(self, event):
-        print("task-received", event["uuid"])
         kwargs = ast.literal_eval(event["kwargs"])
         task_id = event["uuid"]
         task_type = kwargs["task_type"]
         submit_datetime = kwargs["submit_datetime"]
         status = "received"
-        # print Task
-        # print db_session
-        # print("SAD")
-        # task = Task(
-        #     task_id = task_id,
-        #     task_type = task_type,
-        #     submit_datetime = submit_datetime,
-        #     status = status
-        # )
+        print("task-received", event["uuid"])
+        print(task_id, task_type, submit_datetime, status)
+        task = self.Task(
+            task_id = task_id,
+            task_type = task_type,
+            submit_datetime = submit_datetime,
+            status = status
+        )
+        self.db_session.add(task)
+        self.db_session.commit()
+        self.wamp_app.publish("celery.tasks", "added task")
+
+
         # print db_session
         # db_session.add(task)
         # db_session.commit()

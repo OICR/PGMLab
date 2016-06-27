@@ -99,6 +99,6 @@ if __name__ == "__main__":
 
     reactor.listenTCP(9002, Site(klein.resource()))
     from celery_monitor import MonitorThread
-    MonitorThread(celery, wamp, db_session, Task)
+    MonitorThread(celery, wamp)
     # celery.start()
     wamp.run(u"ws://localhost:9001/ws", u"realm1")

@@ -10,9 +10,6 @@ export class App extends  React.Component {
   constructor (props) {
     // console.log("app constructor", props.session);
     super(props)
-    props.session.subscribe("celery.tasks", (args, kwargs, details)=>{
-      console.log("Event received", args, kwargs, details)
-    });
   }
   componentWillMount(){
 
