@@ -19,7 +19,8 @@ klein = Klein()
 from autobahn.twisted.wamp import Application
 wamp = Application()
 # Queue and run tasks async
-from celery import Celery
+from celery import Celery, states
+from celery.exceptions import InvalidTaskError
 celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
 celery.conf.CELERY_SEND_EVENTS = True
 
@@ -48,7 +49,9 @@ def run_learning_task(self, **kwargs):
     return_code = pgmlab_commands.generate_logical_factorgraph(run_path)
     if return_code != "0":
         shutil.rmtree(run_path)
-        return "Could not generate factorgraph from pairwise interaction file"
+        self.update_state(state=states.FAILURE, meta="reason for failure")
+        raise InvalidTaskError()
+        # return "Could not generate factorgraph from pairwise interaction file"
     # Observation
     obs_file = kwargs["obs_file"]
     run_type = kwargs["task_type"]
@@ -60,7 +63,8 @@ def run_learning_task(self, **kwargs):
     return_code = pgmlab_commands.learning(run_path, number_states, change_limit, max_iterations)
     if return_code != "0":
         shutil.rmtree(run_path)
-        return "Could not run learning with provided parameters"
+        raise InvalidTaskError()
+        # return "Could not run learning with provided parameters"
 
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
@@ -101,7 +105,8 @@ def run_inference_task(self, **kwargs):
     return_code = pgmlab_commands.generate_logical_factorgraph(run_path)
     if return_code != "0":
         shutil.rmtree(run_path)
-        return "Could not generate factorgraph from pairwise interaction file"
+        raise InvalidTaskError()
+        # return "Could not generate factorgraph from pairwise interaction file"
     # Learnt factorgraph (optional)
     lfg_file = kwargs["lfg_file"]
     if lfg_file != "":
@@ -115,7 +120,8 @@ def run_inference_task(self, **kwargs):
     if return_code != "0":
         # Catch errors: self.request.... (call fail event?)
         shutil.rmtree(run_path)
-        return "Could not run inference with provided parameters"
+        raise InvalidTaskError()
+        # return "Could not run inference with provided parameters"
 
 @klein.route('/run/inference/submit', methods=["POST"])
 def run_inference_submit(request):
