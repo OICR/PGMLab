@@ -1,16 +1,35 @@
 import subprocess
-
-pgmlab_path = "../bin/pgmlab"
+import os
+cwd = os.getcwd()
+pgmlab_path = cwd+"/../../bin/pgmlab"
 
 def system_call(command):
     p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     p.wait()
     return str(p.returncode)
 
-def generate_factorgraph(run_path):
+def generate_pairwise_interaction(run_path, pi_file):
+    pi_filepath = run_path+"pathway.pi"
+    pi = open(pi_filepath, "w")
+    pi.write(pi_file)
+    pi.close()
+
+def generate_logical_factorgraph(run_path):
     command = "{0} --generate-factorgraph --pairwise-interaction-file={1}pathway.pi --logical-factorgraph-file={1}logical.fg --number-of-states 3".format(pgmlab_path, run_path)
     # command = "../bin/pgmlab --generate-factorgraph --pairwise-interaction-file=" + str(runPath) + "pathway.pi --logical-factorgraph-file=" + str(runPath) + "logical.fg --number-of-states 3"
     return system_call(command)
+
+def generate_observation(run_path, obs_file, run_type):
+    obs_filepath = run_path+run_type+".obs"
+    obs = open(obs_filepath, "w")
+    obs.write(obs_file)
+    obs.close()
+
+def generate_learnt_factorgraph(run_path, lfg_file):
+    lfg_filepath = run_path+"learnt.fg"
+    lfg = open(lfg_filepath, "w")
+    lfg.write(lfg_file)
+    lfg.close()
 
 def inference(run_path, number_states, fg="logical.fg"):
     command = "{0} --inference --pairwise-interaction-file={1}pathway.pi --inference-factorgraph-file={1}{2} --inference-observed-data-file={1}inference.obs --posterior-probability-file={1}pathway.pp --number-of-states {3}".format(pgmlab_path, run_path, fg, number_states)
