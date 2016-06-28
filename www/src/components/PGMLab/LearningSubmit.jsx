@@ -86,7 +86,7 @@ export class LearningSubmit extends React.Component {
           <div className="row input-field file-field">
             <p>{"Pairwise interaction File"}</p>
             <div className="btn">
-              <span>{"Upload"}</span>
+              <span><i className="material-icons">file_upload</i></span>
               <input type="file" name="learningPairwiseInteractionFile" />
             </div>
             <div className="file-path-wrapper">
@@ -97,7 +97,7 @@ export class LearningSubmit extends React.Component {
           <div className="row input-field file-field">
             <p>{"Observation File"}</p>
             <div className="btn">
-              <span>{"Upload"}</span>
+              <span><i className="material-icons">file_upload</i></span>
               <input type="file" name="learningObservationFile" />
             </div>
             <div className="file-path-wrapper">
