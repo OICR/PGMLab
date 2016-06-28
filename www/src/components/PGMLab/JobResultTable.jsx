@@ -132,7 +132,7 @@ export class JobResultTable extends React.Component {
           <div className="col s11">
             <form className="row">
               {
-                ["Ascending", "Descending"]
+                ["Descending", "Ascending"]
                   .map(sort => {
                     return (
                       <div key={sort} className="col s3">
@@ -163,17 +163,35 @@ export class JobResultTable extends React.Component {
       .filter(t => t.task_id.includes(this.state.idFilter))
       .filter(t => this.state.typeFilters.has(t.task_type))
       .filter(t => this.state.statusFilters.has(t.status))
-      .sort((t1,t2) => this.state.dateSort ?
-        (moment(t1.submit_datetime).isBefore(t2.submit_datetime) ? -1 : 1):
-        (moment(t1.submit_datetime).isAfter(t2.submit_datetime) ? -1 : 1));
+      .sort((t1,t2) => (this.state.dateSort === "descending") ?
+        (moment(t1.submit_datetime).isAfter(t2.submit_datetime) ? -1 : 1):
+        (moment(t1.submit_datetime).isBefore(t2.submit_datetime) ? -1 : 1));
+    const statusIconMap = {
+      "received": <i className="material-icons">low_priority</i>,
+      "started":
+      <div className="preloader-wrapper small active">
+        <div className="spinner-layer spinner-green-only">
+          <div className="circle-clipper left">
+            <div className="circle"></div>
+          </div><div className="gap-patch">
+            <div className="circle"></div>
+          </div><div className="circle-clipper right">
+            <div className="circle"></div>
+          </div>
+        </div>
+      </div>,
+      "succeeded": <i className="material-icons">check_circle</i>,
+      "failed": <i className="material-icons">error</i>
+    };
     return (
-      <table className="col s12">
+      <table className="col s12 centered striped bordered">
         <thead>
           <tr>
             <th data-field="id">{"ID"}</th>
             <th data-field="type">{"Run Type"}</th>
             <th data-field="status">{"Status"}</th>
             <th data-field="datetime">{"Submitted"}</th>
+            <th data-field="info">{"Info"}</th>
             <th data-field="result">{"Results"}</th>
           </tr>
         </thead>
@@ -188,8 +206,13 @@ export class JobResultTable extends React.Component {
                     </span>
                   </td>
                   <td>{t.task_type}</td>
-                  <td>{t.status}</td>
-                  <td>{moment(t.submit_datetime).format("MMMM Do YYYY, h:mm a")}</td>
+                  <td>{statusIconMap[t.status]}</td>
+                  <td>
+                    {`${moment(t.submit_datetime).format("MMMM Do YYYY")}`}
+                    <br/>
+                    {`${moment(t.submit_datetime).format("h:mm a")}`}
+                  </td>
+                  <td>{"Info"}</td>
                   <td>{"Results"}</td>
                 </tr>)
           }
@@ -199,7 +222,7 @@ export class JobResultTable extends React.Component {
   }
   render(){
     return (
-      <div className="col s8">
+      <div className="col s9">
         <div className="row card-panel">
           {this.tableProperties()}
           {this.tasksTable()}
