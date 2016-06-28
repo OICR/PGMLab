@@ -33,6 +33,7 @@ export class JobResultTable extends React.Component {
       this.setState({statusFilters})
     }
     this.setDateSort = dateSort => {
+      console.log(dateSort)
       this.setState({dateSort});
     }
     this.setIDFilter = idFilter => {
@@ -58,69 +59,93 @@ export class JobResultTable extends React.Component {
         })
       })
   }
+  componentDidUpdate(){
+    $("span.tooltipped").tooltip({delay: 5});
+  }
 
   tableProperties(){
     const noVertMargin = {marginBottom: "0px", marginTop: "0px"};
+    const tasks = Object.keys(this.state.tasks).map(k => this.state.tasks[k]);
     const idFilter = ( //lowercase input only
       <div className="row" style={noVertMargin}>
         <form>
-            <input id="idFilter" value={this.state.idFilter} type="text" style={{paddingBottom:"0px"}}
+            <input id="idFilter" value={this.state.idFilter} type="text" placeholder="Filter by ID" style={{paddingBottom:"0px"}}
               onChange={evt => this.setIDFilter(evt.target.value.toLowerCase())}/>
         </form>
       </div>
     );
+    const tasksStatusFiltered = tasks.filter(t => this.state.statusFilters.has(t.status));
     const typeFilters = (
       <div className="row" style={noVertMargin}>
-        <form>
-        <div className="col s2">{"Run types:"}</div>
-        {
-          ["Learning", "Inference"]
-            .map(type =>
-              <div key={type} className="col s2">
-                <input id={`${type}Filter`} value={type.toLowerCase()} type="checkbox"
-                  checked={this.state.typeFilters.has(type.toLowerCase())}
-                  onChange={evt => this.setTypeFilter(evt.target.value)}/>
-                <label htmlFor={`${type}Filter`}>{`${type}`}</label>
-              </div>
-            )
-        }
-        </form>
+        <div className="col s1 valign">{"Type:"}</div>
+        <div className="col s11 valign">
+          <form className="row">
+            {
+              ["Learning", "Inference"]
+                .map(type => {
+                  const typeCount = tasksStatusFiltered
+                    .filter(t => t.task_type === type.toLowerCase())
+                    .length;
+                  return (
+                    <div key={type} className="col s3 valign">
+                      <input id={`${type}Filter`} value={type.toLowerCase()} type="checkbox"
+                        checked={this.state.typeFilters.has(type.toLowerCase())}
+                        onChange={evt => this.setTypeFilter(evt.target.value)}/>
+                      <label htmlFor={`${type}Filter`}>{`${type} (${typeCount})`}</label>
+                    </div>
+                  );
+                })
+            }
+          </form>
+        </div>
       </div>
     );
+    const tasksTypeFiltered = tasks.filter(t => this.state.typeFilters.has(t.task_type));
     const statusFilters = (
       <div className="row" style={noVertMargin}>
-        <form>
-        <div className="col s2">{"Statuses:"}</div>
-        {
-          ["Received", "Started", "Succeeded", "Failed"]
-            .map(status =>
-              <div key={status} className="col s2">
-                <input id={`${status}Filter`} value={status.toLowerCase()} type="checkbox"
-                  checked={this.state.statusFilters.has(status.toLowerCase())}
-                  onChange={evt => this.setStatusFilter(evt.target.value)}/>
-                <label htmlFor={`${status}Filter`}>{`${status}`}</label>
-              </div>
-            )
-        }
-        </form>
+        <div className="col s1">{"Status:"}</div>
+        <div className="col s11">
+          <form className="row">
+            {
+              ["Received", "Started", "Succeeded", "Failed"]
+                .map(status => {
+                  const statusCount = tasksTypeFiltered
+                    .filter(t => t.status === status.toLowerCase())
+                    .length
+                  return (
+                    <div key={status} className="col s3">
+                      <input id={`${status}Filter`} value={status.toLowerCase()} type="checkbox"
+                        checked={this.state.statusFilters.has(status.toLowerCase())}
+                        onChange={evt => this.setStatusFilter(evt.target.value)}/>
+                      <label htmlFor={`${status}Filter`}>{`${status} (${statusCount})`}</label>
+                    </div>
+                  );
+                })
+            }
+          </form>
+        </div>
       </div>
     );
     const dateSort = (
       <div className="row" style={noVertMargin}>
-        <form>
-          <div className="col s2">{"Sort date:"}</div>
-          {
-            ["Ascending", "Descending"]
-              .map(sort =>
-                <div key={sort} className="col s2">
-                  <input id={`${sort}Order`} name="dateSort" value={sort.toLowerCase()} type="radio"
-                    checked={this.state.dateSort===sort}
-                    onChange={evt => this.setDateSort(evt.target.value)}/>
-                  <label htmlFor={`${sort}Order`}>{`${sort}`}</label>
-                </div>
-              )
-          }
-        </form>
+          <div className="col s1">{"Date:"}</div>
+          <div className="col s11">
+            <form className="row">
+              {
+                ["Ascending", "Descending"]
+                  .map(sort => {
+                    return (
+                      <div key={sort} className="col s3">
+                        <input id={`${sort}Order`} name="dateSort" value={sort.toLowerCase()} type="radio"
+                          checked={this.state.dateSort===sort.toLowerCase()}
+                          onChange={evt => this.setDateSort(evt.target.value)}/>
+                        <label htmlFor={`${sort}Order`}>{`${sort}`}</label>
+                      </div>
+                    );
+                  })
+              }
+            </form>
+          </div>
       </div>
     );
     return (
@@ -145,10 +170,11 @@ export class JobResultTable extends React.Component {
       <table className="col s12">
         <thead>
           <tr>
+            <th data-field="id">{"ID"}</th>
             <th data-field="type">{"Run Type"}</th>
             <th data-field="status">{"Status"}</th>
             <th data-field="datetime">{"Submitted"}</th>
-            <th data-field="id">{"Job ID"}</th>
+            <th data-field="result">{"Results"}</th>
           </tr>
         </thead>
         <tbody>
@@ -156,10 +182,15 @@ export class JobResultTable extends React.Component {
             tasks
               .map((t,i) =>
                 <tr key={t.task_id}>
+                  <td>
+                    <span className="tooltipped" data-position="left" data-tooltip={t.task_id}>
+                      {`${t.task_id.substring(0,5)}...`}
+                    </span>
+                  </td>
                   <td>{t.task_type}</td>
                   <td>{t.status}</td>
                   <td>{moment(t.submit_datetime).format("MMMM Do YYYY, h:mm a")}</td>
-                  <td>{t.task_id}</td>
+                  <td>{"Results"}</td>
                 </tr>)
           }
         </tbody>
