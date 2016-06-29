@@ -10,6 +10,7 @@ export class JobSubmitForm extends React.Component {
   }
   componentDidMount() {
     $("ul.tabs").tabs();
+    $("ul.tabs .indicator").addClass("teal");
   }
   render(){
     return (

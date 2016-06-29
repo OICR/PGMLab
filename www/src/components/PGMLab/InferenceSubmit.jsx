@@ -29,7 +29,7 @@ export class InferenceSubmit extends React.Component {
   }
   render(){
     return (
-      <form ref="inferenceForm" onSubmit={evt=>{this.submitInference(evt)}}>
+      <form ref="inferenceForm" className="center-align" onSubmit={evt=>{this.submitInference(evt)}}>
           <div className="row input-field file-field">
             <p>{"Pairwise interaction File"}</p>
             <div className="btn">

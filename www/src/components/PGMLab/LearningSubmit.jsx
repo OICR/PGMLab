@@ -82,7 +82,7 @@ export class LearningSubmit extends React.Component {
   }
   render(){
     return (
-      <form ref="learningForm" onSubmit={evt=>{this.submitLearning(evt)}}>
+      <form ref="learningForm" className="center-align" onSubmit={evt=>{this.submitLearning(evt)}}>
           <div className="row input-field file-field">
             <p>{"Pairwise interaction File"}</p>
             <div className="btn">

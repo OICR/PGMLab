@@ -188,10 +188,10 @@ export class JobResultTable extends React.Component {
         <thead>
           <tr>
             <th data-field="id">{"ID"}</th>
-            <th data-field="type">{"Run Type"}</th>
             <th data-field="status">{"Status"}</th>
-            <th data-field="datetime">{"Submitted"}</th>
+            <th data-field="type">{"Run Type"}</th>
             <th data-field="info">{"Info"}</th>
+            <th data-field="datetime">{"Submitted"}</th>
             <th data-field="result">{"Results"}</th>
           </tr>
         </thead>
@@ -205,14 +205,14 @@ export class JobResultTable extends React.Component {
                       {`${t.task_id.substring(0,5)}...`}
                     </span>
                   </td>
-                  <td>{t.task_type}</td>
                   <td>{statusIconMap[t.status]}</td>
+                  <td>{t.task_type}</td>
+                  <td>{"Info"}</td>
                   <td>
                     {`${moment(t.submit_datetime).format("MMMM Do YYYY")}`}
                     <br/>
                     {`${moment(t.submit_datetime).format("h:mm a")}`}
                   </td>
-                  <td>{"Info"}</td>
                   <td>{"Results"}</td>
                 </tr>)
           }
