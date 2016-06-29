@@ -55,7 +55,7 @@ export class InferenceSubmit extends React.Component {
           <div className="row input-field file-field">
             <p>{"Learnt Factorgraph File (Optional)"}</p>
             <div className="btn">
-              <span>{"Upload"}</span>
+              <span><i className="material-icons">file_upload</i></span>
               <input type="file" name="learntFactorgraphFile" />
             </div>
             <div className="file-path-wrapper">

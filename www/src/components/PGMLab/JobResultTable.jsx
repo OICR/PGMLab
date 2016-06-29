@@ -12,6 +12,30 @@ export class JobResultTable extends React.Component {
       dateSort: "descending", // || "ascending"
       idFilter: ""
     }
+    // For rendering in table
+    this.statusIconMap = {
+      "received": <i className="material-icons">low_priority</i>,
+      "started":
+      <div className="preloader-wrapper small active">
+        <div className="spinner-layer spinner-green-only">
+          <div className="circle-clipper left">
+            <div className="circle"></div>
+          </div><div className="gap-patch">
+            <div className="circle"></div>
+          </div><div className="circle-clipper right">
+            <div className="circle"></div>
+          </div>
+        </div>
+      </div>,
+      "succeeded": <i className="material-icons">check_circle</i>,
+      "failed": <i className="material-icons">error</i>
+    }
+    this.resultsPath = "./pgmlab/results/"; //directory where all zip packages written to
+    this.statusResultMap = t => (
+      t.status === "succeeded" ?
+        (<a href={`${this.resultsPath}${t.task_id}.zip`} download>{"download"}</a>):
+        (t.status === "failed" ? (<span>{"Invalid Task Error"}</span>) : undefined) //Need to add error handling into Celery and PGMLab
+    )
     // this.updateTask = this.updateTask.bind(this);
     this.updateTask = task => {
       let tasks = this.state.tasks;
@@ -171,26 +195,14 @@ export class JobResultTable extends React.Component {
       .sort((t1,t2) => (this.state.dateSort === "descending") ?
         (moment(t1.submit_datetime).isAfter(t2.submit_datetime) ? -1 : 1):
         (moment(t1.submit_datetime).isBefore(t2.submit_datetime) ? -1 : 1));
-    const statusIconMap = {
-      "received": <i className="material-icons">low_priority</i>,
-      "started":
-      <div className="preloader-wrapper small active">
-        <div className="spinner-layer spinner-green-only">
-          <div className="circle-clipper left">
-            <div className="circle"></div>
-          </div><div className="gap-patch">
-            <div className="circle"></div>
-          </div><div className="circle-clipper right">
-            <div className="circle"></div>
-          </div>
-        </div>
-      </div>,
-      "succeeded": <i className="material-icons">check_circle</i>,
-      "failed": <i className="material-icons">error</i>
-    };
     return (
       <Table selectable={false} height={"400px"}>
         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <TableRow>
+            <TableHeaderColumn colSpan="6" style={{textAlign: "center"}}>
+              {"PGMLab Job Queue"}
+            </TableHeaderColumn>
+          </TableRow>
           <TableRow>
             <TableHeaderColumn>{"ID"}</TableHeaderColumn>
             <TableHeaderColumn>{"Status"}</TableHeaderColumn>
@@ -205,7 +217,7 @@ export class JobResultTable extends React.Component {
             tasks.map((t,i) =>
               <TableRow key={i}>
                 <TableRowColumn>{`${t.task_id}`}</TableRowColumn>
-                <TableRowColumn>{statusIconMap[t.status]}</TableRowColumn>
+                <TableRowColumn>{this.statusIconMap[t.status]}</TableRowColumn>
                 <TableRowColumn>{t.task_type}</TableRowColumn>
                 <TableRowColumn>{"Info"}</TableRowColumn>
                 <TableRowColumn>
@@ -213,7 +225,9 @@ export class JobResultTable extends React.Component {
                   <br/>
                   {`${moment(t.submit_datetime).format("h:mm a")}`}
                 </TableRowColumn>
-                <TableRowColumn>{"Results"}</TableRowColumn>
+                <TableRowColumn>
+                  {this.statusResultMap(t)}
+                </TableRowColumn>
               </TableRow>
             )
           }
