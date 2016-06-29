@@ -65,6 +65,11 @@ def run_learning_task(self, **kwargs):
         shutil.rmtree(run_path)
         raise InvalidTaskError()
         # return "Could not run learning with provided parameters"
+    # Create package to download
+    # Package is created into server directory (i.e. www/pgmlab/)
+    # This path corresponds to save file path in results table
+    package_path = cwd+"/results/"+task_id #package name is task uuid
+    shutil.make_archive(package_path, "zip", root_dir=run_path)
 
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
@@ -122,6 +127,11 @@ def run_inference_task(self, **kwargs):
         shutil.rmtree(run_path)
         raise InvalidTaskError()
         # return "Could not run inference with provided parameters"
+    # Create package to download
+    # Package is created into server directory (i.e. www/pgmlab/)
+    # This path corresponds to save file path in results table
+    package_path = cwd+"/results/"+task_id #package name is task uuid
+    shutil.make_archive(package_path, "zip", root_dir=run_path)
 
 @klein.route('/run/inference/submit', methods=["POST"])
 def run_inference_submit(request):
