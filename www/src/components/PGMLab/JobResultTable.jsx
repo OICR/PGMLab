@@ -66,9 +66,17 @@ export class JobResultTable extends React.Component {
 
   tableProperties(){
     const noVertMargin = {marginBottom: "0px", marginTop: "0px"};
-    const tasks = Object.keys(this.state.tasks)
+    const tasksProps = Object.keys(this.state.tasks)
       .map(k => this.state.tasks[k])
       .filter(t => t.task_id.includes(this.state.idFilter))
+      .reduce((acc, t) => {
+        acc["type"][t.task_type]++;
+        acc["status"][t.status]++;
+        return acc;
+      }, {
+        "type": {"learning":0,"inference":0},
+        "status": {"received":0,"started":0,"succeeded":0,"failed":0}
+      });
     const idFilter = ( //lowercase input only
       <div className="row" style={noVertMargin}>
         <form>
@@ -77,7 +85,6 @@ export class JobResultTable extends React.Component {
         </form>
       </div>
     );
-    const tasksStatusFiltered = tasks.filter(t => this.state.statusFilters.has(t.status));
     const typeFilters = (
       <div className="row" style={noVertMargin}>
         <div className="col s1 valign">{"Type:"}</div>
@@ -86,9 +93,7 @@ export class JobResultTable extends React.Component {
             {
               ["Learning", "Inference"]
                 .map(type => {
-                  const typeCount = tasksStatusFiltered
-                    .filter(t => t.task_type === type.toLowerCase())
-                    .length;
+                  const typeCount = tasksProps["type"][type.toLowerCase()];
                   return (
                     <div key={type} className="col s3 valign">
                       <input id={`${type}Filter`} value={type.toLowerCase()} type="checkbox"
@@ -103,7 +108,6 @@ export class JobResultTable extends React.Component {
         </div>
       </div>
     );
-    const tasksTypeFiltered = tasks.filter(t => this.state.typeFilters.has(t.task_type));
     const statusFilters = (
       <div className="row" style={noVertMargin}>
         <div className="col s1">{"Status:"}</div>
@@ -112,9 +116,7 @@ export class JobResultTable extends React.Component {
             {
               ["Received", "Started", "Succeeded", "Failed"]
                 .map(status => {
-                  const statusCount = tasksTypeFiltered
-                    .filter(t => t.status === status.toLowerCase())
-                    .length
+                  const statusCount = tasksProps["status"][status.toLowerCase()];
                   return (
                     <div key={status} className="col s3">
                       <input id={`${status}Filter`} value={status.toLowerCase()} type="checkbox"
