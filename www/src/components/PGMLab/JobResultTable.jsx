@@ -1,4 +1,5 @@
-import React from "react"
+import React from "react";
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
 var moment = require("moment");
 
 export class JobResultTable extends React.Component {
@@ -183,7 +184,9 @@ export class JobResultTable extends React.Component {
       "succeeded": <i className="material-icons">check_circle</i>,
       "failed": <i className="material-icons">error</i>
     };
+    const scrollable = {"height": "300px", "overflow": "scroll"};
     return (
+      <div>
       <table className="col s12 centered striped bordered">
         <thead>
           <tr>
@@ -218,14 +221,15 @@ export class JobResultTable extends React.Component {
           }
         </tbody>
       </table>
+      </div>
     );
   }
   render(){
+    const table = <div>{this.tableProperties()}{this.tasksTable()}</div>
     return (
       <div className="col s9">
         <div className="row card-panel">
-          {this.tableProperties()}
-          {this.tasksTable()}
+          {table}
         </div>
       </div>
     );

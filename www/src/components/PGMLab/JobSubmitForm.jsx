@@ -14,8 +14,8 @@ export class JobSubmitForm extends React.Component {
   }
   render(){
     return (
-      <div className="col s3 card-panel">
-        <div className="row">
+      <div className="col s3">
+        <div className="row card-panel">
           <div className="col s12">
             <ul className="tabs">
               <li className="tab col s6"><a href="#Learning"><span className="teal-text">Learning</span></a></li>

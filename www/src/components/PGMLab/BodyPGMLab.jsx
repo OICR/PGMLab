@@ -1,6 +1,9 @@
 
 import React from 'react'
 
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+
 import {JobSubmitForm} from "./JobSubmitForm.jsx"
 import {JobResultTable} from "./JobResultTable.jsx"
 
@@ -9,12 +12,13 @@ export class Body extends React.Component {
         super(props)
     }
     render () {
-      const fullSize = {height:"1000px"}
       return (
-        <main className="row grey lighten-4" style={fullSize}>
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <main className="row grey lighten-4">
             <JobSubmitForm />
             <JobResultTable session={this.props.session}/>
         </main>
+        </MuiThemeProvider>
       )
     }
 }
