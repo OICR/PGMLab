@@ -66,7 +66,9 @@ export class JobResultTable extends React.Component {
 
   tableProperties(){
     const noVertMargin = {marginBottom: "0px", marginTop: "0px"};
-    const tasks = Object.keys(this.state.tasks).map(k => this.state.tasks[k]);
+    const tasks = Object.keys(this.state.tasks)
+      .map(k => this.state.tasks[k])
+      .filter(t => t.task_id.includes(this.state.idFilter))
     const idFilter = ( //lowercase input only
       <div className="row" style={noVertMargin}>
         <form>
@@ -184,52 +186,49 @@ export class JobResultTable extends React.Component {
       "succeeded": <i className="material-icons">check_circle</i>,
       "failed": <i className="material-icons">error</i>
     };
-    const scrollable = {"height": "300px", "overflow": "scroll"};
     return (
-      <div>
-      <table className="col s12 centered striped bordered">
-        <thead>
-          <tr>
-            <th data-field="id">{"ID"}</th>
-            <th data-field="status">{"Status"}</th>
-            <th data-field="type">{"Run Type"}</th>
-            <th data-field="info">{"Info"}</th>
-            <th data-field="datetime">{"Submitted"}</th>
-            <th data-field="result">{"Results"}</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table selectable={false} height={"400px"}>
+        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+          <TableRow>
+            <TableHeaderColumn>{"ID"}</TableHeaderColumn>
+            <TableHeaderColumn>{"Status"}</TableHeaderColumn>
+            <TableHeaderColumn>{"Type"}</TableHeaderColumn>
+            <TableHeaderColumn>{"Info"}</TableHeaderColumn>
+            <TableHeaderColumn>{"Submitted"}</TableHeaderColumn>
+            <TableHeaderColumn>{"Results"}</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+        <TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true} preScanRows={false}>
           {
-            tasks
-              .map((t,i) =>
-                <tr key={t.task_id}>
-                  <td>
-                    <span className="tooltipped" data-position="left" data-tooltip={t.task_id}>
-                      {`${t.task_id.substring(0,5)}...`}
-                    </span>
-                  </td>
-                  <td>{statusIconMap[t.status]}</td>
-                  <td>{t.task_type}</td>
-                  <td>{"Info"}</td>
-                  <td>
-                    {`${moment(t.submit_datetime).format("MMMM Do YYYY")}`}
-                    <br/>
-                    {`${moment(t.submit_datetime).format("h:mm a")}`}
-                  </td>
-                  <td>{"Results"}</td>
-                </tr>)
+            tasks.map((t,i) =>
+              <TableRow key={i}>
+                <TableRowColumn>{`${t.task_id}`}</TableRowColumn>
+                <TableRowColumn>{statusIconMap[t.status]}</TableRowColumn>
+                <TableRowColumn>{t.task_type}</TableRowColumn>
+                <TableRowColumn>{"Info"}</TableRowColumn>
+                <TableRowColumn>
+                  {`${moment(t.submit_datetime).format("MMMM Do YYYY")}`}
+                  <br/>
+                  {`${moment(t.submit_datetime).format("h:mm a")}`}
+                </TableRowColumn>
+                <TableRowColumn>{"Results"}</TableRowColumn>
+              </TableRow>
+            )
           }
-        </tbody>
-      </table>
-      </div>
-    );
+        </TableBody>
+      </Table>
+    )
   }
   render(){
-    const table = <div>{this.tableProperties()}{this.tasksTable()}</div>
     return (
       <div className="col s9">
-        <div className="row card-panel">
-          {table}
+        <div className="card-panel">
+          <div className="section">
+            {this.tableProperties()}
+          </div>
+          <div className="section">
+            {this.tasksTable()}
+          </div>
         </div>
       </div>
     );
