@@ -34,7 +34,7 @@ export class InferenceSubmit extends React.Component {
             <p>{"Pairwise interaction File"}</p>
             <div className="btn">
               <span><i className="material-icons">file_upload</i></span>
-              <input type="file" name="inferencePairwiseInteractionFile" />
+              <input type="file" name="pairwiseInteractionFile" />
             </div>
             <div className="file-path-wrapper">
               <input type="text" className="file-path validate" name="pairwiseInteractionFilename" />
@@ -45,7 +45,7 @@ export class InferenceSubmit extends React.Component {
             <p>{"Observation File"}</p>
             <div className="btn">
               <span><i className="material-icons">file_upload</i></span>
-              <input type="file" name="inferenceObservationFile" />
+              <input type="file" name="observationFile" />
             </div>
             <div className="file-path-wrapper">
               <input type="text" className="file-path validate" name="observationFilename" />

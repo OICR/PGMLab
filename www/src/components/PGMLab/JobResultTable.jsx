@@ -13,6 +13,18 @@ export class JobResultTable extends React.Component {
       idFilter: ""
     }
     // For rendering in table
+    this.infoMap = t => (
+      <span>
+        <div>{`${t.pi_filename}`}</div>
+        <div>{`${t.obs_filename}`}</div>
+        {t.task_type==="inference" ? <div>{`${t.lfg_filename}`}</div>:undefined}
+        <div>
+          {`(
+            ${t.number_states}${t.task_type==="learning" ? `, ${t.max_iterations}, ${t.change_limit}`:``}
+          )`}
+        </div>
+      </span>
+    )
     this.statusIconMap = {
       "received": <i className="material-icons">low_priority</i>,
       "started":
@@ -33,7 +45,7 @@ export class JobResultTable extends React.Component {
     this.resultsPath = "./pgmlab/results/"; //directory where all zip packages written to
     this.statusResultMap = t => (
       t.status === "succeeded" ?
-        (<a href={`${this.resultsPath}${t.task_id}.zip`} download>{"download"}</a>):
+        (<a href={`${this.resultsPath}${t.task_id}.zip`} download>{"Download"}</a>):
         (t.status === "failed" ? (<span>{"Invalid Task Error"}</span>) : undefined) //Need to add error handling into Celery and PGMLab
     )
     // this.updateTask = this.updateTask.bind(this);
@@ -219,11 +231,13 @@ export class JobResultTable extends React.Component {
                 <TableRowColumn>{`${t.task_id}`}</TableRowColumn>
                 <TableRowColumn>{this.statusIconMap[t.status]}</TableRowColumn>
                 <TableRowColumn>{t.task_type}</TableRowColumn>
-                <TableRowColumn>{"Info"}</TableRowColumn>
                 <TableRowColumn>
-                  {`${moment(t.submit_datetime).format("MMMM Do YYYY")}`}
-                  <br/>
-                  {`${moment(t.submit_datetime).format("h:mm a")}`}
+                  {this.infoMap(t)}
+                </TableRowColumn>
+                <TableRowColumn>
+                    {`${moment(t.submit_datetime).format("MMMM Do YYYY")}`}
+                    <br/>
+                    {`${moment(t.submit_datetime).format("h:mm a")}`}
                 </TableRowColumn>
                 <TableRowColumn>
                   {this.statusResultMap(t)}

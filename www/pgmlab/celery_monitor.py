@@ -15,9 +15,29 @@ class MonitorThread(object):
 
         self.wamp_app = wamp_app
 
-    def db_task_add(self, task):
+    def db_task_add(self, task_id, kwargs):
+        print(kwargs)
+        status = u"received"
+        pi_filename = kwargs["pi_filename"]
+        obs_filename = kwargs["obs_filename"]
+        number_states = kwargs["number_states"]
+        task = self.Task(
+            task_id = task_id, #unicode
+            task_type = kwargs["task_type"],
+            submit_datetime = kwargs["submit_datetime"],
+            status = status,
+            pi_filename = pi_filename,
+            obs_filename = obs_filename,
+            number_states = number_states
+        )
+        if kwargs["task_type"] == "learning":
+            task.change_limit = kwargs["change_limit"]
+            task.max_iterations = kwargs["max_iterations"]
+        else:
+            task.lfg_filename = kwargs["lfg_filename"]
         self.db_session.add(task)
-        
+        return task
+
     def db_commit_publish(self, task):
         self.db_session.commit()
         self.wamp_app.session.publish("celery.task.update", task=task.to_dict())
@@ -26,16 +46,7 @@ class MonitorThread(object):
         print("task-received", event["uuid"])
         kwargs = ast.literal_eval(event["kwargs"])
         task_id = event["uuid"]
-        task_type = kwargs["task_type"]
-        submit_datetime = kwargs["submit_datetime"]
-        status = u"received"
-        task = self.Task(
-            task_id = task_id, #unicode
-            task_type = task_type,
-            submit_datetime = submit_datetime,
-            status = status
-        )
-        self.db_task_add(task=task)
+        task = self.db_task_add(task_id=task_id, kwargs=kwargs)
         self.db_commit_publish(task=task)
 
     def handle_task_started(self, event):

@@ -73,17 +73,21 @@ def run_learning_task(self, **kwargs):
 
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
-    pi_file = request.args["learningPairwiseInteractionFile"][0]
-    obs_file = request.args["learningObservationFile"][0]
-    number_states = int(request.args["learningNumberOfStates"][0])
-    log_likelihood_change_limit = request.args["logLikelihoodChangeLimit"][0]
-    em_max_iterations = request.args["emMaxIterations"][0]
+    pi_file = request.args["pairwiseInteractionFile"][0]
+    pi_filename = request.args["pairwiseInteractionFilename"][0]
+    obs_file = request.args["observationFile"][0]
+    obs_filename = request.args["observationFilename"][0]
+    number_states = int(request.args["numberStates"][0])
+    log_likelihood_change_limit = float(request.args["logLikelihoodChangeLimit"][0])
+    em_max_iterations = int(request.args["emMaxIterations"][0])
     data = {
         "pi_file": pi_file,
+        "pi_filename": pi_filename,
         "obs_file": obs_file,
+        "obs_filename": obs_filename,
         "number_states": number_states,
-        "change_limit": log_likelihood_change_limit,
-        "max_iterations": em_max_iterations,
+        "change_limit": log_likelihood_change_limit, #
+        "max_iterations": em_max_iterations, #
         "task_type": "learning",
         "submit_datetime": str(datetime.datetime.now())
     }
@@ -135,14 +139,20 @@ def run_inference_task(self, **kwargs):
 
 @klein.route('/run/inference/submit', methods=["POST"])
 def run_inference_submit(request):
-    pi_file = request.args["inferencePairwiseInteractionFile"][0]
-    obs_file = request.args["inferenceObservationFile"][0]
+    pi_file = request.args["pairwiseInteractionFile"][0]
+    pi_filename = request.args["pairwiseInteractionFilename"][0]
+    obs_file = request.args["observationFile"][0]
+    obs_filename = request.args["observationFilename"][0]
     lfg_file = request.args["learntFactorgraphFile"][0]
+    lfg_filename = request.args["learntFactorgraphFilename"][0]
     number_states = int(request.args["inferenceNumberOfStates"][0])
     data = {
         "pi_file": pi_file,
+        "pi_filename": pi_filename,
         "obs_file": obs_file,
+        "obs_filename": obs_filename,
         "lfg_file": lfg_file,
+        "lfg_filename": lfg_filename,
         "number_states": number_states,
         "task_type": "inference",
         "submit_datetime": str(datetime.datetime.now())

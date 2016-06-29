@@ -87,7 +87,7 @@ export class LearningSubmit extends React.Component {
             <p>{"Pairwise interaction File"}</p>
             <div className="btn">
               <span><i className="material-icons">file_upload</i></span>
-              <input type="file" name="learningPairwiseInteractionFile" />
+              <input type="file" name="pairwiseInteractionFile" />
             </div>
             <div className="file-path-wrapper">
               <input type="text" className="file-path validate" name="pairwiseInteractionFilename" />
@@ -98,7 +98,7 @@ export class LearningSubmit extends React.Component {
             <p>{"Observation File"}</p>
             <div className="btn">
               <span><i className="material-icons">file_upload</i></span>
-              <input type="file" name="learningObservationFile" />
+              <input type="file" name="observationFile" />
             </div>
             <div className="file-path-wrapper">
               <input type="text" className="file-path validate" name="observationFilename" />
@@ -109,7 +109,7 @@ export class LearningSubmit extends React.Component {
           <div className="row input-field">
             <p>{"Number of States: "+this.state.numberStates}</p>
             <p className="range-field">
-              <input  type="range" name="learningNumberOfStates" defaultValue={3} min={2} max={10}
+              <input  type="range" name="numberStates" defaultValue={3} min={2} max={10}
                       onInput={evt=>{this.setState({numberStates: evt.target.value})}} />
             </p>
           </div>
