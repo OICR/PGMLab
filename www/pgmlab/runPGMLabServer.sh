@@ -1,1 +1,1 @@
-twistd -n web --class=pgmlabServer.resource -c ~/cert.pem -k ~/privkey.pem --https=443
+twistd -n web --class=pgmlab_server.resource -c .crossbar/example.cert.pem -k .crossbar/example.privkey.pem --https=4433

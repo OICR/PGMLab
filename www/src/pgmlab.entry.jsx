@@ -15,8 +15,10 @@ try {var autobahn = require("autobahn")}
 catch (err) {console.log("autobahn error: ", e)};
 
 const wsuri = (document.location.origin == "file://") ?
-  "ws://127.0.0.1:9001/ws" :
-  (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost:9001/ws";
+  "wss://127.0.0.1/ws" :
+  // (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost:9001/ws";
+  // (document.location.protocol === "http:" ? "ws:" : "wss:") + "//"+document.location.host+"/ws";
+  (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost/ws";
 var connection = new autobahn.Connection({
   url: wsuri,
   realm: "realm1"

@@ -70,7 +70,10 @@
 	  console.log("autobahn error: ", e);
 	};
 	
-	var wsuri = document.location.origin == "file://" ? "ws://127.0.0.1:9001/ws" : (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost:9001/ws";
+	var wsuri = document.location.origin == "file://" ? "wss://127.0.0.1/ws" :
+	// (document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost:9001/ws";
+	// (document.location.protocol === "http:" ? "ws:" : "wss:") + "//"+document.location.host+"/ws";
+	(document.location.protocol === "http:" ? "ws:" : "wss:") + "//localhost/ws";
 	var connection = new autobahn.Connection({
 	  url: wsuri,
 	  realm: "realm1"
@@ -75026,7 +75029,7 @@
 	      dateSort: "descending", // || "ascending"
 	      idFilter: ""
 	    };
-	    // For rendering in table
+	    // For rendering details inside table cells
 	    _this.infoMap = function (t) {
 	      return _react2.default.createElement(
 	        "span",
@@ -75106,7 +75109,7 @@
 	      ) : undefined //Need to add error handling into Celery and PGMLab
 	      ;
 	    };
-	    // this.updateTask = this.updateTask.bind(this);
+	    // For subscribing to task updates, updates a task in state
 	    _this.updateTask = function (task) {
 	      var tasks = _this.state.tasks;
 	      tasks[task["task_id"]] = task;
@@ -75134,12 +75137,13 @@
 	      _this.setState({ statusFilters: statusFilters });
 	    };
 	    _this.setDateSort = function (dateSort) {
-	      console.log(dateSort);
 	      _this.setState({ dateSort: dateSort });
 	    };
 	    _this.setIDFilter = function (idFilter) {
 	      _this.setState({ idFilter: idFilter });
 	    };
+	
+	    // Binding
 	    _this.tableProperties = _this.tableProperties.bind(_this);
 	    _this.tasksTable = _this.tasksTable.bind(_this);
 	    return _this;
@@ -75162,9 +75166,7 @@
 	
 	      this.props.session.call("celery.tasks").then(function (tasks) {
 	        console.log("celery.tasks: ", tasks);
-	        _this3.setState({
-	          tasks: tasks
-	        });
+	        _this3.setState({ tasks: tasks });
 	      });
 	    }
 	  }, {
@@ -75197,7 +75199,8 @@
 	        _react2.default.createElement(
 	          "form",
 	          null,
-	          _react2.default.createElement("input", { id: "idFilter", value: this.state.idFilter, type: "text", placeholder: "Filter by ID", style: { paddingBottom: "0px" },
+	          _react2.default.createElement("input", { id: "idFilter", value: this.state.idFilter, type: "text", placeholder: "Filter by ID",
+	            style: { paddingBottom: "0px" },
 	            onChange: function onChange(evt) {
 	              return _this4.setIDFilter(evt.target.value.toLowerCase());
 	            } })
@@ -75349,32 +75352,32 @@
 	            null,
 	            _react2.default.createElement(
 	              _Table.TableHeaderColumn,
-	              null,
+	              { tooltip: "Job ID in queue" },
 	              "ID"
 	            ),
 	            _react2.default.createElement(
 	              _Table.TableHeaderColumn,
-	              null,
+	              { tooltip: "Job status in queue" },
 	              "Status"
 	            ),
 	            _react2.default.createElement(
 	              _Table.TableHeaderColumn,
-	              null,
+	              { tooltip: "PGMLab run type" },
 	              "Type"
 	            ),
 	            _react2.default.createElement(
 	              _Table.TableHeaderColumn,
-	              null,
+	              { tooltip: "PGMLab files and parameters" },
 	              "Info"
 	            ),
 	            _react2.default.createElement(
 	              _Table.TableHeaderColumn,
-	              null,
+	              { tooltip: "Date and time queued" },
 	              "Submitted"
 	            ),
 	            _react2.default.createElement(
 	              _Table.TableHeaderColumn,
-	              null,
+	              { tooltip: "Download zip package" },
 	              "Results"
 	            )
 	          )

@@ -44,6 +44,7 @@ wamp/.crossbar/pgmlab.pem
 #python compiled files
 *.pyc
 
+www/pgmlab/twistd.pid
 
 #node file for running process
 www/pgmbio/.crossbar/*

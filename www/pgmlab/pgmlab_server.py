@@ -15,6 +15,16 @@ from pgmlab_db import db_session, Task
 # Klein for POST that starts Celery task
 from klein import Klein
 klein = Klein()
+# Host html and js
+@klein.route("/pgmlab.html")
+def home(request):
+    print os.getcwd()
+    return File("../pgmlab.html")
+
+@klein.route("/", branch=True)
+def js(request):
+    return File("../js/")
+
 # For communicating with backend (db, RPC, Pub/Sub)
 from autobahn.twisted.wamp import Application
 wamp = Application()
@@ -25,6 +35,7 @@ celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost/
 celery.conf.CELERY_SEND_EVENTS = True
 
 # RPC to register a wamp.publish on <App> mount (loop over all users in db)
+# need to set wamp on wss 443
 @wamp.register("celery.tasks")
 def get_all_tasks():
     tasks = db_session.query(Task).all()
@@ -160,11 +171,14 @@ def run_inference_submit(request):
     task = run_inference_task.apply_async(kwargs=data)
     return task.id
 
+resource = klein.resource
 if __name__ == "__main__":
     from celery_monitor import MonitorThread
     MonitorThread(celery, wamp)
 
     from twisted.web.server import Site
     from twisted.internet import reactor
-    reactor.listenTCP(9002, Site(klein.resource()))
+    from autobahn.twisted.websocket import WebSocketClientFactory, WebSocketClientProtocol, connectWS
+    # reactor.listenTCP(9002, Site(klein.resource()))
+
     wamp.run(u"ws://localhost:9001/ws", u"realm1")
