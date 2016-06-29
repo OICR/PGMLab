@@ -12,7 +12,7 @@ export class JobResultTable extends React.Component {
       dateSort: "descending", // || "ascending"
       idFilter: ""
     }
-    // For rendering in table
+    // For rendering details inside table cells
     this.infoMap = t => (
       <span>
         <div>{`${t.pi_filename}`}</div>
@@ -48,7 +48,7 @@ export class JobResultTable extends React.Component {
         (<a href={`${this.resultsPath}${t.task_id}.zip`} download>{"Download"}</a>):
         (t.status === "failed" ? (<span>{"Invalid Task Error"}</span>) : undefined) //Need to add error handling into Celery and PGMLab
     )
-    // this.updateTask = this.updateTask.bind(this);
+    // For subscribing to task updates, updates a task in state
     this.updateTask = task => {
       let tasks = this.state.tasks;
       tasks[task["task_id"]] = task;
@@ -70,12 +70,13 @@ export class JobResultTable extends React.Component {
       this.setState({statusFilters})
     }
     this.setDateSort = dateSort => {
-      console.log(dateSort)
       this.setState({dateSort});
     }
     this.setIDFilter = idFilter => {
       this.setState({idFilter})
     }
+
+    // Binding
     this.tableProperties = this.tableProperties.bind(this);
     this.tasksTable = this.tasksTable.bind(this);
   }
@@ -91,9 +92,7 @@ export class JobResultTable extends React.Component {
       .call("celery.tasks")
       .then(tasks => {
         console.log("celery.tasks: ", tasks)
-        this.setState({
-          tasks
-        })
+        this.setState({tasks})
       })
   }
   componentDidUpdate(){
@@ -116,7 +115,8 @@ export class JobResultTable extends React.Component {
     const idFilter = ( //lowercase input only
       <div className="row" style={noVertMargin}>
         <form>
-            <input id="idFilter" value={this.state.idFilter} type="text" placeholder="Filter by ID" style={{paddingBottom:"0px"}}
+            <input id="idFilter" value={this.state.idFilter} type="text" placeholder="Filter by ID"
+              style={{paddingBottom:"0px"}}
               onChange={evt => this.setIDFilter(evt.target.value.toLowerCase())}/>
         </form>
       </div>
@@ -216,12 +216,12 @@ export class JobResultTable extends React.Component {
             </TableHeaderColumn>
           </TableRow>
           <TableRow>
-            <TableHeaderColumn>{"ID"}</TableHeaderColumn>
-            <TableHeaderColumn>{"Status"}</TableHeaderColumn>
-            <TableHeaderColumn>{"Type"}</TableHeaderColumn>
-            <TableHeaderColumn>{"Info"}</TableHeaderColumn>
-            <TableHeaderColumn>{"Submitted"}</TableHeaderColumn>
-            <TableHeaderColumn>{"Results"}</TableHeaderColumn>
+            <TableHeaderColumn tooltip={"Job ID in queue"}>{"ID"}</TableHeaderColumn>
+            <TableHeaderColumn tooltip={"Job status in queue"}>{"Status"}</TableHeaderColumn>
+            <TableHeaderColumn tooltip={"PGMLab run type"}>{"Type"}</TableHeaderColumn>
+            <TableHeaderColumn tooltip={"PGMLab files and parameters"}>{"Info"}</TableHeaderColumn>
+            <TableHeaderColumn tooltip={"Date and time queued"}>{"Submitted"}</TableHeaderColumn>
+            <TableHeaderColumn tooltip={"Download zip package"}>{"Results"}</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true} preScanRows={false}>
