@@ -74402,7 +74402,7 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	exports.Body = undefined;
 	
@@ -74433,31 +74433,36 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var Body = exports.Body = function (_React$Component) {
-	    _inherits(Body, _React$Component);
+	  _inherits(Body, _React$Component);
 	
-	    function Body(props) {
-	        _classCallCheck(this, Body);
+	  function Body(props) {
+	    _classCallCheck(this, Body);
 	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Body).call(this, props));
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Body).call(this, props));
+	  }
+	
+	  _createClass(Body, [{
+	    key: "render",
+	    value: function render() {
+	      var noMargin = { marginTop: "0px", marginBottom: "0px" };
+	      return _react2.default.createElement(
+	        _MuiThemeProvider2.default,
+	        { muiTheme: (0, _getMuiTheme2.default)() },
+	        _react2.default.createElement(
+	          "main",
+	          { className: "grey lighten-4" },
+	          _react2.default.createElement(
+	            "div",
+	            { className: "row", style: noMargin },
+	            _react2.default.createElement(_JobSubmitForm.JobSubmitForm, null),
+	            _react2.default.createElement(_JobResultTable.JobResultTable, { session: this.props.session })
+	          )
+	        )
+	      );
 	    }
+	  }]);
 	
-	    _createClass(Body, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                _MuiThemeProvider2.default,
-	                { muiTheme: (0, _getMuiTheme2.default)() },
-	                _react2.default.createElement(
-	                    "main",
-	                    { className: "row grey lighten-4" },
-	                    _react2.default.createElement(_JobSubmitForm.JobSubmitForm, null),
-	                    _react2.default.createElement(_JobResultTable.JobResultTable, { session: this.props.session })
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return Body;
+	  return Body;
 	}(_react2.default.Component);
 
 /***/ },
@@ -75494,13 +75499,13 @@
 	  _createClass(Footer, [{
 	    key: "render",
 	    value: function render() {
-	      var noPadMargin = { paddingBottom: "0px", paddingTop: "0px", marginTop: "0px" };
+	      var noVertMargin = { marginTop: "0px", marginBottom: "0px" };
 	      return _react2.default.createElement(
 	        "footer",
-	        { className: "page-footer light-blue", style: noPadMargin },
+	        { className: "page-footer light-blue", style: noVertMargin },
 	        _react2.default.createElement(
 	          "div",
-	          { className: "row" },
+	          { className: "row", style: noVertMargin },
 	          _react2.default.createElement(
 	            "div",
 	            { className: "col s8" },
