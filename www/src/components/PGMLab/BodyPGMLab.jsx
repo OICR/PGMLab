@@ -12,11 +12,14 @@ export class Body extends React.Component {
         super(props)
     }
     render () {
+      const noMargin = {marginTop:"0px",marginBottom:"0px"};
       return (
         <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <main className="row grey lighten-4">
+        <main className="grey lighten-4">
+          <div className="row" style={noMargin}>
             <JobSubmitForm />
             <JobResultTable session={this.props.session}/>
+          </div>
         </main>
         </MuiThemeProvider>
       )
