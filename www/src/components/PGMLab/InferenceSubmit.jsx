@@ -14,7 +14,7 @@ export class InferenceSubmit extends React.Component {
     evt.preventDefault()
     $.ajax({
       type: "POST",
-      url: "http://localhost:9002/run/inference/submit",
+      url: "https://localhost:4433/run/inference/submit",
       processData: false,
       contentType: false,
       data: new FormData(this.refs.inferenceForm),
