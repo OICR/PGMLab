@@ -4,7 +4,7 @@ import ast
 
 class MonitorThread(object):
     # from pgmlab_db import db_session, Task
-    # from pgmlab_wamp import Component as wamp
+    from pgmlab_wamp import Component
 
     def __init__(self, celery_app, wamp_app, interval=1):
 
@@ -22,6 +22,7 @@ class MonitorThread(object):
         # self.wamp.test(task=task)
         try:
             print("update_task: ", task)
+            Component.test(task=task)
             # self.wamp.call("update.task", task)
             # self.wamp.test(task)
         except:
@@ -102,7 +103,6 @@ class MonitorThread(object):
         while True:
             print("run")
             try:
-
                 with self.celery_app.connection() as connection:
                     recv = self.celery_app.events.Receiver(connection, handlers={
                         "task-received": self.handle_task_received,

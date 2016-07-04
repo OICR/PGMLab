@@ -29,6 +29,7 @@ class Component(ApplicationSession):
         yield self.register(update_task, u"update.task")
         print("procs registered")
 
+    @classmethod
     def test(self, task):
         print("TEST", self)
         self.publish("celery.task.update", task)
