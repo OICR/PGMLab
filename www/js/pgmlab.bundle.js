@@ -74615,7 +74615,7 @@
 	      evt.preventDefault();
 	      $.ajax({
 	        type: "POST",
-	        url: "http://localhost:9002/run/inference/submit",
+	        url: "https://localhost:4433/run/inference/submit",
 	        processData: false,
 	        contentType: false,
 	        data: new FormData(this.refs.inferenceForm),
@@ -74850,7 +74850,7 @@
 	      evt.preventDefault();
 	      $.ajax({
 	        type: "POST",
-	        url: "http://localhost:9002/run/learning/submit",
+	        url: "https://localhost:4433/run/learning/submit",
 	        processData: false,
 	        contentType: false,
 	        data: new FormData(this.refs.learningForm),
@@ -75096,11 +75096,11 @@
 	        "error"
 	      )
 	    };
-	    _this.resultsPath = "./pgmlab/results/"; //directory where all zip packages written to
+	    _this.resultsPath = "./results/"; //directory where all zip packages written to
 	    _this.statusResultMap = function (t) {
 	      return t.status === "succeeded" ? _react2.default.createElement(
 	        "a",
-	        { href: "" + _this.resultsPath + t.task_id + ".zip", download: true },
+	        { href: "" + _this.resultsPath + t.task_id, download: true },
 	        "Download"
 	      ) : t.status === "failed" ? _react2.default.createElement(
 	        "span",
