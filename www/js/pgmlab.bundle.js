@@ -75159,6 +75159,9 @@
 	    value: function componentWillMount() {
 	      var _this2 = this;
 	
+	      this.props.session.subscribe("on.update", function (args, kwargs, details) {
+	        console.log("on.update ", args, kwargs, details);
+	      });
 	      this.props.session.subscribe("celery.task.update", function (args, kwargs, details) {
 	        console.log("celery.task.update ", kwargs["task"]);
 	        _this2.updateTask(kwargs["task"]);
@@ -75171,6 +75174,7 @@
 	
 	      this.props.session.call("celery.tasks").then(function (tasks) {
 	        console.log("celery.tasks: ", tasks);
+	        _this3.props.session.publish("on.update", ["some_task"]);
 	        _this3.setState({ tasks: tasks });
 	      });
 	    }
