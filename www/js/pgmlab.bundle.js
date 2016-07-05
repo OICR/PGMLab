@@ -74402,7 +74402,7 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	exports.Body = undefined;
 	
@@ -74433,36 +74433,31 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var Body = exports.Body = function (_React$Component) {
-	  _inherits(Body, _React$Component);
+	    _inherits(Body, _React$Component);
 	
-	  function Body(props) {
-	    _classCallCheck(this, Body);
+	    function Body(props) {
+	        _classCallCheck(this, Body);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Body).call(this, props));
-	  }
-	
-	  _createClass(Body, [{
-	    key: "render",
-	    value: function render() {
-	      var noMargin = { marginTop: "0px", marginBottom: "0px" };
-	      return _react2.default.createElement(
-	        _MuiThemeProvider2.default,
-	        { muiTheme: (0, _getMuiTheme2.default)() },
-	        _react2.default.createElement(
-	          "main",
-	          { className: "grey lighten-4" },
-	          _react2.default.createElement(
-	            "div",
-	            { className: "row", style: noMargin },
-	            _react2.default.createElement(_JobSubmitForm.JobSubmitForm, null),
-	            _react2.default.createElement(_JobResultTable.JobResultTable, { session: this.props.session })
-	          )
-	        )
-	      );
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(Body).call(this, props));
 	    }
-	  }]);
 	
-	  return Body;
+	    _createClass(Body, [{
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _MuiThemeProvider2.default,
+	                { muiTheme: (0, _getMuiTheme2.default)() },
+	                _react2.default.createElement(
+	                    "main",
+	                    { className: "row grey lighten-4" },
+	                    _react2.default.createElement(_JobSubmitForm.JobSubmitForm, null),
+	                    _react2.default.createElement(_JobResultTable.JobResultTable, { session: this.props.session })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Body;
 	}(_react2.default.Component);
 
 /***/ },
@@ -75159,9 +75154,6 @@
 	    value: function componentWillMount() {
 	      var _this2 = this;
 	
-	      this.props.session.subscribe("on.update", function (args, kwargs, details) {
-	        console.log("on.update ", args, kwargs, details);
-	      });
 	      this.props.session.subscribe("celery.task.update", function (args, kwargs, details) {
 	        console.log("celery.task.update ", kwargs["task"]);
 	        _this2.updateTask(kwargs["task"]);
@@ -75174,7 +75166,6 @@
 	
 	      this.props.session.call("celery.tasks").then(function (tasks) {
 	        console.log("celery.tasks: ", tasks);
-	        _this3.props.session.publish("on.update", ["some_task"]);
 	        _this3.setState({ tasks: tasks });
 	      });
 	    }
@@ -75503,13 +75494,13 @@
 	  _createClass(Footer, [{
 	    key: "render",
 	    value: function render() {
-	      var noVertMargin = { marginTop: "0px", marginBottom: "0px" };
+	      var noPadMargin = { paddingBottom: "0px", paddingTop: "0px", marginTop: "0px" };
 	      return _react2.default.createElement(
 	        "footer",
-	        { className: "page-footer light-blue", style: noVertMargin },
+	        { className: "page-footer light-blue", style: noPadMargin },
 	        _react2.default.createElement(
 	          "div",
-	          { className: "row", style: noVertMargin },
+	          { className: "row" },
 	          _react2.default.createElement(
 	            "div",
 	            { className: "col s8" },

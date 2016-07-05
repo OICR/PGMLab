@@ -42,10 +42,10 @@ export class JobResultTable extends React.Component {
       "succeeded": <i className="material-icons">check_circle</i>,
       "failed": <i className="material-icons">error</i>
     }
-    this.resultsPath = "./results/"; //directory where all zip packages written to
+    this.resultsPath = "./pgmlab/results/"; //directory where all zip packages written to
     this.statusResultMap = t => (
       t.status === "succeeded" ?
-        (<a href={`${this.resultsPath}${t.task_id}`} download>{"Download"}</a>):
+        (<a href={`${this.resultsPath}${t.task_id}.zip`} download>{"Download"}</a>):
         (t.status === "failed" ? (<span>{"Invalid Task Error"}</span>) : undefined) //Need to add error handling into Celery and PGMLab
     )
     // For subscribing to task updates, updates a task in state
@@ -82,10 +82,6 @@ export class JobResultTable extends React.Component {
   }
   componentWillMount(){
     this.props.session
-      .subscribe("on.update", (args, kwargs, details)=>{
-        console.log("on.update ", args, kwargs, details)
-      });
-    this.props.session
       .subscribe("celery.task.update", (args, kwargs, details)=>{
         console.log("celery.task.update ", kwargs["task"])
         this.updateTask(kwargs["task"]);
@@ -96,10 +92,8 @@ export class JobResultTable extends React.Component {
       .call("celery.tasks")
       .then(tasks => {
         console.log("celery.tasks: ", tasks)
-        this.props.session.publish("on.update", ["some_task"]);
-        this.setState({tasks});
+        this.setState({tasks})
       })
-
   }
   componentDidUpdate(){
     $("span.tooltipped").tooltip({delay: 5});

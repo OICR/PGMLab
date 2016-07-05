@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-engine = create_engine("sqlite:///pgmlab.db", echo_pool=True)
+engine = create_engine("sqlite:///pgmlab.db", echo="debug", echo_pool=True)
 
 from sqlalchemy.orm import sessionmaker, scoped_session
 Session = sessionmaker(bind=engine)
