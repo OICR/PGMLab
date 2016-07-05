@@ -12,7 +12,7 @@ from OpenSSL import crypto
 class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
-        # print('joined:', details)
+        # print("joined Component")
         def get_all_tasks():
             tasks = db_session.query(Task).all()
             tasks_dict = {}
@@ -25,23 +25,22 @@ class Component(ApplicationSession):
             print("update_task", task)
             yield self.publish("celery.task.update", task)
 
+        def on_update(task):
+            print("on_update", task)
+            yield self.publish("celery.task.update", task)
+            print("on_update2", task)
+
         yield self.register(get_all_tasks, u"celery.tasks")
         yield self.register(update_task, u"update.task")
+        yield self.subscribe(on_update, u"on.update")
         print("procs registered")
 
-    @classmethod
-    def test(self, task):
-        print("TEST", self)
-        self.publish("celery.task.update", task)
-        # yield self.call(u"update.task", task)
+    @inlineCallbacks
+    def update(self, task):
+        yield self.publish("on.update", task)
 
 
 if __name__ == "__main__":
-    from pgmlab_server import celery
-    # print('main', celery)
-    from celery_monitor import MonitorThread
-    MonitorThread(celery_app=celery, wamp_app=Component)
-
     cert = crypto.load_certificate(crypto.FILETYPE_PEM,six.u(open('.crossbar/example.cert.pem', "r").read()))
     options = CertificateOptions(trustRoot=OpenSSLCertificateAuthorities([cert]))
     runner = ApplicationRunner(url=u"wss://127.0.0.1:443/ws", realm=u"realm1", ssl=options)
