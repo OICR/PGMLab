@@ -67,7 +67,7 @@ export class LearningSubmit extends React.Component {
     evt.preventDefault()
     $.ajax({
       type: "POST",
-      url: "http://localhost:9002/run/learning/submit",
+      url: "https://localhost:4433/run/learning/submit",
       processData: false,
       contentType: false,
       data: new FormData(this.refs.learningForm),

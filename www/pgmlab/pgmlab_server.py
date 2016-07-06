@@ -18,37 +18,90 @@ klein = Klein()
 # Host html and js
 @klein.route("/pgmlab.html")
 def home(request):
-    print os.getcwd()
     return File("../pgmlab.html")
 
 @klein.route("/", branch=True)
 def js(request):
     return File("../js/")
 
-# For communicating with backend (db, RPC, Pub/Sub)
-from autobahn.twisted.wamp import Application
-wamp = Application()
+@klein.route("/results/<task_id>")
+def result(request, task_id):
+    print(task_id,request)
+    return File("./results/"+task_id+".zip")
+
+# # For communicating with backend (db, RPC, Pub/Sub)
+# from autobahn.twisted.wamp import Application
+# print(Application)
+# wamp = Application()
+# print(wamp.session)
 # Queue and run tasks async
 from celery import Celery, states
 from celery.exceptions import InvalidTaskError
 celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
 celery.conf.CELERY_SEND_EVENTS = True
 
-# RPC to register a wamp.publish on <App> mount (loop over all users in db)
-# need to set wamp on wss 443
-@wamp.register("celery.tasks")
-def get_all_tasks():
-    tasks = db_session.query(Task).all()
-    tasks_dict = {}
-    for task in tasks:
-        tasks_dict[task.task_id] = task.to_dict()
-    return tasks_dict
+# # RPC to register a wamp.publish on <App> mount (loop over all users in db)
+# # need to set wamp on wss
+# @wamp.register("celery.tasks")
+# def get_all_tasks():
+#     tasks = db_session.query(Task).all()
+#     tasks_dict = {}
+#     for task in tasks:
+#         tasks_dict[task.task_id] = task.to_dict()
+#     print("get_all_tasks:", tasks_dict)
+#     return tasks_dict
+# wamp.session.call("celery.tasks")
 
-# LEARNING
+@klein.route('/run/learning/submit', methods=["POST"])
+def run_learning_submit(request):
+    pi_file = request.args["pairwiseInteractionFile"][0]
+    pi_filename = request.args["pairwiseInteractionFilename"][0]
+    obs_file = request.args["observationFile"][0]
+    obs_filename = request.args["observationFilename"][0]
+    number_states = int(request.args["numberStates"][0])
+    log_likelihood_change_limit = float(request.args["logLikelihoodChangeLimit"][0])
+    em_max_iterations = int(request.args["emMaxIterations"][0])
+    data = {
+        "pi_file": pi_file,
+        "pi_filename": pi_filename,
+        "obs_file": obs_file,
+        "obs_filename": obs_filename,
+        "number_states": number_states,
+        "change_limit": log_likelihood_change_limit, #
+        "max_iterations": em_max_iterations, #
+        "task_type": "learning",
+        "submit_datetime": str(datetime.datetime.now())
+    }
+    task = run_learning_task.apply_async(kwargs=data)
+    return task.id
+
+@klein.route('/run/inference/submit', methods=["POST"])
+def run_inference_submit(request):
+    pi_file = request.args["pairwiseInteractionFile"][0]
+    pi_filename = request.args["pairwiseInteractionFilename"][0]
+    obs_file = request.args["observationFile"][0]
+    obs_filename = request.args["observationFilename"][0]
+    lfg_file = request.args["learntFactorgraphFile"][0]
+    lfg_filename = request.args["learntFactorgraphFilename"][0]
+    number_states = int(request.args["inferenceNumberOfStates"][0])
+    data = {
+        "pi_file": pi_file,
+        "pi_filename": pi_filename,
+        "obs_file": obs_file,
+        "obs_filename": obs_filename,
+        "lfg_file": lfg_file,
+        "lfg_filename": lfg_filename,
+        "number_states": number_states,
+        "task_type": "inference",
+        "submit_datetime": str(datetime.datetime.now())
+    }
+    task = run_inference_task.apply_async(kwargs=data)
+    return task.id
+
 @celery.task(bind=True)
 def run_learning_task(self, **kwargs):
     # print "run_learning_task"
-    pp.pprint(kwargs)
+    # pp.pprint(kwargs)
     # PGMLab
     task_id = self.request.id
     run_path = learning_path+task_id+"/"
@@ -82,34 +135,10 @@ def run_learning_task(self, **kwargs):
     package_path = cwd+"/results/"+task_id #package name is task uuid
     shutil.make_archive(package_path, "zip", root_dir=run_path)
 
-@klein.route('/run/learning/submit', methods=["POST"])
-def run_learning_submit(request):
-    pi_file = request.args["pairwiseInteractionFile"][0]
-    pi_filename = request.args["pairwiseInteractionFilename"][0]
-    obs_file = request.args["observationFile"][0]
-    obs_filename = request.args["observationFilename"][0]
-    number_states = int(request.args["numberStates"][0])
-    log_likelihood_change_limit = float(request.args["logLikelihoodChangeLimit"][0])
-    em_max_iterations = int(request.args["emMaxIterations"][0])
-    data = {
-        "pi_file": pi_file,
-        "pi_filename": pi_filename,
-        "obs_file": obs_file,
-        "obs_filename": obs_filename,
-        "number_states": number_states,
-        "change_limit": log_likelihood_change_limit, #
-        "max_iterations": em_max_iterations, #
-        "task_type": "learning",
-        "submit_datetime": str(datetime.datetime.now())
-    }
-    task = run_learning_task.apply_async(kwargs=data)
-    return task.id
-
-# INFERENCE
 @celery.task(bind=True)
 def run_inference_task(self, **kwargs):
     # print "run_inference_task"
-    pp.pprint(kwargs)
+    # pp.pprint(kwargs)
     # PGMLab
     task_id = self.request.id
     run_path = inference_path+task_id+"/"
@@ -148,37 +177,6 @@ def run_inference_task(self, **kwargs):
     package_path = cwd+"/results/"+task_id #package name is task uuid
     shutil.make_archive(package_path, "zip", root_dir=run_path)
 
-@klein.route('/run/inference/submit', methods=["POST"])
-def run_inference_submit(request):
-    pi_file = request.args["pairwiseInteractionFile"][0]
-    pi_filename = request.args["pairwiseInteractionFilename"][0]
-    obs_file = request.args["observationFile"][0]
-    obs_filename = request.args["observationFilename"][0]
-    lfg_file = request.args["learntFactorgraphFile"][0]
-    lfg_filename = request.args["learntFactorgraphFilename"][0]
-    number_states = int(request.args["inferenceNumberOfStates"][0])
-    data = {
-        "pi_file": pi_file,
-        "pi_filename": pi_filename,
-        "obs_file": obs_file,
-        "obs_filename": obs_filename,
-        "lfg_file": lfg_file,
-        "lfg_filename": lfg_filename,
-        "number_states": number_states,
-        "task_type": "inference",
-        "submit_datetime": str(datetime.datetime.now())
-    }
-    task = run_inference_task.apply_async(kwargs=data)
-    return task.id
 
 resource = klein.resource
-if __name__ == "__main__":
-    from celery_monitor import MonitorThread
-    MonitorThread(celery, wamp)
-
-    from twisted.web.server import Site
-    from twisted.internet import reactor
-    from autobahn.twisted.websocket import WebSocketClientFactory, WebSocketClientProtocol, connectWS
-    # reactor.listenTCP(9002, Site(klein.resource()))
-
-    wamp.run(u"ws://localhost:9001/ws", u"realm1")
+# print('server', celery)
