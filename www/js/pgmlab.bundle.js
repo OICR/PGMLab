@@ -75174,7 +75174,6 @@
 	
 	      this.props.session.call("celery.tasks").then(function (tasks) {
 	        console.log("celery.tasks: ", tasks);
-	        _this3.props.session.publish("on.update", ["some_task"]);
 	        _this3.setState({ tasks: tasks });
 	      });
 	    }
