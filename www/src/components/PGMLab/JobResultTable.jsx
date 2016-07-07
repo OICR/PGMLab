@@ -87,8 +87,8 @@ export class JobResultTable extends React.Component {
       });
     this.props.session
       .subscribe("celery.task.update", (args, kwargs, details)=>{
-        console.log("celery.task.update ", kwargs["task"])
-        this.updateTask(kwargs["task"]);
+        console.log("celery.task.update ", args, kwargs, details)
+        // this.updateTask(kwargs["task"]);
       });
   }
   componentDidMount(){
@@ -96,7 +96,6 @@ export class JobResultTable extends React.Component {
       .call("celery.tasks")
       .then(tasks => {
         console.log("celery.tasks: ", tasks)
-        this.props.session.publish("on.update", ["some_task"]);
         this.setState({tasks});
       })
 

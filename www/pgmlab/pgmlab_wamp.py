@@ -1,10 +1,7 @@
 from pgmlab_db import db_session, Task
-
 import six
-
 from autobahn.twisted.wamp import ApplicationSession, ApplicationRunner
-
-from twisted.internet.defer import inlineCallbacks
+from twisted.internet.defer import inlineCallbacks, returnValue
 from twisted.internet._sslverify import OpenSSLCertificateAuthorities
 from twisted.internet.ssl import CertificateOptions
 from OpenSSL import crypto
@@ -12,7 +9,6 @@ from OpenSSL import crypto
 class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
-        # print("joined Component")
         def get_all_tasks():
             tasks = db_session.query(Task).all()
             tasks_dict = {}
@@ -21,24 +17,15 @@ class Component(ApplicationSession):
             print("get_all_tasks")
             return tasks_dict
 
-        def update_task(task):
-            print("update_task", task)
-            yield self.publish("celery.task.update", task)
-
+        # @inlineCallbacks
         def on_update(task):
             print("on_update", task)
-            yield self.publish("celery.task.update", task)
-            print("on_update2", task)
+            self.publish("celery.task.update", task)
+            # yield
 
         yield self.register(get_all_tasks, u"celery.tasks")
-        yield self.register(update_task, u"update.task")
-        yield self.subscribe(on_update, u"on.update")
+        # yield self.subscribe(on_update, u"on.update")
         print("procs registered")
-
-    @inlineCallbacks
-    def update(self, task):
-        yield self.publish("on.update", task)
-
 
 if __name__ == "__main__":
     cert = crypto.load_certificate(crypto.FILETYPE_PEM,six.u(open('.crossbar/example.cert.pem', "r").read()))
