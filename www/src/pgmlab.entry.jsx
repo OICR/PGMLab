@@ -11,6 +11,24 @@ var materialize = require("./lib/materialize.min.js");
 
 import {App} from "./components/PGMLab/App.jsx";
 
+const wsuri2 = (window.location.protocol === "file:") ?
+  "wss://localhost:433/sock":"wss://"+window.location.hostname+":433/sock";
+let sock;
+if ("WebSocket" in window) {
+  sock = new WebSocket(wsuri2);
+} else if ("MozWebSocket" in window) {
+  sock = new MozWebSocket(wsuri2)
+} else {
+  console.log("Browser does not support WS")
+};
+if (sock) {
+  sock.onopen = (e)=>{console.log("connected: ", e)}
+  sock.onclose = (e)=>{console.log("closed: ", e)}
+  sock.onmessage = (e)=>{console.log("got echo: ", e);}
+  sock.onerror = (e)=>{console.log("err", e)}
+  console.log(sock)
+}
+
 try {var autobahn = require("autobahn")}
 catch (err) {console.log("autobahn error: ", e)};
 
@@ -23,14 +41,11 @@ var connection = new autobahn.Connection({
   url: wsuri,
   realm: "realm1"
 });
-
 connection.onopen = function(session, details) {
   console.log("autobahn connected", session);
   initializeApp(session);
 }
 connection.open()
-
-
 function initializeApp(session){
   render(
     <App session={session}/>,

@@ -1,16 +1,22 @@
+import sys
+
+from twisted.internet import reactor, ssl
+from twisted.web.server import Site
+from twisted.web.static import File
+
+import txaio
+
 import threading
 import time
-import ast
-import six
-from autobahn.twisted.wamp import ApplicationSession, ApplicationRunner
-from twisted.internet.defer import inlineCallbacks, returnValue
-from twisted.internet._sslverify import OpenSSLCertificateAuthorities
-from twisted.internet.ssl import CertificateOptions
-from OpenSSL import crypto
 
-class MonitorThread(ApplicationSession):
-    @inlineCallbacks
-    def onJoin(self, details):
+from autobahn.twisted.websocket import WebSocketServerFactory, \
+    WebSocketServerProtocol, \
+    listenWS
+
+
+class EchoServerProtocol(WebSocketServerProtocol):
+    def onOpen(self):
+        print("WS connected", self)
         from pgmlab_server import celery as celery_app
         self.celery_app = celery_app
         self.interval = 1
@@ -18,8 +24,6 @@ class MonitorThread(ApplicationSession):
         self.thread = threading.Thread(target=self.run, args=())
         self.thread.daemon = True
         self.thread.start()
-        yield
-
     def handle_task_received(self, event):
         print("task-received", event["uuid"])
 
@@ -31,10 +35,10 @@ class MonitorThread(ApplicationSession):
 
     def handle_task_failed(self, event):
         print("task-failed", event["uuid"])
-
     def run(self):
         while True:
             try:
+                print("tru try")
                 with self.celery_app.connection() as connection:
                     recv = self.celery_app.events.Receiver(connection, handlers={
                         # "task-received": self.handle_task_received,
@@ -50,8 +54,25 @@ class MonitorThread(ApplicationSession):
                 pass
             time.sleep(self.interval)
 
-if __name__ == "__main__":
-    cert = crypto.load_certificate(crypto.FILETYPE_PEM,six.u(open('.crossbar/example.cert.pem', "r").read()))
-    options = CertificateOptions(trustRoot=OpenSSLCertificateAuthorities([cert]))
-    runner = ApplicationRunner(url=u"wss://127.0.0.1:443/ws", realm=u"realm1", ssl=options)
-    runner.run(MonitorThread)
+    def onMessage(self, payload, isBinary):
+        print('pl', payload)
+        self.sendMessage(payload, isBinary)
+
+
+if __name__ == '__main__':
+    txaio.start_logging(level='debug')
+
+    # SSL server context: load server key and certificate
+    # We use this for both WS and Web!
+    contextFactory = ssl.DefaultOpenSSLContextFactory('./server.key','./server.crt')
+    factory = WebSocketServerFactory(u"wss://127.0.0.1:433/sock")
+
+    factory.protocol = EchoServerProtocol
+    listenWS(factory, contextFactory)
+
+    webdir = File(".")
+    webdir.contentTypes['.crt'] = 'application/x-x509-ca-cert'
+    web = Site(webdir)
+    # reactor.listenSSL(8080, web, contextFactory)
+    reactor.listenSSL(9000, web, contextFactory)
+    reactor.run()
