@@ -64,6 +64,31 @@
 	window.$ = $;
 	var materialize = __webpack_require__(591);
 	
+	var wsuri2 = window.location.protocol === "file:" ? "wss://localhost:433/sock" : "wss://" + window.location.hostname + ":433/sock";
+	var sock = void 0;
+	if ("WebSocket" in window) {
+	  sock = new WebSocket(wsuri2);
+	} else if ("MozWebSocket" in window) {
+	  sock = new MozWebSocket(wsuri2);
+	} else {
+	  console.log("Browser does not support WS");
+	};
+	if (sock) {
+	  sock.onopen = function (e) {
+	    console.log("connected: ", e);
+	  };
+	  sock.onclose = function (e) {
+	    console.log("closed: ", e);
+	  };
+	  sock.onmessage = function (e) {
+	    console.log("got echo: ", e);
+	  };
+	  sock.onerror = function (e) {
+	    console.log("err", e);
+	  };
+	  console.log(sock);
+	}
+	
 	try {
 	  var autobahn = __webpack_require__(595);
 	} catch (err) {
@@ -78,13 +103,11 @@
 	  url: wsuri,
 	  realm: "realm1"
 	});
-	
 	connection.onopen = function (session, details) {
 	  console.log("autobahn connected", session);
 	  initializeApp(session);
 	};
 	connection.open();
-	
 	function initializeApp(session) {
 	  (0, _reactDom.render)(_react2.default.createElement(_App.App, { session: session }), document.getElementById('app'));
 	}
@@ -75157,24 +75180,22 @@
 	  _createClass(JobResultTable, [{
 	    key: "componentWillMount",
 	    value: function componentWillMount() {
-	      var _this2 = this;
-	
 	      this.props.session.subscribe("on.update", function (args, kwargs, details) {
 	        console.log("on.update ", args, kwargs, details);
 	      });
 	      this.props.session.subscribe("celery.task.update", function (args, kwargs, details) {
-	        console.log("celery.task.update ", kwargs["task"]);
-	        _this2.updateTask(kwargs["task"]);
+	        console.log("celery.task.update ", args, kwargs, details);
+	        // this.updateTask(kwargs["task"]);
 	      });
 	    }
 	  }, {
 	    key: "componentDidMount",
 	    value: function componentDidMount() {
-	      var _this3 = this;
+	      var _this2 = this;
 	
 	      this.props.session.call("celery.tasks").then(function (tasks) {
 	        console.log("celery.tasks: ", tasks);
-	        _this3.setState({ tasks: tasks });
+	        _this2.setState({ tasks: tasks });
 	      });
 	    }
 	  }, {
@@ -75185,13 +75206,13 @@
 	  }, {
 	    key: "tableProperties",
 	    value: function tableProperties() {
-	      var _this4 = this;
+	      var _this3 = this;
 	
 	      var noVertMargin = { marginBottom: "0px", marginTop: "0px" };
 	      var tasksProps = Object.keys(this.state.tasks).map(function (k) {
-	        return _this4.state.tasks[k];
+	        return _this3.state.tasks[k];
 	      }).filter(function (t) {
-	        return t.task_id.includes(_this4.state.idFilter);
+	        return t.task_id.includes(_this3.state.idFilter);
 	      }).reduce(function (acc, t) {
 	        acc["type"][t.task_type]++;
 	        acc["status"][t.status]++;
@@ -75210,7 +75231,7 @@
 	          _react2.default.createElement("input", { id: "idFilter", value: this.state.idFilter, type: "text", placeholder: "Filter by ID",
 	            style: { paddingBottom: "0px" },
 	            onChange: function onChange(evt) {
-	              return _this4.setIDFilter(evt.target.value.toLowerCase());
+	              return _this3.setIDFilter(evt.target.value.toLowerCase());
 	            } })
 	        )
 	      );
@@ -75234,9 +75255,9 @@
 	                "div",
 	                { key: type, className: "col s3 valign" },
 	                _react2.default.createElement("input", { id: type + "Filter", value: type.toLowerCase(), type: "checkbox",
-	                  checked: _this4.state.typeFilters.has(type.toLowerCase()),
+	                  checked: _this3.state.typeFilters.has(type.toLowerCase()),
 	                  onChange: function onChange(evt) {
-	                    return _this4.setTypeFilter(evt.target.value);
+	                    return _this3.setTypeFilter(evt.target.value);
 	                  } }),
 	                _react2.default.createElement(
 	                  "label",
@@ -75268,9 +75289,9 @@
 	                "div",
 	                { key: status, className: "col s3" },
 	                _react2.default.createElement("input", { id: status + "Filter", value: status.toLowerCase(), type: "checkbox",
-	                  checked: _this4.state.statusFilters.has(status.toLowerCase()),
+	                  checked: _this3.state.statusFilters.has(status.toLowerCase()),
 	                  onChange: function onChange(evt) {
-	                    return _this4.setStatusFilter(evt.target.value);
+	                    return _this3.setStatusFilter(evt.target.value);
 	                  } }),
 	                _react2.default.createElement(
 	                  "label",
@@ -75301,9 +75322,9 @@
 	                "div",
 	                { key: sort, className: "col s3" },
 	                _react2.default.createElement("input", { id: sort + "Order", name: "dateSort", value: sort.toLowerCase(), type: "radio",
-	                  checked: _this4.state.dateSort === sort.toLowerCase(),
+	                  checked: _this3.state.dateSort === sort.toLowerCase(),
 	                  onChange: function onChange(evt) {
-	                    return _this4.setDateSort(evt.target.value);
+	                    return _this3.setDateSort(evt.target.value);
 	                  } }),
 	                _react2.default.createElement(
 	                  "label",
@@ -75327,18 +75348,18 @@
 	  }, {
 	    key: "tasksTable",
 	    value: function tasksTable() {
-	      var _this5 = this;
+	      var _this4 = this;
 	
 	      var tasks = Object.keys(this.state.tasks).map(function (k) {
-	        return _this5.state.tasks[k];
+	        return _this4.state.tasks[k];
 	      }).filter(function (t) {
-	        return t.task_id.includes(_this5.state.idFilter);
+	        return t.task_id.includes(_this4.state.idFilter);
 	      }).filter(function (t) {
-	        return _this5.state.typeFilters.has(t.task_type);
+	        return _this4.state.typeFilters.has(t.task_type);
 	      }).filter(function (t) {
-	        return _this5.state.statusFilters.has(t.status);
+	        return _this4.state.statusFilters.has(t.status);
 	      }).sort(function (t1, t2) {
-	        return _this5.state.dateSort === "descending" ? moment(t1.submit_datetime).isAfter(t2.submit_datetime) ? -1 : 1 : moment(t1.submit_datetime).isBefore(t2.submit_datetime) ? -1 : 1;
+	        return _this4.state.dateSort === "descending" ? moment(t1.submit_datetime).isAfter(t2.submit_datetime) ? -1 : 1 : moment(t1.submit_datetime).isBefore(t2.submit_datetime) ? -1 : 1;
 	      });
 	      return _react2.default.createElement(
 	        _Table.Table,
@@ -75405,7 +75426,7 @@
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
 	                null,
-	                _this5.statusIconMap[t.status]
+	                _this4.statusIconMap[t.status]
 	              ),
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
@@ -75415,7 +75436,7 @@
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
 	                null,
-	                _this5.infoMap(t)
+	                _this4.infoMap(t)
 	              ),
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
@@ -75427,7 +75448,7 @@
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
 	                null,
-	                _this5.statusResultMap(t)
+	                _this4.statusResultMap(t)
 	              )
 	            );
 	          })
