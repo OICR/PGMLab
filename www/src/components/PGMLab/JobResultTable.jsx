@@ -56,10 +56,6 @@ export class JobResultTable extends React.Component {
     }
     this.updateTask = task => {
       let tasks = this.state.tasks;
-      // tasks[task["task_id"]] = task;
-      // this.setState({
-      //   tasks
-      // });
       tasks[task["task_id"]]["status"] = task["task_status"];
       this.setState({tasks})
     }
@@ -88,9 +84,8 @@ export class JobResultTable extends React.Component {
     this.tasksTable = this.tasksTable.bind(this);
   }
   componentWillMount(){
-    var eventSource = new EventSource("test");
+    var eventSource = new EventSource("celery");
     console.log(eventSource)
-    // eventSource.onmessage = (e) => {console.log(JSON.parse(e.data))}
     eventSource.addEventListener(
       "celery.task.add",
       (e) => {
@@ -105,15 +100,6 @@ export class JobResultTable extends React.Component {
         this.updateTask(JSON.parse(e.data));
       }
     );
-    // this.props.session
-    //   .subscribe("on.update", (args, kwargs, details)=>{
-    //     console.log("on.update ", args, kwargs, details)
-    //   });
-    // this.props.session
-    //   .subscribe("celery.task.update", (args, kwargs, details)=>{
-    //     console.log("celery.task.update ", args, kwargs, details)
-    //     // this.updateTask(kwargs["task"]);
-    //   });
   }
   componentDidMount(){
     this.props.session
@@ -122,10 +108,6 @@ export class JobResultTable extends React.Component {
         console.log("celery.tasks: ", tasks)
         this.setState({tasks});
       })
-
-  }
-  componentDidUpdate(){
-    $("span.tooltipped").tooltip({delay: 5});
   }
 
   tableProperties(){

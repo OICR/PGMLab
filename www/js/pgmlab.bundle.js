@@ -75121,10 +75121,6 @@
 	    };
 	    _this.updateTask = function (task) {
 	      var tasks = _this.state.tasks;
-	      // tasks[task["task_id"]] = task;
-	      // this.setState({
-	      //   tasks
-	      // });
 	      tasks[task["task_id"]]["status"] = task["task_status"];
 	      _this.setState({ tasks: tasks });
 	    };
@@ -75165,9 +75161,8 @@
 	    value: function componentWillMount() {
 	      var _this2 = this;
 	
-	      var eventSource = new EventSource("test");
+	      var eventSource = new EventSource("celery");
 	      console.log(eventSource);
-	      // eventSource.onmessage = (e) => {console.log(JSON.parse(e.data))}
 	      eventSource.addEventListener("celery.task.add", function (e) {
 	        console.log(JSON.parse(e.data));
 	        _this2.addTask(JSON.parse(e.data));
@@ -75176,15 +75171,6 @@
 	        console.log(JSON.parse(e.data));
 	        _this2.updateTask(JSON.parse(e.data));
 	      });
-	      // this.props.session
-	      //   .subscribe("on.update", (args, kwargs, details)=>{
-	      //     console.log("on.update ", args, kwargs, details)
-	      //   });
-	      // this.props.session
-	      //   .subscribe("celery.task.update", (args, kwargs, details)=>{
-	      //     console.log("celery.task.update ", args, kwargs, details)
-	      //     // this.updateTask(kwargs["task"]);
-	      //   });
 	    }
 	  }, {
 	    key: "componentDidMount",
@@ -75195,11 +75181,6 @@
 	        console.log("celery.tasks: ", tasks);
 	        _this3.setState({ tasks: tasks });
 	      });
-	    }
-	  }, {
-	    key: "componentDidUpdate",
-	    value: function componentDidUpdate() {
-	      $("span.tooltipped").tooltip({ delay: 5 });
 	    }
 	  }, {
 	    key: "tableProperties",
