@@ -1,4 +1,7 @@
-from twisted.web.static import File
+# PGMLab related modules
+import pgmlab_commands
+from pgmlab_db import db_session, Task
+
 import os, os.path
 cwd = os.getcwd()
 inference_path = cwd+"/../../data/pgmlab/inference/"
@@ -6,15 +9,15 @@ learning_path = cwd+"/../../data/pgmlab/learning/"
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 from itertools import * # for skipping lines in a file
-import datetime, shutil, json, string, cgi, uuid, requests
+import datetime, shutil, json, string, cgi, uuid, requests, json
 
-# PGMLab related modules
-import pgmlab_commands
-from pgmlab_db import db_session, Task
 
-# Klein for POST that starts Celery task
+
+# Klein for POST that starts Celery task, resource for twistd command to start server
+from twisted.web.static import File
 from klein import Klein
 klein = Klein()
+resource = klein.resource
 # Host html and js
 @klein.route("/pgmlab.html")
 def home(request):
@@ -34,7 +37,7 @@ spectactors = set()
 @klein.route("/test")
 def stream(request):
     request.setHeader("Content-type", "text/event-stream")
-    request.write("data: {}\n\n".format(str(datetime.datetime.now())))
+    # request.write("data: connected: {}\n\n".format(str(datetime.datetime.now())))
     spectactors.add(request) #find a way to clear this
     return defer.Deferred()
 
@@ -42,61 +45,35 @@ def stream(request):
 def move(request):
     print('reqs', len(spectactors))
     for spec in spectactors:
-        # spec.write("data: {}/n/n".format(str(datetime.datetime.now())));
-        # print spec.transport.disconnected
         if not spec.transport.disconnected:
             spec.write("data: {}\n\n".format(str(datetime.datetime.now())))
-def update(data):
-    print('update: ', data, spectactors)
+
+def add_task(task):
+    print("add:", task.to_dict())
+    db_session.add(task)
+    db_session.commit()
     for spec in spectactors:
-        # spec.write("data: {}/n/n".format(str(datetime.datetime.now())));
-        # print spec.transport.disconnected
         if not spec.transport.disconnected:
-            spec.write("data: {}\n\n".format(data))
+            spec.write("event: celery.task.add\n")
+            spec.write("data: {}\n\n".format(json.dumps(task.to_dict())))
+            None
+
+def update_task(task_id, task_status):
+    print("update:", task_id, task_status)
+    task = db_session.query(Task).get(task_id)
+    task.status = task_status
+    db_session.commit()
+    for spec in spectactors:
+        if not spec.transport.disconnected:
+            spec.write("event: celery.task.update\n")
+            spec.write("data: {}\n\n".format(json.dumps({"task_id":task_id,"task_status":task_status})))
+            None
 
 # Queue and run tasks async
 from celery import Celery, states
 from celery.exceptions import InvalidTaskError
 celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
 celery.conf.CELERY_SEND_EVENTS = True
-
-import threading
-import time
-def monitor():
-    print('monitor')
-    def handle_task_received(event):
-        print("task-received", event["uuid"])
-        update("recv")
-    def handle_task_started(event):
-        print("task-started", event["uuid"])
-        update("started")
-    def handle_task_succeeded(event):
-        print("task-succeeded", event["uuid"])
-        update("succeeded")
-    def handle_task_failed(event):
-        print("task-failed", event["uuid"])
-        update("failed")
-    while True:
-        try:
-            with celery.connection() as connection:
-                recv = celery.events.Receiver(connection, handlers ={
-                        "task-received": handle_task_received,
-                        "task-started": handle_task_started,
-                        "task-succeeded": handle_task_succeeded,
-                        "task-failed": handle_task_failed
-                })
-                recv.capture(limit=None, timeout=None, wakeup=True)
-        except (KeyboardInterrupt, SystemExit):
-            raise
-        except Exception: # unable to capture
-            pass
-        time.sleep(1)
-def run_monitor():
-    thread = threading.Thread(target=monitor, args=())
-    thread.daemon = True
-    print('run_monitor', thread)
-    thread.start()
-run_monitor()
 
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
@@ -208,5 +185,50 @@ def run_inference_task(self, **kwargs):
     # This path corresponds to save file path in results table
     package_path = cwd+"/results/"+task_id #package name is task uuid
     shutil.make_archive(package_path, "zip", root_dir=run_path)
-#
-resource = klein.resource
+
+import threading
+import time
+import ast
+def monitor():
+    print('monitor')
+    def catch_all(event):
+        if event["type"] == "task-received":
+            kwargs = ast.literal_eval(event["kwargs"])
+            task = Task(
+                task_id = event["uuid"],
+                task_type = kwargs["task_type"],
+                submit_datetime = kwargs["submit_datetime"],
+                status = event["type"],
+                pi_filename = kwargs["pi_filename"],
+                obs_filename = kwargs["obs_filename"],
+                number_states = kwargs["number_states"]
+            )
+            if kwargs["task_type"] == "learning":
+                task.change_limit = kwargs["change_limit"]
+                task.max_iterations = kwargs["max_iterations"]
+            else:
+                task.lfg_filename = kwargs["lfg_filename"]
+            add_task(task)
+        elif event["type"] in ["task-started", "task-succeeded", "task-failed"]:
+            update_task(event["uuid"], event["type"])
+    while True:
+        try:
+            with celery.connection() as connection:
+                recv = celery.events.Receiver(connection, handlers ={
+                        # "task-received": handle_task_received,
+                        # "task-started": handle_task_started,
+                        # "task-succeeded": handle_task_succeeded,
+                        # "task-failed": handle_task_failed,
+                        "*": catch_all
+                })
+                recv.capture(limit=None, timeout=None, wakeup=True)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception: # unable to capture
+            pass
+        time.sleep(1)
+def run_monitor():
+    thread = threading.Thread(target=monitor, args=())
+    thread.daemon = True
+    thread.start()
+run_monitor()

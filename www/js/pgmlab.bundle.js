@@ -84,12 +84,6 @@
 	};
 	connection.open();
 	
-	var eventSource = new EventSource("test");
-	console.log(eventSource);
-	eventSource.onmessage = function (e) {
-	  console.log(e);
-	};
-	
 	function initializeApp(session) {
 	  (0, _reactDom.render)(_react2.default.createElement(_App.App, { session: session }), document.getElementById('app'));
 	}
@@ -75035,7 +75029,7 @@
 	    _this.state = {
 	      tasks: {},
 	      typeFilters: new Set(["learning", "inference"]),
-	      statusFilters: new Set(["received", "started", "succeeded", "failed"]),
+	      statusFilters: new Set(["task-received", "task-started", "task-succeeded", "task-failed"]),
 	      dateSort: "descending", // || "ascending"
 	      idFilter: ""
 	    };
@@ -75067,12 +75061,12 @@
 	      );
 	    };
 	    _this.statusIconMap = {
-	      "received": _react2.default.createElement(
+	      "task-received": _react2.default.createElement(
 	        "i",
 	        { className: "material-icons" },
 	        "low_priority"
 	      ),
-	      "started": _react2.default.createElement(
+	      "task-started": _react2.default.createElement(
 	        "div",
 	        { className: "preloader-wrapper small active" },
 	        _react2.default.createElement(
@@ -75095,12 +75089,12 @@
 	          )
 	        )
 	      ),
-	      "succeeded": _react2.default.createElement(
+	      "task-succeeded": _react2.default.createElement(
 	        "i",
 	        { className: "material-icons" },
 	        "check_circle"
 	      ),
-	      "failed": _react2.default.createElement(
+	      "task-failed": _react2.default.createElement(
 	        "i",
 	        { className: "material-icons" },
 	        "error"
@@ -75108,11 +75102,11 @@
 	    };
 	    _this.resultsPath = "./results/"; //directory where all zip packages written to
 	    _this.statusResultMap = function (t) {
-	      return t.status === "succeeded" ? _react2.default.createElement(
+	      return t.status === "task-succeeded" ? _react2.default.createElement(
 	        "a",
 	        { href: "" + _this.resultsPath + t.task_id, download: true },
 	        "Download"
-	      ) : t.status === "failed" ? _react2.default.createElement(
+	      ) : t.status === "task-failed" ? _react2.default.createElement(
 	        "span",
 	        null,
 	        "Invalid Task Error"
@@ -75120,12 +75114,19 @@
 	      ;
 	    };
 	    // For subscribing to task updates, updates a task in state
-	    _this.updateTask = function (task) {
+	    _this.addTask = function (task) {
 	      var tasks = _this.state.tasks;
 	      tasks[task["task_id"]] = task;
-	      _this.setState({
-	        tasks: tasks
-	      });
+	      _this.setState({ tasks: tasks });
+	    };
+	    _this.updateTask = function (task) {
+	      var tasks = _this.state.tasks;
+	      // tasks[task["task_id"]] = task;
+	      // this.setState({
+	      //   tasks
+	      // });
+	      tasks[task["task_id"]]["status"] = task["task_status"];
+	      _this.setState({ tasks: tasks });
 	    };
 	    // For filtering/sorting through results
 	    _this.setTypeFilter = function (type) {
@@ -75162,22 +75163,37 @@
 	  _createClass(JobResultTable, [{
 	    key: "componentWillMount",
 	    value: function componentWillMount() {
-	      this.props.session.subscribe("on.update", function (args, kwargs, details) {
-	        console.log("on.update ", args, kwargs, details);
+	      var _this2 = this;
+	
+	      var eventSource = new EventSource("test");
+	      console.log(eventSource);
+	      // eventSource.onmessage = (e) => {console.log(JSON.parse(e.data))}
+	      eventSource.addEventListener("celery.task.add", function (e) {
+	        console.log(JSON.parse(e.data));
+	        _this2.addTask(JSON.parse(e.data));
 	      });
-	      this.props.session.subscribe("celery.task.update", function (args, kwargs, details) {
-	        console.log("celery.task.update ", args, kwargs, details);
-	        // this.updateTask(kwargs["task"]);
+	      eventSource.addEventListener("celery.task.update", function (e) {
+	        console.log(JSON.parse(e.data));
+	        _this2.updateTask(JSON.parse(e.data));
 	      });
+	      // this.props.session
+	      //   .subscribe("on.update", (args, kwargs, details)=>{
+	      //     console.log("on.update ", args, kwargs, details)
+	      //   });
+	      // this.props.session
+	      //   .subscribe("celery.task.update", (args, kwargs, details)=>{
+	      //     console.log("celery.task.update ", args, kwargs, details)
+	      //     // this.updateTask(kwargs["task"]);
+	      //   });
 	    }
 	  }, {
 	    key: "componentDidMount",
 	    value: function componentDidMount() {
-	      var _this2 = this;
+	      var _this3 = this;
 	
 	      this.props.session.call("celery.tasks").then(function (tasks) {
 	        console.log("celery.tasks: ", tasks);
-	        _this2.setState({ tasks: tasks });
+	        _this3.setState({ tasks: tasks });
 	      });
 	    }
 	  }, {
@@ -75188,20 +75204,20 @@
 	  }, {
 	    key: "tableProperties",
 	    value: function tableProperties() {
-	      var _this3 = this;
+	      var _this4 = this;
 	
 	      var noVertMargin = { marginBottom: "0px", marginTop: "0px" };
 	      var tasksProps = Object.keys(this.state.tasks).map(function (k) {
-	        return _this3.state.tasks[k];
+	        return _this4.state.tasks[k];
 	      }).filter(function (t) {
-	        return t.task_id.includes(_this3.state.idFilter);
+	        return t.task_id.includes(_this4.state.idFilter);
 	      }).reduce(function (acc, t) {
 	        acc["type"][t.task_type]++;
 	        acc["status"][t.status]++;
 	        return acc;
 	      }, {
 	        "type": { "learning": 0, "inference": 0 },
-	        "status": { "received": 0, "started": 0, "succeeded": 0, "failed": 0 }
+	        "status": { "task-received": 0, "task-started": 0, "task-succeeded": 0, "task-failed": 0 }
 	      });
 	      var idFilter = //lowercase input only
 	      _react2.default.createElement(
@@ -75213,7 +75229,7 @@
 	          _react2.default.createElement("input", { id: "idFilter", value: this.state.idFilter, type: "text", placeholder: "Filter by ID",
 	            style: { paddingBottom: "0px" },
 	            onChange: function onChange(evt) {
-	              return _this3.setIDFilter(evt.target.value.toLowerCase());
+	              return _this4.setIDFilter(evt.target.value.toLowerCase());
 	            } })
 	        )
 	      );
@@ -75237,9 +75253,9 @@
 	                "div",
 	                { key: type, className: "col s3 valign" },
 	                _react2.default.createElement("input", { id: type + "Filter", value: type.toLowerCase(), type: "checkbox",
-	                  checked: _this3.state.typeFilters.has(type.toLowerCase()),
+	                  checked: _this4.state.typeFilters.has(type.toLowerCase()),
 	                  onChange: function onChange(evt) {
-	                    return _this3.setTypeFilter(evt.target.value);
+	                    return _this4.setTypeFilter(evt.target.value);
 	                  } }),
 	                _react2.default.createElement(
 	                  "label",
@@ -75266,14 +75282,15 @@
 	            "form",
 	            { className: "row" },
 	            ["Received", "Started", "Succeeded", "Failed"].map(function (status) {
-	              var statusCount = tasksProps["status"][status.toLowerCase()];
+	              var statusKey = "task-" + status.toLowerCase();
+	              var statusCount = tasksProps["status"][statusKey];
 	              return _react2.default.createElement(
 	                "div",
 	                { key: status, className: "col s3" },
-	                _react2.default.createElement("input", { id: status + "Filter", value: status.toLowerCase(), type: "checkbox",
-	                  checked: _this3.state.statusFilters.has(status.toLowerCase()),
+	                _react2.default.createElement("input", { id: status + "Filter", value: statusKey, type: "checkbox",
+	                  checked: _this4.state.statusFilters.has(statusKey),
 	                  onChange: function onChange(evt) {
-	                    return _this3.setStatusFilter(evt.target.value);
+	                    return _this4.setStatusFilter(evt.target.value);
 	                  } }),
 	                _react2.default.createElement(
 	                  "label",
@@ -75304,9 +75321,9 @@
 	                "div",
 	                { key: sort, className: "col s3" },
 	                _react2.default.createElement("input", { id: sort + "Order", name: "dateSort", value: sort.toLowerCase(), type: "radio",
-	                  checked: _this3.state.dateSort === sort.toLowerCase(),
+	                  checked: _this4.state.dateSort === sort.toLowerCase(),
 	                  onChange: function onChange(evt) {
-	                    return _this3.setDateSort(evt.target.value);
+	                    return _this4.setDateSort(evt.target.value);
 	                  } }),
 	                _react2.default.createElement(
 	                  "label",
@@ -75330,18 +75347,18 @@
 	  }, {
 	    key: "tasksTable",
 	    value: function tasksTable() {
-	      var _this4 = this;
+	      var _this5 = this;
 	
 	      var tasks = Object.keys(this.state.tasks).map(function (k) {
-	        return _this4.state.tasks[k];
+	        return _this5.state.tasks[k];
 	      }).filter(function (t) {
-	        return t.task_id.includes(_this4.state.idFilter);
+	        return t.task_id.includes(_this5.state.idFilter);
 	      }).filter(function (t) {
-	        return _this4.state.typeFilters.has(t.task_type);
+	        return _this5.state.typeFilters.has(t.task_type);
 	      }).filter(function (t) {
-	        return _this4.state.statusFilters.has(t.status);
+	        return _this5.state.statusFilters.has(t.status);
 	      }).sort(function (t1, t2) {
-	        return _this4.state.dateSort === "descending" ? moment(t1.submit_datetime).isAfter(t2.submit_datetime) ? -1 : 1 : moment(t1.submit_datetime).isBefore(t2.submit_datetime) ? -1 : 1;
+	        return _this5.state.dateSort === "descending" ? moment(t1.submit_datetime).isAfter(t2.submit_datetime) ? -1 : 1 : moment(t1.submit_datetime).isBefore(t2.submit_datetime) ? -1 : 1;
 	      });
 	      return _react2.default.createElement(
 	        _Table.Table,
@@ -75408,7 +75425,7 @@
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
 	                null,
-	                _this4.statusIconMap[t.status]
+	                _this5.statusIconMap[t.status]
 	              ),
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
@@ -75418,7 +75435,7 @@
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
 	                null,
-	                _this4.infoMap(t)
+	                _this5.infoMap(t)
 	              ),
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
@@ -75430,7 +75447,7 @@
 	              _react2.default.createElement(
 	                _Table.TableRowColumn,
 	                null,
-	                _this4.statusResultMap(t)
+	                _this5.statusResultMap(t)
 	              )
 	            );
 	          })

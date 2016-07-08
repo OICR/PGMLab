@@ -8,7 +8,7 @@ export class JobResultTable extends React.Component {
     this.state = {
       tasks: {},
       typeFilters: new Set(["learning", "inference"]),
-      statusFilters: new Set(["received", "started", "succeeded", "failed"]),
+      statusFilters: new Set(["task-received", "task-started", "task-succeeded", "task-failed"]),
       dateSort: "descending", // || "ascending"
       idFilter: ""
     }
@@ -26,8 +26,8 @@ export class JobResultTable extends React.Component {
       </span>
     )
     this.statusIconMap = {
-      "received": <i className="material-icons">low_priority</i>,
-      "started":
+      "task-received": <i className="material-icons">low_priority</i>,
+      "task-started":
       <div className="preloader-wrapper small active">
         <div className="spinner-layer spinner-green-only">
           <div className="circle-clipper left">
@@ -39,22 +39,29 @@ export class JobResultTable extends React.Component {
           </div>
         </div>
       </div>,
-      "succeeded": <i className="material-icons">check_circle</i>,
-      "failed": <i className="material-icons">error</i>
+      "task-succeeded": <i className="material-icons">check_circle</i>,
+      "task-failed": <i className="material-icons">error</i>
     }
     this.resultsPath = "./results/"; //directory where all zip packages written to
     this.statusResultMap = t => (
-      t.status === "succeeded" ?
+      t.status === "task-succeeded" ?
         (<a href={`${this.resultsPath}${t.task_id}`} download>{"Download"}</a>):
-        (t.status === "failed" ? (<span>{"Invalid Task Error"}</span>) : undefined) //Need to add error handling into Celery and PGMLab
+        (t.status === "task-failed" ? (<span>{"Invalid Task Error"}</span>) : undefined) //Need to add error handling into Celery and PGMLab
     )
     // For subscribing to task updates, updates a task in state
-    this.updateTask = task => {
+    this.addTask = task => {
       let tasks = this.state.tasks;
       tasks[task["task_id"]] = task;
-      this.setState({
-        tasks
-      });
+      this.setState({tasks})
+    }
+    this.updateTask = task => {
+      let tasks = this.state.tasks;
+      // tasks[task["task_id"]] = task;
+      // this.setState({
+      //   tasks
+      // });
+      tasks[task["task_id"]]["status"] = task["task_status"];
+      this.setState({tasks})
     }
     // For filtering/sorting through results
     this.setTypeFilter = type => {
@@ -81,15 +88,32 @@ export class JobResultTable extends React.Component {
     this.tasksTable = this.tasksTable.bind(this);
   }
   componentWillMount(){
-    this.props.session
-      .subscribe("on.update", (args, kwargs, details)=>{
-        console.log("on.update ", args, kwargs, details)
-      });
-    this.props.session
-      .subscribe("celery.task.update", (args, kwargs, details)=>{
-        console.log("celery.task.update ", args, kwargs, details)
-        // this.updateTask(kwargs["task"]);
-      });
+    var eventSource = new EventSource("test");
+    console.log(eventSource)
+    // eventSource.onmessage = (e) => {console.log(JSON.parse(e.data))}
+    eventSource.addEventListener(
+      "celery.task.add",
+      (e) => {
+        console.log(JSON.parse(e.data));
+        this.addTask(JSON.parse(e.data));
+      }
+    );
+    eventSource.addEventListener(
+      "celery.task.update",
+      (e) => {
+        console.log(JSON.parse(e.data));
+        this.updateTask(JSON.parse(e.data));
+      }
+    );
+    // this.props.session
+    //   .subscribe("on.update", (args, kwargs, details)=>{
+    //     console.log("on.update ", args, kwargs, details)
+    //   });
+    // this.props.session
+    //   .subscribe("celery.task.update", (args, kwargs, details)=>{
+    //     console.log("celery.task.update ", args, kwargs, details)
+    //     // this.updateTask(kwargs["task"]);
+    //   });
   }
   componentDidMount(){
     this.props.session
@@ -115,7 +139,7 @@ export class JobResultTable extends React.Component {
         return acc;
       }, {
         "type": {"learning":0,"inference":0},
-        "status": {"received":0,"started":0,"succeeded":0,"failed":0}
+        "status": {"task-received":0,"task-started":0,"task-succeeded":0,"task-failed":0}
       });
     const idFilter = ( //lowercase input only
       <div className="row" style={noVertMargin}>
@@ -157,11 +181,12 @@ export class JobResultTable extends React.Component {
             {
               ["Received", "Started", "Succeeded", "Failed"]
                 .map(status => {
-                  const statusCount = tasksProps["status"][status.toLowerCase()];
+                  const statusKey = `task-${status.toLowerCase()}`;
+                  const statusCount = tasksProps["status"][statusKey];
                   return (
                     <div key={status} className="col s3">
-                      <input id={`${status}Filter`} value={status.toLowerCase()} type="checkbox"
-                        checked={this.state.statusFilters.has(status.toLowerCase())}
+                      <input id={`${status}Filter`} value={statusKey} type="checkbox"
+                        checked={this.state.statusFilters.has(statusKey)}
                         onChange={evt => this.setStatusFilter(evt.target.value)}/>
                       <label htmlFor={`${status}Filter`}>{`${status} (${statusCount})`}</label>
                     </div>

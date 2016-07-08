@@ -29,10 +29,6 @@ connection.onopen = function(session, details) {
 }
 connection.open()
 
-var eventSource = new EventSource("test");
-console.log(eventSource)
-eventSource.onmessage = (e) => {console.log(e)}
-
 function initializeApp(session){
   render(
     <App session={session}/>,
