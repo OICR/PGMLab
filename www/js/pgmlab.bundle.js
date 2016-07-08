@@ -64,31 +64,6 @@
 	window.$ = $;
 	var materialize = __webpack_require__(591);
 	
-	var wsuri2 = window.location.protocol === "file:" ? "wss://localhost:433/sock" : "wss://" + window.location.hostname + ":433/sock";
-	var sock = void 0;
-	if ("WebSocket" in window) {
-	  sock = new WebSocket(wsuri2);
-	} else if ("MozWebSocket" in window) {
-	  sock = new MozWebSocket(wsuri2);
-	} else {
-	  console.log("Browser does not support WS");
-	};
-	if (sock) {
-	  sock.onopen = function (e) {
-	    console.log("connected: ", e);
-	  };
-	  sock.onclose = function (e) {
-	    console.log("closed: ", e);
-	  };
-	  sock.onmessage = function (e) {
-	    console.log("got echo: ", e);
-	  };
-	  sock.onerror = function (e) {
-	    console.log("err", e);
-	  };
-	  console.log(sock);
-	}
-	
 	try {
 	  var autobahn = __webpack_require__(595);
 	} catch (err) {
