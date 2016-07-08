@@ -8,10 +8,15 @@ from twisted.internet._sslverify import OpenSSLCertificateAuthorities
 from twisted.internet.ssl import CertificateOptions
 from OpenSSL import crypto
 
+import requests
+
 class MonitorThread(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
+        from pgmlab_server import update
+        update('asd')
         from pgmlab_server import celery as celery_app
+        self.update = update
         self.celery_app = celery_app
         self.interval = 1
         self.state = self.celery_app.events.State()
@@ -22,22 +27,25 @@ class MonitorThread(ApplicationSession):
 
     def handle_task_received(self, event):
         print("task-received", event["uuid"])
+        self.update('recv')
 
     def handle_task_started(self, event):
         print("task-started", event["uuid"])
+        # self.update()
 
     def handle_task_succeeded(self, event):
         print("task-succeeded", event["uuid"])
+        # self.update()
 
     def handle_task_failed(self, event):
         print("task-failed", event["uuid"])
+        # self.update()
 
     def run(self):
         while True:
             try:
                 with self.celery_app.connection() as connection:
                     recv = self.celery_app.events.Receiver(connection, handlers={
-                        # "task-received": self.handle_task_received,
                         "task-received": self.handle_task_received,
                         "task-started": self.handle_task_started,
                         "task-succeeded": self.handle_task_succeeded,

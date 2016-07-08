@@ -29,11 +29,74 @@ def result(request, task_id):
     print(task_id,request)
     return File("./results/"+task_id+".zip")
 
+from twisted.internet import defer
+spectactors = set()
+@klein.route("/test")
+def stream(request):
+    request.setHeader("Content-type", "text/event-stream")
+    request.write("data: {}\n\n".format(str(datetime.datetime.now())))
+    spectactors.add(request) #find a way to clear this
+    return defer.Deferred()
+
+@klein.route("/move", methods=["POST"])
+def move(request):
+    print('reqs', len(spectactors))
+    for spec in spectactors:
+        # spec.write("data: {}/n/n".format(str(datetime.datetime.now())));
+        # print spec.transport.disconnected
+        if not spec.transport.disconnected:
+            spec.write("data: {}\n\n".format(str(datetime.datetime.now())))
+def update(data):
+    print('update: ', data, spectactors)
+    for spec in spectactors:
+        # spec.write("data: {}/n/n".format(str(datetime.datetime.now())));
+        # print spec.transport.disconnected
+        if not spec.transport.disconnected:
+            spec.write("data: {}\n\n".format(data))
+
 # Queue and run tasks async
 from celery import Celery, states
 from celery.exceptions import InvalidTaskError
 celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
 celery.conf.CELERY_SEND_EVENTS = True
+
+import threading
+import time
+def monitor():
+    print('monitor')
+    def handle_task_received(event):
+        print("task-received", event["uuid"])
+        update("recv")
+    def handle_task_started(event):
+        print("task-started", event["uuid"])
+        update("started")
+    def handle_task_succeeded(event):
+        print("task-succeeded", event["uuid"])
+        update("succeeded")
+    def handle_task_failed(event):
+        print("task-failed", event["uuid"])
+        update("failed")
+    while True:
+        try:
+            with celery.connection() as connection:
+                recv = celery.events.Receiver(connection, handlers ={
+                        "task-received": handle_task_received,
+                        "task-started": handle_task_started,
+                        "task-succeeded": handle_task_succeeded,
+                        "task-failed": handle_task_failed
+                })
+                recv.capture(limit=None, timeout=None, wakeup=True)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception: # unable to capture
+            pass
+        time.sleep(1)
+def run_monitor():
+    thread = threading.Thread(target=monitor, args=())
+    thread.daemon = True
+    print('run_monitor', thread)
+    thread.start()
+run_monitor()
 
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):

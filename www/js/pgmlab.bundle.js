@@ -108,6 +108,13 @@
 	  initializeApp(session);
 	};
 	connection.open();
+	
+	var eventSource = new EventSource("test");
+	console.log(eventSource);
+	eventSource.onmessage = function (e) {
+	  console.log(e);
+	};
+	
 	function initializeApp(session) {
 	  (0, _reactDom.render)(_react2.default.createElement(_App.App, { session: session }), document.getElementById('app'));
 	}
