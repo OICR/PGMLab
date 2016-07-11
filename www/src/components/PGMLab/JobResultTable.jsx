@@ -143,7 +143,7 @@ export class JobResultTable extends React.Component {
                   const typeCount = tasksProps["type"][type.toLowerCase()];
                   return (
                     <div key={type} className="col s3 valign">
-                      <input id={`${type}Filter`} value={type.toLowerCase()} type="checkbox"
+                      <input id={`${type}Filter`} value={type.toLowerCase()} type="checkbox" className="filled-in"
                         checked={this.state.typeFilters.has(type.toLowerCase())}
                         onChange={evt => this.setTypeFilter(evt.target.value)}/>
                       <label htmlFor={`${type}Filter`}>{`${type} (${typeCount})`}</label>
@@ -167,7 +167,7 @@ export class JobResultTable extends React.Component {
                   const statusCount = tasksProps["status"][statusKey];
                   return (
                     <div key={status} className="col s3">
-                      <input id={`${status}Filter`} value={statusKey} type="checkbox"
+                      <input id={`${status}Filter`} value={statusKey} type="checkbox" className="filled-in"
                         checked={this.state.statusFilters.has(statusKey)}
                         onChange={evt => this.setStatusFilter(evt.target.value)}/>
                       <label htmlFor={`${status}Filter`}>{`${status} (${statusCount})`}</label>

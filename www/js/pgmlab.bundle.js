@@ -75233,7 +75233,7 @@
 	              return _react2.default.createElement(
 	                "div",
 	                { key: type, className: "col s3 valign" },
-	                _react2.default.createElement("input", { id: type + "Filter", value: type.toLowerCase(), type: "checkbox",
+	                _react2.default.createElement("input", { id: type + "Filter", value: type.toLowerCase(), type: "checkbox", className: "filled-in",
 	                  checked: _this4.state.typeFilters.has(type.toLowerCase()),
 	                  onChange: function onChange(evt) {
 	                    return _this4.setTypeFilter(evt.target.value);
@@ -75268,7 +75268,7 @@
 	              return _react2.default.createElement(
 	                "div",
 	                { key: status, className: "col s3" },
-	                _react2.default.createElement("input", { id: status + "Filter", value: statusKey, type: "checkbox",
+	                _react2.default.createElement("input", { id: status + "Filter", value: statusKey, type: "checkbox", className: "filled-in",
 	                  checked: _this4.state.statusFilters.has(statusKey),
 	                  onChange: function onChange(evt) {
 	                    return _this4.setStatusFilter(evt.target.value);
