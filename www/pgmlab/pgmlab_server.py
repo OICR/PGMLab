@@ -75,8 +75,8 @@ def run_learning_task(self, **kwargs):
     # Factorgraph
     return_code = pgmlab_commands.generate_logical_factorgraph(run_path)
     if return_code != "0":
-        shutil.rmtree(run_path)
-        self.update_state(state=states.FAILURE, meta="reason for failure")
+        # shutil.rmtree(run_path)
+        # self.update_state(state=states.FAILURE, meta="reason for failure")
         raise InvalidTaskError()
     # Observation
     obs_file = kwargs["obs_file"]
@@ -88,7 +88,8 @@ def run_learning_task(self, **kwargs):
     max_iterations = kwargs["max_iterations"]
     return_code = pgmlab_commands.learning(run_path, number_states, change_limit, max_iterations)
     if return_code != "0":
-        shutil.rmtree(run_path)
+        # shutil.rmtree(run_path)
+        # self.update_state(state=states.FAILURE, meta="reason for failure")
         raise InvalidTaskError()
     # Create package to download
     # Package is created into server directory (i.e. www/pgmlab/)
@@ -111,7 +112,8 @@ def run_inference_task(self, **kwargs):
     # Logical Factorgraph
     return_code = pgmlab_commands.generate_logical_factorgraph(run_path)
     if return_code != "0":
-        shutil.rmtree(run_path)
+        # shutil.rmtree(run_path)
+        # self.update_state(state=states.FAILURE, meta="reason for failure")
         raise InvalidTaskError()
     # Learnt factorgraph (optional)
     lfg_file = kwargs["lfg_file"]
@@ -124,7 +126,8 @@ def run_inference_task(self, **kwargs):
     number_states = kwargs["number_states"]
     return_code = pgmlab_commands.inference(run_path, number_states, fg_name)
     if return_code != "0":
-        shutil.rmtree(run_path)
+        # shutil.rmtree(run_path)
+        # self.update_state(state=states.FAILURE, meta="reason for failure")
         raise InvalidTaskError()
     # Create package to download
     # Package is created into server directory (i.e. www/pgmlab/)
@@ -133,48 +136,44 @@ def run_inference_task(self, **kwargs):
     shutil.make_archive(package_path, "zip", root_dir=run_path)
 
 # EVENTSTREAM ENDPOINT FOR SERVER-SENT-EVENTS ON CELERY TASK UPDATE
-from pgmlab_db import db_session, Task
+from pgmlab_db import db_session, Task, Session
 from twisted.internet import defer
-spectactors = set() # Holds request objects for each client requesting eventStream
+spectators = set() # Holds request objects for each client requesting eventStream
 @klein.route("/celery")
 def stream(request):
     request.setHeader("Content-type", "text/event-stream")
-    spectactors.add(request) #find a way to clear this
+    global spectators
+    print(spectators,len(spectators))
+    spectators = set([spec for spec in spectators if not spec.transport.disconnected]+[request])
+    print(spectators,len(spectators))
     return defer.Deferred()
 # TASK UPDATING IN DB AND TO CLIENTS
-def add_task(task):
+def sse_add_task(task):
     print("add:", task.to_dict())
-    try:
-        db_session.add(task)
-        db_session.commit()
-        for spec in spectactors:
-            if not spec.transport.disconnected:
-                spec.write("event: celery.task.add\n")
-                spec.write("data: {}\n\n".format(json.dumps(task.to_dict())))
-    except Exception:
-        pass
-def update_task(task_id, task_status):
+    global spectators
+    for spec in spectators:
+        if not spec.transport.disconnected:
+            spec.write("event: celery.task.add\ndata: {}\n\n".format(json.dumps(task.to_dict())))
+def sse_update_task(task_id, task_status):
     print("update:", task_id, task_status)
-    task = db_session.query(Task).get(task_id)
-    try:
-        task.status = task_status
-        db_session.commit()
-        for spec in spectactors:
-            if not spec.transport.disconnected:
-                spec.write("event: celery.task.update\n")
-                spec.write("data: {}\n\n".format(json.dumps({"task_id":task_id,"task_status":task_status})))
-    except Exception:
-        pass
+    global spectators
+    for spec in spectators:
+        if not spec.transport.disconnected:
+            spec.write("event: celery.task.update\ndata: {}\n\n".format(json.dumps({"task_id":task_id,"task_status":task_status})))
+
 # CELERY TASK EVENT MONITOR
 import threading
 import time
 import ast
-def monitor():
-    print('monitor')
+from sqlalchemy.orm import scoped_session
+def monitor(sess):
+    print('monitor', sess)
+    # sess = scoped_session(Session)
     def catch_all(event):
+        # event["uuid"]=12
         if event["type"] == "task-received":
             kwargs = ast.literal_eval(event["kwargs"])
-            task = Task(
+            task_to_add = Task(
                 task_id = event["uuid"],
                 task_type = kwargs["task_type"],
                 submit_datetime = kwargs["submit_datetime"],
@@ -184,13 +183,26 @@ def monitor():
                 number_states = kwargs["number_states"]
             )
             if kwargs["task_type"] == "learning":
-                task.change_limit = kwargs["change_limit"]
-                task.max_iterations = kwargs["max_iterations"]
+                task_to_add.change_limit = kwargs["change_limit"]
+                task_to_add.max_iterations = kwargs["max_iterations"]
             else:
-                task.lfg_filename = kwargs["lfg_filename"]
-            add_task(task)
+                task_to_add.lfg_filename = kwargs["lfg_filename"]
+            try:
+                sse_add_task(task=task_to_add)
+                print(sess)
+                sess.add(task_to_add)
+                sess.commit()
+            except Exception as err:
+                print("exception caught on add", err)
         elif event["type"] in ["task-started", "task-succeeded", "task-failed"]:
-            update_task(event["uuid"], event["type"])
+            try:
+                sse_update_task(task_id=event["uuid"], task_status=event["type"])
+                task_to_update = sess.query(Task).get(event["uuid"])
+                task_to_update.status = event["type"]
+                print(sess)
+                sess.commit()
+            except Exception as err:
+                print("exception caught on update: ", event["type"], err)
     while True:
         try:
             with celery.connection() as connection:
@@ -204,8 +216,8 @@ def monitor():
         except Exception: # unable to capture
             pass
         time.sleep(1)
-def run_monitor():
-    thread = threading.Thread(target=monitor, args=())
+def run_monitor(sess):
+    thread = threading.Thread(target=monitor, kwargs={"sess":sess})
     thread.daemon = True
     thread.start()
-run_monitor()
+run_monitor(sess=scoped_session(Session))

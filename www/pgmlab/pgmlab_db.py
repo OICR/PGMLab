@@ -2,31 +2,31 @@ from sqlalchemy import create_engine
 engine = create_engine("sqlite:///pgmlab.db", echo_pool=True)
 
 from sqlalchemy.orm import sessionmaker, scoped_session
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine, autoflush=False)
 db_session = scoped_session(Session)
 
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
-# Need this for querying
-Base.query = db_session.query_property()
+Base.query = db_session.query_property()# Need this for querying
 
 from sqlalchemy import Column, String, Integer, Float, null
 import datetime
 class Task(Base):
     __tablename__ = "tasks"
-    task_id = Column(String, primary_key=True)
-    task_type = Column(String)
-    submit_datetime = Column(String) #can add other datetimes for task info (i.e. runtime, waittime, etc)
-    status = Column(String)
+    task_id = Column("task_id", String, primary_key=True)
+    # task_id = Column("task_id", Integer, primary_key=True)
+    task_type = Column("task_type", String)
+    submit_datetime = Column("submit_datetime", String) #can add other datetimes for task info (i.e. runtime, waittime, etc)
+    status = Column("status", String)
     # Job metadata (i.e. parameters for different runs) causes unnormalized table (should be decoupled at some point)
-    pi_filename = Column(String)
-    obs_filename = Column(String)
-    number_states = Column(Integer)
+    pi_filename = Column("pi_filename", String)
+    obs_filename = Column("obs_filename", String)
+    number_states = Column("number_states", Integer)
     # Learning
-    max_iterations = Column(Integer, default=null())
-    change_limit = Column(Float, default=null())
+    max_iterations = Column("max_iterations", Integer, default=null())
+    change_limit = Column("change_limit", Float, default=null())
     # Inference
-    lfg_filename = Column(String, default=null())
+    lfg_filename = Column("lfg_filename", String, default=null())
 
     def to_dict(self):
         task = {
