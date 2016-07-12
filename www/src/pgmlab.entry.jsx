@@ -36,10 +36,24 @@ function initializeApp(session){
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
   const store = createStoreDevTools(reducer);
+  // Initial state
   store.dispatch({
-    type: "SET_STATE",
-    state: {
-      session
+    type: "SET_INITIAL_STATE",
+    initialState: {
+      session,
+      tasks: Map(),
+      typeFilters: Map({
+        "learning": true,
+        "inference": true
+      }),
+      statusFilters: Map({
+        "task-received": true,
+        "task-started": true,
+        "task-succeeded": true,
+        "task-failed": true
+      }),
+      dateSort: "descending",
+      idFilter: ""
     }
   });
   render(

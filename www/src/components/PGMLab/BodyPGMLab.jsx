@@ -10,7 +10,6 @@ import {JobResultTable} from "./JobResultTable.jsx"
 export class Body extends React.Component {
     constructor(props) {
         super(props)
-        this.props.TEST()
     }
     render () {
       const noMargin = {marginTop:"0px",marginBottom:"0px"};
@@ -18,8 +17,8 @@ export class Body extends React.Component {
         <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="grey lighten-4">
           <div className="row" style={noMargin}>
-            <JobSubmitForm />
-            <JobResultTable session={this.props.session}/>
+            <JobSubmitForm/>
+            <JobResultTable {...this.props}/>
           </div>
         </main>
         </MuiThemeProvider>

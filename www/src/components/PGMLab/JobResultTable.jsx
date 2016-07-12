@@ -2,9 +2,12 @@ import React from "react";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
 var moment = require("moment");
 
+import {TableControls} from "./TableControls.jsx";
+
 export class JobResultTable extends React.Component {
   constructor(props){
     super(props);
+    console.log("...JobResultTable.props: ", this.props);
     this.state = {
       tasks: {},
       typeFilters: new Set(["learning", "inference"]),
@@ -128,7 +131,7 @@ export class JobResultTable extends React.Component {
         <form>
             <input id="idFilter" value={this.state.idFilter} type="text" placeholder="Filter by ID"
               style={{paddingBottom:"0px"}}
-              onChange={evt => this.setIDFilter(evt.target.value.toLowerCase())}/>
+              onChange={evt => {this.setIDFilter(evt.target.value.toLowerCase());this.props.updateIDFilter(evt.target.value.toLowerCase())}}/>
         </form>
       </div>
     );
@@ -267,6 +270,9 @@ export class JobResultTable extends React.Component {
         <div className="card-panel">
           <div className="section">
             {this.tableProperties()}
+          </div>
+          <div className="section">
+            <TableControls {...this.props} />
           </div>
           <div className="section">
             {this.tasksTable()}

@@ -26,7 +26,12 @@ export class App extends  React.Component {
 
 function mapStateToProps(state) {
   return {
-    session: state.get("session")
+    session: state.get("session"),
+    tasks: state.get("tasks"),
+    typeFilters: state.get("typeFilters"),
+    statusFilters: state.get("statusFilters"),
+    dateSort: state.get("dateSort"),
+    idFilter: state.get("idFilter")
   };
 }
 
