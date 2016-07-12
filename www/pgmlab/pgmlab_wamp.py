@@ -14,18 +14,10 @@ class Component(ApplicationSession):
             tasks_dict = {}
             for task in tasks:
                 tasks_dict[task.task_id] = task.to_dict()
-            print("get_all_tasks")
+            print("...get_all_tasks")
             return tasks_dict
-
-        # @inlineCallbacks
-        def on_update(task):
-            print("on_update", task)
-            self.publish("celery.task.update", task)
-            # yield
-
         yield self.register(get_all_tasks, u"celery.tasks")
-        # yield self.subscribe(on_update, u"on.update")
-        print("procs registered")
+        print("...WAMP registered")
 
 if __name__ == "__main__":
     cert = crypto.load_certificate(crypto.FILETYPE_PEM,six.u(open('.crossbar/example.cert.pem', "r").read()))

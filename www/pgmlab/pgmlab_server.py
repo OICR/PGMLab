@@ -29,11 +29,12 @@ def js(request):
 # HOST RESULTS FOR DOWNLOAD
 @klein.route("/results/<task_id>")
 def result(request, task_id):
-    print(task_id,request)
+    print("...requesting task with id: {}".format(task_id))
     return File("./results/"+task_id+".zip")
 # POST METHOD FOR SUBMITTING LEARNING AND INFERENCE JOBS
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
+    print("...run_learning_submit @: {}".format(str(datetime.datetime.now())))
     data = {
         "pi_file": request.args["pairwiseInteractionFile"][0],
         "pi_filename": request.args["pairwiseInteractionFilename"][0],
@@ -49,6 +50,7 @@ def run_learning_submit(request):
     return task.id
 @klein.route('/run/inference/submit', methods=["POST"])
 def run_inference_submit(request):
+    print("...run_inference_submit @: {}".format(str(datetime.datetime.now())))
     data = {
         "pi_file": request.args["pairwiseInteractionFile"][0],
         "pi_filename": request.args["pairwiseInteractionFilename"][0],
@@ -143,19 +145,19 @@ spectators = set() # Holds request objects for each client requesting eventStrea
 def stream(request):
     request.setHeader("Content-type", "text/event-stream")
     global spectators
-    print(spectators,len(spectators))
     spectators = set([spec for spec in spectators if not spec.transport.disconnected]+[request])
-    print(spectators,len(spectators))
+    print("...celery event stream requests: ", len(spectators))
     return defer.Deferred()
-# TASK UPDATING IN DB AND TO CLIENTS
+# TASK UPDATING IN DB AND TO CLIENTS (SERVER SENT EVENTS)
 def sse_add_task(task):
-    print("add:", task.to_dict())
+    print("...adding task with id: {}".format(task.to_dict()["task_id"]))
     global spectators
     for spec in spectators:
         if not spec.transport.disconnected:
+            # Add event listener to event "celery.task.add" on client
             spec.write("event: celery.task.add\ndata: {}\n\n".format(json.dumps(task.to_dict())))
 def sse_update_task(task_id, task_status):
-    print("update:", task_id, task_status)
+    print("...updating task with id: {0} -> {1}".format(task_id, task_status))
     global spectators
     for spec in spectators:
         if not spec.transport.disconnected:
@@ -167,7 +169,7 @@ import time
 import ast
 from sqlalchemy.orm import scoped_session
 def monitor(sess):
-    print('monitor', sess)
+    print("...calling celery monitor")
     # sess = scoped_session(Session)
     def catch_all(event):
         # event["uuid"]=12
@@ -193,7 +195,7 @@ def monitor(sess):
                 sess.add(task_to_add)
                 sess.commit()
             except Exception as err:
-                print("exception caught on add", err)
+                print("...EXCEPTION caught on add: {}".format(err))
         elif event["type"] in ["task-started", "task-succeeded", "task-failed"]:
             try:
                 sse_update_task(task_id=event["uuid"], task_status=event["type"])
@@ -202,7 +204,7 @@ def monitor(sess):
                 print(sess)
                 sess.commit()
             except Exception as err:
-                print("exception caught on update: ", event["type"], err)
+                print("...EXCEPTION caught on update ({0}): {1}".format(event["type"], err))
     while True:
         try:
             with celery.connection() as connection:
