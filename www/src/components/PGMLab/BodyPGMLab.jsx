@@ -10,6 +10,7 @@ import {JobResultTable} from "./JobResultTable.jsx"
 export class Body extends React.Component {
     constructor(props) {
         super(props)
+        this.props.TEST()
     }
     render () {
       const noMargin = {marginTop:"0px",marginBottom:"0px"};

@@ -85,7 +85,6 @@ export class JobResultTable extends React.Component {
   }
   componentWillMount(){
     var eventSource = new EventSource("celery");
-    console.log(eventSource)
     eventSource.addEventListener(
       "celery.task.add",
       (e) => {
@@ -100,12 +99,13 @@ export class JobResultTable extends React.Component {
         this.updateTask(JSON.parse(e.data));
       }
     );
+    console.log("...EventSource for SSE: ", eventSource)
   }
   componentDidMount(){
     this.props.session
       .call("celery.tasks")
       .then(tasks => {
-        console.log("celery.tasks: ", tasks)
+        console.log("...celery.tasks: ", tasks)
         this.setState({tasks});
       })
   }
