@@ -10,15 +10,16 @@ export class JobSubmitForm extends React.Component {
   }
   componentDidMount() {
     $("ul.tabs").tabs();
+    $("ul.tabs .indicator").addClass("teal");
   }
   render(){
     return (
-      <div className="col s4">
-        <div className="row">
+      <div className="col s3">
+        <div className="row card-panel">
           <div className="col s12">
-            <ul className="tabs grey lighten-4">
-              <li className="tab col s6"><a href="#Learning">Learning</a></li>
-              <li className="tab col s6"><a href="#Inference">Inference</a></li>
+            <ul className="tabs">
+              <li className="tab col s6"><a href="#Learning"><span className="teal-text">Learning</span></a></li>
+              <li className="tab col s6"><a href="#Inference"><span className="teal-text">Inference</span></a></li>
             </ul>
           </div>
           <div id="Learning" className="col s12">

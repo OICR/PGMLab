@@ -14,7 +14,7 @@ export class InferenceSubmit extends React.Component {
     evt.preventDefault()
     $.ajax({
       type: "POST",
-      url: "http://localhost:9002/run/inference/submit",
+      url: "https://localhost:4433/run/inference/submit",
       processData: false,
       contentType: false,
       data: new FormData(this.refs.inferenceForm),
@@ -29,12 +29,12 @@ export class InferenceSubmit extends React.Component {
   }
   render(){
     return (
-      <form ref="inferenceForm" onSubmit={evt=>{this.submitInference(evt)}}>
+      <form ref="inferenceForm" className="center-align" onSubmit={evt=>{this.submitInference(evt)}}>
           <div className="row input-field file-field">
             <p>{"Pairwise interaction File"}</p>
             <div className="btn">
-              <span>{"Upload"}</span>
-              <input type="file" name="inferencePairwiseInteractionFile" />
+              <span><i className="material-icons">file_upload</i></span>
+              <input type="file" name="pairwiseInteractionFile" />
             </div>
             <div className="file-path-wrapper">
               <input type="text" className="file-path validate" name="pairwiseInteractionFilename" />
@@ -44,8 +44,8 @@ export class InferenceSubmit extends React.Component {
           <div className="row input-field file-field">
             <p>{"Observation File"}</p>
             <div className="btn">
-              <span>{"Upload"}</span>
-              <input type="file" name="inferenceObservationFile" />
+              <span><i className="material-icons">file_upload</i></span>
+              <input type="file" name="observationFile" />
             </div>
             <div className="file-path-wrapper">
               <input type="text" className="file-path validate" name="observationFilename" />
@@ -55,7 +55,7 @@ export class InferenceSubmit extends React.Component {
           <div className="row input-field file-field">
             <p>{"Learnt Factorgraph File (Optional)"}</p>
             <div className="btn">
-              <span>{"Upload"}</span>
+              <span><i className="material-icons">file_upload</i></span>
               <input type="file" name="learntFactorgraphFile" />
             </div>
             <div className="file-path-wrapper">

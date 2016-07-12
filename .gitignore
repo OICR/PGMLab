@@ -44,6 +44,7 @@ wamp/.crossbar/pgmlab.pem
 #python compiled files
 *.pyc
 
+www/pgmlab/twistd.pid
 
 #node file for running process
 www/pgmbio/.crossbar/*
@@ -59,4 +60,6 @@ www/node_modules/
 tmp/*
 
 #Data files created from running PGMLab queueing
+www/pgmlab/results/*
+www/pgmlab/pgmlab.db
 data/pgmlab/*

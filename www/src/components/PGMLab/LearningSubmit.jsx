@@ -67,7 +67,7 @@ export class LearningSubmit extends React.Component {
     evt.preventDefault()
     $.ajax({
       type: "POST",
-      url: "http://localhost:9002/run/learning/submit",
+      url: "https://localhost:4433/run/learning/submit",
       processData: false,
       contentType: false,
       data: new FormData(this.refs.learningForm),
@@ -82,12 +82,12 @@ export class LearningSubmit extends React.Component {
   }
   render(){
     return (
-      <form ref="learningForm" onSubmit={evt=>{this.submitLearning(evt)}}>
+      <form ref="learningForm" className="center-align" onSubmit={evt=>{this.submitLearning(evt)}}>
           <div className="row input-field file-field">
             <p>{"Pairwise interaction File"}</p>
             <div className="btn">
-              <span>{"Upload"}</span>
-              <input type="file" name="learningPairwiseInteractionFile" />
+              <span><i className="material-icons">file_upload</i></span>
+              <input type="file" name="pairwiseInteractionFile" />
             </div>
             <div className="file-path-wrapper">
               <input type="text" className="file-path validate" name="pairwiseInteractionFilename" />
@@ -97,8 +97,8 @@ export class LearningSubmit extends React.Component {
           <div className="row input-field file-field">
             <p>{"Observation File"}</p>
             <div className="btn">
-              <span>{"Upload"}</span>
-              <input type="file" name="learningObservationFile" />
+              <span><i className="material-icons">file_upload</i></span>
+              <input type="file" name="observationFile" />
             </div>
             <div className="file-path-wrapper">
               <input type="text" className="file-path validate" name="observationFilename" />
@@ -109,7 +109,7 @@ export class LearningSubmit extends React.Component {
           <div className="row input-field">
             <p>{"Number of States: "+this.state.numberStates}</p>
             <p className="range-field">
-              <input  type="range" name="learningNumberOfStates" defaultValue={3} min={2} max={10}
+              <input  type="range" name="numberStates" defaultValue={3} min={2} max={10}
                       onInput={evt=>{this.setState({numberStates: evt.target.value})}} />
             </p>
           </div>
