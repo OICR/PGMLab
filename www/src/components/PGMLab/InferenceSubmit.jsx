@@ -10,7 +10,6 @@ export class InferenceSubmit extends React.Component {
   }
 
   submitInference(evt){
-    // console.log("inference", evt);
     evt.preventDefault()
     $.ajax({
       type: "POST",
@@ -19,11 +18,10 @@ export class InferenceSubmit extends React.Component {
       contentType: false,
       data: new FormData(this.refs.inferenceForm),
       success: (data, textStatus, jqXHR) => {
-        // console.log("ajax.success:", data,textStatus,jqXHR);
-        console.log("ajax.success: ", data)
+        console.log("...inference task submitted: ", data)
       },
       error: (jqXHR, textStatus, error) => {
-        console.log("ajax.error:", jqXHR,textStatus,error);
+        console.log("...inference task error: ", jqXHR, textStatus, error);
       }
     })
   }

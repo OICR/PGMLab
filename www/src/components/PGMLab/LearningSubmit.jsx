@@ -10,59 +10,6 @@ export class LearningSubmit extends React.Component {
     }
     this.submitLearning = this.submitLearning.bind(this);
   }
-  componentDidMount(){
-    var self = this
-    $("#runForm").submit(function(e){
-        e.preventDefault(); //STOP default action
-        console.log("THIS", this);
-        var inputs = $(this).serializeArray()
-        var runType = (self.state.activeKey === "tab 2")? "inference": "learning"
-        inputs =  (runType === "inference")? inputs.slice(-5): inputs.slice(0,-5)
-
-        var jobData = { "status": "running",
-                        "time":   new Date().toLocaleString(),
-                        "inputs": inputs }
-        var jobs = self.state.jobs.slice()
-        var jobIndex = jobs.push(jobData)
-        var formURL = "http://localhost:9002/run/"+ runType + "/submit"
-        $.ajax(
-        {
-            url : formURL,
-            type: "POST",
-            data : new FormData(this),
-            processData: false,
-            contentType: false,
-            success:function(data, textStatus, jqXHR)
-            {
-                console.log("ajax.success:", data,textStatus,jqXHR);
-                // var data = new Blob([data], {type: 'text/plain'});
-                // var downloadURL = window.URL.createObjectURL(data)
-                // var tempLink = document.createElement('a');
-                // tempLink.href = downloadURL;
-                // var filename = (runType === "inference")?
-                //                "pathway-" + (jobIndex+1)  + ".pp":
-                //                "learnt-" + (jobIndex+1)  + ".fg"
-                // tempLink.setAttribute('download', filename);
-                // tempLink.click()
-                // var currentJobs = self.state.jobs.slice()
-                // jobData.status = "success"
-                // currentJobs[jobIndex] = jobData
-                // self.setState({jobs:jobs})
-            },
-            error: function(jqXHR, textStatus, errorThrown)
-            {
-                console.log("ajax.error:", jqXHR, textStatus, errorThrown)
-                // var currentJobs = self.state.jobs.slice()
-                // jobData.status = "failed"
-                // jobData.comments = jqXHR.responseText
-                // currentJobs[jobIndex] = jobData
-                // self.setState({jobs: jobs})
-            }
-        })
-        self.setState({jobs: jobs})
-    })
-  }
-
   submitLearning(evt){
     evt.preventDefault()
     $.ajax({
@@ -72,11 +19,10 @@ export class LearningSubmit extends React.Component {
       contentType: false,
       data: new FormData(this.refs.learningForm),
       success: (data, textStatus, jqXHR) => {
-        // console.log("ajax.success:", data, textStatus, jqXHR);
-        console.log("ajax.sucess", data)
+        console.log("...learning task submitted: ", data)
       },
       error: (jqXHR, textStatus, error) => {
-        console.log("ajax.error:", jqXHR, textStatus, error);
+        console.log("...learning task error: ", jqXHR, textStatus, error);
       }
     });
   }
@@ -104,7 +50,6 @@ export class LearningSubmit extends React.Component {
               <input type="text" className="file-path validate" name="observationFilename" />
             </div>
           </div>
-
 
           <div className="row input-field">
             <p>{"Number of States: "+this.state.numberStates}</p>
