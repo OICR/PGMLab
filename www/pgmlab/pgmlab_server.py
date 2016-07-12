@@ -172,7 +172,7 @@ def monitor(sess):
     print("...calling celery monitor")
     # sess = scoped_session(Session)
     def catch_all(event):
-        # event["uuid"]=12
+        # task-received: add to database and push sse to client with new task
         if event["type"] == "task-received":
             kwargs = ast.literal_eval(event["kwargs"])
             task_to_add = Task(
@@ -190,21 +190,21 @@ def monitor(sess):
             else:
                 task_to_add.lfg_filename = kwargs["lfg_filename"]
             try:
-                sse_add_task(task=task_to_add)
-                print(sess)
                 sess.add(task_to_add)
                 sess.commit()
+                sse_add_task(task=task_to_add)
             except Exception as err:
                 print("...EXCEPTION caught on add: {}".format(err))
+        # else update task in database and push sse to client with task change
         elif event["type"] in ["task-started", "task-succeeded", "task-failed"]:
             try:
-                sse_update_task(task_id=event["uuid"], task_status=event["type"])
                 task_to_update = sess.query(Task).get(event["uuid"])
                 task_to_update.status = event["type"]
-                print(sess)
                 sess.commit()
+                sse_update_task(task_id=event["uuid"], task_status=event["type"])
             except Exception as err:
                 print("...EXCEPTION caught on update ({0}): {1}".format(event["type"], err))
+    # Continuously poll Celery for events to handlers
     while True:
         try:
             with celery.connection() as connection:
