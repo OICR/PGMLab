@@ -24,7 +24,6 @@ export class ResultsTableControls extends React.Component {
   render(){
     const noVertMargin = {marginBottom: "0px", marginTop: "0px"};
     const {typeCount, statusCount} = this.clusterTasks();
-    console.log(typeCount, statusCount)
     const idFilter = (
       <div className="row" style={noVertMargin}>
         <form className="row">
@@ -42,7 +41,6 @@ export class ResultsTableControls extends React.Component {
             {
               ["Learning", "Inference"]
                 .map(type => {
-                  const typeCount = 0;
                   const lowercase = type.toLowerCase();
                   return (
                     <div key={lowercase} className="col s3 valign">
@@ -50,7 +48,7 @@ export class ResultsTableControls extends React.Component {
                           type="checkbox" className="filled-in"
                           checked={this.props.typeFilters.get(lowercase)}
                           onChange={evt => this.props.updateTypeFilter(evt.target.value)}/>
-                      <label htmlFor={`${lowercase}Filter`}>{`${type} (${typeCount})`}</label>
+                        <label htmlFor={`${lowercase}Filter`}>{`${type} (${typeCount[lowercase]})`}</label>
                     </div>
                   )
                 })
@@ -69,13 +67,12 @@ export class ResultsTableControls extends React.Component {
                 .map(status => {
                   const lowercase = status.toLowerCase();
                   const statusKey = `task-${lowercase}`;
-                  const statusCount = 0;//tasksProps["status"][statusKey];
                   return (
                     <div key={status} className="col s3">
                       <input id={`${lowercase}Filter`} value={statusKey} type="checkbox" className="filled-in"
                         checked={this.props.statusFilters.get(statusKey)}
                         onChange={evt => this.props.updateStatusFilter(evt.target.value)}/>
-                      <label htmlFor={`${lowercase}Filter`}>{`${status} (${statusCount})`}</label>
+                      <label htmlFor={`${lowercase}Filter`}>{`${status} (${statusCount[statusKey]})`}</label>
                     </div>
                   );
                 })
