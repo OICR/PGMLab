@@ -1,5 +1,6 @@
 import React from "react";
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow} from "material-ui/Table";
+import ResultsTableRow from "./ResultsTableRow.jsx";
 var moment = require("moment");
 
 export class ResultsTableBody extends React.Component {
@@ -26,6 +27,18 @@ export class ResultsTableBody extends React.Component {
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true} preScanRows={false}>
+          {
+            this.props.tasks.valueSeq()
+              .filter(t => t.get("task_id").includes(this.props.idFilter))
+              .filter(t => this.props.typeFilters.get(t.get("task_type")))
+              .filter(t => this.props.statusFilters.get(t.get("status")))
+              .sort(
+                (t1,t2) => this.props.dateSort === "descending" ?
+                  (moment(t1.get("submit_datetime")).isAfter(t2.get("submit_datetime")) ? -1:1):
+                  (moment(t1.get("submit_datetime")).isBefore(t2.get("submit_datetime")) ? -1:1)
+              )
+              .map(t => <ResultsTableRow key={t.get("task_id")} task={t}/>)
+          }
         </TableBody>
       </Table>
     );

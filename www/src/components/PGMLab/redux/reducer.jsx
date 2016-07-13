@@ -1,16 +1,24 @@
-import {Map} from "immutable";
+import {Map, fromJS} from "immutable";
 
 function setState(state, newState){
   return state.merge(newState);
 }
+
+// Construct tasks data as immutable
+function setTasks(state, action){
+  const tasksI = fromJS(action.tasks);
+  // console.log(tasksI);
+  return state.update("tasks", tasks=>tasksI);
+}
+
 // Updates string value in state.idFilter
 function setIDFilter(state, action){
-  console.log(action);
-  return state.set("idFilter", action.text);
+  // console.log(action);
+  return state.update("idFilter", idText=>action.text);
 }
 // Toggles boolean in state.typeFilters
 function setTypeFilter(state, action){
-  console.log(action, state);
+  // console.log(action, state);
   return state.updateIn(
     ["typeFilters", action.runType],
     typeOn => !typeOn
@@ -25,7 +33,7 @@ function setStatusFilter(state, action){
 }
 // Toggles date sorting between 'ascending'||'descending'
 function setDateSort(state, action){
-  return state.update("dateSort", ()=>action.sort);
+  return state.update("dateSort", dateSort=>action.sort);
 }
 
 function TEST(state, action){
@@ -42,6 +50,10 @@ export default function(state = Map(), action) {
       return setState(state, action.state);
     case "TEST":
       return TEST(state, action);
+    // Getting and updating tasks data in state
+    case "SET_TASKS":
+      return setTasks(state, action);
+    // Results Control
     case "UPDATE_ID_FILTER":
       return setIDFilter(state, action);
     case "TOGGLE_TYPE_FILTER":

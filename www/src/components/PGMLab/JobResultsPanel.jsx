@@ -110,6 +110,7 @@ export class JobResultsPanel extends React.Component {
       .call("celery.tasks")
       .then(tasks => {
         console.log("...celery.tasks: ", tasks)
+        this.props.setTasksInState(tasks);
         this.setState({tasks});
       })
   }

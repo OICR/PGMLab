@@ -3,15 +3,32 @@ import React from "react";
 export class ResultsTableControls extends React.Component {
   constructor(props){
     super(props);
-    console.log(this.props)
+    // Count different types of tasks to display next to filters
+    this.clusterTasks = this.clusterTasks.bind(this);
+  }
+  clusterTasks(){
+    return this.props.tasks
+      .filter(t => t.get("task_id").includes(this.props.idFilter))
+      .reduce(
+        (clusters, t) => {
+          clusters["typeCount"][t.get("task_type")]++;
+          clusters["statusCount"][t.get("status")]++;
+          return clusters;
+        },{
+          typeCount: {"learning":0,"inference":0},
+          statusCount: {"task-received":0,"task-started":0,"task-succeeded":0,"task-failed":0}
+        }
+      );
   }
 
   render(){
     const noVertMargin = {marginBottom: "0px", marginTop: "0px"};
+    const {typeCount, statusCount} = this.clusterTasks();
+    console.log(typeCount, statusCount)
     const idFilter = (
       <div className="row" style={noVertMargin}>
-        <form>
-          <input id="idFilter" style={{paddingBottom: "0px"}}
+        <form className="row">
+          <input id="idFilter" style={{paddingBottom: "0px"}} className="col s10 offset-s1"
             value={this.props.idFilter} type="text" placeholder="Filter by ID"
             onChange={evt => this.props.updateIDFilter(evt.target.value.toLowerCase())} />
         </form>
