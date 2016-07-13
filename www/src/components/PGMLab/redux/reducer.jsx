@@ -16,6 +16,17 @@ function setTypeFilter(state, action){
     typeOn => !typeOn
   );
 }
+// Toggles boolean in state.statusFilters
+function setStatusFilter(state, action){
+  return state.updateIn(
+    ["statusFilters", action.status],
+    statusOn => !statusOn
+  );
+}
+// Toggles date sorting between 'ascending'||'descending'
+function setDateSort(state, action){
+  return state.update("dateSort", ()=>action.sort);
+}
 
 function TEST(state, action){
   console.log("...TEST: ")
@@ -35,6 +46,10 @@ export default function(state = Map(), action) {
       return setIDFilter(state, action);
     case "TOGGLE_TYPE_FILTER":
       return setTypeFilter(state, action);
+    case "TOGGLE_STATUS_FILTER":
+      return setStatusFilter(state, action);
+    case "TOGGLE_DATE_SORT":
+      return setDateSort(state, action);
   }
   return state;
 }

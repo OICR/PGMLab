@@ -17,3 +17,17 @@ export function updateTypeFilter(runType) {
     runType
   }
 }
+
+export function updateStatusFilter(status) {
+  return {
+    type: "TOGGLE_STATUS_FILTER",
+    status
+  }
+}
+
+export function updateDateSort(sort) {
+  return {
+    type: "TOGGLE_DATE_SORT",
+    sort
+  }
+}

@@ -1,11 +1,10 @@
-
-import React from 'react'
+import React from 'react';
 
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
-import {JobSubmitForm} from "./JobSubmitForm.jsx"
-import {JobResultTable} from "./JobResultTable.jsx"
+import {JobSubmitPanel} from "./JobSubmitPanel.jsx";
+import {JobResultsPanel} from "./JobResultsPanel.jsx";
 
 export class Body extends React.Component {
     constructor(props) {
@@ -17,8 +16,8 @@ export class Body extends React.Component {
         <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="grey lighten-4">
           <div className="row" style={noMargin}>
-            <JobSubmitForm/>
-            <JobResultTable {...this.props}/>
+            <JobSubmitPanel/>
+            <JobResultsPanel {...this.props}/>
           </div>
         </main>
         </MuiThemeProvider>

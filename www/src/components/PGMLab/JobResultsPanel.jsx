@@ -2,9 +2,10 @@ import React from "react";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
 var moment = require("moment");
 
-import {TableControls} from "./TableControls.jsx";
+import {ResultsTableControls} from "./ResultsTableControls.jsx";
+import {ResultsTableBody} from "./ResultsTableBody.jsx";
 
-export class JobResultTable extends React.Component {
+export class JobResultsPanel extends React.Component {
   constructor(props){
     super(props);
     console.log("...JobResultTable.props: ", this.props);
@@ -269,10 +270,13 @@ export class JobResultTable extends React.Component {
       <div className="col s9">
         <div className="card-panel">
           <div className="section">
-            {this.tableProperties()}
+            <ResultsTableControls {...this.props} />
           </div>
           <div className="section">
-            <TableControls {...this.props} />
+            <ResultsTableBody {...this.props} />
+          </div>
+          <div className="section">
+            {this.tableProperties()}
           </div>
           <div className="section">
             {this.tasksTable()}

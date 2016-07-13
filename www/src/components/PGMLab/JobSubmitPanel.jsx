@@ -1,10 +1,9 @@
 import React from "react"
-// import 'rc-tabs/assets/index.css'
-// import Tabs, { TabPane } from 'rc-tabs'
+
 import {InferenceSubmit} from "./InferenceSubmit.jsx"
 import {LearningSubmit} from "./LearningSubmit.jsx"
 
-export class JobSubmitForm extends React.Component {
+export class JobSubmitPanel extends React.Component {
   constructor(props){
     super(props);
   }
