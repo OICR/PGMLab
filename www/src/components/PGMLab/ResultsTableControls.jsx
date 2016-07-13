@@ -1,11 +1,11 @@
 import React from "react";
 
-export class ResultsTableControls extends React.Component {
+export default class ResultsTableControls extends React.Component {
   constructor(props){
     super(props);
-    // Count different types of tasks to display next to filters
     this.clusterTasks = this.clusterTasks.bind(this);
   }
+  // Count different types of tasks to display next to filters
   clusterTasks(){
     return this.props.tasks
       .filter(t => t.get("task_id").includes(this.props.idFilter))

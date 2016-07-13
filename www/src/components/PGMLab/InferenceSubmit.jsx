@@ -19,9 +19,11 @@ export class InferenceSubmit extends React.Component {
       data: new FormData(this.refs.inferenceForm),
       success: (data, textStatus, jqXHR) => {
         console.log("...inference task submitted: ", data)
+        return;
       },
       error: (jqXHR, textStatus, error) => {
         console.log("...inference task error: ", jqXHR, textStatus, error);
+        return;
       }
     })
   }

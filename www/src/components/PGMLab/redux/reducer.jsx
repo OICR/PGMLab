@@ -1,5 +1,6 @@
 import {Map, fromJS} from "immutable";
 
+// Standard setState
 function setState(state, newState){
   return state.merge(newState);
 }
@@ -7,18 +8,15 @@ function setState(state, newState){
 // Construct tasks data as immutable
 function setTasks(state, action){
   const tasksI = fromJS(action.tasks);
-  // console.log(tasksI);
   return state.update("tasks", ()=>fromJS(action.tasks));
 }
 
 // Updates string value in state.idFilter
 function setIDFilter(state, action){
-  // console.log(action);
   return state.update("idFilter", ()=>action.text);
 }
 // Toggles boolean in state.typeFilters
 function setTypeFilter(state, action){
-  // console.log(action, state);
   return state.updateIn(
     ["typeFilters", action.runType],
     typeOn => !typeOn
@@ -38,7 +36,6 @@ function setDateSort(state, action){
 
 // Adds a task (for SSE)
 function addTask(state, action){
-  console.log(action);
   return state.setIn(
     ["tasks", action["taskDetails"]["task_id"]],
     fromJS(action["taskDetails"])
@@ -46,7 +43,6 @@ function addTask(state, action){
 }
 // Update a task (for SSE)
 function updateTask(state, action){
-  console.log(action);
   return state.updateIn(
     ["tasks", action["updateDetails"]["task_id"], "status"],
     ()=>action["updateDetails"]["task_status"]
@@ -54,7 +50,7 @@ function updateTask(state, action){
 }
 
 export default function(state = Map(), action) {
-  console.log(`...action: ${action.type}`)
+  console.log(`...action:`, action)
   switch (action.type) {
     case "SET_INITIAL_STATE":
       return setState(state, action.initialState)

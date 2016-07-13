@@ -3,7 +3,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow} from "materi
 import ResultsTableRow from "./ResultsTableRow.jsx";
 var moment = require("moment");
 
-export class ResultsTableBody extends React.Component {
+export default class ResultsTableBody extends React.Component {
   constructor(props){
     super(props);
   }

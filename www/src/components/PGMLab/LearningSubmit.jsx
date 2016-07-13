@@ -20,9 +20,11 @@ export class LearningSubmit extends React.Component {
       data: new FormData(this.refs.learningForm),
       success: (data, textStatus, jqXHR) => {
         console.log("...learning task submitted: ", data)
+        return;
       },
       error: (jqXHR, textStatus, error) => {
         console.log("...learning task error: ", jqXHR, textStatus, error);
+        return;
       }
     });
   }
