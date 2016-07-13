@@ -91,16 +91,18 @@ export class JobResultsPanel extends React.Component {
     var eventSource = new EventSource("celery");
     eventSource.addEventListener(
       "celery.task.add",
-      (e) => {
-        console.log(JSON.parse(e.data));
-        this.addTask(JSON.parse(e.data));
+      (evt) => {
+        console.log(JSON.parse(evt.data));
+        this.props.addTaskInState(JSON.parse(evt.data));
+        this.addTask(JSON.parse(evt.data));
       }
     );
     eventSource.addEventListener(
       "celery.task.update",
-      (e) => {
-        console.log(JSON.parse(e.data));
-        this.updateTask(JSON.parse(e.data));
+      (evt) => {
+        console.log(JSON.parse(evt.data));
+        this.props.updateTaskInState(JSON.parse(evt.data));
+        this.updateTask(JSON.parse(evt.data));
       }
     );
     console.log("...EventSource for SSE: ", eventSource)

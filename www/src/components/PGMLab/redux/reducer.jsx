@@ -8,13 +8,13 @@ function setState(state, newState){
 function setTasks(state, action){
   const tasksI = fromJS(action.tasks);
   // console.log(tasksI);
-  return state.update("tasks", tasks=>tasksI);
+  return state.update("tasks", ()=>fromJS(action.tasks));
 }
 
 // Updates string value in state.idFilter
 function setIDFilter(state, action){
   // console.log(action);
-  return state.update("idFilter", idText=>action.text);
+  return state.update("idFilter", ()=>action.text);
 }
 // Toggles boolean in state.typeFilters
 function setTypeFilter(state, action){
@@ -33,12 +33,24 @@ function setStatusFilter(state, action){
 }
 // Toggles date sorting between 'ascending'||'descending'
 function setDateSort(state, action){
-  return state.update("dateSort", dateSort=>action.sort);
+  return state.update("dateSort", ()=>action.sort);
 }
 
-function TEST(state, action){
-  console.log("...TEST: ")
-  return state
+// Adds a task (for SSE)
+function addTask(state, action){
+  console.log(action);
+  return state.setIn(
+    ["tasks", action["taskDetails"]["task_id"]],
+    fromJS(action["taskDetails"])
+  );
+}
+// Update a task (for SSE)
+function updateTask(state, action){
+  console.log(action);
+  return state.updateIn(
+    ["tasks", action["updateDetails"]["task_id"], "status"],
+    ()=>action["updateDetails"]["task_status"]
+  );
 }
 
 export default function(state = Map(), action) {
@@ -46,10 +58,6 @@ export default function(state = Map(), action) {
   switch (action.type) {
     case "SET_INITIAL_STATE":
       return setState(state, action.initialState)
-    case "SET_STATE":
-      return setState(state, action.state);
-    case "TEST":
-      return TEST(state, action);
     // Getting and updating tasks data in state
     case "SET_TASKS":
       return setTasks(state, action);
@@ -62,6 +70,11 @@ export default function(state = Map(), action) {
       return setStatusFilter(state, action);
     case "TOGGLE_DATE_SORT":
       return setDateSort(state, action);
+    // SSE events
+    case "ADD_TASK":
+      return addTask(state, action);
+    case "UPDATE_TASK":
+      return updateTask(state, action);
   }
   return state;
 }

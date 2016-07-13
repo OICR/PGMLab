@@ -35,3 +35,16 @@ export function setTasksInState(tasks){
     tasks
   }
 }
+
+export function addTaskInState(taskDetails){
+  return {
+    type: "ADD_TASK",
+    taskDetails
+  }
+}
+export function updateTaskInState(updateDetails){
+  return {
+    type: "UPDATE_TASK",
+    updateDetails
+  }
+}
