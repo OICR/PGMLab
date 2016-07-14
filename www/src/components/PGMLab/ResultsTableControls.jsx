@@ -36,7 +36,7 @@ export default class ResultsTableControls extends React.Component {
     );
     const typeFilters = (
       <div className="row" style={noVertMargin}>
-        <div className="col s1 valign">{"Type:"}</div>
+        <div className="col s1 valign grey-text">{"Type:"}</div>
         <div className="col s11 valign">
           <form className="row">
             {
@@ -49,7 +49,7 @@ export default class ResultsTableControls extends React.Component {
                           type="checkbox" className="filled-in"
                           checked={this.props.typeFilters.get(lowercase)}
                           onChange={evt => this.props.updateTypeFilter(evt.target.value)}/>
-                        <label htmlFor={`${lowercase}Filter`}>{`${type} (${typeCount[lowercase]})`}</label>
+                        <label className="black-text" htmlFor={`${lowercase}Filter`}>{`${type} (${typeCount[lowercase]})`}</label>
                     </div>
                   )
                 })
@@ -60,7 +60,7 @@ export default class ResultsTableControls extends React.Component {
     );
     const statusFilters = (
       <div className="row" style={noVertMargin}>
-        <div className="col s1">{"Status:"}</div>
+        <div className="col s1 grey-text">{"Status:"}</div>
         <div className="col s11">
           <form className="row">
             {
@@ -73,7 +73,7 @@ export default class ResultsTableControls extends React.Component {
                       <input id={`${lowercase}Filter`} value={statusKey} type="checkbox" className="filled-in"
                         checked={this.props.statusFilters.get(statusKey)}
                         onChange={evt => this.props.updateStatusFilter(evt.target.value)}/>
-                      <label htmlFor={`${lowercase}Filter`}>{`${status} (${statusCount[statusKey]})`}</label>
+                      <label className="black-text" htmlFor={`${lowercase}Filter`}>{`${status} (${statusCount[statusKey]})`}</label>
                     </div>
                   );
                 })
@@ -84,7 +84,7 @@ export default class ResultsTableControls extends React.Component {
     );
     const dateSort = (
       <div className="row" style={noVertMargin}>
-        <div className="col s1">{"Date:"}</div>
+        <div className="col s1 grey-text">{"Date:"}</div>
         <div className="col s11">
           <form className="row">
             {
@@ -96,7 +96,7 @@ export default class ResultsTableControls extends React.Component {
                       <input id={`${lowercase}Order`} name="dateSort" value={lowercase} type="radio"
                         checked={this.props.dateSort===lowercase}
                         onChange={evt => this.props.updateDateSort(evt.target.value)}/>
-                      <label htmlFor={`${lowercase}Order`}>{`${sort}`}</label>
+                      <label className="black-text" htmlFor={`${lowercase}Order`}>{`${sort}`}</label>
                     </div>
                   );
                 })
