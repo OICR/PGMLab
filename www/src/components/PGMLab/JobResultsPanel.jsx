@@ -36,15 +36,12 @@ export class JobResultsPanel extends React.Component {
       })
   }
   render(){
+    const noVertPadding = {paddingBottom: "0px", paddingTop: "0px"};
     return (
       <div className="col s9">
         <div className="card-panel">
-          <div className="section">
             <ResultsTableControls {...this.props} />
-          </div>
-          <div className="section">
             <ResultsTableBody {...this.props} />
-          </div>
         </div>
       </div>
     );
