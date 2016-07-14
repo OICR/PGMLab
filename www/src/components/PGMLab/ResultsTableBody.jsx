@@ -9,21 +9,6 @@ export default class ResultsTableBody extends React.Component {
   }
 
   render(){
-    const tasks = this.props.tasks.valueSeq()
-      .filter(t => t.get("task_id").includes(this.props.idFilter))
-      .filter(t => this.props.typeFilters.get(t.get("task_type")))
-      .filter(t => this.props.statusFilters.get(t.get("status")))
-      .sort(
-        (t1,t2) => this.props.dateSort === "descending" ?
-          (moment(t1.get("submit_datetime")).isAfter(t2.get("submit_datetime")) ? -1:1):
-          (moment(t1.get("submit_datetime")).isBefore(t2.get("submit_datetime")) ? -1:1)
-      );
-    const rows = (
-      <TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true} preScanRows={false}>
-        {tasks.map(t => <ResultsTableRow key={t.get("task_id")} task={t}></ResultsTableRow>)}
-      </TableBody>
-    );
-
     return (
       <Table selectable={false} height={"400px"}>
         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -41,9 +26,20 @@ export default class ResultsTableBody extends React.Component {
             <TableHeaderColumn tooltip={"Download zip package"}>{"Results"}</TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true} preScanRows={false}
-          children={tasks.map(t => <ResultsTableRow key={t.get("task_id")} task={t}></ResultsTableRow>)}
-          />
+        <TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true} preScanRows={false}>
+          {
+            this.props.tasks.valueSeq()
+              .filter(t => t.get("task_id").includes(this.props.idFilter))
+              .filter(t => this.props.typeFilters.get(t.get("task_type")))
+              .filter(t => this.props.statusFilters.get(t.get("status")))
+              .sort(
+                (t1,t2) => this.props.dateSort === "descending" ?
+                  (moment(t1.get("submit_datetime")).isAfter(t2.get("submit_datetime")) ? -1:1):
+                  (moment(t1.get("submit_datetime")).isBefore(t2.get("submit_datetime")) ? -1:1)
+              )
+              .map(t => <ResultsTableRow key={t.get("task_id")} task={t}></ResultsTableRow>)
+          }
+        </TableBody>
       </Table>
     );
   }
