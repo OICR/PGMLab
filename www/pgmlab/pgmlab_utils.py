@@ -1,6 +1,7 @@
 import subprocess
 import os
 import shutil
+import datetime
 cwd = os.getcwd()
 pgmlab_path = cwd+"/../../bin/pgmlab"
 from celery.exceptions import InvalidTaskError
@@ -10,13 +11,13 @@ def system_call(command):
     p.wait()
     return str(p.returncode)
 
-def generate_pairwise_interaction(run_path, pi_file):
+def write_pairwise_interaction(run_path, pi_file):
     pi_filepath = run_path+"pathway.pi"
     pi = open(pi_filepath, "w")
     pi.write(pi_file)
     pi.close()
 
-def generate_observation(run_path, obs_file, run_type):
+def write_observation(run_path, obs_file, run_type):
     obs_filepath = run_path+run_type+".obs"
     obs = open(obs_filepath, "w")
     obs.write(obs_file)
@@ -30,7 +31,7 @@ def learning(run_path, number_states, log_likelihood_change_limit, em_max_iterat
     command = "{0} --learning --pairwise-interaction-file={1}pathway.pi --logical-factorgraph-file={1}logical.fg --learning-observed-data-file={1}learning.obs --estimated-parameters-file={1}learnt.fg --number-of-states {2} --log-likelihood-change-limit={3} --em-max-iterations={4}".format(pgmlab_path,run_path,number_states,log_likelihood_change_limit,em_max_iterations)
     return system_call(command)
 
-def generate_learnt_factorgraph(run_path, lfg_file):
+def write_learnt_factorgraph(run_path, lfg_file):
     lfg_filepath = run_path+"learnt.fg"
     lfg = open(lfg_filepath, "w")
     lfg.write(lfg_file)
@@ -44,16 +45,19 @@ def inference(run_path, number_states, fg="logical.fg"):
 #  Pairwise, Observations, Factorgraph
 #  Learning || Inference
 #  Package to download
+def write_info(run_path):
+    info_filepath = run_path+"info.txt"
+
 # LEARNING
 def learning_task(task_id, run_path, package_path, kwargs):
     os.mkdir(run_path)
     # Pairwise interaction
     pi_file = kwargs["pi_file"]
-    generate_pairwise_interaction(run_path, pi_file)
+    write_pairwise_interaction(run_path, pi_file)
     # Observation
     obs_file = kwargs["obs_file"]
     run_type = kwargs["task_type"]
-    generate_observation(run_path, obs_file, run_type)
+    write_observation(run_path, obs_file, run_type)
     # Factorgraph
     return_code = generate_logical_factorgraph(run_path)
     if return_code != "0":
@@ -73,18 +77,18 @@ def inference_task(task_id, run_path, package_path, kwargs):
     os.mkdir(run_path)
     # Pairwise Interaction
     pi_file = kwargs["pi_file"]
-    generate_pairwise_interaction(run_path, pi_file)
+    write_pairwise_interaction(run_path, pi_file)
     # Observation
     obs_file = kwargs["obs_file"]
     run_type = kwargs["task_type"]
-    generate_observation(run_path, obs_file, run_type)
+    write_observation(run_path, obs_file, run_type)
     # Logical (|| Learnt) Factorgraph
     return_code = generate_logical_factorgraph(run_path)
     if return_code != "0":
         raise InvalidTaskError()
     lfg_file = kwargs["lfg_file"]
     if lfg_file != "":
-        generate_learnt_factorgraph(run_path, lfg_file)
+        write_learnt_factorgraph(run_path, lfg_file)
         fg_name = "learnt.fg"
     else:
         fg_name = "logical.fg"
