@@ -14,14 +14,14 @@ from klein import Klein
 klein = Klein()
 resource = klein.resource
 
-# # HOST HTML
-# @klein.route("/pgmlab.html")
-# def home(request):
-#     return File("../pgmlab.html")
-# # HOST JS
-# @klein.route("/", branch=True)
-# def js(request):
-#     return File("../js/")
+# HOST HTML
+@klein.route("/pgmlab.html")
+def home(request):
+    return File("../pgmlab.html")
+# HOST JS
+@klein.route("/", branch=True)
+def js(request):
+    return File("../js/")
 # HOST RESULTS FOR DOWNLOAD
 @klein.route("/results/<task_id>")
 def result(request, task_id):
