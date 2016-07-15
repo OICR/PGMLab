@@ -58,17 +58,16 @@ def inference(run_path, number_states, fg="logical.fg"):
 #  Learning || Inference
 #  Package to download
 def write_info_file(run_path, meta_info):
-    info_filepath = run_path+"info.txt"
+    info_filepath = run_path+"pgmlab.log"
+    if meta_info["task_kwargs"]["task_type"] == "learning":
+        meta_info["task_kwargs"]["lfg_filename"]=""
+        meta_info["task_kwargs"]["lfg_file"]=""
     with open(info_filepath, "w") as info:
-        print(filepath, meta_info)
-        header = "\
-        PGMLAB (www.github.com/OICR/PGMLab)\n\
-        Authors: Hossein Radfar, Adam Wright, Martin Pham\n\
-        This file provides information related to tasks queued on PGMLab\n\n"
+        header = "PGMLAB (www.github.com/OICR/PGMLab)\nAuthors: Hossein Radfar, Adam Wright, Martin Pham\nThis file provides information related to tasks queued on PGMLab\n\n"
         info.write(header)
         task_info = {
             "PGMLab job type": meta_info["task_kwargs"]["task_type"],
-            "Task ID": meta_info["task_id"],
+            "Job queue ID": meta_info["task_id"],
             "Job submitted": meta_info["task_kwargs"]["submit_datetime"],
             "Pairwise interaction file": meta_info["task_kwargs"]["pi_filename"],
             "Observation file": meta_info["task_kwargs"]["obs_filename"],
@@ -77,25 +76,25 @@ def write_info_file(run_path, meta_info):
             "Expectation-maximization max iterations": meta_info["task_kwargs"]["max_iterations"] if meta_info["task_kwargs"]["task_type"]=="learning" else "N/A",
             "Learnt factorgraph file (optional)": meta_info["task_kwargs"]["lfg_filename"] if meta_info["task_kwargs"]["task_type"]=="inference" else "N/A"
         }
-        t_padding = max(map(len,task_info))
+        title_width = max(map(len,task_info))
+        info.write("JOB SUBMISSION PARAMETERS...\n")
         for title, val in task_info.items():
-            info.write("{title:t_padding} ==> {val}\n".format(title=title, val=val))
+            info.write("{title:<{col1}} ==> {val}\n".format(title=title, val=val, col1=title_width))
         info.write("\n")
         runtime_info = {
-            "{}".format(meta_info["task_kwargs"]["task_type"].capitalize()): {
-                "runtime": meta_info["pgm_runtime"],
-                "command": meta_info["pgm_command"]
-            },
             "Factorgraph": {
                 "runtime": meta_info["lfg_runtime"] if meta_info["task_kwargs"]["lfg_file"]=="" else "Supplied learnt factorgraph ({}) used".format(meta_info["task_kwargs"]["lfg_filename"]),
                 "command": meta_info["lfg_command"]
+            },
+            "{}".format(meta_info["task_kwargs"]["task_type"].capitalize()): {
+                "runtime": meta_info["pgm_runtime"],
+                "command": meta_info["pgm_command"]
             }
         }
-        r_padding = max(map(len,runtime_info))
+        title_width = max(map(len,runtime_info))
+        info.write("PGMLAB COMMANDS USED...\n")
         for title, val in runtime_info.items():
-            info.write("{title:r_padding}")
-
-
+            info.write("{title:<{col1}} ==> {runtime}\n{command}\n".format(title=title, runtime=val["runtime"], command=val["command"], col1=title_width))
 
 # LEARNING
 def learning_task(task_id, run_path, package_path, kwargs):
