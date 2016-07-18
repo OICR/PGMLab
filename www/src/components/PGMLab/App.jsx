@@ -5,7 +5,7 @@ import * as actionCreators from "./redux/action_creators.jsx";
 var moment = require('moment');
 
 import Header from './Header.jsx';
-import Body   from './BodyPGMLab.jsx';
+import Body from './BodyPGMLab.jsx';
 import Footer from './Footer.jsx';
 
 export class App extends  React.Component {
