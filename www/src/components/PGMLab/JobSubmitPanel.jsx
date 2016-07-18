@@ -1,7 +1,6 @@
 import React from "react"
-
-import {InferenceSubmit} from "./InferenceSubmit.jsx"
-import {LearningSubmit} from "./LearningSubmit.jsx"
+import InferenceSubmit from "./InferenceSubmit.jsx"
+import LearningSubmit from "./LearningSubmit.jsx"
 
 export class JobSubmitPanel extends React.Component {
   constructor(props){

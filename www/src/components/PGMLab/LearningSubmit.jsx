@@ -1,6 +1,6 @@
 import React from "react"
 
-export class LearningSubmit extends React.Component {
+export default class LearningSubmit extends React.Component {
   constructor(props){
     super(props);
     this.state = {

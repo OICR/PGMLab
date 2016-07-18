@@ -6,7 +6,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import {JobSubmitPanel} from "./JobSubmitPanel.jsx";
 import {JobResultsPanel} from "./JobResultsPanel.jsx";
 
-export class Body extends React.Component {
+export default class Body extends React.Component {
     constructor(props) {
         super(props)
     }

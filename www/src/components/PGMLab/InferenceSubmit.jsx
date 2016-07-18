@@ -1,6 +1,6 @@
 import React from "react"
 
-export class InferenceSubmit extends React.Component {
+export default class InferenceSubmit extends React.Component {
   constructor(props){
     super(props);
     this.state = {
