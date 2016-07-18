@@ -48,3 +48,11 @@ export function updateTaskInState(updateDetails){
     updateDetails
   }
 }
+
+// NOTIFY ON JOB SUBMIT
+export function snackbarNotify(message){
+  return {
+    type: "SNACKBAR_NOTIFY",
+    message
+  }
+}

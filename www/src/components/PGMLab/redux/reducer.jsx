@@ -7,8 +7,7 @@ function setState(state, newState){
 
 // Construct tasks data as immutable
 function setTasks(state, action){
-  const tasksI = fromJS(action.tasks);
-  return state.update("tasks", ()=>fromJS(action.tasks));
+  return state.update("tasks", () => fromJS(action.tasks));
 }
 
 // Toggle faceted search show/hide
@@ -17,7 +16,7 @@ function toggleFaceted(state, action){
 }
 // Updates string value in state.idFilter
 function setIDFilter(state, action){
-  return state.update("idFilter", ()=>action.text);
+  return state.update("idFilter", () => action.text);
 }
 // Toggles boolean in state.typeFilters
 function setTypeFilter(state, action){
@@ -35,7 +34,7 @@ function setStatusFilter(state, action){
 }
 // Toggles date sorting between 'ascending'||'descending'
 function setDateSort(state, action){
-  return state.update("dateSort", ()=>action.sort);
+  return state.update("dateSort", () => action.sort);
 }
 
 // Adds a task (for SSE)
@@ -49,8 +48,13 @@ function addTask(state, action){
 function updateTask(state, action){
   return state.updateIn(
     ["tasks", action["updateDetails"]["task_id"], "status"],
-    ()=>action["updateDetails"]["task_status"]
+    () => action["updateDetails"]["task_status"]
   );
+}
+
+// Snackbar notify on job submit
+function notify(state, action){
+  return state.update("snackbarMessage", () => action.message);
 }
 
 export default function(state = Map(), action) {
@@ -77,6 +81,9 @@ export default function(state = Map(), action) {
       return addTask(state, action);
     case "UPDATE_TASK":
       return updateTask(state, action);
+    // Snackbar notification for job submission
+    case "SNACKBAR_NOTIFY":
+      return notify(state, action);
   }
   return state;
 }

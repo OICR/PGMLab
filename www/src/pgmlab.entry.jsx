@@ -54,7 +54,8 @@ function initializeApp(session){
         "task-failed": true
       }),
       dateSort: "descending",
-      idFilter: ""
+      idFilter: "",
+      snackbarMessage: "Welcome to PGMLab job submission and queueing"
     }
   });
   render(

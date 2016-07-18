@@ -20,11 +20,11 @@ export default class LearningSubmit extends React.Component {
       data: new FormData(this.refs.learningForm),
       success: (data, textStatus, jqXHR) => {
         console.log("...learning task submitted: ", data)
-        return;
+        this.props.snackbarNotify(`Queued job: ${data}`);
       },
       error: (jqXHR, textStatus, error) => {
         console.log("...learning task error: ", jqXHR, textStatus, error);
-        return;
+        this.props.snackbarNotify("Unable to submit task. Please try again");
       }
     });
   }

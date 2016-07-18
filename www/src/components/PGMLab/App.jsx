@@ -32,7 +32,8 @@ function mapStateToProps(state) {
     typeFilters: state.get("typeFilters"),
     statusFilters: state.get("statusFilters"),
     dateSort: state.get("dateSort"),
-    idFilter: state.get("idFilter")
+    idFilter: state.get("idFilter"),
+    snackbarMessage: state.get("snackbarMessage")
   };
 }
 
