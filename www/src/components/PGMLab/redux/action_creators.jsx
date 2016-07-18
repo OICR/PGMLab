@@ -1,6 +1,7 @@
-export function TEST(){
+// FACETED SEARCH ACTIONS
+export function toggleFacetedSearch(){
   return {
-    type: "TEST"
+    type: "TOGGLE_FACETED"
   }
 }
 export function updateIDFilter(text){
@@ -9,7 +10,6 @@ export function updateIDFilter(text){
     text
   }
 }
-
 export function updateTypeFilter(runType){
   return {
     type: "TOGGLE_TYPE_FILTER",
@@ -29,13 +29,13 @@ export function updateDateSort(sort){
   }
 }
 
+// TABLE RESULTS UPDATING ACTIONS
 export function setTasksInState(tasks){
   return {
     type: "SET_TASKS",
     tasks
   }
 }
-
 export function addTaskInState(taskDetails){
   return {
     type: "ADD_TASK",

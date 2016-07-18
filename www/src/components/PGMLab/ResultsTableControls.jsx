@@ -24,11 +24,12 @@ export default class ResultsTableControls extends React.Component {
   render(){
     const noVertMargin = {marginBottom: "0px", marginTop: "0px"};
     const noVertPadding = {paddingBottom: "0px", paddingTop: "0px"};
+    const noVertSpace = Object.assign({},noVertMargin,noVertPadding)
     const {typeCount, statusCount} = this.clusterTasks();
     const idFilter = (
       <div className="row" style={noVertMargin}>
-        <form className="row">
-          <input id="idFilter" style={{paddingBottom: "0px"}} className="col s12"
+        <form className="col s12">
+          <input id="idFilter" style={{paddingBottom: "0px"}}
             value={this.props.idFilter} type="text" placeholder="Filter by ID"
             onChange={evt => this.props.updateIDFilter(evt.target.value.toLowerCase())} />
         </form>
@@ -106,7 +107,7 @@ export default class ResultsTableControls extends React.Component {
       </div>
     );
     return (
-      <div className="card-panel z-depth-0" style={Object.assign({},noVertMargin,noVertPadding)}>
+      <div style={noVertSpace}>
         {idFilter}
         {typeFilters}
         {statusFilters}

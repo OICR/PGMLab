@@ -11,6 +11,10 @@ function setTasks(state, action){
   return state.update("tasks", ()=>fromJS(action.tasks));
 }
 
+// Toggle faceted search show/hide
+function toggleFaceted(state, action){
+  return state.update("showFaceted", showFaceted => !showFaceted);
+}
 // Updates string value in state.idFilter
 function setIDFilter(state, action){
   return state.update("idFilter", ()=>action.text);
@@ -58,6 +62,8 @@ export default function(state = Map(), action) {
     case "SET_TASKS":
       return setTasks(state, action);
     // Results Control
+    case "TOGGLE_FACETED":
+      return toggleFaceted(state, action);
     case "UPDATE_ID_FILTER":
       return setIDFilter(state, action);
     case "TOGGLE_TYPE_FILTER":

@@ -28,6 +28,7 @@ function mapStateToProps(state) {
   return {
     session: state.get("session"),
     tasks: state.get("tasks"),
+    showFaceted: state.get("showFaceted"),
     typeFilters: state.get("typeFilters"),
     statusFilters: state.get("statusFilters"),
     dateSort: state.get("dateSort"),

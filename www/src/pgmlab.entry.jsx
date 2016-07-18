@@ -42,6 +42,7 @@ function initializeApp(session){
     initialState: {
       session,
       tasks: Map(),
+      showFaceted: true,
       typeFilters: Map({
         "learning": true,
         "inference": true
