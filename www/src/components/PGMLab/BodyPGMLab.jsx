@@ -3,8 +3,8 @@ import React from 'react';
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
-import {JobSubmitPanel} from "./JobSubmitPanel.jsx";
-import {JobResultsPanel} from "./JobResultsPanel.jsx";
+import JobSubmitPanel from "./JobSubmitPanel.jsx";
+import JobResultsPanel from "./JobResultsPanel.jsx";
 
 export default class Body extends React.Component {
     constructor(props) {

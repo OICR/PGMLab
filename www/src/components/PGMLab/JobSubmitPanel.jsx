@@ -18,7 +18,7 @@ class SnackbarNotification extends React.Component {
   }
 }
 
-export class JobSubmitPanel extends React.Component {
+export default class JobSubmitPanel extends React.Component {
   constructor(props){
     super(props);
   }

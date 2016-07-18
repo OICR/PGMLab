@@ -4,7 +4,7 @@ import ResultsTableRow from "./ResultsTableRow.jsx";
 import ResultsTableControls from "./ResultsTableControls.jsx"
 var moment = require("moment");
 
-export class JobResultsPanel extends React.Component {
+export default class JobResultsPanel extends React.Component {
   constructor(props){
     super(props);
     this.getTableRows = this.getTableRows.bind(this);
