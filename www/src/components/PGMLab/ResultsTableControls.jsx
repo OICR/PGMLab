@@ -9,6 +9,8 @@ export default class ResultsTableControls extends React.Component {
   clusterTasks(){
     return this.props.tasks
       .filter(t => t.get("task_id").includes(this.props.idFilter))
+      .filter(t => this.props.typeFilters.get(t.get("task_type")))
+      .filter(t => this.props.statusFilters.get(t.get("status")))
       .reduce(
         (clusters, t) => {
           clusters["typeCount"][t.get("task_type")]++;
