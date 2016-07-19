@@ -19,10 +19,19 @@ class AuthWrapper extends React.Component {
   }
   getGoogleButton(){
     const responseGoogle =
-      r => {
-        console.log(r, r.getBasicProfile());
-        if (r.isSignedIn()) {
-          this.props.signIn(r)
+      gAuth => {
+        if (gAuth.isSignedIn()) {
+          const kwargs = {
+            id_token: gAuth.getAuthResponse().id_token,
+            name: gAuth.getBasicProfile().getName(),
+            email: gAuth.getBasicProfile().getEmail()
+          };
+          this.props.session
+            .call("google.auth", [], kwargs)
+            .then(response => {
+              console.log(response)
+              // this.props.signIn(gAuth)
+            })
         };
       };
     const clientId = this.props.auth.get("googleClientId");

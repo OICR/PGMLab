@@ -27,7 +27,7 @@ class Task(Base):
     lfg_filename = Column("lfg_filename", String, default=null())
 
     # USERS
-    user_sub = Column("user_sub", String, ForeignKey("users.sub"))
+    user_sub_uid = Column("user_sub_uid", String, ForeignKey("users.sub_uid"))
     user = relationship("User", back_populates="tasks")
 
     def to_dict(self):
@@ -46,11 +46,10 @@ class Task(Base):
 
 class User(Base):
     __tablename__ = "users"
-    sub = Column("sub", String, primary_key=True) # 'sub' field of id_token from Google
-    name = Column("name", String)
-    email = Column("email", String)
-    tasks = relationship("Task", order_by=Task.submit_datetime, back_populates="users")
-
+    sub_uid = Column("sub_uid", String, primary_key=True) # 'sub' field of id_token from Google
+    name = Column("name", String, default=null())
+    email = Column("email", String, default=null())
+    tasks = relationship("Task", order_by=Task.submit_datetime, back_populates="user")
 
 Base.metadata.create_all(engine)
 
@@ -58,21 +57,27 @@ class DatabaseSessionManager():
     def __init__(self):
         self.session = scoped_session(Session)
         print(self.session)
-
+    # USER AUTHENTICATION
+    def get_user(self, sub_uid):
+        print('users', self.session.query(User).count())
+        return self.session.query(User).get(sub_uid)
+    def register_user(self, sub_uid, name, email):
+        user = User(sub_uid=sub_uid, name=name, email=email)
+        self.session.add(user)
+        self.commit_session()
+    # TASK HANDLING
     def get_all_tasks(self):
         return self.session.query(Task).all()
-
     def add_task(self, task):
         print("...[db] adding task: {}".format(task.to_dict()["task_id"]))
         self.session.add(task)
         self.commit_session()
-
     def update_task(self, task_id, status):
         print("...[db] updating task ({0}): {1}".format(status, task_id))
         task = self.session.query(Task).get(task_id)
         task.status = status
         self.commit_session()
-
+    # COMMIT
     def commit_session(self):
         try:
             print("...[db] committing session")
