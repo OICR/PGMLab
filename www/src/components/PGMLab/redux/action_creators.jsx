@@ -1,3 +1,11 @@
+// AUTHENTICATION
+export function signIn(googleAuth){
+  return {
+    type: "SIGN_IN",
+    googleIdToken: googleAuth.getAuthResponse.id_token
+  }
+}
+
 // FACETED SEARCH ACTIONS
 export function toggleFacetedSearch(){
   return {

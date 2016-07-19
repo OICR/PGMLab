@@ -1,10 +1,10 @@
 import React from "react";
-import { render } from "react-dom";
-import {List, Map} from "immutable";
+import {render} from "react-dom";
+import {Map} from "immutable";
 import {compose, createStore} from "redux";
 import {Provider} from "react-redux";
 import reducer from "./components/PGMLab/redux/reducer.jsx";
-import {AppContainer, App} from "./components/PGMLab/App.jsx"
+import {AppContainer} from "./components/PGMLab/App.jsx"
 
 require("../assets/css/materialize.css");
 require("../assets/css/style.css");
@@ -40,6 +40,11 @@ function initializeApp(session){
   store.dispatch({
     type: "SET_INITIAL_STATE",
     initialState: {
+      auth: Map({
+        signedIn: false,
+        googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com", //Google Console
+        googleIdToken: ""
+      }),
       session,
       tasks: Map(),
       showFaceted: true,
