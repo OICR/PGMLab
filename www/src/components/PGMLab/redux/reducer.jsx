@@ -1,9 +1,10 @@
 import {Map, fromJS} from "immutable";
 
 function setGoogleAuth(state, action){
-  const {googleIdToken} = action;
   const signedIn = true;
-  return state.update("auth", auth => auth.merge({signedIn, googleIdToken}));
+  const {googleIdToken, ...nameEmail} = action;
+  const googleProfile = Map(nameEmail);
+  return state.update("auth", auth => auth.merge({signedIn, googleIdToken, googleProfile}));
 }
 
 // Standard setState

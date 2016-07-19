@@ -42,6 +42,7 @@ function initializeApp(session){
     initialState: {
       auth: Map({
         signedIn: false,
+        googleProfile: Map(),
         googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com", //Google Console
         googleIdToken: ""
       }),

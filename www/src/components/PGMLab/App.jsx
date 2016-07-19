@@ -20,7 +20,7 @@ class AuthWrapper extends React.Component {
   getGoogleButton(){
     const responseGoogle =
       r => {
-        console.log(r.getAuthResponse());
+        console.log(r, r.getBasicProfile());
         if (r.isSignedIn()) {
           this.props.signIn(r)
         };
@@ -31,13 +31,15 @@ class AuthWrapper extends React.Component {
     );
   }
   render(){
+    const notSignedIn = !this.props.auth.get("signedIn");
+    const {auth, ...bodyProps} = this.props;
     return (
-      !this.props.auth.get("signedIn") ?
+      notSignedIn ?
         <Dialog title="Sign in" actions={[this.getGoogleButton()]} modal={true} open={true} />
         :
         <div>
-          <Header />
-          <Body {...this.props} />
+          <Header auth={auth}/>
+          <Body {...bodyProps} />
           <Footer />
         </div>
     );

@@ -1,8 +1,12 @@
 // AUTHENTICATION
-export function signIn(googleAuth){
+export function signIn(gAuth){
+  const googleIdToken = gAuth.getAuthResponse().id_token;
+  const profile = gAuth.getBasicProfile();
+  const name = profile.getName();
+  const email = profile.getEmail();
   return {
     type: "SIGN_IN",
-    googleIdToken: googleAuth.getAuthResponse.id_token
+    googleIdToken, name, email
   }
 }
 
