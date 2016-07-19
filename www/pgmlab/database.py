@@ -46,3 +46,27 @@ class Task(Base):
         return task
 
 Base.metadata.create_all(engine)
+
+class DatabaseSessionManager():
+    def __init__(self):
+        self.session = scoped_session(Session)
+        print(self.session)
+
+    def add_task(self, task):
+        print("...[db] adding task: {}".format(task.to_dict()["task_id"]))
+        self.session.add(task)
+        self.commit_session()
+
+    def update_task(self, task_id, status):
+        print("...[db] updating task ({0}): {1}".format(status, task_id))
+        task = self.session.query(Task).get(task_id)
+        task.status = status
+        self.commit_session()
+
+    def commit_session(self):
+        try:
+            print("...[db] committing session")
+            self.session.commit()
+        except:
+            print("...[db] rolling back session")
+            self.session.rollback()

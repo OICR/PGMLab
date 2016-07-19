@@ -80,7 +80,7 @@ def run_inference_task(self, **kwargs):
     pgmlab_utils.inference_task(task_id=task_id, run_path=run_path, package_path=package_path, kwargs=kwargs)
 
 # EVENTSTREAM ENDPOINT FOR SERVER-SENT-EVENTS ON CELERY TASK UPDATE
-from database import db_session, Task, Session
+from database import db_session, Task, Session, DatabaseSessionManager
 from twisted.internet import defer
 spectators = set() # Holds request objects for each client requesting eventStream
 @klein.route("/celery")
@@ -88,11 +88,11 @@ def stream(request):
     request.setHeader("Content-type", "text/event-stream")
     global spectators
     spectators = set([spec for spec in spectators if not spec.transport.disconnected]+[request])
-    print("...celery event stream requests: ", len(spectators))
+    print("...[sse] {} celery event stream requests: ".format(len(spectators)))
     return defer.Deferred()
 # TASK UPDATING IN DB AND TO CLIENTS (SERVER SENT EVENTS)
 def sse_add_task(task):
-    print("...adding task with id: {}".format(task.to_dict()["task_id"]))
+    print("...[sse] adding task: {}".format(task.to_dict()["task_id"]))
     global spectators
     for spec in spectators:
         if not spec.transport.disconnected:
@@ -100,7 +100,7 @@ def sse_add_task(task):
             # Write needs to be in SSE format
             spec.write("event: celery.task.add\ndata: {}\n\n".format(json.dumps(task.to_dict())))
 def sse_update_task(task_id, task_status):
-    print("...updating task with id: {0} -> {1}".format(task_id, task_status))
+    print("...[sse] updating task ({0}): {1}".format(task_status, task_id))
     global spectators
     for spec in spectators:
         if not spec.transport.disconnected:
@@ -114,6 +114,7 @@ import ast
 from sqlalchemy.orm import scoped_session
 def monitor(sess):
     print("...calling celery monitor")
+    dbsm = DatabaseSessionManager()
     # Celery event handler
     def catch_all(event):
         # task-received: add to database and push sse to client with new task
@@ -136,6 +137,7 @@ def monitor(sess):
             try:
                 # sess.add(task_to_add)
                 # sess.commit()
+                dbsm.add_task(task_to_add)
                 sse_add_task(task=task_to_add)
             except Exception as err:
                 print("...EXCEPTION caught on add: {}".format(err))
@@ -145,6 +147,7 @@ def monitor(sess):
                 # task_to_update = sess.query(Task).get(event["uuid"])
                 # task_to_update.status = event["type"]
                 # sess.commit()
+                dbsm.update_task(task_id=event["uuid"], status=event["type"])
                 sse_update_task(task_id=event["uuid"], task_status=event["type"])
             except Exception as err:
                 print("...EXCEPTION caught on update ({0}): {1}".format(event["type"], err))
