@@ -4,9 +4,9 @@ import * as actionCreators from "./redux/action_creators.jsx";
 
 var moment = require('moment');
 
-import {Header} from './Header.jsx';
-import {Body}   from './BodyPGMLab.jsx';
-import {Footer} from './Footer.jsx';
+import Header from './Header.jsx';
+import Body from './BodyPGMLab.jsx';
+import Footer from './Footer.jsx';
 
 export class App extends  React.Component {
   static getCurrentDateTime() {return moment().format('MMM D, YYYY HH:mm')}
@@ -28,10 +28,12 @@ function mapStateToProps(state) {
   return {
     session: state.get("session"),
     tasks: state.get("tasks"),
+    showFaceted: state.get("showFaceted"),
     typeFilters: state.get("typeFilters"),
     statusFilters: state.get("statusFilters"),
     dateSort: state.get("dateSort"),
-    idFilter: state.get("idFilter")
+    idFilter: state.get("idFilter"),
+    snackbarMessage: state.get("snackbarMessage")
   };
 }
 

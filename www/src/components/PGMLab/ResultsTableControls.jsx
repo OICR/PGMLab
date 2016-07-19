@@ -9,6 +9,8 @@ export default class ResultsTableControls extends React.Component {
   clusterTasks(){
     return this.props.tasks
       .filter(t => t.get("task_id").includes(this.props.idFilter))
+      .filter(t => this.props.typeFilters.get(t.get("task_type")))
+      .filter(t => this.props.statusFilters.get(t.get("status")))
       .reduce(
         (clusters, t) => {
           clusters["typeCount"][t.get("task_type")]++;
@@ -23,11 +25,13 @@ export default class ResultsTableControls extends React.Component {
 
   render(){
     const noVertMargin = {marginBottom: "0px", marginTop: "0px"};
+    const noVertPadding = {paddingBottom: "0px", paddingTop: "0px"};
+    const noVertSpace = Object.assign({},noVertMargin,noVertPadding)
     const {typeCount, statusCount} = this.clusterTasks();
     const idFilter = (
       <div className="row" style={noVertMargin}>
-        <form className="row">
-          <input id="idFilter" style={{paddingBottom: "0px"}} className="col s10 offset-s1"
+        <form className="col s12">
+          <input id="idFilter" style={{paddingBottom: "0px"}}
             value={this.props.idFilter} type="text" placeholder="Filter by ID"
             onChange={evt => this.props.updateIDFilter(evt.target.value.toLowerCase())} />
         </form>
@@ -35,7 +39,7 @@ export default class ResultsTableControls extends React.Component {
     );
     const typeFilters = (
       <div className="row" style={noVertMargin}>
-        <div className="col s1 valign">{"Type:"}</div>
+        <div className="col s1 valign grey-text">{"Type:"}</div>
         <div className="col s11 valign">
           <form className="row">
             {
@@ -48,7 +52,7 @@ export default class ResultsTableControls extends React.Component {
                           type="checkbox" className="filled-in"
                           checked={this.props.typeFilters.get(lowercase)}
                           onChange={evt => this.props.updateTypeFilter(evt.target.value)}/>
-                        <label htmlFor={`${lowercase}Filter`}>{`${type} (${typeCount[lowercase]})`}</label>
+                        <label className="black-text" htmlFor={`${lowercase}Filter`}>{`${type} (${typeCount[lowercase]})`}</label>
                     </div>
                   )
                 })
@@ -59,7 +63,7 @@ export default class ResultsTableControls extends React.Component {
     );
     const statusFilters = (
       <div className="row" style={noVertMargin}>
-        <div className="col s1">{"Status:"}</div>
+        <div className="col s1 grey-text">{"Status:"}</div>
         <div className="col s11">
           <form className="row">
             {
@@ -72,7 +76,7 @@ export default class ResultsTableControls extends React.Component {
                       <input id={`${lowercase}Filter`} value={statusKey} type="checkbox" className="filled-in"
                         checked={this.props.statusFilters.get(statusKey)}
                         onChange={evt => this.props.updateStatusFilter(evt.target.value)}/>
-                      <label htmlFor={`${lowercase}Filter`}>{`${status} (${statusCount[statusKey]})`}</label>
+                      <label className="black-text" htmlFor={`${lowercase}Filter`}>{`${status} (${statusCount[statusKey]})`}</label>
                     </div>
                   );
                 })
@@ -83,7 +87,7 @@ export default class ResultsTableControls extends React.Component {
     );
     const dateSort = (
       <div className="row" style={noVertMargin}>
-        <div className="col s1">{"Date:"}</div>
+        <div className="col s1 grey-text">{"Date:"}</div>
         <div className="col s11">
           <form className="row">
             {
@@ -95,7 +99,7 @@ export default class ResultsTableControls extends React.Component {
                       <input id={`${lowercase}Order`} name="dateSort" value={lowercase} type="radio"
                         checked={this.props.dateSort===lowercase}
                         onChange={evt => this.props.updateDateSort(evt.target.value)}/>
-                      <label htmlFor={`${lowercase}Order`}>{`${sort}`}</label>
+                      <label className="black-text" htmlFor={`${lowercase}Order`}>{`${sort}`}</label>
                     </div>
                   );
                 })
@@ -105,7 +109,7 @@ export default class ResultsTableControls extends React.Component {
       </div>
     );
     return (
-      <div className="card-panel" style={noVertMargin}>
+      <div style={noVertSpace}>
         {idFilter}
         {typeFilters}
         {statusFilters}

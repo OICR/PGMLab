@@ -74,8 +74,9 @@ export default class ResultsTableRow extends React.Component {
   }
   render(){
     const task = this.props.task;
+    // Need to pass table properties to this custom MaterialUI TableRow component
     return (
-      <TableRow>
+      <TableRow {...this.props}>
         <TableRowColumn>{`${task.get("task_id")}`}</TableRowColumn>
         <TableRowColumn>{this.getStatusIcon(task.get("status"))}</TableRowColumn>
         <TableRowColumn>{`${task.get("task_type")}`}</TableRowColumn>

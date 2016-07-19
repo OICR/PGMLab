@@ -47,8 +47,10 @@ wamp/.crossbar/pgmlab.pem
 www/pgmlab/twistd.pid
 
 #node file for running process
-www/pgmbio/.crossbar/*
-www/pgmlab/.crossbar/*
+www/*/.crossbar/node.pid
+www/*/.crossbar/node.key
+www/*/.crossbar/key.priv
+www/*/.crossbar/key.pub
 */.crossbar/node.pid
 */.crossbar/node.key
 */.crossbar/key.priv

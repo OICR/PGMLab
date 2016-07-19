@@ -1,23 +1,19 @@
 # PGMLab commands
-import pgmlab_commands
+import pgmlab_utils
 import datetime
 import json
 import shutil
 import os, os.path
 cwd = os.getcwd()
-inference_path = cwd+"/../../data/pgmlab/inference/"
-learning_path = cwd+"/../../data/pgmlab/learning/"
+inference_path = cwd+"/../../data/pgmlab/inference"
+learning_path = cwd+"/../../data/pgmlab/learning"
 
 # Klein for POST that starts Celery task, resource for twistd command to start server
 from twisted.web.static import File
 from klein import Klein
 klein = Klein()
 resource = klein.resource
-# QUEUE AND RUN TASKS ASYNC USING CELERY
-from celery import Celery, states
-from celery.exceptions import InvalidTaskError
-celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
-celery.conf.CELERY_SEND_EVENTS = True
+
 # HOST HTML
 @klein.route("/pgmlab.html")
 def home(request):
@@ -64,78 +60,24 @@ def run_inference_submit(request):
     }
     task = run_inference_task.apply_async(kwargs=data)
     return task.id
+# QUEUE AND RUN TASKS ASYNC USING CELERY
+from celery import Celery, states
+celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
+celery.conf.CELERY_SEND_EVENTS = True
 # CELERY TASKS FOR LEARNING AND INFERENCE
 @celery.task(bind=True)
 def run_learning_task(self, **kwargs):
-    # PGMLab
     task_id = self.request.id
-    run_path = learning_path+task_id+"/"
-    os.mkdir(run_path)
-    # Pairwise Interaction
-    pi_file = kwargs["pi_file"]
-    pgmlab_commands.generate_pairwise_interaction(run_path, pi_file)
-    # Factorgraph
-    return_code = pgmlab_commands.generate_logical_factorgraph(run_path)
-    if return_code != "0":
-        # shutil.rmtree(run_path)
-        # self.update_state(state=states.FAILURE, meta="reason for failure")
-        raise InvalidTaskError()
-    # Observation
-    obs_file = kwargs["obs_file"]
-    run_type = kwargs["task_type"]
-    pgmlab_commands.generate_observation(run_path, obs_file, run_type)
-    # Learning
-    number_states = kwargs["number_states"]
-    change_limit = kwargs["change_limit"]
-    max_iterations = kwargs["max_iterations"]
-    return_code = pgmlab_commands.learning(run_path, number_states, change_limit, max_iterations)
-    if return_code != "0":
-        # shutil.rmtree(run_path)
-        # self.update_state(state=states.FAILURE, meta="reason for failure")
-        raise InvalidTaskError()
-    # Create package to download
-    # Package is created into server directory (i.e. www/pgmlab/)
-    # This path corresponds to save file path in results table
-    package_path = cwd+"/results/"+task_id #package name is task uuid
-    shutil.make_archive(package_path, "zip", root_dir=run_path)
+    run_path = "{0}/{1}/".format(learning_path, task_id)
+    # Package filename is task uuid, path to download
+    package_path = "{0}/results/{1}".format(cwd, task_id)
+    pgmlab_utils.learning_task(task_id=task_id, run_path=run_path, package_path=package_path, kwargs=kwargs)
 @celery.task(bind=True)
 def run_inference_task(self, **kwargs):
-    # PGMLab
     task_id = self.request.id
-    run_path = inference_path+task_id+"/"
-    os.mkdir(run_path)
-    # Pairwise Interaction
-    pi_file = kwargs["pi_file"]
-    pgmlab_commands.generate_pairwise_interaction(run_path, pi_file)
-    # Observation
-    obs_file = kwargs["obs_file"]
-    run_type = kwargs["task_type"]
-    pgmlab_commands.generate_observation(run_path, obs_file, run_type)
-    # Logical Factorgraph
-    return_code = pgmlab_commands.generate_logical_factorgraph(run_path)
-    if return_code != "0":
-        # shutil.rmtree(run_path)
-        # self.update_state(state=states.FAILURE, meta="reason for failure")
-        raise InvalidTaskError()
-    # Learnt factorgraph (optional)
-    lfg_file = kwargs["lfg_file"]
-    if lfg_file != "":
-        pgmlab_commands.generate_learnt_factorgraph(run_path, lfg_file)
-        fg_name = "learnt.fg"
-    else:
-        fg_name = "logical.fg"
-    # Inference
-    number_states = kwargs["number_states"]
-    return_code = pgmlab_commands.inference(run_path, number_states, fg_name)
-    if return_code != "0":
-        # shutil.rmtree(run_path)
-        # self.update_state(state=states.FAILURE, meta="reason for failure")
-        raise InvalidTaskError()
-    # Create package to download
-    # Package is created into server directory (i.e. www/pgmlab/)
-    # This path corresponds to save file path in results table
-    package_path = cwd+"/results/"+task_id #package name is task uuid
-    shutil.make_archive(package_path, "zip", root_dir=run_path)
+    run_path = "{0}/{1}/".format(inference_path, task_id)
+    package_path = "{0}/results/{1}".format(cwd, task_id)
+    pgmlab_utils.inference_task(task_id=task_id, run_path=run_path, package_path=package_path, kwargs=kwargs)
 
 # EVENTSTREAM ENDPOINT FOR SERVER-SENT-EVENTS ON CELERY TASK UPDATE
 from pgmlab_db import db_session, Task, Session
@@ -155,6 +97,7 @@ def sse_add_task(task):
     for spec in spectators:
         if not spec.transport.disconnected:
             # Add event listener to event "celery.task.add" on client
+            # Write needs to be in SSE format
             spec.write("event: celery.task.add\ndata: {}\n\n".format(json.dumps(task.to_dict())))
 def sse_update_task(task_id, task_status):
     print("...updating task with id: {0} -> {1}".format(task_id, task_status))
@@ -170,7 +113,7 @@ import ast
 from sqlalchemy.orm import scoped_session
 def monitor(sess):
     print("...calling celery monitor")
-    # sess = scoped_session(Session)
+    # Celery event handler
     def catch_all(event):
         # task-received: add to database and push sse to client with new task
         if event["type"] == "task-received":
