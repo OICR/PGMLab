@@ -8,6 +8,10 @@ cwd = os.getcwd()
 inference_path = cwd+"/../../data/pgmlab/inference"
 learning_path = cwd+"/../../data/pgmlab/learning"
 
+# SQLite and SQLAlchemy
+from database import Task, DatabaseSessionManager
+dbsm = DatabaseSessionManager()
+
 # Klein for POST that starts Celery task, resource for twistd command to start server
 from twisted.web.static import File
 from klein import Klein
@@ -27,6 +31,7 @@ def js(request):
 def result(request, task_id):
     print("...requesting task with id: {}".format(task_id))
     return File("./results/"+task_id+".zip")
+
 # POST METHOD FOR SUBMITTING LEARNING AND INFERENCE JOBS
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
@@ -60,6 +65,7 @@ def run_inference_submit(request):
     }
     task = run_inference_task.apply_async(kwargs=data)
     return task.id
+    
 # QUEUE AND RUN TASKS ASYNC USING CELERY
 from celery import Celery, states
 celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
@@ -80,7 +86,6 @@ def run_inference_task(self, **kwargs):
     pgmlab_utils.inference_task(task_id=task_id, run_path=run_path, package_path=package_path, kwargs=kwargs)
 
 # EVENTSTREAM ENDPOINT FOR SERVER-SENT-EVENTS ON CELERY TASK UPDATE
-from database import db_session, Task, Session, DatabaseSessionManager
 from twisted.internet import defer
 spectators = set() # Holds request objects for each client requesting eventStream
 @klein.route("/celery")
@@ -111,10 +116,8 @@ def sse_update_task(task_id, task_status):
 import threading
 import time
 import ast
-from sqlalchemy.orm import scoped_session
-def monitor(sess):
+def monitor():
     print("...calling celery monitor")
-    dbsm = DatabaseSessionManager()
     # Celery event handler
     def catch_all(event):
         # task-received: add to database and push sse to client with new task
@@ -135,8 +138,6 @@ def monitor(sess):
             else:
                 task_to_add.lfg_filename = kwargs["lfg_filename"]
             try:
-                # sess.add(task_to_add)
-                # sess.commit()
                 dbsm.add_task(task_to_add)
                 sse_add_task(task=task_to_add)
             except Exception as err:
@@ -144,9 +145,6 @@ def monitor(sess):
         # else update task in database and push sse to client with task change
         elif event["type"] in ["task-started", "task-succeeded", "task-failed"]:
             try:
-                # task_to_update = sess.query(Task).get(event["uuid"])
-                # task_to_update.status = event["type"]
-                # sess.commit()
                 dbsm.update_task(task_id=event["uuid"], status=event["type"])
                 sse_update_task(task_id=event["uuid"], task_status=event["type"])
             except Exception as err:
@@ -165,8 +163,8 @@ def monitor(sess):
         except Exception: # unable to capture
             pass
         time.sleep(1)
-def run_monitor(sess):
-    thread = threading.Thread(target=monitor, kwargs={"sess":sess})
+def run_monitor():
+    thread = threading.Thread(target=monitor, kwargs={})
     thread.daemon = True
     thread.start()
-run_monitor(sess=scoped_session(Session))
+run_monitor()
