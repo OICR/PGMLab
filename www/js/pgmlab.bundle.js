@@ -84564,10 +84564,18 @@
 	    value: function getGoogleButton() {
 	      var _this2 = this;
 	
-	      var responseGoogle = function responseGoogle(r) {
-	        console.log(r, r.getBasicProfile());
-	        if (r.isSignedIn()) {
-	          _this2.props.signIn(r);
+	      var responseGoogle = function responseGoogle(gAuth) {
+	        if (gAuth.isSignedIn()) {
+	          var profile = gAuth.getBasicProfile();
+	          var kwargs = {
+	            id_token: gAuth.getAuthResponse().id_token,
+	            name: profile.getName(),
+	            email: profile.getEmail()
+	          };
+	          _this2.props.session.call("google.auth", [], kwargs).then(function (response) {
+	            console.log(response);
+	            // this.props.signIn(gAuth)
+	          });
 	        };
 	      };
 	      var clientId = this.props.auth.get("googleClientId");
@@ -85253,6 +85261,8 @@
 	  _createClass(LearningSubmit, [{
 	    key: "submitLearning",
 	    value: function submitLearning(evt) {
+	      var _this2 = this;
+	
 	      evt.preventDefault();
 	      $.ajax({
 	        type: "POST",
@@ -85262,23 +85272,23 @@
 	        data: new FormData(this.refs.learningForm),
 	        success: function success(data, textStatus, jqXHR) {
 	          console.log("...learning task submitted: ", data);
-	          // this.props.snackbarNotify(`Queued job: ${data}`);
+	          _this2.props.snackbarNotify("Queued job: " + data);
 	        },
 	        error: function error(jqXHR, textStatus, _error) {
 	          console.log("...learning task error: ", jqXHR, textStatus, _error);
-	          // this.props.snackbarNotify("Unable to submit task. Please try again");
+	          _this2.props.snackbarNotify("Unable to submit task. Please try again");
 	        }
 	      });
 	    }
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      var _this2 = this;
+	      var _this3 = this;
 	
 	      return _react2.default.createElement(
 	        "form",
 	        { ref: "learningForm", className: "center-align", onSubmit: function onSubmit(evt) {
-	            _this2.submitLearning(evt);
+	            _this3.submitLearning(evt);
 	          } },
 	        _react2.default.createElement(
 	          "div",
@@ -85349,7 +85359,7 @@
 	            { className: "range-field" },
 	            _react2.default.createElement("input", { type: "range", name: "numberStates", defaultValue: 3, min: 2, max: 10,
 	              onInput: function onInput(evt) {
-	                _this2.setState({ numberStates: evt.target.value });
+	                _this3.setState({ numberStates: evt.target.value });
 	              } })
 	          )
 	        ),
@@ -85366,7 +85376,7 @@
 	            { className: "range-field" },
 	            _react2.default.createElement("input", { type: "range", name: "emMaxIterations", defaultValue: 4000, min: 0, max: 8000,
 	              onChange: function onChange(evt) {
-	                _this2.setState({ maxIterations: evt.target.value });
+	                _this3.setState({ maxIterations: evt.target.value });
 	              } })
 	          )
 	        ),
