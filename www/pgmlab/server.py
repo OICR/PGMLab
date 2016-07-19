@@ -80,7 +80,7 @@ def run_inference_task(self, **kwargs):
     pgmlab_utils.inference_task(task_id=task_id, run_path=run_path, package_path=package_path, kwargs=kwargs)
 
 # EVENTSTREAM ENDPOINT FOR SERVER-SENT-EVENTS ON CELERY TASK UPDATE
-from pgmlab_db import db_session, Task, Session
+from database import db_session, Task, Session
 from twisted.internet import defer
 spectators = set() # Holds request objects for each client requesting eventStream
 @klein.route("/celery")
@@ -104,6 +104,7 @@ def sse_update_task(task_id, task_status):
     global spectators
     for spec in spectators:
         if not spec.transport.disconnected:
+            print('updating task')
             spec.write("event: celery.task.update\ndata: {}\n\n".format(json.dumps({"task_id":task_id,"task_status":task_status})))
 
 # CELERY TASK EVENT MONITOR
@@ -133,17 +134,17 @@ def monitor(sess):
             else:
                 task_to_add.lfg_filename = kwargs["lfg_filename"]
             try:
-                sess.add(task_to_add)
-                sess.commit()
+                # sess.add(task_to_add)
+                # sess.commit()
                 sse_add_task(task=task_to_add)
             except Exception as err:
                 print("...EXCEPTION caught on add: {}".format(err))
         # else update task in database and push sse to client with task change
         elif event["type"] in ["task-started", "task-succeeded", "task-failed"]:
             try:
-                task_to_update = sess.query(Task).get(event["uuid"])
-                task_to_update.status = event["type"]
-                sess.commit()
+                # task_to_update = sess.query(Task).get(event["uuid"])
+                # task_to_update.status = event["type"]
+                # sess.commit()
                 sse_update_task(task_id=event["uuid"], task_status=event["type"])
             except Exception as err:
                 print("...EXCEPTION caught on update ({0}): {1}".format(event["type"], err))

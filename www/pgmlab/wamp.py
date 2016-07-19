@@ -1,4 +1,4 @@
-from pgmlab_db import db_session, Task
+from database import db_session, Task
 import six
 from autobahn.twisted.wamp import ApplicationSession, ApplicationRunner
 from twisted.internet.defer import inlineCallbacks, returnValue
