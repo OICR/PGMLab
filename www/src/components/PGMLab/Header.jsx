@@ -15,9 +15,9 @@ export default class Header extends React.Component {
               {`${this.props.auth.getIn(["googleProfile", "name"])}
                 (${this.props.auth.getIn(["googleProfile", "email"])})`}
             </span>
-            <a className="brand-logo center">
-              <h4><span>PGMLab</span></h4>
-            </a>
+            <span className="brand-logo center">
+              <h4>{`PGMLab`}</h4>
+            </span>
             <ul className="right">
               <li>
                 <a target="_blank" href="http://github.com/OICR/PGMLab">Github</a>
