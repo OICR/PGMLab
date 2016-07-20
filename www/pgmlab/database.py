@@ -30,6 +30,9 @@ class Task(Base):
     user_sub_uid = Column("user_sub_uid", String, ForeignKey("users.sub_uid"))
     user = relationship("User", back_populates="tasks")
 
+    def __repr__(self):
+        return "<task_id: {0}, status: {1}>".format(self.task_id, self.status)
+
     def to_dict(self):
         return {
             "task_id": self.task_id,
@@ -51,6 +54,9 @@ class User(Base):
     email = Column("email", String, default=null())
     tasks = relationship("Task", order_by=Task.submit_datetime, back_populates="user")
 
+    def __repr__(self):
+        return "<sub_ui: {0}>".format(self.sub_uid)
+
 Base.metadata.create_all(engine)
 
 class DatabaseSessionManager():
@@ -59,9 +65,10 @@ class DatabaseSessionManager():
         print(self.session)
     # USER AUTHENTICATION
     def get_user(self, sub_uid):
-        print('users', self.session.query(User).count())
+        print("...[db] get_user: ", sub_uid)
         return self.session.query(User).get(sub_uid)
     def register_user(self, sub_uid, name, email):
+        print("...[db] register_user: ", sub_uid, name, email)
         user = User(sub_uid=sub_uid, name=name, email=email)
         self.session.add(user)
         self.commit_session()
