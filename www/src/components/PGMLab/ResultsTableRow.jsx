@@ -78,11 +78,14 @@ export default class ResultsTableRow extends React.Component {
     return (
       <TableRow {...this.props}>
         <TableRowColumn>{`${task.get("task_id")}`}</TableRowColumn>
-        <TableRowColumn>{this.getStatusIcon(task.get("status"))}</TableRowColumn>
+        <TableRowColumn style={{"textAlign": "center"}}>
+          {this.getStatusIcon(task.get("status"))}
+        </TableRowColumn>
+        <TableRowColumn>{this.getResult(task)}</TableRowColumn>
         <TableRowColumn>{`${task.get("task_type")}`}</TableRowColumn>
         <TableRowColumn>{this.getInfo(task)}</TableRowColumn>
         <TableRowColumn>{this.getDatetime(task.get("submit_datetime"))}</TableRowColumn>
-        <TableRowColumn>{this.getResult(task)}</TableRowColumn>
+
       </TableRow>
     );
   }

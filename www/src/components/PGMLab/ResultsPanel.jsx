@@ -73,11 +73,13 @@ export default class ResultsPanel extends React.Component {
     const tableHeaders = (
       <TableRow>
         <TableHeaderColumn tooltip={"Job ID in queue"}>{"ID"}</TableHeaderColumn>
-        <TableHeaderColumn tooltip={"Job status in queue"}>{"Status"}</TableHeaderColumn>
+        <TableHeaderColumn tooltip={"Job status in queue"} style={{"textAlign":"center"}}>
+          {"Status"}
+        </TableHeaderColumn>
+        <TableHeaderColumn tooltip={"Download zip package"}>{"Results"}</TableHeaderColumn>
         <TableHeaderColumn tooltip={"PGMLab run type"}>{"Type"}</TableHeaderColumn>
         <TableHeaderColumn tooltip={"PGMLab files and parameters"}>{"Info"}</TableHeaderColumn>
         <TableHeaderColumn tooltip={"Date and time queued"}>{"Submitted"}</TableHeaderColumn>
-        <TableHeaderColumn tooltip={"Download zip package"}>{"Results"}</TableHeaderColumn>
       </TableRow>
     );
     return (

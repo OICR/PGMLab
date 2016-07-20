@@ -66,7 +66,7 @@ function notify(state, action){
 }
 
 export default function(state = Map(), action) {
-  console.log("...action: ", action.type);
+  console.log("...action: ", action);
   switch (action.type) {
     case "SIGN_IN":
       return setGoogleAuth(state, action);
