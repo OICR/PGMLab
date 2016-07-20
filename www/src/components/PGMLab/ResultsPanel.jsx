@@ -4,7 +4,7 @@ import ResultsTableRow from "./ResultsTableRow.jsx";
 import ResultsTableControls from "./ResultsTableControls.jsx"
 var moment = require("moment");
 
-export default class JobResultsPanel extends React.Component {
+export default class ResultsPanel extends React.Component {
   constructor(props){
     super(props);
     this.getTableRows = this.getTableRows.bind(this);
@@ -15,7 +15,7 @@ export default class JobResultsPanel extends React.Component {
         id_token: this.props.auth.get("googleIdToken")
       })
       .then(tasks => {
-        console.log("...celery.tasks: ", tasks)
+        console.log("...celery.tasks")
         this.props.setTasksInState(tasks);
       });
     let eventSource = new EventSource("celery");
@@ -33,7 +33,7 @@ export default class JobResultsPanel extends React.Component {
         this.props.updateTaskInState(JSON.parse(evt.data));
       }
     );
-    console.log("...EventSource for SSE: ", eventSource)
+    eventSource.onopen = () => {console.log("...EventSource for SSE connected")};
   }
 
   getTableRows(){

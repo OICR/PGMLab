@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import JobSubmitPanel from "./JobSubmitPanel.jsx";
-import JobResultsPanel from "./JobResultsPanel.jsx";
+import SubmitPanel from "./SubmitPanel.jsx";
+import ResultsPanel from "./ResultsPanel.jsx";
 
 export default class Body extends React.Component {
     constructor(props) {
@@ -15,8 +15,8 @@ export default class Body extends React.Component {
       return (
         <main className="grey lighten-4">
           <div className="row" style={noMargin}>
-            <JobSubmitPanel {...submitProps}/>
-            <JobResultsPanel {...resultsProps}/>
+            <SubmitPanel {...submitProps}/>
+            <ResultsPanel {...resultsProps}/>
           </div>
         </main>
       )

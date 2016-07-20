@@ -1,5 +1,6 @@
 import {Map, fromJS} from "immutable";
 
+// Signing into PGMLab
 function setGoogleAuth(state, action){
   const signedIn = true;
   const {googleIdToken, ...nameEmail} = action;
@@ -65,7 +66,7 @@ function notify(state, action){
 }
 
 export default function(state = Map(), action) {
-  console.log(`...action:`, action)
+  console.log("...action: ", action.type);
   switch (action.type) {
     case "SIGN_IN":
       return setGoogleAuth(state, action);

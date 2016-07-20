@@ -29,7 +29,7 @@ var connection = new autobahn.Connection({
   realm: "realm1"
 });
 connection.onopen = function(session, details) {
-  console.log("...autobahn connected: ", session);
+  console.log("...autobahn connected");
   initializeApp(session);
 }
 connection.open()
@@ -51,7 +51,7 @@ function initializeApp(wamp){
       }),
       wamp,
       tasks: Map(),
-      showFaceted: true,
+      showFaceted: false,
       typeFilters: Map({
         "learning": true,
         "inference": true

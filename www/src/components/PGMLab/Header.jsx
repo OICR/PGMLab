@@ -3,7 +3,6 @@ import React from 'react'
 export default class Header extends React.Component {
   constructor(props){
     super(props);
-    console.log(this.props.auth.get("googleProfile").get("name"));
   }
   render(){
     const noVertMargin = {marginTop:"0px",marginBottom:"0px"};
