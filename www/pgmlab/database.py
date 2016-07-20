@@ -35,6 +35,7 @@ class Task(Base):
 
     def to_dict(self):
         return {
+            "user_sub_uid": self.user_sub_uid,
             "task_id": self.task_id,
             "task_type": self.task_type,
             "submit_datetime": self.submit_datetime,
@@ -59,11 +60,27 @@ class User(Base):
 
 Base.metadata.create_all(engine)
 
+from oauth2client import client, crypt
+CLIENT_ID = "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com"
+
 class DatabaseSessionManager():
     def __init__(self):
         self.session = scoped_session(Session)
         print(self.session)
     # USER AUTHENTICATION
+    def validate_g_token(self, id_token): # validate on sign in and submit
+        try:
+            idinfo = client.verify_id_token(id_token, CLIENT_ID)
+            print(idinfo)
+            if idinfo["aud"] not in [CLIENT_ID]:
+                raise crypt.AppIdentityError("Unrecognized client.")
+            if idinfo["iss"] not in ["accounts.google.com", "https://accounts.google.com"]:
+                raise crypt.AppIdentityError("Wrong issuer.")
+            # if idinfo['hd'] != #APPS_DOMAIN_NAME:
+            #     raise crypt.AppIdentityError("Wrong hosted domain.")
+            return idinfo
+        except crypt.AppIdentityError:
+            pass # Invalid token
     def get_user(self, sub_uid):
         print("...[db] get_user: ", sub_uid)
         return self.session.query(User).get(sub_uid)
@@ -73,8 +90,10 @@ class DatabaseSessionManager():
         self.session.add(user)
         self.commit_session()
     # TASK HANDLING
-    def get_all_tasks(self):
-        return self.session.query(Task).all()
+    def get_all_tasks(self, sub_uid):
+        tasks = self.session.query(Task).filter(Task.user_sub_uid == sub_uid).all()
+        print(tasks)
+        return tasks
     def add_task(self, task):
         print("...[db] adding task: {}".format(task.to_dict()["task_id"]))
         self.session.add(task)
@@ -82,6 +101,7 @@ class DatabaseSessionManager():
     def update_task(self, task_id, status):
         print("...[db] updating task ({0}): {1}".format(status, task_id))
         task = self.session.query(Task).get(task_id)
+        print(task)
         task.status = status
         self.commit_session()
     # COMMIT

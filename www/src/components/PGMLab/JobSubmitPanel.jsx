@@ -27,6 +27,7 @@ export default class JobSubmitPanel extends React.Component {
     $("ul.tabs .indicator").addClass("teal");
   }
   render(){
+    const {auth, snackbarNotify, snackbarMessage} = this.props;
     return (
       <div className="col s3">
         <div className="row card-panel">
@@ -41,10 +42,10 @@ export default class JobSubmitPanel extends React.Component {
             </ul>
           </div>
           <div id="Learning" className="col s12">
-            <LearningSubmit snackbarNotify={this.props.snackbarNotify}/>
+            <LearningSubmit auth={auth} snackbarNotify={snackbarNotify}/>
           </div>
           <div id="Inference" className="col s12">
-            <InferenceSubmit snackbarNotify={this.props.snackbarNotify}/>
+            <InferenceSubmit auth={auth} snackbarNotify={snackbarNotify}/>
           </div>
         </div>
         <SnackbarNotification snackbarMessage={this.props.snackbarMessage} />

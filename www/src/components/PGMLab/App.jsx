@@ -22,13 +22,12 @@ class AuthWrapper extends React.Component {
     const responseGoogle =
       gAuth => {
         if (gAuth.isSignedIn()) {
-          const kwargs = {
-            id_token: gAuth.getAuthResponse().id_token,
-            name: gAuth.getBasicProfile().getName(),
-            email: gAuth.getBasicProfile().getEmail()
-          };
           this.props.wamp
-            .call("google.auth", [], kwargs)
+            .call("google.auth", [], {
+              id_token: gAuth.getAuthResponse().id_token,
+              name: gAuth.getBasicProfile().getName(),
+              email: gAuth.getBasicProfile().getEmail()
+            })
             .then(pgmAuth => pgmAuth ? this.props.signIn(gAuth) : null)
         };
       };
@@ -39,14 +38,13 @@ class AuthWrapper extends React.Component {
   }
   render(){
     const notSignedIn = !this.props.auth.get("signedIn");
-    const {auth, ...bodyProps} = this.props;
     return (
       notSignedIn ?
         <Dialog title="Sign in" actions={[this.getGoogleButton()]} modal={true} open={true} />
         :
         <div>
-          <Header auth={auth}/>
-          <Body {...bodyProps} />
+          <Header auth={this.props.auth}/>
+          <Body {...this.props} />
           <Footer />
         </div>
     );
@@ -70,12 +68,14 @@ function mapStateToProps(state) {
   return {
     auth: state.get("auth"),
     wamp: state.get("wamp"),
+    // Results props
     tasks: state.get("tasks"),
     showFaceted: state.get("showFaceted"),
     typeFilters: state.get("typeFilters"),
     statusFilters: state.get("statusFilters"),
     dateSort: state.get("dateSort"),
     idFilter: state.get("idFilter"),
+    // Submit props
     snackbarMessage: state.get("snackbarMessage")
   };
 }

@@ -11,7 +11,9 @@ export default class JobResultsPanel extends React.Component {
   }
   componentWillMount(){
     this.props.wamp
-      .call("celery.tasks")
+      .call("celery.tasks", [], {
+        id_token: this.props.auth.get("googleIdToken")
+      })
       .then(tasks => {
         console.log("...celery.tasks: ", tasks)
         this.props.setTasksInState(tasks);

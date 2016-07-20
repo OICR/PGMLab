@@ -9,8 +9,9 @@ export default class Body extends React.Component {
     }
     render () {
       const noMargin = {marginTop:"0px",marginBottom:"0px"};
-      const {snackbarMessage, snackbarNotify, ...resultsProps} = this.props;
-      const submitProps = {snackbarMessage, snackbarNotify};
+      const {auth, snackbarMessage, snackbarNotify, ...rest} = this.props;
+      const submitProps = {auth, snackbarMessage, snackbarNotify};
+      const resultsProps = {auth, ...rest};
       return (
         <main className="grey lighten-4">
           <div className="row" style={noMargin}>

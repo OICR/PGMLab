@@ -12,12 +12,14 @@ export default class LearningSubmit extends React.Component {
   }
   submitLearning(evt){
     evt.preventDefault()
+    const data = new FormData(this.refs.learningForm);
+    data.append("id_token", this.props.auth.get("googleIdToken"))
     $.ajax({
       type: "POST",
       url: "https://localhost:4433/run/learning/submit",
       processData: false,
       contentType: false,
-      data: new FormData(this.refs.learningForm),
+      data,
       success: (data, textStatus, jqXHR) => {
         console.log("...learning task submitted: ", data)
         this.props.snackbarNotify(`Queued job: ${data}`);

@@ -6,6 +6,11 @@ cwd = os.getcwd()
 pgmlab_path = cwd+"/../../bin/pgmlab"
 from celery.exceptions import InvalidTaskError
 
+# Task pipeline:
+#  Pairwise, Observations, Factorgraph
+#  Learning || Inference
+#  Package to download
+
 def system_call(command):
     p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     p.wait()
@@ -23,19 +28,18 @@ def write_observation(run_path, obs_file, run_type):
     obs.write(obs_file)
     obs.close()
 
+def write_learnt_factorgraph(run_path, lfg_file):
+    lfg_filepath = run_path+"learnt.fg"
+    lfg = open(lfg_filepath, "w")
+    lfg.write(lfg_file)
+    lfg.close()
+
 def generate_logical_factorgraph(run_path):
     starttime = datetime.datetime.now()
     command = "{0} --generate-factorgraph --pairwise-interaction-file={1}pathway.pi --logical-factorgraph-file={1}logical.fg --number-of-states 3".format(pgmlab_path, run_path)
     yield command # return command used to generate logical factograph
     yield system_call(command) # then generate it
     yield str(datetime.datetime.now() - starttime) # then take time difference for runtime
-    # return system_call(command)
-
-def write_learnt_factorgraph(run_path, lfg_file):
-    lfg_filepath = run_path+"learnt.fg"
-    lfg = open(lfg_filepath, "w")
-    lfg.write(lfg_file)
-    lfg.close()
 
 def learning(run_path, number_states, log_likelihood_change_limit, em_max_iterations):
     starttime = datetime.datetime.now()
@@ -43,7 +47,6 @@ def learning(run_path, number_states, log_likelihood_change_limit, em_max_iterat
     yield command
     yield system_call(command)
     yield str(datetime.datetime.now() - starttime)
-    # return system_call(command)
 
 def inference(run_path, number_states, fg="logical.fg"):
     starttime = datetime.datetime.now()
@@ -51,12 +54,7 @@ def inference(run_path, number_states, fg="logical.fg"):
     yield command
     yield system_call(command)
     yield str(datetime.datetime.now() - starttime)
-    # return system_call(command)
 
-# Task pipeline:
-#  Pairwise, Observations, Factorgraph
-#  Learning || Inference
-#  Package to download
 def write_info_file(run_path, meta_info):
     info_filepath = run_path+"pgmlab.log"
     if meta_info["task_kwargs"]["task_type"] == "learning":
@@ -100,6 +98,7 @@ def write_info_file(run_path, meta_info):
 def learning_task(task_id, run_path, package_path, kwargs):
     os.mkdir(run_path)
     meta_info = {"task_id":task_id,"task_kwargs":kwargs}
+
     # Pairwise interaction
     pi_file = kwargs["pi_file"]
     write_pairwise_interaction(run_path, pi_file)

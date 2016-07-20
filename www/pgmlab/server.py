@@ -36,7 +36,9 @@ def result(request, task_id):
 @klein.route('/run/learning/submit', methods=["POST"])
 def run_learning_submit(request):
     print("...run_learning_submit @: {}".format(str(datetime.datetime.now())))
+    sub_uid = dbsm.validate_g_token(id_token=request.args["id_token"][0])["sub"]
     data = {
+        "sub_uid": sub_uid,
         "pi_file": request.args["pairwiseInteractionFile"][0],
         "pi_filename": request.args["pairwiseInteractionFilename"][0],
         "obs_file": request.args["observationFile"][0],
@@ -52,7 +54,9 @@ def run_learning_submit(request):
 @klein.route('/run/inference/submit', methods=["POST"])
 def run_inference_submit(request):
     print("...run_inference_submit @: {}".format(str(datetime.datetime.now())))
+    sub_uid = dbsm.validate_g_token(id_token=request.args["id_token"][0])["sub"]
     data = {
+        "sub_uid": sub_uid,
         "pi_file": request.args["pairwiseInteractionFile"][0],
         "pi_filename": request.args["pairwiseInteractionFilename"][0],
         "obs_file": request.args["observationFile"][0],
@@ -65,7 +69,7 @@ def run_inference_submit(request):
     }
     task = run_inference_task.apply_async(kwargs=data)
     return task.id
-    
+
 # QUEUE AND RUN TASKS ASYNC USING CELERY
 from celery import Celery, states
 celery = Celery("pgmlab_server", backend="amqp", broker="amqp://guest@localhost//") # celery -A pgmlab_server.celery worker
@@ -124,6 +128,7 @@ def monitor():
         if event["type"] == "task-received":
             kwargs = ast.literal_eval(event["kwargs"])
             task_to_add = Task(
+                user_sub_uid = kwargs["sub_uid"],
                 task_id = event["uuid"],
                 task_type = kwargs["task_type"],
                 submit_datetime = kwargs["submit_datetime"],

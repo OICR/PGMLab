@@ -11,12 +11,14 @@ export default class InferenceSubmit extends React.Component {
 
   submitInference(evt){
     evt.preventDefault()
+    const data = new FormData(this.refs.inferenceForm);
+    data.append("id_token", this.props.auth.get("googleIdToken"))
     $.ajax({
       type: "POST",
       url: "https://localhost:4433/run/inference/submit",
       processData: false,
       contentType: false,
-      data: new FormData(this.refs.inferenceForm),
+      data,
       success: (data, textStatus, jqXHR) => {
         console.log("...inference task submitted: ", data)
         this.props.snackbarNotify(`Queued job: ${data}`);
