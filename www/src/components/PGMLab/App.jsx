@@ -38,9 +38,10 @@ class AuthWrapper extends React.Component {
   }
   render(){
     const notSignedIn = !this.props.auth.get("signedIn");
+    const actions = [this.getGoogleButton()];
     return (
       notSignedIn ?
-        <Dialog title="Sign in" actions={[this.getGoogleButton()]} modal={true} open={true} />
+        <Dialog title="Sign in" actions={actions} modal={true} open={true} />
         :
         <div>
           <Header auth={this.props.auth}/>
