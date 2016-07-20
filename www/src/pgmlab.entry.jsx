@@ -6,6 +6,9 @@ import {Provider} from "react-redux";
 import reducer from "./components/PGMLab/redux/reducer.jsx";
 import {AppContainer} from "./components/PGMLab/App.jsx"
 
+var injectTapEvenPlugin = require("react-tap-event-plugin");
+injectTapEvenPlugin();
+
 require("../assets/css/materialize.css");
 require("../assets/css/style.css");
 require("material-design-icons");
