@@ -20,19 +20,22 @@ class Component(ApplicationSession):
                 print(idinfo)
                 if idinfo["aud"] not in [CLIENT_ID]:
                     raise crypt.AppIdentityError("Unrecognized client.")
-                if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+                if idinfo["iss"] not in ["accounts.google.com", "https://accounts.google.com"]:
                     raise crypt.AppIdentityError("Wrong issuer.")
                 # if idinfo['hd'] != #APPS_DOMAIN_NAME:
                 #     raise crypt.AppIdentityError("Wrong hosted domain.")
             except crypt.AppIdentityError:
                 pass # Invalid token
             # Upsert user in db
-            user = self.dbsm.get_user(sub_uid=idinfo["sub"])
-            if user:
-                return "user exists"
+            try:
+                user = self.dbsm.get_user(sub_uid=idinfo["sub"])
+                if not user:
+                    self.dbsm.register_user(sub_uid=idinfo["sub"], name=name, email=email)
+                return True
+            except:
+                pass # Could not authenticate
             else:
-                self.dbsm.register_user(sub_uid=idinfo["sub"], name=name, email=email)
-                return "user DNE"
+                return False
         def get_all_tasks():
             # tasks = db_session.query(Task).all()
             tasks = self.dbsm.get_all_tasks()
