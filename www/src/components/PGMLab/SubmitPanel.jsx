@@ -13,7 +13,9 @@ class SnackbarNotification extends React.Component {
   }
   render(){
     return (
-      <Snackbar open={true} message={this.props.snackbarMessage} autoHideDuration={5000}/>
+      <Snackbar
+        className="center-align" open={true} autoHideDuration={5000}
+        message={this.props.snackbarMessage}/>
     );
   }
 }
