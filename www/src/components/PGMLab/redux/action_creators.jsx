@@ -1,3 +1,15 @@
+// AUTHENTICATION
+export function signIn(gAuth){
+  const googleIdToken = gAuth.getAuthResponse().id_token;
+  const profile = gAuth.getBasicProfile();
+  const name = profile.getName();
+  const email = profile.getEmail();
+  return {
+    type: "SIGN_IN",
+    googleIdToken, name, email
+  }
+}
+
 // FACETED SEARCH ACTIONS
 export function toggleFacetedSearch(){
   return {

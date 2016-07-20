@@ -1,10 +1,13 @@
 import React from "react";
-import { render } from "react-dom";
-import {List, Map} from "immutable";
+import {render} from "react-dom";
+import {Map} from "immutable";
 import {compose, createStore} from "redux";
 import {Provider} from "react-redux";
 import reducer from "./components/PGMLab/redux/reducer.jsx";
-import {AppContainer, App} from "./components/PGMLab/App.jsx"
+import {AppContainer} from "./components/PGMLab/App.jsx"
+
+var injectTapEvenPlugin = require("react-tap-event-plugin");
+injectTapEvenPlugin();
 
 require("../assets/css/materialize.css");
 require("../assets/css/style.css");
@@ -26,12 +29,12 @@ var connection = new autobahn.Connection({
   realm: "realm1"
 });
 connection.onopen = function(session, details) {
-  console.log("...autobahn connected: ", session);
+  console.log("...autobahn connected");
   initializeApp(session);
 }
 connection.open()
 
-function initializeApp(session){
+function initializeApp(wamp){
   const createStoreDevTools = compose(
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
@@ -40,9 +43,15 @@ function initializeApp(session){
   store.dispatch({
     type: "SET_INITIAL_STATE",
     initialState: {
-      session,
+      auth: Map({
+        signedIn: false,
+        googleProfile: Map(),
+        googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com", //Google Console
+        googleIdToken: ""
+      }),
+      wamp,
       tasks: Map(),
-      showFaceted: true,
+      showFaceted: false,
       typeFilters: Map({
         "learning": true,
         "inference": true

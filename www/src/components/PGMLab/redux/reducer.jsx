@@ -1,5 +1,13 @@
 import {Map, fromJS} from "immutable";
 
+// Signing into PGMLab
+function setGoogleAuth(state, action){
+  const signedIn = true;
+  const {googleIdToken, ...nameEmail} = action;
+  const googleProfile = Map(nameEmail);
+  return state.update("auth", auth => auth.merge({signedIn, googleIdToken, googleProfile}));
+}
+
 // Standard setState
 function setState(state, newState){
   return state.merge(newState);
@@ -58,10 +66,12 @@ function notify(state, action){
 }
 
 export default function(state = Map(), action) {
-  console.log(`...action:`, action)
+  console.log("...action: ", action);
   switch (action.type) {
+    case "SIGN_IN":
+      return setGoogleAuth(state, action);
     case "SET_INITIAL_STATE":
-      return setState(state, action.initialState)
+      return setState(state, action.initialState);
     // Getting and updating tasks data in state
     case "SET_TASKS":
       return setTasks(state, action);

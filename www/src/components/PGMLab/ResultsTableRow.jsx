@@ -1,5 +1,6 @@
 import React from "react";
 import {TableRow, TableRowColumn} from "material-ui/Table";
+import CircularProgress from "material-ui/CircularProgress";
 var moment = require("moment");
 
 export default class ResultsTableRow extends React.Component {
@@ -12,19 +13,7 @@ export default class ResultsTableRow extends React.Component {
       case "task-received":
         return (<i className="material-icons">low_priority</i>);
       case "task-started":
-        return (
-          <div className="preloader-wrapper small active">
-            <div className="spinner-layer spinner-green-only">
-              <div className="circle-clipper left">
-                <div className="circle"></div>
-              </div><div className="gap-patch">
-                <div className="circle"></div>
-              </div><div className="circle-clipper right">
-                <div className="circle"></div>
-              </div>
-            </div>
-          </div>
-        );
+        return (<CircularProgress size={0.4} color="black"/>);
       case "task-succeeded":
         return (<i className="material-icons">check_circle</i>);
       case "task-failed":
@@ -78,11 +67,14 @@ export default class ResultsTableRow extends React.Component {
     return (
       <TableRow {...this.props}>
         <TableRowColumn>{`${task.get("task_id")}`}</TableRowColumn>
-        <TableRowColumn>{this.getStatusIcon(task.get("status"))}</TableRowColumn>
+        <TableRowColumn style={{"textAlign": "center"}}>
+          {this.getStatusIcon(task.get("status"))}
+        </TableRowColumn>
+        <TableRowColumn>{this.getResult(task)}</TableRowColumn>
         <TableRowColumn>{`${task.get("task_type")}`}</TableRowColumn>
         <TableRowColumn>{this.getInfo(task)}</TableRowColumn>
         <TableRowColumn>{this.getDatetime(task.get("submit_datetime"))}</TableRowColumn>
-        <TableRowColumn>{this.getResult(task)}</TableRowColumn>
+
       </TableRow>
     );
   }

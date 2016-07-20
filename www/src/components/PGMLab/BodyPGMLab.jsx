@@ -1,10 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-
-import JobSubmitPanel from "./JobSubmitPanel.jsx";
-import JobResultsPanel from "./JobResultsPanel.jsx";
+import SubmitPanel from "./SubmitPanel.jsx";
+import ResultsPanel from "./ResultsPanel.jsx";
 
 export default class Body extends React.Component {
     constructor(props) {
@@ -12,17 +9,16 @@ export default class Body extends React.Component {
     }
     render () {
       const noMargin = {marginTop:"0px",marginBottom:"0px"};
-      const {snackbarMessage, snackbarNotify, ...resultsProps} = this.props;
-      const submitProps = {snackbarMessage, snackbarNotify};
+      const {auth, snackbarMessage, snackbarNotify, ...rest} = this.props;
+      const submitProps = {auth, snackbarMessage, snackbarNotify};
+      const resultsProps = {auth, ...rest};
       return (
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main className="grey lighten-4">
           <div className="row" style={noMargin}>
-            <JobSubmitPanel {...submitProps}/>
-            <JobResultsPanel {...resultsProps}/>
+            <SubmitPanel {...submitProps}/>
+            <ResultsPanel {...resultsProps}/>
           </div>
         </main>
-        </MuiThemeProvider>
       )
     }
 }
