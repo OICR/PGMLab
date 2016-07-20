@@ -93,7 +93,7 @@
 	};
 	connection.open();
 	
-	function initializeApp(session) {
+	function initializeApp(wamp) {
 	  var createStoreDevTools = (0, _redux.compose)(window.devToolsExtension ? window.devToolsExtension() : function (f) {
 	    return f;
 	  })(_redux.createStore);
@@ -108,7 +108,7 @@
 	        googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com", //Google Console
 	        googleIdToken: ""
 	      }),
-	      session: session,
+	      wamp: wamp,
 	      tasks: (0, _immutable.Map)(),
 	      showFaceted: true,
 	      typeFilters: (0, _immutable.Map)({
@@ -84539,8 +84539,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -84564,17 +84562,15 @@
 	    value: function getGoogleButton() {
 	      var _this2 = this;
 	
+	      // On Google login, validate on backend via id_token. Register into pgmlab.db
 	      var responseGoogle = function responseGoogle(gAuth) {
 	        if (gAuth.isSignedIn()) {
-	          var profile = gAuth.getBasicProfile();
-	          var kwargs = {
+	          _this2.props.wamp.call("google.auth", [], {
 	            id_token: gAuth.getAuthResponse().id_token,
-	            name: profile.getName(),
-	            email: profile.getEmail()
-	          };
-	          _this2.props.session.call("google.auth", [], kwargs).then(function (response) {
-	            console.log(response);
-	            // this.props.signIn(gAuth)
+	            name: gAuth.getBasicProfile().getName(),
+	            email: gAuth.getBasicProfile().getEmail()
+	          }).then(function (pgmAuth) {
+	            return pgmAuth ? _this2.props.signIn(gAuth) : null;
 	          });
 	        };
 	      };
@@ -84585,16 +84581,11 @@
 	    key: "render",
 	    value: function render() {
 	      var notSignedIn = !this.props.auth.get("signedIn");
-	      var _props = this.props;
-	      var auth = _props.auth;
-	
-	      var bodyProps = _objectWithoutProperties(_props, ["auth"]);
-	
 	      return notSignedIn ? _react2.default.createElement(_Dialog2.default, { title: "Sign in", actions: [this.getGoogleButton()], modal: true, open: true }) : _react2.default.createElement(
 	        "div",
 	        null,
-	        _react2.default.createElement(_Header2.default, { auth: auth }),
-	        _react2.default.createElement(_BodyPGMLab2.default, bodyProps),
+	        _react2.default.createElement(_Header2.default, { auth: this.props.auth }),
+	        _react2.default.createElement(_BodyPGMLab2.default, this.props),
 	        _react2.default.createElement(_Footer2.default, null)
 	      );
 	    }
@@ -84629,13 +84620,15 @@
 	function mapStateToProps(state) {
 	  return {
 	    auth: state.get("auth"),
-	    session: state.get("session"),
+	    wamp: state.get("wamp"),
+	    // Results props
 	    tasks: state.get("tasks"),
 	    showFaceted: state.get("showFaceted"),
 	    typeFilters: state.get("typeFilters"),
 	    statusFilters: state.get("statusFilters"),
 	    dateSort: state.get("dateSort"),
 	    idFilter: state.get("idFilter"),
+	    // Submit props
 	    snackbarMessage: state.get("snackbarMessage")
 	  };
 	}
@@ -84829,6 +84822,8 @@
 	  value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(1);
@@ -84867,12 +84862,14 @@
 	    value: function render() {
 	      var noMargin = { marginTop: "0px", marginBottom: "0px" };
 	      var _props = this.props;
+	      var auth = _props.auth;
 	      var snackbarMessage = _props.snackbarMessage;
 	      var snackbarNotify = _props.snackbarNotify;
 	
-	      var resultsProps = _objectWithoutProperties(_props, ["snackbarMessage", "snackbarNotify"]);
+	      var rest = _objectWithoutProperties(_props, ["auth", "snackbarMessage", "snackbarNotify"]);
 	
-	      var submitProps = { snackbarMessage: snackbarMessage, snackbarNotify: snackbarNotify };
+	      var submitProps = { auth: auth, snackbarMessage: snackbarMessage, snackbarNotify: snackbarNotify };
+	      var resultsProps = _extends({ auth: auth }, rest);
 	      return _react2.default.createElement(
 	        "main",
 	        { className: "grey lighten-4" },
@@ -84970,6 +84967,11 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
+	      var _props = this.props;
+	      var auth = _props.auth;
+	      var snackbarNotify = _props.snackbarNotify;
+	      var snackbarMessage = _props.snackbarMessage;
+	
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "col s3" },
@@ -85013,12 +85015,12 @@
 	          _react2.default.createElement(
 	            "div",
 	            { id: "Learning", className: "col s12" },
-	            _react2.default.createElement(_LearningSubmit2.default, { snackbarNotify: this.props.snackbarNotify })
+	            _react2.default.createElement(_LearningSubmit2.default, { auth: auth, snackbarNotify: snackbarNotify })
 	          ),
 	          _react2.default.createElement(
 	            "div",
 	            { id: "Inference", className: "col s12" },
-	            _react2.default.createElement(_InferenceSubmit2.default, { snackbarNotify: this.props.snackbarNotify })
+	            _react2.default.createElement(_InferenceSubmit2.default, { auth: auth, snackbarNotify: snackbarNotify })
 	          )
 	        ),
 	        _react2.default.createElement(SnackbarNotification, { snackbarMessage: this.props.snackbarMessage })
@@ -85076,12 +85078,14 @@
 	      var _this2 = this;
 	
 	      evt.preventDefault();
+	      var data = new FormData(this.refs.inferenceForm);
+	      data.append("id_token", this.props.auth.get("googleIdToken"));
 	      $.ajax({
 	        type: "POST",
 	        url: "https://localhost:4433/run/inference/submit",
 	        processData: false,
 	        contentType: false,
-	        data: new FormData(this.refs.inferenceForm),
+	        data: data,
 	        success: function success(data, textStatus, jqXHR) {
 	          console.log("...inference task submitted: ", data);
 	          _this2.props.snackbarNotify("Queued job: " + data);
@@ -85264,12 +85268,14 @@
 	      var _this2 = this;
 	
 	      evt.preventDefault();
+	      var data = new FormData(this.refs.learningForm);
+	      data.append("id_token", this.props.auth.get("googleIdToken"));
 	      $.ajax({
 	        type: "POST",
 	        url: "https://localhost:4433/run/learning/submit",
 	        processData: false,
 	        contentType: false,
-	        data: new FormData(this.refs.learningForm),
+	        data: data,
 	        success: function success(data, textStatus, jqXHR) {
 	          console.log("...learning task submitted: ", data);
 	          _this2.props.snackbarNotify("Queued job: " + data);
@@ -85457,7 +85463,9 @@
 	    value: function componentWillMount() {
 	      var _this2 = this;
 	
-	      this.props.session.call("celery.tasks").then(function (tasks) {
+	      this.props.wamp.call("celery.tasks", [], {
+	        id_token: this.props.auth.get("googleIdToken")
+	      }).then(function (tasks) {
 	        console.log("...celery.tasks: ", tasks);
 	        _this2.props.setTasksInState(tasks);
 	      });
