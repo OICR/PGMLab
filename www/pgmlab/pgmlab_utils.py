@@ -4,6 +4,7 @@ import shutil
 import datetime
 cwd = os.getcwd()
 pgmlab_path = cwd+"/../../bin/pgmlab"
+split_nodes_path = cwd+"/../../bin/split_nodes.pl"
 from celery.exceptions import InvalidTaskError
 
 # Task pipeline:
@@ -22,6 +23,12 @@ def write_pairwise_interaction(run_path, pi_file):
     pi.write(pi_file)
     pi.close()
 
+def split_pairwise_interaction(run_path):
+    pi_filepath = run_path+"pathway.pi"
+    pi_split_filepath = run_path+"pathway.split.pi"
+    command = "perl {0} {1} > {2}".format(split_nodes_path, pi_filepath, pi_split_filepath)
+    return system_call(command)
+
 def write_observation(run_path, obs_file, run_type):
     obs_filepath = run_path+run_type+".obs"
     obs = open(obs_filepath, "w")
@@ -34,23 +41,25 @@ def write_learnt_factorgraph(run_path, lfg_file):
     lfg.write(lfg_file)
     lfg.close()
 
+
+# Note: generator commands (i.e. PGMLab commands) use .split.pi files
 def generate_logical_factorgraph(run_path):
     starttime = datetime.datetime.now()
-    command = "{0} --generate-factorgraph --pairwise-interaction-file={1}pathway.pi --logical-factorgraph-file={1}logical.fg --number-of-states 3".format(pgmlab_path, run_path)
+    command = "{0} --generate-factorgraph --pairwise-interaction-file={1}pathway.split.pi --logical-factorgraph-file={1}logical.fg --number-of-states 3".format(pgmlab_path, run_path)
     yield command # return command used to generate logical factograph
     yield system_call(command) # then generate it
     yield str(datetime.datetime.now() - starttime) # then take time difference for runtime
 
 def learning(run_path, number_states, log_likelihood_change_limit, em_max_iterations):
     starttime = datetime.datetime.now()
-    command = "{0} --learning --pairwise-interaction-file={1}pathway.pi --logical-factorgraph-file={1}logical.fg --learning-observed-data-file={1}learning.obs --estimated-parameters-file={1}learnt.fg --number-of-states {2} --log-likelihood-change-limit={3} --em-max-iterations={4}".format(pgmlab_path,run_path,number_states,log_likelihood_change_limit,em_max_iterations)
+    command = "{0} --learning --pairwise-interaction-file={1}pathway.split.pi --logical-factorgraph-file={1}logical.fg --learning-observed-data-file={1}learning.obs --estimated-parameters-file={1}learnt.fg --number-of-states {2} --log-likelihood-change-limit={3} --em-max-iterations={4}".format(pgmlab_path,run_path,number_states,log_likelihood_change_limit,em_max_iterations)
     yield command
     yield system_call(command)
     yield str(datetime.datetime.now() - starttime)
 
 def inference(run_path, number_states, fg="logical.fg"):
     starttime = datetime.datetime.now()
-    command = "{0} --inference --pairwise-interaction-file={1}pathway.pi --inference-factorgraph-file={1}{2} --inference-observed-data-file={1}inference.obs --posterior-probability-file={1}pathway.pp --number-of-states {3}".format(pgmlab_path, run_path, fg, number_states)
+    command = "{0} --inference --pairwise-interaction-file={1}pathway.split.pi --inference-factorgraph-file={1}{2} --inference-observed-data-file={1}inference.obs --posterior-probability-file={1}pathway.pp --number-of-states {3}".format(pgmlab_path, run_path, fg, number_states)
     yield command
     yield system_call(command)
     yield str(datetime.datetime.now() - starttime)
@@ -79,6 +88,8 @@ def write_info_file(run_path, meta_info):
         for title, val in task_info.items():
             info.write("{title:<{col1}} ==> {val}\n".format(title=title, val=val, col1=title_width))
         info.write("\n")
+        split_note = "Note: PGMLab currently has a 10 parent limit for nodes. If your graph has nodes with more parents than this, PSEUDONODES will be inserted in between parent and child.\n\n"
+        info.write(split_note)
         runtime_info = {
             "Factorgraph": {
                 "runtime": meta_info["lfg_runtime"] if meta_info["task_kwargs"]["lfg_file"]=="" else "Supplied learnt factorgraph ({}) used".format(meta_info["task_kwargs"]["lfg_filename"]),
@@ -98,10 +109,12 @@ def write_info_file(run_path, meta_info):
 def learning_task(task_id, run_path, package_path, kwargs):
     os.mkdir(run_path)
     meta_info = {"task_id":task_id,"task_kwargs":kwargs}
-
-    # Pairwise interaction
+    # Pairwise interaction, split .pi file
     pi_file = kwargs["pi_file"]
     write_pairwise_interaction(run_path, pi_file)
+    split_return_code = split_pairwise_interaction(run_path)
+    if split_return_code != "0":
+        raise InvalidTaskError()
     # Observation
     obs_file = kwargs["obs_file"]
     run_type = kwargs["task_type"]
@@ -136,6 +149,9 @@ def inference_task(task_id, run_path, package_path, kwargs):
     # Pairwise Interaction
     pi_file = kwargs["pi_file"]
     write_pairwise_interaction(run_path, pi_file)
+    split_return_code = split_pairwise_interaction(run_path)
+    if split_return_code != "0":
+        raise InvalidTaskError()
     # Observation
     obs_file = kwargs["obs_file"]
     run_type = kwargs["task_type"]
