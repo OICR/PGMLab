@@ -9,7 +9,7 @@ use POSIX;
 
 my $input_file = $ARGV[0];
 
-my $max_number_of_parents = 3;
+my $max_number_of_parents = 10;
 
 open(my $fh, "<", $input_file);
 
