@@ -31,7 +31,7 @@ connection.onopen = function(session, details) {
 }
 connection.open()
 
-function initializeApp(session){
+function initializeApp(wamp){
   const createStoreDevTools = compose(
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
@@ -46,7 +46,7 @@ function initializeApp(session){
         googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com", //Google Console
         googleIdToken: ""
       }),
-      session,
+      wamp,
       tasks: Map(),
       showFaceted: true,
       typeFilters: Map({

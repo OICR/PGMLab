@@ -18,6 +18,7 @@ class AuthWrapper extends React.Component {
     this.getGoogleButton = this.getGoogleButton.bind(this);
   }
   getGoogleButton(){
+    // On Google login, validate on backend via id_token. Register into pgmlab.db
     const responseGoogle =
       gAuth => {
         if (gAuth.isSignedIn()) {
@@ -26,12 +27,9 @@ class AuthWrapper extends React.Component {
             name: gAuth.getBasicProfile().getName(),
             email: gAuth.getBasicProfile().getEmail()
           };
-          this.props.session
+          this.props.wamp
             .call("google.auth", [], kwargs)
-            .then(response => {
-              console.log(response)
-              // this.props.signIn(gAuth)
-            })
+            .then(pgmAuth => pgmAuth ? this.props.signIn(gAuth) : null)
         };
       };
     const clientId = this.props.auth.get("googleClientId");
@@ -71,7 +69,7 @@ export class App extends  React.Component {
 function mapStateToProps(state) {
   return {
     auth: state.get("auth"),
-    session: state.get("session"),
+    wamp: state.get("wamp"),
     tasks: state.get("tasks"),
     showFaceted: state.get("showFaceted"),
     typeFilters: state.get("typeFilters"),

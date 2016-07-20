@@ -10,7 +10,7 @@ export default class JobResultsPanel extends React.Component {
     this.getTableRows = this.getTableRows.bind(this);
   }
   componentWillMount(){
-    this.props.session
+    this.props.wamp
       .call("celery.tasks")
       .then(tasks => {
         console.log("...celery.tasks: ", tasks)
