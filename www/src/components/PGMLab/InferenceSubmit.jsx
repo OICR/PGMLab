@@ -56,7 +56,7 @@ export default class InferenceSubmit extends React.Component {
     );
     const numberStatesInput = (
       <div className="row input-field">
-        <p>{"Number of States: "+this.state.numberStates}</p>
+        <span>{"Number of States: "+this.state.numberStates}</span>
         <p className="range-field">
           <input type="range" name="numberStates" defaultValue={3} min={2} max={10}
             onInput={(evt)=>{this.setState({numberStates: evt.target.value})}}/>
