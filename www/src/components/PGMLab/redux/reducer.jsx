@@ -38,6 +38,9 @@ function signIn(state, action){
       .update("tasks", () => fromJS(tasks))
   });
 }
+function signOut(state){
+  return state.merge(initialAppState);
+}
 
 // Construct tasks data as immutable
 function setTasks(state, action){
@@ -98,7 +101,7 @@ export default function(state = Map(), action) {
 
       return signIn(state, action);
     case "SIGN_OUT":
-      return state.merge(initialAppState);
+      return signOut(state);
     case "SET_INITIAL_STATE":
       const {wamp} = action;
       return state.merge({wamp, ...initialAppState});
