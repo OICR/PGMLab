@@ -12,11 +12,11 @@ class SnackbarNotification extends React.Component {
     return nextProps.snackbarMessage !== this.props.snackbarMessage;
   }
   render(){
-    return (
+    return this.props.snackbarMessage != "" ?
       <Snackbar
         className="center-align" open={true} autoHideDuration={5000}
         message={this.props.snackbarMessage}/>
-    );
+      :null;
   }
 }
 
