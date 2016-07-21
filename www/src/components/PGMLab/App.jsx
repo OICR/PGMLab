@@ -44,10 +44,11 @@ class AuthWrapper extends React.Component {
           {
             notSignedIn ?
             <Dialog actions={actions} modal={true} open={true}>
-              <p>
-              {`PGMLab provides a queueing system for performing learning and inference over discrete Bayesian networks.
-                Please sign in through Google to continue.`}
-              </p>
+              <span>
+              {`PGMLab provides a queueing system for performing learning and inference over discrete Bayesian networks.`}
+              <br/>
+              {`Please sign in through Google to continue.`}
+              </span>
             </Dialog>
             :null
           }
