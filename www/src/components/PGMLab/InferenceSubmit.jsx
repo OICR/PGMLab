@@ -10,9 +10,9 @@ export default class InferenceSubmit extends React.Component {
   }
 
   submitInference(evt){
-    evt.preventDefault()
+    evt.preventDefault();
     const data = new FormData(this.refs.inferenceForm);
-    data.append("id_token", this.props.auth.get("googleIdToken"))
+    data.append("id_token", this.props.auth.get("googleIdToken"));
     $.ajax({
       type: "POST",
       url: "https://localhost:4433/run/inference/submit",
@@ -27,8 +27,9 @@ export default class InferenceSubmit extends React.Component {
         console.log("...inference task error: ", jqXHR, textStatus, error);
         this.props.snackbarNotify("Unable to submit task. Please try again");
       }
-    })
+    });
   }
+
   render(){
     const noMarginTop = {marginTop: "0px"};
     const uploads = {
@@ -57,8 +58,8 @@ export default class InferenceSubmit extends React.Component {
       <div className="row input-field">
         <p>{"Number of States: "+this.state.numberStates}</p>
         <p className="range-field">
-          <input  type="range" name="inferenceNumberOfStates" defaultValue={3} min={2} max={10}
-                  onInput={(evt)=>{this.setState({numberStates: evt.target.value})}}/>
+          <input type="range" name="numberStates" defaultValue={3} min={2} max={10}
+            onInput={(evt)=>{this.setState({numberStates: evt.target.value})}}/>
         </p>
       </div>
     );

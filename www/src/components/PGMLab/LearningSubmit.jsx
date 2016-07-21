@@ -4,16 +4,16 @@ export default class LearningSubmit extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      //defaultValues
-      numberStates: 3,
+      numberStates: 3, //defaultValues
       maxIterations: 4000
     }
     this.submitLearning = this.submitLearning.bind(this);
   }
+
   submitLearning(evt){
-    evt.preventDefault()
+    evt.preventDefault();
     const data = new FormData(this.refs.learningForm);
-    data.append("id_token", this.props.auth.get("googleIdToken"))
+    data.append("id_token", this.props.auth.get("googleIdToken"));
     $.ajax({
       type: "POST",
       url: "https://localhost:4433/run/learning/submit",
@@ -30,6 +30,7 @@ export default class LearningSubmit extends React.Component {
       }
     });
   }
+  
   render(){
     const noMarginTop = {marginTop: "0px"};
     // Uploading .pi and .obs files

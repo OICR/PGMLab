@@ -63,7 +63,7 @@ def run_inference_submit(request):
         "obs_filename": request.args["observationFilename"][0],
         "lfg_file": request.args["learntFactorgraphFile"][0],
         "lfg_filename": request.args["learntFactorgraphFilename"][0],
-        "number_states": int(request.args["inferenceNumberOfStates"][0]),
+        "number_states": int(request.args["numberStates"][0]),
         "task_type": "inference",
         "submit_datetime": str(datetime.datetime.now())
     }
