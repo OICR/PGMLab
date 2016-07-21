@@ -71,7 +71,6 @@ class DatabaseSessionManager():
     def validate_g_token(self, id_token): # validate on sign in and submit
         try:
             idinfo = client.verify_id_token(id_token, CLIENT_ID)
-            print(idinfo)
             if idinfo["aud"] not in [CLIENT_ID]:
                 raise crypt.AppIdentityError("Unrecognized client.")
             if idinfo["iss"] not in ["accounts.google.com", "https://accounts.google.com"]:
@@ -92,7 +91,6 @@ class DatabaseSessionManager():
     # TASK HANDLING
     def get_all_tasks(self, sub_uid):
         tasks = self.session.query(Task).filter(Task.user_sub_uid == sub_uid).all()
-        print(tasks)
         return tasks
     def add_task(self, task):
         print("...[db] adding task: {}".format(task.to_dict()["task_id"]))

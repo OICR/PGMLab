@@ -39,33 +39,9 @@ function initializeApp(wamp){
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
   const store = createStoreDevTools(reducer);
-  // Initial state
   store.dispatch({
     type: "SET_INITIAL_STATE",
-    initialState: {
-      auth: Map({
-        signedIn: false,
-        googleProfile: Map(),
-        googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com", //Google Console
-        googleIdToken: ""
-      }),
-      wamp,
-      tasks: Map(),
-      showFaceted: false,
-      typeFilters: Map({
-        "learning": true,
-        "inference": true
-      }),
-      statusFilters: Map({
-        "task-received": true,
-        "task-started": true,
-        "task-succeeded": true,
-        "task-failed": true
-      }),
-      dateSort: "descending",
-      idFilter: "",
-      snackbarMessage: ""
-    }
+    wamp
   });
   render(
     <Provider store={store}>

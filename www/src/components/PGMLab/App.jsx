@@ -12,6 +12,8 @@ import Footer from "./Footer.jsx";
 import Dialog from "material-ui/Dialog";
 import GoogleLogin from "react-google-login";
 
+var when = require("when");
+
 class AuthWrapper extends React.Component {
   constructor(props){
     super(props);
@@ -28,7 +30,7 @@ class AuthWrapper extends React.Component {
               name: gAuth.getBasicProfile().getName(),
               email: gAuth.getBasicProfile().getEmail()
             })
-            .then(pgmAuth => pgmAuth ? this.props.signIn(gAuth) : null)
+            .then(userTasks => this.props.signIn(gAuth, userTasks));
         };
       };
     const clientId = this.props.auth.get("googleClientId");
@@ -51,7 +53,7 @@ class AuthWrapper extends React.Component {
           </Dialog>
           :null
         }
-        <Header auth={this.props.auth}/>
+        <Header auth={this.props.auth} signOut={this.props.signOut}/>
         <Body {...this.props} />
         <Footer />
       </div>

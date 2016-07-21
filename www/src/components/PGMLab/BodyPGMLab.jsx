@@ -9,7 +9,7 @@ export default class Body extends React.Component {
     }
     render () {
       const noMargin = {marginTop:"0px",marginBottom:"0px"};
-      const {auth, snackbarMessage, snackbarNotify, ...rest} = this.props;
+      const {auth, signOut, snackbarMessage, snackbarNotify, ...rest} = this.props;
       const submitProps = {auth, snackbarMessage, snackbarNotify};
       const resultsProps = {auth, ...rest};
       return (

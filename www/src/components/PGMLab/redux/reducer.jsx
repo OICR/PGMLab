@@ -1,16 +1,42 @@
 import {Map, fromJS} from "immutable";
-
-// Signing into PGMLab
-function setGoogleAuth(state, action){
-  const signedIn = true;
-  const {googleIdToken, ...nameEmail} = action;
-  const googleProfile = Map(nameEmail);
-  return state.update("auth", auth => auth.merge({signedIn, googleIdToken, googleProfile}));
+// Initial app state for app start up and signing out
+const initialAppState = {
+  auth: Map({
+    signedIn: false,
+    googleProfile: Map({
+      "name": "",
+      "email": ""
+    }),
+    googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com", //Google Console
+    googleIdToken: ""
+  }),
+  tasks: Map(),
+  showFaceted: false,
+  typeFilters: Map({
+    "learning": true,
+    "inference": true
+  }),
+  statusFilters: Map({
+    "task-received": true,
+    "task-started": true,
+    "task-succeeded": true,
+    "task-failed": true
+  }),
+  dateSort: "descending",
+  idFilter: "",
+  snackbarMessage: ""
 }
 
-// Standard setState
-function setState(state, newState){
-  return state.merge(newState);
+// Update user info and their tasks
+function signIn(state, action){
+  const signedIn = true;
+  const {tasks, googleIdToken, ...nameEmail} = action;
+  const googleProfile = Map(nameEmail);
+  return state.withMutations(state => {
+    return state
+      .update("auth", auth => auth.merge({signedIn, googleIdToken, googleProfile}))
+      .update("tasks", () => fromJS(tasks))
+  });
 }
 
 // Construct tasks data as immutable
@@ -69,9 +95,13 @@ export default function(state = Map(), action) {
   console.log("...action: ", action);
   switch (action.type) {
     case "SIGN_IN":
-      return setGoogleAuth(state, action);
+
+      return signIn(state, action);
+    case "SIGN_OUT":
+      return state.merge(initialAppState);
     case "SET_INITIAL_STATE":
-      return setState(state, action.initialState);
+      const {wamp} = action;
+      return state.merge({wamp, ...initialAppState});
     // Getting and updating tasks data in state
     case "SET_TASKS":
       return setTasks(state, action);

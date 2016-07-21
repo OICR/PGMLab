@@ -10,14 +10,6 @@ export default class ResultsPanel extends React.Component {
     this.getTableRows = this.getTableRows.bind(this);
   }
   componentWillMount(){
-    this.props.wamp
-      .call("celery.tasks", [], {
-        id_token: this.props.auth.get("googleIdToken")
-      })
-      .then(tasks => {
-        console.log("...celery.tasks")
-        this.props.setTasksInState(tasks);
-      });
     let eventSource = new EventSource("celery");
     eventSource.addEventListener(
       "celery.task.add",
@@ -38,6 +30,7 @@ export default class ResultsPanel extends React.Component {
 
   getTableRows(){
     return (
+      !this.props.auth.get("signedIn") ? null :
       this.props.tasks.valueSeq()
         .filter(t => t.get("task_id").includes(this.props.idFilter))
         .filter(t => this.props.typeFilters.get(t.get("task_type")))
