@@ -33,29 +33,28 @@ class AuthWrapper extends React.Component {
       };
     const clientId = this.props.auth.get("googleClientId");
     return (
-      <GoogleLogin clientId={clientId} callback={responseGoogle} />
+      <GoogleLogin clientId={clientId} callback={responseGoogle} cssClass="btn-large waves-effect waves-light blue darken-1">
+      </GoogleLogin>
     );
   }
   render(){
     const notSignedIn = !this.props.auth.get("signedIn");
     const actions = [this.getGoogleButton()];
     return (
-        <div>
-          {
-            notSignedIn ?
-            <Dialog actions={actions} modal={true} open={true}>
-              <span>
-              {`PGMLab provides a queueing system for performing learning and inference over discrete Bayesian networks.`}
-              <br/>
-              {`Please sign in through Google to continue.`}
-              </span>
-            </Dialog>
-            :null
-          }
-          <Header auth={this.props.auth}/>
-          <Body {...this.props} />
-          <Footer />
-        </div>
+      <div>
+        {
+          notSignedIn ?
+          <Dialog actions={actions} modal={true} open={true} contentClassName="center-align">
+            <span>
+            {`Please sign in through Google to continue.`}
+            </span>
+          </Dialog>
+          :null
+        }
+        <Header auth={this.props.auth}/>
+        <Body {...this.props} />
+        <Footer />
+      </div>
     );
   }
 }
