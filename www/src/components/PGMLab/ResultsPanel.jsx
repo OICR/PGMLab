@@ -45,10 +45,15 @@ export default class ResultsPanel extends React.Component {
   }
   render(){
     const noVertPadding = {paddingBottom: "0px", paddingTop: "0px"};
+    const notSignedIn = !this.props.auth.get("signedIn");
     const tableTitle = (
       <TableRow>
         <TableHeaderColumn colSpan="6" style={Object.assign({textAlign: "center"},noVertPadding)}>
-          <h6>{"Job Queue"}</h6>
+          <h5 className="grey-text text-darken-4">
+            {
+              `${notSignedIn ? "":`${this.props.auth.getIn(["googleProfile", "name"])}'s `} Job Queue`
+            }
+          </h5>
           <a className="btn-flat blue-text darken-2" onClick={evt => this.props.toggleFacetedSearch()}>
             {`${this.props.showFaceted ? "Hide":"Show"} faceted search`}
           </a>

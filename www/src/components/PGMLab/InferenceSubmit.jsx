@@ -72,7 +72,7 @@ export default class InferenceSubmit extends React.Component {
                       onInput={(evt)=>{this.setState({numberStates: evt.target.value})}}/>
             </p>
           </div>
-          <button className="btn" type="submit">Run Inference</button>
+          <button className="waves-effect btn" type="submit">Run Inference</button>
       </form>
     );
   }

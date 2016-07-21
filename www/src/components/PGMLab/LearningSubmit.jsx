@@ -31,52 +31,60 @@ export default class LearningSubmit extends React.Component {
     });
   }
   render(){
+    const noMarginTop = {marginTop: "0px"};
     return (
       <form ref="learningForm" className="center-align" onSubmit={evt=>{this.submitLearning(evt)}}>
           <div className="row input-field file-field">
-            <p>{"Pairwise interaction File"}</p>
+            <p style={{textAlign:"center"}}>{"Pairwise interaction File"}</p>
             <div className="btn">
               <span><i className="material-icons">file_upload</i></span>
-              <input type="file" name="pairwiseInteractionFile" />
+              <input type="file" name="pairwiseInteractionFile"/>
             </div>
             <div className="file-path-wrapper">
-              <input type="text" className="file-path validate" name="pairwiseInteractionFilename" />
+              <input
+                type="text" className="file-path validate"
+                name="pairwiseInteractionFilename"
+                placeholder="Upload a file" />
             </div>
           </div>
 
           <div className="row input-field file-field">
-            <p>{"Observation File"}</p>
+            <p style={{textAlign:"center"}}>{"Observation File"}</p>
             <div className="btn">
               <span><i className="material-icons">file_upload</i></span>
-              <input type="file" name="observationFile" />
+              <input type="file" name="observationFile" placeholder="Upload a file"/>
             </div>
             <div className="file-path-wrapper">
-              <input type="text" className="file-path validate" name="observationFilename" />
+              <input
+                type="text" className="file-path validate"
+                name="observationFilename"
+                placeholder="Upload a file" />
             </div>
           </div>
 
           <div className="row input-field">
-            <p>{"Number of States: "+this.state.numberStates}</p>
-            <p className="range-field">
+            <span>{"Number of States: "+this.state.numberStates}</span>
+            <p className="range-field" style={noMarginTop}>
               <input  type="range" name="numberStates" defaultValue={3} min={2} max={10}
                       onInput={evt=>{this.setState({numberStates: evt.target.value})}} />
             </p>
           </div>
 
           <div className="row input-field">
-            <p>{"EM Max Iterations: "+this.state.maxIterations}</p>
-            <p className="range-field">
+            <span>{"EM Max Iterations: "+this.state.maxIterations}</span>
+            <p className="range-field" style={noMarginTop}>
               <input  type="range" name="emMaxIterations" defaultValue={4000} min={0} max={8000}
-                      onChange={evt=>{this.setState({maxIterations: evt.target.value})}} />
+                      onChange={evt=>{this.setState({maxIterations: evt.target.value})}}
+                      style={{"textAlign":"center"}}/>
             </p>
           </div>
 
           <div className="row input-field">
-            <p>{"Log Likelihood Change Limit"}</p>
-            <input type="number" name="logLikelihoodChangeLimit" step={0.00001} defaultValue={0.001} min={0} />
+            <span>{"Log Likelihood Change Limit:"}</span>
+            <input type="number" name="logLikelihoodChangeLimit" step={0.00001} defaultValue={0.001} min={0}
+              style={{textAlign:"center"}}/>
           </div>
-
-          <button className="btn" type="submit">Run Learning</button>
+          <button className="waves-effect btn-large" type="submit">Run Learning</button>
       </form>
     );
   }

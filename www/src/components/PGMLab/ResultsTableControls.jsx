@@ -26,7 +26,9 @@ export default class ResultsTableControls extends React.Component {
   render(){
     const noVertMargin = {marginBottom: "0px", marginTop: "0px"};
     const noVertPadding = {paddingBottom: "0px", paddingTop: "0px"};
-    const noVertSpace = Object.assign({},noVertMargin,noVertPadding)
+    const noVertSpace = Object.assign({},noVertMargin,noVertPadding);
+    const filterLabelClass = "col s1 valign right-align grey-text";
+    const filterClass = "col s11 valign";
     const {typeCount, statusCount} = this.clusterTasks();
     const idFilter = (
       <div className="row" style={noVertMargin}>
@@ -39,8 +41,8 @@ export default class ResultsTableControls extends React.Component {
     );
     const typeFilters = (
       <div className="row" style={noVertMargin}>
-        <div className="col s1 valign grey-text">{"Type:"}</div>
-        <div className="col s11 valign">
+        <div className={filterLabelClass}>{"Type"}</div>
+        <div className={filterClass}>
           <form className="row">
             {
               ["Learning", "Inference"]
@@ -63,8 +65,8 @@ export default class ResultsTableControls extends React.Component {
     );
     const statusFilters = (
       <div className="row" style={noVertMargin}>
-        <div className="col s1 grey-text">{"Status:"}</div>
-        <div className="col s11">
+        <div className={filterLabelClass}>{"Status"}</div>
+        <div className={filterClass}>
           <form className="row">
             {
               ["Received", "Started", "Succeeded", "Failed"]
@@ -87,8 +89,8 @@ export default class ResultsTableControls extends React.Component {
     );
     const dateSort = (
       <div className="row" style={noVertMargin}>
-        <div className="col s1 grey-text">{"Date:"}</div>
-        <div className="col s11">
+        <div className={filterLabelClass}>{"Date:"}</div>
+        <div className={filterClass}>
           <form className="row">
             {
               ["Descending", "Ascending"]

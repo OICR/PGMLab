@@ -35,8 +35,9 @@ class AuthWrapper extends React.Component {
       };
     const clientId = this.props.auth.get("googleClientId");
     return (
-      <GoogleLogin clientId={clientId} callback={responseGoogle} cssClass="btn-large waves-effect waves-light blue darken-1">
-      </GoogleLogin>
+      <GoogleLogin
+        clientId={clientId} callback={responseGoogle}
+        cssClass="btn-large waves-effect waves-light blue darken-1" />
     );
   }
   render(){

@@ -5,6 +5,19 @@ export default class Header extends React.Component {
     super(props);
     this.getSignOutBtn = this.getSignOutBtn.bind(this);
   }
+
+  getLinkBtns(){
+    const links = {
+      "Wiki":"http://oicr.github.io/PGMLab/",
+      "Github":"http://github.com/OICR/PGMLab"
+    };
+    return Object.keys(links)
+      .map(k => (
+        <li key={k}>
+          <a href={links[k]} target="_blank">{`${k}`}</a>
+        </li>
+      ))
+  }
   getSignOutBtn(){
     return (
       !this.props.auth.get("signedIn") ? null :
@@ -26,9 +39,7 @@ export default class Header extends React.Component {
               <h4>{`PGMLab`}</h4>
             </span>
             <ul className="right">
-              <li>
-                <a target="_blank" href="http://github.com/OICR/PGMLab">Github</a>
-              </li>
+              {this.getLinkBtns()}
               {this.getSignOutBtn()}
             </ul>
           </div>
