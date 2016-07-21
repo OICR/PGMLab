@@ -64,7 +64,7 @@ function initializeApp(wamp){
       }),
       dateSort: "descending",
       idFilter: "",
-      snackbarMessage: "Welcome to PGMLab job submission and queueing"
+      snackbarMessage: ""
     }
   });
   render(

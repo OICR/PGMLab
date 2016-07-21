@@ -40,12 +40,17 @@ class AuthWrapper extends React.Component {
     const notSignedIn = !this.props.auth.get("signedIn");
     const actions = [this.getGoogleButton()];
     return (
-      notSignedIn ?
-        <Dialog title="PGMLab" titleClassName="center-align" actions={actions} modal={true} open={true}>
-          {"PGMLab provides a queueing system for performing learning and inference over discrete Bayesian networks. Please sign in through Google to continue."}
-        </Dialog>
-        :
         <div>
+          {
+            notSignedIn ?
+            <Dialog actions={actions} modal={true} open={true}>
+              <p>
+              {`PGMLab provides a queueing system for performing learning and inference over discrete Bayesian networks.
+                Please sign in through Google to continue.`}
+              </p>
+            </Dialog>
+            :null
+          }
           <Header auth={this.props.auth}/>
           <Body {...this.props} />
           <Footer />
