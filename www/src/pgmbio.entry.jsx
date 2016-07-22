@@ -1,5 +1,10 @@
-import React from 'react'
-import {render} from 'react-dom'
+import React from "react";
+import {render} from "react-dom";
+
+import {compose, createStore} from "redux";
+import {Provider} from "react-redux";
+import reducer from "./components/PGMBio/redux/reducer.jsx";
+import {AppContainer} from "./components/PGMBio/App.jsx";
 
 import injectTapEventPlugin from "react-tap-event-plugin";
 injectTapEventPlugin();
@@ -44,11 +49,17 @@ function callInchlibCluster(posteriorProbsData) {
 }
 
 function initializeApp(reactomePathways) {
+  const createStoreDevTools = compose(
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  )(createStore);
+  const store = createStoreDevTools(reducer);
   render(
-    <App  reactomePathways={reactomePathways}
-          getReactomePathway={getReactomePathway}
-          PGMLabInference={PGMLabInference}
-          callInchlibCluster={callInchlibCluster}/>,
+    <Provider store={store}>
+      <App  reactomePathways={reactomePathways}
+            getReactomePathway={getReactomePathway}
+            PGMLabInference={PGMLabInference}
+            callInchlibCluster={callInchlibCluster} />
+    </Provider>,
     document.getElementById('app')
   );
 };
