@@ -5,7 +5,7 @@ import {Divider, FlatButton, Popover, Menu, MenuItem, FontIcon} from "material-u
 var classNames = require("classnames");
 var graphvis = require("./../../lib/graphvis.js");
 
-export class NodeItem extends React.Component {
+export default class NodeItem extends React.Component {
   constructor(props){
     super(props);
     this.state={

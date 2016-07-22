@@ -5,15 +5,15 @@ import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 
-import {RunControlPanel} from "./RunControlPanel.jsx";
-import {ResultsControlPanel} from "./ResultsControlPanel.jsx";
-import {GraphPanel} from "./GraphPanel.jsx";
-import {HeatMapPanel} from "./HeatMapPanel.jsx";
+import RunControlPanel from "./RunControlPanel.jsx";
+import ResultsControlPanel from "./ResultsControlPanel.jsx";
+import GraphPanel from "./GraphPanel.jsx";
+import HeatMapPanel from "./HeatMapPanel.jsx";
 
 var graphvis = require("./../../lib/graphvis.js");
 var classNames = require("classnames");
 
-export class Body extends React.Component {
+export default class Body extends React.Component {
     constructor(props){
       super(props)
     }

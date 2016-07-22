@@ -3,7 +3,7 @@ import React from 'react';
 
 var graphvis = require("../../lib/graphvis.js");
 
-export class GraphPanel extends React.Component {
+export default class GraphPanel extends React.Component {
   constructor(props){
     super(props);
   }

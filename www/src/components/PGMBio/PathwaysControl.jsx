@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {NodeList} from "./NodeList.jsx";
-import {NodeItem} from "./NodeItem.jsx";
+import NodeList from "./NodeList.jsx";
+import NodeItem from "./NodeItem.jsx";
 import {SelectField, MenuItem} from "material-ui";
 
-export class PathwaysControl extends React.Component {
+export default class PathwaysControl extends React.Component {
   constructor(props){
     super(props);
     this.state = {

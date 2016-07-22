@@ -4,7 +4,7 @@ import {Dialog, FlatButton, TextField} from "material-ui";
 
 var classNames = require("classnames");
 
-export class SelectPathways extends React.Component {
+export default class SelectPathways extends React.Component {
   constructor (props) {
     super(props);
     this.state = {

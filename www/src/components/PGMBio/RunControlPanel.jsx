@@ -1,11 +1,11 @@
 import React from 'react';
 
-import {RunTypePanel} from "./RunTypePanel.jsx";
-import {DataSelection} from "./DataSelection.jsx";
-import {ObservationsControl} from "./ObservationsControl.jsx";
-import {PathwaysControl} from "./PathwaysControl.jsx";
+import RunTypePanel from "./RunTypePanel.jsx";
+import DataSelection from "./DataSelection.jsx";
+import ObservationsControl from "./ObservationsControl.jsx";
+import PathwaysControl from "./PathwaysControl.jsx";
 
-export class RunControlPanel extends React.Component {
+export default class RunControlPanel extends React.Component {
   constructor(props){
     super(props);
     this.handleRun = this.handleRun.bind(this);

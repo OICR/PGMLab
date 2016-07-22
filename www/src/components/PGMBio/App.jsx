@@ -1,12 +1,12 @@
-import React from 'react'
-import {render} from 'react-dom'
+import React from "react"
+import {render} from "react-dom"
 
-import {Header} from './Header.jsx';
-import {Body}   from './BodyPGMBio.jsx';
-import {Footer} from './Footer.jsx';
+import Header from "./Header.jsx";
+import Body   from "./BodyPGMBio.jsx";
+import Footer from "./Footer.jsx";
 
-var moment = require('moment')
-var graphvis = require('./../../lib/graphvis.js');
+var moment = require("moment")
+var graphvis = require("./../../lib/graphvis.js");
 
 
 import {Snackbar} from "material-ui";

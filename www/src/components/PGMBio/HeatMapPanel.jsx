@@ -5,7 +5,7 @@ import InChlib from "biojs-vis-inchlib";
 import {SelectField, MenuItem} from "material-ui";
 
 
-export class HeatMapPanel extends React.Component {
+export default class HeatMapPanel extends React.Component {
   constructor(props){
     super(props);
     this.inchlib = new InChlib({

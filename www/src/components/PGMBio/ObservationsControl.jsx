@@ -1,12 +1,13 @@
 import React from 'react'
 
-import {NodeList} from "./NodeList.jsx";
-import {NodeItem} from "./NodeItem.jsx";
+import NodeList from "./NodeList.jsx";
+import NodeItem from "./NodeItem.jsx";
+
 import {SelectField, MenuItem} from "material-ui";
 
 var classNames = require("classnames");
 
-export class ObservationsControl extends React.Component {
+export default class ObservationsControl extends React.Component {
   constructor(props){
     super(props);
     this.state = {

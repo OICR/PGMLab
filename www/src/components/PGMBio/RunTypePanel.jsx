@@ -1,6 +1,6 @@
 import React from "react";
 
-export class RunTypePanel extends React.Component {
+export default class RunTypePanel extends React.Component {
   constructor(props){
     super(props);
 

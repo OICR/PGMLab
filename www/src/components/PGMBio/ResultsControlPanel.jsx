@@ -1,10 +1,10 @@
 import React from "react";
 
-import {SelectPosteriorProbabilities} from "./SelectPosteriorProbabilities.jsx";
+import SelectPosteriorProbabilities from "./SelectPosteriorProbabilities.jsx";
 
 import {SelectField, MenuItem} from "material-ui";
 
-export class ResultsControlPanel extends React.Component {
+export default class ResultsControlPanel extends React.Component {
   constructor(props){
     super(props);
   }

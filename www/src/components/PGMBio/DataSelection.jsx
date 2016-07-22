@@ -1,9 +1,9 @@
 import React from 'react'
 
-import {SelectPathways} from './SelectPathways.jsx'
-import {SelectObservationSet} from './SelectObservationSet.jsx'
+import SelectPathways from './SelectPathways.jsx'
+import SelectObservationSet from './SelectObservationSet.jsx'
 
-export class DataSelection extends React.Component {
+export default class DataSelection extends React.Component {
   componentDidMount() {
     $(".modal-trigger").leanModal();
     $(".tooltipped").tooltip({delay: 25});

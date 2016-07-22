@@ -3,7 +3,7 @@ import React from 'react'
 import {UploadModal} from "./UploadModal.jsx";
 
 var classNames = require("classnames");
-export class Header extends React.Component {
+export default class Header extends React.Component {
   componentDidMount(){
     $(".dropdown-button").dropdown();
     $(".tooltipped").tooltip({delay: 25});

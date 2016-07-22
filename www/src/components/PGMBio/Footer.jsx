@@ -2,7 +2,7 @@ import React from 'react'
 
 import OICRlogo from "../../../assets/logos/logo_oicr_transparent.png"
 
-export class Footer extends React.Component {
+export default class Footer extends React.Component {
   render(){
     const noPadMargin = {paddingBottom:"0px",paddingTop:"0px",marginTop:"0px"}
     return (

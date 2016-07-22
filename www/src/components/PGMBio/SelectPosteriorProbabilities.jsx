@@ -4,7 +4,7 @@ import {Dialog, FlatButton, TextField} from "material-ui";
 
 var classNames = require("classnames");
 
-export class SelectPosteriorProbabilities extends React.Component {
+export default class SelectPosteriorProbabilities extends React.Component {
   constructor(props){
     super(props);
     this.state = {
