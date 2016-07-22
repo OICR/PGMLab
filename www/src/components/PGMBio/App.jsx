@@ -2,8 +2,6 @@ import React from "react";
 import {connect} from "react-redux";
 import * as actionCreators from "./redux/action_creators.jsx";
 
-
-
 import Header from "./Header.jsx";
 import Body   from "./BodyPGMBio.jsx";
 import Footer from "./Footer.jsx";

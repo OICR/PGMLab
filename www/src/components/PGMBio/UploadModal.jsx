@@ -1,6 +1,15 @@
 import React from 'react'
 var classNames=require("classnames");
 
+export class UploadModal2 extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  render(){
+
+  }
+}
+
 export class UploadModal extends React.Component {
     constructor(props) {
         super(props)
