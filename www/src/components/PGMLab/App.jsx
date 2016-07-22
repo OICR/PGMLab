@@ -12,6 +12,8 @@ import Footer from "./Footer.jsx";
 import Dialog from "material-ui/Dialog";
 import GoogleLogin from "react-google-login";
 
+var when = require("when");
+
 class AuthWrapper extends React.Component {
   constructor(props){
     super(props);
@@ -28,28 +30,34 @@ class AuthWrapper extends React.Component {
               name: gAuth.getBasicProfile().getName(),
               email: gAuth.getBasicProfile().getEmail()
             })
-            .then(pgmAuth => pgmAuth ? this.props.signIn(gAuth) : null)
+            .then(userTasks => this.props.signIn(gAuth, userTasks));
         };
       };
     const clientId = this.props.auth.get("googleClientId");
     return (
-      <GoogleLogin clientId={clientId} callback={responseGoogle} />
+      <GoogleLogin
+        clientId={clientId} callback={responseGoogle}
+        cssClass="btn-large waves-effect waves-light blue darken-1" />
     );
   }
   render(){
     const notSignedIn = !this.props.auth.get("signedIn");
     const actions = [this.getGoogleButton()];
     return (
-      notSignedIn ?
-        <Dialog title="PGMLab" titleClassName="center-align" actions={actions} modal={true} open={true}>
-          {"PGMLab provides a queueing system for performing learning and inference over discrete Bayesian networks. Please sign in through Google to continue."}
-        </Dialog>
-        :
-        <div>
-          <Header auth={this.props.auth}/>
-          <Body {...this.props} />
-          <Footer />
-        </div>
+      <div>
+        {
+          notSignedIn ?
+          <Dialog actions={actions} modal={true} open={true} contentClassName="center-align">
+            <span>
+            {`Please sign in through Google to continue.`}
+            </span>
+          </Dialog>
+          :null
+        }
+        <Header auth={this.props.auth} signOut={this.props.signOut}/>
+        <Body {...this.props} />
+        <Footer />
+      </div>
     );
   }
 }

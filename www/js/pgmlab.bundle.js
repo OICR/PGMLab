@@ -101,33 +101,9 @@
 	    return f;
 	  })(_redux.createStore);
 	  var store = createStoreDevTools(_reducer2.default);
-	  // Initial state
 	  store.dispatch({
 	    type: "SET_INITIAL_STATE",
-	    initialState: {
-	      auth: (0, _immutable.Map)({
-	        signedIn: false,
-	        googleProfile: (0, _immutable.Map)(),
-	        googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com", //Google Console
-	        googleIdToken: ""
-	      }),
-	      wamp: wamp,
-	      tasks: (0, _immutable.Map)(),
-	      showFaceted: false,
-	      typeFilters: (0, _immutable.Map)({
-	        "learning": true,
-	        "inference": true
-	      }),
-	      statusFilters: (0, _immutable.Map)({
-	        "task-received": true,
-	        "task-started": true,
-	        "task-succeeded": true,
-	        "task-failed": true
-	      }),
-	      dateSort: "descending",
-	      idFilter: "",
-	      snackbarMessage: "Welcome to PGMLab job submission and queueing"
-	    }
+	    wamp: wamp
 	  });
 	  (0, _reactDom.render)(_react2.default.createElement(
 	    _reactRedux.Provider,
@@ -84059,6 +84035,8 @@
 	  value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	exports.default = function () {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? (0, _immutable.Map)() : arguments[0];
 	  var action = arguments[1];
@@ -84066,9 +84044,14 @@
 	  console.log("...action: ", action);
 	  switch (action.type) {
 	    case "SIGN_IN":
-	      return setGoogleAuth(state, action);
+	
+	      return signIn(state, action);
+	    case "SIGN_OUT":
+	      return signOut(state);
 	    case "SET_INITIAL_STATE":
-	      return setState(state, action.initialState);
+	      var wamp = action.wamp;
+	
+	      return state.merge(_extends({ wamp: wamp }, initialAppState));
 	    // Getting and updating tasks data in state
 	    case "SET_TASKS":
 	      return setTasks(state, action);
@@ -84099,22 +84082,53 @@
 	
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 	
-	// Signing into PGMLab
-	function setGoogleAuth(state, action) {
+	// Initial app state for app start up and signing out
+	var initialAppState = {
+	  auth: (0, _immutable.Map)({
+	    signedIn: false,
+	    googleProfile: (0, _immutable.Map)({
+	      "name": "",
+	      "email": ""
+	    }),
+	    googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com", //Google Console
+	    googleIdToken: ""
+	  }),
+	  tasks: (0, _immutable.Map)(),
+	  showFaceted: false,
+	  typeFilters: (0, _immutable.Map)({
+	    "learning": true,
+	    "inference": true
+	  }),
+	  statusFilters: (0, _immutable.Map)({
+	    "task-received": true,
+	    "task-started": true,
+	    "task-succeeded": true,
+	    "task-failed": true
+	  }),
+	  dateSort: "descending",
+	  idFilter: "",
+	  snackbarMessage: ""
+	};
+	
+	// Update user info and their tasks
+	function signIn(state, action) {
 	  var signedIn = true;
+	  var tasks = action.tasks;
 	  var googleIdToken = action.googleIdToken;
 	
-	  var nameEmail = _objectWithoutProperties(action, ["googleIdToken"]);
+	  var nameEmail = _objectWithoutProperties(action, ["tasks", "googleIdToken"]);
 	
 	  var googleProfile = (0, _immutable.Map)(nameEmail);
-	  return state.update("auth", function (auth) {
-	    return auth.merge({ signedIn: signedIn, googleIdToken: googleIdToken, googleProfile: googleProfile });
+	  return state.withMutations(function (state) {
+	    return state.update("auth", function (auth) {
+	      return auth.merge({ signedIn: signedIn, googleIdToken: googleIdToken, googleProfile: googleProfile });
+	    }).update("tasks", function () {
+	      return (0, _immutable.fromJS)(tasks);
+	    });
 	  });
 	}
-	
-	// Standard setState
-	function setState(state, newState) {
-	  return state.merge(newState);
+	function signOut(state) {
+	  return state.merge(initialAppState);
 	}
 	
 	// Construct tasks data as immutable
@@ -84234,6 +84248,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	var when = __webpack_require__(606);
+	
 	var AuthWrapper = function (_React$Component) {
 	  _inherits(AuthWrapper, _React$Component);
 	
@@ -84258,27 +84274,34 @@
 	            id_token: gAuth.getAuthResponse().id_token,
 	            name: gAuth.getBasicProfile().getName(),
 	            email: gAuth.getBasicProfile().getEmail()
-	          }).then(function (pgmAuth) {
-	            return pgmAuth ? _this2.props.signIn(gAuth) : null;
+	          }).then(function (userTasks) {
+	            return _this2.props.signIn(gAuth, userTasks);
 	          });
 	        };
 	      };
 	      var clientId = this.props.auth.get("googleClientId");
-	      return _react2.default.createElement(_reactGoogleLogin2.default, { clientId: clientId, callback: responseGoogle });
+	      return _react2.default.createElement(_reactGoogleLogin2.default, {
+	        clientId: clientId, callback: responseGoogle,
+	        cssClass: "btn-large waves-effect waves-light blue darken-1" });
 	    }
 	  }, {
 	    key: "render",
 	    value: function render() {
 	      var notSignedIn = !this.props.auth.get("signedIn");
 	      var actions = [this.getGoogleButton()];
-	      return notSignedIn ? _react2.default.createElement(
-	        _Dialog2.default,
-	        { title: "PGMLab", titleClassName: "center-align", actions: actions, modal: true, open: true },
-	        "PGMLab provides a queueing system for performing learning and inference over discrete Bayesian networks. Please sign in through Google to continue."
-	      ) : _react2.default.createElement(
+	      return _react2.default.createElement(
 	        "div",
 	        null,
-	        _react2.default.createElement(_Header2.default, { auth: this.props.auth }),
+	        notSignedIn ? _react2.default.createElement(
+	          _Dialog2.default,
+	          { actions: actions, modal: true, open: true, contentClassName: "center-align" },
+	          _react2.default.createElement(
+	            "span",
+	            null,
+	            "Please sign in through Google to continue."
+	          )
+	        ) : null,
+	        _react2.default.createElement(_Header2.default, { auth: this.props.auth, signOut: this.props.signOut }),
 	        _react2.default.createElement(_BodyPGMLab2.default, this.props),
 	        _react2.default.createElement(_Footer2.default, null)
 	      );
@@ -84339,6 +84362,7 @@
 	  value: true
 	});
 	exports.signIn = signIn;
+	exports.signOut = signOut;
 	exports.toggleFacetedSearch = toggleFacetedSearch;
 	exports.updateIDFilter = updateIDFilter;
 	exports.updateTypeFilter = updateTypeFilter;
@@ -84349,14 +84373,19 @@
 	exports.updateTaskInState = updateTaskInState;
 	exports.snackbarNotify = snackbarNotify;
 	// AUTHENTICATION
-	function signIn(gAuth) {
+	function signIn(gAuth, tasks) {
 	  var googleIdToken = gAuth.getAuthResponse().id_token;
 	  var profile = gAuth.getBasicProfile();
 	  var name = profile.getName();
 	  var email = profile.getEmail();
 	  return {
 	    type: "SIGN_IN",
-	    googleIdToken: googleIdToken, name: name, email: email
+	    googleIdToken: googleIdToken, name: name, email: email, tasks: tasks
+	  };
+	}
+	function signOut() {
+	  return {
+	    type: "SIGN_OUT"
 	  };
 	}
 	
@@ -84449,10 +84478,58 @@
 	  function Header(props) {
 	    _classCallCheck(this, Header);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Header).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Header).call(this, props));
+	
+	    _this.getSignOutBtn = _this.getSignOutBtn.bind(_this);
+	    return _this;
 	  }
 	
 	  _createClass(Header, [{
+	    key: "getLinkBtns",
+	    value: function getLinkBtns() {
+	      var links = {
+	        "Wiki": "http://oicr.github.io/PGMLab/",
+	        "Github": "http://github.com/OICR/PGMLab"
+	      };
+	      return Object.keys(links).map(function (k) {
+	        return _react2.default.createElement(
+	          "li",
+	          { key: k },
+	          _react2.default.createElement(
+	            "a",
+	            { href: links[k], target: "_blank" },
+	            "" + k
+	          )
+	        );
+	      });
+	    }
+	  }, {
+	    key: "getSignOutBtn",
+	    value: function getSignOutBtn() {
+	      var _this2 = this;
+	
+	      return !this.props.auth.get("signedIn") ? null : _react2.default.createElement(
+	        "li",
+	        null,
+	        _react2.default.createElement(
+	          "a",
+	          { href: "#", onClick: function onClick(evt) {
+	              return _this2.props.signOut();
+	            } },
+	          _react2.default.createElement(
+	            "span",
+	            null,
+	            "Sign Out"
+	          ),
+	          _react2.default.createElement(
+	            "i",
+	            { className: "material-icons right" },
+	            "exit_to_app"
+	          )
+	        )
+	      );
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
 	      var noVertMargin = { marginTop: "0px", marginBottom: "0px" };
@@ -84464,12 +84541,7 @@
 	          { className: "blue darken-1", role: "navigation" },
 	          _react2.default.createElement(
 	            "div",
-	            { className: "nav-wrapper white-text" },
-	            _react2.default.createElement(
-	              "span",
-	              { className: "left", style: { paddingLeft: "15px" } },
-	              this.props.auth.getIn(["googleProfile", "name"]) + "\n                (" + this.props.auth.getIn(["googleProfile", "email"]) + ")"
-	            ),
+	            { className: "nav-wrapper" },
 	            _react2.default.createElement(
 	              "span",
 	              { className: "brand-logo center" },
@@ -84482,15 +84554,8 @@
 	            _react2.default.createElement(
 	              "ul",
 	              { className: "right" },
-	              _react2.default.createElement(
-	                "li",
-	                null,
-	                _react2.default.createElement(
-	                  "a",
-	                  { target: "_blank", href: "http://github.com/OICR/PGMLab" },
-	                  "Github"
-	                )
-	              )
+	              this.getLinkBtns(),
+	              this.getSignOutBtn()
 	            )
 	          )
 	        )
@@ -84554,10 +84619,11 @@
 	      var noMargin = { marginTop: "0px", marginBottom: "0px" };
 	      var _props = this.props;
 	      var auth = _props.auth;
+	      var signOut = _props.signOut;
 	      var snackbarMessage = _props.snackbarMessage;
 	      var snackbarNotify = _props.snackbarNotify;
 	
-	      var rest = _objectWithoutProperties(_props, ["auth", "snackbarMessage", "snackbarNotify"]);
+	      var rest = _objectWithoutProperties(_props, ["auth", "signOut", "snackbarMessage", "snackbarNotify"]);
 	
 	      var submitProps = { auth: auth, snackbarMessage: snackbarMessage, snackbarNotify: snackbarNotify };
 	      var resultsProps = _extends({ auth: auth }, rest);
@@ -84633,9 +84699,9 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      return _react2.default.createElement(_Snackbar2.default, {
+	      return this.props.snackbarMessage != "" ? _react2.default.createElement(_Snackbar2.default, {
 	        className: "center-align", open: true, autoHideDuration: 5000,
-	        message: this.props.snackbarMessage });
+	        message: this.props.snackbarMessage }) : null;
 	    }
 	  }]);
 	
@@ -84794,115 +84860,71 @@
 	    value: function render() {
 	      var _this3 = this;
 	
+	      var noMarginTop = { marginTop: "0px" };
+	      var uploads = {
+	        "pairwiseInteraction": "Pairwise interaction File",
+	        "observation": "Observation File",
+	        "learntFactorgraph": "Learnt Factorgraph File (Optional)"
+	      };
+	      var uploadInputs = Object.keys(uploads).map(function (k) {
+	        return _react2.default.createElement(
+	          "div",
+	          { key: k, className: "row input-field file-field" },
+	          _react2.default.createElement(
+	            "h6",
+	            { className: "center-align" },
+	            "" + uploads[k]
+	          ),
+	          _react2.default.createElement(
+	            "div",
+	            { className: "btn" },
+	            _react2.default.createElement(
+	              "span",
+	              null,
+	              _react2.default.createElement(
+	                "i",
+	                { className: "material-icons" },
+	                "file_upload"
+	              )
+	            ),
+	            _react2.default.createElement("input", { type: "file", name: k + "File" })
+	          ),
+	          _react2.default.createElement(
+	            "div",
+	            { className: "file-path-wrapper" },
+	            _react2.default.createElement("input", {
+	              type: "text", className: "file-path validate",
+	              name: k + "Filename", placeholder: "Upload a file" })
+	          )
+	        );
+	      });
+	      var numberStatesInput = _react2.default.createElement(
+	        "div",
+	        { className: "row input-field" },
+	        _react2.default.createElement(
+	          "span",
+	          null,
+	          "Number of States: " + this.state.numberStates
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          { className: "range-field" },
+	          _react2.default.createElement("input", { type: "range", name: "numberStates", defaultValue: 3, min: 2, max: 10,
+	            onInput: function onInput(evt) {
+	              _this3.setState({ numberStates: evt.target.value });
+	            } })
+	        )
+	      );
 	      return _react2.default.createElement(
 	        "form",
 	        { ref: "inferenceForm", className: "center-align", onSubmit: function onSubmit(evt) {
 	            _this3.submitInference(evt);
 	          } },
-	        _react2.default.createElement(
-	          "div",
-	          { className: "row input-field file-field" },
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            "Pairwise interaction File"
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "btn" },
-	            _react2.default.createElement(
-	              "span",
-	              null,
-	              _react2.default.createElement(
-	                "i",
-	                { className: "material-icons" },
-	                "file_upload"
-	              )
-	            ),
-	            _react2.default.createElement("input", { type: "file", name: "pairwiseInteractionFile" })
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "file-path-wrapper" },
-	            _react2.default.createElement("input", { type: "text", className: "file-path validate", name: "pairwiseInteractionFilename" })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: "row input-field file-field" },
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            "Observation File"
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "btn" },
-	            _react2.default.createElement(
-	              "span",
-	              null,
-	              _react2.default.createElement(
-	                "i",
-	                { className: "material-icons" },
-	                "file_upload"
-	              )
-	            ),
-	            _react2.default.createElement("input", { type: "file", name: "observationFile" })
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "file-path-wrapper" },
-	            _react2.default.createElement("input", { type: "text", className: "file-path validate", name: "observationFilename" })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: "row input-field file-field" },
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            "Learnt Factorgraph File (Optional)"
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "btn" },
-	            _react2.default.createElement(
-	              "span",
-	              null,
-	              _react2.default.createElement(
-	                "i",
-	                { className: "material-icons" },
-	                "file_upload"
-	              )
-	            ),
-	            _react2.default.createElement("input", { type: "file", name: "learntFactorgraphFile" })
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "file-path-wrapper" },
-	            _react2.default.createElement("input", { type: "text", className: "file-path validate", name: "learntFactorgraphFilename" })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: "row input-field" },
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            "Number of States: " + this.state.numberStates
-	          ),
-	          _react2.default.createElement(
-	            "p",
-	            { className: "range-field" },
-	            _react2.default.createElement("input", { type: "range", name: "inferenceNumberOfStates", defaultValue: 3, min: 2, max: 10,
-	              onInput: function onInput(evt) {
-	                _this3.setState({ numberStates: evt.target.value });
-	              } })
-	          )
-	        ),
+	        uploadInputs,
+	        numberStatesInput,
 	        _react2.default.createElement(
 	          "button",
-	          { className: "btn", type: "submit" },
+	          { className: "waves-effect btn-large", type: "submit" },
 	          "Run Inference"
 	        )
 	      );
@@ -84947,8 +84969,7 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LearningSubmit).call(this, props));
 	
 	    _this.state = {
-	      //defaultValues
-	      numberStates: 3,
+	      numberStates: 3, //defaultValues
 	      maxIterations: 4000
 	    };
 	    _this.submitLearning = _this.submitLearning.bind(_this);
@@ -84984,114 +85005,102 @@
 	    value: function render() {
 	      var _this3 = this;
 	
+	      var noMarginTop = { marginTop: "0px" };
+	      // Uploading .pi and .obs files
+	      var uploads = {
+	        "pairwiseInteraction": "Pairwise interaction File",
+	        "observation": "Observation File"
+	      };
+	      var uploadInputs = Object.keys(uploads).map(function (k) {
+	        return _react2.default.createElement(
+	          "div",
+	          { key: k, className: "row input-field file-field" },
+	          _react2.default.createElement(
+	            "h6",
+	            { className: "center-align" },
+	            "" + uploads[k]
+	          ),
+	          _react2.default.createElement(
+	            "div",
+	            { className: "btn" },
+	            _react2.default.createElement(
+	              "span",
+	              null,
+	              _react2.default.createElement(
+	                "i",
+	                { className: "material-icons" },
+	                "file_upload"
+	              )
+	            ),
+	            _react2.default.createElement("input", { type: "file", name: k + "File" })
+	          ),
+	          _react2.default.createElement(
+	            "div",
+	            { className: "file-path-wrapper" },
+	            _react2.default.createElement("input", {
+	              type: "text", className: "file-path validate",
+	              name: k + "Filename", placeholder: "Upload a file" })
+	          )
+	        );
+	      });
+	      // Parameters
+	      var numberStatesInput = _react2.default.createElement(
+	        "div",
+	        { className: "row input-field" },
+	        _react2.default.createElement(
+	          "span",
+	          null,
+	          "Number of States: " + this.state.numberStates
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          { className: "range-field", style: noMarginTop },
+	          _react2.default.createElement("input", { type: "range", name: "numberStates", defaultValue: 3, min: 2, max: 10,
+	            onInput: function onInput(evt) {
+	              _this3.setState({ numberStates: evt.target.value });
+	            } })
+	        )
+	      );
+	      var maxIterationInput = _react2.default.createElement(
+	        "div",
+	        { className: "row input-field" },
+	        _react2.default.createElement(
+	          "span",
+	          null,
+	          "EM Max Iterations: " + this.state.maxIterations
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          { className: "range-field", style: noMarginTop },
+	          _react2.default.createElement("input", { type: "range", name: "emMaxIterations", defaultValue: 4000, min: 0, max: 8000,
+	            onChange: function onChange(evt) {
+	              _this3.setState({ maxIterations: evt.target.value });
+	            } })
+	        )
+	      );
+	      var logLikelihoodInput = _react2.default.createElement(
+	        "div",
+	        { className: "row input-field" },
+	        _react2.default.createElement(
+	          "span",
+	          null,
+	          "Log Likelihood Change Limit:"
+	        ),
+	        _react2.default.createElement("input", { type: "number", name: "logLikelihoodChangeLimit", step: 0.00001, defaultValue: 0.001, min: 0,
+	          className: "center-align" })
+	      );
 	      return _react2.default.createElement(
 	        "form",
 	        { ref: "learningForm", className: "center-align", onSubmit: function onSubmit(evt) {
 	            _this3.submitLearning(evt);
 	          } },
-	        _react2.default.createElement(
-	          "div",
-	          { className: "row input-field file-field" },
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            "Pairwise interaction File"
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "btn" },
-	            _react2.default.createElement(
-	              "span",
-	              null,
-	              _react2.default.createElement(
-	                "i",
-	                { className: "material-icons" },
-	                "file_upload"
-	              )
-	            ),
-	            _react2.default.createElement("input", { type: "file", name: "pairwiseInteractionFile" })
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "file-path-wrapper" },
-	            _react2.default.createElement("input", { type: "text", className: "file-path validate", name: "pairwiseInteractionFilename" })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: "row input-field file-field" },
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            "Observation File"
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "btn" },
-	            _react2.default.createElement(
-	              "span",
-	              null,
-	              _react2.default.createElement(
-	                "i",
-	                { className: "material-icons" },
-	                "file_upload"
-	              )
-	            ),
-	            _react2.default.createElement("input", { type: "file", name: "observationFile" })
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "file-path-wrapper" },
-	            _react2.default.createElement("input", { type: "text", className: "file-path validate", name: "observationFilename" })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: "row input-field" },
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            "Number of States: " + this.state.numberStates
-	          ),
-	          _react2.default.createElement(
-	            "p",
-	            { className: "range-field" },
-	            _react2.default.createElement("input", { type: "range", name: "numberStates", defaultValue: 3, min: 2, max: 10,
-	              onInput: function onInput(evt) {
-	                _this3.setState({ numberStates: evt.target.value });
-	              } })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: "row input-field" },
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            "EM Max Iterations: " + this.state.maxIterations
-	          ),
-	          _react2.default.createElement(
-	            "p",
-	            { className: "range-field" },
-	            _react2.default.createElement("input", { type: "range", name: "emMaxIterations", defaultValue: 4000, min: 0, max: 8000,
-	              onChange: function onChange(evt) {
-	                _this3.setState({ maxIterations: evt.target.value });
-	              } })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: "row input-field" },
-	          _react2.default.createElement(
-	            "p",
-	            null,
-	            "Log Likelihood Change Limit"
-	          ),
-	          _react2.default.createElement("input", { type: "number", name: "logLikelihoodChangeLimit", step: 0.00001, defaultValue: 0.001, min: 0 })
-	        ),
+	        uploadInputs,
+	        numberStatesInput,
+	        maxIterationInput,
+	        logLikelihoodInput,
 	        _react2.default.createElement(
 	          "button",
-	          { className: "btn", type: "submit" },
+	          { className: "waves-effect btn-large", type: "submit" },
 	          "Run Learning"
 	        )
 	      );
@@ -85156,12 +85165,6 @@
 	    value: function componentWillMount() {
 	      var _this2 = this;
 	
-	      this.props.wamp.call("celery.tasks", [], {
-	        id_token: this.props.auth.get("googleIdToken")
-	      }).then(function (tasks) {
-	        console.log("...celery.tasks");
-	        _this2.props.setTasksInState(tasks);
-	      });
 	      var eventSource = new EventSource("celery");
 	      eventSource.addEventListener("celery.task.add", function (evt) {
 	        console.log(JSON.parse(evt.data));
@@ -85180,7 +85183,7 @@
 	    value: function getTableRows() {
 	      var _this3 = this;
 	
-	      return this.props.tasks.valueSeq().filter(function (t) {
+	      return !this.props.auth.get("signedIn") ? null : this.props.tasks.valueSeq().filter(function (t) {
 	        return t.get("task_id").includes(_this3.props.idFilter);
 	      }).filter(function (t) {
 	        return _this3.props.typeFilters.get(t.get("task_type"));
@@ -85198,6 +85201,7 @@
 	      var _this4 = this;
 	
 	      var noVertPadding = { paddingBottom: "0px", paddingTop: "0px" };
+	      var notSignedIn = !this.props.auth.get("signedIn");
 	      var tableTitle = _react2.default.createElement(
 	        _Table.TableRow,
 	        null,
@@ -85205,9 +85209,9 @@
 	          _Table.TableHeaderColumn,
 	          { colSpan: "6", style: Object.assign({ textAlign: "center" }, noVertPadding) },
 	          _react2.default.createElement(
-	            "h6",
-	            null,
-	            "Job Queue"
+	            "h5",
+	            { className: "grey-text text-darken-4" },
+	            (notSignedIn ? "" : this.props.auth.getIn(["googleProfile", "name"]) + "'s ") + " Job Queue"
 	          ),
 	          _react2.default.createElement(
 	            "a",
@@ -85533,6 +85537,8 @@
 	      var noVertMargin = { marginBottom: "0px", marginTop: "0px" };
 	      var noVertPadding = { paddingBottom: "0px", paddingTop: "0px" };
 	      var noVertSpace = Object.assign({}, noVertMargin, noVertPadding);
+	      var filterLabelClass = "col s1 valign right-align grey-text";
+	      var filterClass = "col s11 valign";
 	
 	      var _clusterTasks = this.clusterTasks();
 	
@@ -85557,12 +85563,12 @@
 	        { className: "row", style: noVertMargin },
 	        _react2.default.createElement(
 	          "div",
-	          { className: "col s1 valign grey-text" },
-	          "Type:"
+	          { className: filterLabelClass },
+	          "Type"
 	        ),
 	        _react2.default.createElement(
 	          "div",
-	          { className: "col s11 valign" },
+	          { className: filterClass },
 	          _react2.default.createElement(
 	            "form",
 	            { className: "row" },
@@ -85592,12 +85598,12 @@
 	        { className: "row", style: noVertMargin },
 	        _react2.default.createElement(
 	          "div",
-	          { className: "col s1 grey-text" },
-	          "Status:"
+	          { className: filterLabelClass },
+	          "Status"
 	        ),
 	        _react2.default.createElement(
 	          "div",
-	          { className: "col s11" },
+	          { className: filterClass },
 	          _react2.default.createElement(
 	            "form",
 	            { className: "row" },
@@ -85627,12 +85633,12 @@
 	        { className: "row", style: noVertMargin },
 	        _react2.default.createElement(
 	          "div",
-	          { className: "col s1 grey-text" },
+	          { className: filterLabelClass },
 	          "Date:"
 	        ),
 	        _react2.default.createElement(
 	          "div",
-	          { className: "col s11" },
+	          { className: filterClass },
 	          _react2.default.createElement(
 	            "form",
 	            { className: "row" },

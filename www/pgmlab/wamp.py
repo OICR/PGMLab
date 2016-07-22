@@ -10,34 +10,32 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
         self.dbsm = DatabaseSessionManager()
-        # On Google authentication, register their basic info to PGMLab
+        def register_login_user(id_token):
+            sub = self.dbsm.validate_g_token(id_token=id_token)["sub"]
+            user = self.dbsm.get_user(sub_uid=sub)
+            if not user:
+                self.dbsm.register_user(sub_uid=sub, name=name, email=email)
+            print("...[wamp] {} signed in".format(sub))
+        def get_user_tasks(id_token):
+            sub = self.dbsm.validate_g_token(id_token=id_token)["sub"]
+            tasks = self.dbsm.get_all_tasks(sub_uid=sub)
+            tasks_dict = {}
+            for task in tasks:
+                tasks_dict[task.task_id] = task.to_dict()
+            print("...[wamp] get_all_tasks")
+            return tasks_dict
+        # On Google authentication, register their basic info to PGMLab and return their tasks
         def google_auth(id_token, name, email):
-            # Upsert user in db
             try:
-                sub = self.dbsm.validate_g_token(id_token=id_token)["sub"]
-                user = self.dbsm.get_user(sub_uid=sub)
-                if not user:
-                    self.dbsm.register_user(sub_uid=sub, name=name, email=email)
-                print("...[wamp] {} signed in".format(sub))
-                return True
+                # Upsert user in db
+                register_login_user(id_token=id_token)
+                # Return all user's tasks
+                return get_user_tasks(id_token=id_token)
             except:
                 pass # Could not authenticate
             else:
                 return False
-        def get_all_tasks(id_token):
-            try:
-                sub = self.dbsm.validate_g_token(id_token=id_token)["sub"]
-                tasks = self.dbsm.get_all_tasks(sub_uid=sub)
-                tasks_dict = {}
-                for task in tasks:
-                    tasks_dict[task.task_id] = task.to_dict()
-                print("...[wamp] get_all_tasks")
-                return tasks_dict
-            except:
-                pass #
-
         yield self.register(google_auth, u"google.auth")
-        yield self.register(get_all_tasks, u"celery.tasks")
         print("...[wamp] Procedures registered")
 
 if __name__ == "__main__":
