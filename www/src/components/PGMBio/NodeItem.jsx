@@ -3,7 +3,7 @@ import React from "react";
 import {Divider, FlatButton, Popover, Menu, MenuItem, FontIcon} from "material-ui";
 
 var classNames = require("classnames");
-var graphvis = require("./../bin/graphvis.js");
+var graphvis = require("./../../lib/graphvis.js");
 
 export class NodeItem extends React.Component {
   constructor(props){

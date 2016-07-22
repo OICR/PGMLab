@@ -1,6 +1,6 @@
 import React from 'react'
 
-import OICRlogo from "../../assets/logos/logo_oicr_transparent.png"
+import OICRlogo from "../../../assets/logos/logo_oicr_transparent.png"
 
 export class Footer extends React.Component {
   render(){

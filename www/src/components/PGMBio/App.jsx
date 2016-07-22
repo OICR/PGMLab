@@ -6,7 +6,7 @@ import {Body}   from './BodyPGMBio.jsx';
 import {Footer} from './Footer.jsx';
 
 var moment = require('moment')
-var graphvis = require('./../bin/graphvis.js');
+var graphvis = require('./../../lib/graphvis.js');
 
 
 import {Snackbar} from "material-ui";

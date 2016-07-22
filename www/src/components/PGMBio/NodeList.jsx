@@ -2,7 +2,7 @@ import React from "react";
 
 import {NodeItem} from "./NodeItem.jsx";
 
-var graphvis = require("./../bin/graphvis.js");
+var graphvis = require("./../../lib/graphvis.js");
 
 export class NodeList extends React.Component {
   constructor(props){

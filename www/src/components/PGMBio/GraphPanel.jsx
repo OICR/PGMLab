@@ -1,7 +1,7 @@
 // GraphPanel: right side of window displaying graph
 import React from 'react';
 
-var graphvis = require("../bin/graphvis.js");
+var graphvis = require("../../lib/graphvis.js");
 
 export class GraphPanel extends React.Component {
   constructor(props){

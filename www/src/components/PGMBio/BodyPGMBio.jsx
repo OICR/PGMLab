@@ -10,7 +10,7 @@ import {ResultsControlPanel} from "./ResultsControlPanel.jsx";
 import {GraphPanel} from "./GraphPanel.jsx";
 import {HeatMapPanel} from "./HeatMapPanel.jsx";
 
-var graphvis = require("./../bin/graphvis.js");
+var graphvis = require("./../../lib/graphvis.js");
 var classNames = require("classnames");
 
 export class Body extends React.Component {
