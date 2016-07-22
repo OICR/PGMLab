@@ -1,5 +1,8 @@
 import React from "react"
-import {render} from "react-dom"
+
+
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import Header from "./Header.jsx";
 import Body   from "./BodyPGMBio.jsx";
@@ -7,7 +10,6 @@ import Footer from "./Footer.jsx";
 
 var moment = require("moment")
 var graphvis = require("./../../lib/graphvis.js");
-
 
 import {Snackbar} from "material-ui";
 
@@ -410,3 +412,17 @@ export class App extends  React.Component {
       )
     }
 };
+
+// MuiThemeProvider > App (App2) > AuthWrapper (App)
+export class App2 extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return (
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <App {...this.props} />
+      </MuiThemeProvider>
+    )
+  }
+}

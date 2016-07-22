@@ -1,10 +1,6 @@
 
 import React from "react"
 
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-
-
 import RunControlPanel from "./RunControlPanel.jsx";
 import ResultsControlPanel from "./ResultsControlPanel.jsx";
 import GraphPanel from "./GraphPanel.jsx";
@@ -24,7 +20,6 @@ export default class Body extends React.Component {
       const graphSize = {minWidth:"800px", minHeight:"650px"};
       const heatmapSize = {minHeight:"700px"};
       return (
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
         <main>
           <main className={classNames({"hide":tab!=="Run"},["row grey lighten-5"])} style={noMargin}>
             <div className="col s4" style={leftStyle}>
@@ -46,7 +41,6 @@ export default class Body extends React.Component {
             </div>
           </main>
         </main>
-        </MuiThemeProvider>
       )
     }
 }

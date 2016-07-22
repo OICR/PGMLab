@@ -4,7 +4,7 @@ import {render} from 'react-dom'
 import injectTapEventPlugin from "react-tap-event-plugin";
 injectTapEventPlugin();
 
-import {App} from "./components/PGMBio/App.jsx"
+import {App2 as App} from "./components/PGMBio/App.jsx"
 
 var materialize = require('./lib/materialize.min.js')
 var graphvis = require('./lib/graphvis.js');
