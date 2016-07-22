@@ -7,10 +7,11 @@ import reducer from "./components/PGMBio/redux/reducer.jsx";
 import {AppContainer} from "./components/PGMBio/App.jsx";
 import {App2 as App} from "./components/PGMBio/App.jsx"
 
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+
 import injectTapEventPlugin from "react-tap-event-plugin";
 injectTapEventPlugin();
-
-
 
 var materialize = require('./lib/materialize.min.js')
 var graphvis = require('./lib/graphvis.js');
@@ -55,13 +56,15 @@ function initializeApp(reactomePathways) {
   )(createStore);
   const store = createStoreDevTools(reducer);
   render(
-    <Provider store={store}>
-      <AppContainer
-            reactomePathways={reactomePathways}
-            getReactomePathway={getReactomePathway}
-            PGMLabInference={PGMLabInference}
-            callInchlibCluster={callInchlibCluster} />
-    </Provider>,
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <Provider store={store}>
+        <AppContainer
+              reactomePathways={reactomePathways}
+              getReactomePathway={getReactomePathway}
+              PGMLabInference={PGMLabInference}
+              callInchlibCluster={callInchlibCluster} />
+      </Provider>
+    </MuiThemeProvider>,
     document.getElementById('app')
   );
 };

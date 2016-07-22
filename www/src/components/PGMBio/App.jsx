@@ -2,8 +2,7 @@ import React from "react";
 import {connect} from "react-redux";
 import * as actionCreators from "./redux/action_creators.jsx";
 
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+
 
 import Header from "./Header.jsx";
 import Body   from "./BodyPGMBio.jsx";
@@ -421,9 +420,7 @@ export class App2 extends React.Component {
   }
   render(){
     return (
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
         <App {...this.props} />
-      </MuiThemeProvider>
     )
   }
 }
