@@ -434,4 +434,4 @@ function mapStateToProps(state) {
   };
 }
 
-export const AppContainer = connect(mapStateToProps, actionCreators)(App)
+export const AppContainer = connect(mapStateToProps, actionCreators)(App2)

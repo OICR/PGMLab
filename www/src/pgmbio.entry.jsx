@@ -5,11 +5,12 @@ import {compose, createStore} from "redux";
 import {Provider} from "react-redux";
 import reducer from "./components/PGMBio/redux/reducer.jsx";
 import {AppContainer} from "./components/PGMBio/App.jsx";
+import {App2 as App} from "./components/PGMBio/App.jsx"
 
 import injectTapEventPlugin from "react-tap-event-plugin";
 injectTapEventPlugin();
 
-import {App2 as App} from "./components/PGMBio/App.jsx"
+
 
 var materialize = require('./lib/materialize.min.js')
 var graphvis = require('./lib/graphvis.js');
@@ -55,7 +56,8 @@ function initializeApp(reactomePathways) {
   const store = createStoreDevTools(reducer);
   render(
     <Provider store={store}>
-      <App  reactomePathways={reactomePathways}
+      <AppContainer
+            reactomePathways={reactomePathways}
             getReactomePathway={getReactomePathway}
             PGMLabInference={PGMLabInference}
             callInchlibCluster={callInchlibCluster} />
