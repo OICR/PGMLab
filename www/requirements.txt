@@ -13,7 +13,6 @@ enum34==1.1.5
 fastcluster==1.1.20
 httplib2==0.9.2
 idna==2.1
-inchlib-clust==0.1.4
 ipaddress==1.0.16
 Jinja2==2.8
 klein==15.3.1
@@ -25,7 +24,6 @@ msgpack-python==0.4.7
 netaddr==0.7.18
 numpy==1.11.0
 oauth2client==2.2.0
-PGMLab-Wamp-Server==0.0.1
 psutil==4.1.0
 pyasn1==0.1.9
 pyasn1-modules==0.0.8
