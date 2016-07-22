@@ -271,6 +271,11 @@ export class UploadModal extends React.Component {
       const noPad = {paddingBottom: "0px", paddingTop: "0px"};
       const uploadTable=this.uploadTable(this.props.uploadList);
       return (
+        <div>
+          <a  href="#!" onClick={()=>{$("#uploadModal").openModal()}}
+              className="tooltipped" data-position="bottom" data-tooltip="Upload Data Files">
+            <i className="material-icons">file_upload</i>
+          </a>
           <div id="uploadModal" className="modal modal-fixed-footer">
             <div className="modal-content">
               <div className="section" style={noPad}>
@@ -300,6 +305,7 @@ export class UploadModal extends React.Component {
                 <a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
             </div>
           </div>
+        </div>
       );
     }
 }

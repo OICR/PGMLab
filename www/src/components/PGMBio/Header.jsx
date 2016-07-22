@@ -3,50 +3,66 @@ import React from 'react'
 import {UploadModal} from "./UploadModal.jsx";
 
 var classNames = require("classnames");
-export default class Header extends React.Component {
-  componentDidMount(){
-    $(".dropdown-button").dropdown();
-    $(".tooltipped").tooltip({delay: 25});
 
+export default class Header extends React.Component {
+  constructor(props){
+    super(props);
+    this.getLeftTabs = this.getLeftTabs.bind(this);
+  }
+  componentDidMount(){
+    $(".tooltipped").tooltip({delay: 25});
+  }
+
+  getLinkBtns(){
+    const links = {
+      "Wiki":"http://oicr.github.io/PGMLab/",
+      "Github":"http://github.com/OICR/PGMLab"
+    };
+    return Object.keys(links)
+      .map(k => (
+        <li key={k}>
+          <a href={links[k]} target="_blank">{`${k}`}</a>
+        </li>
+      ))
+  }
+  getLeftTabs(){
+    return (
+      <ul className="left">
+        {
+          ["Run", "Results"].map(tab => (
+            <li key={tab} className={classNames({"active":tab===this.props.tab})}>
+              <a href="#!" onClick={()=>{this.handleSetTab(tab)}}>{tab}</a>
+            </li>
+          ))
+        }
+        <li>
+          <UploadModal  uploadList                     = {this.props.uploadList}
+                        uploadListAddFailure           = {this.props.uploadListAddFailure}
+                        addNewPathway                  = {this.props.addNewPathway}
+                        addNewObservationSet           = {this.props.addNewObservationSet}
+                        addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
+                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
+        </li>
+      </ul>
+    )
   }
 
   handleSetTab(tab){
     this.props.setTab(tab);
-    this.tabs = this.tabs.bind(this);
-  }
-
-  tabs(){
-    return ["Run", "Results"].map(tab => (
-      <li key={tab} className={classNames({"active":tab===this.props.tab})}>
-        <a href="#!" onClick={()=>{this.handleSetTab(tab)}}>{tab}</a>
-      </li>
-    ));
   }
   render(){
-    const noMargin = {marginBottom: "0px"}
+    const noVertMargin = {marginTop:"0px",marginBottom:"0px"};
     return (
-      <header className="row" style={noMargin}>
-        <UploadModal  uploadList                     = {this.props.uploadList}
-                      uploadListAddFailure           = {this.props.uploadListAddFailure}
-                      addNewPathway                  = {this.props.addNewPathway}
-                      addNewObservationSet           = {this.props.addNewObservationSet}
-                      addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
-                      addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
+      <header className="row" style={noVertMargin}>
         <nav className="light-blue" role="navigation">
           <div className="nav-wrapper">
-            <ul id="nav-mobile" className="left hide-on-med-and-down">
-              {this.tabs()}
-              <li>
-                <a  href="#!" onClick={()=>{$("#uploadModal").openModal()}}
-                    className="tooltipped" data-position="bottom" data-tooltip="Upload Data Files">
-                  <i className="material-icons">file_upload</i>
-                </a>
-              </li>
-
+            {this.getLeftTabs()}
+            <span className="brand-logo center">
+              <h4>{"PGMBio"}</h4>
+            </span>
+            <ul className="right">
+              {this.getLinkBtns()}
             </ul>
-            <a className="brand-logo center" href="#!">
-              <h4><span style={{color: "#2e7d32"}}>PGMLab</span>{"::"}<span style={{color:"#9c27b0"}}>Bio</span></h4>
-            </a>
           </div>
         </nav>
       </header>
