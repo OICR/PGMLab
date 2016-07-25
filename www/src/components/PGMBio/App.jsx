@@ -370,7 +370,10 @@ export class App extends  React.Component {
       // console.log("<App> render()");
       return (
         <div>
-          <Header tab = {this.state.tab}
+          <Header
+            uploadFile = {this.props.uploadFile}
+
+                  tab = {this.state.tab}
                   setTab = {this.setTab}
                   uploadList                      = {this.state.uploadList}
                   uploadListAddFailure            = {this.uploadListAddFailure}
@@ -415,6 +418,7 @@ export class App extends  React.Component {
 export class App2 extends React.Component {
   constructor(props){
     super(props);
+    console.log("App2 props", this.props);
   }
   render(){
     return (

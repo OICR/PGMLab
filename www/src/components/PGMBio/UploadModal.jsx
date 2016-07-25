@@ -1,14 +1,8 @@
-import React from 'react'
+import React from "react";
+import Dialog from "material-ui/Dialog";
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
+
 var classNames=require("classnames");
-
-export class UploadModal2 extends React.Component {
-  constructor(props){
-    super(props);
-  }
-  render(){
-
-  }
-}
 
 export class UploadModal extends React.Component {
     constructor(props) {

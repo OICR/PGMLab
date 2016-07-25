@@ -1,6 +1,7 @@
 import React from 'react'
 
 import {UploadModal} from "./UploadModal.jsx";
+import {UploadModal2} from "./UploadModal2.jsx";
 
 var classNames = require("classnames");
 
@@ -42,6 +43,9 @@ export default class Header extends React.Component {
                         addNewObservationSet           = {this.props.addNewObservationSet}
                         addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
                         addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
+        </li>
+        <li>
+          <UploadModal2 uploadFile = {this.props.uploadFile}/>
         </li>
       </ul>
     )

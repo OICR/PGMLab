@@ -5,3 +5,13 @@ export function signIn(){
     type: "SIGN_IN"
   };
 }
+
+// UPLOAD DATA
+export function uploadFile(evt, fileType){
+  const file = evt.target.files[0];
+  return {
+    type: "UPLOAD",
+    fileType,
+    file
+  };
+}
