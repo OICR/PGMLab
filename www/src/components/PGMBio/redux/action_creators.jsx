@@ -7,11 +7,13 @@ export function signIn(){
 }
 
 // UPLOAD DATA
-export function uploadFile(evt, fileType){
+export function uploadFile(evt, uploadType){
   const file = evt.target.files[0];
   return {
     type: "UPLOAD",
-    fileType,
-    file
+    payload: {
+      uploadType,
+      file
+    }
   };
 }

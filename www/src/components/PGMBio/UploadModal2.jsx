@@ -80,7 +80,7 @@ export class UploadModal2 extends React.Component {
       <div>
         {this.getOpenBtn()}
         <Dialog modal={true} open={this.state.open}
-          title={"Upload Files"} titleStyle={{paddingBottom:"0px"}}>
+          title={"Upload Files"} titleStyle={{paddingBottom:"0px"}} titleClassName={"center-align"}>
           <Table selectable={false}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
               {this.getUploadBtns()}

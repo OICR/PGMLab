@@ -18,6 +18,29 @@ export class UploadModal extends React.Component {
         e.preventDefault()
     }
     readPathwayFile(e) {
+      // const contents = upload.target.result;
+      // let lines = contents.split("/n")||[];
+      // lines.pop(); // There is one additional empty element on the end because of newlines on the end of the last line
+      // // Error handling
+      // const lineCount = lines.length;
+      // const interactionCount = lineCount - 2;
+      // switch (true) {
+      //   case lineCount < 2:
+      //     // wrong format
+      //     break;
+      //   case interactionCount > 100:
+      //     // max interaction count is 100
+      //     break;
+      //   case !isInteger(lines[0]):
+      //     // first line is interaction count
+      //     break;
+      //   case Number(lines[0]) !== interactionCount:
+      //     // number of interactions doesn't match number in file header
+      //     break;
+      //   case !!lines[1].trim()
+      //     // second line should be empty/whitespace
+      //     break;
+      // };
         let reader = new FileReader();
         let file = e.target.files[0];
         let self = this;
