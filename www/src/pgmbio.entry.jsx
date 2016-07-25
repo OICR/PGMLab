@@ -55,6 +55,9 @@ function initializeApp(reactomePathways) {
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
   const store = createStoreDevTools(reducer);
+  store.dispatch({
+    type: "SET_INITIAL_STATE",
+  });
   render(
     <MuiThemeProvider muiTheme={getMuiTheme()}>
       <Provider store={store}>

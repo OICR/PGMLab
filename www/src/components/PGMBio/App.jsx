@@ -6,6 +6,9 @@ import Header from "./Header.jsx";
 import Body   from "./BodyPGMBio.jsx";
 import Footer from "./Footer.jsx";
 
+import Dialog from "material-ui/Dialog";
+import GoogleLogin from "react-google-login";
+
 var moment = require("moment")
 var graphvis = require("./../../lib/graphvis.js");
 
@@ -79,6 +82,9 @@ export class App extends  React.Component {
       this.addNewObservationSet           = this.addNewObservationSet.bind(this);
       this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this);
       this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this);
+
+      //
+      this.getGoogleBtn = this.getGoogleBtn.bind(this);
     }
 
     componentDidMount(){
@@ -365,11 +371,41 @@ export class App extends  React.Component {
                      "posteriorProbabilitySets": posteriorProbabilitySets})
     }
 
+    //////
+    getGoogleBtn(){
+      const responseGoogle = gAuth => {
+        if (gAuth.isSignedIn()) {
+          this.props.wamp
+            .call("google.auth", [], {
+              id_token: gAuth.getAuthResponse().id_token,
+              name: gAuth.getBasicProfile().getName(),
+              email: gAuth.getBasicProfile().getEmail()
+            })
+            .then(() => this.props.signIn(gAuth))
+        }
+        console.log(gAuth)
+      };
+      const clientId = this.props.auth.get("googleClientId");
+      return (
+        <GoogleLogin clientId={clientId} callback={responseGoogle} />
+      );
+    }
+
     //RENDERING//
     render(){
-      // console.log("<App> render()");
+      const notSignedIn = !this.props.auth.get("signedIn");
+      const actions = [this.getGoogleBtn()];
       return (
         <div>
+          {
+            notSignedIn ?
+            <Dialog actions={actions} modal={true} open={true}>
+              <span>
+                {"Please sign in through Google to Continue"}
+              </span>
+            </Dialog>
+            :null
+          }
           <Header
             uploadFile = {this.props.uploadFile}
 
@@ -429,7 +465,8 @@ export class App2 extends React.Component {
 
 function mapStateToProps(state) {
   return {
-
+    auth: state.get("auth"),
+    uploads: state.get("uploads")
   };
 }
 

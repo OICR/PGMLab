@@ -1,8 +1,12 @@
 // AUTHENTICATION
-export function signIn(){
+export function signIn(gAuth){
   console.log("signed in");
+  const googleIdToken = gAuth.getAuthResponse().id_token;
   return {
-    type: "SIGN_IN"
+    type: "SIGN_IN",
+    payload: {
+      googleIdToken
+    }
   };
 }
 

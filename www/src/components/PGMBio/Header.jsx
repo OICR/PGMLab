@@ -1,5 +1,6 @@
 import React from 'react'
 
+import GoogleLogin from "react-google-login";
 import {UploadModal} from "./UploadModal.jsx";
 import {UploadModal2} from "./UploadModal2.jsx";
 
@@ -24,7 +25,7 @@ export default class Header extends React.Component {
         <li key={k}>
           <a href={links[k]} target="_blank">{`${k}`}</a>
         </li>
-      ))
+      ));
   }
   getLeftTabs(){
     return (
