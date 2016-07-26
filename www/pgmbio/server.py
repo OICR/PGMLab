@@ -1,12 +1,34 @@
-from klein import Klein
+import os
+import subprocess
+import shutil
+import json
+import string
+import uuid
+
 
 from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import Application
 from twisted.logger import Logger
 
-import os, subprocess, shutil, json, string, uuid
 import inchlib_clust
 print inchlib_clust
+
+#
+from twisted.web.static import File
+from klein import Klein
+klein = Klein()
+resource = klein.resource
+
+# HOST HTML (127.0.0.1:4433)
+@klein.route("/pgmbio.html")
+def home(request):
+    return File("../pgmbio.html")
+# HOST JS
+@klein.route("/", branch=True)
+def js(request):
+    return File("../js/")
+
+
 
 app = Application()
 log = Logger()
@@ -205,7 +227,7 @@ def inchlibCluster(heatmapData):
     return clustered
 
 # Start
-if __name__ == "__main__":
-    url = "ws://localhost:9000/ws"
-    realm = "realm1"
-    app.run(url.decode("unicode-escape"), realm.decode("unicode-escape"))
+# if __name__ == "__main__":
+#     url = "ws://localhost:9000/ws"
+#     realm = "realm1"
+#     app.run(url.decode("unicode-escape"), realm.decode("unicode-escape"))
