@@ -59,11 +59,11 @@ def getPathway(pathwayID):
     pathway = json.loads(jsonData)
     return pathway
 
-@app.register("reactome.pathwaylist.get")
-def getPathwayList():
-    jsonData = open(hosted_data+"pathways.json").read()
-    pathwayList = json.loads(jsonData)
-    return pathwayList
+# @app.register("reactome.pathwaylist.get")
+# def getPathwayList():
+#     jsonData = open(hosted_data+"pathways.json").read()
+#     pathwayList = json.loads(jsonData)
+#     return pathwayList
 
 
 # PGMLab

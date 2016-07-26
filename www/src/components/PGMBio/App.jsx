@@ -127,6 +127,7 @@ export class App extends  React.Component {
       ]);
       this.props.getReactomePathway(pathwayMap.get("Active")).then(
         pairwiseInteractions => {
+          console.log(pairwiseInteractions)
           this.setState(
             {observationMap, pathwayMap, pairwiseInteractions},
             ()=>{
@@ -386,7 +387,6 @@ export class App extends  React.Component {
           //   })
           //   .then(() => this.props.signIn(gAuth))
         }
-        console.log("...google authentication failed");
       };
       const clientId = this.props.auth.get("googleClientId");
       return (

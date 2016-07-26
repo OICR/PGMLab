@@ -27,7 +27,6 @@ var autobahn = require('autobahn');
 const wsuri = (document.location.origin == "file://") ?
     "ws://127.0.0.1/ws" :
     (document.location.protocol === "http:" ? "wss:" : "wss:") + "//127.0.0.1/ws";
-console.log(document.location.origin, document.location.protocol, wsuri);
 var connection = new autobahn.Connection({
   url: wsuri,
   realm: "realm1"
@@ -48,7 +47,7 @@ connection.onclose = function(reason, details) {
 connection.open();
 
 function getReactomePathway(pathway) {
-  return connection.session.call("reactome.pathway.get", [pathway.id]);
+  return connection.session.call("reactome.pathway", [pathway.id]);
 };
 // Nodes returned will only be for given pathway described by links
 //  when passing this processed info to callInChlibCluster, extraneous observed nodes will be ignored
@@ -65,9 +64,10 @@ function initializeApp(wamp) {
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
   const store = createStoreDevTools(reducer);
-  wamp.call("reactome.pathwaylist.get")
+  wamp.call("reactome.pathways")
     .then(
       reactomePathways => {
+        console.log("reactomePathways: ", reactomePathways);
         store.dispatch({
           type: "SET_INITIAL_STATE",
           payload: {
@@ -88,19 +88,4 @@ function initializeApp(wamp) {
         );
       }
     )
-  // store.dispatch({
-  //   type: "SET_INITIAL_STATE",
-  // });
-  // render(
-  //   <MuiThemeProvider muiTheme={getMuiTheme()}>
-  //     <Provider store={store}>
-  //       <AppContainer
-  //             reactomePathways={reactomePathways}
-  //             getReactomePathway={getReactomePathway}
-  //             PGMLabInference={PGMLabInference}
-  //             callInchlibCluster={callInchlibCluster} />
-  //     </Provider>
-  //   </MuiThemeProvider>,
-  //   document.getElementById('app')
-  // );
 };
