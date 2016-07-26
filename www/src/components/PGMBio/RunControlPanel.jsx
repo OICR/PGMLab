@@ -11,7 +11,7 @@ export default class RunControlPanel extends React.Component {
     this.handleRun = this.handleRun.bind(this);
   }
   componentDidMount(){
-    console.log("Control Mount");
+    // console.log("Control Mount");
     $("ul.tabs").tabs()
   }
   handleRun(){

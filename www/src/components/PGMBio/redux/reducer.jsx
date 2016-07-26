@@ -29,7 +29,6 @@ export default function(state = Map(), action) {
     case "SET_INITIAL_STATE":
       return state.merge({...initialAppState});
     case "SIGN_IN":
-      console.log("logged in");
       return signIn(state, action);
     case "UPLOAD":
       return uploadReducer(state, action);

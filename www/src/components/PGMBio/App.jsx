@@ -88,7 +88,7 @@ export class App extends  React.Component {
     }
 
     componentDidMount(){
-      console.log("componentDidMount: initializeData");
+      // console.log("componentDidMount: initializeData");
       // EXAMPLE DATA ON INIT
       const EXAMPLEDATA = {
         // For G-protein pathway
@@ -127,7 +127,7 @@ export class App extends  React.Component {
       ]);
       this.props.getReactomePathway(pathwayMap.get("Active")).then(
         pairwiseInteractions => {
-          console.log(pairwiseInteractions)
+          // console.log(pairwiseInteractions)
           this.setState(
             {observationMap, pathwayMap, pairwiseInteractions},
             ()=>{
@@ -378,14 +378,14 @@ export class App extends  React.Component {
     getGoogleBtn(){
       const responseGoogle = gAuth => {
         if (gAuth.isSignedIn()) {
-          console.log("...google authenticated: ", gAuth);
-          // this.props.wamp
-          //   .call("google.auth", [], {
-          //     id_token: gAuth.getAuthResponse().id_token,
-          //     name: gAuth.getBasicProfile().getName(),
-          //     email: gAuth.getBasicProfile().getEmail()
-          //   })
-          //   .then(() => this.props.signIn(gAuth))
+          // console.log("...google authenticated: ", gAuth, this.props.wamp);
+          this.props.wamp
+            .call("google.auth", [], {
+              id_token: gAuth.getAuthResponse().id_token,
+              name: gAuth.getBasicProfile().getName(),
+              email: gAuth.getBasicProfile().getEmail()
+            })
+            .then(() => this.props.signIn(gAuth))
         }
       };
       const clientId = this.props.auth.get("googleClientId");
@@ -457,7 +457,7 @@ export class App extends  React.Component {
 export class App2 extends React.Component {
   constructor(props){
     super(props);
-    console.log("App2 props", this.props);
+    // console.log("App2 props", this.props);
   }
   render(){
     return (

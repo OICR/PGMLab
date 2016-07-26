@@ -13,3 +13,9 @@ def validate_g_token(id_token):
         return idinfo
     except crypt.AppIdentityError:
         pass # Invalid token
+
+def register_login_user(id_token, name, email):
+    sub = validate_g_token(id_token=id_token)["sub"]
+    print("...[auth] register_login_user ", sub)
+    # GET USER FROM DB
+    # IF USER DNE, REGISTER (:sub, name, email)

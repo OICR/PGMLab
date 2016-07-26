@@ -81,6 +81,7 @@ function initializeApp(wamp) {
           <MuiThemeProvider muiTheme={getMuiTheme()}>
             <Provider store={store}>
               <AppContainer
+                wamp={wamp}
                     reactomePathways={reactomePathways}
                     getReactomePathway={getReactomePathway}
                     PGMLabInference={PGMLabInference}

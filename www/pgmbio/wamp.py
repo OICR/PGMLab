@@ -13,14 +13,11 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
         # AUTHENTICATION
-        def register_login_user(id_token):
-            sub = auth_utils.validate_g_token(id_token=id_token)["sub"]
-            # GET USER FROM DB
-            # IF USER DNE, REGISTER (:sub, name, email)
-            print("...[wamp] register_login_user", id_token)
         def google_auth(id_token, name, email):
+
             try:
                 print("...[wamp] google_auth")
+                auth_utils.register_login_user(id_token=id_token, name=name, email=email)
                 return True
             except:
                 pass
