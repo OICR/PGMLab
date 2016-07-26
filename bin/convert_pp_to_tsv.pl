@@ -77,7 +77,7 @@ if (@sample_names) {
 else {
     print "@sample_numbers";
 }
-say "";
+#say "";aremoving because it produceds extra new line on mac 
 
 foreach my $node_name (keys %nodes) {
     print "$node_name\t";
