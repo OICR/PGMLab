@@ -45,6 +45,7 @@ wamp/.crossbar/pgmlab.pem
 *.pyc
 
 www/pgmlab/twistd.pid
+www/pgmbio/twistd.pid
 
 #node file for running process
 www/*/.crossbar/node.pid
