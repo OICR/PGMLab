@@ -6,7 +6,7 @@ import uploadReducer from "./uploadReducer.jsx";
 const initialAppState = {
   auth: Map({
     signedIn: false,
-    googleClientId: "852145575631-a44j86epgif1illc4alnol126j4qsoku.apps.googleusercontent.com",
+    googleClientId: "852145575631-l5luk85au20hbh9p2vbf68u3jd7v0h1k.apps.googleusercontent.com",
     googleIdToken: ""
   }),
   uploads: Map({

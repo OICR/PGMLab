@@ -15,7 +15,7 @@ injectTapEventPlugin();
 require("../assets/css/materialize.css"); //dont need to import in pgmbio.html ?
 require("../assets/css/style.css");
 require("../node_modules/vis/dist/vis.css");
-require("./lib/kinetic-v5.1.0.min.js");
+// require("./lib/kinetic-v5.1.0.min.js");
 
 var $ = require("jquery");
 window.jQuery = $;

@@ -29,7 +29,6 @@ def js(request):
     return File("../js/")
 
 
-
 app = Application()
 log = Logger()
 

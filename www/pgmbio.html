@@ -17,19 +17,18 @@
         <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmgAkAZoA/AGaAYgBmgGIAZoBAAGaACQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGaACxl1jIUyhJnuLIGW/yuAlv8rgJb/LIGW/zKEme4ZdYyFAGaACwAAAAAAAAAAAAAAAAAAAAAAAAAAAGaAHSyAltQlfJP/AGaA/y2Blv/M4Ob/zODm/y2Blv8AZoD/JXyT/yyAltQAZoAdAAAAAAAAAAAAAAAAAGaACyyAltQVc4v/AGaA/wBmgP+CtMH///////////+CtMH/AGaA/wBmgP8Vc4v/LICW1ABmgAsAAAAAAAAAABl1jIUlfJP/AGaA/wBmgP8AZoD/hLXC////////////hLXC/wBmgP8AZoD/AGaA/yV8k/8ZdYyFAAAAAABmgAkyhJnuAGaA/wBmgP8AZoD/AGaA/4S1wv///////////4S1wv8AZoD/AGaA/wBmgP8AZoD/MoSZ7gBmgAkAZoBALIGW/wBmgP8AZoD/AGaA/wBmgP+EtcL///////////+EtcL/AGaA/wBmgP8AZoD/AGaA/yyBlv8AZoA/AGaAYiuAlv8AZoD/AGaA/wBmgP8AZoD/hLXC////////////hLXC/wBmgP8AZoD/AGaA/wBmgP8rgJb/AGaAYgBmgGIrgJb/AGaA/wBmgP8AZoD/AGaA/4S1wv///////////4S1wv8AZoD/AGaA/wBmgP8AZoD/K4CW/wBmgGIAZoBALIGW/wBmgP8AZoD/AGaA/wBmgP+EtcL///////////+EtcL/AGaA/wBmgP8AZoD/AGaA/yyBlv8AZoA/AGaACTKEme4AZoD/AGaA/wBmgP8AZoD/hLXC////////////hLXC/wBmgP8AZoD/AGaA/wBmgP8yhJnuAGaACQAAAAAZdYyFJXyT/wBmgP8AZoD/AGaA/4S1wv///////////4S1wv8AZoD/AGaA/wBmgP8lfJP/GXWMhQAAAAAAAAAAAGaACyyAltQVc4v/AGaA/wBmgP/e6+7////////////e6+7/AGaA/wBmgP8Vc4v/LICW1ABmgAsAAAAAAAAAAAAAAAAAZoAdLICW1CV8k/8AZoD/kb3I/5K9yP+Svcj/kb3I/wBmgP8lfJP/LICW1ABmgB0AAAAAAAAAAAAAAAAAAAAAAAAAAABmgAsZdYyFMoSZ7iyBlv8rgJb/K4CW/yyBlv8yhJnuGXWMhQBmgAsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABmgAkAZoA/AGaAYgBmgGIAZoBAAGaACQAAAAAAAAAAAAAAAAAAAAAAAAAA+B8AAOAHAADAAwAAgAEAAIABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAgAEAAMADAADgBwAA+B8AAA==" rel="icon" type="image/x-icon">
 
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <!-- <link href="../../assets/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-        <link href="../../assets/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/> -->
-
+        <!-- Require explicitly in entrypoint -->
+        <!-- <link href="../../assets/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/> -->
+        <!-- <link href="../../assets/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/> -->
         <!-- <link href="./node_modules/vis/dist/vis.css" rel="stylesheet" type="text/css" /> -->
     </head>
 
     <body>
        <div id="app"></div>
     </body>
-
- <!--   <script src="//d3js.org/d3.v3.min.js"></script>
-    <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script> -->
+    <!-- use cdnjs because cant host local kinetic.js with klein -->
     <!-- <script src="./src/lib/kinetic-v5.1.0.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/kineticjs/5.2.0/kinetic.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="pgmbio.bundle.js"></script>
 </html>

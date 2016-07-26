@@ -377,15 +377,16 @@ export class App extends  React.Component {
     getGoogleBtn(){
       const responseGoogle = gAuth => {
         if (gAuth.isSignedIn()) {
-          this.props.wamp
-            .call("google.auth", [], {
-              id_token: gAuth.getAuthResponse().id_token,
-              name: gAuth.getBasicProfile().getName(),
-              email: gAuth.getBasicProfile().getEmail()
-            })
-            .then(() => this.props.signIn(gAuth))
+          console.log("...google authenticated: ", gAuth);
+          // this.props.wamp
+          //   .call("google.auth", [], {
+          //     id_token: gAuth.getAuthResponse().id_token,
+          //     name: gAuth.getBasicProfile().getName(),
+          //     email: gAuth.getBasicProfile().getEmail()
+          //   })
+          //   .then(() => this.props.signIn(gAuth))
         }
-        console.log(gAuth)
+        console.log("...google authentication failed");
       };
       const clientId = this.props.auth.get("googleClientId");
       return (
