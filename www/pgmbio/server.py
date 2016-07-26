@@ -33,38 +33,10 @@ app = Application()
 log = Logger()
 
 cwd = os.getcwd()
-hosted_data = cwd+"/../../data/reactome_template/"
 
 def system_call(command):
     p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
     return p.stdout.read()
-
-
-def getReactomeFolder(pathwayID):
-    f = open(hosted_data+"folder_to_reactome_id.txt")
-    for line in f:
-        kv = line.split("\t")
-        if kv[0] == pathwayID:
-            return kv[1]
-    return None
-
-# REACTOME
-@app.register("reactome.pathway.get")
-def getPathway(pathwayID):
-    log.info("getPathway")
-    folders = os.listdir(hosted_data)
-    folder = getReactomeFolder(pathwayID).strip()
-    filePath = hosted_data+folder+"/"+folder+".pi"
-    jsonData = system_call("perl "+cwd+"/../../bin/convert_pi_to_json.pl " + filePath + " " + hosted_data +"db_id_to_name_mapping.txt")
-    pathway = json.loads(jsonData)
-    return pathway
-
-# @app.register("reactome.pathwaylist.get")
-# def getPathwayList():
-#     jsonData = open(hosted_data+"pathways.json").read()
-#     pathwayList = json.loads(jsonData)
-#     return pathwayList
-
 
 # PGMLab
 def createPairwiseInteractionFile(runPath, pathway):
