@@ -5,6 +5,12 @@ from twisted.internet._sslverify import OpenSSLCertificateAuthorities
 from twisted.internet.ssl import CertificateOptions
 from OpenSSL import crypto
 
+#
+import os
+import json
+cwd = os.getcwd()
+hosted_data = cwd+"/../../data/reactome_template/"
+
 class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
@@ -19,6 +25,12 @@ class Component(ApplicationSession):
             else:
                 return False
         yield self.register(google_auth, u"google.auth")
+
+        def get_reactome_pathways():
+            jsonData = open(hosted_data+"pathways.json").read()
+            pathwayList = json.loads(jsonData)
+            return pathwayList
+        yield self.register(get_reactome_pathways, u"reactome.pathwaylist.get")
         print("...[wamp] Registered")
 
 if __name__ == "__main__":
