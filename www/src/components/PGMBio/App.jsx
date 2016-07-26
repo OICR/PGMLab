@@ -25,7 +25,6 @@ export class App extends  React.Component {
     static notify(message, duration) {Materialize.toast(message, duration, "rounded")} //Can be moved to its own Notifier component
     constructor(props){
       super(props)
-      // console.log("<App> constructor");
       const pairwiseInteractions = {links: new Array(), nodes: new Array()};
       const observationMap = new Map([
         ["All", new Map()],
@@ -83,7 +82,8 @@ export class App extends  React.Component {
       this.addNewEstimatedParameterSet    = this.addNewEstimatedParameterSet.bind(this);
       this.addNewPosteriorProbabilitySet  = this.addNewPosteriorProbabilitySet.bind(this);
 
-      //
+      ///////
+
       this.getGoogleBtn = this.getGoogleBtn.bind(this);
     }
 
@@ -138,6 +138,8 @@ export class App extends  React.Component {
         },
         err => {console.log("Could not get initial pairwiseInteraction: ", err)}
       );
+
+      ///
     }
     // For ControlPanel vs ResultsPanel
     setTab(tab){
