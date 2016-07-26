@@ -90,7 +90,7 @@ export default class SelectPathways extends React.Component {
       </div>
     );
     const pathsMap = this.state.pathsMap;
-    console.log(pathsMap.get("Selected"));
+    // console.log(pathsMap.get("Selected"));
     const itemClass = (pathwayID) => {return classNames(
       {"active": pathsMap.get("Selected").has(pathwayID)},
       ["collection-item"]

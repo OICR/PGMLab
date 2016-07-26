@@ -46,6 +46,10 @@ connection.onclose = function(reason, details) {
 }
 connection.open();
 
+function getReactomePathwayList(){
+  return connection.session.call("reactome.pathways")
+}
+
 function getReactomePathway(pathway) {
   return connection.session.call("reactome.pathway", [pathway.id]);
 };
@@ -64,10 +68,9 @@ function initializeApp(wamp) {
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
   const store = createStoreDevTools(reducer);
-  wamp.call("reactome.pathways")
-    .then(
-      reactomePathways => {
-        console.log("reactomePathways: ", reactomePathways);
+  getReactomePathwayList()
+    .then(reactomePathways =>
+      {
         store.dispatch({
           type: "SET_INITIAL_STATE",
           payload: {
@@ -86,6 +89,5 @@ function initializeApp(wamp) {
           </MuiThemeProvider>,
           document.getElementById('app')
         );
-      }
-    )
+      })
 };

@@ -6,11 +6,17 @@ from twisted.internet.ssl import CertificateOptions
 from OpenSSL import crypto
 
 import reactome_utils
+import auth_utils
+
 
 class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
+        # AUTHENTICATION
         def register_login_user(id_token):
+            sub = auth_utils.validate_g_token(id_token=id_token)["sub"]
+            # GET USER FROM DB
+            # IF USER DNE, REGISTER (:sub, name, email)
             print("...[wamp] register_login_user", id_token)
         def google_auth(id_token, name, email):
             try:
@@ -22,6 +28,7 @@ class Component(ApplicationSession):
                 return False
         yield self.register(google_auth, u"google.auth")
 
+        # REACTOME
         def get_reactome_pathways_list():
             return reactome_utils.get_pathways_list()
         yield self.register(get_reactome_pathways_list, u"reactome.pathways")
