@@ -16,6 +16,6 @@ def validate_g_token(id_token):
 
 def register_login_user(id_token, name, email):
     sub = validate_g_token(id_token=id_token)["sub"]
-    print("...[auth] register_login_user ", sub)
+    print("...[auth] register_login_user {}".format(sub))
     # GET USER FROM DB
     # IF USER DNE, REGISTER (:sub, name, email)

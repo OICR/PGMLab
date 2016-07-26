@@ -376,18 +376,19 @@ export class App extends  React.Component {
 
     //////
     getGoogleBtn(){
-      const responseGoogle = gAuth => {
-        if (gAuth.isSignedIn()) {
-          // console.log("...google authenticated: ", gAuth, this.props.wamp);
+      const responseGoogle = gAuth => (
+        gAuth.isSignedIn() ?
           this.props.wamp
             .call("google.auth", [], {
               id_token: gAuth.getAuthResponse().id_token,
               name: gAuth.getBasicProfile().getName(),
               email: gAuth.getBasicProfile().getEmail()
             })
-            .then(() => this.props.signIn(gAuth))
-        }
-      };
+            .then(authenticated => authenticated ?
+              this.props.signIn(gAuth)
+              :console.log("Unable to register/login via Google"))
+          :console.log("Unable to authenticate Google account")
+      );
       const clientId = this.props.auth.get("googleClientId");
       return (
         <GoogleLogin clientId={clientId} callback={responseGoogle} />
