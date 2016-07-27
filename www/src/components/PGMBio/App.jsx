@@ -376,19 +376,24 @@ export class App extends  React.Component {
 
     //////
     getGoogleBtn(){
-      const responseGoogle = gAuth => (
-        gAuth.isSignedIn() ?
+      const responseGoogle = gAuth => {
+        if (gAuth.isSignedIn()) {
           this.props.wamp
             .call("google.auth", [], {
               id_token: gAuth.getAuthResponse().id_token,
               name: gAuth.getBasicProfile().getName(),
               email: gAuth.getBasicProfile().getEmail()
             })
-            .then(authenticated => authenticated ?
-              this.props.signIn(gAuth)
-              :console.log("Unable to register/login via Google"))
-          :console.log("Unable to authenticate Google account")
-      );
+            .then(authenticated => {
+              if (authenticated) {
+                this.props.signIn(gAuth)
+              }
+              else {console.log("Unable to register/login via Google")}
+            })
+
+        }
+        else {console.log("Unable to authenticate Google account")}
+      };
       const clientId = this.props.auth.get("googleClientId");
       return (
         <GoogleLogin clientId={clientId} callback={responseGoogle} />
@@ -398,12 +403,11 @@ export class App extends  React.Component {
     //RENDERING//
     render(){
       const notSignedIn = !this.props.auth.get("signedIn");
-      const actions = [this.getGoogleBtn()];
       return (
         <div>
           {
             notSignedIn ?
-            <Dialog actions={actions} modal={true} open={true}>
+            <Dialog actions={[this.getGoogleBtn()]} modal={true} open={true}>
               <span>
                 {"Please sign in through Google to Continue"}
               </span>
@@ -412,6 +416,9 @@ export class App extends  React.Component {
           }
           <Header
             uploadFile = {this.props.uploadFile}
+            auth = {this.props.auth}
+            signOut = {this.props.signOut}
+
 
                   tab = {this.state.tab}
                   setTab = {this.setTab}

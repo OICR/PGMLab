@@ -8,6 +8,11 @@ export function signIn(gAuth){
     }
   };
 }
+export function signOut(){
+  return {
+    type: "SIGN_OUT"
+  }
+}
 
 // UPLOAD DATA
 export function uploadFile(evt, uploadType){

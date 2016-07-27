@@ -10,9 +10,7 @@ export default class Header extends React.Component {
   constructor(props){
     super(props);
     this.getLeftTabs = this.getLeftTabs.bind(this);
-  }
-  componentDidMount(){
-    $(".tooltipped").tooltip({delay: 25});
+    this.getSignOutBtn = this.getSignOutBtn.bind(this);
   }
 
   getLinkBtns(){
@@ -26,6 +24,16 @@ export default class Header extends React.Component {
           <a href={links[k]} target="_blank">{`${k}`}</a>
         </li>
       ));
+  }
+  getSignOutBtn(){
+    return (
+      !this.props.auth.get("signedIn") ? null :
+      <li>
+        <a href="#" onClick={evt => this.props.signOut()}>
+          <span>{"Sign Out"}</span>
+        </a>
+      </li>
+    );
   }
   getLeftTabs(){
     return (
@@ -67,6 +75,7 @@ export default class Header extends React.Component {
             </span>
             <ul className="right">
               {this.getLinkBtns()}
+              {this.getSignOutBtn()}
             </ul>
           </div>
         </nav>
