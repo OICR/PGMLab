@@ -6,20 +6,22 @@ from twisted.internet.ssl import CertificateOptions
 from OpenSSL import crypto
 
 import reactome_utils
-import auth_utils
-
+from database import DatabaseManager
 
 class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
+        self.dbm = DatabaseManager()
         # AUTHENTICATION
         def google_auth(id_token, name, email):
-
             try:
                 print("...[wamp] google_auth")
-                auth_utils.register_login_user(id_token=id_token, name=name, email=email)
+                # auth_utils.register_login_user(id_token=id_token, name=name, email=email)
+                # idinfo = self.dbm.validate_g_token(id_token=id_token)
+                self.dbm.register_login_user(id_token=id_token, name=name, email=email)
                 return True
             except:
+                print("...[wamp] failed to google_auth")
                 pass
             else:
                 return False

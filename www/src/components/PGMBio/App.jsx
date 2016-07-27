@@ -377,6 +377,7 @@ export class App extends  React.Component {
     //////
     getGoogleBtn(){
       const responseGoogle = gAuth => {
+        console.log(gAuth, gAuth.getAuthResponse())
         if (gAuth.isSignedIn()) {
           this.props.wamp
             .call("google.auth", [], {

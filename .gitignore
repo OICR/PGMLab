@@ -66,3 +66,5 @@ tmp/*
 www/pgmlab/results/*
 www/pgmlab/pgmlab.db
 data/pgmlab/*
+
+www/pgmbio/db/*
