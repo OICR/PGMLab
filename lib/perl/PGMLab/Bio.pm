@@ -30,7 +30,7 @@ sub gistic_to_dominant_state_table {
 
         gistic_to_obs_file($db_id_to_name_mapping_file, $pairwise_interaction_file, $gistic_file, $observation_file, $verbose);
 
-        $command = "pgmlab --data-dir $data_dir --network $network --number-of-states $number_of_states --verbose";
+        $command = "../../../bin/pgmlab --data-dir $data_dir --network $network --number-of-states $number_of_states --verbose";
         if ($verbose) {
             say "Running command: $command";
         }
@@ -53,8 +53,6 @@ sub create_dominant_state_file {
 
     my $dominant_state_file = "$pp_file.tsv";
     print_dominant_state_file($sample_number, $sample_to_nodes_dominant_state, $dominant_state_file, $sample_names, $nodes);
-
-
 }
 
 sub get_sample_list_from_file {
@@ -156,6 +154,8 @@ sub posterior_probability_file_to_dominant_state {
     my ($node, $probability, $highest_probability);
     my %nodes;
     
+    my %key_output_hash = map {$_ => 1} @{$key_outputs};
+
     while (my $line = <$fh_pp>) {
         chomp $line;
         if ($line =~ /^--/) {
@@ -165,7 +165,7 @@ sub posterior_probability_file_to_dominant_state {
 
         ($node, $probability) = split /\t/, $line;
 
-        if (($key_outputs) && ($node ~~ @{$key_outputs})) {
+        if ((not $key_outputs) || ($key_output_hash{$node})) {
             unless ($sample_to_nodes_dominant_state{$node}{$sample_number}) {
                 $state = 1;
                 $nodes{$node} = 1;

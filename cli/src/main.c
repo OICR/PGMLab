@@ -862,7 +862,7 @@ int main(int argc, char *argv[]) {
     if (data_dir->count >= 1) {
         printf("Starting analysis on sub directories in datadir\n");
         int data_dir_idx;
-        for(data_dir_idx=0; data_dir_idx < data_dir->count; data_dir_idx++) {
+        for(data_dir_idx = 0; data_dir_idx < data_dir->count; data_dir_idx++) {
             printf("\tAnalyzing Directory: %s\n", data_dir->sval[data_dir_idx]);
             exitcode = analyze_directory( data_dir->sval[data_dir_idx], 
                                           em_max_iterations->ival[0],
