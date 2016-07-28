@@ -12,8 +12,6 @@ import Footer from "./Footer.jsx";
 import Dialog from "material-ui/Dialog";
 import GoogleLogin from "react-google-login";
 
-var when = require("when");
-
 class AuthWrapper extends React.Component {
   constructor(props){
     super(props);
