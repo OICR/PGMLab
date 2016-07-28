@@ -35,7 +35,12 @@ def js(request):
 def upload_file(request, upload_type):
     print("...[klein] upload ", upload_type)
     upload_file = request.args[upload_type][0]
-
+    # Convert to json
+    # Pass to db
+    # Return upload info and json
+    #   upload info: id, datetime, type, status, name, comments
+    #   json: pi, obs, parameters, pp
+    # Redux action to merge new upload info and json to appropriate upload type
 #####
 
 def system_call(command):

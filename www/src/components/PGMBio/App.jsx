@@ -417,6 +417,7 @@ export class App extends  React.Component {
           }
           <Header
             uploadFile = {this.props.uploadFile}
+            uploads = {this.props.uploads}
             auth = {this.props.auth}
             signOut = {this.props.signOut}
 

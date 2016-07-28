@@ -20,6 +20,7 @@ class UploadButton extends React.Component {
       data,
       success: (data, textStatus, jqXHR) => {
         console.log("upload success", data);
+        //On upload success, should return upload info and json format of file
       },
       error: (jqXHR, textStatus, error) => {
         console.log("upload error", error);
@@ -46,6 +47,27 @@ class UploadButton extends React.Component {
           </form>
         </FlatButton>
       </div>
+    );
+  }
+}
+
+class UploadTable extends React.Component {
+  constructor(props){
+    super(props)
+  }
+  componentDidMount(){
+    console.log(this.props.uploads);
+  }
+  render(){
+    return (
+      <TableRow>
+          <TableRowColumn>a</TableRowColumn>
+          <TableRowColumn>a</TableRowColumn>
+          <TableRowColumn>a</TableRowColumn>
+          <TableRowColumn>a</TableRowColumn>
+          <TableRowColumn>a</TableRowColumn>
+          <TableRowColumn>a</TableRowColumn>
+      </TableRow>
     );
   }
 }
@@ -86,18 +108,6 @@ export class UploadModal2 extends React.Component {
       </TableRow>
     );
   }
-  getTableRows(){
-    return (
-      <TableRow>
-          <TableRowColumn>a</TableRowColumn>
-          <TableRowColumn>a</TableRowColumn>
-          <TableRowColumn>a</TableRowColumn>
-          <TableRowColumn>a</TableRowColumn>
-          <TableRowColumn>a</TableRowColumn>
-          <TableRowColumn>a</TableRowColumn>
-      </TableRow>
-    );
-  }
   render(){
     return (
       <div>
@@ -110,7 +120,7 @@ export class UploadModal2 extends React.Component {
               {this.getTableHeadings()}
             </TableHeader>
             <TableBody displayRowCheckbox={false} showRowHover={true} preScanRows={false}>
-              {this.getTableRows()}
+              <UploadTable uploads={this.props.uploads} />
             </TableBody>
           </Table>
         </Dialog>
