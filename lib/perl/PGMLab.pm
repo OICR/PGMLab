@@ -11,10 +11,12 @@ use vars qw(@EXPORT_OK);
 @EXPORT_OK = qw(create_obs_file);
 
 sub create_obs_file {
-    my ($obs_filepath, $sample_gene_states, $sample_list) = @_;
+    my ($obs_filepath, $sample_gene_states, $sample_list, $verbose) = @_;
 
     $sample_list //= [keys %{$sample_gene_states}];
 
+
+    say "Writing observation file to: $obs_filepath";
     open(my $obs_fh, ">", $obs_filepath);
 
     say $obs_fh scalar (keys %{$sample_gene_states});

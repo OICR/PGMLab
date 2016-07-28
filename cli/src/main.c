@@ -67,22 +67,175 @@ int is_writeable(char * filepath) {
     return FALSE;
 }    
 
-int analyze_directory( char *data_dir, int em_max_iterations, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, int verbose, int map) {
-    DIR *dir, *subdir;
-    struct dirent *ent, *subent;
+int analyze_network_directory(char *network_dir_name, char *data_dir, int em_max_iterations, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, int verbose, int map) {
+    int network_dir_len = strlen(data_dir) + strlen(network_dir_name) + 3;//3 = zero-terminator and slashs
+    char *network_dir = malloc(network_dir_len);
+    strcpy(network_dir, data_dir);
+    strcat(network_dir, "/");
+    strcat(network_dir, network_dir_name);
+    strcat(network_dir, "/");
 
+    DIR  *subdir;
+    if (((access((network_dir), W_OK) != 0 )) || ((subdir = opendir((network_dir))) == NULL)) {
+        printf("ERROR: directory %s is not writeable / was not able to open\n", network_dir_name);
+        return 1;
+    }
+printf("sfsds");
+    int pi_str_len = strlen(network_dir_name) + network_dir_len + 4; // 4 = file extension .pi and zero-terminator
+    char *pi_file = malloc(pi_str_len);
+    strcpy(pi_file, network_dir);
+    strcat(pi_file, network_dir_name);
+    strcat(pi_file, ".pi");
+
+printf("pi: %s\n", pi_file);
+    char * logical_fg_file = malloc(network_dir_len + 11);// 11 = zero-terminator + length filename
+    strcpy(logical_fg_file, network_dir);
+    strcat(logical_fg_file, "logical.fg");
+
+    char * learning_obs_file = malloc(network_dir_len + 13);
+    strcpy(learning_obs_file, network_dir);
+    strcat(learning_obs_file, "learning.obs");
+
+    char *learnt_fg_file = malloc(network_dir_len + 10); 
+    strcpy(learnt_fg_file, network_dir);
+    strcat(learnt_fg_file, "learnt.fg");
+
+    char *inference_obs_file = malloc(network_dir_len + 14);
+    strcpy(inference_obs_file, network_dir);
+    strcat(inference_obs_file, "inference.obs");
+
+    char *pp_file = malloc(pi_str_len);// happens to be same length as pi file
+    strcpy(pp_file, network_dir);
+    strcat(pp_file, network_dir_name);
+    strcat(pp_file, ".pp");
+
+    int pi_exists = 0,
+        logical_fg_exists = 0,
+        learning_obs_exists = 0,
+        learnt_fg_exists = 0,
+        inference_obs_exists = 0,
+        pp_exists = 0;
+
+    struct dirent *subent;
+    while((subent = readdir(subdir)) != NULL) {
+        if ((strcmp(".", (subent->d_name)) == 0) || (strcmp("..", subent->d_name) == 0 )) continue;
+
+        char *dot = strrchr(subent->d_name, '.');
+        if (dot && !strcmp(dot, ".pi")) {
+            pi_exists = 1; 
+        }
+        else if (!strcmp(dot, ".pp")) {
+            pp_exists = 1;
+        }
+        else if (!strcmp(subent->d_name, "logical.fg")) {
+            logical_fg_exists = 1;
+        }
+        else if (!strcmp(subent->d_name, "learning.obs")) {
+            learning_obs_exists = 1;
+        }
+        else if (!strcmp(subent->d_name, "learnt.fg")) {
+            learnt_fg_exists = 1;
+        }
+        else if (!strcmp(subent->d_name, "inference.obs")) {
+            inference_obs_exists = 1;
+        }
+    }
+    
+    if (!(pi_exists == 1 )) {
+        if (verbose == 1) {
+            printf("\t\t\tSKIPPING: unable to find pairwise interaction file (should have same name as subdirectory with the extension pi\n"); 
+        }
+        return 0;
+    }
+
+    if (!logical_fg_exists) {
+        int exit_code = reaction_logic_to_factorgraph(pi_file, logical_fg_file, number_of_states);
+        if (exit_code != 0) {
+            char * strerr = strerror(exit_code);
+            printf("ERROR: Failed to generate factorgraph %s (error code: %d): %s\n", logical_fg_file, exit_code, strerr);
+        } 
+        else {
+            logical_fg_exists = 1;
+            printf("\t\t\tlogical.fg has been generated\n");
+        }
+    } 
+
+    if ((learnt_fg_exists == 0) && ( learning_obs_exists == 1) && ( logical_fg_exists ==1)) {
+        if (verbose == 1 ) {
+            printf("\t\t\tPerforming learning\n");
+        }
+ 
+        int exit_code = learning_discrete_BayNet(pi_file, logical_fg_file, learning_obs_file, learnt_fg_file, number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, map, 0);
+        if (exit_code != 0) {
+            char * strerr = strerror_pgmlab(exit_code);
+            printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
+        } 
+        else {
+            learnt_fg_exists = 1;
+            if (verbose == 1) {
+                printf("\t\t\tlearnt.fg has been generaged\n");
+            }
+        }
+    }
+    else if (verbose == 1) {
+        printf("\t\t\tSkipping learning: Either learnt.fg and/or learning.obs does not exit or learnt.fg has already been generated\n"); 
+    }
+    if((pp_exists == 0) && ( inference_obs_exists == 1 )) {
+        if (verbose == 1) {
+             printf("\t\t\tPerforming inference\n");
+        }
+
+        int exit_code = 0;
+        if(learnt_fg_exists == 1) {
+             if (verbose == 1) {
+                  printf("\t\t\t\tUsing learnt.fg and inference.obs (pgmlab uses learnt fg if it has been generated)\n");         
+             }
+             exit_code = doLBPinference(pi_file, learnt_fg_file, inference_obs_file, pp_file, number_of_states);
+        } 
+        else if (logical_fg_exists == 1) {
+             if (verbose == 1) {
+                  printf("\t\t\t\tUsing logical.fg and inference.obs\n");         
+             }
+             exit_code = doLBPinference(pi_file, logical_fg_file, inference_obs_file, pp_file, number_of_states);
+        }
+
+        if (exit_code != 0) {
+            char * strerr = strerror_pgmlab(exit_code);
+            printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
+        } 
+        else if (verbose == 1) {
+            printf("\t\t\tPosterior probability file has been generaged\n");
+        }
+    }
+    else if (verbose == 1) {
+        printf("\t\t\tSkipping inference because there isn't a inference.obs file available or because the posterior probability file has already been generated\n");
+    }
+
+
+    free(pi_file);
+    free(logical_fg_file);
+    free(learning_obs_file);
+    free(learnt_fg_file);
+    free(inference_obs_file);
+    free(pp_file);
+    free(network_dir);
+
+    return 1;
+}
+
+int analyze_directory( char *data_dir, int em_max_iterations, double em_log_likelihood_change_limit, double em_parameters_change_limit, int number_of_states, int verbose, int map) {
+    DIR *dir;
     if ((access(data_dir, W_OK) != 0) || ((dir = opendir(data_dir)) == NULL)) {
-        printf("ERROR: Make sure your data-dir flag is a path to a writable directory\n");
+        printf("ERROR: Make sure your data-dir (%s) flag is a path to a writable directory\n", data_dir);
         return 1;
     }
 
     if(verbose == 1) {
         printf("\tStarting to analyze each sub directory found in: %s\n", data_dir);
     }
-    
-    int pi_exits, logical_fg_exists, learning_obs_exists, learnt_fg_exists, inference_obs_exists, posterior_probabilities_exists;
 
-    int ret;
+    int exit_code;
+    struct dirent *ent;
     while ((ent = readdir(dir)) != NULL) {
         if ((strcmp(".", (ent->d_name)) == 0) || (strcmp("..", ent->d_name) == 0 )) continue;
 
@@ -90,151 +243,10 @@ int analyze_directory( char *data_dir, int em_max_iterations, double em_log_like
              printf("\t\tAnlyzing sub-directory: %s\n", ent->d_name);
         } 
 
-        int network_dir_len = strlen(data_dir) + strlen(ent->d_name) + 3;//3 = zero-terminator and slashs
-        char *network_dir = malloc(network_dir_len);
-        strcpy(network_dir, data_dir);
-        strcat(network_dir, "/");
-        strcat(network_dir, ent->d_name);
-        strcat(network_dir, "/");
-
-        if (((access((network_dir), W_OK) != 0 )) || ((subdir = opendir((network_dir))) == NULL)) continue;
-        int pi_str_len = strlen(ent->d_name) + network_dir_len + 4; // 4 = file extension .pi and zero-terminator
-        char *pi_file = malloc(pi_str_len);
-        strcpy(pi_file, network_dir);
-        strcat(pi_file, ent->d_name);
-        strcat(pi_file, ".pi");
-
-        char * logical_fg_file = malloc(network_dir_len + 11);// 11 = zero-terminator + length filename
-        strcpy(logical_fg_file, network_dir);
-        strcat(logical_fg_file, "logical.fg");
-
-        char * learning_obs_file = malloc(network_dir_len + 13);
-        strcpy(learning_obs_file, network_dir);
-        strcat(learning_obs_file, "learning.obs");
-
-        char *learnt_fg_file = malloc(network_dir_len + 10); 
-        strcpy(learnt_fg_file, network_dir);
-        strcat(learnt_fg_file, "learnt.fg");
-
-        char *inference_obs_file = malloc(network_dir_len + 14);
-        strcpy(inference_obs_file, network_dir);
-        strcat(inference_obs_file, "inference.obs");
-
-        char *pp_file = malloc(pi_str_len);// happens to be same length as pi file
-        strcpy(pp_file, network_dir);
-        strcat(pp_file, ent->d_name);
-        strcat(pp_file, ".pp");
-
-        int pi_exists = 0,
-            logical_fg_exists = 0,
-            learning_obs_exists = 0,
-            learnt_fg_exists = 0,
-            inference_obs_exists = 0,
-            pp_exists = 0;
-
-        while((subent = readdir(subdir)) != NULL) {
-            if ((strcmp(".", (subent->d_name)) == 0) || (strcmp("..", subent->d_name) == 0 )) continue;
-
-            char *dot = strrchr(subent->d_name, '.');
-            if (dot && !strcmp(dot, ".pi")) {
-                pi_exists = 1; 
-            }
-            else if (!strcmp(dot, ".pp")) {
-                pp_exists = 1;
-            }
-            else if (!strcmp(subent->d_name, "logical.fg")) {
-                logical_fg_exists = 1;
-            }
-            else if (!strcmp(subent->d_name, "learning.obs")) {
-                learning_obs_exists = 1;
-            }
-            else if (!strcmp(subent->d_name, "learnt.fg")) {
-                learnt_fg_exists = 1;
-            }
-            else if (!strcmp(subent->d_name, "inference.obs")) {
-                inference_obs_exists = 1;
-            }
+        int exit_code = analyze_network_directory(&ent->d_name, data_dir, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, number_of_states, verbose, map);
+        if (exit_code !=0) {
+           return exit_code;
         }
-        
-        if (!(pi_exists == 1 )) {
-            if (verbose == 1) {
-                printf("\t\t\tSKIPPING: unable to find pairwise interaction file (should have same name as subdirectory with the extension pi\n"); 
-            }
-            continue;
-        }
-
-        if (!logical_fg_exists) {
-            int exit_code = reaction_logic_to_factorgraph(pi_file, logical_fg_file, number_of_states);
-            if (exit_code != 0) {
-                char * strerr = strerror(exit_code);
-                printf("ERROR: Failed to generate factorgraph %s (error code: %d): %s\n", logical_fg_file, exit_code, strerr);
-            } 
-            else {
-                logical_fg_exists = 1;
-                printf("\t\t\tlogical.fg has been generated\n");
-            }
-        } 
-
-        if ((learnt_fg_exists == 0) && ( learning_obs_exists == 1) && ( logical_fg_exists ==1)) {
-            if (verbose == 1 ) {
-                printf("\t\t\tPerforming learning\n");
-            }
- 
-            int exit_code = learning_discrete_BayNet(pi_file, logical_fg_file, learning_obs_file, learnt_fg_file, number_of_states, em_max_iterations, em_log_likelihood_change_limit, em_parameters_change_limit, map, 0);
-            if (exit_code != 0) {
-                char * strerr = strerror_pgmlab(exit_code);
-                printf("Learning failed (error code: %d): %s\n", exit_code, *strerr);
-            } 
-            else {
-                learnt_fg_exists = 1;
-                if (verbose == 1) {
-                    printf("\t\t\tlearnt.fg has been generaged\n");
-                }
-            }
-        }
-        else if (verbose == 1) {
-            printf("\t\t\tSkipping learning: Either learnt.fg and/or learning.obs does not exit or learnt.fg has already been generated\n"); 
-        }
-        if((pp_exists == 0) && ( inference_obs_exists == 1 )) {
-            if (verbose == 1) {
-                 printf("\t\t\tPerforming inference\n");
-            }
-
-            int exit_code = 0;
-            if(learnt_fg_exists == 1) {
-                 if (verbose == 1) {
-                      printf("\t\t\t\tUsing learnt.fg and inference.obs (pgmlab uses learnt fg if it has been generated)\n");         
-                 }
-                 exit_code = doLBPinference(pi_file, learnt_fg_file, inference_obs_file, pp_file, number_of_states);
-            } 
-            else if (logical_fg_exists == 1) {
-                 if (verbose == 1) {
-                      printf("\t\t\t\tUsing logical.fg and inference.obs\n");         
-                 }
-                 exit_code = doLBPinference(pi_file, logical_fg_file, inference_obs_file, pp_file, number_of_states);
-            }
-
-            if (exit_code != 0) {
-                char * strerr = strerror_pgmlab(exit_code);
-                printf("Inference failed with (error code: %d): %s\n", exit_code, *strerr);
-            } 
-            else if (verbose == 1) {
-                printf("\t\t\tPosterior probability file has been generaged\n");
-            }
-        }
-        else if (verbose == 1) {
-            printf("\t\t\tSkipping inference because there isn't a inference.obs file available or because the posterior probability file has already been generated\n");
-        }
-
-
-        free(pi_file);
-        free(logical_fg_file);
-        free(learning_obs_file);
-        free(learnt_fg_file);
-        free(inference_obs_file);
-        free(pp_file);
-
-        free(network_dir);
     }
     closedir(dir);
 
@@ -732,6 +744,7 @@ int main(int argc, char *argv[]) {
     struct arg_lit *help, *version, *verbose;
     struct arg_end *end;
     struct arg_str *data_dir;
+    struct arg_str *network_dir_name;
     struct arg_int *em_max_iterations, *number_of_states;
     struct arg_file *pairwise_interaction_file, *logical_factorgraph_file, *estimated_parameters_file, *learning_observed_data_file, *inference_observed_data_file, *inference_factorgraph_file, *posterior_probability_file;
     struct arg_dbl *em_log_likelihood_change_limit, *em_parameters_change_limit; 
@@ -744,6 +757,7 @@ int main(int argc, char *argv[]) {
         interactive = arg_lit0(NULL, "interactive", "Interactive mode"),
 
         data_dir = arg_str0(NULL, "data-dir", NULL, "Path to folder containing data in specified folder structure and naming conventions"),
+        network_dir_name = arg_str0(NULL, "network-dir-name", NULL, "This flag allows you to specify a specific sub directory in the data-dir folder"),
 
         pairwise_interaction_file    = arg_file0(NULL, "pairwise-interaction-file", NULL, "File path to pairwise interaction file"),
         logical_factorgraph_file     = arg_file0(NULL, "logical-factorgraph-file", NULL, "File path to factorgraph file create from pairwise interaction file"),
@@ -819,12 +833,38 @@ int main(int argc, char *argv[]) {
     int logging = logging_on->count > 0 ? 1 : 0;
     int map = map_off->count > 1 ? 0: 1;
 
+    if (network_dir_name->count >= 1) {
+        if (data_dir->count == 0) {
+            printf("Error: When specifying the network_dir_name you must specify the data_dir as well");
+            goto exit;
+        }
+
+        printf("Starting analysis on specified network folder in data-dir\n");
+        int data_dir_idx, network_dir_name_idx;
+        for(data_dir_idx = 0; data_dir_idx < data_dir->count; data_dir_idx++) {
+            printf("\tAnalyzing Directory: %s\n", data_dir->sval[data_dir_idx]);
+            for(network_dir_name_idx = 0; network_dir_name_idx < network_dir_name->count; network_dir_name_idx++) {
+                printf("\t\tAnalyzing Network: %s\n", network_dir_name->sval[network_dir_name_idx]);
+                exitcode = analyze_network_directory(network_dir_name->sval[network_dir_name_idx],
+                                                     data_dir->sval[data_dir_idx], 
+                                                     em_max_iterations->ival[0],
+                                                     em_log_likelihood_change_limit->dval[0], 
+                                                     em_parameters_change_limit->dval[0], 
+                                                     number_of_states->ival[0],
+                                                     (verbose->count >= 1)? 1: 0,
+                                                     map);
+            }
+        }
+        printf("Analysis Complete\n");
+        goto exit;
+    }
+
     if (data_dir->count >= 1) {
-        printf("Starting analysis on specified directories\n");
-        int i;
-        for(i=0; i < data_dir->count; i++) {
-            printf("\tAnalyzing Directory: %s\n", data_dir->sval[i]);
-            exitcode = analyze_directory( data_dir->sval[i], 
+        printf("Starting analysis on sub directories in datadir\n");
+        int data_dir_idx;
+        for(data_dir_idx=0; data_dir_idx < data_dir->count; data_dir_idx++) {
+            printf("\tAnalyzing Directory: %s\n", data_dir->sval[data_dir_idx]);
+            exitcode = analyze_directory( data_dir->sval[data_dir_idx], 
                                           em_max_iterations->ival[0],
                                           em_log_likelihood_change_limit->dval[0], 
                                           em_parameters_change_limit->dval[0], 
@@ -832,8 +872,8 @@ int main(int argc, char *argv[]) {
                                           (verbose->count >= 1)? 1: 0,
                                           map);
             printf("Analysis Complete\n");
-       }
-       goto exit;
+        }
+        goto exit;
     }
 
     if (interactive->count > 0) {
@@ -841,7 +881,8 @@ int main(int argc, char *argv[]) {
         interactive_command();
         goto exit;
     }
-printf("inference obs %s\n", posterior_probability_file->filename[0]);
+
+    printf("inference obs %s\n", posterior_probability_file->filename[0]);
     /* Command line parsing is complete, do the main processing */
     exitcode = non_interactive_command( em_max_iterations->ival[0],
                                         em_log_likelihood_change_limit->dval[0], 
