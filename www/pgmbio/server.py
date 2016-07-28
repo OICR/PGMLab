@@ -7,6 +7,7 @@ import shutil
 import json
 import string
 import uuid
+import datetime
 
 from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import Application
@@ -14,12 +15,16 @@ from twisted.logger import Logger
 app = Application()
 log = Logger()
 
-import inchlib_clust
-
 from twisted.web.static import File
 from klein import Klein
 klein = Klein()
 resource = klein.resource
+
+
+import inchlib_clust
+import pgmlab_utils
+from database import DatabaseManager
+dbm = DatabaseManager()
 
 # HOST HTML (127.0.0.1:4433)
 @klein.route("/pgmbio.html")
@@ -35,12 +40,28 @@ def js(request):
 def upload_file(request, upload_type):
     print("...[klein] upload ", upload_type)
     upload_file = request.args[upload_type][0]
+    upload_filename = request.args["filename"][0]
+    id_token = request.args["id_token"][0]
     # Convert to json
-    # Pass to db
-    # Return upload info and json
-    #   upload info: id, datetime, type, status, name, comments
-    #   json: pi, obs, parameters, pp
+    upload_json = pgmlab_utils.upload_to_json(upload_file, upload_type)
+    # Upload info
+    upload_info = {
+        "datetime": datetime.datetime.now().isoformat(),
+        "type": upload_type,
+        "filename": upload_filename,
+    }
+    # Pass to db (payload, sub_uid)
+    dbm.save_upload(upload_info, upload_json, id_token)
+    # # Return upload info and json
+    payload = {
+        "data": upload_json["data"], #the actual json
+        "info": upload_info
+    }
+
+
     # Redux action to merge new upload info and json to appropriate upload type
+    return json.dumps(payload)
+
 #####
 
 def system_call(command):

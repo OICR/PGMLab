@@ -12,17 +12,21 @@ class UploadButton extends React.Component {
   handleUpload(evt){
     evt.preventDefault()
     const data = new FormData(this.refs[this.props.uploadType])
+    data.append("filename", $(`input[name=${this.props.uploadType}]`)[0].files[0].name)
+    data.append("id_token", this.props.auth.get("googleIdToken"))
     $.ajax({
       type: "POST",
       url: `https://localhost:4433/upload/${this.props.uploadType}`,
       processData: false,
       contentType: false,
       data,
-      success: (data, textStatus, jqXHR) => {
-        console.log("upload success", data);
+      success: (uploadPayload, textStatus, jqXHR) => {
+        console.log("upload success");
         //On upload success, should return upload info and json format of file
+        this.props.onUpload(JSON.parse(uploadPayload));
       },
       error: (jqXHR, textStatus, error) => {
+        //If fails, should empty out file property of input so user can add again
         console.log("upload error", error);
       }
     })
@@ -92,7 +96,7 @@ export class UploadModal2 extends React.Component {
         <TableHeaderColumn colSpan="6" className="row">
           {
             ["pathway", "observation", "parameters", "probabilities"]
-              .map(uploadType => <UploadButton key={uploadType} uploadType={uploadType} />)
+              .map(uploadType => <UploadButton key={uploadType} uploadType={uploadType} onUpload={this.props.onUpload} auth={this.props.auth} />)
           }
         </TableHeaderColumn>
       </TableRow>

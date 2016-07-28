@@ -24,7 +24,7 @@ function signIn(state, action){
   const signedIn = true;
   const {googleIdToken} = action.payload;
   return state.withMutations(state => state
-      .update("auth", auth => auth.merge({signedIn,googleIdToken}))
+      .update("auth", auth => auth.merge({signedIn, googleIdToken}))
   )
 };
 function signOut(state){

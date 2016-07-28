@@ -54,7 +54,7 @@ export default class Header extends React.Component {
                         addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
         </li>
         <li>
-          <UploadModal2 uploadFile = {this.props.uploadFile} uploads={this.props.uploads} auth={this.props.auth} />
+          <UploadModal2 onUpload = {this.props.onUpload} uploads={this.props.uploads} auth={this.props.auth} />
         </li>
       </ul>
     )

@@ -15,13 +15,11 @@ export function signOut(){
 }
 
 // UPLOAD DATA
-export function uploadFile(evt, uploadType){
-  const file = evt.target.files[0];
+export function onUpload(uploadPayload){
   return {
     type: "UPLOAD",
     payload: {
-      uploadType,
-      file
+      uploadPayload
     }
   };
 }

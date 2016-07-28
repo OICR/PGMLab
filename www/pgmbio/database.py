@@ -8,6 +8,8 @@ class DatabaseManager():
         self.db = self.client["pgmlab"]
         self.users = self.db["users"]
         self.uploads = self.db["uploads"]
+        self.pairwise_interactions = self.db["pairwise_interactions"]
+    # AUTHENTICATION
     # Upsert user into db
     def register_login_user(self, id_token, name, email):
         sub = auth_utils.validate_g_token(id_token=id_token)["sub"]
@@ -19,6 +21,23 @@ class DatabaseManager():
                 "name": name,
                 "email": email
             })
+
+    # UPLOADS
+    def save_upload(self, upload_info, upload_json, id_token):
+        print ("...[dbm] save upload")
+        sub = auth_utils.validate_g_token(id_token=id_token)["sub"]
+        upload = self.uploads.insert_one({
+            "user_id": sub,
+            "datetime": upload_info["datetime"],
+            "type": upload_info["type"],
+            "status": upload_json["success"],
+            "filename": upload_info["filename"],
+            "comments": upload_json["comments"]
+        })
+        pi = self.pairwise_interactions.insert_one({
+            # "_id": upload.id,
+            "data": upload_json["data"]
+        })
     # Get all users uploads
     def get_all_uploads(self, sub_uid):
         return
