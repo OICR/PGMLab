@@ -4,23 +4,30 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import FlatButton from "material-ui/FlatButton";
 var classNames=require("classnames");
 
-
-export class UploadModal2 extends React.Component {
+class UploadButton extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      open: false
-    }
+    this.handleUpload = this.handleUpload.bind(this);
+  }
+  handleUpload(evt){
+    evt.preventDefault()
+    const data = new FormData(this.refs[this.props.uploadType])
+    $.ajax({
+      type: "POST",
+      url: `https://localhost:4433/upload/${this.props.uploadType}`,
+      processData: false,
+      contentType: false,
+      data,
+      success: (data, textStatus, jqXHR) => {
+        console.log("upload success", data);
+      },
+      error: (jqXHR, textStatus, error) => {
+        console.log("upload error", error);
+      }
+    })
   }
 
-  getOpenBtn(){
-    return (
-      <a href="#!" onClick={()=>{this.setState({open:true})}}>
-        <span>{"Upload Data"}</span>
-      </a>
-    );
-  }
-  getUploadBtns(){
+  render(){
     const inputStyle = {
       cursor: 'pointer',
       position: 'absolute',
@@ -30,23 +37,41 @@ export class UploadModal2 extends React.Component {
       left: 0,
       width: '100%',
       opacity: 0
-    }
-    const btn = (label,onChange) => (
+    };
+    return (
       <div className="col s3">
-        <FlatButton label={label} labelPosition="before">
-          <form enctype="multipart/form-data">
-            <input type="file" onChange={onChange} style={inputStyle}/>
+        <FlatButton label={this.props.uploadType} labelPosition="before">
+          <form enctype="multipart/form-data" ref={this.props.uploadType}>
+            <input type="file" name={this.props.uploadType} onChange={evt=> {this.handleUpload(evt)}} style={inputStyle}/>
           </form>
         </FlatButton>
       </div>
     );
+  }
+}
+
+export class UploadModal2 extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      open: false
+    }
+  }
+  getOpenBtn(){
+    return (
+      <a href="#!" onClick={()=>{this.setState({open:true})}}>
+        <span>{"Upload Data"}</span>
+      </a>
+    );
+  }
+  getUploadBtns(){
     return (
       <TableRow>
         <TableHeaderColumn colSpan="6" className="row">
-          {btn("Pathway", (evt)=>{this.props.uploadFile(evt,"PATHWAY")})}
-          {btn("Observation", (evt)=>{this.props.uploadFile(evt,"OBSERVATION")})}
-          {btn("Parameters", (evt)=>{this.props.uploadFile(evt,"PARAMETERS")})}
-          {btn("Probabilities", (evt)=>{this.props.uploadFile(evt,"PROBABILITIES")})}
+          {
+            ["pathway", "observation", "parameters", "probabilities"]
+              .map(uploadType => <UploadButton key={uploadType} uploadType={uploadType} />)
+          }
         </TableHeaderColumn>
       </TableRow>
     );
@@ -54,12 +79,10 @@ export class UploadModal2 extends React.Component {
   getTableHeadings(){
     return (
       <TableRow>
-        <TableHeaderColumn>{"ID"}</TableHeaderColumn>
-        <TableHeaderColumn>{"Datetime"}</TableHeaderColumn>
-        <TableHeaderColumn>{"Type"}</TableHeaderColumn>
-        <TableHeaderColumn>{"Status"}</TableHeaderColumn>
-        <TableHeaderColumn>{"Name"}</TableHeaderColumn>
-        <TableHeaderColumn>{"Comments"}</TableHeaderColumn>
+        {
+          ["ID", "Datetime", "Type", "Status", "Name", "Comments"]
+            .map(heading => <TableHeaderColumn key={heading}>{heading}</TableHeaderColumn>)
+        }
       </TableRow>
     );
   }

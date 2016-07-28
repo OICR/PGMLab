@@ -1,10 +1,11 @@
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
 import os
 import subprocess
 import shutil
 import json
 import string
 import uuid
-
 
 from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import Application
@@ -28,6 +29,11 @@ def home(request):
 def js(request):
     return File("../js/")
 
+# UPLOADING FILES
+@klein.route("/upload/<upload_type>", methods=["POST"])
+def upload_file(request, upload_type):
+    print("...[klein] upload ", upload_type)
+    pp.pprint(request.args)
 
 app = Application()
 log = Logger()

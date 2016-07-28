@@ -37,6 +37,10 @@ class Component(ApplicationSession):
         yield self.register(get_reactome_pathway, u"reactome.pathway")
         print("...[wamp] Registered")
 
+        # DATABASE
+        def get_uploads():
+            return
+
 if __name__ == "__main__":
     cert = crypto.load_certificate(crypto.FILETYPE_PEM,six.u(open('.crossbar/example.cert.pem', "r").read()))
     options = CertificateOptions(trustRoot=OpenSSLCertificateAuthorities([cert]))

@@ -7,17 +7,18 @@ class DatabaseManager():
         self.client = MongoClient("mongodb://localhost:27017")
         self.db = self.client["pgmlab"]
         self.users = self.db["users"]
+        self.uploads = self.db["uploads"]
     # Upsert user into db
     def register_login_user(self, id_token, name, email):
-        print("...[dbm] register_login_user")
         sub = auth_utils.validate_g_token(id_token=id_token)["sub"]
+        print("...[dbm] register user {}".format(sub))
         user = self.users.find_one({"_id": sub})
         if not user:
-            print("...[db] register user {}".format(sub))
             self.users.insert_one({
                 "_id": sub,
                 "name": name,
                 "email": email
             })
-        else:
-            print("...[db] login user {}".format(sub))
+    # Get all users uploads
+    def get_all_uploads(self, sub_uid):
+        return
