@@ -80,14 +80,12 @@ int analyze_network_directory(char *network_dir_name, char *data_dir, int em_max
         printf("ERROR: directory %s is not writeable / was not able to open\n", network_dir_name);
         return 1;
     }
-printf("sfsds");
     int pi_str_len = strlen(network_dir_name) + network_dir_len + 4; // 4 = file extension .pi and zero-terminator
     char *pi_file = malloc(pi_str_len);
     strcpy(pi_file, network_dir);
     strcat(pi_file, network_dir_name);
     strcat(pi_file, ".pi");
 
-printf("pi: %s\n", pi_file);
     char * logical_fg_file = malloc(network_dir_len + 11);// 11 = zero-terminator + length filename
     strcpy(logical_fg_file, network_dir);
     strcat(logical_fg_file, "logical.fg");

@@ -109,7 +109,9 @@ sub print_dominant_state_file {
     else {
         print $ds_fh "@sample_numbers";
     }
-   
+
+    print $ds_fh "\n"; 
+  
     foreach my $node_name (@{$nodes}) {
         print $ds_fh "$node_name\t";
     
