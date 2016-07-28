@@ -1,6 +1,7 @@
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 import os
+cwd = os.getcwd()
 import subprocess
 import shutil
 import json
@@ -10,11 +11,11 @@ import uuid
 from twisted.internet.defer import inlineCallbacks
 from autobahn.twisted.wamp import Application
 from twisted.logger import Logger
+app = Application()
+log = Logger()
 
 import inchlib_clust
-print inchlib_clust
 
-#
 from twisted.web.static import File
 from klein import Klein
 klein = Klein()
@@ -33,12 +34,9 @@ def js(request):
 @klein.route("/upload/<upload_type>", methods=["POST"])
 def upload_file(request, upload_type):
     print("...[klein] upload ", upload_type)
-    pp.pprint(request.args)
+    upload_file = request.args[upload_type][0]
 
-app = Application()
-log = Logger()
-
-cwd = os.getcwd()
+#####
 
 def system_call(command):
     p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
@@ -57,6 +55,7 @@ def createPairwiseInteractionFile(runPath, pathway):
         pi.write(str(interaction["logic"])  + "\n")
     pi.close()
     return nodeCount
+
 def createObservationFile(runPath, observationSet):
     filePath = runPath + "/inference.obs"
     obs = open(filePath, "w")
@@ -202,9 +201,3 @@ def inchlibCluster(heatmapData):
         # print d
         # clustered[filename] = d
     return clustered
-
-# Start
-# if __name__ == "__main__":
-#     url = "ws://localhost:9000/ws"
-#     realm = "realm1"
-#     app.run(url.decode("unicode-escape"), realm.decode("unicode-escape"))
