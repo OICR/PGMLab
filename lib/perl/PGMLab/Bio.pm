@@ -299,7 +299,7 @@ sub get_reactome_ids_to_names_maps {
     while (my $reactome_map = <$fh_db_id>) {
          chomp $reactome_map;
          ($reactome_id, $entity_name, $entity_type) = split /\t/, $reactome_map;
-         if (( $entity_type eq 'ReferenceGeneProduct') || ($entity_type eq 'ReferenceRNASequence') || ($entity_type eq 'ReferenceDNASequence')) {
+         if( $entity_type =~ /^Reference/) {
               $reactome_id_to_entity_name{$reactome_id} = $entity_name;
               unless( exists $entity_name_to_reactome_id{$entity_name}) {
                  $entity_name_to_reactome_id{$entity_name} = ();
