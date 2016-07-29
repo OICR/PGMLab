@@ -21,8 +21,8 @@ class UploadButton extends React.Component {
       contentType: false,
       data,
       success: (uploadPayload, textStatus, jqXHR) => {
-        console.log("upload success");
         //On upload success, should return upload info and json format of file
+        $(`input[name=${this.props.uploadType}]`).val(null);
         this.props.onUpload(JSON.parse(uploadPayload));
       },
       error: (jqXHR, textStatus, error) => {
@@ -61,7 +61,6 @@ class UploadTable extends React.Component {
     super(props)
   }
   componentDidMount(){
-    console.log(this.props.uploads);
   }
   render(){
     return (

@@ -26,7 +26,9 @@ def pairwise_interaction_json(pi_string):
     node = lambda n: {"name":n,"label":n,"longname":n,"leaf":None,"shape":None,"shape3":None,"type":None}
     try:
         lines = pi_string.splitlines()
-        nodes = {}
+        # Error handling
+        # Parse
+        nodes = {} # for looking up
         nodes_list = []
         links_list = []
         for line in lines[2:]:
@@ -47,24 +49,51 @@ def pairwise_interaction_json(pi_string):
                 "logic": logic,
                 "value": value
             })
-        pi = {
+        pairwise_interaction = {
             "nodes": nodes_list,
             "links": links_list
         }
         return {
             "success": True,
             "comments": "",
-            "data": pi
+            "data": pairwise_interaction
         }
     except:
         pass
 # Parse uploaded observation file into json
 def observation_json(obs_string):
     try:
+        lines = obs_string.splitlines()
+        # Error handling
+        if len(lines) < 2:
+            return {
+                "success": False,
+                "comments": "File format error: file is empty (no observations)",
+                "data": {}
+            }
+        if float(lines[0]) == 0 or not lines[0].isdigit():
+            return {
+                "success": False,
+                "comments": "File format error: first line must be non-zero number of observations",
+                "data": {}
+            }
+        # Parse
+        def parse_line(observations, line):
+            if len(line.split("\t")) == 1:
+                observations.append({})
+                return observations
+            else:
+                [name, state] = map(lambda w: w.strip(), line.split("\t"))
+                observations[-1][name] = {
+                    "name": name,
+                    "state": state
+                }
+            return observations
+        observations = reduce(parse_line, lines[1:], [])
         return {
             "success": True,
             "comments": "",
-            "data": {}
+            "data": observations
         }
     except:
         pass
