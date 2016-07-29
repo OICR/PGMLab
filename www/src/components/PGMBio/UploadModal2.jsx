@@ -1,7 +1,7 @@
 import React from "react";
 import Dialog from "material-ui/Dialog";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
-import FlatButton from "material-ui/FlatButton";
+import RaisedButton from "material-ui/RaisedButton";
 var classNames=require("classnames");
 
 class UploadButton extends React.Component {
@@ -45,11 +45,11 @@ class UploadButton extends React.Component {
     };
     return (
       <div className="col s3">
-        <FlatButton label={this.props.uploadType} labelPosition="before">
+        <RaisedButton label={this.props.uploadType} labelPosition="before">
           <form enctype="multipart/form-data" ref={this.props.uploadType}>
             <input type="file" name={this.props.uploadType} onChange={evt=> {this.handleUpload(evt)}} style={inputStyle}/>
           </form>
-        </FlatButton>
+        </RaisedButton>
       </div>
     );
   }

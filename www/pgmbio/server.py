@@ -57,8 +57,6 @@ def upload_file(request, upload_type):
         "data": upload_json["data"], #the actual json
         "info": upload_info
     }
-
-
     # Redux action to merge new upload info and json to appropriate upload type
     return json.dumps(payload)
 
