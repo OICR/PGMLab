@@ -10,16 +10,17 @@ pgmlab_path = cwd+"/../../bin/pgmlab"
 
 # Called by Klein server for uploading
 def upload_to_json(upload_file, upload_type):
-    if upload_type == u"pathway":
+    if upload_type == "pathway":
         return pairwise_interaction_json(upload_file)
     elif upload_type == "observation":
-        return
+        return observation_json(upload_file)
     elif upload_type == "parameters":
-        return
+        return parameters_json(upload_file)
     elif upload_type == "probabilities":
-        return
+        return probabilities_json(upload_file)
 
-# Use this function to check the format and pass comments on a failed upload
+# Use these function to check the format and pass comments on a failed upload
+# Parse uploaded pairwise interaction file into json
 def pairwise_interaction_json(pi_string):
     # Node constructor
     node = lambda n: {"name":n,"label":n,"longname":n,"leaf":None,"shape":None,"shape3":None,"type":None}
@@ -57,6 +58,36 @@ def pairwise_interaction_json(pi_string):
         }
     except:
         pass
+# Parse uploaded observation file into json
+def observation_json(obs_string):
+    try:
+        return {
+            "success": True,
+            "comments": "",
+            "data": {}
+        }
+    except:
+        pass
+# Parse uploaded estimated parameter file into json
+def parameters_json(pm_string):
+    try:
+        return {
+            "success": True,
+            "comments": "",
+            "data": {}
+        }
+    except:
+        pass# Parse uploaded posterior probabilities file into json
+def probabilities_json(pp_string):
+    try:
+        return {
+            "success": True,
+            "comments": "",
+            "data": {}
+        }
+    except:
+        pass
+
 
 #
 def write_pairwise_interaction(run_path, links):
