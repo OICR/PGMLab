@@ -15,11 +15,10 @@ export function signOut(){
 }
 
 // UPLOAD DATA
-export function onUpload(uploadPayload){
+export function onUpload(payload){
+  // payload = {info,data}
   return {
     type: "UPLOAD",
-    payload: {
-      uploadPayload
-    }
+    payload
   };
 }

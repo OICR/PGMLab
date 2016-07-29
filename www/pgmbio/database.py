@@ -29,7 +29,7 @@ class DatabaseManager():
     def save_upload(self, upload_info, upload_json, id_token):
         print ("...[dbm] save upload")
         sub = auth_utils.validate_g_token(id_token=id_token)["sub"]
-        upload = self.uploads.insert_one({
+        meta = self.uploads.insert_one({
             "user_id": sub,
             "datetime": upload_info["datetime"],
             "type": upload_info["type"],
@@ -39,17 +39,19 @@ class DatabaseManager():
         })
         upload_type = upload_info["type"]
         if upload_type == "pathway":
-            pi = self.pairwise_interactions.insert_one({
-                "_id": upload.inserted_id,
-                "data": upload_json["data"],
-                "filename": upload_info["filename"]
-            })
-        elif upload_type = "observation":
-            obs = self.observations.insert_one({})
-        elif upload_type = "parameters":
-            pm = self.parameters.insert_one({})
-        elif upload_type = "probabilities":
-            pp = self.parameters.insert_one({})
+            collection = self.pairwise_interactions
+        elif upload_type == "observation":
+            collection = self.observations
+        elif upload_type == "parameters":
+            collection = self.parameters
+        elif upload_type == "probabilities":
+            collection = self.probabilities
+        upload = collection.insert_one({
+            "_id": meta.inserted_id,
+            "user_id": sub,
+            "data": upload_json["data"],
+            "filename": upload_info["filename"]
+        })
 
     # Get all users uploads
     def get_all_uploads(self, sub_uid):

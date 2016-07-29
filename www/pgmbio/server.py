@@ -42,19 +42,21 @@ def upload_file(request, upload_type):
     upload_file = request.args[upload_type][0]
     upload_filename = request.args["filename"][0]
     id_token = request.args["id_token"][0]
-    # Convert to json
-    upload_json = pgmlab_utils.upload_to_json(upload_file, upload_type)
     # Upload info
     upload_info = {
-        "datetime": datetime.datetime.now().isoformat(),
         "type": upload_type,
         "filename": upload_filename,
+        "datetime": datetime.datetime.now().isoformat(),
     }
+    # Convert to json
+    upload_json = pgmlab_utils.upload_to_json(upload_file, upload_type)
     # Pass to db (payload, sub_uid)
     dbm.save_upload(upload_info, upload_json, id_token)
     # # Return upload info and json
     payload = {
+        #  success, comments, data
         "json": upload_json,
+        #  type, filename, datetime
         "info": upload_info
     }
     # Redux action to merge new upload info and json to appropriate upload type

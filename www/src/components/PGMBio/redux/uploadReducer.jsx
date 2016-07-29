@@ -5,14 +5,18 @@ const isInteger = s => Number.isInteger(Number(s));
 
 const uploadReducer = (state=Map(), action) => {
   console.log("...uploadReducer.action: ", action);
-  switch (action.payload.uploadType) {
-    case "PATHWAY":
+  switch (action.payload["info"]["type"]) {
+    case "pathway":
+      console.log("pathway: ", action.payload["json"]["data"])
       break;
-    case "OBSERVATIONS":
+    case "observation":
+      console.log("obs: ", action.payload["json"]["data"])
       break;
-    case "PARAMETERS":
+    case "parameters":
+      console.log("pms: ", action.payload["json"]["data"])
       break;
-    case "PROBABILITIES":
+    case "probabilities":
+      console.log("pp: ", action.payload["json"]["data"])
       break;
   };
   return state;
