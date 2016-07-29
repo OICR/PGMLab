@@ -26,8 +26,9 @@ class UploadButton extends React.Component {
         this.props.onUpload(JSON.parse(uploadPayload));
       },
       error: (jqXHR, textStatus, error) => {
-        //If fails, should empty out file property of input so user can add again
         console.log("upload error", error);
+        //If fails, should empty out file property of input so user can add again
+        $(`input[name=${this.props.uploadType}]`).val(null);
       }
     })
   }
