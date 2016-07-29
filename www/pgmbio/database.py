@@ -27,7 +27,7 @@ class DatabaseManager():
 
     # UPLOADS
     def save_upload(self, upload_info, upload_json, id_token):
-        print ("...[dbm] save upload", id_token, upload_info)
+        print ("...[dbm] save upload")
         sub = auth_utils.validate_g_token(id_token=id_token)["sub"]
         meta = self.uploads.insert_one({
             "user_id": sub,

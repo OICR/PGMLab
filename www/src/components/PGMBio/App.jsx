@@ -368,10 +368,11 @@ export class App extends  React.Component {
                                      "name"   : name,
                                      "probablilies"   : probabilities }
       var posteriorProbabilitySets = this.state.posteriorProbabilitySets //this.state.posteriorProbabilities
-      posteriorProbabilitySets.push(posteriorProbabilitySet)
-      uploadList.push(uploadSummary)
-      this.setState({"uploadList": uploadList,
-                     "posteriorProbabilitySets": posteriorProbabilitySets})
+      // posteriorProbabilitySets.push(posteriorProbabilitySet)
+      // uploadList.push(uploadSummary)
+      // this.setState({"uploadList": uploadList,
+                    //  "posteriorProbabilitySets": posteriorProbabilitySets})
+      console.log(posteriorProbabilitySet)
     }
 
     //////

@@ -19,6 +19,7 @@ def upload_to_json(upload_file, upload_type):
     elif upload_type == "probabilities":
         return probabilities_json(upload_file)
 
+upload_error = lambda comments: {"success":False,"data":None,"comments":comments}
 # Use these function to check the format and pass comments on a failed upload
 # Parse uploaded pairwise interaction file into json
 def pairwise_interaction_json(pi_string):
@@ -27,6 +28,16 @@ def pairwise_interaction_json(pi_string):
     try:
         lines = pi_string.splitlines()
         # Error handling
+        if len(lines) < 2:
+            return upload_error("File format error: file is empty")
+        if len(lines) > 102:
+            return upload_error("File error: max number of interactions is 100, larger pathways can be done by command line")
+        if float(lines[0]) == 0 or not lines[0].isdigit():
+            return upload_error("File format error: first line must represent non-zero number of interactions")
+        if len(lines)-2 != float(lines[0]):
+            return upload_error("File format error: number of interactions does not match value at top of file")
+        if lines[1]:
+            return upload_error("File format error: second line must be empty")
         # Parse
         nodes = {} # for looking up
         nodes_list = []
@@ -66,17 +77,9 @@ def observation_json(obs_string):
         lines = obs_string.splitlines()
         # Error handling
         if len(lines) < 2:
-            return {
-                "success": False,
-                "comments": "File format error: file is empty (no observations)",
-                "data": {}
-            }
+            return upload_error("File format error: file is empty")
         if float(lines[0]) == 0 or not lines[0].isdigit():
-            return {
-                "success": False,
-                "comments": "File format error: first line must be non-zero number of observations",
-                "data": {}
-            }
+            return upload_error("File format error: first line must represent non-zero number of observations")
         # Parse
         def parse_line(observations, line):
             if len(line.split("\t")) == 1:
@@ -102,19 +105,9 @@ def parameters_json(pm_string):
         lines = pm_string.strip().splitlines()
         # Error handling
         if len(lines) < 2:
-            return {
-                "success": False,
-                "comments": "File format error: file is empty (no observations)",
-                "data": {}
-            }
+            return upload_error("File format error: file is empty (no observations)")
         if float(lines[0]) == 0 or not lines[0].isdigit():
-            return {
-                "success": False,
-                "comments": "File format error: first line must be non-zero number of observations",
-                "data": {}
-            }
-
-        pp.pprint(lines[0:10])
+            return upload_error("File format error: first line must be non-zero number of observations")
         # Parse
         def parse_line(parameters, line):
             # If statements in order of format : node_count, node_names, node_states, ...probabilities
@@ -138,7 +131,6 @@ def parameters_json(pm_string):
                 prob = line.split()[1]
                 parameters[-1]["probabilities"].append(prob)
             return parameters
-
         pms = reduce(parse_line, lines[1:], [])
         return {
             "success": True,
@@ -146,8 +138,8 @@ def parameters_json(pm_string):
             "data": pms
         }
     except:
-        print('except')
-        pass# Parse uploaded posterior probabilities file into json
+        pass
+# Parse uploaded posterior probabilities file into json
 def probabilities_json(pp_string):
     try:
         return {
