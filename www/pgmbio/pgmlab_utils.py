@@ -49,14 +49,14 @@ def pairwise_interaction_json(pi_string):
                 "logic": logic,
                 "value": value
             })
-        pairwise_interaction = {
+        pi = {
             "nodes": nodes_list,
             "links": links_list
         }
         return {
             "success": True,
             "comments": "",
-            "data": pairwise_interaction
+            "data": pi
         }
     except:
         pass
@@ -81,7 +81,6 @@ def observation_json(obs_string):
         def parse_line(observations, line):
             if len(line.split("\t")) == 1:
                 observations.append({})
-                return observations
             else:
                 [name, state] = map(lambda w: w.strip(), line.split("\t"))
                 observations[-1][name] = {
@@ -89,23 +88,65 @@ def observation_json(obs_string):
                     "state": state
                 }
             return observations
-        observations = reduce(parse_line, lines[1:], [])
+        obs = reduce(parse_line, lines[1:], [])
         return {
             "success": True,
             "comments": "",
-            "data": observations
+            "data": obs
         }
     except:
         pass
-# Parse uploaded estimated parameter file into json
+# Parse uploaded estimated parameter (learnt factorgraph) file into json
 def parameters_json(pm_string):
     try:
+        lines = pm_string.strip().splitlines()
+        # Error handling
+        if len(lines) < 2:
+            return {
+                "success": False,
+                "comments": "File format error: file is empty (no observations)",
+                "data": {}
+            }
+        if float(lines[0]) == 0 or not lines[0].isdigit():
+            return {
+                "success": False,
+                "comments": "File format error: first line must be non-zero number of observations",
+                "data": {}
+            }
+
+        pp.pprint(lines[0:10])
+        # Parse
+        def parse_line(parameters, line):
+            # If statements in order of format : node_count, node_names, node_states, ...probabilities
+            if not line: # empty string indicates new section
+                parameters.append({})
+            elif "node_count" not in parameters[-1]:
+                parameters[-1]["node_count"] = line
+            elif "node_names" not in parameters[-1]:
+                node_names = line.split()
+                parameters[-1]["node_names"] = node_names
+                parameters[-1]["target"] = node_names[0]
+                parameters[-1]["parents"] = node_names[1:]
+            elif "node_states" not in parameters[-1]:
+                node_states = line.split()
+                parameters[-1]["node_states"] = node_states
+            elif "prob_count" not in parameters[-1]:
+                parameters[-1]["prob_count"] = line
+            else:
+                if "probabilities" not in parameters[-1]:
+                    parameters[-1]["probabilities"] = []
+                prob = line.split()[1]
+                parameters[-1]["probabilities"].append(prob)
+            return parameters
+
+        pms = reduce(parse_line, lines[1:], [])
         return {
             "success": True,
             "comments": "",
-            "data": {}
+            "data": pms
         }
     except:
+        print('except')
         pass# Parse uploaded posterior probabilities file into json
 def probabilities_json(pp_string):
     try:

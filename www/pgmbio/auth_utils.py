@@ -13,4 +13,5 @@ def validate_g_token(id_token):
         #     raise crypt.AppIdentityError("Wrong hosted domain.")
         return idinfo
     except crypt.AppIdentityError:
+        print("AppIdentityError")
         pass # Invalid token

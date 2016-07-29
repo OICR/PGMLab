@@ -176,6 +176,7 @@ export class UploadModal extends React.Component {
         reader.onload = function(upload) {
             var contents = upload.target.result
             var lines = contents.split("\n")||[]
+
             lines.pop() // There is one additional empty element on the end because of newlines on the end of the last line
             var numberOfLines = lines.length
 
@@ -210,7 +211,9 @@ export class UploadModal extends React.Component {
                            "probablilites": probabilities }
                 cpts.push(cpt)
             }
+            console.log(lines, cpts)
             self.props.addNewEstimatedParameterSet(file.name, cpts)
+
         }
 
         reader.readAsText(file)
