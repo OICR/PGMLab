@@ -28,6 +28,7 @@ upload_success = lambda data: {"success":True,"data":data,"comments":""}
 def pairwise_interaction_json(pi_string):
     # Node constructor
     node = lambda n: {"name":n,"label":n,"longname":n,"leaf":None,"shape":None,"shape3":None,"type":None}
+    link_nodes = lambda link: {"source":link[0],"target":link[1],"logic":link[2],"value":link[3]}
     try:
         lines = pi_string.splitlines()
         # Error handling
@@ -42,30 +43,19 @@ def pairwise_interaction_json(pi_string):
         if lines[1]:
             return upload_error("File format error: second line must be empty")
         # Parse
-        nodes = {} # for looking up
-        nodes_list = []
-        links_list = []
-        for line in lines[2:]:
+        def parse_line(pairwise, line):
             link = map(lambda w: w.strip(), line.split("\t"))
-            source = link[0]
-            target = link[1]
-            logic = link[2]
-            value = link[3]
-            if source not in nodes:
-                nodes[source] = True
-                nodes_list.append(node(source))
-            if target not in nodes:
-                nodes[target] = True
-                nodes_list.append(node(source))
-            links_list.append({
-                "source": source,
-                "target": target,
-                "logic": logic,
-                "value": value
-            })
+            [source, target, logic, value] = link
+            if source not in pairwise["nodes"]:
+                pairwise["nodes"][source] = node(source)
+            if target not in pairwise["nodes"]:
+                pairwise["nodes"][target] = node(source)
+            pairwise["links"].append(link_nodes(link))
+            return pairwise
+        pi_parsed = reduce(parse_line, lines[2:], {"nodes":{},"links":[]})
         pi = {
-            "nodes": nodes_list,
-            "links": links_list
+            "nodes": [v for v in pi_parsed["nodes"].values()],
+            "links": pi_parsed["links"]
         }
         return upload_success(pi)
     except Exception as e:
