@@ -19,7 +19,10 @@ def upload_to_json(upload_file, upload_type):
     elif upload_type == "probabilities":
         return probabilities_json(upload_file)
 
+# Use these for results of *_json(*_string) functions
 upload_error = lambda comments: {"success":False,"data":None,"comments":comments}
+upload_success = lambda data: {"success":True,"data":data,"comments":""}
+
 # Use these function to check the format and pass comments on a failed upload
 # Parse uploaded pairwise interaction file into json
 def pairwise_interaction_json(pi_string):
@@ -64,13 +67,10 @@ def pairwise_interaction_json(pi_string):
             "nodes": nodes_list,
             "links": links_list
         }
-        return {
-            "success": True,
-            "comments": "",
-            "data": pi
-        }
-    except:
-        pass
+        return upload_success(pi)
+    except Exception as e:
+        raise(e)
+
 # Parse uploaded observation file into json
 def observation_json(obs_string):
     try:
@@ -92,13 +92,10 @@ def observation_json(obs_string):
                 }
             return observations
         obs = reduce(parse_line, lines[1:], [])
-        return {
-            "success": True,
-            "comments": "",
-            "data": obs
-        }
-    except:
-        pass
+        return upload_success(obs)
+    except Exception as e:
+        raise(e)
+
 # Parse uploaded estimated parameter (learnt factorgraph) file into json
 def parameters_json(pm_string):
     try:
@@ -132,18 +129,17 @@ def parameters_json(pm_string):
                 parameters[-1]["probabilities"].append(prob)
             return parameters
         pms = reduce(parse_line, lines[1:], [])
-        return {
-            "success": True,
-            "comments": "",
-            "data": pms
-        }
-    except:
-        pass
+        return upload_success(pms)
+    except Exception as e:
+        raise(e)
+
 # Parse uploaded posterior probabilities file into json
 def probabilities_json(pp_string):
     try:
         lines = pp_string.strip().splitlines()
         # Error handling
+        if len(lines) < 2:
+            return upload_error("File format error: file is empty")
         # Parse
         def parse_line(probabilities, line):
             # node_prob = map(lambda w: w.strip(), line.split("\t"))
@@ -155,14 +151,9 @@ def probabilities_json(pp_string):
             probabilities[name].append(prob)
             return probabilities
         pp = reduce(parse_line, lines, {})
-        return {
-            "success": True,
-            "comments": "",
-            "data": pp
-        }
+        return upload_success(pp)
     except Exception as e:
-        print(e)
-        pass
+        raise(e)
 
 
 #
