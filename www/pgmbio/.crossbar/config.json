@@ -45,7 +45,7 @@
                     "paths": {
                         "ws": {
                             "type": "websocket",
-                            "url": "wss://localhost/ws"
+                            "url": "wss://127.0.0.1/ws"
                         }
                     }
                 }

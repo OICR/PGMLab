@@ -9,6 +9,18 @@ import reactome_utils
 from database import DatabaseManager
 
 class Component(ApplicationSession):
+    # def onConnect(self):
+    #     print("transport connected")
+    #
+    # def onChallenge(self, challenge):
+    #     print("authentication challenge")
+    #
+    # def onLeave(self, details):
+    #     print("session left")
+    #
+    # def onDisconnect(self):
+    #     print("transport disconnected")
+
     @inlineCallbacks
     def onJoin(self, details):
         self.dbm = DatabaseManager()
@@ -44,5 +56,6 @@ class Component(ApplicationSession):
 if __name__ == "__main__":
     cert = crypto.load_certificate(crypto.FILETYPE_PEM,six.u(open('.crossbar/example.cert.pem', "r").read()))
     options = CertificateOptions(trustRoot=OpenSSLCertificateAuthorities([cert]))
-    runner = ApplicationRunner(url=u"wss://127.0.0.1:443/ws", realm=u"realm1", ssl=options)
+    # runner = ApplicationRunner(url=u"wss://127.0.0.1:443/ws", realm=u"realm1", ssl=options)
+    runner = ApplicationRunner(url=u"ws://127.0.0.1:443/ws", realm=u"realm1")
     runner.run(Component)
