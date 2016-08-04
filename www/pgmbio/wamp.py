@@ -52,9 +52,9 @@ class WAMPComponent(ApplicationSession):
 
 
 if __name__ == "__main__":
-    # cert = crypto.load_certificate(crypto.FILETYPE_PEM,six.u(open('.crossbar/example.cert.pem', "r").read()))
-    # options = CertificateOptions(trustRoot=OpenSSLCertificateAuthorities([cert]))
+    cert = crypto.load_certificate(crypto.FILETYPE_PEM,six.u(open('.crossbar/example.cert.pem', "r").read()))
+    options = CertificateOptions(trustRoot=OpenSSLCertificateAuthorities([cert]))
     # runner = ApplicationRunner(url=u"wss://127.0.0.1:443/ws", realm=u"realm1", ssl=options)
-    # runner = ApplicationRunner(url=u"ws://127.0.0.1:8000/ws", realm=u"realm1")
+    # runner = ApplicationRunner(url=u"wss://127.0.0.1:4433", realm=u"realm1", ssl=options)
     runner = ApplicationRunner(url=u"ws://127.0.0.1:4433", realm=u"realm1")
     runner.run(WAMPComponent)
