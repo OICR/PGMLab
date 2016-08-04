@@ -25,7 +25,12 @@ class UploadButton extends React.Component {
         //On upload success, should return upload info and json format of file
         console.log("upload success")
         $(`input[name=${this.props.uploadType}]`).val(null);
-        this.props.onUpload(JSON.parse(uploadPayload));
+        const payload = JSON.parse(uploadPayload);
+        if (payload.json.success) {
+            this.props.onUpload(JSON.parse(uploadPayload));
+        } else {
+          console.log("upload success, server error: ", payload.json.comments)
+        }
       },
       error: (jqXHR, textStatus, error) => {
         console.log("upload error", error);

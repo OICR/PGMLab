@@ -142,12 +142,26 @@ def parameters_json(pm_string):
 # Parse uploaded posterior probabilities file into json
 def probabilities_json(pp_string):
     try:
+        lines = pp_string.strip().splitlines()
+        # Error handling
+        # Parse
+        def parse_line(probabilities, line):
+            # node_prob = map(lambda w: w.strip(), line.split("\t"))
+            node_prob = map(lambda w: w.strip(), line.split())
+            [name, prob] = node_prob
+            # State probabilities ordered as they appear line by line
+            if name not in probabilities:
+                probabilities[name] = []
+            probabilities[name].append(prob)
+            return probabilities
+        pp = reduce(parse_line, lines, {})
         return {
             "success": True,
             "comments": "",
-            "data": {}
+            "data": pp
         }
-    except:
+    except Exception as e:
+        print(e)
         pass
 
 

@@ -54,10 +54,10 @@ def upload_file(request, upload_type):
     dbm.save_upload(upload_info, upload_json, id_token)
     # # Return upload info and json
     payload = {
-        #  success, comments, data
-        "json": upload_json,
         #  type, filename, datetime
-        "info": upload_info
+        "info": upload_info,
+        #  success, comments, data
+        "json": upload_json
     }
     # Redux action to merge new upload info and json to appropriate upload type
     return json.dumps(payload)
