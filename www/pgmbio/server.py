@@ -22,6 +22,7 @@ resource = klein.resource
 
 
 import inchlib_clust
+import upload_parser
 import pgmlab_utils
 from database import DatabaseManager
 dbm = DatabaseManager()
@@ -49,7 +50,7 @@ def upload_file(request, upload_type):
         "datetime": datetime.datetime.now().isoformat(),
     }
     # Convert to json
-    upload_json = pgmlab_utils.upload_to_json(upload_file, upload_type)
+    upload_json = upload_parser.upload(upload_file, upload_type)
     # Pass to db (payload, sub_uid)
     dbm.save_upload(upload_info, upload_json, id_token)
     # # Return upload info and json
