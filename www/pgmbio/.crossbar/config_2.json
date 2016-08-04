@@ -12,7 +12,8 @@
                             "name": "anonymous",
                             "permissions": [
                                 {
-                                    "uri": "*",
+                                    "uri": "",
+                                    "match": "prefix",
                                     "allow": {
                                         "call": true,
                                         "register": true,
@@ -31,16 +32,21 @@
                 }
             ],
             "transports": [
-
                 {
-                  "type": "websocket",
-                  "endpoint": {
-                    "type": "tcp",
-                    "interface": "127.0.0.1",
-                    "port": 4433
-                  },
-                  "url": "ws://127.0.0.1:4433",
-                  "debug": true
+                    "type": "web",
+                    "endpoint": {
+                        "type": "tcp",
+                        "port": 443,
+                        "tls": {
+                          "key": "example.privkey.pem",
+                          "certificate": "example.cert.pem"
+                        }
+                    },
+                    "paths": {
+                        "ws": {
+                            "type": "websocket"
+                        }
+                    }
                 }
             ]
         }

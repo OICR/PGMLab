@@ -16,14 +16,17 @@ class DatabaseManager():
     # Upsert user into db
     def register_login_user(self, id_token, name, email):
         sub = auth_utils.validate_g_token(id_token=id_token)["sub"]
-        print("...[dbm] register user {}".format(sub))
+        print("...[dbm] register_login user {}".format(sub))
         user = self.users.find_one({"_id": sub})
         if not user:
+            print("...[dbm] user does not exist")
             self.users.insert_one({
                 "_id": sub,
                 "name": name,
                 "email": email
             })
+        else:
+            print("...[dbm] user exists")
 
     # UPLOADS
     def save_upload(self, upload_info, upload_json, id_token):

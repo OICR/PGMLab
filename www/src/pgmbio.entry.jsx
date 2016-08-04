@@ -26,14 +26,15 @@ var autobahn = require('autobahn');
 
 const wsuri = (document.location.origin == "file://") ?
     "ws://127.0.0.1/ws" :
-    (document.location.protocol === "http:" ? "wss:" : "wss:") + "//127.0.0.1/ws";
+    (document.location.protocol === "http:" ? "wss:" : "wss:") + "//127.0.0.1:443/ws";
 var connection = new autobahn.Connection({
   // url: wsuri,
-  url: "ws://127.0.0.1:443/ws",
+  // url: "ws://127.0.0.1:8000/ws",
+  url: "ws://127.0.0.1:4433",
   realm: "realm1"
 });
 connection.onopen = function(session, details) {
-  console.log("autobahn connected");
+  console.log("autobahn connected", session);
   // session
   //   .call("reactome.pathwaylist.get")
   //   .then(
@@ -41,6 +42,7 @@ connection.onopen = function(session, details) {
   //      err => console.log("getPathwayList() error:", err)
   //    );
   initializeApp(session);
+
 }
 connection.onclose = function(reason, details) {
   console.log("autobahn close", reason, details);
