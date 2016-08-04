@@ -16,12 +16,14 @@ class UploadButton extends React.Component {
     data.append("id_token", this.props.auth.get("googleIdToken"))
     $.ajax({
       type: "POST",
-      url: `https://localhost:4433/upload/${this.props.uploadType}`,
+      // url: `https://localhost:8000/upload/${this.props.uploadType}`,
+      url: `http://localhost:8000/upload/${this.props.uploadType}`,
       processData: false,
       contentType: false,
       data,
       success: (uploadPayload, textStatus, jqXHR) => {
         //On upload success, should return upload info and json format of file
+        console.log("upload success")
         $(`input[name=${this.props.uploadType}]`).val(null);
         this.props.onUpload(JSON.parse(uploadPayload));
       },

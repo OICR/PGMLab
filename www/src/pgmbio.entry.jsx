@@ -29,7 +29,7 @@ const wsuri = (document.location.origin == "file://") ?
     (document.location.protocol === "http:" ? "wss:" : "wss:") + "//127.0.0.1:443/ws";
 var connection = new autobahn.Connection({
   // url: wsuri,
-  // url: "ws://127.0.0.1:8000/ws",
+  // url: "wss://127.0.0.1:4433",
   url: "ws://127.0.0.1:4433",
   realm: "realm1"
 });

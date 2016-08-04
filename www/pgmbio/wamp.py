@@ -42,6 +42,7 @@ class WAMPComponent(ApplicationSession):
         def get_reactome_pathway(pathway_id):
             return reactome_utils.get_pathway(pathway_id)
 
+        # REGISTER
         try:
             yield self.register(google_auth, u"google.auth")
             yield self.register(get_reactome_pathways_list, u"reactome.pathways")
