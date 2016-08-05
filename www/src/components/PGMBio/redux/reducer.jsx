@@ -22,10 +22,11 @@ function setInitialState(state, action){
 };
 function signIn(state, action){
   const signedIn = true;
-  const {googleIdToken} = action.payload;
+  const {googleIdToken, userUploads} = action.payload;
   return state.withMutations(state => state
       .update("auth", auth => auth.merge({signedIn, googleIdToken}))
-  )
+      .update("uploads", uploads => uploads.merge(userUploads))
+  );
 };
 function signOut(state){
   return state.merge({auth});

@@ -27,8 +27,8 @@ class WAMPComponent(ApplicationSession):
                 print("...[wamp] google_auth")
                 # auth_utils.register_login_user(id_token=id_token, name=name, email=email)
                 # idinfo = self.dbm.validate_g_token(id_token=id_token)
-                self.dbm.register_login_user(id_token=id_token, name=name, email=email)
-                return True
+                return self.dbm.register_login_user(id_token=id_token, name=name, email=email)
+                # return True
             except Exception as e:
                 print("...[wamp] failed to google_auth: {0}".format(e))
                 pass
@@ -49,7 +49,7 @@ class WAMPComponent(ApplicationSession):
         # REGISTER
         try:
             yield self.register(google_auth, u"google.auth")
-            yield self.register(get_reactome_pathways_list, u"reactome.pathways")
+            yield self.register(get_reactome_pathways_list, u"reactome.pathwayslist")
             yield self.register(get_reactome_pathway, u"reactome.pathway")
             yield self.register(get_uploads_list, u"db.uploadslist")
             print("...[wamp] Registered")

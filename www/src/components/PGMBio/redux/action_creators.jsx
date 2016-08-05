@@ -1,10 +1,11 @@
 // AUTHENTICATION
-export function signIn(gAuth){
+export function signInPGM(gAuth, userUploads){
   const googleIdToken = gAuth.getAuthResponse().id_token;
   return {
     type: "SIGN_IN",
     payload: {
-      googleIdToken
+      googleIdToken,
+      userUploads
     }
   };
 }
@@ -15,8 +16,8 @@ export function signOut(){
 }
 
 // UPLOAD DATA
-export function onUpload(payload){
-  // payload = {info,data}
+export function onUploadSuccess(payload){
+  // payload = {info,data} from server upload
   return {
     type: "UPLOAD",
     payload

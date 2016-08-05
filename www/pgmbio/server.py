@@ -5,6 +5,7 @@ cwd = os.getcwd()
 import subprocess
 import shutil
 import json
+from bson import json_util
 import string
 import uuid
 import datetime
@@ -49,19 +50,18 @@ def upload_file(request, upload_type):
         "filename": upload_filename,
         "datetime": datetime.datetime.now().isoformat(),
     }
-    # Convert to json
+    # Convert to json: {success, comments, data}
     upload_json = upload_parser.upload(upload_file, upload_type)
     # Pass to db (payload, sub_uid)
-    dbm.save_upload(upload_info, upload_json, id_token)
+    upload_meta = dbm.save_upload(upload_info, upload_json, id_token)
     # # Return upload info and json
     payload = {
-        #  type, filename, datetime
-        "info": upload_info,
-        #  success, comments, data
-        "json": upload_json
+        # "info": upload_info,
+        # "json": upload_json,
+        "meta": upload_meta
     }
     # Redux action to merge new upload info and json to appropriate upload type
-    return json.dumps(payload)
+    return json_util.dumps(payload)
 
 #####
 

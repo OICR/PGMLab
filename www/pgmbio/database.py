@@ -1,5 +1,5 @@
 from pymongo import MongoClient, ASCENDING
-from bson import json_util
+from bson import json_util, objectid
 
 import auth_utils
 
@@ -13,6 +13,12 @@ class DatabaseManager():
         self.observations = self.db["observations"]
         self.parameters = self.db["parameters"]
         self.probabilities = self.db["probabilities"]
+        # Reset db
+        self.uploads.delete_many({})
+        self.pairwise_interactions.delete_many({})
+        self.observations.delete_many({})
+        self.parameters.delete_many({})
+        self.probabilities.delete_many({})
     # AUTHENTICATION
     # Upsert user into db
     def register_login_user(self, id_token, name, email):
@@ -28,6 +34,7 @@ class DatabaseManager():
             })
         else:
             print("...[dbm] user exists")
+        return user
 
     # UPLOADS
     def save_upload(self, upload_info, upload_json, id_token):
@@ -58,6 +65,9 @@ class DatabaseManager():
             "data": upload_json["data"],
             "filename": upload_info["filename"]
         })
+        # Return meta data for onUploadSuccess to merge into all uploads in store
+        print meta.inserted_id
+        return self.uploads.find_one({"_id": objectid.ObjectId(meta.inserted_id)})
 
     # Get all users uploads
     def get_uploads_list(self, id_token):
