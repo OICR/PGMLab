@@ -40,13 +40,18 @@ class WAMPComponent(ApplicationSession):
             return reactome_utils.get_pathways_list()
 
         def get_reactome_pathway(pathway_id):
-            return reactome_utils.get_pathway(pathway_id)
+            return reactome_utils.get_pathway(pathway_id=pathway_id)
+
+        # DATABASE
+        def get_uploads_list(id_token):
+            return self.dbm.get_uploads_list(id_token=id_token)
 
         # REGISTER
         try:
             yield self.register(google_auth, u"google.auth")
             yield self.register(get_reactome_pathways_list, u"reactome.pathways")
             yield self.register(get_reactome_pathway, u"reactome.pathway")
+            yield self.register(get_uploads_list, u"db.uploadslist")
             print("...[wamp] Registered")
         except Exception as e:
             print("...[wamp] could not register: {0}".format(e))

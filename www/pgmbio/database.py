@@ -1,4 +1,5 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING
+from bson import json_util
 
 import auth_utils
 
@@ -31,7 +32,9 @@ class DatabaseManager():
     # UPLOADS
     def save_upload(self, upload_info, upload_json, id_token):
         print ("...[dbm] save upload", upload_json==None,upload_info)
+        # Used for user_id
         sub = auth_utils.validate_g_token(id_token=id_token)["sub"]
+        # metadata for an upload in db.uploads shares same id as db.pairwise_interactions/observations/parameters/probabilities
         meta = self.uploads.insert_one({
             "user_id": sub,
             "datetime": upload_info["datetime"],
@@ -57,5 +60,8 @@ class DatabaseManager():
         })
 
     # Get all users uploads
-    def get_all_uploads(self, sub_uid):
-        return
+    def get_uploads_list(self, id_token):
+        sub_uid = auth_utils.validate_g_token(id_token=id_token)["sub"]
+        print("...[dbm] get all uploads: {0}".format(sub_uid))
+        uploads_cursor = self.uploads.find({"user_id":sub_uid}).sort([("datetime", ASCENDING)])
+        return json_util.dumps(uploads_cursor)
