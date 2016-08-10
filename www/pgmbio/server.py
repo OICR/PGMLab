@@ -5,6 +5,7 @@ cwd = os.getcwd()
 import subprocess
 import shutil
 import json
+from bson import json_util
 import string
 import uuid
 import datetime
@@ -22,6 +23,7 @@ resource = klein.resource
 
 
 import inchlib_clust
+import upload_parser
 import pgmlab_utils
 from database import DatabaseManager
 dbm = DatabaseManager()
@@ -42,25 +44,24 @@ def upload_file(request, upload_type):
     upload_file = request.args[upload_type][0]
     upload_filename = request.args["filename"][0]
     id_token = request.args["id_token"][0]
-    # Convert to json
-    upload_json = pgmlab_utils.upload_to_json(upload_file, upload_type)
     # Upload info
     upload_info = {
-        "datetime": datetime.datetime.now().isoformat(),
         "type": upload_type,
         "filename": upload_filename,
+        "datetime": datetime.datetime.now().isoformat(),
     }
+    # Convert to json: {success, comments, data}
+    upload_json = upload_parser.upload(upload_file, upload_type)
     # Pass to db (payload, sub_uid)
-    dbm.save_upload(upload_info, upload_json, id_token)
+    upload_meta = dbm.save_upload(upload_info, upload_json, id_token)
     # # Return upload info and json
     payload = {
-        "data": upload_json["data"], #the actual json
-        "info": upload_info
+        # "info": upload_info,
+        # "json": upload_json,
+        "meta": upload_meta
     }
-
-
     # Redux action to merge new upload info and json to appropriate upload type
-    return json.dumps(payload)
+    return json_util.dumps(payload)
 
 #####
 

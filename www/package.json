@@ -10,7 +10,8 @@
   "scripts": {
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --inline"
+    "start": "webpack-dev-server --inline",
+    "start-secure": "webpack-dev-server --https"
   },
   "author": "",
   "license": "ISC",

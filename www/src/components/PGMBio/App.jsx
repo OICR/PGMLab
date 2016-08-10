@@ -368,30 +368,46 @@ export class App extends  React.Component {
                                      "name"   : name,
                                      "probablilies"   : probabilities }
       var posteriorProbabilitySets = this.state.posteriorProbabilitySets //this.state.posteriorProbabilities
-      posteriorProbabilitySets.push(posteriorProbabilitySet)
-      uploadList.push(uploadSummary)
-      this.setState({"uploadList": uploadList,
-                     "posteriorProbabilitySets": posteriorProbabilitySets})
+      // posteriorProbabilitySets.push(posteriorProbabilitySet)
+      // uploadList.push(uploadSummary)
+      // this.setState({"uploadList": uploadList,
+                    //  "posteriorProbabilitySets": posteriorProbabilitySets})
+      console.log(posteriorProbabilitySet)
     }
 
     //////
     getGoogleBtn(){
       const responseGoogle = gAuth => {
-        console.log(gAuth, gAuth.getAuthResponse())
+        // console.log(gAuth, gAuth.getAuthResponse())
         if (gAuth.isSignedIn()) {
-          this.props.wamp
-            .call("google.auth", [], {
-              id_token: gAuth.getAuthResponse().id_token,
-              name: gAuth.getBasicProfile().getName(),
-              email: gAuth.getBasicProfile().getEmail()
-            })
-            .then(authenticated => {
-              if (authenticated) {
-                this.props.signIn(gAuth)
-              }
-              else {console.log("Unable to register/login via Google")}
-            })
-
+          // this.props.wamp
+          //   .call("google.auth", [], {
+          //     id_token: gAuth.getAuthResponse().id_token,
+          //     name: gAuth.getBasicProfile().getName(),
+          //     email: gAuth.getBasicProfile().getEmail()
+          //   })
+          //   .then(authenticated => {
+          //     this.props.wamp
+          //       .call("db.uploadslist", [], {id_token: gAuth.getAuthResponse().id_token})
+          //       .then(uploads => console.log(JSON.parse(uploads)));
+          //     if (authenticated) {
+          //       this.props.signIn(gAuth)
+          //     }
+          //     else {console.log("Unable to register/login via Google")}
+          //   })
+          this.props.wamp.loginWithGoogle(
+            gAuth.getAuthResponse().id_token,
+            gAuth.getBasicProfile().getName(),
+            gAuth.getBasicProfile().getEmail()
+          ).then(results => {
+            const loginResult = results[0];
+            const userUploads = results[1];
+            if (loginResult != null) {
+              this.props.signInPGM(gAuth, userUploads)
+            } else {
+              console.log("Unable to register/login via Google")
+            };
+          });
         }
         else {console.log("Unable to authenticate Google account")}
       };
@@ -417,7 +433,7 @@ export class App extends  React.Component {
           }
           <Header
             uploadFile = {this.props.uploadFile}
-            onUpload={this.props.onUpload}
+            onUploadSuccess={this.props.onUploadSuccess}
             uploads = {this.props.uploads}
             auth = {this.props.auth}
             signOut = {this.props.signOut}
