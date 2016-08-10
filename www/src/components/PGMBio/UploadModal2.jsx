@@ -1,7 +1,6 @@
 import React from "react";
 import Dialog from "material-ui/Dialog";
 import RaisedButton from "material-ui/RaisedButton";
-import Snackbar from "material-ui/Snackbar";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
 var moment = require("moment");
 
@@ -25,14 +24,12 @@ export class UploadModal2 extends React.Component {
         <UploadButton key={uploadType}
           uploadType={uploadType} onUploadSuccess={this.props.onUploadSuccess}
           auth={this.props.auth} />);
-    const headings = ["ID", "Datetime", "Type", "Status", "Name", "Comments"]
+    const headings = ["ID", "Date", "Type", "Status", "Name", "Comments"]
       .map(heading => <TableHeaderColumn key={heading}>{heading}</TableHeaderColumn>);
     return (
       <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
         <TableRow>
-          <TableHeaderColumn colSpan="6" className="row">
-            {uploadBtns}
-          </TableHeaderColumn>
+          <TableHeaderColumn colSpan="6" className="row">{uploadBtns}</TableHeaderColumn>
         </TableRow>
         <TableRow>
           {headings}
@@ -43,14 +40,9 @@ export class UploadModal2 extends React.Component {
   getTableRows(){
     return (
       this.props.uploads.valueSeq()
+        .sort((u1, u2) => moment(u1.get("datetime")).isAfter(u2.get("datetime")) ? -1 : 1)
         .map(upload => <UploadRow key={upload.get("_id")} upload={upload}/>)
-        // .map(upload => <UploadRow key={upload.getIn(["_id","$oid"])} upload={upload}/>)
     );
-    // return (null
-    //   Object.keys(this.props.uploads.toJS())
-    //     .map(k => this.props.uploads.t)
-    //     .map(upload => <UploadRow key={upload._id.$oid} upload={upload}/>)
-    // );
   }
   render(){
     return (
@@ -73,9 +65,6 @@ class UploadButton extends React.Component {
   constructor(props){
     super(props);
     this.handleUpload = this.handleUpload.bind(this);
-    this.state = {
-      "errorMessage": ""
-    };
   }
   handleUpload(evt){
     evt.preventDefault()
@@ -91,22 +80,22 @@ class UploadButton extends React.Component {
       data,
       success: (uploadPayload, textStatus, jqXHR) => {
         //On upload success, should return upload info and json format of file
-        console.log("upload success")
+        console.log("upload browser success");
         $(`input[name=${this.props.uploadType}]`).val(null);
         const payload = JSON.parse(uploadPayload);
         if (payload.meta.success) {
+            // Reduce into store
             this.props.onUploadSuccess(payload);
-            this.setState({"errorMessage": "Upload Successful"});
+            console.log("upload parse success", payload)
         } else {
-          console.log("upload success, server error: ", payload);
-          this.setState({"errorMessage": "Server Error, try again"});
-        }
+          this.props.onUploadSuccess(payload);
+          console.log("upload server error", payload);
+        };
       },
       error: (jqXHR, textStatus, error) => {
-        console.log("upload error", error);
-        //If fails, should empty out file property of input so user can add again
+        //If fails, should empty out file property of input so user can add file again
         $(`input[name=${this.props.uploadType}]`).val(null);
-        this.setState({"errorMessage": "Browser Error, try again"});
+        console.log("upload browser error", error);
       }
     })
   }
@@ -128,7 +117,6 @@ class UploadButton extends React.Component {
             <input type="file" name={this.props.uploadType} onChange={evt=> {this.handleUpload(evt)}} style={inputStyle}/>
           </form>
         </RaisedButton>
-        <Snackbar open={false} message={this.state.errorMessage}/>
       </div>
     );
   }
@@ -139,11 +127,9 @@ class UploadRow extends React.Component {
     super(props);
   }
   componentDidMount(){
-    $(".tooltipped").tooltip({"delay": 50});
+    $(".tooltipped").tooltip({"delay": 30});
   }
   render(){
-    // const {_id, datetime, type, success, filename, comments} = this.props.upload;
-    console.log(this.props.upload.toJS());
     const upload = this.props.upload;
     const id = upload.get("_id");
     const datetime = moment(upload.get("datetime")).format("MM/DD/YY");
@@ -162,7 +148,7 @@ class UploadRow extends React.Component {
         <TableRowColumn className="tooltipped" data-tooltip={filename}>
           {`${filename}`}
         </TableRowColumn>
-        <TableRowColumn className="tooltipped" data-tooltip={comments}>
+        <TableRowColumn className="tooltipped" data-tooltip={comments ? comments : "No upload comments"}>
           {`${comments}`}
         </TableRowColumn>
       </TableRow>
