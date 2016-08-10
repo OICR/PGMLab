@@ -37,7 +37,7 @@ var connection = new autobahn.Connection({
   realm: "realm1"
 });
 connection.onopen = function(session, details) {
-  console.log("autobahn connected", session);
+  console.log("autobahn connected, loading WAMP RPC");
   // LOGIN
   // Return PGM user info (sub_uid, name, email) or null if could not validate
   const googleAuthenticate = (id_token, name, email) => session.call("google.auth", [], {id_token, name, email});
@@ -46,32 +46,25 @@ connection.onopen = function(session, details) {
       .then(uploads =>
         JSON.parse(uploads)
           .map(u => {u._id = u._id.$oid; return Map(u)})
-          .reduce((uploads, u) => {uploads[u._id] = u; return uploads}, {})
+          .reduce((uploads, u) => {uploads[u.get("_id")] = u; return uploads}, {})
       );
   const loginWithGoogle = (id_token, name, email) => when.all([googleAuthenticate(id_token, name, email), getUploadsList(id_token)]);
   // REACTOME
   const getReactomePathwaysList = () => session.call("reactome.pathwayslist");
   const getReactomePathway = (pathway) => session.call("reactome.pathway", [], {pathway_id: pathway.id});
-  // Load WAMP with promise generators
+  // Load WAMP with promise generators (WAMP RPC calls)
   const wamp = {
     loginWithGoogle,
-    // googleAuthenticate,
-    // getUploadsList,
     getReactomePathwaysList,
     getReactomePathway
-
   };
   initializeApp(wamp);
-
 }
 connection.onclose = function(reason, details) {
   console.log("autobahn close", reason, details);
 }
 connection.open();
 
-// function getReactomePathwayList(){
-//   return connection.session.call("reactome.pathways")
-// }
 function getReactomePathway(pathway) {
   return connection.session.call("reactome.pathway", [pathway.id]);
 };

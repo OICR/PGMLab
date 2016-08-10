@@ -1,8 +1,8 @@
 import React from "react";
 import Dialog from "material-ui/Dialog";
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
 import RaisedButton from "material-ui/RaisedButton";
-var classNames = require("classnames");
+import Snackbar from "material-ui/Snackbar";
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
 var moment = require("moment");
 
 export class UploadModal2 extends React.Component {
@@ -60,7 +60,7 @@ export class UploadModal2 extends React.Component {
           title={"Upload Files"} titleStyle={{paddingBottom:"0px"}} titleClassName={"center-align"}>
           <Table selectable={false} height={"250px"}>
             {this.getTableHeader()}
-            <TableBody displayRowCheckbox={false} showRowHover={true} preScanRows={false}
+            <TableBody displayRowCheckbox={false} showRowHover={true} preScanRows={false} stripedRows={true}
               children={this.getTableRows()} />
           </Table>
         </Dialog>
@@ -73,6 +73,9 @@ class UploadButton extends React.Component {
   constructor(props){
     super(props);
     this.handleUpload = this.handleUpload.bind(this);
+    this.state = {
+      "errorMessage": ""
+    };
   }
   handleUpload(evt){
     evt.preventDefault()
@@ -93,14 +96,17 @@ class UploadButton extends React.Component {
         const payload = JSON.parse(uploadPayload);
         if (payload.meta.success) {
             this.props.onUploadSuccess(payload);
+            this.setState({"errorMessage": "Upload Successful"});
         } else {
-          console.log("upload success, server error: ", payload.json.comments)
+          console.log("upload success, server error: ", payload);
+          this.setState({"errorMessage": "Server Error, try again"});
         }
       },
       error: (jqXHR, textStatus, error) => {
         console.log("upload error", error);
         //If fails, should empty out file property of input so user can add again
         $(`input[name=${this.props.uploadType}]`).val(null);
+        this.setState({"errorMessage": "Browser Error, try again"});
       }
     })
   }
@@ -122,6 +128,7 @@ class UploadButton extends React.Component {
             <input type="file" name={this.props.uploadType} onChange={evt=> {this.handleUpload(evt)}} style={inputStyle}/>
           </form>
         </RaisedButton>
+        <Snackbar open={false} message={this.state.errorMessage}/>
       </div>
     );
   }
@@ -131,29 +138,34 @@ class UploadRow extends React.Component {
   constructor(props){
     super(props);
   }
+  componentDidMount(){
+    $(".tooltipped").tooltip({"delay": 50});
+  }
   render(){
     // const {_id, datetime, type, success, filename, comments} = this.props.upload;
     console.log(this.props.upload.toJS());
     const upload = this.props.upload;
+    const id = upload.get("_id");
+    const datetime = moment(upload.get("datetime")).format("MM/DD/YY");
+    const type = upload.get("type");
+    const success = upload.get("success");
+    const filename = upload.get("filename");
+    const comments = upload.get("comments");
     return (
       <TableRow>
-        <TableRowColumn>{`${upload.get("_id")}`}</TableRowColumn>
-        <TableRowColumn>{`${moment(upload.get("datetime")).format("MM Do YYYY, \n h:mm a")}`}</TableRowColumn>
-        <TableRowColumn>{`${upload.get("type")}`}</TableRowColumn>
-        <TableRowColumn>{`${upload.get("success")}`}</TableRowColumn>
-        <TableRowColumn>{`${upload.get("filename")}`}</TableRowColumn>
-        <TableRowColumn>{`${upload.get("comments")}`}</TableRowColumn>
+        <TableRowColumn className="tooltipped" data-tooltip={id}>
+            {`${id}`}
+        </TableRowColumn>
+        <TableRowColumn>{`${datetime}`}</TableRowColumn>
+        <TableRowColumn>{`${type}`}</TableRowColumn>
+        <TableRowColumn>{`${success}`}</TableRowColumn>
+        <TableRowColumn className="tooltipped" data-tooltip={filename}>
+          {`${filename}`}
+        </TableRowColumn>
+        <TableRowColumn className="tooltipped" data-tooltip={comments}>
+          {`${comments}`}
+        </TableRowColumn>
       </TableRow>
-    )
-    // return (
-    //     <TableRow>
-    //       <TableRowColumn>{`${_id.$oid}`}</TableRowColumn>
-    //       <TableRowColumn>{`${moment(datetime).format("MMMM Do YYYY, h:mm a")}`}</TableRowColumn>
-    //       <TableRowColumn>{`${type}`}</TableRowColumn>
-    //     <TableRowColumn>{`${success}`}</TableRowColumn>
-    //       <TableRowColumn>{`${filename}`}</TableRowColumn>
-    //       <TableRowColumn>{`${comments}`}</TableRowColumn>
-    //     </TableRow>
-    // );
+    );
   }
 }
