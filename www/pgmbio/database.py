@@ -73,5 +73,5 @@ class DatabaseManager():
     def get_uploads_list(self, id_token):
         sub_uid = auth_utils.validate_g_token(id_token=id_token)["sub"]
         print("...[dbm] get all uploads: {0}".format(sub_uid))
-        uploads_cursor = self.uploads.find({"user_id":sub_uid})
+        uploads_cursor = self.uploads.find({"user_id":sub_uid}).sort([("datetime", DESCENDING)])
         return json_util.dumps(uploads_cursor)
