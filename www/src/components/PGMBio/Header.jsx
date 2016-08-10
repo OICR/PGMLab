@@ -2,7 +2,6 @@ import React from 'react'
 
 import GoogleLogin from "react-google-login";
 import {UploadModal} from "./UploadModal.jsx";
-import {UploadModal2} from "./UploadModal2.jsx";
 
 var classNames = require("classnames");
 
@@ -45,16 +44,16 @@ export default class Header extends React.Component {
             </li>
           ))
         }
-        <li>
+        {/* <li>
           <UploadModal  uploadList                     = {this.props.uploadList}
                         uploadListAddFailure           = {this.props.uploadListAddFailure}
                         addNewPathway                  = {this.props.addNewPathway}
                         addNewObservationSet           = {this.props.addNewObservationSet}
                         addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
                         addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
-        </li>
+        </li> */}
         <li>
-          <UploadModal2 onUploadSuccess = {this.props.onUploadSuccess} uploads={this.props.uploads} auth={this.props.auth} />
+          <UploadModal onUploadSuccess = {this.props.onUploadSuccess} uploads={this.props.uploads} auth={this.props.auth} />
         </li>
       </ul>
     )
