@@ -48,6 +48,16 @@
                             "url": "wss://localhost/ws"
                         }
                     }
+                },
+                {
+                  "type": "websocket",
+                  "endpoint": {
+                    "type": "tcp",
+                    "interface": "127.0.0.1",
+                    "port": 4433
+                  },
+                  "url": "ws://127.0.0.1:4433",
+                  "debug": true
                 }
             ]
         }
