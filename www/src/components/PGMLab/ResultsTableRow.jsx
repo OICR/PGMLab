@@ -12,6 +12,9 @@ export default class ResultsTableRow extends React.Component {
     this.getInfo = this.getInfo.bind(this);
     this.getDatetime = this.getDatetime.bind(this);
   }
+  componentDidMount(){
+    $(".tooltipped").tooltip({delay:25});
+  }
 
   getID(){
     const id = this.props.task.get("task_id");
