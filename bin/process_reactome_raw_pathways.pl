@@ -5,7 +5,6 @@ use warnings;
 
 use autodie;
 use feature qw(say);
-use POSIX;
 
 use Data::Dumper;
 

@@ -6,11 +6,42 @@ use warnings;
 use autodie;
 use feature qw(say);
 
+use POSIX;
+
 use Data::Dumper;
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
-@EXPORT_OK = qw(is_pi_DAG create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+@EXPORT_OK = qw(add_pseudo_nodes_to_interactions is_pi_DAG create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+
+sub add_pseudo_nodes_to_interactions {
+    my ($interactions, $max_number_of_parents) = @_;
+    
+    my ($num_groups, $num_parents, $nodes_per_group, $node_index, $group_index);
+    foreach my $child (keys %{$interactions}) {
+        my @parents = keys %{$interactions->{$child}};
+        $num_parents = scalar @parents;
+        if ($num_parents >= 10) {
+            $num_groups =  ceil($num_parents/$max_number_of_parents);
+            $nodes_per_group = ceil($num_parents/$num_groups);
+    
+            $group_index = 1;
+            $node_index = 1;
+            foreach my $parent (@parents) {
+                  if ($node_index > $nodes_per_group) {
+                       $node_index = 1;
+                       $group_index++;
+                  }
+                  my @node_data = @{$interactions->{$child}{$parent}};
+                  $interactions->{"$child\_PSEUDONODE\_$group_index"}{$parent} = \@node_data;
+                  $node_index++; 
+            } 
+            for(my $i = 1; $i < $num_groups; $i++) {
+                $interactions->{$child}{"$child\_PSEUDONODE\_$i"} = [1,$interactions->{$child}{$parents[0]}[1]];
+            }
+        }
+    }
+}
 
 sub is_pi_DAG {
     my($pi_interactions) = @_;
