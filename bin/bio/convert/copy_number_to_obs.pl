@@ -10,8 +10,8 @@ use feature qw(say);
 use FindBin qw($Bin);
 use lib "$Bin/../../../lib/perl";
 
-use PGMLab qw(create_obs_file);
-use PGMLab::Bio qw(get_donor_ploidy get_reactome_ids_to_names_maps get_genes_in_pi_file get_sample_list get_copy_number_gene_states);
+use PGMLab qw(create_obs_file get_nodes_in_pi_file);
+use PGMLab::Bio qw(get_donor_ploidy get_reactome_ids_to_names_maps get_sample_list get_copy_number_gene_states);
 
 use Getopt::Euclid qw( :minimal_keys );
 
@@ -22,7 +22,7 @@ my $donor_ploidy = get_donor_ploidy($ARGV{'ploidy'});
 
 my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($ARGV{'db_id_to_name_mapping'});
 
-my $pi_genes = get_genes_in_pi_file($ARGV{'pi'});
+my $pi_genes = get_nodes_in_pi_file($ARGV{'pi'});
 
 my $sample_list = get_sample_list($ARGV{'sample_list'});
 

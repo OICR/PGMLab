@@ -26,7 +26,7 @@ def write_pairwise_interaction(run_path, pi_file):
 def split_pairwise_interaction(run_path):
     pi_filepath = run_path+"pathway.pi"
     pi_split_filepath = run_path+"pathway.split.pi"
-    command = "perl {0} {1} > {2}".format(split_nodes_path, pi_filepath, pi_split_filepath)
+    command = "perl {0} {1} {2}".format(split_nodes_path, pi_filepath, pi_split_filepath)
     return system_call(command)
 
 def write_observation(run_path, obs_file, run_type):
