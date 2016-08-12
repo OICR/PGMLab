@@ -10,7 +10,9 @@ export default class ResultsPanel extends React.Component {
     this.getTableRows = this.getTableRows.bind(this);
   }
   componentWillMount(){
-    let eventSource = new EventSource("celery");
+    // let eventSource = new EventSource("celery");
+    // let eventSource = new EventSource("http://localhost:8888/celery");
+    let eventSource = new EventSource("http://localhost:8000/celery");
     eventSource.addEventListener(
       "celery.task.add",
       (evt) => {

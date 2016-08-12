@@ -20,10 +20,8 @@ var materialize = require("./lib/materialize.min.js");
 // AUTOBAHN
 try {var autobahn = require("autobahn")}
 catch (err) {console.log("autobahn error: ", e)};
-const wsuri = (document.location.origin == "file://") ?
-  "wss://127.0.0.1/ws" :
-  // (document.location.protocol === "http:" ? "ws:" : "wss:") + "//127.0.0.1/ws";
-  (document.location.protocol === "http:" ? "wss:" : "wss:") + "//127.0.0.1/ws";
+const wssuri = "wss://127.0.0.1:443";
+const wsuri = "ws://127.0.0.1:4433";
 var connection = new autobahn.Connection({
   url: wsuri,
   realm: "realm1"
