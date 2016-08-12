@@ -11,8 +11,12 @@ use Data::Dumper;
 use FindBin qw($Bin);
 use lib "$Bin/../lib/perl";
 
-use PGMLab qw(is_pi_DAG create_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+use PGMLab qw(add_pseudo_nodes_to_interactions is_pi_DAG create_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
 use PGMLab::NetworkComponents qw(network_components);
+
+#USAGE perl process_reactome_raw_pathways.pl <input_directory> <output_directory>
+
+my $max_number_of_parents = 10;
 
 my $reactome_export_dir = $ARGV[0];
 $reactome_export_dir = $1 if($reactome_export_dir=~/(.*)\/$/); #remove trailing slash if exists
@@ -57,6 +61,7 @@ foreach my $tsv_file (@tsv_files) {
        my $is_a_dag = (is_pi_DAG(\%member_interactions))? "yes":"no";
        say "DAG? $is_a_dag";
 
+       add_pseudo_nodes_to_interactions(\%member_interactions, $max_number_of_parents);
        create_pi_file($filepath, \%member_interactions);
 
        $member_group_index++;    
