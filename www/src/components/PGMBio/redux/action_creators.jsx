@@ -3,6 +3,8 @@ const SIGN_IN = "SIGN_IN";
 const SIGN_OUT = "SIGN_OUT";
 const UPLOAD = "UPLOAD";
 const CHANGE_VIEW = "CHANGE_VIEW";
+const CHANGE_OBS_SET = "CHANGE_OBS_SET";
+const CHANGE_OBS = "CHANGE_OBS";
 
 // AUTHENTICATION
 export function signInPGM(gAuth, userUploads, userObservations){
@@ -34,6 +36,24 @@ export function changeView(view){
     type: CHANGE_VIEW,
     payload: {
       view
+    }
+  }
+}
+
+// SELECT OBSERVATION DATA
+export function selectObservationSet(observationSet){
+  return {
+    type: CHANGE_OBS_SET,
+    payload: {
+      observationSet
+    }
+  }
+}
+export function selectObservations(selected){
+  return {
+    type: CHANGE_OBS,
+    payload: {
+      selected
     }
   }
 }

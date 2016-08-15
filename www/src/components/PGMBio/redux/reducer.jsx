@@ -22,9 +22,24 @@ function signOut(state){
   return state.merge({auth});
 }
 
-// TAB
 function changeView(state, action){
   return state.update("view", view => action.payload.view)
+}
+
+function changeObservationSet(state, action){
+  return state.withMutations(state => state
+    .setIn(["dataspace", "observationSet"], action.payload.observationSet)
+    .setIn(["dataspace", "observationSet", "selected"], action.payload.observationSet.get("data").map(o => true))
+  );
+}
+function changeObservations(state, action){
+  return state.setIn(
+    ["dataspace", "observationSet", "selected"],
+    action.payload.selected.reduce(
+      (selected, obsIndex) => selected.set(obsIndex, true),
+      state.getIn(["dataspace", "observationSet", "data"]).map(o => false)
+    )
+  );
 }
 
 // REDUCER
@@ -40,6 +55,12 @@ export default function(state = Map(), action) {
       return signOut(state)
     case "UPLOAD":
       return uploadReducer(state, action);
+    case "CHANGE_VIEW":
+      return state //add reducer once we have more than 'Run' tab
+    case "CHANGE_OBS_SET":
+      return changeObservationSet(state, action);
+    case "CHANGE_OBS":
+      return changeObservations(state, action);
   };
   return state;
 }

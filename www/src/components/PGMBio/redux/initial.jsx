@@ -1,4 +1,4 @@
-import {Map} from "immutable";
+import {Map, OrderedMap} from "immutable";
 
 // Should match mapStateToProps
 const auth = Map({
@@ -12,7 +12,7 @@ const initialAppState = {
   uploads: Map(),
   view: "Run",
   dataspace: Map(),
-  observations: Map()
+  observations: OrderedMap()
 };
 
 function mapStateToProps(state) {

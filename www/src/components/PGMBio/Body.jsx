@@ -11,8 +11,11 @@ export default class Body2 extends React.Component {
         case "Run":
           return (
             <RunView
+              observations={this.props.observations}
               dataspace={this.props.dataspace}
-              observations={this.props.observations}/>
+              selectObservationSet={this.props.selectObservationSet}
+              selectObservations={this.props.selectObservations}
+            />
           )
       }
     }

@@ -12,8 +12,11 @@ export default class RunDataSelect extends React.Component {
         <div className="col s12">
           <PathwaySelect />
           <ObservationSelect
+            observations={this.props.observations}
             dataspace={this.props.dataspace}
-            observations={this.props.observations}/>
+            selectObservationSet = {this.props.selectObservationSet}
+            selectObservations={this.props.selectObservations}
+          />
          </div>
       </div>
     );

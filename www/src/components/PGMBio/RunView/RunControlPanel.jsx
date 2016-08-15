@@ -11,8 +11,11 @@ export default class RunControlPanel extends React.Component {
       <div className="card-panel">
         <RunTypeSelect />
         <RunDataSelect
+          observations={this.props.observations}
           dataspace={this.props.dataspace}
-          observations={this.props.observations}/>
+          selectObservationSet = {this.props.selectObservationSet}
+          selectObservations={this.props.selectObservations}
+        />
       </div>
     )
   }

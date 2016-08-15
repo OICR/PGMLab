@@ -439,8 +439,11 @@ export class App extends  React.Component {
                   addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet} />
           <Body2
             view = {this.props.view}
-            dataspace = {this.props.dataspace}
             observations = {this.props.observations}
+            dataspace = {this.props.dataspace}
+            selectObservationSet = {this.props.selectObservationSet}
+            selectObservations = {this.props.selectObservations}
+
 
             />
           <Body tab = {this.state.tab}
@@ -476,15 +479,5 @@ export class App extends  React.Component {
     }
 };
 
-// function mapStateToProps(state) {
-//   return {
-//     auth: state.get("auth"),
-//     uploads: state.get("uploads"),
-//     view: state.get("view"),
-//     observations: state.get("observations")
-//   };
-// }
-
 import {mapStateToProps} from "./redux/initial.jsx";
-
 export const AppContainer = connect(mapStateToProps, actionCreators)(App)
