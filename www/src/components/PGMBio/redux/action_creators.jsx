@@ -1,8 +1,14 @@
+// All action types
+const SIGN_IN = "SIGN_IN";
+const SIGN_OUT = "SIGN_OUT";
+const UPLOAD = "UPLOAD";
+const CHANGE_VIEW = "CHANGE_VIEW";
+
 // AUTHENTICATION
 export function signInPGM(gAuth, userUploads, userObservations){
   const googleIdToken = gAuth.getAuthResponse().id_token;
   return {
-    type: "SIGN_IN",
+    type: SIGN_IN,
     payload: {
       googleIdToken,
       userUploads,
@@ -11,16 +17,13 @@ export function signInPGM(gAuth, userUploads, userObservations){
   };
 }
 export function signOut(){
-  return {
-    type: "SIGN_OUT"
-  }
+  return {type: SIGN_OUT}
 }
 
 // UPLOAD DATA
 export function onUploadSuccess(payload){
-  // payload = {info,data} from server upload
   return {
-    type: "UPLOAD",
+    type: UPLOAD,
     payload
   };
 }
@@ -28,7 +31,9 @@ export function onUploadSuccess(payload){
 // CHANGE TAB
 export function changeView(view){
   return {
-    type: "CHANGE_VIEW",
-    payload: {view}
+    type: CHANGE_VIEW,
+    payload: {
+      view
+    }
   }
 }
