@@ -44,14 +44,13 @@ export default class Header extends React.Component {
             </li>
           ))
         }
-        {/* <li>
-          <UploadModal  uploadList                     = {this.props.uploadList}
-                        uploadListAddFailure           = {this.props.uploadListAddFailure}
-                        addNewPathway                  = {this.props.addNewPathway}
-                        addNewObservationSet           = {this.props.addNewObservationSet}
-                        addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
-                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
-        </li> */}
+        {
+          ["Run"].map(view =>
+            <li key={view}>
+              <a href="#!" onClick={evt=>this.props.changeView(view)}>{view}</a>
+            </li>
+          )
+        }
         <li>
           <UploadModal onUploadSuccess = {this.props.onUploadSuccess} uploads={this.props.uploads} auth={this.props.auth} />
         </li>

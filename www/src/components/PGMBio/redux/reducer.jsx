@@ -2,18 +2,7 @@ import {Map} from "immutable";
 
 import uploadReducer from "./uploadReducer.jsx";
 
-// Should match mapStateToProps
-const auth = Map({
-  signedIn: false,
-  googleClientId: "852145575631-l5luk85au20hbh9p2vbf68u3jd7v0h1k.apps.googleusercontent.com",
-  googleIdToken: ""
-});
-const initialAppState = {
-  auth,
-  uploads: Map({
-
-  })
-};
+import {initialAppState} from "./initial.jsx";
 
 // AUTHENTICATION
 function setInitialState(state, action){
@@ -22,14 +11,20 @@ function setInitialState(state, action){
 };
 function signIn(state, action){
   const signedIn = true;
-  const {googleIdToken, userUploads} = action.payload;
+  const {googleIdToken, userUploads, userObservations} = action.payload;
   return state.withMutations(state => state
       .update("auth", auth => auth.merge({signedIn, googleIdToken}))
       .update("uploads", uploads => uploads.merge(userUploads))
+      .update("observations", observations => observations.merge(userObservations))
   );
 };
 function signOut(state){
   return state.merge({auth});
+}
+
+// TAB
+function changeView(state, action){
+  return state.update("view", view => action.payload.view)
 }
 
 // REDUCER

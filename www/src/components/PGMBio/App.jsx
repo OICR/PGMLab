@@ -4,6 +4,7 @@ import * as actionCreators from "./redux/action_creators.jsx";
 
 import Header from "./Header.jsx";
 import Body   from "./BodyPGMBio.jsx";
+import Body2 from "./Body.jsx";
 import Footer from "./Footer.jsx";
 
 import Dialog from "material-ui/Dialog";
@@ -378,23 +379,7 @@ export class App extends  React.Component {
     //////
     getGoogleBtn(){
       const responseGoogle = gAuth => {
-        // console.log(gAuth, gAuth.getAuthResponse())
         if (gAuth.isSignedIn()) {
-          // this.props.wamp
-          //   .call("google.auth", [], {
-          //     id_token: gAuth.getAuthResponse().id_token,
-          //     name: gAuth.getBasicProfile().getName(),
-          //     email: gAuth.getBasicProfile().getEmail()
-          //   })
-          //   .then(authenticated => {
-          //     this.props.wamp
-          //       .call("db.uploadslist", [], {id_token: gAuth.getAuthResponse().id_token})
-          //       .then(uploads => console.log(JSON.parse(uploads)));
-          //     if (authenticated) {
-          //       this.props.signIn(gAuth)
-          //     }
-          //     else {console.log("Unable to register/login via Google")}
-          //   })
           this.props.wamp.loginWithGoogle(
             gAuth.getAuthResponse().id_token,
             gAuth.getBasicProfile().getName(),
@@ -402,12 +387,15 @@ export class App extends  React.Component {
           ).then(results => {
             const loginResult = results[0];
             const userUploads = results[1];
+            const userObservations = results[2];
+            console.log(userObservations);
             if (loginResult != null) {
-              this.props.signInPGM(gAuth, userUploads)
+              this.props.signInPGM(gAuth, userUploads, userObservations)
             } else {
               console.log("Unable to register/login via Google")
             };
           });
+
         }
         else {console.log("Unable to authenticate Google account")}
       };
@@ -437,9 +425,11 @@ export class App extends  React.Component {
             uploads = {this.props.uploads}
             auth = {this.props.auth}
             signOut = {this.props.signOut}
+            view = {this.props.view}
+            changeView = {this.props.changeView}
 
 
-                  tab = {this.state.tab}
+                  // tab = {this.state.tab}
                   setTab = {this.setTab}
                   uploadList                      = {this.state.uploadList}
                   uploadListAddFailure            = {this.uploadListAddFailure}
@@ -447,6 +437,12 @@ export class App extends  React.Component {
                   addNewObservationSet            = {this.addNewObservationSet}
                   addNewEstimatedParameterSet     = {this.addNewEstimatedParameterSet}
                   addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet} />
+          <Body2
+            view = {this.props.view}
+            dataspace = {this.props.dataspace}
+            observations = {this.props.observations}
+
+            />
           <Body tab = {this.state.tab}
 
                 pairwiseInteractions            = {this.state.pairwiseInteractions}
@@ -480,24 +476,15 @@ export class App extends  React.Component {
     }
 };
 
-// MuiThemeProvider > App (App2) > AuthWrapper (App)
-export class App2 extends React.Component {
-  constructor(props){
-    super(props);
-    // console.log("App2 props", this.props);
-  }
-  render(){
-    return (
-        <App {...this.props} />
-    )
-  }
-}
+// function mapStateToProps(state) {
+//   return {
+//     auth: state.get("auth"),
+//     uploads: state.get("uploads"),
+//     view: state.get("view"),
+//     observations: state.get("observations")
+//   };
+// }
 
-function mapStateToProps(state) {
-  return {
-    auth: state.get("auth"),
-    uploads: state.get("uploads")
-  };
-}
+import {mapStateToProps} from "./redux/initial.jsx";
 
-export const AppContainer = connect(mapStateToProps, actionCreators)(App2)
+export const AppContainer = connect(mapStateToProps, actionCreators)(App)

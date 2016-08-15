@@ -75,3 +75,9 @@ class DatabaseManager():
         print("...[dbm] get all uploads: {0}".format(sub_uid))
         uploads_cursor = self.uploads.find({"user_id":sub_uid}).sort([("datetime", DESCENDING)])
         return json_util.dumps(uploads_cursor)
+    # Get all users uploaded observations
+    def get_observations_list(self, id_token):
+        sub_uid = auth_utils.validate_g_token(id_token=id_token)["sub"]
+        print("...[dbm] get all observations")
+        obs_cursor = self.observations.find({"user_id":sub_uid}).sort([("filename", ASCENDING)])
+        return json_util.dumps(obs_cursor)

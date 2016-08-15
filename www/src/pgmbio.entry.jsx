@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import reducer from "./components/PGMBio/redux/reducer.jsx";
 import {AppContainer} from "./components/PGMBio/App.jsx";
 
-import {Map} from "immutable";
+import {Map, List} from "immutable";
 
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
@@ -48,10 +48,23 @@ connection.onopen = function(session, details) {
           .map(u => {u._id = u._id.$oid; return Map(u)})
           .reduce((uploads, u) => {uploads[u.get("_id")] = u; return uploads}, {})
       );
-  const loginWithGoogle = (id_token, name, email) => when.all([googleAuthenticate(id_token, name, email), getUploadsList(id_token)]);
+  // Get all user observations
+  const getObservationsList = (id_token) => session.call("db.observationsList", [], {id_token})
+    .then(observations =>
+      JSON.parse(observations)
+        .map(o => {o._id = o._id.$oid; o.data = List(o.data); return Map(o)})
+        .reduce((observations, o) => {observations[o.get("_id")] = o; return observations}, {})
+    );
+  const loginWithGoogle = (id_token, name, email) =>
+    when.all([
+      googleAuthenticate(id_token, name, email),
+      getUploadsList(id_token),
+      getObservationsList(id_token)
+    ]);
   // REACTOME
   const getReactomePathwaysList = () => session.call("reactome.pathwayslist");
   const getReactomePathway = (pathway) => session.call("reactome.pathway", [], {pathway_id: pathway.id});
+  // PGM
   // Load WAMP with promise generators (WAMP RPC calls)
   const wamp = {
     loginWithGoogle,

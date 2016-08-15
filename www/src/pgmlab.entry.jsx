@@ -1,5 +1,7 @@
 import React from "react";
 import {render} from "react-dom";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import {Map} from "immutable";
 import {compose, createStore} from "redux";
 import {Provider} from "react-redux";
@@ -42,9 +44,11 @@ function initializeApp(wamp){
     wamp
   });
   render(
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
     <Provider store={store}>
       <AppContainer/>
-    </Provider>,
+    </Provider>
+    </MuiThemeProvider>,
     document.getElementById('app')
   );
 }

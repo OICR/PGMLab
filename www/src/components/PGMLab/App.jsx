@@ -2,9 +2,6 @@ import React from "react";
 import {connect} from "react-redux";
 import * as actionCreators from "./redux/action_creators.jsx";
 
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-
 import Header from "./Header.jsx";
 import Body from "./BodyPGMLab.jsx";
 import Footer from "./Footer.jsx";
@@ -12,7 +9,7 @@ import Footer from "./Footer.jsx";
 import Dialog from "material-ui/Dialog";
 import GoogleLogin from "react-google-login";
 
-class AuthWrapper extends React.Component {
+class App extends React.Component {
   constructor(props){
     super(props);
     this.getGoogleButton = this.getGoogleButton.bind(this);
@@ -56,19 +53,6 @@ class AuthWrapper extends React.Component {
         <Body {...this.props} />
         <Footer />
       </div>
-    );
-  }
-}
-
-export class App extends  React.Component {
-  constructor(props){
-    super(props);
-  }
-  render(){
-    return (
-      <MuiThemeProvider muiTheme={getMuiTheme()}>
-        <AuthWrapper {...this.props} />
-      </MuiThemeProvider>
     );
   }
 }

@@ -1,11 +1,12 @@
 // AUTHENTICATION
-export function signInPGM(gAuth, userUploads){
+export function signInPGM(gAuth, userUploads, userObservations){
   const googleIdToken = gAuth.getAuthResponse().id_token;
   return {
     type: "SIGN_IN",
     payload: {
       googleIdToken,
-      userUploads
+      userUploads,
+      userObservations
     }
   };
 }
@@ -22,4 +23,12 @@ export function onUploadSuccess(payload){
     type: "UPLOAD",
     payload
   };
+}
+
+// CHANGE TAB
+export function changeView(view){
+  return {
+    type: "CHANGE_VIEW",
+    payload: {view}
+  }
 }
