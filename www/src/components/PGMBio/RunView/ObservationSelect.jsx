@@ -99,8 +99,7 @@ export default class ObservationSelect extends React.Component {
       <div>
         {openBtn}
         <Dialog modal={true} open={this.state.open} actions={[closeBtn]}
-            title={"Select an observation set and data to include"}
-            titleClassName={"center-align"}>
+            title={"Select an observation set and data to include"} titleClassName={"center-align"}>
           <div className="row">
             <div className={!this.props.dataspace.has("observationSet") ? "col s12" : "col s5"}>
               <ObservationSetTable
