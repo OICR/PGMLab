@@ -8,21 +8,23 @@ class ObservationSetTable extends React.Component {
     this.onRowSelection = this.onRowSelection.bind(this);
   }
   onRowSelection(selected){
-    const observationSet = this.props.observations.toList().get(selected[0]);
-    this.props.selectObservationSet(observationSet);
+    if (selected.length != 0) {
+      const observationSet = this.props.observations.toList().get(selected[0]);
+      this.props.selectObservationSet(observationSet);
+    }
   }
   render(){
     return (
-      <Table multiSelectable={false} height={"300px"}
+      <Table multiSelectable={false} height={"330px"}
           onRowSelection={selected => this.onRowSelection(selected)}>
-        <TableHeader displaySelectAll={false}>
+        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>
-              {"Observation Sets"}
+              <h5 className="center-align black-text">{"Observation Sets"}</h5>
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody deselectOnClickaway={false}>
+        <TableBody deselectOnClickaway={false} stripedRows={true}>
           {
             this.props.observations.valueSeq()
               .map(obsSet => (
@@ -45,6 +47,9 @@ class ObservationTable extends React.Component {
   constructor(props){
     super(props);
     this.onRowSelection = this.onRowSelection.bind(this);
+    this.state = {
+      selectedObservations: []
+    };
   }
   onRowSelection(selected){
     console.log(selected)
@@ -52,16 +57,16 @@ class ObservationTable extends React.Component {
   }
   render(){
     return (!this.props.dataspace.has("observationSet") ? null :
-      <Table multiSelectable={true} height={"300px"}
+      <Table multiSelectable={true} height={"330px"}
           onRowSelection={selected => this.onRowSelection(selected)}>
         <TableHeader displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn>
-              {this.props.dataspace.getIn(["observationSet", "filename"])}
+              <h5 className="black-text">{this.props.dataspace.getIn(["observationSet", "filename"])}</h5>
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody deselectOnClickaway={false}>
+        <TableBody deselectOnClickaway={false} stripedRows={true}>
           {
               this.props.dataspace.getIn(["observationSet", "data"]).entrySeq()
                 .map(entry => (
@@ -97,9 +102,11 @@ export default class ObservationSelect extends React.Component {
     return (
       <div>
         {openBtn}
-        <Dialog modal={true} open={this.state.open} actions={[closeBtn]} title={"Select an observation set and data to include"}>
+        <Dialog modal={true} open={this.state.open} actions={[closeBtn]}
+            title={"Select an observation set and data to include"}
+            titleClassName={"center-align"}>
           <div className="row">
-            <div className="col s5">
+            <div className={this.props.dataspace.has("observationSet") ? "col s5" : "col s12"}>
               <ObservationSetTable
                   dataspace={this.props.dataspace}
                   selectObservationSet={this.props.selectObservationSet}
