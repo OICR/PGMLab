@@ -55,11 +55,21 @@ connection.onopen = function(session, details) {
         .map(o => {o._id = o._id.$oid; o.data = List(o.data); return Map(o)})
         .reduce((observations, o) => {observations[o.get("_id")] = o; return observations}, {})
     );
+  // Get all user pathways
+  const getPathwaysList = (id_token) => session.call("db.pathwaysList", [], {id_token})
+    // .then(pathways => {
+    //   console.log(pathways);
+    // })
+    .then(pathways => {
+        const test = JSON.parse(pathways);
+        console.log(test); return test;
+    });
   const loginWithGoogle = (id_token, name, email) =>
     when.all([
       googleAuthenticate(id_token, name, email),
       getUploadsList(id_token),
-      getObservationsList(id_token)
+      getObservationsList(id_token),
+      getPathwaysList(id_token)
     ]);
   // REACTOME
   const getReactomePathwaysList = () => session.call("reactome.pathwayslist");

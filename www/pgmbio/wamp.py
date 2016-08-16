@@ -47,6 +47,8 @@ class WAMPComponent(ApplicationSession):
             return self.dbm.get_uploads_list(id_token=id_token)
         def get_observations_list(id_token):
             return self.dbm.get_observations_list(id_token=id_token)
+        def get_pathways_list(id_token):
+            return self.dbm.get_pathways_list(id_token=id_token)
 
         # REGISTER
         try:
@@ -55,6 +57,7 @@ class WAMPComponent(ApplicationSession):
             yield self.register(get_reactome_pathway, u"reactome.pathway")
             yield self.register(get_uploads_list, u"db.uploadslist")
             yield self.register(get_observations_list, u"db.observationsList")
+            yield self.register(get_pathways_list, u"db.pathwaysList")
             print("...[wamp] Registered")
         except Exception as e:
             print("...[wamp] could not register: {0}".format(e))

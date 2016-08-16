@@ -7,11 +7,12 @@ import {initialAppState} from "./initial.jsx";
 // AUTHENTICATION
 function setInitialState(state, action){
   // pass reactomePathways from action.payload
+  console.log(action.payload.reactomePathways);
   return state.merge(initialAppState);
 };
 function signIn(state, action){
   const signedIn = true;
-  const {googleIdToken, userUploads, userObservations} = action.payload;
+  const {googleIdToken, userUploads, userObservations, userPathways} = action.payload;
   return state.withMutations(state => state
       .update("auth", auth => auth.merge({signedIn, googleIdToken}))
       .update("uploads", uploads => uploads.merge(userUploads))
@@ -48,7 +49,7 @@ export default function(state = Map(), action) {
   switch (action.type) {
     case "SET_INITIAL_STATE":
       // return state.merge({...initialAppState});
-      return setInitialState(state)
+      return setInitialState(state, action);
     case "SIGN_IN":
       return signIn(state, action);
     case "SIGN_OUT":

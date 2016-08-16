@@ -388,9 +388,10 @@ export class App extends  React.Component {
             const loginResult = results[0];
             const userUploads = results[1];
             const userObservations = results[2];
-            console.log(userObservations);
+            const userPathways = results[3];
+            // console.log(userObservations);
             if (loginResult != null) {
-              this.props.signInPGM(gAuth, userUploads, userObservations)
+              this.props.signInPGM(gAuth, userUploads, userObservations, userPathways)
             } else {
               console.log("Unable to register/login via Google")
             };

@@ -7,14 +7,15 @@ const CHANGE_OBS_SET = "CHANGE_OBS_SET";
 const CHANGE_OBS = "CHANGE_OBS";
 
 // AUTHENTICATION
-export function signInPGM(gAuth, userUploads, userObservations){
+export function signInPGM(gAuth, userUploads, userObservations, userPathways){
   const googleIdToken = gAuth.getAuthResponse().id_token;
   return {
     type: SIGN_IN,
     payload: {
       googleIdToken,
       userUploads,
-      userObservations
+      userObservations,
+      userPathways
     }
   };
 }
