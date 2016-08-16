@@ -47,12 +47,8 @@ class ObservationTable extends React.Component {
   constructor(props){
     super(props);
     this.onRowSelection = this.onRowSelection.bind(this);
-    this.state = {
-      selectedObservations: []
-    };
   }
   onRowSelection(selected){
-    console.log(selected)
     this.props.selectObservations(selected);
   }
   render(){
@@ -68,13 +64,13 @@ class ObservationTable extends React.Component {
         </TableHeader>
         <TableBody deselectOnClickaway={false} stripedRows={true}>
           {
-              this.props.dataspace.getIn(["observationSet", "data"]).entrySeq()
-                .map(entry => (
+              this.props.dataspace.getIn(["observationSet", "data"]).keySeq()
+                .map(index => (
                   <TableRow
-                      key={entry[0]}
-                      selected={this.props.dataspace.getIn(["observationSet", "selected", entry[0]])}>
+                      key={index}
+                      selected={this.props.dataspace.getIn(["observationSet", "selected", index])}>
                     <TableRowColumn>
-                      {`Observation ${entry[0]+1}`}
+                      {`Observation ${index+1}`}
                     </TableRowColumn>
                   </TableRow>
                 ))
