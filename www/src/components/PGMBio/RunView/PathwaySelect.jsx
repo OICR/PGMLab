@@ -4,8 +4,6 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import TextField from "material-ui/TextField";
 import Checkbox from "material-ui/Checkbox";
 import {List, ListItem} from "material-ui/List";
-import {green900} from "material-ui/styles/colors";
-console.log(green900)
 
 class PathwaySelectFilter extends React.Component {
   constructor(props){
@@ -34,7 +32,6 @@ class PathwaySelectFilter extends React.Component {
             <ListItem
               leftCheckbox={
                 <Checkbox
-                  iconStyle={{color:green900}}
                   label="Reactome"
                   checked={this.props.filters.reactome}
                   onCheck={(evt, checked) => this.props.updateFilters("reactome", checked)}/>}
