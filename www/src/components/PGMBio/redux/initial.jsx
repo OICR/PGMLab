@@ -12,7 +12,11 @@ const initialAppState = {
   uploads: Map(),
   view: "Run",
   dataspace: Map(),
-  observations: OrderedMap()
+  observations: OrderedMap(),
+  pathways: Map({
+    reactome: Map(),
+    user: Map()
+  })
 };
 
 function mapStateToProps(state) {
@@ -21,7 +25,8 @@ function mapStateToProps(state) {
     uploads: state.get("uploads"),
     view: state.get("view"),
     dataspace: state.get("dataspace"),
-    observations: state.get("observations")
+    observations: state.get("observations"),
+    pathways: state.get("pathways")
   };
 }
 

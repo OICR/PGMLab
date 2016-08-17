@@ -8,7 +8,12 @@ import {initialAppState} from "./initial.jsx";
 function setInitialState(state, action){
   // pass reactomePathways from action.payload
   console.log(action.payload.reactomePathways);
-  return state.merge(initialAppState);
+  const {reactomePathways} = action.payload;
+  // return state.merge(initialAppState);
+  return state.withMutations(state => state
+      .merge(initialAppState)
+      .updateIn(["pathways", "reactome"], rPathways => rPathways.merge(reactomePathways))
+  );
 };
 function signIn(state, action){
   const signedIn = true;
@@ -17,6 +22,7 @@ function signIn(state, action){
       .update("auth", auth => auth.merge({signedIn, googleIdToken}))
       .update("uploads", uploads => uploads.merge(userUploads))
       .update("observations", observations => observations.merge(userObservations))
+      .updateIn(["pathways", "user"], uPathways => uPathways.merge(userPathways))
   );
 };
 function signOut(state){

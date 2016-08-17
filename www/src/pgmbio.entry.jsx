@@ -46,24 +46,25 @@ connection.onopen = function(session, details) {
       .then(uploads =>
         JSON.parse(uploads)
           .map(u => {u._id = u._id.$oid; return Map(u)})
-          .reduce((uploads, u) => {uploads[u.get("_id")] = u; return uploads}, {})
+          // .reduce((uploads, u) => {uploads[u.get("_id")] = u; return uploads}, {})
+          .reduce((uploads, u) => uploads.set(u.get("_id"), u), Map())
       );
   // Get all user observations
   const getObservationsList = (id_token) => session.call("db.observationsList", [], {id_token})
     .then(observations =>
       JSON.parse(observations)
         .map(o => {o._id = o._id.$oid; o.data = List(o.data); return Map(o)})
-        .reduce((observations, o) => {observations[o.get("_id")] = o; return observations}, {})
+        // .reduce((observations, o) => {observations[o.get("_id")] = o; return observations}, {})
+        .reduce((observations, o) => observations.set(o.get("_id"), o), Map())
     );
   // Get all user pathways
   const getPathwaysList = (id_token) => session.call("db.pathwaysList", [], {id_token})
-    // .then(pathways => {
-    //   console.log(pathways);
-    // })
-    .then(pathways => {
-        const test = JSON.parse(pathways);
-        console.log(test); return test;
-    });
+    .then(pathways =>
+      JSON.parse(pathways)
+          .map(p => {p._id = p._id.$oid; return Map(p)})
+          // .reduce((pathways, p) => {pathways[p.get("_id")] = p; return pathways}, {})
+          .reduce((pathways, p) => pathways.set(p.get("_id"), p), Map())
+    );
   const loginWithGoogle = (id_token, name, email) =>
     when.all([
       googleAuthenticate(id_token, name, email),
@@ -72,7 +73,12 @@ connection.onopen = function(session, details) {
       getPathwaysList(id_token)
     ]);
   // REACTOME
-  const getReactomePathwaysList = () => session.call("reactome.pathwayslist");
+  const getReactomePathwaysList = () => session.call("reactome.pathwayslist")
+    .then(pathways => pathways
+      .map(p => Map(p))
+      // .reduce((pathways, p) => {pathways[p.get("id")] = p; return pathways}, {})
+      .reduce((pathways, p) => pathways.set(p.get("id"), p), Map())
+    );
   const getReactomePathway = (pathway) => session.call("reactome.pathway", [], {pathway_id: pathway.id});
   // PGM
   // Load WAMP with promise generators (WAMP RPC calls)
