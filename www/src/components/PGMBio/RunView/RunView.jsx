@@ -18,6 +18,7 @@ export default class RunView extends React.Component {
               selectObservationSet={this.props.selectObservationSet}
               selectObservations={this.props.selectObservations}
               pathways={this.props.pathways}
+              selectPathways={this.props.selectPathways}
           />
         </div>
         <div className="col s8">

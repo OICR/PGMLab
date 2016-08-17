@@ -5,6 +5,7 @@ const UPLOAD = "UPLOAD";
 const CHANGE_VIEW = "CHANGE_VIEW";
 const CHANGE_OBS_SET = "CHANGE_OBS_SET";
 const CHANGE_OBS = "CHANGE_OBS";
+const CHANGE_PATHWAYS = "CHANGE_PATHWAYS";
 
 // AUTHENTICATION
 export function signInPGM(gAuth, userUploads, userObservations, userPathways){
@@ -55,6 +56,16 @@ export function selectObservations(selected){
     type: CHANGE_OBS,
     payload: {
       selected
+    }
+  }
+}
+
+// SELECT PATHWAYS
+export function selectPathways(selected){
+  return {
+    type: CHANGE_PATHWAYS,
+    payload: {
+
     }
   }
 }

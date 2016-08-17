@@ -445,6 +445,7 @@ export class App extends  React.Component {
             selectObservationSet = {this.props.selectObservationSet}
             selectObservations = {this.props.selectObservations}
             pathways = {this.props.pathways}
+            selectPathways = {this.props.selectPathways}
 
 
             />

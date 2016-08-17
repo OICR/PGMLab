@@ -47,6 +47,10 @@ function changeObservations(state, action){
   );
 }
 
+function changePathways(state, action){
+  return state;
+}
+
 // REDUCER
 export default function(state = Map(), action) {
   console.log("...reducer.action: ", action);
@@ -66,6 +70,8 @@ export default function(state = Map(), action) {
       return changeObservationSet(state, action);
     case "CHANGE_OBS":
       return changeObservations(state, action);
+    case "CHANGE_PATHWAYS":
+      return changePathways(state, action);
   };
   return state;
 }

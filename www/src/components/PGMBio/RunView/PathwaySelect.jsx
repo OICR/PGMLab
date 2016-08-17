@@ -4,6 +4,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import TextField from "material-ui/TextField";
 import Checkbox from "material-ui/Checkbox";
 import {List, ListItem} from "material-ui/List";
+import {OrderedMap} from "immutable";
 
 class PathwaySelectFilter extends React.Component {
   constructor(props){
@@ -56,14 +57,19 @@ class PathwayTable extends React.Component {
     this.onRowSelection = this.onRowSelection.bind(this);
     this.getFilteredPathways = this.getFilteredPathways.bind(this);
   }
-  onRowSelection(){
-
+  onRowSelection(selected){
+    // Check filters for what is being selected, change accordingly
+    this.props.selectPathways();
   }
   getFilteredPathways(){
-    const test = this.props.pathways.toJS();
+    const test = this.props.pathways
+      .reduce((bothPathways, pathwayMap) => bothPathways.merge(pathwayMap), OrderedMap())
+      .toList()
+      .toJS();
     console.log(test);
   }
   render(){
+    this.getFilteredPathways();
     return (
       <Table multiSelectable={true} height={"330px"}
           onRowSelection={selected => this.onRowSelection(selected)}>
