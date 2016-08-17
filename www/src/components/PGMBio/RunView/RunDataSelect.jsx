@@ -10,12 +10,15 @@ export default class RunDataSelect extends React.Component {
     return (
       <div className="row center-align">
         <div className="col s12">
-          <PathwaySelect />
+          <PathwaySelect
+              dataspace={this.props.dataspace}
+              pathways={this.props.pathways}
+          />
           <ObservationSelect
-            observations={this.props.observations}
-            dataspace={this.props.dataspace}
-            selectObservationSet = {this.props.selectObservationSet}
-            selectObservations={this.props.selectObservations}
+              dataspace={this.props.dataspace}
+              observations={this.props.observations}
+              selectObservationSet = {this.props.selectObservationSet}
+              selectObservations={this.props.selectObservations}
           />
          </div>
       </div>

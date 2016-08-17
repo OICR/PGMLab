@@ -20,7 +20,7 @@ class ObservationSetTable extends React.Component {
         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>
-              <h5 className="center-align black-text">{"Observation Sets"}</h5>
+              <h6 className="center-align black-text">{"Observation Sets"}</h6>
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
@@ -55,10 +55,10 @@ class ObservationTable extends React.Component {
     return (
       <Table multiSelectable={true} height={"330px"}
           onRowSelection={selected => this.onRowSelection(selected)}>
-        <TableHeader displaySelectAll={false}>
+        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
           <TableRow>
             <TableHeaderColumn>
-              <h5 className="black-text">{this.props.dataspace.getIn(["observationSet", "filename"])}</h5>
+              <h6 className="center-align black-text">{this.props.dataspace.getIn(["observationSet", "filename"])}</h6>
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>

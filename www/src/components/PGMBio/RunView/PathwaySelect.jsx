@@ -1,14 +1,70 @@
 import React from "react";
 import {Dialog, FlatButton} from "material-ui";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import TextField from "material-ui/TextField";
+import Checkbox from "material-ui/Checkbox";
+import {List, ListItem} from "material-ui/List";
+import {green900} from "material-ui/styles/colors";
+console.log(green900)
+
+class PathwaySelectFilter extends React.Component {
+  constructor(props){
+    super(props);
+    this.getPlaceholderText = this.getPlaceholderText.bind(this);
+  }
+  getPlaceholderText(){
+    let {reactome, uploads} = this.props.filters;
+    const and = reactome && uploads ? " and " : "";
+    reactome = reactome ? "Reactome" : "";
+    uploads = uploads ? "uploaded" : "";
+    return `Filter ${reactome}${and}${uploads} pathways by name`;
+  }
+  render(){
+    return (
+      <div className="row">
+        <div className="col s9">
+          <input
+            type="text" id="textInput"
+            placeholder={this.getPlaceholderText()}
+            value={this.props.filters.text}
+            onChange={evt => this.props.updateFilters("text", evt.target.value)}/>
+        </div>
+        <div className="col s3">
+          <List>
+            <ListItem
+              leftCheckbox={
+                <Checkbox
+                  iconStyle={{color:green900}}
+                  label="Reactome"
+                  checked={this.props.filters.reactome}
+                  onCheck={(evt, checked) => this.props.updateFilters("reactome", checked)}/>}
+              />
+            <ListItem
+              leftCheckbox={
+                <Checkbox
+                  label="Uploads"
+                  checked={this.props.filters.uploads}
+                  onCheck={(evt, checked) => this.props.updateFilters("uploads", checked)}/>}
+              />
+          </List>
+        </div>
+      </div>
+    );
+  }
+}
 
 class PathwayTable extends React.Component {
   constructor(props){
     super(props);
     this.onRowSelection = this.onRowSelection.bind(this);
+    this.getFilteredPathways = this.getFilteredPathways.bind(this);
   }
   onRowSelection(){
 
+  }
+  getFilteredPathways(){
+    const test = this.props.pathways.toJS();
+    console.log(test);
   }
   render(){
     return (
@@ -17,12 +73,7 @@ class PathwayTable extends React.Component {
         <TableHeader displaySelectAll={true}>
           <TableRow>
             <TableHeaderColumn>
-              <h5 className="black-text">Pathways</h5>
-            </TableHeaderColumn>
-          </TableRow>
-          <TableRow>
-            <TableHeaderColumn>
-              Filter goes here
+              <h6 className="black-text">{"Click to select all pathways"}</h6>
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
@@ -46,8 +97,19 @@ export default class PathwaySelect extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      open: false
+      open: false,
+      filters: {
+        text: "",
+        reactome: true,
+        uploads: true
+      }
     };
+    this.updateFilters = this.updateFilters.bind(this);
+  }
+  updateFilters(type, newValue){
+    let filters = this.state.filters;
+    filters[type] = newValue;
+    this.setState({filters});
   }
   render(){
     const openBtn = (
@@ -63,7 +125,15 @@ export default class PathwaySelect extends React.Component {
             title={"Select pathways to run PGMLab over"} titleClassName={"center-align"}>
           <div className="row">
             <div className="col s12">
-              <PathwayTable />
+              <PathwaySelectFilter
+                  filters={this.state.filters}
+                  updateFilters={this.updateFilters}/>
+            </div>
+            <div className="col s12">
+              <PathwayTable
+                  dataspace={this.props.dataspace}
+                  pathways={this.props.pathways}
+                  filters={this.state.filters}/>
             </div>
           </div>
         </Dialog>

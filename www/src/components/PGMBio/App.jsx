@@ -440,10 +440,11 @@ export class App extends  React.Component {
                   addNewPosteriorProbabilitySet   = {this.addNewPosteriorProbabilitySet} />
           <Body2
             view = {this.props.view}
-            observations = {this.props.observations}
             dataspace = {this.props.dataspace}
+            observations = {this.props.observations}
             selectObservationSet = {this.props.selectObservationSet}
             selectObservations = {this.props.selectObservations}
+            pathways = {this.props.pathways}
 
 
             />

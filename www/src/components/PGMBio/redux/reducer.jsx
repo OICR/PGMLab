@@ -6,10 +6,8 @@ import {initialAppState} from "./initial.jsx";
 
 // AUTHENTICATION
 function setInitialState(state, action){
-  // pass reactomePathways from action.payload
-  console.log(action.payload.reactomePathways);
+  // pass reactomePathways from action.payload into state
   const {reactomePathways} = action.payload;
-  // return state.merge(initialAppState);
   return state.withMutations(state => state
       .merge(initialAppState)
       .updateIn(["pathways", "reactome"], rPathways => rPathways.merge(reactomePathways))

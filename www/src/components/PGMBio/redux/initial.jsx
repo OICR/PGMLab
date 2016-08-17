@@ -14,8 +14,8 @@ const initialAppState = {
   dataspace: Map(),
   observations: OrderedMap(),
   pathways: Map({
-    reactome: Map(),
-    user: Map()
+    reactome: OrderedMap(),
+    user: OrderedMap()
   })
 };
 
