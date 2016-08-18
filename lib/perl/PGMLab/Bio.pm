@@ -14,8 +14,31 @@ use base "Exporter";
 use vars qw(@EXPORT_OK);
 @EXPORT_OK = qw(gistic_to_obs_file
                 gistic_to_dominant_state_table
+                copy_number_to_dominant_state_table
                 copy_number_to_obs_file
                 snv_to_obs_file);
+
+sub copy_number_to_dominant_state_table {
+    my ($ploidy_file, $db_id_to_name_mapping, $networks, $data_dir, $sample_list_file, $number_of_states, $copy_number_dir, $key_outputs_file, $verbose) = @_;
+
+    $data_dir = $1 if($data_dir=~/(.*)\/$/); # if remove the trailing slash if it exists
+    my ($network_dir, $observation_file, $pairwise_interaction_file, $posterior_probability_file, $command);
+    foreach my $network (@{$networks}) {
+        $network_dir = "$data_dir/$network";
+        $observation_file = "$network_dir/inference.obs";
+        $pairwise_interaction_file = "$network_dir/$network.pi";
+        $posterior_probability_file = "$network_dir/$network.pp"; 
+
+        copy_number_to_obs_file($ploidy_file, $db_id_to_name_mapping, $pairwise_interaction_file, $sample_list_file, $copy_number_dir, $observation_file, $verbose);
+
+        $command = "../../../bin/pgmlab --data-dir $data_dir --network $network --number-of-states $number_of_states --verbose";
+        if ($verbose) {
+            say "Running command: $command";
+        }
+        system($command);
+        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs_file);
+    }
+}
 
 sub gistic_to_dominant_state_table {
     my ($db_id_to_name_mapping_file, $networks, $data_dir, $gistic_file, $number_of_states, $sample_list_file, $key_outputs_file, $verbose) = @_;
@@ -35,14 +58,14 @@ sub gistic_to_dominant_state_table {
             say "Running command: $command";
         }
         system($command);
-        create_dominant_state_file($posterior_probability_file, $gistic_file, $sample_list_file, $key_outputs_file);
+        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs_file, $gistic_file);
     }
 
 
 }
 
 sub create_dominant_state_file {
-    my ($pp_file, $gistic_file, $sample_list_file, $key_outputs_file) = @_;
+    my ($pp_file, $sample_list_file, $key_outputs_file, $gistic_file) = @_;
 
     my ($sample_number, $sample_to_nodes_dominant_state, $nodes) = posterior_probability_file_to_dominant_state($pp_file, $key_outputs_file);
 
@@ -213,7 +236,7 @@ sub gistic_to_obs_file {
 }
 
 sub copy_number_to_obs_file {
-   my ($ploidy_file, $db_id_to_name_mapping_file, $pi_file, $sample_list_file, $copy_number_file, $observation_file) = @_;
+   my ($ploidy_file, $db_id_to_name_mapping_file, $pi_file, $sample_list_file, $copy_number_file, $observation_file, $verbose) = @_;
 
    my $donor_ploidy = get_donor_ploidy($ploidy_file);
    my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($db_id_to_name_mapping_file);
@@ -224,7 +247,12 @@ sub copy_number_to_obs_file {
 
    my $sample_gene_states = get_copy_number_gene_states($copy_number_file, $sample_list, $entity_name_to_reactome_id, $donor_ploidy, $pi_genes);
 
-   create_obs_file($observation_file, $sample_gene_states, $sample_list);
+    if (%{$sample_gene_states}) {
+        create_obs_file($observation_file, $sample_gene_states, $sample_list, $verbose);
+    }
+    elsif($verbose) {
+        say "No results for $observation_file. Therefor not creating file";
+    }
 }
 
 sub snv_to_obs_file {
