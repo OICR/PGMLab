@@ -2,6 +2,7 @@ package PGMLab;
 
 use strict;
 use warnings;
+no warnings 'recursion';
 
 use autodie;
 use feature qw(say);
@@ -12,7 +13,93 @@ use Data::Dumper;
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
-@EXPORT_OK = qw(add_pseudo_nodes_to_interactions is_pi_DAG create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+@EXPORT_OK = qw(find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+
+## returning 1 if is a tree
+sub is_pi_a_tree {
+    my($pi_interactions) = @_;
+
+    my $network = create_network($pi_interactions);
+
+    foreach my $node (keys %{$network}) {
+        next if ($network->{$node}{visited});
+
+        my $start_node = $node;
+        return 0 if(visit_node($network, $start_node, $node));
+    }
+
+    return 1;
+}
+
+sub find_cycles {
+    my ($pi_interactions) = @_;
+
+    my $network = create_network($pi_interactions);
+
+    my @cycles = ();
+    foreach my $node (sort keys %$network) {
+        next if ($network->{$node}{started_with});
+        $network->{$node}{started_with} = $node;
+        my $start_node = $node;
+        find_new_cycles($network, $start_node, $node, \@cycles, []);
+    }
+
+    return \@cycles;
+}
+
+sub find_new_cycles {
+    my ($network, $start_node, $node, $cycles, $path) = @_;
+    
+    $network->{$node}{visited} = $start_node;
+
+    push @$path, $node;
+    foreach my $child (sort @{$network->{$node}{children}}) {
+        next unless(eval { exists $network->{$child} });
+        if (($network->{$child}{visited} eq $start_node) || $network->{$child}{started_with}) {
+            if ($network->{$child}{started_with} eq $start_node) {
+               my @new_path = @$path;
+               push @{$cycles}, \@new_path;
+            }
+            next;
+        }
+
+        find_new_cycles($network, $start_node, $child, $cycles, $path);
+        pop @$path;
+    }
+}
+
+sub visit_node {
+    my ($network, $start_node, $node) = @_;
+
+    $network->{$node}{visited} = $start_node;
+
+    foreach my $child (@{$network->{$node}{children}}) {
+        if (($network->{$child}) && ($network->{$child}{visited} eq $start_node)) {
+               return 1;
+        }
+        if (not $network->{$child}{visited}) {
+            if (visit_node($network, $start_node, $child)) {
+              return 1;
+            }
+        }
+    }
+
+    return 0;   
+}
+
+
+sub print_cycles {
+    my ($cycles) = @_;
+
+    say "Cycles:";
+    my $path_str;
+    foreach my $path (@$cycles) {
+        $path_str = join ' -> ', @$path;
+        say $path_str;
+    }
+}
+
+####
 
 sub add_pseudo_nodes_to_interactions {
     my ($interactions, $max_number_of_parents) = @_;
@@ -43,8 +130,9 @@ sub add_pseudo_nodes_to_interactions {
     }
 }
 
-sub is_pi_DAG {
-    my($pi_interactions) = @_;
+
+sub create_network {
+    my ($pi_interactions) = @_;
 
     my %network;
     foreach my $node (keys %{$pi_interactions}) {
@@ -52,37 +140,16 @@ sub is_pi_DAG {
              my @keys = keys %{$pi_interactions->{$node}};
              my $children = \@keys;
              if ($children) { #can't be in cycle if does not have children
-                 $network{$node} = {"children" => $children,
-                                    "visited"  => 0};
+                 $network{$node} = {"children"     => $children,
+                                    "started_with" => 0,
+                                    "visited"      => 0};
              }
         }
     }
 
-    foreach my $node (keys %network) {
-        next if ($network{$node}{visited});
-        $network{$node}{visited} = $node;
-
-        my $start_node = $node;
-        my $resp = visit_children(\%network, $start_node, $node); 
-        return $resp if ($resp);
-    }
-
-    return 0;
+    return \%network;
 }
-
-sub visit_children {
-    my ($network, $start_node, $node) = @_;
-
-    foreach my $child (@{$network->{$node}{children}}) {
-         return 1 if (($network->{$child}{visited}) && ($network->{$child}{visited} eq $start_node)); 
-         $network->{$node}{visited} = $start_node if (not $network->{$child}{visited});
-         my $resp = visit_children($network, $start_node, $child); 
-         return $resp if($resp);
-    }
-
-    return 0;   
-}
-
+   
 sub create_pi_file {
     my ($pi_filepath, $interactions) = @_;
 
@@ -91,9 +158,9 @@ sub create_pi_file {
     open(my $fh, ">", $pi_filepath);
 
     print $fh "$number_of_interactions\n\n";
-    foreach my $child (keys %{$interactions}) {
-        foreach my $parent (keys %{$interactions->{$child}}) {
-            my @values = @{$interactions->{$child}{$parent}};
+    foreach my $parent (keys %{$interactions}) {
+        foreach my $child (keys %{$interactions->{$parent}}) {
+            my @values = @{$interactions->{$parent}{$child}};
             print $fh "$parent\t$child\t".$values[0]."\t".$values[1]."\n";
         }
     }
