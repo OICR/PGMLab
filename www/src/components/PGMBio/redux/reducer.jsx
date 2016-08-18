@@ -37,18 +37,28 @@ function changeObservationSet(state, action){
     .setIn(["dataspace", "observationSet", "selected"], action.payload.observationSet.get("data").map(o => true))
   );
 }
-function changeObservations(state, action){
+function changeObservation(state, action){
+  const {obsIndex, checked} = action.payload;
   return state.setIn(
-    ["dataspace", "observationSet", "selected"],
-    action.payload.selected.reduce(
-      (selected, obsIndex) => selected.set(obsIndex, true),
-      state.getIn(["dataspace", "observationSet", "data"]).map(o => false)
-    )
+    ["dataspace", "observationSet", "selected", obsIndex],
+    checked
   );
+  // return state.setIn(
+  //   ["dataspace", "observationSet", "selected"],
+  //   action.payload.selected.reduce(
+  //     (selected, obsIndex) => selected.set(obsIndex, true),
+  //     state.getIn(["dataspace", "observationSet", "data"]).map(o => false)
+  //   )
+  // );
 }
 
 function changePathways(state, action){
-  return state;
+  const {pathwaySource, pathwayID, pathway, checked} = action.payload;
+  if (checked) {
+    return state.setIn(["dataspace", "pathways", pathwayID], pathway);
+  } else {
+    return state.deleteIn(["dataspace", "pathways", pathwayID]);
+  };
 }
 
 // REDUCER
@@ -69,7 +79,7 @@ export default function(state = Map(), action) {
     case "CHANGE_OBS_SET":
       return changeObservationSet(state, action);
     case "CHANGE_OBS":
-      return changeObservations(state, action);
+      return changeObservation(state, action);
     case "CHANGE_PATHWAYS":
       return changePathways(state, action);
   };

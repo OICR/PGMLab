@@ -1,6 +1,9 @@
 import React from "react";
 import {Dialog, FlatButton} from "material-ui";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import Checkbox from "material-ui/Checkbox";
+import {List, ListItem} from "material-ui/List";
+import Subheader from "material-ui/Subheader";
 
 class ObservationSetTable extends React.Component {
   constructor(props){
@@ -24,7 +27,7 @@ class ObservationSetTable extends React.Component {
             </TableHeaderColumn>
           </TableRow>
         </TableHeader>
-        <TableBody deselectOnClickaway={false} stripedRows={true}>
+        <TableBody deselectOnClickaway={false}>
           {
             this.props.observations.valueSeq()
               .map(obsSet => (
@@ -43,40 +46,49 @@ class ObservationSetTable extends React.Component {
   }
 }
 
+class ObservationRow extends React.Component {
+  constructor(props){super(props);}
+  render(){
+    return (
+      <ListItem primaryText={`Observation ${this.props.obsIndex+1}`}
+          leftCheckbox={
+            <Checkbox
+                checked={this.props.checked}
+                onCheck={(evt,checked)=>this.props.onRowSelection(this.props.obsIndex,checked)}
+            />
+          }
+      />
+    );
+  }
+}
+
 class ObservationTable extends React.Component {
   constructor(props){
     super(props);
     this.onRowSelection = this.onRowSelection.bind(this);
   }
-  onRowSelection(selected){
-    this.props.selectObservations(selected);
+  onRowSelection(obsIndex, checked){
+    this.props.selectObservation(obsIndex, checked);
+    console.log(obsIndex, checked);
   }
   render(){
     return (
-      <Table multiSelectable={true} height={"330px"}
-          onRowSelection={selected => this.onRowSelection(selected)}>
-        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-          <TableRow>
-            <TableHeaderColumn>
-              <h6 className="center-align black-text">{this.props.dataspace.getIn(["observationSet", "filename"])}</h6>
-            </TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody deselectOnClickaway={false} stripedRows={true}>
-          {
-              this.props.dataspace.getIn(["observationSet", "data"]).keySeq()
-                .map(index => (
-                  <TableRow
-                      key={index}
-                      selected={this.props.dataspace.getIn(["observationSet", "selected", index])}>
-                    <TableRowColumn>
-                      {`Observation ${index+1}`}
-                    </TableRowColumn>
-                  </TableRow>
-                ))
-          }
-        </TableBody>
-      </Table>
+      <List>
+        <Subheader>
+          <h6 className="center-align black-text">
+            {`${this.props.dataspace.getIn(["observationSet", "filename"])}`}
+          </h6>
+        </Subheader>
+        {
+          this.props.dataspace.getIn(["observationSet", "data"])
+            .keySeq()
+            .map(obsIndex =>
+              <ObservationRow key={obsIndex} obsIndex={obsIndex}
+                  onRowSelection={this.onRowSelection}
+                  checked={this.props.dataspace.getIn(["observationSet","selected",obsIndex])}/>
+            )
+        }
+      </List>
     );
   }
 }
@@ -109,10 +121,10 @@ export default class ObservationSelect extends React.Component {
             </div>
             {
               !this.props.dataspace.has("observationSet") ? null :
-              <div className="col s7">
+              <div className="col s7" style={{maxHeight:"400px", overflowY:"scroll"}}>
                 <ObservationTable
                     dataspace={this.props.dataspace}
-                    selectObservations={this.props.selectObservations}/>
+                    selectObservation={this.props.selectObservation}/>
               </div>
             }
           </div>

@@ -4,7 +4,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import TextField from "material-ui/TextField";
 import Checkbox from "material-ui/Checkbox";
 import {List, ListItem} from "material-ui/List";
-import {OrderedMap} from "immutable";
+import {Map} from "immutable";
 
 class PathwaySelectFilter extends React.Component {
   constructor(props){
@@ -60,11 +60,14 @@ class PathwayRow extends React.Component {
     super(props);
   }
   render(){
-    const {pathway, ...props} = this.props;
     return (
-      <TableRow {...props} selectable={true}>
-        <TableRowColumn>{getName(this.props.pathway)}</TableRowColumn>
-      </TableRow>
+      <ListItem primaryText={getName(this.props.pathway)}
+          leftCheckbox={
+            <Checkbox
+                checked={this.props.checked}
+                onCheck={(evt,checked)=>this.props.onRowSelection(this.props.pathway, checked)}/>
+          }
+      />
     );
   }
 }
@@ -77,6 +80,7 @@ class PathwayTable extends React.Component {
   }
   onRowSelection(pathway, checked){
     console.log(pathway, checked);
+    this.props.selectPathway(pathway, checked)
     // Check filters for what is being selected, change accordingly
     // this.props.selectPathways();
   }
@@ -91,7 +95,7 @@ class PathwayTable extends React.Component {
             default: return bothPathways
           }
         },
-        OrderedMap())
+        Map())
       .filter(pathway =>
         getName(pathway).toLowerCase().indexOf(this.props.filters.text.toLowerCase()) != -1
       )
@@ -111,10 +115,11 @@ class PathwayTable extends React.Component {
         {
           this.getFilteredSortedPathways()
             .valueSeq()
-            .map(p => (
-              <ListItem key={getID(p)} primaryText={getName(p)}
-                  leftCheckbox={<Checkbox onCheck={(evt,checked) => this.onRowSelection(p, checked)}/>} />
-            ))
+            .map(p =>
+              <PathwayRow key={getID(p)} pathway={p}
+                  onRowSelection={this.onRowSelection}
+                  checked={this.props.dataspace.hasIn(["pathways", getID(p)])}/>
+            )
         }
       </List>
     );
@@ -161,6 +166,7 @@ export default class PathwaySelect extends React.Component {
               <PathwayTable
                   dataspace={this.props.dataspace}
                   pathways={this.props.pathways}
+                  selectPathway={this.props.selectPathway}
                   filters={this.state.filters}/>
             </div>
           </div>

@@ -13,13 +13,13 @@ export default class RunDataSelect extends React.Component {
           <PathwaySelect
               dataspace={this.props.dataspace}
               pathways={this.props.pathways}
-              selectPathways={this.props.selectPathways}
+              selectPathway={this.props.selectPathway}
           />
           <ObservationSelect
               dataspace={this.props.dataspace}
               observations={this.props.observations}
               selectObservationSet = {this.props.selectObservationSet}
-              selectObservations={this.props.selectObservations}
+              selectObservation={this.props.selectObservation}
           />
          </div>
       </div>

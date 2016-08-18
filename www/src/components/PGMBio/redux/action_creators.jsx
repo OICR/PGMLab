@@ -51,21 +51,27 @@ export function selectObservationSet(observationSet){
     }
   }
 }
-export function selectObservations(selected){
+export function selectObservation(obsIndex, checked){
   return {
     type: CHANGE_OBS,
     payload: {
-      selected
+      obsIndex,
+      checked
     }
   }
 }
 
 // SELECT PATHWAYS
-export function selectPathways(selected){
+export function selectPathway(pathway, checked){
+  const pathwaySource = pathway.has("id") ? "reactome" : "user";
+  const pathwayID = pathway.has("id") ? pathway.get("id") : pathway.get("_id");
   return {
     type: CHANGE_PATHWAYS,
     payload: {
-
+      pathwaySource,
+      pathwayID,
+      pathway: pathway.set("pathwaySource", pathwaySource),
+      checked
     }
   }
 }
