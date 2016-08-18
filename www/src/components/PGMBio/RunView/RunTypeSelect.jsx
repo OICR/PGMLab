@@ -1,25 +1,21 @@
 import React from "react";
+import {Tabs, Tab} from "material-ui/Tabs";
+import {red200, red400} from "material-ui/styles/colors";
 
 export default class RunTypeSelect extends React.Component {
-  constructor(props){
-    super(props);
-  }
-  componentDidMount(){
-    $("ul.tabs").tabs();
-  }
   render(){
+    const [lStyle, iStyle] = this.props.runType == "Learning" ?
+      [{backgroundColor:red400},{backgroundColor:red200}]:
+      [{backgroundColor:red200},{backgroundColor:red400}];
     return (
       <div className="row">
-        <div className="col s12">
-          <ul className="tabs">
-            <li className="tab col s6">
-              <a href="#learning">{"Learning"}</a>
-            </li>
-            <li className="tab col s6">
-              <a href="#inference">{"Inference"}</a>
-            </li>
-          </ul>
-        </div>
+        <Tabs
+            className="col s12"
+            value={this.props.runType}
+            onChange={runType => this.props.changeRunType(runType)}>
+          <Tab style={lStyle} label="Learning" value="Learning"/>
+          <Tab style={iStyle} label="Inference" value="Inference"/>
+        </Tabs>
       </div>
     );
   }

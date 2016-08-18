@@ -11,6 +11,7 @@ const initialAppState = {
   auth,
   uploads: Map(),
   view: "Run",
+  runType: "Learning",
   dataspace: Map(),
   observations: OrderedMap(),
   pathways: Map({
@@ -24,6 +25,7 @@ function mapStateToProps(state) {
     auth: state.get("auth"),
     uploads: state.get("uploads"),
     view: state.get("view"),
+    runType: state.get("runType"),
     dataspace: state.get("dataspace"),
     observations: state.get("observations"),
     pathways: state.get("pathways")

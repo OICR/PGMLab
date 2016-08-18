@@ -11,6 +11,8 @@ export default class Body2 extends React.Component {
         case "Run":
           return (
             <RunView
+                runType={this.props.runType}
+                changeRunType = {this.props.changeRunType}
                 dataspace={this.props.dataspace}
                 observations={this.props.observations}
                 selectObservationSet={this.props.selectObservationSet}

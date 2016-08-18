@@ -31,6 +31,12 @@ function changeView(state, action){
   return state.update("view", view => action.payload.view)
 }
 
+// RUN TYPE CONTROL
+function changeRunType(state, action){
+  return state.update("runType", runType => action.payload.runType)
+}
+
+// RUN CONTROL PANEL
 function changeObservationSet(state, action){
   return state.withMutations(state => state
     .setIn(["dataspace", "observationSet"], action.payload.observationSet)
@@ -43,15 +49,7 @@ function changeObservation(state, action){
     ["dataspace", "observationSet", "selected", obsIndex],
     checked
   );
-  // return state.setIn(
-  //   ["dataspace", "observationSet", "selected"],
-  //   action.payload.selected.reduce(
-  //     (selected, obsIndex) => selected.set(obsIndex, true),
-  //     state.getIn(["dataspace", "observationSet", "data"]).map(o => false)
-  //   )
-  // );
 }
-
 function changePathways(state, action){
   const {pathwaySource, pathwayID, pathway, checked} = action.payload;
   if (checked) {
@@ -74,6 +72,8 @@ export default function(state = Map(), action) {
       return signOut(state)
     case "UPLOAD":
       return uploadReducer(state, action);
+    case "CHANGE_RUNTYPE":
+      return changeRunType(state, action);
     case "CHANGE_VIEW":
       return state //add reducer once we have more than 'Run' tab
     case "CHANGE_OBS_SET":

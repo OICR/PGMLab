@@ -3,6 +3,7 @@ const SIGN_IN = "SIGN_IN";
 const SIGN_OUT = "SIGN_OUT";
 const UPLOAD = "UPLOAD";
 const CHANGE_VIEW = "CHANGE_VIEW";
+const CHANGE_RUNTYPE = "CHANGE_RUNTYPE";
 const CHANGE_OBS_SET = "CHANGE_OBS_SET";
 const CHANGE_OBS = "CHANGE_OBS";
 const CHANGE_PATHWAYS = "CHANGE_PATHWAYS";
@@ -38,6 +39,16 @@ export function changeView(view){
     type: CHANGE_VIEW,
     payload: {
       view
+    }
+  }
+}
+
+// CHANGE BETWEEN LEARNING AND INFERENCE
+export function changeRunType(runType){
+  return {
+    type: CHANGE_RUNTYPE,
+    payload: {
+      runType
     }
   }
 }
