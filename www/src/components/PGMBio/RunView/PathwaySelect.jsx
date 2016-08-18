@@ -20,7 +20,7 @@ class PathwaySelectFilter extends React.Component {
   }
   render(){
     return (
-      <div className="row">
+      <div className="row" style={{marginBottom:"0px"}}>
         <div className="col s9">
           <input
             type="text" id="textInput"
@@ -51,47 +51,72 @@ class PathwaySelectFilter extends React.Component {
   }
 }
 
+// Functions for normalizing Reactome/User uploaded pathways
+const getName = p => p.has("name") ? p.get("name") : p.get("filename")
+const getID = p => p.has("id") ? p.get("id") : p.get("_id")
+
+class PathwayRow extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  render(){
+    const {pathway, ...props} = this.props;
+    return (
+      <TableRow {...props} selectable={true}>
+        <TableRowColumn>{getName(this.props.pathway)}</TableRowColumn>
+      </TableRow>
+    );
+  }
+}
+
 class PathwayTable extends React.Component {
   constructor(props){
     super(props);
     this.onRowSelection = this.onRowSelection.bind(this);
-    this.getFilteredPathways = this.getFilteredPathways.bind(this);
+    this.getFilteredSortedPathways = this.getFilteredSortedPathways.bind(this);
   }
-  onRowSelection(selected){
+  onRowSelection(pathway, checked){
+    console.log(pathway, checked);
     // Check filters for what is being selected, change accordingly
-    this.props.selectPathways();
+    // this.props.selectPathways();
   }
-  getFilteredPathways(){
-    const test = this.props.pathways
-      .reduce((bothPathways, pathwayMap) => bothPathways.merge(pathwayMap), OrderedMap())
-      .toList()
-      .toJS();
-    console.log(test);
+  getFilteredSortedPathways(){
+    return this.props.pathways
+      .reduce((bothPathways, pathwayMap, pathwaySource) => {
+          switch (true) {
+            case (pathwaySource=="user") && this.props.filters.uploads:
+              return bothPathways.merge(pathwayMap)
+            case (pathwaySource=="reactome") && this.props.filters.reactome:
+              return bothPathways.merge(pathwayMap)
+            default: return bothPathways
+          }
+        },
+        OrderedMap())
+      .filter(pathway =>
+        getName(pathway).toLowerCase().indexOf(this.props.filters.text.toLowerCase()) != -1
+      )
+      .sort((a,b) => {
+        // reactome pathways have 'name', uploaded pathways have 'filename'
+        const [aName, bName] = [a,b].map(p => getName(p).toLowerCase());
+        switch (true) {
+          case aName < bName: return -1
+          case aName > bName: return 1
+          default: return 0
+        };
+      });
   }
   render(){
-    this.getFilteredPathways();
     return (
-      <Table multiSelectable={true} height={"330px"}
-          onRowSelection={selected => this.onRowSelection(selected)}>
-        <TableHeader displaySelectAll={true}>
-          <TableRow>
-            <TableHeaderColumn>
-              <h6 className="black-text">{"Click to select all pathways"}</h6>
-            </TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody deselectOnClickaway={false} stripedRows={true}>
-          {
-            [1,2,3,4].map(a => (
-              <TableRow key={a}>
-                <TableRowColumn>
-                  {a}
-                </TableRowColumn>
-              </TableRow>
+      <List>
+        {
+          this.getFilteredSortedPathways()
+            .valueSeq()
+            .map(p => (
+              <ListItem key={getID(p)} primaryText={getName(p)}
+                  leftCheckbox={<Checkbox onCheck={(evt,checked) => this.onRowSelection(p, checked)}/>} />
             ))
-          }
-        </TableBody>
-      </Table>
+        }
+      </List>
     );
   }
 }
@@ -132,7 +157,7 @@ export default class PathwaySelect extends React.Component {
                   filters={this.state.filters}
                   updateFilters={this.updateFilters}/>
             </div>
-            <div className="col s12">
+            <div className="col s12" style={{maxHeight:"300px", overflowY:"scroll"}}>
               <PathwayTable
                   dataspace={this.props.dataspace}
                   pathways={this.props.pathways}
