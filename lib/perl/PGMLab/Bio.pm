@@ -12,6 +12,7 @@ use PGMLab qw(create_obs_file);
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
+
 @EXPORT_OK = qw(gistic_to_obs_file
                 gistic_to_dominant_state_table
                 copy_number_to_dominant_state_table
@@ -269,8 +270,6 @@ sub snv_to_obs_file {
     create_obs_file($observation_file, $sample_gene_states, $sample_list);
 }
 
-
-
 sub get_donor_ploidy {
     my ($ploidy_filepath) = @_; 
     
@@ -342,30 +341,6 @@ sub get_reactome_ids_to_names_maps {
 
     return (\%entity_name_to_reactome_id, \%reactome_id_to_entity_name);
 }
-
-sub get_genes_in_pi_file {
-    my ($pi_file_path) = @_;
-
-    open(my $fh_pi, "<", $pi_file_path);
-    
-    <$fh_pi>;<$fh_pi>; ##remove fist two rows
-    
-    my %pi_genes;
-    my ($from, $to, $column_3, $column_4);
-    while (my $interaction = <$fh_pi>) {
-        chomp $interaction;
-        ($from, $to, $column_3, $column_4) = split /\t/, $interaction;
-        $pi_genes{$from} = 1;
-        $pi_genes{$to} = 1;
-    
-    }
-    
-    my @pathway_genes = keys %pi_genes;
-    
-    close($fh_pi);
-
-    return \%pi_genes;
-}  
 
 sub getting_sample_list {
     my ($sample_list_path) = @_;   

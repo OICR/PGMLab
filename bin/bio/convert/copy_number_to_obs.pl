@@ -13,8 +13,6 @@ use Getopt::Euclid qw( :minimal_keys );
 
 use PGMLab::Bio qw(copy_number_to_obs_file);
 
-use Data::Dumper;
-
 copy_number_to_obs_file($ARGV{'ploidy'},
                         $ARGV{'db_id_to_name_mapping'},
                         $ARGV{'pi'},
