@@ -11,6 +11,8 @@ use lib "$Bin/../../../lib/perl";
 
 use PGMLab::Bio qw(gistic_to_obs_file);
 
+use Getopt::Euclid qw( :minimal_keys );
+
 gistic_to_obs_file($ARGV{'db_id_to_name_mapping'}, 
                    $ARGV{'pairwise_interaction'},
                    $ARGV{'gistic'},
