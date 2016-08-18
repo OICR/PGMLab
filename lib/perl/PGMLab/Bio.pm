@@ -79,18 +79,18 @@ sub create_dominant_state_file {
 }
 
 sub get_sample_list_from_file {
-   my ($sample_list_file) = @_;
+    my ($sample_list_file) = @_;
 
-   open(my $fh, "<", $sample_list_file);
+    open(my $fh, "<", $sample_list_file);
 
-   my $line = <$fh>;
+    my @sample_list;
+    while(my $sample_name = <$fh>) {
+        chomp($sample_name);
+        push @sample_list, $sample_name
+    }
+    close($fh);
 
-   my @sample_list = split "\t", $line;
-
-
-   close($fh);
-
-   return \@sample_list;
+    return \@sample_list;
 }
 
 
