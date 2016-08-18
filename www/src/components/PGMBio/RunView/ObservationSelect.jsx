@@ -69,7 +69,6 @@ class ObservationTable extends React.Component {
   }
   onRowSelection(obsIndex, checked){
     this.props.selectObservation(obsIndex, checked);
-    console.log(obsIndex, checked);
   }
   render(){
     return (

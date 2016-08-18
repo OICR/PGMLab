@@ -79,10 +79,7 @@ class PathwayTable extends React.Component {
     this.getFilteredSortedPathways = this.getFilteredSortedPathways.bind(this);
   }
   onRowSelection(pathway, checked){
-    console.log(pathway, checked);
     this.props.selectPathway(pathway, checked)
-    // Check filters for what is being selected, change accordingly
-    // this.props.selectPathways();
   }
   getFilteredSortedPathways(){
     return this.props.pathways
