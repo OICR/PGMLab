@@ -1,10 +1,11 @@
 // Reducer for handling selecting pathway/observation data to put into dataspace
-import {Map} from "immutable";
+import {Map, fromJS} from "immutable";
 
 // RUN CONTROL PANEL
 function changeObservationSet(state, action){
   return state.withMutations(state => state
     .setIn(["dataspace", "observationSet"], action.payload.observationSet)
+    .updateIn(["dataspace", "observationSet", "data"], data => data.map(o => fromJS(o)))
     .setIn(["dataspace", "observationSet", "selected"], action.payload.observationSet.get("data").map(o => true))
   );
 }
