@@ -389,7 +389,6 @@ export class App extends  React.Component {
             const userUploads = results[1];
             const userObservations = results[2];
             const userPathways = results[3];
-            // console.log(userObservations);
             if (loginResult != null) {
               this.props.signInPGM(gAuth, userUploads, userObservations, userPathways)
             } else {
@@ -398,7 +397,10 @@ export class App extends  React.Component {
           });
 
         }
-        else {console.log("Unable to authenticate Google account")}
+        else {
+          window.alert("Unable to authenticate your Google account. Try again")
+          console.log("Unable to authenticate Google account")
+        }
       };
       const clientId = this.props.auth.get("googleClientId");
       return (
@@ -411,15 +413,11 @@ export class App extends  React.Component {
       const notSignedIn = !this.props.auth.get("signedIn");
       return (
         <div>
-          {
-            notSignedIn ?
-            <Dialog actions={[this.getGoogleBtn()]} modal={true} open={true}>
-              <span>
-                {"Please sign in through Google to Continue"}
-              </span>
-            </Dialog>
-            :null
-          }
+          <Dialog modal={true} open={notSignedIn} actions={[this.getGoogleBtn()]}>
+            <h5 className="center-align">
+              {"Please sign in through Google to Continue"}
+            </h5>
+          </Dialog>
           <Header
             uploadFile = {this.props.uploadFile}
             onUploadSuccess={this.props.onUploadSuccess}

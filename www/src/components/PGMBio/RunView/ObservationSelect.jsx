@@ -1,5 +1,6 @@
 import React from "react";
-import {Dialog, FlatButton} from "material-ui";
+import Dialog from "material-ui/Dialog"
+import FlatButton from "material-ui/FlatButton";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Checkbox from "material-ui/Checkbox";
 import {List, ListItem} from "material-ui/List";
@@ -47,7 +48,6 @@ class ObservationSetTable extends React.Component {
 }
 
 class ObservationRow extends React.Component {
-  constructor(props){super(props);}
   render(){
     return (
       <ListItem primaryText={`Observation ${this.props.obsIndex+1}`}
@@ -94,18 +94,18 @@ class ObservationTable extends React.Component {
 
 export default class ObservationSelect extends React.Component {
   constructor(props){
-    super(props);
+    super(props)
     this.state = {
       open: false
-    };
+    }
   }
   render(){
     const openBtn = (
       <a href="#" onClick={evt => this.setState({open:true})}>{"Select Observation Data"}</a>
-    );
+    )
     const closeBtn = (
       <FlatButton label="Close" onTouchTap={evt => this.setState({open:false})}/>
-    );
+    )
     return (
       <div>
         {openBtn}

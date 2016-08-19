@@ -1,65 +1,9 @@
 import React from "react";
 import Dialog from "material-ui/Dialog";
+import FlatButton from "material-ui/FlatButton";
 import RaisedButton from "material-ui/RaisedButton";
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
 var moment = require("moment");
-
-export class UploadModal extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      open: false
-    }
-  }
-  getOpenBtn(){
-    return (
-      <a href="#!" onClick={()=>{this.setState({open:true})}}>
-        <span>{"Upload Data"}</span>
-      </a>
-    );
-  }
-  getTableHeader(){
-    const uploadBtns = ["pathway", "observation", "parameters", "probabilities"]
-      .map(uploadType =>
-        <UploadButton key={uploadType}
-          uploadType={uploadType} onUploadSuccess={this.props.onUploadSuccess}
-          auth={this.props.auth} />);
-    const headings = ["ID", "Date", "Type", "Status", "Name", "Comments"]
-      .map(heading => <TableHeaderColumn key={heading}>{heading}</TableHeaderColumn>);
-    return (
-      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-        <TableRow>
-          <TableHeaderColumn colSpan="6" className="row">{uploadBtns}</TableHeaderColumn>
-        </TableRow>
-        <TableRow>
-          {headings}
-        </TableRow>
-      </TableHeader>
-    );
-  }
-  getTableRows(){
-    return (
-      this.props.uploads.valueSeq()
-        .sort((u1, u2) => moment(u1.get("datetime")).isAfter(u2.get("datetime")) ? -1 : 1)
-        .map(upload => <UploadRow key={upload.get("_id")} upload={upload}/>)
-    );
-  }
-  render(){
-    return (
-      <div>
-        {this.getOpenBtn()}
-        <Dialog open={this.state.open} onRequestClose={()=>{this.setState({open:false})}}
-          title={"Upload Files"} titleStyle={{paddingBottom:"0px"}} titleClassName={"center-align"}>
-          <Table selectable={false} height={"250px"}>
-            {this.getTableHeader()}
-            <TableBody displayRowCheckbox={false} showRowHover={true} preScanRows={false} stripedRows={true}
-              children={this.getTableRows()} />
-          </Table>
-        </Dialog>
-      </div>
-    );
-  }
-}
 
 class UploadButton extends React.Component {
   constructor(props){
@@ -152,6 +96,62 @@ class UploadRow extends React.Component {
           {`${comments}`}
         </TableRowColumn>
       </TableRow>
+    );
+  }
+}
+
+export class UploadModal extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      open: false
+    }
+  }
+  getTableHeader(){
+    const uploadBtns = ["pathway", "observation", "parameters", "probabilities"]
+      .map(uploadType =>
+        <UploadButton key={uploadType}
+          uploadType={uploadType} onUploadSuccess={this.props.onUploadSuccess}
+          auth={this.props.auth} />);
+    const headings = ["ID", "Date", "Type", "Status", "Name", "Comments"]
+      .map(heading => <TableHeaderColumn key={heading}>{heading}</TableHeaderColumn>);
+    return (
+      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+        <TableRow>
+          <TableHeaderColumn colSpan="6" className="row">{uploadBtns}</TableHeaderColumn>
+        </TableRow>
+        <TableRow>
+          {headings}
+        </TableRow>
+      </TableHeader>
+    )
+  }
+  getTableRows(){
+    return (
+      this.props.uploads.valueSeq()
+        .sort((u1, u2) => moment(u1.get("datetime")).isAfter(u2.get("datetime")) ? -1 : 1)
+        .map(upload => <UploadRow key={upload.get("_id")} upload={upload}/>)
+    )
+  }
+  render(){
+    const openBtn = (
+      <a href="#" onClick={()=>{this.setState({open:true})}}>{"Upload Data"}</a>
+    )
+    const closeBtn = (
+      <FlatButton label="Close" onTouchTap={evt => this.setState({open:false})}/>
+    )
+    return (
+      <div>
+        {openBtn}
+        <Dialog modal={true} open={this.state.open} actions={[closeBtn]}
+          title={"Upload Files"} titleStyle={{paddingBottom:"0px"}} titleClassName={"center-align"}>
+          <Table selectable={false} height={"250px"}>
+            {this.getTableHeader()}
+            <TableBody displayRowCheckbox={false} showRowHover={true} preScanRows={false} stripedRows={true}
+              children={this.getTableRows()} />
+          </Table>
+        </Dialog>
+      </div>
     );
   }
 }

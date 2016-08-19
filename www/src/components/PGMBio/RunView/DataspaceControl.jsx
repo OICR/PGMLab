@@ -58,7 +58,7 @@ class PathwayData extends React.Component {
         .map(p => <MenuItem key={getID(p)} value={getID(p)} primaryText={getName(p)} autoWidth={false} label={getLabel(p)}/>)
     )
   }
-  getPathwaysList(){
+  getPathwayList(){
     return (
       this.props.dataspace.getIn(["pathways", this.state.viewPathway, "data", "nodes"])
         .valueSeq()
@@ -82,7 +82,7 @@ class PathwayData extends React.Component {
           !this.props.dataspace.hasIn(["pathways", this.state.viewPathway]) ? null :
             <List
                 style={{maxHeight:"300px",overflowY:"scroll"}}
-                children={this.getPathwaysList()}
+                children={this.getPathwayList()}
             />
         }
       </div>
