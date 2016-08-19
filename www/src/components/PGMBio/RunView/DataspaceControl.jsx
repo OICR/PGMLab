@@ -31,20 +31,19 @@ class DataspaceSelect extends React.Component {
 
 const getName = p => p.has("name") ? p.get("name") : p.get("filename")
 const getID = p => p.has("id") ? p.get("id") : p.get("_id")
-const getLabel = p => getName(p).length > 40 ? getName(p).substr(0,30).concat("...") : getName(p)
+const getLabel = p => getName(p).length > 35 ? getName(p).substr(0,35).concat("...") : getName(p)
 class PathwayData extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       viewPathway: Map(),
     }
-    this.changeViewPathway = (evt, idx, viewPathway) => {
-      this.setState({viewPathway})
-    }
+    this.changeViewPathway = (evt, idx, viewPathway) => {console.log(viewPathway);this.setState({viewPathway})}
   }
   render(){
+    console.log(this.state.viewPathway);
     return (
-      <div className="col s12 center-align">
+      <div className="col s12">
         <SelectField
             fullWidth={true}
             autoWidth={true}
@@ -52,24 +51,29 @@ class PathwayData extends React.Component {
             value={this.state.viewPathway}
             onChange={this.changeViewPathway}
         >
-        {
-          this.props.dataspace.get("pathways").valueSeq()
-          .sort((a,b) => {
-            const [aName, bName] = [a,b].map(p => getName(p).toLowerCase());
-            switch (true) {
-              case aName < bName: return -1
-              case aName > bName: return 1
-              default: return 0
-            };
-          })
-          .map(p => <MenuItem key={getID(p)} value={p} primaryText={getName(p)} autoWidth={false} label={getLabel(p)}/>)
-        }
-        </SelectField>
-        <List>
           {
-            this.getPathwayNodes(this.state.viewPathway)
-              .valueSeq()
-              .map(p => <ListItem key={getID(p)} primaryText={getName(p)}/>)
+            this.props.dataspace.get("pathways").valueSeq()
+            .sort((a,b) => {
+              const [aName, bName] = [a,b].map(p => getName(p).toLowerCase());
+              switch (true) {
+                case aName < bName: return -1
+                case aName > bName: return 1
+                default: return 0
+              };
+            })
+            .map(p => <MenuItem key={getID(p)} value={p} primaryText={getName(p)} autoWidth={false} label={getLabel(p)}/>)
+          }
+        </SelectField>
+        <List style={{maxHeight:"300px",overflowY:"scroll"}}>
+          {
+            !this.props.dataspace.hasIn(["pathways", getID(this.state.viewPathway)]) ? null :
+              this.props.dataspace.getIn(["pathways", getID(this.state.viewPathway), "data", "nodes"])
+                .valueSeq()
+                .map(n =>
+                  <ListItem key={n.get("name")}
+                      primaryText={n.get("longname", "No longname available")}
+                      secondaryText={n.get("name")}
+                  />)
           }
         </List>
       </div>

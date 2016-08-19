@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import reducer from "./components/PGMBio/redux/reducer.jsx";
 import {AppContainer} from "./components/PGMBio/App.jsx";
 
-import {Map, List} from "immutable";
+import {Map, List, fromJS} from "immutable";
 
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
@@ -76,7 +76,8 @@ connection.onopen = function(session, details) {
       // .reduce((pathways, p) => {pathways[p.get("id")] = p; return pathways}, {})
       .reduce((pathways, p) => pathways.set(p.get("id"), p), Map())
     );
-  const getReactomePathway = (pathwayID) => session.call("reactome.pathway", [], {pathway_id: pathwayID});
+  const getReactomePathway = (pathwayID) => session.call("reactome.pathway", [], {pathway_id: pathwayID})
+    .then(pairwiseData => fromJS(pairwiseData));
   // PGM
   // Load WAMP with promise generators (WAMP RPC calls)
   const wamp = {
