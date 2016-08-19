@@ -40,6 +40,34 @@ class PathwayData extends React.Component {
     this.state = {
       viewPathway: null //ID of pathway
     }
+    this.getPathwayChildren = this.getPathwayChildren.bind(this);
+    this.getPathwayList = this.getPathwayList.bind(this);
+  }
+  getPathwayChildren(){
+    return (
+      this.props.dataspace.get("pathways")
+        .valueSeq()
+        .sort((a,b) => {
+          const [aName, bName] = [a,b].map(p => getName(p).toLowerCase());
+          switch (true) {
+            case aName < bName: return -1
+            case aName > bName: return 1
+            default: return 0
+          };
+        })
+        .map(p => <MenuItem key={getID(p)} value={getID(p)} primaryText={getName(p)} autoWidth={false} label={getLabel(p)}/>)
+    )
+  }
+  getPathwaysList(){
+    return (
+      this.props.dataspace.getIn(["pathways", this.state.viewPathway, "data", "nodes"])
+        .valueSeq()
+        .map(n =>
+          <ListItem key={n.get("name")}
+              primaryText={n.get("longname", "No longname available")}
+              secondaryText={n.get("name")}
+          />)
+    )
   }
   render(){
     return (
@@ -48,33 +76,14 @@ class PathwayData extends React.Component {
             fullWidth={true} autoWidth={true} hintText="Select a pathway"
             value={this.state.viewPathway}
             onChange={(evt, idx, viewPathway) => {this.setState({viewPathway})}}
-            children={
-              this.props.dataspace.get("pathways")
-                .valueSeq()
-                .sort((a,b) => {
-                  const [aName, bName] = [a,b].map(p => getName(p).toLowerCase());
-                  switch (true) {
-                    case aName < bName: return -1
-                    case aName > bName: return 1
-                    default: return 0
-                  };
-                })
-                .map(p => <MenuItem key={getID(p)} value={getID(p)} primaryText={getName(p)} autoWidth={false} label={getLabel(p)}/>)
-            }
+            children={this.getPathwayChildren()}
         />
         {
           !this.props.dataspace.hasIn(["pathways", this.state.viewPathway]) ? null :
-            <List style={{maxHeight:"300px",overflowY:"scroll"}}>
-              {
-                this.props.dataspace.getIn(["pathways", this.state.viewPathway, "data", "nodes"])
-                  .valueSeq()
-                  .map(n =>
-                    <ListItem key={n.get("name")}
-                        primaryText={n.get("longname", "No longname available")}
-                        secondaryText={n.get("name")}
-                    />)
-              }
-            </List>
+            <List
+                style={{maxHeight:"300px",overflowY:"scroll"}}
+                children={this.getPathwaysList()}
+            />
         }
       </div>
     )
@@ -87,6 +96,25 @@ class ObservationData extends React.Component {
     this.state = {
       viewObservation: null //index of observation
     }
+    this.getObservationChildren = this.getObservationChildren.bind(this)
+    this.getObservationList = this.getObservationList.bind(this)
+  }
+  getObservationChildren(){
+    return (
+      this.props.dataspace.getIn(["observationSet", "selected"])
+        .reduce((observations, selected, i) => !selected ? observations :
+          [...observations,
+            <MenuItem key={i} value={`${i}`} label={`Observation ${i+1}`} primaryText={`Observation ${i+1}`} />
+          ],
+          [])
+    )
+  }
+  getObservationList(){
+    return (
+      this.props.dataspace.getIn(["observationSet", "data", this.state.viewObservation])
+        .valueSeq()
+        .map(n => <ListItem key={n.get("name")} primaryText={n.get("name")} secondaryText={n.get("state")}/>)
+    )
   }
   render(){
     return (
@@ -95,24 +123,14 @@ class ObservationData extends React.Component {
             fullWidth={true} autoWidth={true} hintText="Select an observation"
             value={this.state.viewObservation}
             onChange={(evt, idx, viewObservation) => {this.setState({viewObservation})}}
-            children={
-              this.props.dataspace.getIn(["observationSet", "selected"])
-                .reduce((observations, selected, i) => !selected ? observations :
-                  [...observations,
-                    <MenuItem key={i} value={`${i}`} label={`Observation ${i+1}`} primaryText={`Observation ${i+1}`} />
-                  ],
-                  [])
-            }
+            children={this.getObservationChildren()}
         />
         {
           !this.props.dataspace.getIn(["observationSet", "selected", this.state.viewObservation]) ? null :
-            <List style={{maxHeight:"300px",overflowY:"scroll"}}>
-                {
-                  this.props.dataspace.getIn(["observationSet", "data", this.state.viewObservation])
-                    .valueSeq()
-                    .map(n => <ListItem key={n.get("name")} primaryText={n.get("name")} secondaryText={n.get("state")}/>)
-                }
-            </List>
+            <List
+              style={{maxHeight:"300px",overflowY:"scroll"}}
+              children={this.getObservationList()}
+            />
         }
       </div>
     )

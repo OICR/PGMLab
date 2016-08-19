@@ -14,6 +14,7 @@ export default class RunView extends React.Component {
         <div className="col s4">
           <RunControlPanel
               runType={this.props.runType}
+              changeRunType={this.props.changeRunType}
               dataspace={this.props.dataspace}
               observations={this.props.observations}
               selectObservationSet={this.props.selectObservationSet}
@@ -24,7 +25,9 @@ export default class RunView extends React.Component {
           />
         </div>
         <div className="col s8">
-          <GraphPanel />
+          <GraphPanel
+              dataspace={this.props.dataspace}
+          />
         </div>
       </div>
     );
