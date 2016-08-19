@@ -45,9 +45,7 @@ class PathwayData extends React.Component {
     return (
       <div className="col s12 center-align">
         <SelectField
-            fullWidth={true}
-            autoWidth={true}
-            hintText="Select a pathway"
+            fullWidth={true} autoWidth={true} hintText="Select a pathway"
             value={this.state.viewPathway}
             onChange={(evt, idx, viewPathway) => {this.setState({viewPathway})}}
             children={
@@ -66,16 +64,15 @@ class PathwayData extends React.Component {
         />
         {
           !this.props.dataspace.hasIn(["pathways", this.state.viewPathway]) ? null :
-          // this.state.viewPathway.size == null ? null :
             <List style={{maxHeight:"300px",overflowY:"scroll"}}>
               {
-                  this.props.dataspace.getIn(["pathways", this.state.viewPathway, "data", "nodes"])
-                    .valueSeq()
-                    .map(n =>
-                      <ListItem key={n.get("name")}
-                          primaryText={n.get("longname", "No longname available")}
-                          secondaryText={n.get("name")}
-                      />)
+                this.props.dataspace.getIn(["pathways", this.state.viewPathway, "data", "nodes"])
+                  .valueSeq()
+                  .map(n =>
+                    <ListItem key={n.get("name")}
+                        primaryText={n.get("longname", "No longname available")}
+                        secondaryText={n.get("name")}
+                    />)
               }
             </List>
         }
@@ -95,20 +92,16 @@ class ObservationData extends React.Component {
     return (
       <div className="col s12 center-align">
         <SelectField
-            fullWidth={true}
-            autoWidth={true}
-            hintText="Select an observation"
+            fullWidth={true} autoWidth={true} hintText="Select an observation"
             value={this.state.viewObservation}
             onChange={(evt, idx, viewObservation) => {this.setState({viewObservation})}}
             children={
               this.props.dataspace.getIn(["observationSet", "selected"])
                 .reduce((observations, selected, i) => !selected ? observations :
-                  [...observations, <MenuItem key={i} value={`${i}`} label={`Observation ${i+1}`} primaryText={`Observation ${i+1}`} />],
+                  [...observations,
+                    <MenuItem key={i} value={`${i}`} label={`Observation ${i+1}`} primaryText={`Observation ${i+1}`} />
+                  ],
                   [])
-                // .map((selected, i) => !selected ? null :
-                  // <MenuItem key={i}
-                  //     value={`${i}`} label={`Observation ${i+1}`}
-                  //     primaryText={`Observation ${i+1}`} />)
             }
         />
         {
