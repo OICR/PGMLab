@@ -14,6 +14,7 @@ export default class RunDataSelect extends React.Component {
               dataspace={this.props.dataspace}
               pathways={this.props.pathways}
               selectPathway={this.props.selectPathway}
+              getReactomePathway = {this.props.getReactomePathway}
           />
           <ObservationSelect
               dataspace={this.props.dataspace}

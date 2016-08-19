@@ -79,7 +79,15 @@ class PathwayTable extends React.Component {
     this.getFilteredSortedPathways = this.getFilteredSortedPathways.bind(this);
   }
   onRowSelection(pathway, checked){
-    this.props.selectPathway(pathway, checked)
+    const pathwaySource = pathway.has("id") ? "reactome" : "user";
+    const pathwayID = getID(pathway);
+    if ((pathwaySource == "reactome") && checked) {
+      this.props.getReactomePathway(pathwayID)
+        .then(pairwiseData => this.props.selectPathway(pathway, pathwaySource, pathwayID, pairwiseData, checked))
+    }
+    else {
+      this.props.selectPathway(pathway, pathwaySource, pathwayID, pathway.get("data"), checked)
+    }
   }
   getFilteredSortedPathways(){
     return this.props.pathways
@@ -164,6 +172,7 @@ export default class PathwaySelect extends React.Component {
                   dataspace={this.props.dataspace}
                   pathways={this.props.pathways}
                   selectPathway={this.props.selectPathway}
+                  getReactomePathway = {this.props.getReactomePathway}
                   filters={this.state.filters}/>
             </div>
           </div>

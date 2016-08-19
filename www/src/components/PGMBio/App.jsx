@@ -448,6 +448,7 @@ export class App extends  React.Component {
             selectObservation = {this.props.selectObservation}
             pathways = {this.props.pathways}
             selectPathway = {this.props.selectPathway}
+            getReactomePathway = {this.props.wamp.getReactomePathway}
 
 
             />

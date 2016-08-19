@@ -76,7 +76,7 @@ connection.onopen = function(session, details) {
       // .reduce((pathways, p) => {pathways[p.get("id")] = p; return pathways}, {})
       .reduce((pathways, p) => pathways.set(p.get("id"), p), Map())
     );
-  const getReactomePathway = (pathway) => session.call("reactome.pathway", [], {pathway_id: pathway.id});
+  const getReactomePathway = (pathwayID) => session.call("reactome.pathway", [], {pathway_id: pathwayID});
   // PGM
   // Load WAMP with promise generators (WAMP RPC calls)
   const wamp = {

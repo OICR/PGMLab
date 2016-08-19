@@ -14,13 +14,13 @@ export default class RunView extends React.Component {
         <div className="col s4">
           <RunControlPanel
               runType={this.props.runType}
-              changeRunType = {this.props.changeRunType}
               dataspace={this.props.dataspace}
               observations={this.props.observations}
               selectObservationSet={this.props.selectObservationSet}
               selectObservation={this.props.selectObservation}
               pathways={this.props.pathways}
               selectPathway={this.props.selectPathway}
+              getReactomePathway = {this.props.getReactomePathway}
           />
         </div>
         <div className="col s8">

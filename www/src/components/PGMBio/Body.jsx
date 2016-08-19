@@ -19,6 +19,7 @@ export default class Body2 extends React.Component {
                 selectObservation={this.props.selectObservation}
                 pathways={this.props.pathways}
                 selectPathway={this.props.selectPathway}
+                getReactomePathway = {this.props.getReactomePathway}
 
             />
           )

@@ -73,15 +73,14 @@ export function selectObservation(obsIndex, checked){
 }
 
 // SELECT PATHWAYS
-export function selectPathway(pathway, checked){
-  const pathwaySource = pathway.has("id") ? "reactome" : "user";
-  const pathwayID = pathway.has("id") ? pathway.get("id") : pathway.get("_id");
+export function selectPathway(pathway, pathwaySource, pathwayID, pairwiseData, checked){
   return {
     type: CHANGE_PATHWAYS,
     payload: {
-      pathwaySource,
       pathwayID,
-      pathway: pathway.set("pathwaySource", pathwaySource),
+      pathway: pathway.withMutations(pathway => pathway
+        .set("pathwaySource", pathwaySource)
+        .set("data", pairwiseData)),
       checked
     }
   }

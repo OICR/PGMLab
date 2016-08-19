@@ -37,13 +37,10 @@ class PathwayData extends React.Component {
     super(props);
     this.state = {
       viewPathway: Map(),
-      pathwayNodes: Map()
     }
     this.changeViewPathway = (evt, idx, viewPathway) => {
-      // If reactome, get pathway nodes
       this.setState({viewPathway})
     }
-    this.getPathwayNodes = this.getPathwayNodes.bind(this);
   }
   render(){
     return (
