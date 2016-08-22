@@ -92,11 +92,6 @@ export default class GraphPanel extends React.Component {
   }
   shouldComponentUpdate(nextProps, nextState){
     // Check if graph state can be drawn from dataspace
-    // const showGraph = nextProps.dataspace.has("pathways") && nextProps.dataspace.has("observationSet")
-    // const sameObservationSet = nextProps.dataspace.getIn(["observationSet", "_id"]) == this.props.dataspace.getIn(["observationSet", "_id"])
-    const pathwayAvailable = nextProps.dataspace.hasIn(["pathways", nextProps.graphVis.get("viewPathway")])
-    const observationAvailable = nextProps.dataspace.getIn(["observationSet", "selected", nextProps.graphVis.get("viewObservation")]) //state observation selected in dataspace ? (need to check if same observationSet)
-    //
     const sameObservationSet = nextProps.dataspace.getIn(["observationSet", "_id"]) == this.props.dataspace.getIn(["observationSet", "_id"])
     const nextViewPathway = nextProps.graphVis.get("viewPathway")
     const nextViewObservation = nextProps.graphVis.get("viewObservation")
@@ -122,23 +117,6 @@ export default class GraphPanel extends React.Component {
       else {
         console.log("don't draw graph")
       }
-      // if () {
-      //   if (currentViewPathway==null || currentViewObservation==null) {
-      //     // Initialize graphvis and draw current graph
-      //     console.log("graph new graph")
-      //     this.initializeGV(nextProps)
-      //   }
-      //   else {
-      //     console.log("update graph")
-      //     this.redrawGV(nextProps)
-      //   }
-      // } else if (!pathwayAvailable && !observationAvailable) {
-      //   console.log("can't draw")
-      // } else if (pathwayAvailable && !observationAvailable) {
-      //   console.log("missing observation")
-      // } else if (!pathwayAvailable && observationAvailable) {
-      //   console.log("missing pathway")
-      // }
     }
     return true
   }
