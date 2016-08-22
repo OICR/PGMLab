@@ -69,29 +69,33 @@ class GraphController extends React.Component {
 export default class GraphPanel extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      viewPathway: null, //pathway ID
-      viewObservation: null //observation index in
-    }
-    this.changeViewPathway = (evt, idx, viewPathway) => {console.log("pathway");viewPathway=String(viewPathway);this.setState({viewPathway})}
-    this.changeViewObservation = (evt, idx, viewObservation) => {console.log("obs");viewObservation=String(viewObservation);this.setState({viewObservation})}
     this.showGraph = () => this.props.dataspace.has("pathways") && this.props.dataspace.has("observationSet")
-  }
-  componentDidMount(){
-    this.graphVis =
-    this.network = null
-    this.datasetNodes = null
-    this.datasetEdges = null
+
+    this.changeViewPathway = (evt, idx, viewPathway) => {this.props.graphVisSelectPathway(viewPathway)}
+    this.changeViewObservation = (evt, idx, viewObservation) => {this.props.graphVisSelectObservation(viewObservation)}
   }
   shouldComponentUpdate(nextProps, nextState){
     // Check if graph state can be drawn from dataspace
     const showGraph = nextProps.dataspace.has("pathways") && nextProps.dataspace.has("observationSet")
-    const sameObservationSet = nextProps.dataspace.getIn(["observationSet", "_id"]) == this.props.dataspace.getIn(["observationSet", "_id"])
-    const pathwayAvailable = nextProps.dataspace.hasIn(["pathways", nextState.viewPathway]) //state pathway selected in dataspace ?
-    const observationAvailable = nextProps.dataspace.getIn(["observationSet", "selected", nextState.viewObservation]) //state observation selected in dataspace ? (need to check if same observationSet)
+    const sameObservationSet =
+      nextProps.dataspace.getIn(["observationSet", "_id"]) == this.props.dataspace.getIn(["observationSet", "_id"])
+    const pathwayAvailable =
+      nextProps.dataspace.hasIn(["pathways", nextProps.graphVis.get("viewPathway")])
+    const observationAvailable =
+      nextProps.dataspace.getIn(["observationSet", "selected", nextProps.graphVis.get("viewObservation")]) //state observation selected in dataspace ? (need to check if same observationSet)
     if (showGraph) {
       if (pathwayAvailable && observationAvailable && sameObservationSet) {
-        console.log("can draw graph")
+        const [viewPathwayNull, viewObservationNull] = [
+          this.props.graphVis.get("viewPathway")==null,
+          this.props.graphVis.get("viewObservation")==null
+        ]
+        if (viewPathwayNull || viewObservationNull) {
+          console.log("graph new graph")
+          // Initialize graphvis and draw current graph
+        }
+        else {
+          console.log("update graph")
+        }
       } else if (!pathwayAvailable && !observationAvailable) {
         console.log("can't draw")
       } else if (pathwayAvailable && !observationAvailable) {
@@ -109,9 +113,9 @@ export default class GraphPanel extends React.Component {
           !this.showGraph() ? null :
             <GraphController
                 dataspace={this.props.dataspace}
-                viewPathway={this.state.viewPathway}
+                viewPathway={this.props.graphVis.get("viewPathway")}
                 changeViewPathway={this.changeViewPathway}
-                viewObservation={this.state.viewObservation}
+                viewObservation={this.props.graphVis.get("viewObservation")}
                 changeViewObservation={this.changeViewObservation}
             />
         }

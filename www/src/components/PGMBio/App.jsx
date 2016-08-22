@@ -448,6 +448,9 @@ export class App extends  React.Component {
             selectPathway = {this.props.selectPathway}
             getReactomePathway = {this.props.wamp.getReactomePathway}
 
+            graphVis = {this.props.graphVis}
+            graphVisSelectPathway = {this.props.graphVisSelectPathway}
+            graphVisSelectObservation = {this.props.graphVisSelectObservation}
 
             />
           <Body tab = {this.state.tab}

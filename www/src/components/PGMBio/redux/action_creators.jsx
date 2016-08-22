@@ -86,3 +86,24 @@ export function selectPathway(pathway, pathwaySource, pathwayID, pairwiseData, c
     }
   }
 }
+
+// SELECT PATHWAY TO VISUALIZE ON GRAPH
+export function graphVisSelectPathway(pathwayID){
+  return {
+    type: "GRAPHVIS",
+    payload: {
+      graphVisType: "SELECT_PATHWAY",
+      pathwayID
+    }
+  }
+}
+// SELECT OBSERVATION TO VISUALIZE ON GRAPH
+export function graphVisSelectObservation(obsIndex){
+  return {
+    type: "GRAPHVIS",
+    payload: {
+      graphVisType: "SELECT_OBSERVATION",
+      obsIndex
+    }
+  }
+}

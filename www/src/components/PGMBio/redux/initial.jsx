@@ -13,6 +13,10 @@ const initialAppState = {
   view: "Run",
   runType: "Learning",
   dataspace: Map(),
+  graphVis: Map({
+    viewPathway: null, //pathway ID of graph to draw
+    viewObservation: null //index of obsevation selected, still need to check if same observationSet
+  }),
   observations: OrderedMap(),
   pathways: Map({
     reactome: OrderedMap(),
@@ -27,6 +31,7 @@ function mapStateToProps(state) {
     view: state.get("view"),
     runType: state.get("runType"),
     dataspace: state.get("dataspace"),
+    graphVis: state.get("graphVis"),
     observations: state.get("observations"),
     pathways: state.get("pathways")
   };

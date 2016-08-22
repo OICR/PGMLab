@@ -27,6 +27,9 @@ export default class RunView extends React.Component {
         <div className="col s8">
           <GraphPanel
               dataspace={this.props.dataspace}
+              graphVis = {this.props.graphVis}
+              graphVisSelectPathway = {this.props.graphVisSelectPathway}
+              graphVisSelectObservation = {this.props.graphVisSelectObservation}
           />
         </div>
       </div>

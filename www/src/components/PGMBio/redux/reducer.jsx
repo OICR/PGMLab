@@ -1,8 +1,9 @@
-import {Map} from "immutable";
+import {Map} from "immutable"
 
-import authenticationReducer from "./authenticationReducer.jsx";
-import uploadReducer from "./uploadReducer.jsx";
-import runViewSelectReducer from "./runViewSelectReducer.jsx";
+import authenticationReducer from "./authenticationReducer.jsx"
+import uploadReducer from "./uploadReducer.jsx"
+import runViewSelectReducer from "./runViewSelectReducer.jsx"
+import graphReducer from "./graphReducer.jsx"
 
 function changeView(state, action){
   return state.update("view", view => action.payload.view)
@@ -22,15 +23,17 @@ export default function(state = Map(), action) {
     case "SIGN_OUT":
       return authenticationReducer(state, action);
     case "UPLOAD":
-      return uploadReducer(state, action);
+      return uploadReducer(state, action)
     case "CHANGE_RUNTYPE":
-      return changeRunType(state, action);
+      return changeRunType(state, action)
     case "CHANGE_VIEW":
       return state //add reducer once we have more than 'Run' tab
     case "CHANGE_OBS_SET":
     case "CHANGE_OBS":
     case "CHANGE_PATHWAYS":
-      return runViewSelectReducer(state, action);
-  };
-  return state;
+      return runViewSelectReducer(state, action)
+    case "GRAPHVIS":
+      return graphReducer(state, action)
+  }
+  return state
 }
