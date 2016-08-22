@@ -108,30 +108,33 @@ function callInchlibCluster(posteriorProbsData) {
 
 //
 function initializeApp(wamp) {
+  console.log("intiialize")
   const createStoreDevTools = compose(
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
   const store = createStoreDevTools(reducer);
+  console.log('stopped working here')
   wamp.getReactomePathwaysList()
     .then(reactomePathways => {
-        store.dispatch({
-          type: "SET_INITIAL_STATE",
-          payload: {
-            reactomePathways
-          }
-        });
-        render(
-          <MuiThemeProvider muiTheme={getMuiTheme()}>
-            <Provider store={store}>
-              <AppContainer
-                wamp={wamp}
-                    reactomePathways={reactomePathways}
-                    getReactomePathway={getReactomePathway}
-                    PGMLabInference={PGMLabInference}
-                    callInchlibCluster={callInchlibCluster} />
-            </Provider>
-          </MuiThemeProvider>,
-          document.getElementById('app')
-        );
-      })
+
+      store.dispatch({
+        type: "SET_INITIAL_STATE",
+        payload: {
+          reactomePathways
+        }
+      });
+      render(
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <Provider store={store}>
+            <AppContainer
+              wamp={wamp}
+                  reactomePathways={reactomePathways}
+                  getReactomePathway={getReactomePathway}
+                  PGMLabInference={PGMLabInference}
+                  callInchlibCluster={callInchlibCluster} />
+          </Provider>
+        </MuiThemeProvider>,
+        document.getElementById('app')
+      )
+    })
 };

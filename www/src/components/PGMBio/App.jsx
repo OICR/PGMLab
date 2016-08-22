@@ -441,6 +441,7 @@ export class App extends  React.Component {
             dataspace = {this.props.dataspace}
             dataspaceModals = {this.props.dataspaceModals}
             toggleDataspaceModal = {this.props.toggleDataspaceModal}
+            updatePathwaysModalFilters = {this.props.updatePathwaysModalFilters}
             observations = {this.props.observations}
             selectObservationSet = {this.props.selectObservationSet}
             selectObservation = {this.props.selectObservation}

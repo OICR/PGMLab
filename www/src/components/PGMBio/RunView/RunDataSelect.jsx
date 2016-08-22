@@ -14,6 +14,7 @@ export default class RunDataSelect extends React.Component {
               dataspace={this.props.dataspace}
               pathwaysModal={this.props.dataspaceModals.get("pathwaysModal")}
               toggleDataspaceModal = {this.props.toggleDataspaceModal}
+              updatePathwaysModalFilters = {this.props.updatePathwaysModalFilters}
               pathways={this.props.pathways}
               selectPathway={this.props.selectPathway}
               getReactomePathway = {this.props.getReactomePathway}

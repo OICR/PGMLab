@@ -12,7 +12,8 @@ class PathwaySelectFilter extends React.Component {
     this.getPlaceholderText = this.getPlaceholderText.bind(this);
   }
   getPlaceholderText(){
-    let {reactome, uploads} = this.props.filters;
+    let reactome = this.props.filters.get("reactome")
+    let uploads = this.props.filters.get("uploads")
     const and = reactome && uploads ? " and " : "";
     reactome = reactome ? "Reactome" : "";
     uploads = uploads ? "uploaded" : "";
@@ -25,7 +26,7 @@ class PathwaySelectFilter extends React.Component {
           <input
             type="text" id="textInput"
             placeholder={this.getPlaceholderText()}
-            value={this.props.filters.text}
+            value={this.props.filters.get("text")}
             onChange={evt => this.props.updateFilters("text", evt.target.value)}/>
         </div>
         <div className="col s3">
@@ -34,14 +35,14 @@ class PathwaySelectFilter extends React.Component {
               leftCheckbox={
                 <Checkbox
                   label="Reactome"
-                  checked={this.props.filters.reactome}
+                  checked={this.props.filters.get("reactome")}
                   onCheck={(evt, checked) => this.props.updateFilters("reactome", checked)}/>}
               />
             <ListItem
               leftCheckbox={
                 <Checkbox
                   label="Uploads"
-                  checked={this.props.filters.uploads}
+                  checked={this.props.filters.get("uploads")}
                   onCheck={(evt, checked) => this.props.updateFilters("uploads", checked)}/>}
               />
           </List>
@@ -93,16 +94,16 @@ class PathwayTable extends React.Component {
     return this.props.pathways
       .reduce((bothPathways, pathwayMap, pathwaySource) => {
           switch (true) {
-            case (pathwaySource=="user") && this.props.filters.uploads:
+            case (pathwaySource=="user") && this.props.filters.get("uploads"):
               return bothPathways.merge(pathwayMap)
-            case (pathwaySource=="reactome") && this.props.filters.reactome:
+            case (pathwaySource=="reactome") && this.props.filters.get("reactome"):
               return bothPathways.merge(pathwayMap)
             default: return bothPathways
           }
         },
         Map())
       .filter(pathway =>
-        getName(pathway).toLowerCase().indexOf(this.props.filters.text.toLowerCase()) != -1
+        getName(pathway).toLowerCase().indexOf(this.props.filters.get("text").toLowerCase()) != -1
       )
       .sort((a,b) => {
         // reactome pathways have 'name', uploaded pathways have 'filename'
@@ -134,26 +135,16 @@ class PathwayTable extends React.Component {
 export default class PathwaySelect extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-      filters: {
-        text: "",
-        reactome: true,
-        uploads: true
-      }
-    };
-    this.updateFilters = this.updateFilters.bind(this);
-  }
-  updateFilters(type, newValue){
-    let filters = this.state.filters;
-    filters[type] = newValue;
-    this.setState({filters});
+    this.updateFilters = (filterType, newValue) => {this.props.updatePathwaysModalFilters(filterType, newValue)};
+    this.openModal = () => {this.props.toggleDataspaceModal(true, "PATHWAYS")}
+    this.closeModal = () => {this.props.toggleDataspaceModal(false, "PATHWAYS")}
   }
   render(){
     const openBtn = (
-      <a href="#" onClick={evt => this.props.toggleDataspaceModal(true, "PATHWAYS")}>{"Select Pathways"}</a>
+      <a href="#" onClick={evt => this.openModal()}>{"Select Pathways"}</a>
     );
     const closeBtn = (
-      <FlatButton label="Close" onTouchTap={evt => this.props.toggleDataspaceModal(false, "PATHWAYS")}/>
+      <FlatButton label="Close" onTouchTap={evt => this.closeModal()}/>
     );
     return (
       <div>
@@ -163,7 +154,7 @@ export default class PathwaySelect extends React.Component {
           <div className="row">
             <div className="col s12">
               <PathwaySelectFilter
-                  filters={this.state.filters}
+                  filters = {this.props.pathwaysModal.get("filters")}
                   updateFilters={this.updateFilters}/>
             </div>
             <div className="col s12" style={{maxHeight:"300px", overflowY:"scroll"}}>
@@ -172,7 +163,8 @@ export default class PathwaySelect extends React.Component {
                   pathways={this.props.pathways}
                   selectPathway={this.props.selectPathway}
                   getReactomePathway = {this.props.getReactomePathway}
-                  filters={this.state.filters}/>
+                  filters = {this.props.pathwaysModal.get("filters")}
+                  />
             </div>
           </div>
         </Dialog>

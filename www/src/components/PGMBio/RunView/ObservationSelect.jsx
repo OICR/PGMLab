@@ -93,12 +93,17 @@ class ObservationTable extends React.Component {
 }
 
 export default class ObservationSelect extends React.Component {
+  constructor(props){
+    super(props)
+    this.openModal = () => {this.props.toggleDataspaceModal(true, "OBS_SET")}
+    this.closeModal = () => {this.props.toggleDataspaceModal(false, "OBS_SET")}
+  }
   render(){
     const openBtn = (
-      <a href="#" onClick={evt => this.props.toggleDataspaceModal(true, "OBS_SET")}>{"Select Observation Data"}</a>
+      <a href="#" onClick={evt => this.openModal()}>{"Select Observation Data"}</a>
     )
     const closeBtn = (
-      <FlatButton label="Close" onTouchTap={evt => this.props.toggleDataspaceModal(false, "OBS_SET")}/>
+      <FlatButton label="Close" onTouchTap={evt => this.closeModal()}/>
     )
     return (
       <div>

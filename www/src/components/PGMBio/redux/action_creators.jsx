@@ -83,6 +83,15 @@ export function toggleDataspaceModal(open, modalType){
     }
   }
 }
+export function updatePathwaysModalFilters(filterType, newValue){
+  return {
+    type: "UPDATE_PATHWAYS_MODAL_FILTERS",
+    payload: {
+      filterType,
+      newValue
+    }
+  }
+}
 
 // SELECT PATHWAYS
 export function selectPathway(pathway, pathwaySource, pathwayID, pairwiseData, checked){

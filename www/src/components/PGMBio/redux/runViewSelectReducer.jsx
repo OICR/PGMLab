@@ -27,7 +27,7 @@ function changePathways(state, action){
 }
 
 // HANDLE MODALS FOR POPULATING DATASPACE
-function handleModals(state, action){
+function handleDataspaceModals(state, action){
   switch (action.payload.modalType) {
     case "PATHWAYS":
       return state.updateIn(["dataspaceModals", "pathwaysModal", "open"], open => action.payload.open)
@@ -35,7 +35,12 @@ function handleModals(state, action){
       return state.updateIn(["dataspaceModals", "observationSetModal", "open"], open => action.payload.open)
   }
 }
-
+function handlePathwaysModalFilters(state, action){
+  return state.updateIn(
+    ["dataspaceModals", "pathwaysModal", "filters", action.payload.filterType],
+    filter => action.payload.newValue
+  )
+}
 
 const runViewSelectReducer = (state=Map(), action) => {
   switch (action.type) {
@@ -46,7 +51,9 @@ const runViewSelectReducer = (state=Map(), action) => {
     case "CHANGE_PATHWAYS":
       return changePathways(state, action)
     case "TOGGLE_DATASPACE_MODALS":
-      return handleModals(state, action)
+      return handleDataspaceModals(state, action)
+    case "UPDATE_PATHWAYS_MODAL_FILTERS":
+      return handlePathwaysModalFilters(state, action)
   }
   return state;
 }
