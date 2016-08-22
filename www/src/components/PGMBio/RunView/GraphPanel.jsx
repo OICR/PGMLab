@@ -3,7 +3,7 @@ import Paper from "material-ui/Paper"
 import SelectField from "material-ui/SelectField"
 import MenuItem from "material-ui/MenuItem"
 
-import vis from "vis"
+import GraphVis from "./../redux/GraphVis.jsx"
 
 //put these into a module
 const getName = p => p.has("name") ? p.get("name") : p.get("filename")
@@ -73,6 +73,21 @@ export default class GraphPanel extends React.Component {
 
     this.changeViewPathway = (evt, idx, viewPathway) => {this.props.graphVisSelectPathway(viewPathway)}
     this.changeViewObservation = (evt, idx, viewObservation) => {this.props.graphVisSelectObservation(viewObservation)}
+    this.getGVNodesDataSet = () => GraphVis.getNodes(this.props.dataspace.getIn(["pathways", this.props.graphVis.get("viewPathway"), "data"]))
+    this.getGVEdgesDataSet = () => GraphVis.getEdges(this.props.dataspace.getIn(["pathways", this.props.graphVis.get("viewPathway"), "data"]))
+    this.initializeGV = this.initializeGV.bind(this)
+    this.redrawGV = this.redrawGV.bind(this)
+  }
+  initializeGV(){
+    const canvasElement = document.getElementById("graphCanvas")
+    const nodes = this.getGVNodesDataSet()
+    const edges = this.getGVEdgesDataSet()
+    this.GVNetwork = GraphVis.initializeGVNetwork(canvasElement, nodes, edges)
+  }
+  redrawGV(){
+    const nodes = this.getGVNodesDataSet()
+    const edges = this.getGVNEdgesDataSet()
+    GraphVis.drawNetwork(this.GVNetwork, nodes, edges)
   }
   shouldComponentUpdate(nextProps, nextState){
     // Check if graph state can be drawn from dataspace
@@ -90,11 +105,13 @@ export default class GraphPanel extends React.Component {
           this.props.graphVis.get("viewObservation")==null
         ]
         if (viewPathwayNull || viewObservationNull) {
-          console.log("graph new graph")
           // Initialize graphvis and draw current graph
+          console.log("graph new graph")
+          this.initializeGV()
         }
         else {
           console.log("update graph")
+          this.redrawGV()
         }
       } else if (!pathwayAvailable && !observationAvailable) {
         console.log("can't draw")

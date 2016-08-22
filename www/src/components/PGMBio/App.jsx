@@ -449,6 +449,7 @@ export class App extends  React.Component {
             getReactomePathway = {this.props.wamp.getReactomePathway}
 
             graphVis = {this.props.graphVis}
+            graphVisInitialization = {this.props.graphVisInitialization}
             graphVisSelectPathway = {this.props.graphVisSelectPathway}
             graphVisSelectObservation = {this.props.graphVisSelectObservation}
 

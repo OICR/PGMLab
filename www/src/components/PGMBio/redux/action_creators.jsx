@@ -88,6 +88,15 @@ export function selectPathway(pathway, pathwaySource, pathwayID, pairwiseData, c
 }
 
 // SELECT PATHWAY TO VISUALIZE ON GRAPH
+export function graphVisInitialization(canvasElement){
+  return {
+    type: "GRAPHVIS",
+    payload: {
+      graphVisType: "INITIALIZATION",
+      canvasElement
+    }
+  }
+}
 export function graphVisSelectPathway(pathwayID){
   return {
     type: "GRAPHVIS",
