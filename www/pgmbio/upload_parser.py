@@ -43,7 +43,7 @@ def pairwise_interaction_json(pi_string):
                 if source not in pairwise["nodes"]:
                     pairwise["nodes"][source] = node(source)
                 if target not in pairwise["nodes"]:
-                    pairwise["nodes"][target] = node(source)
+                    pairwise["nodes"][target] = node(target)
                 pairwise["links"].append(link_nodes(link))
                 return pairwise
             pi_parsed = reduce(parse_line, lines[2:], {"nodes":{},"links":[]})
