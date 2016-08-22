@@ -73,8 +73,9 @@ export default class GraphPanel extends React.Component {
 
     this.changeViewPathway = (evt, idx, viewPathway) => {this.props.graphVisSelectPathway(viewPathway)}
     this.changeViewObservation = (evt, idx, viewObservation) => {this.props.graphVisSelectObservation(viewObservation)}
-    this.getGVNodesDataSet = () => GraphVis.getNodes(this.props.dataspace.getIn(["pathways", this.props.graphVis.get("viewPathway"), "data"]))
-    this.getGVEdgesDataSet = () => GraphVis.getEdges(this.props.dataspace.getIn(["pathways", this.props.graphVis.get("viewPathway"), "data"]))
+    this.getGVNodesDataSet = () => GraphVis.getNodes(this.props.dataspace, this.props.graphVis)
+    this.getGVEdgesDataSet = () => GraphVis.getEdges(this.props.dataspace, this.props.graphVis)
+
     this.initializeGV = this.initializeGV.bind(this)
     this.redrawGV = this.redrawGV.bind(this)
   }
@@ -138,7 +139,7 @@ export default class GraphPanel extends React.Component {
         }
         <div id="graphCanvas">
           {
-            !this.showGraph() ? <span>Need more info</span> : null
+            !this.showGraph() ? <h6 className="center-align">{"Select pathway and observation data to begin visualizing"}</h6> : null
           }
         </div>
       </div>

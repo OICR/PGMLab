@@ -57,36 +57,41 @@ export default class GraphVis {
     )
   }
 
-  static getNodes(pathwayData){
-    return new vis.DataSet(pathwayData.get("nodes")
-      .map(node => {
-        const id = node.get("name")
-        const label = node.get("name")
-        const border = "#2B7CE9"
-        const color = {
-          border,
-          background: "#D2E5FF",
-          highlight: {border: "#2B7CE9", background: "#D2E5FF"},
-          hover: {border: "#2B7CE9", background: "#D2E5FF"}
-        }
-        return {
-          id, label, color,
-          title: `
-            ID: ${id}<br>
-            Name: ${label}<br>`,
-          shape: "dot"
-        }
-      })
-      .toJS()
-    )
+  static getNodes(dataspace, graphVis){
+    const nodes = dataspace.getIn(["pathways", graphVis.get("viewPathway"), "data", "nodes"])
+    const visNode = node => {
+      const id = node.get("name")
+      const label = node.get("name")
+      const border = "#2B7CE9"
+      const color = {
+        border,
+        background: "#D2E5FF",
+        highlight: {border: "#2B7CE9", background: "#D2E5FF"},
+        hover: {border: "#2B7CE9", background: "#D2E5FF"}
+      }
+      return {
+        id, label, color,
+        title: `
+          ID: ${id}<br>
+          Name: ${label}<br>`,
+        shape: "dot"
+      }
+    }
+    return new vis.DataSet(nodes.map(visNode).toJS())
   }
 
-  static getEdges(pathwayData){
-    return new vis.DataSet(pathwayData.get("links")
-      .map(link => { return {from: link.get("source"), to: link.get("target"), arrows: "to"}})
-      .toJS()
-    )
+  static getEdges(dataspace, graphVis){
+    const links = dataspace.getIn(["pathways", graphVis.get("viewPathway"), "data", "links"])
+    const visEdge = link => {
+      return {
+        from: link.get("source"),
+        to: link.get("target"),
+        arrows: "to"
+      }
+    }
+    return new vis.DataSet(links.map(visEdge).toJS())
   }
+
   static drawNetwork(network, nodes, edges){
     network.setData(nodes, edges)
   }
