@@ -35,7 +35,7 @@ class GraphController extends React.Component {
       this.props.dataspace.getIn(["observationSet", "selected"])
         .reduce((observations, selected, i) => !selected ? observations :
           [...observations,
-            <MenuItem key={i} value={`${i}`} label={`Observation ${i+1}`} primaryText={`Observation ${i+1}`} />
+            <MenuItem key={i} value={String(i)} label={`Observation ${i+1}`} primaryText={`Observation ${i+1}`} />
           ],
           [])
     )
@@ -73,54 +73,72 @@ export default class GraphPanel extends React.Component {
 
     this.changeViewPathway = (evt, idx, viewPathway) => {this.props.graphVisSelectPathway(viewPathway)}
     this.changeViewObservation = (evt, idx, viewObservation) => {this.props.graphVisSelectObservation(viewObservation)}
-    this.getGVNodesDataSet = () => GraphVis.getNodes(this.props.dataspace, this.props.graphVis)
-    this.getGVEdgesDataSet = () => GraphVis.getEdges(this.props.dataspace, this.props.graphVis)
 
     this.initializeGV = this.initializeGV.bind(this)
     this.redrawGV = this.redrawGV.bind(this)
   }
-  initializeGV(){
+  initializeGV(nextProps){
+    const {dataspace, graphVis} = nextProps
     const canvasElement = document.getElementById("graphCanvas")
-    const nodes = this.getGVNodesDataSet()
-    const edges = this.getGVEdgesDataSet()
+    const nodes = GraphVis.getNodes(dataspace, graphVis)
+    const edges = GraphVis.getEdges(dataspace, graphVis)
     this.GVNetwork = GraphVis.initializeGVNetwork(canvasElement, nodes, edges)
   }
-  redrawGV(){
-    const nodes = this.getGVNodesDataSet()
-    const edges = this.getGVNEdgesDataSet()
+  redrawGV(nextProps){
+    const {dataspace, graphVis} = nextProps
+    const nodes = GraphVis.getNodes(dataspace, graphVis)
+    const edges = GraphVis.getEdges(dataspace, graphVis)
     GraphVis.drawNetwork(this.GVNetwork, nodes, edges)
   }
   shouldComponentUpdate(nextProps, nextState){
     // Check if graph state can be drawn from dataspace
-    const showGraph = nextProps.dataspace.has("pathways") && nextProps.dataspace.has("observationSet")
-    const sameObservationSet =
-      nextProps.dataspace.getIn(["observationSet", "_id"]) == this.props.dataspace.getIn(["observationSet", "_id"])
-    const pathwayAvailable =
-      nextProps.dataspace.hasIn(["pathways", nextProps.graphVis.get("viewPathway")])
-    const observationAvailable =
-      nextProps.dataspace.getIn(["observationSet", "selected", nextProps.graphVis.get("viewObservation")]) //state observation selected in dataspace ? (need to check if same observationSet)
-    if (showGraph) {
-      if (pathwayAvailable && observationAvailable && sameObservationSet) {
-        const [viewPathwayNull, viewObservationNull] = [
-          this.props.graphVis.get("viewPathway")==null,
-          this.props.graphVis.get("viewObservation")==null
-        ]
-        if (viewPathwayNull || viewObservationNull) {
-          // Initialize graphvis and draw current graph
-          console.log("graph new graph")
-          this.initializeGV()
+    // const showGraph = nextProps.dataspace.has("pathways") && nextProps.dataspace.has("observationSet")
+    // const sameObservationSet = nextProps.dataspace.getIn(["observationSet", "_id"]) == this.props.dataspace.getIn(["observationSet", "_id"])
+    const pathwayAvailable = nextProps.dataspace.hasIn(["pathways", nextProps.graphVis.get("viewPathway")])
+    const observationAvailable = nextProps.dataspace.getIn(["observationSet", "selected", nextProps.graphVis.get("viewObservation")]) //state observation selected in dataspace ? (need to check if same observationSet)
+    //
+    const sameObservationSet = nextProps.dataspace.getIn(["observationSet", "_id"]) == this.props.dataspace.getIn(["observationSet", "_id"])
+    const nextViewPathway = nextProps.graphVis.get("viewPathway")
+    const nextViewObservation = nextProps.graphVis.get("viewObservation")
+    const observationSelected = nextProps.dataspace.getIn(["observationSet", "selected", nextViewObservation])
+    const pathwaySelected = nextProps.dataspace.getIn(["pathways", nextViewPathway])
+    const graphPathwayAvailable = (nextViewPathway!=null) && pathwaySelected
+    const graphObservationAvailable = (nextViewObservation!=null) && observationSelected && sameObservationSet
+    const currentViewPathway = this.props.graphVis.get("viewPathway")
+    const currentViewObservation = this.props.graphVis.get("viewObservation")
+
+    if (graphPathwayAvailable && graphObservationAvailable) {
+      if ((nextViewPathway!=null) && (nextViewObservation!=null)) {
+        console.log("draw graph")
+        if ((currentViewPathway==null) || (currentViewObservation==null)) {
+          console.log("graph must be rendered first time")
+          this.initializeGV(nextProps)
         }
         else {
-          console.log("update graph")
-          this.redrawGV()
+          console.log("graph has already been rendered")
+          this.redrawGV(nextProps)
         }
-      } else if (!pathwayAvailable && !observationAvailable) {
-        console.log("can't draw")
-      } else if (pathwayAvailable && !observationAvailable) {
-        console.log("missing observation")
-      } else if (!pathwayAvailable && observationAvailable) {
-        console.log("missing pathway")
       }
+      else {
+        console.log("don't draw graph")
+      }
+      // if () {
+      //   if (currentViewPathway==null || currentViewObservation==null) {
+      //     // Initialize graphvis and draw current graph
+      //     console.log("graph new graph")
+      //     this.initializeGV(nextProps)
+      //   }
+      //   else {
+      //     console.log("update graph")
+      //     this.redrawGV(nextProps)
+      //   }
+      // } else if (!pathwayAvailable && !observationAvailable) {
+      //   console.log("can't draw")
+      // } else if (pathwayAvailable && !observationAvailable) {
+      //   console.log("missing observation")
+      // } else if (!pathwayAvailable && observationAvailable) {
+      //   console.log("missing pathway")
+      // }
     }
     return true
   }

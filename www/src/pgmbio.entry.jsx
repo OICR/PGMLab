@@ -23,7 +23,7 @@ var $ = require("jquery");
 window.jQuery = $;
 window.$ = $;
 var materialize = require('./lib/materialize.min.js')
-var graphvis = require('./lib/graphvis.js');
+// var graphvis = require('./lib/graphvis.js');
 var autobahn = require("autobahn");
 var when = require("when");
 

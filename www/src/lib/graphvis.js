@@ -89,27 +89,27 @@ const getNodesEdges = (pairwiseInteractions, observedStates=new Map())=>{
   return [nodes, edges];
 };
 
-// For setting new activePathway
-const render = (pairwiseInteractions, observedStates) => {
-  // console.log("graphvis.render");
-  const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
-  datasetnodes = new vis.DataSet(nodes);
-  datasetedges = new vis.DataSet(edges);
-  network.setData({nodes: datasetnodes, edges: datasetedges});
-};
-exports.render = render;
+// // For setting new activePathway
+// const render = (pairwiseInteractions, observedStates) => {
+//   // console.log("graphvis.render");
+//   const [nodes, edges] = getNodesEdges(pairwiseInteractions, observedStates);
+//   datasetnodes = new vis.DataSet(nodes);
+//   datasetedges = new vis.DataSet(edges);
+//   network.setData({nodes: datasetnodes, edges: datasetedges});
+// };
+// exports.render = render;
 
-// Initialize graphvis after <App> component mounts, called once
-exports.initialize = (pairwiseInteractions, observedStates) => {
-  // console.log("graphvis.initialize");
-  datasetnodes = new vis.DataSet();
-  datasetedges = new vis.DataSet();
-  network = new vis.Network(document.getElementById("canvas"),{
-    nodes: datasetnodes,
-    edges: datasetedges
-  }, config.networkOptions);
-  render(pairwiseInteractions, observedStates);
-};
+// // Initialize graphvis after <App> component mounts, called once
+// exports.initialize = (pairwiseInteractions, observedStates) => {
+//   // console.log("graphvis.initialize");
+//   datasetnodes = new vis.DataSet();
+//   datasetedges = new vis.DataSet();
+//   network = new vis.Network(document.getElementById("canvas"),{
+//     nodes: datasetnodes,
+//     edges: datasetedges
+//   }, config.networkOptions);
+//   render(pairwiseInteractions, observedStates);
+// };
 
 
 exports.setSingleNodeState = (observedNode) => {

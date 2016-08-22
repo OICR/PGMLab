@@ -59,6 +59,9 @@ export default class GraphVis {
 
   static getNodes(dataspace, graphVis){
     const nodes = dataspace.getIn(["pathways", graphVis.get("viewPathway"), "data", "nodes"])
+    console.log(dataspace.getIn(["pathways"]).toJS())
+    console.log(dataspace.getIn(["pathways", graphVis.get("viewPathway")]).toJS(), graphVis.get("viewPathway"))
+    console.log(dataspace.getIn(["pathways", graphVis.get("viewPathway"), "data", "nodes"]).toJS())
     const visNode = node => {
       const id = node.get("name")
       const label = node.get("name")
@@ -93,6 +96,6 @@ export default class GraphVis {
   }
 
   static drawNetwork(network, nodes, edges){
-    network.setData(nodes, edges)
+    network.setData({nodes, edges})
   }
 }

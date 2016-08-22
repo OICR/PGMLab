@@ -22,7 +22,6 @@ export default class Body2 extends React.Component {
                 getReactomePathway = {this.props.getReactomePathway}
 
                 graphVis = {this.props.graphVis}
-                graphVisInitialization = {this.props.graphVisInitialization}
                 graphVisSelectPathway = {this.props.graphVisSelectPathway}
                 graphVisSelectObservation = {this.props.graphVisSelectObservation}
 

@@ -11,7 +11,7 @@ import Dialog from "material-ui/Dialog";
 import GoogleLogin from "react-google-login";
 
 var moment = require("moment")
-var graphvis = require("./../../lib/graphvis.js");
+// var graphvis = require("./../../lib/graphvis.js");
 
 import {Snackbar} from "material-ui";
 
@@ -89,59 +89,57 @@ export class App extends  React.Component {
     }
 
     componentDidMount(){
-      // console.log("componentDidMount: initializeData");
-      // EXAMPLE DATA ON INIT
-      const EXAMPLEDATA = {
-        // For G-protein pathway
-        observationSets : new Map([
-          ["exampleID1", {"id":"exampleID1", "name":"Example 1", "observations":[
-            [ {"name":"49865","state":"3"}],
-            [ {"name":"49865","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
-          ]}],
-          ["exampleID2", {"id":"exampleID2", "name":"Example 2", "observations":[
-            [ {"name":"58253","state":"1"},{"name":"415917","state":"2"},{"name":"61076","state":"1"},{"name":"49860","state":"2"}],
-            [ {"name":"61074","state":"1"},{"name":"49860","state":"2"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"}]
-          ]}]
-        ]),
-        current: {
-          set : {"id":"exampleID1", "name":"Example 1", "observations":[
-            [],
-            [ {"name":"49865","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
-          ]},
-          selected: [0, 1],
-          active: 1
-        }
-      };
-      const observationMap = new Map([
-        ["All", EXAMPLEDATA.observationSets],
-        ["Current", new Map([
-          ["Set", EXAMPLEDATA.current.set],
-          // ["Selected Observations", EXAMPLEDATA.current.selected], //Indices of .observations
-          ["Selected Observations", new Set(EXAMPLEDATA.current.selected)],
-          ["Active Observation", EXAMPLEDATA.current.active] //Index of active in .observations
-        ])]
-      ]);
-      const pathwayMap = new Map([
-        ["All", new Map(this.props.reactomePathways.map(p => [p.id, p]))],
-        ["Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]])],
-        ["Active", {id:"397795",name:"G-protein beta:gamma signalling"}]
-      ]);
-      this.props.getReactomePathway(pathwayMap.get("Active")).then(
-        pairwiseInteractions => {
-          // console.log(pairwiseInteractions)
-          this.setState(
-            {observationMap, pathwayMap, pairwiseInteractions},
-            ()=>{
-              const observation = observationMap.get("Current").get("Set").observations[observationMap.get("Current").get("Active Observation")];
-              const observedStates = new Map(observation.map(node=>[node.name, node.state]));
-              graphvis.initialize(pairwiseInteractions, observedStates);
-            }
-          );
-        },
-        err => {console.log("Could not get initial pairwiseInteraction: ", err)}
-      );
-
-      ///
+      // // console.log("componentDidMount: initializeData");
+      // // EXAMPLE DATA ON INIT
+      // const EXAMPLEDATA = {
+      //   // For G-protein pathway
+      //   observationSets : new Map([
+      //     ["exampleID1", {"id":"exampleID1", "name":"Example 1", "observations":[
+      //       [ {"name":"49865","state":"3"}],
+      //       [ {"name":"49865","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+      //     ]}],
+      //     ["exampleID2", {"id":"exampleID2", "name":"Example 2", "observations":[
+      //       [ {"name":"58253","state":"1"},{"name":"415917","state":"2"},{"name":"61076","state":"1"},{"name":"49860","state":"2"}],
+      //       [ {"name":"61074","state":"1"},{"name":"49860","state":"2"},{"name":"58253","state":"2"},{"name":"415917","state":"1"},{"name":"61076","state":"1"}]
+      //     ]}]
+      //   ]),
+      //   current: {
+      //     set : {"id":"exampleID1", "name":"Example 1", "observations":[
+      //       [],
+      //       [ {"name":"49865","state":"2"},{"name":"58253","state":"1"},{"name":"415917","state":"1"},{"name":"61076","state":"2"},{"name":"61074","state":"1"}]
+      //     ]},
+      //     selected: [0, 1],
+      //     active: 1
+      //   }
+      // };
+      // const observationMap = new Map([
+      //   ["All", EXAMPLEDATA.observationSets],
+      //   ["Current", new Map([
+      //     ["Set", EXAMPLEDATA.current.set],
+      //     // ["Selected Observations", EXAMPLEDATA.current.selected], //Indices of .observations
+      //     ["Selected Observations", new Set(EXAMPLEDATA.current.selected)],
+      //     ["Active Observation", EXAMPLEDATA.current.active] //Index of active in .observations
+      //   ])]
+      // ]);
+      // const pathwayMap = new Map([
+      //   ["All", new Map(this.props.reactomePathways.map(p => [p.id, p]))],
+      //   ["Selected", new Map([["397795", {id:"397795",name:"G-protein beta:gamma signalling"}]])],
+      //   ["Active", {id:"397795",name:"G-protein beta:gamma signalling"}]
+      // ]);
+      // this.props.getReactomePathway(pathwayMap.get("Active")).then(
+      //   pairwiseInteractions => {
+      //     // console.log(pairwiseInteractions)
+      //     // this.setState(
+      //     //   {observationMap, pathwayMap, pairwiseInteractions},
+      //     //   ()=>{
+      //     //     const observation = observationMap.get("Current").get("Set").observations[observationMap.get("Current").get("Active Observation")];
+      //     //     const observedStates = new Map(observation.map(node=>[node.name, node.state]));
+      //     //     graphvis.initialize(pairwiseInteractions, observedStates);
+      //     //   }
+      //     // );
+      //   },
+      //   err => {console.log("Could not get initial pairwiseInteraction: ", err)}
+      // );
     }
     // For ControlPanel vs ResultsPanel
     setTab(tab){
@@ -449,12 +447,11 @@ export class App extends  React.Component {
             getReactomePathway = {this.props.wamp.getReactomePathway}
 
             graphVis = {this.props.graphVis}
-            graphVisInitialization = {this.props.graphVisInitialization}
             graphVisSelectPathway = {this.props.graphVisSelectPathway}
             graphVisSelectObservation = {this.props.graphVisSelectObservation}
 
             />
-          <Body tab = {this.state.tab}
+          {/* <Body tab = {this.state.tab}
 
                 pairwiseInteractions            = {this.state.pairwiseInteractions}
 
@@ -480,7 +477,7 @@ export class App extends  React.Component {
                 setActivePosteriorProbability = {this.setActivePosteriorProbability}
 
                 inchlibCluster = {this.inchlibCluster}
-                />
+                /> */}
           <Footer />
         </div>
       )

@@ -81,22 +81,13 @@ export function selectPathway(pathway, pathwaySource, pathwayID, pairwiseData, c
       pathwayID,
       pathway: pathway.withMutations(pathway => pathway
         .set("pathwaySource", pathwaySource)
-        .set("data", pairwiseData)),
+        .set("data", fromJS(pairwiseData))),
       checked
     }
   }
 }
 
 // SELECT PATHWAY TO VISUALIZE ON GRAPH
-export function graphVisInitialization(canvasElement){
-  return {
-    type: "GRAPHVIS",
-    payload: {
-      graphVisType: "INITIALIZATION",
-      canvasElement
-    }
-  }
-}
 export function graphVisSelectPathway(pathwayID){
   return {
     type: "GRAPHVIS",
