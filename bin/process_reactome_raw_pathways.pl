@@ -11,17 +11,20 @@ use Data::Dumper;
 use FindBin qw($Bin);
 use lib "$Bin/../lib/perl";
 
-use PGMLab qw(find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+use Getopt::Euclid qw( :minimal_keys );
+
+use PGMLab qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
 use PGMLab::NetworkComponents qw(network_components);
 
-#USAGE perl process_reactome_raw_pathways.pl <input_directory> <output_directory>
+print "I got the following options:                                                                    
+@{[ Dumper \%ARGV ]}                                                                                   
+" if $ARGV{'verbose'};
 
-my $max_number_of_parents = 10;
 
-my $reactome_export_dir = $ARGV[0];
+my $reactome_export_dir = $ARGV{reactome_dir};
 $reactome_export_dir = $1 if($reactome_export_dir=~/(.*)\/$/); #remove trailing slash if exists
 
-my $reactome_pi_result_dir = $ARGV[1];
+my $reactome_pi_result_dir = $ARGV{processed_dir};
 $reactome_pi_result_dir = $1 if($reactome_pi_result_dir=~/(.*)\/$/);
 
 opendir(my $dir_h, $reactome_export_dir);
@@ -60,24 +63,28 @@ foreach my $tsv_file (@tsv_files) {
        my $filepath = "$reactome_pi_result_dir/$pathway_name";
        $filepath .= "_$member_group_index" if ($member_group_index != 1);
        $filepath .= ".pi";
-
-       say "Writing: $filepath";
-       my $is_a_tree = is_pi_a_tree(\%member_interactions);
-       my $tree_y_n = ($is_a_tree)?"Yes":"No";
-       say "Tree: $tree_y_n";
-
-       unless ($is_a_tree) {
-            my $cycles = find_cycles(\%member_interactions);
-            if (scalar(@{$cycles})) {
-                print_cycles($cycles);
-            } 
-            else {
-                say "No Cycles for this graph";
+        
+       if($ARGV{verbose}) {
+            say "Writing: $filepath";
+            my $is_a_tree = is_pi_a_tree(\%member_interactions);
+            my $tree_y_n = ($is_a_tree)?"Yes":"No";
+            say "Tree: $tree_y_n";
+     
+            unless ($is_a_tree) {
+                 my $cycles = find_cycles(\%member_interactions);
+                 if (scalar(@{$cycles})) {
+                     print_cycles($cycles);
+                 } 
+                 else {
+                     say "No Cycles for this graph";
+                 }
+                 say "";
             }
-            say "";
        }
 
-       add_pseudo_nodes_to_interactions(\%member_interactions, $max_number_of_parents);
+       flip_pi_logic(\%member_interactions, $ARGV{verbose}) unless($ARGV{leave_logic});
+
+       add_pseudo_nodes_to_interactions(\%member_interactions, $ARGV{max_number_of_parents}) unless ($ARGV{no_add_pseudo_nodes});
        create_pi_file($filepath, \%member_interactions);
 
        $member_group_index++;

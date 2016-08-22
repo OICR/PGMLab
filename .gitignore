@@ -7,6 +7,8 @@ net/hash_obj
 #GSL library
 external_lib/gsl
 external_lib/gsl-*
+external_lib/gsl-*/*
+external_lib/gsl-*/*/*
 
 #readline
 external_lib/readline

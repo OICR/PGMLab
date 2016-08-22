@@ -13,7 +13,46 @@ use Data::Dumper;
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
-@EXPORT_OK = qw(find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+@EXPORT_OK = qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+
+
+sub flip_pi_logic {
+    my ($pi_interactions, $verbose) = @_;
+
+    my $negative_interaction_children = find_negative_interaction_children($pi_interactions, $verbose);
+
+say "VERBOSE: $verbose";
+
+    foreach my $from (keys %$pi_interactions) {
+        foreach my $to (keys %{$pi_interactions->{$from}}) {
+            if (grep {$to eq $_} @$negative_interaction_children) {
+                $pi_interactions->{$from}{$to}[1] = 1;
+                if ($verbose) {
+                   say "switching interaction to 1 for interaction: $from > $to";
+                }
+            }
+        }
+    }
+}
+
+
+sub find_negative_interaction_children {
+    my ($pi_interactions, $verbose) = @_;
+
+    my (%has_negative_interactions, $interaction_details);
+    foreach my $from (keys %$pi_interactions) {
+        foreach my $to (keys %{$pi_interactions->{$from}}) {
+             $interaction_details = $pi_interactions->{$from}{$to};
+             if($interaction_details->[0] == -1) {
+                 $has_negative_interactions{$to} =1;
+             }
+        }
+    }
+
+    my @children = keys %has_negative_interactions;
+
+    return \@children;
+}
 
 ## returning 1 if is a tree
 sub is_pi_a_tree {
