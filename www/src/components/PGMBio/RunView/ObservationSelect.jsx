@@ -93,23 +93,17 @@ class ObservationTable extends React.Component {
 }
 
 export default class ObservationSelect extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      open: false
-    }
-  }
   render(){
     const openBtn = (
-      <a href="#" onClick={evt => this.setState({open:true})}>{"Select Observation Data"}</a>
+      <a href="#" onClick={evt => this.props.toggleDataspaceModal(true, "OBS_SET")}>{"Select Observation Data"}</a>
     )
     const closeBtn = (
-      <FlatButton label="Close" onTouchTap={evt => this.setState({open:false})}/>
+      <FlatButton label="Close" onTouchTap={evt => this.props.toggleDataspaceModal(false, "OBS_SET")}/>
     )
     return (
       <div>
         {openBtn}
-        <Dialog modal={true} open={this.state.open} actions={[closeBtn]}
+        <Dialog modal={true} open={this.props.observationSetModal.get("open")} actions={[closeBtn]}
             title={"Select an observation set and data to include"} titleClassName={"center-align"}>
           <div className="row">
             <div className={!this.props.dataspace.has("observationSet") ? "col s12" : "col s5"}>

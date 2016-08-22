@@ -73,6 +73,17 @@ export function selectObservation(obsIndex, checked){
   }
 }
 
+// TOGGLE PATHWAY/OBSERVATION MODAL
+export function toggleDataspaceModal(open, modalType){
+  return {
+    type: "TOGGLE_DATASPACE_MODALS",
+    payload: {
+      modalType, //PATHWAYS || OBS_SET
+      open
+    }
+  }
+}
+
 // SELECT PATHWAYS
 export function selectPathway(pathway, pathwaySource, pathwayID, pairwiseData, checked){
   return {

@@ -28,6 +28,7 @@ export default function(state = Map(), action) {
       return changeRunType(state, action)
     case "CHANGE_VIEW":
       return state //add reducer once we have more than 'Run' tab
+    case "TOGGLE_DATASPACE_MODALS":
     case "CHANGE_OBS_SET":
     case "CHANGE_OBS":
     case "CHANGE_PATHWAYS":

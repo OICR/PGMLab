@@ -3,7 +3,7 @@ import Paper from "material-ui/Paper"
 import SelectField from "material-ui/SelectField"
 import MenuItem from "material-ui/MenuItem"
 
-import GraphVis from "./../redux/GraphVis.jsx"
+import GraphVis from "./GraphVis.jsx"
 
 //put these into a module
 const getName = p => p.has("name") ? p.get("name") : p.get("filename")

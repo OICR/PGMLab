@@ -135,7 +135,6 @@ export default class PathwaySelect extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      open: false,
       filters: {
         text: "",
         reactome: true,
@@ -151,15 +150,15 @@ export default class PathwaySelect extends React.Component {
   }
   render(){
     const openBtn = (
-      <a href="#" onClick={evt => this.setState({open:true})}>{"Select Pathways"}</a>
+      <a href="#" onClick={evt => this.props.toggleDataspaceModal(true, "PATHWAYS")}>{"Select Pathways"}</a>
     );
     const closeBtn = (
-      <FlatButton label="Close" onTouchTap={evt => this.setState({open:false})}/>
+      <FlatButton label="Close" onTouchTap={evt => this.props.toggleDataspaceModal(false, "PATHWAYS")}/>
     );
     return (
       <div>
         {openBtn}
-        <Dialog modal={true} open={this.state.open} actions={[closeBtn]}
+        <Dialog modal={true} open={this.props.pathwaysModal.get("open")} actions={[closeBtn]}
             title={"Select pathways to run PGMLab over"} titleClassName={"center-align"}>
           <div className="row">
             <div className="col s12">

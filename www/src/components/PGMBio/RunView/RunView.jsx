@@ -16,6 +16,8 @@ export default class RunView extends React.Component {
               runType={this.props.runType}
               changeRunType={this.props.changeRunType}
               dataspace={this.props.dataspace}
+              dataspaceModals = {this.props.dataspaceModals}
+              toggleDataspaceModal = {this.props.toggleDataspaceModal}
               observations={this.props.observations}
               selectObservationSet={this.props.selectObservationSet}
               selectObservation={this.props.selectObservation}

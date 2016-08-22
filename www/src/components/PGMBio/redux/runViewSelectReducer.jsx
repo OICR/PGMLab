@@ -26,14 +26,27 @@ function changePathways(state, action){
   };
 }
 
+// HANDLE MODALS FOR POPULATING DATASPACE
+function handleModals(state, action){
+  switch (action.payload.modalType) {
+    case "PATHWAYS":
+      return state.updateIn(["dataspaceModals", "pathwaysModal", "open"], open => action.payload.open)
+    case "OBS_SET":
+      return state.updateIn(["dataspaceModals", "observationSetModal", "open"], open => action.payload.open)
+  }
+}
+
+
 const runViewSelectReducer = (state=Map(), action) => {
   switch (action.type) {
     case "CHANGE_OBS_SET":
-      return changeObservationSet(state, action);
+      return changeObservationSet(state, action)
     case "CHANGE_OBS":
-      return changeObservation(state, action);
+      return changeObservation(state, action)
     case "CHANGE_PATHWAYS":
-      return changePathways(state, action);
+      return changePathways(state, action)
+    case "TOGGLE_DATASPACE_MODALS":
+      return handleModals(state, action)
   }
   return state;
 }

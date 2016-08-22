@@ -16,6 +16,8 @@ export default class RunControlPanel extends React.Component {
         />
         <RunDataSelect
             dataspace={this.props.dataspace}
+            dataspaceModals = {this.props.dataspaceModals}
+            toggleDataspaceModal = {this.props.toggleDataspaceModal}
             observations={this.props.observations}
             selectObservationSet = {this.props.selectObservationSet}
             selectObservation={this.props.selectObservation}

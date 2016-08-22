@@ -13,6 +13,19 @@ const initialAppState = {
   view: "Run",
   runType: "Learning",
   dataspace: Map(),
+  dataspaceModals: Map({
+    pathwaysModal: Map({
+      open: false,
+      filters: Map({
+        text: "",
+        reactome: true,
+        uploads: true
+      })
+    }),
+    observationSetModal: Map({
+      open: false
+    })
+  }),
   graphVis: Map({
     viewPathway: null, //pathway ID of graph to draw
     viewObservation: null //index of obsevation selected, still need to check if same observationSet
@@ -31,6 +44,7 @@ function mapStateToProps(state) {
     view: state.get("view"),
     runType: state.get("runType"),
     dataspace: state.get("dataspace"),
+    dataspaceModals: state.get("dataspaceModals"),
     graphVis: state.get("graphVis"),
     observations: state.get("observations"),
     pathways: state.get("pathways")
