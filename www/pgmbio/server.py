@@ -71,6 +71,8 @@ def submit_inference(request):
     run_id = str(uuid.uuid4())
     posterior_probabilities = run_inference(pathways, observation_set, run_id)
     return json_util.dumps({
+        "pathways": pathways,
+        "observation_set": observation_set,
         "post_probs": posterior_probabilities,
         "run_id": run_id
     })
