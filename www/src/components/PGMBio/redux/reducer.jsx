@@ -27,7 +27,7 @@ export default function(state = Map(), action) {
     case "CHANGE_RUNTYPE":
       return changeRunType(state, action)
     case "CHANGE_VIEW":
-      return state //add reducer once we have more than 'Run' tab
+      return state.update("view", view => action.payload.view) //add reducer once we have more than 'Run' tab
     case "TOGGLE_DATASPACE_MODALS":
     case "UPDATE_PATHWAYS_MODAL_FILTERS":
     case "CHANGE_OBS_SET":

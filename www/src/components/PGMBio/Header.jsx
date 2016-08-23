@@ -1,9 +1,7 @@
 import React from 'react'
 
 import GoogleLogin from "react-google-login";
-import {UploadModal} from "./UploadModal.jsx";
-
-var classNames = require("classnames");
+import UploadModal from "./UploadModal.jsx";
 
 export default class Header extends React.Component {
   constructor(props){
@@ -11,7 +9,6 @@ export default class Header extends React.Component {
     this.getLeftTabs = this.getLeftTabs.bind(this);
     this.getSignOutBtn = this.getSignOutBtn.bind(this);
   }
-
   getLinkBtns(){
     const links = {
       "Wiki":"http://oicr.github.io/PGMLab/",
@@ -38,14 +35,7 @@ export default class Header extends React.Component {
     return (
       <ul className="left">
         {
-          ["Run", "Results"].map(tab => (
-            <li key={tab} className={classNames({"active":tab===this.props.tab})}>
-              <a href="#!" onClick={()=>{this.handleSetTab(tab)}}>{tab}</a>
-            </li>
-          ))
-        }
-        {
-          ["Run"].map(view =>
+          ["Run", "Results"].map(view =>
             <li key={view}>
               <a href="#!" onClick={evt=>this.props.changeView(view)}>{view}</a>
             </li>
@@ -58,9 +48,6 @@ export default class Header extends React.Component {
     )
   }
 
-  handleSetTab(tab){
-    this.props.setTab(tab);
-  }
   render(){
     const noVertMargin = {marginTop:"0px",marginBottom:"0px"};
     return (

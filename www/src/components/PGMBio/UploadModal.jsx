@@ -100,7 +100,7 @@ class UploadRow extends React.Component {
   }
 }
 
-export class UploadModal extends React.Component {
+export default class UploadModal extends React.Component {
   constructor(props){
     super(props)
     this.state = {
