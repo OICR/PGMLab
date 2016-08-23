@@ -1,3 +1,4 @@
+# Different from pgmlab/pgmlab_utils
 import pprint
 pp = pprint.PrettyPrinter(indent=4)
 import subprocess
@@ -5,7 +6,9 @@ import os
 import shutil
 import datetime
 cwd = os.getcwd()
+results_path = cwd+"/results"
 pgmlab_path = cwd+"/../../bin/pgmlab"
+
 
 
 #

@@ -68,3 +68,4 @@ www/pgmlab/pgmlab.db
 data/pgmlab/*
 
 www/pgmbio/db/*
+www/pgmbio/results/*

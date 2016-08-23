@@ -21,7 +21,6 @@ from klein import Klein
 klein = Klein()
 resource = klein.resource
 
-
 import inchlib_clust
 import upload_parser
 import pgmlab_utils
@@ -44,20 +43,15 @@ def upload_file(request, upload_type):
     upload_file = request.args[upload_type][0]
     upload_filename = request.args["filename"][0]
     id_token = request.args["id_token"][0]
-    # Upload info
     upload_info = {
         "type": upload_type,
         "filename": upload_filename,
         "datetime": datetime.datetime.now().isoformat(),
     }
-    # Convert to json: {success, comments, data}
-    upload_json = upload_parser.upload(upload_file, upload_type)
-    # Pass to db (payload, sub_uid)
-    upload_meta = dbm.save_upload(upload_info, upload_json, id_token)
-    # # Return upload info and json
-    payload = {
-        # payload.json same shape as upload document in mongo
-        "json": {
+    upload_json = upload_parser.upload(upload_file, upload_type) # Convert to json: {success, comments, data}
+    upload_meta = dbm.save_upload(upload_info, upload_json, id_token) # Pass to db (payload, sub_uid)
+    payload = { # # Return upload info and json
+        "json": { # payload.json same shape as upload document in mongo
             "_id": str(upload_meta["_id"]),
             "user_id": upload_meta["user_id"],
             "data": upload_json["data"],
@@ -67,6 +61,46 @@ def upload_file(request, upload_type):
     }
     # Redux action to merge new upload info and json to appropriate upload type
     return json_util.dumps(payload)
+
+import pprint
+pp = pprint.PrettyPrinter(indent=2)
+@klein.route("/submit/inference", methods={"POST"})
+def submit_inference(request):
+    data = {
+        "pathways": json_util.loads(request.args["pathways"][0]),
+        "observation_set": json_util.loads(request.args["observationSet"][0])
+    }
+    run_inference(data)
+    return
+
+def run_inference(data):
+    # run_id = str(uuid.uuid4())
+    run_id = "dev"
+    cwd = os.getcwd()
+    run_path = "{}/results/{}".format(cwd, run_id)
+    shutil.rmtree(run_path)
+    os.mkdir(run_path)
+
+    for path in data["pathways"].values():
+        # pp.pprint(path["pathwaySource"])
+        nodes = path["data"]["nodes"]
+        links = path["data"]["links"]
+        write_pi_file(run_path, links)
+
+def write_pi_file(run_path, links):
+    file_path = "{}/pathway.pi".format(run_path)
+    with open(file_path, "w") as pi:
+        pi.write("{}\n\n".format(str(len(links))))
+        for interaction in links:
+            [source, target, value, logic] = interaction.values()
+            pp.pprint(interaction)
+            pi.write("{}\t{}\t{}\t{}\n".format(source,target,value,logic))
+
+
+@klein.route("/submit/learning", methods=["POST"])
+def submit_learning(request):
+    return
+
 
 #####
 
