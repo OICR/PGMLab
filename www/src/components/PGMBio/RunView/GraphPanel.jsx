@@ -5,6 +5,20 @@ import MenuItem from "material-ui/MenuItem"
 import {is} from "immutable"
 import GraphVis from "./GraphVis.jsx"
 
+class StateLegend extends React.Component {
+  render(){
+    const stateColors = GraphVis.getStateColors()
+    return (
+      <h6 className="center-align">
+        <span style={{color: stateColors.get("unobserved")}}>{"Unobserved"}</span>&nbsp;|&nbsp;
+        <span style={{color: stateColors.get("1")}}>{"Down-regulated"}</span>&nbsp;|&nbsp;
+        <span style={{color: stateColors.get("2")}}>{"Non-regulated"}</span>&nbsp;|&nbsp;
+        <span style={{color: stateColors.get("3")}}>{"Up-regulated"}</span>
+      </h6>
+    )
+  }
+}
+
 //put these into a module
 const getName = p => p.has("name") ? p.get("name") : p.get("filename")
 const getID = p => p.has("id") ? p.get("id") : p.get("_id")
@@ -30,6 +44,11 @@ class GraphController extends React.Component {
         .map(p => <MenuItem key={getID(p)} value={getID(p)} primaryText={getName(p)} autoWidth={false} label={getLabel(p)}/>)
     )
   }
+  getUnobservedMenuItem(){
+    return (
+      <MenuItem key={-1} value={String(-1)} label={"Unobserved"} primaryText={"Unobserved"} />
+    )
+  }
   getObservationChildren(){
     return (
       this.props.dataspace.getIn(["observationSet", "selected"])
@@ -40,20 +59,7 @@ class GraphController extends React.Component {
           [])
     )
   }
-  getLegend(){
-    const stateColors = GraphVis.getStateColors()
-    return (
-      <h6 className="center-align">
-        <span style={{color: stateColors.get("unobserved")}}>{"Unobserved"}</span>&nbsp;|&nbsp;
-        <span style={{color: stateColors.get("1")}}>{"Down-regulated"}</span>&nbsp;|&nbsp;
-        <span style={{color: stateColors.get("2")}}>{"Non-regulated"}</span>&nbsp;|&nbsp;
-        <span style={{color: stateColors.get("3")}}>{"Up-regulated"}</span>
-      </h6>
-    )
-  }
   render(){
-    const showPathway = this.props.dataspace.has("pathways") //these will handle changing data while drawn
-    const showObservation = this.props.dataspace.has("observationSet")
     return (
       <Paper className="row center-align">
         <div className="col s8">
@@ -68,12 +74,12 @@ class GraphController extends React.Component {
           <SelectField
               fullWidth={true} autoWidth={true} hintText="Select an observation"
               value={this.props.viewObservation}
-              children={this.getObservationChildren()}
+              children={[this.getUnobservedMenuItem(), ...this.getObservationChildren()]}
               onChange={this.props.changeViewObservation}
           />
         </div>
         <div className="col s12">
-          {this.getLegend()}
+          <StateLegend />
         </div>
       </Paper>
     )
