@@ -51,6 +51,8 @@ def inference(run_path):
     command = "{} --inference {} {} {} {} {}".format(pgmlab_path,pi_flag,fg_flag,obs_flag,pp_flag,num_states)
     system_call(command)
 
+import pprint
+pretty = pprint.PrettyPrinter(indent=4)
 def read_pp_file(run_path):
     file_path = "{}/post_probs.pp".format(run_path)
     all_post_probs = list()
@@ -59,6 +61,7 @@ def read_pp_file(run_path):
         for line in pp:
             if line.startswith("-"): #new post probs from different observation
                 all_post_probs.append(post_probs)
+                test = post_probs
                 post_probs = dict()
                 continue
             [node_name, state_prob] = line.strip().split("\t")
@@ -66,9 +69,6 @@ def read_pp_file(run_path):
                 post_probs[node_name] = list()
             post_probs[node_name].append(state_prob)
     return all_post_probs
-
-
-
 
 # not used
 def write_pairwise_interaction(run_path, links):

@@ -203,7 +203,7 @@ def sortHeatmapData(heatmapData):
     state1 = {}
     state2 = {}
     state3 = {}
-    stateD = {}
+    stateD = {} #dominant
     # print heatmapData["posteriorProbsData"]["posteriorProbabilitiesSet"]
     for obsIdx, observation in enumerate(heatmapData["posteriorProbsData"]["posteriorProbabilitiesSet"]):
         for nodeID,states in observation.items():
