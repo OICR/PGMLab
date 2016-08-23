@@ -18,7 +18,6 @@ function changeObservation(state, action){
 }
 function changePathways(state, action){
   const {pathwayID, pathway, checked} = action.payload
-  console.log('changepathways', pathway.get("data"))
   if (checked) {
     return state.setIn(["dataspace", "pathways", pathwayID], fromJS(pathway));
   } else {

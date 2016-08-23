@@ -1,10 +1,11 @@
-import React from "react";
+import React from "react"
 import Dialog from "material-ui/Dialog"
-import FlatButton from "material-ui/FlatButton";
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import Checkbox from "material-ui/Checkbox";
-import {List, ListItem} from "material-ui/List";
-import Subheader from "material-ui/Subheader";
+import FlatButton from "material-ui/FlatButton"
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
+import Checkbox from "material-ui/Checkbox"
+import {List, ListItem} from "material-ui/List"
+import Subheader from "material-ui/Subheader"
+import Paper from "material-ui/Paper"
 
 class ObservationSetTable extends React.Component {
   constructor(props){
@@ -73,11 +74,11 @@ class ObservationTable extends React.Component {
   render(){
     return (
       <List>
-        <Subheader>
+        {/* <Subheader>
           <h6 className="center-align black-text">
             {`${this.props.dataspace.getIn(["observationSet", "filename"])}`}
           </h6>
-        </Subheader>
+        </Subheader> */}
         {
           this.props.dataspace.getIn(["observationSet", "data"])
             .keySeq()
@@ -111,20 +112,19 @@ export default class ObservationSelect extends React.Component {
         <Dialog modal={true} open={this.props.observationSetModal.get("open")} actions={[closeBtn]}
             title={"Select an observation set and data to include"} titleClassName={"center-align"}>
           <div className="row">
-            <div className={!this.props.dataspace.has("observationSet") ? "col s12" : "col s5"}>
+            <div  className="col s5">
+            <Paper zDepth={2}>
               <ObservationSetTable
                   dataspace={this.props.dataspace}
                   selectObservationSet={this.props.selectObservationSet}
                   observations={this.props.observations}/>
+            </Paper>
             </div>
-            {
-              !this.props.dataspace.has("observationSet") ? null :
-              <div className="col s7" style={{maxHeight:"400px", overflowY:"scroll"}}>
-                <ObservationTable
-                    dataspace={this.props.dataspace}
-                    selectObservation={this.props.selectObservation}/>
-              </div>
-            }
+            <div className="col s7" style={{maxHeight:"400px", overflowY:"scroll"}}>
+              <ObservationTable
+                  dataspace={this.props.dataspace}
+                  selectObservation={this.props.selectObservation}/>
+            </div>
           </div>
         </Dialog>
       </div>

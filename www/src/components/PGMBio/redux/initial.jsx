@@ -1,4 +1,4 @@
-import {Map, OrderedMap} from "immutable";
+import {Map, OrderedMap, List} from "immutable";
 
 // Should match mapStateToProps
 const auth = Map({
@@ -12,7 +12,16 @@ const initialAppState = {
   uploads: Map(),
   view: "Run",
   runType: "Learning",
-  dataspace: Map(),
+  dataspace: Map({
+    pathways: Map(),
+    observationSet: Map({
+      selected: List(),
+      data: List(),
+      _id: "",
+      user_id: "",
+      filename: ""
+    })
+  }),
   dataspaceModals: Map({
     pathwaysModal: Map({
       open: false,

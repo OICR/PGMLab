@@ -124,7 +124,6 @@ export default class GraphPanel extends React.Component {
     return (
       <div className="card-panel" style={{minWidth:"800px", minHeight:"675px"}}>
         {
-          !this.showGraph() ? null :
             <GraphController
                 dataspace={this.props.dataspace}
                 viewPathway={this.props.graphVis.get("viewPathway")}
@@ -135,7 +134,9 @@ export default class GraphPanel extends React.Component {
         }
         <div id="graphCanvas">
           {
-            !this.showGraph() ? <h6 className="center-align">{"Select pathway and observation data to begin visualizing"}</h6> : null
+            (this.props.dataspace.has("pathways") && this.props.dataspace.get("pathways").size!=0) ?
+              <h6 className="center-align">{"Select pathway and observation data to begin visualizing"}</h6>
+              :null
           }
         </div>
       </div>

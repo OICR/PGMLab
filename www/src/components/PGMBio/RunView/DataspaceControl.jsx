@@ -13,18 +13,16 @@ class DataspaceSelect extends React.Component {
       <div className="center-align col s12">
         {
           this.props.showDataspace ?
-          <div>{"View data by: "}
-            {
+            <div>{"View data by: "}
               <a href="#" style={pStyle} onClick={evt => this.props.changeViewData("Pathway")}>
                 {"Pathways"}
               </a>
-            }{" / "}
-            {
+              {" / "}
               <a href="#" style={oStyle} onClick={evt => this.props.changeViewData("Observation")}>
                 {"Observations"}
               </a>
-            }
-          </div> : <span>{"Click on links above to choose data for PGMLab"}</span>
+            </div>
+            :<span>{"Click on links above to choose data for PGMLab"}</span>
         }
       </div>
     )
