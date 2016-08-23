@@ -9,9 +9,52 @@ cwd = os.getcwd()
 results_path = cwd+"/results"
 pgmlab_path = cwd+"/../../bin/pgmlab"
 
+def system_call(command):
+    p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
+    return p.stdout.read()
+
+def write_pi_file(run_path, links):
+    file_path = "{}/pathway.pi".format(run_path)
+    with open(file_path, "w") as pi:
+        pi.write("{}\n\n".format(str(len(links))))
+        for interaction in links:
+            [source, target, value, logic] = interaction.values()
+            pi.write("{}\t{}\t{}\t{}\n".format(source,target,value,logic))
+
+def write_obs_file(run_path, observation_set):
+    file_path = "{}/inference.obs".format(run_path)
+    obs_selected = map(
+        lambda obs_idx: observation_set["data"][obs_idx],
+        filter(
+            lambda obs_idx: observation_set["selected"][obs_idx],
+            range(len(observation_set["selected"]))))
+    with open(file_path, "w") as obs:
+        obs.write("{}\n".format(len(obs_selected)))
+        for observations in obs_selected:
+            obs.write("{}\n".format(len(observations)))
+            for node in observations.values():
+                obs.write("{}\t{}\n".format(node["name"],node["state"]))
+
+def generate_fg_file(run_path):
+    pi_flag = "--pairwise-interaction-file={}/pathway.pi".format(run_path)
+    fg_flag = "--logical-factorgraph-file={}/logical.fg".format(run_path)
+    num_states = "--number-of-states=3"
+    command = "{} --generate-factorgraph {} {} {}".format(pgmlab_path,pi_flag,fg_flag,num_states)
+    system_call(command)
+
+def inference(run_path):
+    pi_flag = "--pairwise-interaction-file={}/pathway.pi".format(run_path)
+    fg_flag = "--inference-factorgraph-file={}/logical.fg".format(run_path)
+    obs_flag = "--inference-observed-data-file={}/inference.obs".format(run_path)
+    pp_flag = "--posterior-probability-file={}/post_probs.pp".format(run_path)
+    num_states = "--number-of-states=3"
+    command = "{} --inference {} {} {} {} {}".format(pgmlab_path,pi_flag,fg_flag,obs_flag,pp_flag,num_states)
+    system_call(command)
+
+def read_pp_file(run_path):
 
 
-#
+# not used
 def write_pairwise_interaction(run_path, links):
     file_path = "{}/pathway.pi".format(run_path)
     with open(file_path, "w") as pi:

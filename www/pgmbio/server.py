@@ -81,20 +81,17 @@ def run_inference(data):
     shutil.rmtree(run_path)
     os.mkdir(run_path)
 
+    pathways = data["pathways"]
+    observation_set = data["observation_set"]
+    pp.pprint(observation_set)
     for path in data["pathways"].values():
         # pp.pprint(path["pathwaySource"])
         nodes = path["data"]["nodes"]
         links = path["data"]["links"]
-        write_pi_file(run_path, links)
-
-def write_pi_file(run_path, links):
-    file_path = "{}/pathway.pi".format(run_path)
-    with open(file_path, "w") as pi:
-        pi.write("{}\n\n".format(str(len(links))))
-        for interaction in links:
-            [source, target, value, logic] = interaction.values()
-            pp.pprint(interaction)
-            pi.write("{}\t{}\t{}\t{}\n".format(source,target,value,logic))
+        pgmlab_utils.write_pi_file(run_path, links)
+        pgmlab_utils.generate_fg_file(run_path)
+        pgmlab_utils.write_obs_file(run_path, observation_set)
+        pgmlab_utils.inference(run_path)
 
 
 @klein.route("/submit/learning", methods=["POST"])
@@ -135,6 +132,7 @@ def createObservationFile(runPath, observationSet):
             obs.write(str(node["name"])+"\t"+str(node["state"])+"\n")
     obs.close()
     return obsCount
+
 def generateFactorgraph(runPath):
     system_call(cwd+"/../../bin/pgmlab --generate-factorgraph --pairwise-interaction-file="+runPath+"/pathway.pi --logical-factorgraph-file="+runPath+"/logical.fg --number-of-states 3")
 def inference(runPath):
