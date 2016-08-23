@@ -5,9 +5,12 @@ const graphReducer = (state=Map(), action) => {
     case "SELECT_PATHWAY":
       return state.setIn(["graphVis", "viewPathway"], action.payload.pathwayID)
     case "SELECT_OBSERVATION":
-      return state.setIn(["graphVis", "viewObservation"], action.payload.obsIndex)
+      return state.withMutations(state => state
+        .setIn(["graphVis", "viewObservation"], action.payload.obsIndex)
+        .setIn(["graphVis", "viewObservationSet"], state.getIn(["dataspace","observationSet","_id"]))
+      )
   }
-  return state;
+  return state
 }
 
 export default graphReducer

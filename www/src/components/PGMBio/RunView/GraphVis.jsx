@@ -1,5 +1,5 @@
 import vis from "vis"
-import {List} from "immutable"
+import {List, Map} from "immutable"
 
 const networkOptions = {
   height: "575px",
@@ -41,15 +41,17 @@ const networkOptions = {
     adaptiveTimestep: true
   }
 }
-const labelLengthLimit = 15
-const stateColors = { //Materialize colors
-  '-': "#2B7CE9", //default
-  '1': "#D50000", //red accent-4
-  '2': "#424242", //grey darken-3
-  '3': "#43A047" //green darken-1
-}
+import {red500, blue500, green500, grey900, blueGrey500, grey300} from "material-ui/styles/colors"
 
 export default class GraphVis {
+  static getStateColors() {
+    return Map({
+      unobserved: grey900,
+      "1": red500,
+      "2": blue500,
+      "3": green500
+    })
+  }
   static initializeGVNetwork(canvasElement, nodes, edges){
     return new vis.Network(
       canvasElement,
@@ -60,15 +62,23 @@ export default class GraphVis {
 
   static getNodes(dataspace, graphVis){
     const nodes = dataspace.getIn(["pathways", graphVis.get("viewPathway"), "data", "nodes"])
+    const getNodeBorder = state => {
+      switch (state) {
+        case "unobserved": return grey900
+        case "1": return red500
+        case "2": return blue500
+        case "3": return green500
+      }
+    }
     const visNode = node => {
-      const id = node.get("name")
-      const label = node.get("name")
-      const border = "#2B7CE9"
+      const id = name = node.get("name")
+      const longname = node.get("longname")
+      const label = longname!=null ? (longname.length>15 ? name : longname) : name
+      const nodeState = dataspace.getIn(["observationSet","data",graphVis.get("viewObservation"),name,"state"], "unobserved")
       const color = {
-        border,
-        background: "#D2E5FF",
-        highlight: {border: "#2B7CE9", background: "#D2E5FF"},
-        hover: {border: "#2B7CE9", background: "#D2E5FF"}
+        border: getNodeBorder(nodeState),
+        background: grey300,
+        highlight: {border: blueGrey500, background: grey300}
       }
       return {
         id, label, color,

@@ -1,6 +1,6 @@
-import React from "react";
-import RunView from "./RunView/RunView.jsx";
-
+import React from "react"
+import RunView from "./RunView/RunView.jsx"
+import {grey200} from "material-ui/styles/colors"
 export default class Body2 extends React.Component {
     constructor(props){
       super(props);
@@ -34,7 +34,7 @@ export default class Body2 extends React.Component {
     }
     render(){
       return (
-        <main>
+        <main style={{backgroundColor:grey200}}>
           {this.getView()}
         </main>
       )

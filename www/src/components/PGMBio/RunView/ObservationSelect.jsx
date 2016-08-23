@@ -74,11 +74,6 @@ class ObservationTable extends React.Component {
   render(){
     return (
       <List>
-        {/* <Subheader>
-          <h6 className="center-align black-text">
-            {`${this.props.dataspace.getIn(["observationSet", "filename"])}`}
-          </h6>
-        </Subheader> */}
         {
           this.props.dataspace.getIn(["observationSet", "data"])
             .keySeq()

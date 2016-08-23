@@ -5,12 +5,9 @@ import RunControlPanel from "./RunControlPanel.jsx";
 import RaisedButton from "material-ui/RaisedButton";
 
 export default class RunView extends React.Component {
-  constructor(props){
-    super(props);
-  }
   render(){
     return (
-      <div className="row">
+      <div className="row" style={{marginBottom:"0px"}}>
         <div className="col s4">
           <RunControlPanel
               runType={this.props.runType}

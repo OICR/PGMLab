@@ -24,14 +24,9 @@ export default class RunControlPanel extends React.Component {
             selectPathway={this.props.selectPathway}
             getReactomePathway = {this.props.getReactomePathway}
         />
-        {
-          !is(this.props.dataspace.get("pathways").size,0) &&
-          !is(this.props.dataspace.getIn(["observationSet", "_id"]),"") ?
-            <DataspaceControl
-                dataspace={this.props.dataspace}
-            />
-            : <h6 className="center-align">{"Select some data"}</h6>
-        }
+        <DataspaceControl
+            dataspace={this.props.dataspace}
+        />
       </div>
     )
   }

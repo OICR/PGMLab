@@ -11,7 +11,7 @@ class DataspaceSelect extends React.Component {
       [{fontWeight:"bold"},{}]:[{},{fontWeight:"bold"}];
     return (
       <div className="center-align col s12">
-        <div>{"View data by: "}
+        <div>{"View data: "}
           <a href="#" style={pStyle} onClick={evt => this.props.changeViewData("Pathway")}>
             {"Pathways"}
           </a>

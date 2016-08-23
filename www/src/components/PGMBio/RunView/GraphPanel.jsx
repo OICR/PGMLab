@@ -40,6 +40,17 @@ class GraphController extends React.Component {
           [])
     )
   }
+  getLegend(){
+    const stateColors = GraphVis.getStateColors()
+    return (
+      <h6 className="center-align">
+        <span style={{color: stateColors.get("unobserved")}}>{"Unobserved"}</span>&nbsp;|&nbsp;
+        <span style={{color: stateColors.get("1")}}>{"Down-regulated"}</span>&nbsp;|&nbsp;
+        <span style={{color: stateColors.get("2")}}>{"Non-regulated"}</span>&nbsp;|&nbsp;
+        <span style={{color: stateColors.get("3")}}>{"Up-regulated"}</span>
+      </h6>
+    )
+  }
   render(){
     const showPathway = this.props.dataspace.has("pathways") //these will handle changing data while drawn
     const showObservation = this.props.dataspace.has("observationSet")
@@ -60,6 +71,9 @@ class GraphController extends React.Component {
               children={this.getObservationChildren()}
               onChange={this.props.changeViewObservation}
           />
+        </div>
+        <div className="col s12">
+          {this.getLegend()}
         </div>
       </Paper>
     )
@@ -102,20 +116,6 @@ export default class GraphPanel extends React.Component {
     const currentViewPathway = this.props.graphVis.get("viewPathway")
     const currentViewObservation = this.props.graphVis.get("viewObservation")
 
-    // if (graphPathwayAvailable && graphObservationAvailable) {
-    //   if ((nextViewPathway!=null) && (nextViewObservation!=null)) {
-    //     console.log("draw graph")
-    //     if ((currentViewPathway==null) || (currentViewObservation==null)) {
-    //       console.log("graph must be rendered first time")
-    //       this.initializeGV(nextProps)
-    //     }
-    //     else {
-    //       console.log("graph has already been rendered")
-    //       this.redrawGV(nextProps)
-    //     }
-    //   }
-    //   else {console.log("don't draw graph")}
-    // }
     if (!is(nextProps.dataspace.get("pathways").size, 0)) {
       console.log("pathways can be drawn")
       if (nextProps.dataspace.hasIn(["pathways", nextProps.graphVis.get("viewPathway")])) {
@@ -138,6 +138,32 @@ export default class GraphPanel extends React.Component {
     }
     return true
   }
+  getErrorMessage(){ //returns false if no error message should be shown
+    const noPathways = this.props.dataspace.get("pathways").size==0
+    const sameObservationSet = this.props.dataspace.get(["observationSet", "_id"])==this.props.graphVis.get("viewObservationSet")
+    const observationSetSelected = this.props.dataspace.getIn(["observationSet","_id"])!=""
+    const observationSelected = this.props.graphVis.get("viewObservation")!=""
+    const pathwaySelected = this.props.graphVis.get("viewPathway")!=""
+    const graphShouldBeDrawn = observationSetSelected && pathwaySelected && observationSelected
+    const observationAvailable = this.props.dataspace.getIn(["observationSet","selected",this.props.graphVis.get("viewObservation")])
+    const pathwayAvailable = this.props.dataspace.hasIn(["pathways",this.props.graphVis.get("viewPathway")])
+    switch (true) {
+      case !graphShouldBeDrawn:
+        return false
+      case noPathways:
+        return "Populate your dataspace by clicking on the 'Select Pathways' and 'Select Observation Data' links"
+      case !(observationAvailable && pathwayAvailable):
+        if (!observationAvailable && !pathwayAvailable) {
+          return "Both your selected observation and pathway to visualize are not available in your dataspace.\nSee links to the left"
+        }
+        else if (!observationAvailable) {
+          return "Your selected observation to visualize is not available in your dataspace"
+        } else {
+          return "Your selected pathway to visualize is not available in your dataspace"
+        }
+    }
+    return false
+  }
   render(){
     return (
       <div className="card-panel" style={{minWidth:"800px", minHeight:"675px"}}>
@@ -150,9 +176,9 @@ export default class GraphPanel extends React.Component {
         />
         <div id="graphCanvas">
           {
-            this.props.dataspace.get("pathways").size==0 ?
-              <h6 className="center-align">{"You need to select some pathway data"}</h6>
-              :null
+            this.getErrorMessage() ?
+              <h6 className="center-align">{this.getErrorMessage()}</h6>
+              : null
           }
         </div>
       </div>
