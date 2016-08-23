@@ -11,19 +11,15 @@ class DataspaceSelect extends React.Component {
       [{fontWeight:"bold"},{}]:[{},{fontWeight:"bold"}];
     return (
       <div className="center-align col s12">
-        {
-          this.props.showDataspace ?
-            <div>{"View data by: "}
-              <a href="#" style={pStyle} onClick={evt => this.props.changeViewData("Pathway")}>
-                {"Pathways"}
-              </a>
-              {" / "}
-              <a href="#" style={oStyle} onClick={evt => this.props.changeViewData("Observation")}>
-                {"Observations"}
-              </a>
-            </div>
-            :<span>{"Click on links above to choose data for PGMLab"}</span>
-        }
+        <div>{"View data by: "}
+          <a href="#" style={pStyle} onClick={evt => this.props.changeViewData("Pathway")}>
+            {"Pathways"}
+          </a>
+          {" / "}
+          <a href="#" style={oStyle} onClick={evt => this.props.changeViewData("Observation")}>
+            {"Observations"}
+          </a>
+        </div>
       </div>
     )
   }
@@ -77,11 +73,12 @@ class PathwayData extends React.Component {
             children={this.getPathwayChildren()}
         />
         {
-          !this.props.dataspace.hasIn(["pathways", this.state.viewPathway]) ? null :
+          this.props.dataspace.hasIn(["pathways", this.state.viewPathway]) ?
             <List
                 style={{maxHeight:"300px",overflowY:"scroll"}}
                 children={this.getPathwayList()}
             />
+            : null
         }
       </div>
     )
@@ -111,7 +108,10 @@ class ObservationData extends React.Component {
     return (
       this.props.dataspace.getIn(["observationSet", "data", this.state.viewObservation])
         .valueSeq()
-        .map(n => <ListItem key={n.get("name")} primaryText={n.get("name")} secondaryText={n.get("state")}/>)
+        .map(n =>
+          <ListItem key={n.get("name")}
+              primaryText={n.get("name")} secondaryText={`State: ${n.get("state")}`}
+          />)
     )
   }
   render(){
@@ -124,11 +124,12 @@ class ObservationData extends React.Component {
             children={this.getObservationChildren()}
         />
         {
-          !this.props.dataspace.getIn(["observationSet", "selected", this.state.viewObservation]) ? null :
+          this.props.dataspace.getIn(["observationSet", "selected", this.state.viewObservation]) ?
             <List
               style={{maxHeight:"300px",overflowY:"scroll"}}
               children={this.getObservationList()}
             />
+            : null
         }
       </div>
     )
@@ -150,19 +151,16 @@ export default class DataspaceControl extends React.Component {
     return (
       <div>
         <div className="row">
-          <DataspaceSelect showDataspace={showDataspace} viewData={this.state.viewData} changeViewData={this.changeViewData} />
+          <DataspaceSelect viewData={this.state.viewData} changeViewData={this.changeViewData} />
         </div>
-        {
-          !showDataspace ? null :
-            <Paper className="row">
-              <div style={pStyle}>
-                <PathwayData dataspace={this.props.dataspace}/>
-              </div>
-              <div style={oStyle}>
-                <ObservationData dataspace={this.props.dataspace}/>
-              </div>
-            </Paper>
-        }
+        <Paper className="row">
+          <div style={pStyle}>
+            <PathwayData dataspace={this.props.dataspace}/>
+          </div>
+          <div style={oStyle}>
+            <ObservationData dataspace={this.props.dataspace}/>
+          </div>
+        </Paper>
       </div>
     )
   }

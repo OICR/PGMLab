@@ -2,7 +2,7 @@ import React from "react"
 import Paper from "material-ui/Paper"
 import SelectField from "material-ui/SelectField"
 import MenuItem from "material-ui/MenuItem"
-
+import {is} from "immutable"
 import GraphVis from "./GraphVis.jsx"
 
 //put these into a module
@@ -102,40 +102,56 @@ export default class GraphPanel extends React.Component {
     const currentViewPathway = this.props.graphVis.get("viewPathway")
     const currentViewObservation = this.props.graphVis.get("viewObservation")
 
-    if (graphPathwayAvailable && graphObservationAvailable) {
-      if ((nextViewPathway!=null) && (nextViewObservation!=null)) {
-        console.log("draw graph")
-        if ((currentViewPathway==null) || (currentViewObservation==null)) {
-          console.log("graph must be rendered first time")
+    // if (graphPathwayAvailable && graphObservationAvailable) {
+    //   if ((nextViewPathway!=null) && (nextViewObservation!=null)) {
+    //     console.log("draw graph")
+    //     if ((currentViewPathway==null) || (currentViewObservation==null)) {
+    //       console.log("graph must be rendered first time")
+    //       this.initializeGV(nextProps)
+    //     }
+    //     else {
+    //       console.log("graph has already been rendered")
+    //       this.redrawGV(nextProps)
+    //     }
+    //   }
+    //   else {console.log("don't draw graph")}
+    // }
+    if (!is(nextProps.dataspace.get("pathways").size, 0)) {
+      console.log("pathways can be drawn")
+      if (nextProps.dataspace.hasIn(["pathways", nextProps.graphVis.get("viewPathway")])) {
+        console.log("selected graph pathway information in dataspace")
+        if (is(this.props.graphVis.get("viewPathway"), "") && !is(nextProps.graphVis.get("viewPathway"),"")) {
+          console.log("initialize")
           this.initializeGV(nextProps)
         }
         else {
-          console.log("graph has already been rendered")
+          console.log("redraw")
           this.redrawGV(nextProps)
         }
       }
       else {
-        console.log("don't draw graph")
+        console.log("selected graph pathway info no in dataspace")
       }
+    }
+    else {
+      console.log("not enough pathway information")
     }
     return true
   }
   render(){
     return (
       <div className="card-panel" style={{minWidth:"800px", minHeight:"675px"}}>
-        {
-            <GraphController
-                dataspace={this.props.dataspace}
-                viewPathway={this.props.graphVis.get("viewPathway")}
-                changeViewPathway={this.changeViewPathway}
-                viewObservation={this.props.graphVis.get("viewObservation")}
-                changeViewObservation={this.changeViewObservation}
-            />
-        }
+        <GraphController
+            dataspace={this.props.dataspace}
+            viewPathway={this.props.graphVis.get("viewPathway")}
+            changeViewPathway={this.changeViewPathway}
+            viewObservation={this.props.graphVis.get("viewObservation")}
+            changeViewObservation={this.changeViewObservation}
+        />
         <div id="graphCanvas">
           {
-            (this.props.dataspace.has("pathways") && this.props.dataspace.get("pathways").size!=0) ?
-              <h6 className="center-align">{"Select pathway and observation data to begin visualizing"}</h6>
+            this.props.dataspace.get("pathways").size==0 ?
+              <h6 className="center-align">{"You need to select some pathway data"}</h6>
               :null
           }
         </div>

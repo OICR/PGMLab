@@ -1,4 +1,5 @@
 import vis from "vis"
+import {List} from "immutable"
 
 const networkOptions = {
   height: "575px",

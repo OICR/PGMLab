@@ -36,8 +36,8 @@ const initialAppState = {
     })
   }),
   graphVis: Map({
-    viewPathway: null, //pathway ID of graph to draw
-    viewObservation: null //index of obsevation selected, still need to check if same observationSet
+    viewPathway: "", //pathway ID of graph to draw
+    viewObservation: "" //index of obsevation selected, still need to check if same observationSet
   }),
   observations: OrderedMap(),
   pathways: Map({

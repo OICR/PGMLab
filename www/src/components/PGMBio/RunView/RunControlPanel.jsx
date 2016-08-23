@@ -1,12 +1,10 @@
-import React from "react";
-import RunTypeSelect from "./RunTypeSelect.jsx";
-import RunDataSelect from "./RunDataSelect.jsx";
+import React from "react"
+import {is} from "immutable"
+import RunTypeSelect from "./RunTypeSelect.jsx"
+import RunDataSelect from "./RunDataSelect.jsx"
 import DataspaceControl from "./DataspaceControl.jsx"
 
 export default class RunControlPanel extends React.Component {
-  constructor(props){
-    super(props);
-  }
   render(){
     return (
       <div className="card-panel">
@@ -26,9 +24,14 @@ export default class RunControlPanel extends React.Component {
             selectPathway={this.props.selectPathway}
             getReactomePathway = {this.props.getReactomePathway}
         />
-        <DataspaceControl
-            dataspace={this.props.dataspace}
-        />
+        {
+          !is(this.props.dataspace.get("pathways").size,0) &&
+          !is(this.props.dataspace.getIn(["observationSet", "_id"]),"") ?
+            <DataspaceControl
+                dataspace={this.props.dataspace}
+            />
+            : <h6 className="center-align">{"Select some data"}</h6>
+        }
       </div>
     )
   }
