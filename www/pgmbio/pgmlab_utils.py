@@ -52,6 +52,22 @@ def inference(run_path):
     system_call(command)
 
 def read_pp_file(run_path):
+    file_path = "{}/post_probs.pp".format(run_path)
+    all_post_probs = list()
+    post_probs = dict()
+    with open(file_path, "r") as pp:
+        for line in pp:
+            if line.startswith("-"): #new post probs from different observation
+                all_post_probs.append(post_probs)
+                post_probs = dict()
+                continue
+            [node_name, state_prob] = line.strip().split("\t")
+            if node_name not in post_probs.keys():
+                post_probs[node_name] = list()
+            post_probs[node_name].append(state_prob)
+    return all_post_probs
+
+
 
 
 # not used

@@ -70,8 +70,7 @@ def submit_inference(request):
         "pathways": json_util.loads(request.args["pathways"][0]),
         "observation_set": json_util.loads(request.args["observationSet"][0])
     }
-    run_inference(data)
-    return
+    return json_util.dumps(run_inference(data))
 
 def run_inference(data):
     # run_id = str(uuid.uuid4())
@@ -81,9 +80,11 @@ def run_inference(data):
     shutil.rmtree(run_path)
     os.mkdir(run_path)
 
+    post_probs_set = {}
+
     pathways = data["pathways"]
     observation_set = data["observation_set"]
-    pp.pprint(observation_set)
+    # pp.pprint(observation_set)
     for path in data["pathways"].values():
         # pp.pprint(path["pathwaySource"])
         nodes = path["data"]["nodes"]
@@ -92,7 +93,12 @@ def run_inference(data):
         pgmlab_utils.generate_fg_file(run_path)
         pgmlab_utils.write_obs_file(run_path, observation_set)
         pgmlab_utils.inference(run_path)
+        post_probs = pgmlab_utils.read_pp_file(run_path)
 
+        path_id = path["id"] if path["pathwaySource"]=="reactome" else path["_id"]
+        post_probs_set[path_id] = post_probs
+    pp.pprint(post_probs_set.keys())
+    return post_probs_set
 
 @klein.route("/submit/learning", methods=["POST"])
 def submit_learning(request):
@@ -143,6 +149,7 @@ def readPosteriorProbabilityFile(runPath):
     postProbs = list()
     pp = dict()
     for line in postProbsFile:
+        # new observation
         if line.startswith("---"):
             postProbs.append(pp);
             pp = dict()
