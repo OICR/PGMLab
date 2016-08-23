@@ -21,8 +21,6 @@ sub flip_pi_logic {
 
     my $negative_interaction_children = find_negative_interaction_children($pi_interactions, $verbose);
 
-say "VERBOSE: $verbose";
-
     foreach my $from (keys %$pi_interactions) {
         foreach my $to (keys %{$pi_interactions->{$from}}) {
             if (grep {$to eq $_} @$negative_interaction_children) {
