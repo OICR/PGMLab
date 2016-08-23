@@ -49,7 +49,7 @@ By default we will be adding pseudonodes. If you would like to skip this step ad
 
 =item --max-number-of-parents [=] <max_number_of_parents>
 
-This will be used for adding parents when the number of parents to a node exceeds the max. 
+This will be used for adding parents when the number of parents to a node exceeds the max. (default 10)
 
 =for Euclid:
    max_number_of_parents.default=10
