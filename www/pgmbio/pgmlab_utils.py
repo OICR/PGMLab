@@ -5,9 +5,13 @@ import subprocess
 import os
 import shutil
 import datetime
+import json
 cwd = os.getcwd()
 results_path = cwd+"/results"
 pgmlab_path = cwd+"/../../bin/pgmlab"
+
+import pprint
+pretty = pprint.PrettyPrinter(indent=4)
 
 def system_call(command):
     p = subprocess.Popen([command], stdout=subprocess.PIPE, shell=True)
@@ -20,6 +24,13 @@ def write_pi_file(run_path, links):
         for interaction in links:
             [source, target, value, logic] = interaction.values()
             pi.write("{}\t{}\t{}\t{}\n".format(source,target,value,logic))
+
+def generate_fg_file(run_path):
+    pi_flag = "--pairwise-interaction-file={}/pathway.pi".format(run_path)
+    fg_flag = "--logical-factorgraph-file={}/logical.fg".format(run_path)
+    num_states = "--number-of-states=3"
+    command = "{} --generate-factorgraph {} {} {}".format(pgmlab_path,pi_flag,fg_flag,num_states)
+    system_call(command)
 
 def write_obs_file(run_path, observation_set):
     file_path = "{}/inference.obs".format(run_path)
@@ -35,13 +46,6 @@ def write_obs_file(run_path, observation_set):
             for node in observations.values():
                 obs.write("{}\t{}\n".format(node["name"],node["state"]))
 
-def generate_fg_file(run_path):
-    pi_flag = "--pairwise-interaction-file={}/pathway.pi".format(run_path)
-    fg_flag = "--logical-factorgraph-file={}/logical.fg".format(run_path)
-    num_states = "--number-of-states=3"
-    command = "{} --generate-factorgraph {} {} {}".format(pgmlab_path,pi_flag,fg_flag,num_states)
-    system_call(command)
-
 def inference(run_path):
     pi_flag = "--pairwise-interaction-file={}/pathway.pi".format(run_path)
     fg_flag = "--inference-factorgraph-file={}/logical.fg".format(run_path)
@@ -51,8 +55,6 @@ def inference(run_path):
     command = "{} --inference {} {} {} {} {}".format(pgmlab_path,pi_flag,fg_flag,obs_flag,pp_flag,num_states)
     system_call(command)
 
-import pprint
-pretty = pprint.PrettyPrinter(indent=4)
 def read_pp_file(run_path):
     file_path = "{}/post_probs.pp".format(run_path)
     all_post_probs = list()
@@ -69,6 +71,59 @@ def read_pp_file(run_path):
                 post_probs[node_name] = list()
             post_probs[node_name].append(state_prob)
     return all_post_probs
+
+# Converts results from PGMLab to be written to CSV for inchlib to convert to JSON
+def inchlib(post_probs, run_id):
+    run_id = "dev"
+    run_path = "{}/results/{}".format(os.getcwd(),run_id)
+    inchlib_csv = {}
+    inchlib_json = {}
+    for path_id,post_probs_obs in post_probs.items():
+        if path_id not in inchlib_json:
+            inchlib_csv[path_id] = {}
+            inchlib_json[path_id] = {}
+        for state_idx,state_type in enumerate(["1","2","3"]):
+            inchlib_csv[path_id][state_type] = convert_pp_inchlib(post_probs_obs,state_type)
+            write_inchlib_csv(inchlib_csv[path_id][state_type],run_path)
+            inchlib_json[path_id][state_type] = inchlib_cluster_csv(run_path)
+    return inchlib_json
+
+
+def convert_pp_inchlib(post_probs_obs,state_type):
+    def get_value(state_values, state_type):
+        # pp.pprint(state_values)
+        if state_type=="1":
+            return state_values[0]
+        elif state_type=="2":
+            return state_values[1]
+        elif state_type=="3":
+            return state_values[2]
+    heat_map = {}
+    for obs_idx,post_probs in enumerate(post_probs_obs):
+        for node,state_values in post_probs.items():
+            if node not in heat_map:
+                heat_map[node] = []
+            heat_map[node].append(get_value(state_values,state_type))
+    return heat_map
+
+def write_inchlib_csv(heat_map_data, run_path):
+    file_path = "{}/inchlib.csv".format(run_path)
+    obs_count = len(heat_map_data.values()[0])
+    with open(file_path, "w") as csv:
+        header = reduce(lambda p,c: "{},Observation {}".format(p,str(c+1)),range(obs_count),"id")
+        csv.write("{}\n".format(header))
+        for node,obs_values in heat_map_data.items():
+            node_line = reduce(lambda p,c: "{},{}".format(p,str(c)), obs_values, node)
+            csv.write("{}\n".format(node_line))
+
+def inchlib_cluster_csv(run_path):
+    csv_filepath = "{}/inchlib.csv".format(run_path)
+    json_filepath = "{}/inchlib.json".format(run_path)
+    command = "python inchlib_clust.py {} -o {} -dh".format(csv_filepath,json_filepath)
+    system_call(command)
+    with open(json_filepath) as clustered:
+        heatmap_json = json.load(clustered)
+    return heatmap_json
 
 # not used
 def write_pairwise_interaction(run_path, links):

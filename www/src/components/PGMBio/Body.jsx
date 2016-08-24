@@ -17,7 +17,7 @@ class ResultsView extends React.Component {
                 />
               </div>
               <div className="col s6">
-                <SelectField fullWidth={true} autoWidth={true} hintText="Select a pathway"
+                <SelectField fullWidth={true} autoWidth={true} hintText="Select a state"
                   value={1} children={[]} onChange={evt => {}}
                 />
               </div>

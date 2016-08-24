@@ -69,11 +69,15 @@ def submit_inference(request):
     pathways = json_util.loads(request.args["pathways"][0])
     observation_set = json_util.loads(request.args["observationSet"][0])
     run_id = str(uuid.uuid4())
+    # Get posterior probabilities from inference
     posterior_probabilities = run_inference(pathways, observation_set, run_id)
+    # Transform to heatmap data
+    inchlib = pgmlab_utils.inchlib(posterior_probabilities, run_id)
     return json_util.dumps({
         "pathways": pathways,
         "observation_set": observation_set,
         "post_probs": posterior_probabilities,
+        "inchlib": inchlib,
         "run_id": run_id
     })
 
@@ -96,6 +100,7 @@ def run_inference(pathways, observation_set, run_id):
 
         path_id = path["id"] if path["pathwaySource"]=="reactome" else path["_id"]
         post_probs_set[path_id] = post_probs
+
     return post_probs_set
 
 @klein.route("/submit/learning", methods=["POST"])
