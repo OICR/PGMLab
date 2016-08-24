@@ -11,7 +11,7 @@ const initialAppState = {
   auth,
   uploads: Map(),
   view: "Run",
-  runType: "Learning",
+  runType: "Inference",
   dataspace: Map({
     pathways: Map(),
     observationSet: Map({

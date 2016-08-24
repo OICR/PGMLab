@@ -5,8 +5,8 @@ import HeatmapPanel from "./HeatmapPanel.jsx"
 export default class ResultsView extends React.Component {
   render(){
     return (
-      <div className="row" style={{marginBottom:"0px"}}>
-        <div classname="col s11">
+      <div className="row card-panel" style={{marginBottom:"0px"}}>
+        <div className="col s12">
           <HeatmapController
               resultIDs={this.props.resultIDs}
               heatmap={this.props.heatmap}
@@ -14,6 +14,8 @@ export default class ResultsView extends React.Component {
               heatmapSelectPathway = {this.props.heatmapSelectPathway}
               heatmapSelectState = {this.props.heatmapSelectState}
           />
+        </div>
+        <div className="col s12 center-align">
           <HeatmapPanel
               heatmap={this.props.heatmap}/>
         </div>

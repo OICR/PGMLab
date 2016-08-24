@@ -34,13 +34,12 @@ export default class Header extends React.Component {
   getLeftTabs(){
     return (
       <ul className="left">
-        {
-          ["Run", "Results"].map(view =>
-            <li key={view}>
-              <a href="#!" onClick={evt=>this.props.changeView(view)}>{view}</a>
-            </li>
-          )
-        }
+        <li key={"Run"}>
+          <a href="#" onClick={evt=>this.props.changeView("Run")}>{"Run"}</a>
+        </li>
+        <li key={"Results"}>
+          <a href="#" onClick={evt=>this.props.changeView("Results")}>{`Results (${this.props.resultsCount})`}</a>
+        </li>
         <li>
           <UploadModal onUploadSuccess = {this.props.onUploadSuccess} uploads={this.props.uploads} auth={this.props.auth} />
         </li>

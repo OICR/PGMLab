@@ -425,6 +425,8 @@ export class App extends  React.Component {
             view = {this.props.view}
             changeView = {this.props.changeView}
 
+            resultsCount = {this.props.results.size}
+
 
                   // tab = {this.state.tab}
                   setTab = {this.setTab}

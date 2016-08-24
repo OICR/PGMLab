@@ -1,12 +1,12 @@
 import React from "react";
 import {Tabs, Tab} from "material-ui/Tabs";
-import {red200, red400} from "material-ui/styles/colors";
+import {red100, red400} from "material-ui/styles/colors";
 
 export default class RunTypeSelect extends React.Component {
   render(){
     const [lStyle, iStyle] = this.props.runType == "Learning" ?
-      [{backgroundColor:red400},{backgroundColor:red200}]:
-      [{backgroundColor:red200},{backgroundColor:red400}];
+      [{backgroundColor:red400},{backgroundColor:red100}]:
+      [{backgroundColor:red100},{backgroundColor:red400}];
     return (
       <div className="row">
         <Tabs

@@ -151,7 +151,10 @@ export default class GraphPanel extends React.Component {
     const observationSelected = this.props.graphVis.get("viewObservation")!=""
     const pathwaySelected = this.props.graphVis.get("viewPathway")!=""
     const graphShouldBeDrawn = observationSetSelected && pathwaySelected && observationSelected
-    const observationAvailable = this.props.dataspace.getIn(["observationSet","selected",this.props.graphVis.get("viewObservation")])
+    const observationAvailable = (
+      this.props.graphVis.get("viewObservation")=="-1" ||
+      this.props.dataspace.getIn(["observationSet","selected",this.props.graphVis.get("viewObservation")])
+    )
     const pathwayAvailable = this.props.dataspace.hasIn(["pathways",this.props.graphVis.get("viewPathway")])
     switch (true) {
       case !graphShouldBeDrawn:
