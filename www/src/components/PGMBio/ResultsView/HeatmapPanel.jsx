@@ -20,10 +20,10 @@ export default class HeatmapPanel extends React.Component {
       max_height: HEATMAP_MAXHEIGHT,
       navigation_toggle: {
         color_scale: false,
-        distance_scale: true,
+        distance_scale: false,
         export_button: true,
         filter_button: true,
-        hint_button: true
+        hint_button: false
       },
       width: HEATMAP_WIDTH
     })
