@@ -4,6 +4,7 @@ import authenticationReducer from "./authenticationReducer.jsx"
 import uploadReducer from "./uploadReducer.jsx"
 import runViewSelectReducer from "./runViewSelectReducer.jsx"
 import graphReducer from "./graphReducer.jsx"
+import heatmapReducer from "./heatmapReducer.jsx"
 
 function changeView(state, action){
   return state.update("view", view => action.payload.view)
@@ -36,6 +37,8 @@ export default function(state = Map(), action) {
       return runViewSelectReducer(state, action)
     case "GRAPHVIS":
       return graphReducer(state, action)
+    case "HEATMAP":
+      return heatmapReducer(state, action)
   }
   return state
 }

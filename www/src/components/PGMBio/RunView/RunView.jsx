@@ -22,6 +22,8 @@ export default class RunView extends React.Component {
               pathways={this.props.pathways}
               selectPathway={this.props.selectPathway}
               getReactomePathway = {this.props.getReactomePathway}
+
+              onInferenceSuccess = {this.props.onInferenceSuccess}
           />
         </div>
         <div className="col s8">

@@ -453,6 +453,9 @@ export class App extends  React.Component {
             graphVisSelectPathway = {this.props.graphVisSelectPathway}
             graphVisSelectObservation = {this.props.graphVisSelectObservation}
 
+            onInferenceSuccess = {this.props.onInferenceSuccess}
+            heatmap = {this.props.heatmap}
+
             />
           {/* <Body tab = {this.state.tab}
 

@@ -44,6 +44,13 @@ const initialAppState = {
   pathways: Map({
     reactome: OrderedMap(),
     user: OrderedMap()
+  }),
+  results: Map(), //holds results from inference
+  heatmap: Map({
+    viewResults: "", //run id of result
+    viewPathway: "",
+    viewState: "",
+    data: Map() //a value results[someRunID][inchlib]
   })
 };
 
@@ -57,7 +64,9 @@ function mapStateToProps(state) {
     dataspaceModals: state.get("dataspaceModals"),
     graphVis: state.get("graphVis"),
     observations: state.get("observations"),
-    pathways: state.get("pathways")
+    pathways: state.get("pathways"),
+    results: state.get("results"),
+    heatmap: state.get("heatmap")
   };
 }
 

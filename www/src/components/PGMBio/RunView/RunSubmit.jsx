@@ -20,6 +20,7 @@ export default class RunSubmit extends React.Component {
       data,
       success: (data,status,jqXHR) => {
         console.log("inference successful", JSON.parse(data))
+        this.props.onInferenceSuccess(JSON.parse(data))
       },
       error: (jqXHR,status,error) => {
         console.log("inference submittal error")

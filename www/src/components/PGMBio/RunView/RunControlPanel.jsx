@@ -30,7 +30,9 @@ export default class RunControlPanel extends React.Component {
         />
         <RunSubmit
             runType={this.props.runType}
-            dataspace={this.props.dataspace}/>
+            dataspace={this.props.dataspace}
+            onInferenceSuccess = {this.props.onInferenceSuccess}
+        />
       </div>
     )
   }

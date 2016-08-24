@@ -1,36 +1,7 @@
 import React from "react"
 import RunView from "./RunView/RunView.jsx"
+import ResultsView from "./ResultsView/ResultsView.jsx"
 import {grey200} from "material-ui/styles/colors"
-
-import Paper from "material-ui/Paper"
-import SelectField from "material-ui/SelectField"
-class ResultsView extends React.Component {
-  render(){
-    return (
-      <div className="row" style={{marginBottom:"0px"}}>
-        <div classname="col s11">
-          <div className="card-panel">
-            <Paper className="row center-align">
-              <div className="col s6">
-                <SelectField fullWidth={true} autoWidth={true} hintText="Select a pathway"
-                  value={1} children={[]} onChange={evt => {}}
-                />
-              </div>
-              <div className="col s6">
-                <SelectField fullWidth={true} autoWidth={true} hintText="Select a state"
-                  value={1} children={[]} onChange={evt => {}}
-                />
-              </div>
-            </Paper>
-            <div>
-              Heatmap Goes here
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-}
 
 export default class Body2 extends React.Component {
     constructor(props){
@@ -58,11 +29,14 @@ export default class Body2 extends React.Component {
                 graphVis = {this.props.graphVis}
                 graphVisSelectPathway = {this.props.graphVisSelectPathway}
                 graphVisSelectObservation = {this.props.graphVisSelectObservation}
+
+                onInferenceSuccess = {this.props.onInferenceSuccess}
             />
           )
         case "Results":
           return (
-            <ResultsView />
+            <ResultsView
+                heatmap={this.props.heatmap}/>
           )
       }
     }
