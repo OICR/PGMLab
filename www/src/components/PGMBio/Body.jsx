@@ -36,7 +36,12 @@ export default class Body2 extends React.Component {
         case "Results":
           return (
             <ResultsView
-                heatmap={this.props.heatmap}/>
+                resultIDs={this.props.results.map(r => r.get("runID"))}
+                heatmap={this.props.heatmap}
+                heatmapSelectResult = {this.props.heatmapSelectResult}
+                heatmapSelectPathway = {this.props.heatmapSelectPathway}
+                heatmapSelectState = {this.props.heatmapSelectState}
+            />
           )
       }
     }

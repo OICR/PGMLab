@@ -4,7 +4,7 @@ import InChlib from "biojs-vis-inchlib"
 export default class HeatmapPanel extends React.Component {
   constructor(props){
     super(props)
-    this.inchlib = new Inchlib({
+    this.inchlib = new InChlib({
       target: "heatmapCanvas",
       metadata: false,
       column_metadata: false,

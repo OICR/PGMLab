@@ -132,11 +132,6 @@ export function graphVisSelectObservation(obsIndex){
 // ADD RESULTS FROM INFERENCE FOR HEATMAP
 export function onInferenceSuccess(result){
   const {pathways, observation_set, post_probs, inchlib, run_id} = result
-  console.log(pathways)
-  console.log(observation_set)
-  console.log(post_probs)
-  console.log(inchlib)
-  console.log(run_id)
   return {
     type: HEATMAP,
     payload: {
@@ -148,6 +143,37 @@ export function onInferenceSuccess(result){
         postProbs: post_probs,
         inchlib
       }
+    }
+  }
+}
+
+// SELECT A RESULT FOR HEATMAP
+export function heatmapSelectResult(runID){
+  return {
+    type: HEATMAP,
+    payload: {
+      heatmapType: "SELECT_RESULT",
+      runID
+    }
+  }
+}
+// SELECT A PATHWAY FOR HEATMAP
+export function heatmapSelectPathway(pathwayID){
+  return {
+    type: HEATMAP,
+    payload: {
+      heatmapType: "SELECT_PATHWAY",
+      pathwayID
+    }
+  }
+}
+// SELECT A STATE FOR HEATMAP
+export function heatmapSelectState(state){
+  return {
+    type: HEATMAP,
+    payload: {
+      heatmapType: "SELECT_STATE",
+      state
     }
   }
 }

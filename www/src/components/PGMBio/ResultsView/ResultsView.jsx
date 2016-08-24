@@ -7,8 +7,15 @@ export default class ResultsView extends React.Component {
     return (
       <div className="row" style={{marginBottom:"0px"}}>
         <div classname="col s11">
-          <HeatmapController />
-          <HeatmapPanel />
+          <HeatmapController
+              resultIDs={this.props.resultIDs}
+              heatmap={this.props.heatmap}
+              heatmapSelectResult = {this.props.heatmapSelectResult}
+              heatmapSelectPathway = {this.props.heatmapSelectPathway}
+              heatmapSelectState = {this.props.heatmapSelectState}
+          />
+          <HeatmapPanel
+              heatmap={this.props.heatmap}/>
         </div>
       </div>
     )

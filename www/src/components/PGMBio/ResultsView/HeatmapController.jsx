@@ -1,20 +1,56 @@
 import React from "react"
 import Paper from "material-ui/Paper"
 import SelectField from "material-ui/SelectField"
+import MenuItem from "material-ui/MenuItem"
 
 export default class HeatmapController extends React.Component {
+  constructor(props){
+    super(props)
+    this.changeResult = (evt,idx,viewResult) => {this.props.heatmapSelectResult(viewResult)}
+    this.changePathway = (evt,idx,viewPathway) => {this.props.heatmapSelectPathway(viewPathway)}
+    this.changeState = (evt,idx,viewState) => {this.props.heatmapSelectState(viewState)}
+  }
   render(){
     return (
       <div className="card-panel">
         <Paper className="row center-align">
-          <div className="col s6">
-            <SelectField fullWidth={true} autoWidth={true} hintText="Select a pathway"
-              value={1} children={[]} onChange={evt => {}}
+          <div className="col s4">
+            <SelectField fullWidth={true} autoWidth={true} hintText="Select a result"
+                value={this.props.heatmap.get("viewResult")}
+                children={
+                  this.props.resultIDs.valueSeq()
+                    .map(runID =>
+                      <MenuItem key={runID} value={runID} primaryText={runID} autoWidth={false} label={runID}/>
+                    )
+                }
+                onChange={this.changeResult}
             />
           </div>
-          <div className="col s6">
+          <div className="col s4">
+            <SelectField fullWidth={true} autoWidth={true} hintText="Select a pathway"
+                value={this.props.heatmap.get("viewPathway")}
+                children={
+                  this.props.heatmap.getIn(["data","pathways"]).valueSeq()
+                    .map((name, id) =>
+                      <MenuItem key={id} value={id}
+                      primaryText={name}
+                      autoWidth={false}
+                      label={name.length > 20 ? name.substr(0,20).concat("...") : name}/>
+                    )
+                }
+                onChange={this.changePathway}
+            />
+          </div>
+          <div className="col s4">
             <SelectField fullWidth={true} autoWidth={true} hintText="Select a state"
-              value={1} children={[]} onChange={evt => {}}
+                value={this.props.heatmap.get("viewState")}
+                children={
+                  ["1","2","3"]
+                    .map(state =>
+                      <MenuItem key={state} value={state} primaryText={state} autoWidth={false} label={state}/>
+                    )
+                }
+                onChange={this.changeState}
             />
           </div>
         </Paper>

@@ -47,10 +47,13 @@ const initialAppState = {
   }),
   results: Map(), //holds results from inference
   heatmap: Map({
-    viewResults: "", //run id of result
+    viewResult: "", //run id of result
     viewPathway: "",
     viewState: "",
-    data: Map() //a value results[someRunID][inchlib]
+    data: Map({
+      inchlib: Map(), //a value from results[someRunID][inchlib]
+      pathways: Map() //results[someRunID][pathways] mapped to get only ids and names
+    })
   })
 };
 
