@@ -9,7 +9,7 @@ use feature qw(say);
 use Data::Dumper;
 
 use FindBin qw($Bin);
-use lib "$Bin/../lib/perl";
+use lib "$Bin/../../../lib/perl";
 
 use Getopt::Euclid qw( :minimal_keys );
 
@@ -84,7 +84,7 @@ foreach my $tsv_file (@tsv_files) {
 
        flip_pi_logic(\%member_interactions, $ARGV{verbose}) unless($ARGV{leave_logic});
 
-       add_pseudo_nodes_to_interactions(\%member_interactions, $ARGV{max_number_of_parents}) unless ($ARGV{no_add_pseudo_nodes});
+       add_pseudo_nodes_to_interactions(\%member_interactions, $ARGV{max_number_of_parents}) unless ($ARGV{no_add_pseudonodes});
        create_pi_file($filepath, \%member_interactions);
 
        $member_group_index++;
