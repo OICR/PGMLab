@@ -1,9 +1,9 @@
-import React from "react";
-import Dialog from "material-ui/Dialog";
-import FlatButton from "material-ui/FlatButton";
-import RaisedButton from "material-ui/RaisedButton";
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
-var moment = require("moment");
+import React from "react"
+import Dialog from "material-ui/Dialog"
+import FlatButton from "material-ui/FlatButton"
+import RaisedButton from "material-ui/RaisedButton"
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table"
+var moment = require("moment")
 
 class UploadButton extends React.Component {
   constructor(props){
@@ -101,12 +101,6 @@ class UploadRow extends React.Component {
 }
 
 export default class UploadModal extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      open: false
-    }
-  }
   getTableHeader(){
     const uploadBtns = ["pathway", "observation", "parameters", "probabilities"]
       .map(uploadType =>
