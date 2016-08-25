@@ -17,7 +17,7 @@ export default class LearningSubmit extends React.Component {
     $.ajax({
       type: "POST",
       // url: "https://127.0.0.1:8888/run/learning/submit",
-      url: "http://127.0.0.1:8000/run/learning/submit",
+      url: "http://127.0.0.1:8001/run/learning/submit",
       processData: false,
       contentType: false,
       data,

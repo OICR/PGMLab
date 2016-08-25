@@ -42,7 +42,7 @@ export default class RunSubmit extends React.Component {
       <div className="row">
         <div className="col s12 center-align">
           <RaisedButton
-              backgroundColor={indigo500} labelColor={indigo100} label="Run"
+              backgroundColor={indigo500} labelColor={indigo100} label={`Run ${this.props.runType}`}
               onTouchTap={this.handleSubmit}/>
         </div>
       </div>

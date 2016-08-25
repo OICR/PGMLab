@@ -27,7 +27,7 @@ const initialAppState = {
       open: false,
       filters: Map({
         text: "",
-        reactome: true,
+        reactome: false,
         uploads: true
       })
     }),

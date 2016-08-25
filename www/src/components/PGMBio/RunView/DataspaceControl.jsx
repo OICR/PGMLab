@@ -67,7 +67,7 @@ class PathwayData extends React.Component {
     return (
       <div className="col s12 center-align">
         <SelectField
-            fullWidth={true} autoWidth={true} hintText="Select a pathway"
+            fullWidth={true} autoWidth={true} hintText="View nodes in a pathway"
             value={this.state.viewPathway}
             onChange={(evt, idx, viewPathway) => {this.setState({viewPathway})}}
             children={this.getPathwayChildren()}
@@ -118,7 +118,7 @@ class ObservationData extends React.Component {
     return (
       <div className="col s12 center-align">
         <SelectField
-            fullWidth={true} autoWidth={true} hintText="Select an observation"
+            fullWidth={true} autoWidth={true} hintText="View observed node states"
             value={this.state.viewObservation}
             onChange={(evt, idx, viewObservation) => {this.setState({viewObservation})}}
             children={this.getObservationChildren()}

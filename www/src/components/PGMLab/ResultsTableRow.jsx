@@ -38,7 +38,7 @@ export default class ResultsTableRow extends React.Component {
     }
   };
   getResult(){
-    const resultsURI = "http://127.0.0.1:8000/results";
+    const resultsURI = "http://127.0.0.1:8001/results";
     const status = this.props.task.get("status");
     const id = this.props.task.get("task_id");
     return (

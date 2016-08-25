@@ -96,7 +96,7 @@ export default class ObservationSelect extends React.Component {
   }
   render(){
     const openBtn = (
-      <a href="#" onClick={evt => this.openModal()}>{"Select Observation Data"}</a>
+      <a href="#" onClick={evt => this.openModal()}>{"Add Observations to dataspace"}</a>
     )
     const closeBtn = (
       <FlatButton label="Close" onTouchTap={evt => this.closeModal()}/>

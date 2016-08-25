@@ -64,7 +64,7 @@ class GraphController extends React.Component {
       <Paper className="row center-align">
         <div className="col s8">
           <SelectField
-              fullWidth={true} autoWidth={true} hintText="Select a pathway"
+              fullWidth={true} autoWidth={true} hintText="Select a pathway to draw"
               value={this.props.viewPathway}
               children={this.getPathwayChildren()}
               onChange={this.props.changeViewPathway}
@@ -72,7 +72,7 @@ class GraphController extends React.Component {
         </div>
         <div className="col s4">
           <SelectField
-              fullWidth={true} autoWidth={true} hintText="Select an observation"
+              fullWidth={true} autoWidth={true} hintText="Apply an observation"
               value={this.props.viewObservation}
               children={[this.getUnobservedMenuItem(), ...this.getObservationChildren()]}
               onChange={this.props.changeViewObservation}

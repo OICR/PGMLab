@@ -141,7 +141,7 @@ export default class PathwaySelect extends React.Component {
   }
   render(){
     const openBtn = (
-      <a href="#" onClick={evt => this.openModal()}>{"Select Pathways"}</a>
+      <a href="#" onClick={evt => this.openModal()}>{"Add Pathways to dataspace"}</a>
     );
     const closeBtn = (
       <FlatButton label="Close" onTouchTap={evt => this.closeModal()}/>

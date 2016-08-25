@@ -12,7 +12,7 @@ export default class ResultsPanel extends React.Component {
   componentWillMount(){
     // let eventSource = new EventSource("celery");
     // let eventSource = new EventSource("http://localhost:8888/celery");
-    let eventSource = new EventSource("http://localhost:8000/celery");
+    let eventSource = new EventSource("http://localhost:8001/celery");
     eventSource.addEventListener(
       "celery.task.add",
       (evt) => {

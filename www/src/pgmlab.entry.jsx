@@ -23,7 +23,7 @@ var materialize = require("./lib/materialize.min.js");
 try {var autobahn = require("autobahn")}
 catch (err) {console.log("autobahn error: ", e)};
 const wssuri = "wss://127.0.0.1:443";
-const wsuri = "ws://127.0.0.1:4433";
+const wsuri = "ws://127.0.0.1:4444";
 var connection = new autobahn.Connection({
   url: wsuri,
   realm: "realm1"
