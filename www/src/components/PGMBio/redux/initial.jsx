@@ -10,6 +10,7 @@ const auth = Map({
 const initialAppState = {
   auth,
   uploads: Map(),
+  uploadModalOpen: false,
   view: "Run",
   runType: "Inference",
   dataspace: Map({
@@ -61,6 +62,7 @@ function mapStateToProps(state) {
   return {
     auth: state.get("auth"),
     uploads: state.get("uploads"),
+    uploadModalOpen: state.get("uploadModalOpen"),
     view: state.get("view"),
     runType: state.get("runType"),
     dataspace: state.get("dataspace"),

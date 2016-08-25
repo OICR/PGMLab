@@ -135,15 +135,15 @@ export default class UploadModal extends React.Component {
   }
   render(){
     const openBtn = (
-      <a href="#" onClick={()=>{this.setState({open:true})}}>{"Upload Data"}</a>
+      <a href="#" onClick={()=>{this.props.toggleUploadModal(true)}}>{"Upload Data"}</a>
     )
     const closeBtn = (
-      <FlatButton label="Close" onTouchTap={evt => this.setState({open:false})}/>
+      <FlatButton label="Close" onTouchTap={()=>{this.props.toggleUploadModal(false)}}/>
     )
     return (
       <div>
         {openBtn}
-        <Dialog modal={true} open={this.state.open} actions={[closeBtn]}
+        <Dialog modal={true} open={this.props.uploadModalOpen} actions={[closeBtn]}
           title={"Upload Files"} titleStyle={{paddingBottom:"0px"}} titleClassName={"center-align"}>
           <Table selectable={false} height={"250px"}>
             {this.getTableHeader()}

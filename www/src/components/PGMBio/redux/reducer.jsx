@@ -23,6 +23,7 @@ export default function(state = Map(), action) {
     case "SIGN_IN":
     case "SIGN_OUT":
       return authenticationReducer(state, action);
+    case "TOGGLE_UPLOAD_MODAL":
     case "UPLOAD":
       return uploadReducer(state, action)
     case "CHANGE_RUNTYPE":

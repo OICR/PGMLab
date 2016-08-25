@@ -420,6 +420,8 @@ export class App extends  React.Component {
             uploadFile = {this.props.uploadFile}
             onUploadSuccess={this.props.onUploadSuccess}
             uploads = {this.props.uploads}
+            uploadModalOpen = {this.props.uploadModalOpen}
+            toggleUploadModal = {this.props.toggleUploadModal}
             auth = {this.props.auth}
             signOut = {this.props.signOut}
             view = {this.props.view}

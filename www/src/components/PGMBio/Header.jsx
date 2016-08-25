@@ -41,7 +41,13 @@ export default class Header extends React.Component {
           <a href="#" onClick={evt=>this.props.changeView("Results")}>{`Results (${this.props.resultsCount})`}</a>
         </li>
         <li>
-          <UploadModal onUploadSuccess = {this.props.onUploadSuccess} uploads={this.props.uploads} auth={this.props.auth} />
+          <UploadModal
+              auth={this.props.auth}
+              uploads={this.props.uploads}
+              onUploadSuccess = {this.props.onUploadSuccess}
+              uploadModalOpen = {this.props.uploadModalOpen}
+              toggleUploadModal = {this.props.toggleUploadModal}
+          />
         </li>
       </ul>
     )

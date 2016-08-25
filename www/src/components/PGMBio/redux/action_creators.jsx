@@ -3,6 +3,7 @@ import {fromJS} from "immutable"
 const SIGN_IN = "SIGN_IN"
 const SIGN_OUT = "SIGN_OUT"
 const UPLOAD = "UPLOAD"
+const TOGGLE_UPLOAD_MODAL = "TOGGLE_UPLOAD_MODAL"
 const CHANGE_VIEW = "CHANGE_VIEW"
 const CHANGE_RUNTYPE = "CHANGE_RUNTYPE"
 const CHANGE_OBS_SET = "CHANGE_OBS_SET"
@@ -55,6 +56,16 @@ export function changeRunType(runType){
   }
 }
 
+// OPEN UPLOADS MODAL
+export function toggleUploadModal(open){
+  return {
+    type: TOGGLE_UPLOAD_MODAL,
+    payload: {
+      open
+    }
+  }
+}
+
 // TOGGLE PATHWAY/OBSERVATION MODAL
 export function toggleDataspaceModal(open, modalType){
   return {
@@ -65,6 +76,7 @@ export function toggleDataspaceModal(open, modalType){
     }
   }
 }
+// SET FILTERS IN SELECT PATHWAYS MODAL
 export function updatePathwaysModalFilters(filterType, newValue){
   return {
     type: "UPDATE_PATHWAYS_MODAL_FILTERS",
