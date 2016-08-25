@@ -1,37 +1,10 @@
 import React from 'react'
+import GoogleLogin from "react-google-login"
 
-import GoogleLogin from "react-google-login";
-import UploadModal from "./UploadModal.jsx";
+import UploadModal from "./UploadModal.jsx"
 
-export default class Header extends React.Component {
-  constructor(props){
-    super(props);
-    this.getLeftTabs = this.getLeftTabs.bind(this);
-    this.getSignOutBtn = this.getSignOutBtn.bind(this);
-  }
-  getLinkBtns(){
-    const links = {
-      "Wiki":"http://oicr.github.io/PGMLab/",
-      "Github":"http://github.com/OICR/PGMLab"
-    };
-    return Object.keys(links)
-      .map(k => (
-        <li key={k}>
-          <a href={links[k]} target="_blank">{`${k}`}</a>
-        </li>
-      ));
-  }
-  getSignOutBtn(){
-    return (
-      !this.props.auth.get("signedIn") ? null :
-      <li>
-        <a href="#" onClick={evt => this.props.signOut()}>
-          <span>{"Sign Out"}</span>
-        </a>
-      </li>
-    );
-  }
-  getLeftTabs(){
+class LeftHeaderLinks extends React.Component {
+  render(){
     return (
       <ul className="left">
         <li key={"Run"}>
@@ -52,21 +25,48 @@ export default class Header extends React.Component {
       </ul>
     )
   }
+}
 
+class RightHeaderLinks extends React.Component {
   render(){
-    const noVertMargin = {marginTop:"0px",marginBottom:"0px"};
+    const links = {
+      Wiki:"http://oicr.github.io/PGMLab/",
+      Github:"http://github.com/OICR/PGMLab"
+    }
     return (
-      <header className="row" style={noVertMargin}>
+      <ul className="right">
+        {
+          Object.keys(links)
+            .map(key =>
+              <li key={key}>
+                <a href={links[key]} target="_blank">{`${key}`}</a>
+              </li>
+            )
+        }
+        {
+          !this.props.auth.get("signedIn") ? null :
+            <li>
+              <a href="#" onClick={evt => this.props.signOut()}>
+                <span>{"Sign Out"}</span>
+              </a>
+            </li>
+        }
+      </ul>
+    )
+  }
+}
+
+export default class Header extends React.Component {
+  render(){
+    return (
+      <header className="row" style={{marginTop:"0px",marginBottom:"0px"}}>
         <nav className="light-blue" role="navigation">
           <div className="nav-wrapper">
-            {this.getLeftTabs()}
+            <LeftHeaderLinks {...this.props} />
             <span className="brand-logo center">
               <h4>{"PGMBio"}</h4>
             </span>
-            <ul className="right">
-              {this.getLinkBtns()}
-              {this.getSignOutBtn()}
-            </ul>
+            <RightHeaderLinks auth={this.props.auth} signOut={this.props.signOut} />
           </div>
         </nav>
       </header>

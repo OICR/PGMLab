@@ -1,9 +1,11 @@
 import React from "react"
+var moment = require("moment")
+
 import Dialog from "material-ui/Dialog"
 import FlatButton from "material-ui/FlatButton"
 import RaisedButton from "material-ui/RaisedButton"
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table"
-var moment = require("moment")
+
 
 class UploadButton extends React.Component {
   constructor(props){
@@ -67,11 +69,8 @@ class UploadButton extends React.Component {
 }
 
 class UploadRow extends React.Component {
-  constructor(props){
-    super(props);
-  }
   componentDidMount(){
-    $(".tooltipped").tooltip({"delay": 30});
+    $(".tooltipped").tooltip({"delay": 30})
   }
   render(){
     const upload = this.props.upload;
