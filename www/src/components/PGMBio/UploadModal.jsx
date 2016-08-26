@@ -95,7 +95,7 @@ class UploadRow extends React.Component {
           {`${comments}`}
         </TableRowColumn>
       </TableRow>
-    );
+    )
   }
 }
 

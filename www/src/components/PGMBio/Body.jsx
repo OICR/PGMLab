@@ -10,17 +10,20 @@ export default class Body extends React.Component {
       <main style={{backgroundColor:grey200}}>
         <div style={this.props.view!="Run"?{display:"none"}:{}}>
           <RunView
-              runType={this.props.runType}
+              runType = {this.props.runType}
               changeRunType = {this.props.changeRunType}
-              dataspace={this.props.dataspace}
+
+              dataspace = {this.props.dataspace}
               dataspaceModals = {this.props.dataspaceModals}
               toggleDataspaceModal = {this.props.toggleDataspaceModal}
+
+              observations = {this.props.observations}
+              selectObservationSet = {this.props.selectObservationSet}
+              selectObservation = {this.props.selectObservation}
+
+              pathways = {this.props.pathways}
               updatePathwaysModalFilters = {this.props.updatePathwaysModalFilters}
-              observations={this.props.observations}
-              selectObservationSet={this.props.selectObservationSet}
-              selectObservation={this.props.selectObservation}
-              pathways={this.props.pathways}
-              selectPathway={this.props.selectPathway}
+              selectPathway = {this.props.selectPathway}
               getReactomePathway = {this.props.getReactomePathway}
 
               graphVis = {this.props.graphVis}

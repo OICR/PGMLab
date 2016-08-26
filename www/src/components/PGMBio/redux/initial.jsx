@@ -1,21 +1,19 @@
-import {Map, OrderedMap, List} from "immutable";
+import {Map, OrderedMap, List} from "immutable"
 
 // Should match mapStateToProps
-const auth = Map({
-  signedIn: false,
-  // signedIn: true,
-  googleClientId: "852145575631-l5luk85au20hbh9p2vbf68u3jd7v0h1k.apps.googleusercontent.com",
-  googleIdToken: ""
-});
 const initialAppState = {
-  auth,
+  auth: Map({
+    signedIn: false,
+    googleClientId: "852145575631-l5luk85au20hbh9p2vbf68u3jd7v0h1k.apps.googleusercontent.com",
+    googleIdToken: ""
+  }),
   uploads: Map(),
   uploadModalOpen: false,
   view: "Run",
-  runType: "Inference",
+  runType: "Inference", //PGMLab
   dataspace: Map({
-    pathways: Map(),
-    observationSet: Map({
+    pathways: Map(), //pathways to send PGMLab
+    observationSet: Map({ //observationSet to send PGMLab
       selected: List(),
       data: List(),
       _id: "",
@@ -27,7 +25,7 @@ const initialAppState = {
     pathwaysModal: Map({
       open: false,
       filters: Map({
-        text: "",
+        text: "", //pathwayID
         reactome: false,
         uploads: true
       })
@@ -37,20 +35,20 @@ const initialAppState = {
     })
   }),
   graphVis: Map({
-    viewPathway: "", //pathway ID of graph to draw
-    viewObservationSet: "",
-    viewObservation: "" //index of obsevation selected, still need to check if same observationSet
+    viewPathway: "", //pathwayID of graph to draw
+    viewObservationSet: "", //observationSetID
+    viewObservation: "" //index of observation selected
   }),
   observations: OrderedMap(),
-  pathways: Map({
-    reactome: OrderedMap(),
-    user: OrderedMap()
+  pathways: Map({ //pairwise interactions
+    reactome: OrderedMap(), //pathways from wamp
+    user: OrderedMap() //uploaded pathways
   }),
-  results: Map(), //holds results from inference
+  results: Map({}), //results from inference async callbacks
   heatmap: Map({
-    viewResult: "", //run id of result
-    viewPathway: "",
-    viewState: "",
+    viewResult: "", //runID of result to draw
+    viewPathway: "", //pathwayID of result to draw
+    viewState: "", //state type to draw
     data: Map({
       inchlib: Map(), //a value from results[someRunID][inchlib]
       pathways: Map() //results[someRunID][pathways] mapped to get only ids and names
@@ -72,7 +70,7 @@ function mapStateToProps(state) {
     pathways: state.get("pathways"),
     results: state.get("results"),
     heatmap: state.get("heatmap")
-  };
+  }
 }
 
 export {initialAppState, mapStateToProps}

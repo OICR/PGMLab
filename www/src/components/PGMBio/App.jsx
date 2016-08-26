@@ -61,53 +61,53 @@ export class App extends React.Component {
       return (
         <div>
           <AuthModal
-              loginWithGoogle={this.props.wamp.loginWithGoogle}
-              signInPGM={this.props.signInPGM}
-              auth={this.props.auth}
+              auth = {this.props.auth}
+              loginWithGoogle = {this.props.wamp.loginWithGoogle}
+              signInPGM = {this.props.signInPGM}
           />
           <Header
-            auth = {this.props.auth}
-            signOut = {this.props.signOut}
+              auth = {this.props.auth}
+              signOut = {this.props.signOut}
 
-            uploadFile = {this.props.uploadFile}
-            onUploadSuccess={this.props.onUploadSuccess}
-            uploads = {this.props.uploads}
-            uploadModalOpen = {this.props.uploadModalOpen}
-            toggleUploadModal = {this.props.toggleUploadModal}
+              uploadFile = {this.props.uploadFile}
+              onUploadSuccess={this.props.onUploadSuccess}
+              uploads = {this.props.uploads}
+              uploadModalOpen = {this.props.uploadModalOpen}
+              toggleUploadModal = {this.props.toggleUploadModal}
 
-            view = {this.props.view}
-            changeView = {this.props.changeView}
+              view = {this.props.view}
+              changeView = {this.props.changeView}
 
-            resultsCount = {this.props.results.size}
+              resultsCount = {this.props.results.size}
           />
           <Body
-            view = {this.props.view}
-            runType = {this.props.runType}
-            changeRunType = {this.props.changeRunType}
+              view = {this.props.view}
+              runType = {this.props.runType}
+              changeRunType = {this.props.changeRunType}
 
-            dataspace = {this.props.dataspace}
-            dataspaceModals = {this.props.dataspaceModals}
-            toggleDataspaceModal = {this.props.toggleDataspaceModal}
+              dataspace = {this.props.dataspace}
+              dataspaceModals = {this.props.dataspaceModals}
+              toggleDataspaceModal = {this.props.toggleDataspaceModal}
 
-            observations = {this.props.observations}
-            selectObservationSet = {this.props.selectObservationSet}
-            selectObservation = {this.props.selectObservation}
+              observations = {this.props.observations}
+              selectObservationSet = {this.props.selectObservationSet}
+              selectObservation = {this.props.selectObservation}
 
-            pathways = {this.props.pathways}
-            selectPathway = {this.props.selectPathway}
-            updatePathwaysModalFilters = {this.props.updatePathwaysModalFilters}
-            getReactomePathway = {this.props.wamp.getReactomePathway}
+              pathways = {this.props.pathways}
+              selectPathway = {this.props.selectPathway}
+              updatePathwaysModalFilters = {this.props.updatePathwaysModalFilters}
+              getReactomePathway = {this.props.wamp.getReactomePathway}
 
-            graphVis = {this.props.graphVis}
-            graphVisSelectPathway = {this.props.graphVisSelectPathway}
-            graphVisSelectObservation = {this.props.graphVisSelectObservation}
+              graphVis = {this.props.graphVis}
+              graphVisSelectPathway = {this.props.graphVisSelectPathway}
+              graphVisSelectObservation = {this.props.graphVisSelectObservation}
 
-            results = {this.props.results}
-            onInferenceSuccess = {this.props.onInferenceSuccess}
-            heatmap = {this.props.heatmap}
-            heatmapSelectResult = {this.props.heatmapSelectResult}
-            heatmapSelectPathway = {this.props.heatmapSelectPathway}
-            heatmapSelectState = {this.props.heatmapSelectState}
+              results = {this.props.results}
+              onInferenceSuccess = {this.props.onInferenceSuccess}
+              heatmap = {this.props.heatmap}
+              heatmapSelectResult = {this.props.heatmapSelectResult}
+              heatmapSelectPathway = {this.props.heatmapSelectPathway}
+              heatmapSelectState = {this.props.heatmapSelectState}
           />
           <Footer />
         </div>

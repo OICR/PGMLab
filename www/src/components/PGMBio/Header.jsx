@@ -63,9 +63,7 @@ export default class Header extends React.Component {
         <nav className="light-blue" role="navigation">
           <div className="nav-wrapper">
             <LeftHeaderLinks {...this.props} />
-            <span className="brand-logo center">
-              <h4>{"PGMBio"}</h4>
-            </span>
+            <span className="brand-logo center"><h4>{"PGMBio"}</h4></span>
             <RightHeaderLinks auth={this.props.auth} signOut={this.props.signOut} />
           </div>
         </nav>
