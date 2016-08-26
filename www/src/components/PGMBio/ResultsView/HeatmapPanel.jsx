@@ -1,13 +1,11 @@
 import React from "react"
-import Paper from "material-ui/Paper"
 import InChlib from "biojs-vis-inchlib"
+
+import Paper from "material-ui/Paper"
 
 const HEATMAP_MAXHEIGHT = 900
 const HEATMAP_WIDTH = 1200
 export default class HeatmapPanel extends React.Component {
-  constructor(props){
-    super(props)
-  }
   componentDidMount(){
     this.inchlib = new InChlib({
       target: "heatmapCanvas",
@@ -42,6 +40,7 @@ export default class HeatmapPanel extends React.Component {
           "heatmap_colors": ({"1":"Reds","2":"Blues","3":"Greens"})[nextViewState]
         })
       }
+      // Update heatmap by checking option diff
       if (viewPathway!=nextViewPathway||viewState!=nextViewState) {
         this.inchlib.read_data(
           nextProps.heatmap
