@@ -1,4 +1,5 @@
 import React from "react"
+
 import RaisedButton from "material-ui/RaisedButton"
 import {indigo500, indigo100} from "material-ui/styles/colors"
 
@@ -9,8 +10,8 @@ export default class RunSubmit extends React.Component {
     this.submitInference = this.submitInference.bind(this)
   }
   submitInference(){
+    console.log("inference dataspace:", this.props.dataspace.toJS())
     let data = new FormData()
-    console.log(this.props.dataspace.toJS())
     data.append("pathways", JSON.stringify(this.props.dataspace.get("pathways").toJS()))
     data.append("observationSet", JSON.stringify(this.props.dataspace.get("observationSet").toJS()))
     $.ajax({
@@ -28,6 +29,7 @@ export default class RunSubmit extends React.Component {
     })
   }
   handleSubmit(evt){
+    evt.preventDefault()
     switch (this.props.runType) {
       case "Learning":
         console.log("learning")

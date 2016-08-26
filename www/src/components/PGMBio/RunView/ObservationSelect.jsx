@@ -1,4 +1,5 @@
 import React from "react"
+
 import Dialog from "material-ui/Dialog"
 import FlatButton from "material-ui/FlatButton"
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table'
@@ -9,13 +10,13 @@ import Paper from "material-ui/Paper"
 
 class ObservationSetTable extends React.Component {
   constructor(props){
-    super(props);
-    this.onRowSelection = this.onRowSelection.bind(this);
+    super(props)
+    this.onRowSelection = this.onRowSelection.bind(this)
   }
   onRowSelection(selected){
-    if (selected.length != 0) {
-      const observationSet = this.props.observations.toList().get(selected[0]);
-      this.props.selectObservationSet(observationSet);
+    if (selected.length!=0) {
+      const observationSet = this.props.observations.toList().get(selected[0])
+      this.props.selectObservationSet(observationSet)
     }
   }
   render(){
@@ -31,8 +32,9 @@ class ObservationSetTable extends React.Component {
         </TableHeader>
         <TableBody deselectOnClickaway={false}>
           {
-            this.props.observations.valueSeq()
-              .map(obsSet => (
+            this.props.observations
+              .valueSeq()
+              .map(obsSet =>
                 <TableRow
                     key={obsSet.get("_id")}
                     selected={obsSet.get("_id") == this.props.dataspace.getIn(["observationSet","_id"])}>
@@ -40,11 +42,11 @@ class ObservationSetTable extends React.Component {
                     {obsSet.get("filename")}
                   </TableRowColumn>
                 </TableRow>
-              ))
+              )
           }
         </TableBody>
       </Table>
-    );
+    )
   }
 }
 
@@ -59,17 +61,17 @@ class ObservationRow extends React.Component {
             />
           }
       />
-    );
+    )
   }
 }
 
 class ObservationTable extends React.Component {
   constructor(props){
-    super(props);
-    this.onRowSelection = this.onRowSelection.bind(this);
+    super(props)
+    this.onRowSelection = this.onRowSelection.bind(this)
   }
   onRowSelection(obsIndex, checked){
-    this.props.selectObservation(obsIndex, checked);
+    this.props.selectObservation(obsIndex, checked)
   }
   render(){
     return (
@@ -84,7 +86,7 @@ class ObservationTable extends React.Component {
             )
         }
       </List>
-    );
+    )
   }
 }
 
@@ -104,11 +106,14 @@ export default class ObservationSelect extends React.Component {
     return (
       <div>
         {openBtn}
-        <Dialog modal={true} open={this.props.observationSetModal.get("open")} actions={[closeBtn]}
-            title={"Select an observation set and data to include"} titleClassName={"center-align"}>
+        <Dialog
+            title={"Select an observation set and data to include"} titleClassName={"center-align"}
+            modal={true} open={this.props.observationSetModal.get("open")}
+            actions={[closeBtn]}
+        >
           <div className="row">
             <div  className="col s5">
-            <Paper zDepth={2}>
+            <Paper zDepth={0}>
               <ObservationSetTable
                   dataspace={this.props.dataspace}
                   selectObservationSet={this.props.selectObservationSet}
@@ -123,6 +128,6 @@ export default class ObservationSelect extends React.Component {
           </div>
         </Dialog>
       </div>
-    );
+    )
   }
 }

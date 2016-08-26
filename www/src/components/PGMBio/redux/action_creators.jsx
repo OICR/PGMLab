@@ -13,7 +13,7 @@ const HEATMAP = "HEATMAP"
 
 // AUTHENTICATION
 export function signInPGM(gAuth, userUploads, userObservations, userPathways){
-  const googleIdToken = gAuth.getAuthResponse().id_token;
+  const googleIdToken = gAuth.getAuthResponse().id_token
   return {
     type: SIGN_IN,
     payload: {
@@ -22,7 +22,7 @@ export function signInPGM(gAuth, userUploads, userObservations, userPathways){
       userObservations,
       userPathways
     }
-  };
+  }
 }
 export function signOut(){
   return {type: SIGN_OUT}
@@ -33,7 +33,7 @@ export function onUploadSuccess(payload){
   return {
     type: UPLOAD,
     payload
-  };
+  }
 }
 
 // CHANGE TAB

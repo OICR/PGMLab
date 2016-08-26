@@ -1,14 +1,16 @@
-import React from "react";
-import Paper from "material-ui/Paper";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
-import {List, ListItem} from "material-ui/List";
-import {Map} from "immutable";
+import React from "react"
+import {List, ListItem} from "material-ui/List"
+import {Map} from "immutable"
 
+import Paper from "material-ui/Paper"
+import SelectField from "material-ui/SelectField"
+import MenuItem from "material-ui/MenuItem"
+
+// These components have stateful data containing whether to display pathways or observations
 class DataspaceSelect extends React.Component {
   render(){
     const [pStyle,oStyle] = this.props.viewData=="Pathway" ?
-      [{fontWeight:"bold"},{}]:[{},{fontWeight:"bold"}];
+      [{fontWeight:"bold"},{}]:[{},{fontWeight:"bold"}]
     return (
       <div className="center-align col s12">
         <div>{"View data: "}
@@ -30,7 +32,7 @@ const getID = p => p.has("id") ? p.get("id") : p.get("_id")
 const getLabel = p => getName(p).length > 35 ? getName(p).substr(0,35).concat("...") : getName(p)
 class PathwayData extends React.Component {
   constructor(props){
-    super(props);
+    super(props)
     this.state = {
       viewPathway: null //ID of pathway
     }
@@ -87,7 +89,7 @@ class PathwayData extends React.Component {
 
 class ObservationData extends React.Component {
   constructor(props){
-    super(props);
+    super(props)
     this.state = {
       viewObservation: null //index of observation
     }
@@ -138,11 +140,11 @@ class ObservationData extends React.Component {
 
 export default class DataspaceControl extends React.Component {
   constructor(props){
-    super(props);
+    super(props)
     this.state = {
       viewData: "Pathway"
     };
-    this.changeViewData = viewData => this.setState({viewData});
+    this.changeViewData = viewData => this.setState({viewData})
   }
   render(){
     const showDataspace = this.props.dataspace.has("pathways") && this.props.dataspace.has("observationSet");

@@ -1,6 +1,8 @@
 import vis from "vis"
 import {List, Map} from "immutable"
 
+import {red500, blue500, green500, grey900, blueGrey500, grey300} from "material-ui/styles/colors"
+
 const networkOptions = {
   height: "575px",
   width: "100%",
@@ -41,8 +43,8 @@ const networkOptions = {
     adaptiveTimestep: true
   }
 }
-import {red500, blue500, green500, grey900, blueGrey500, grey300} from "material-ui/styles/colors"
 
+// Module for controlling drawn pathway graph
 export default class GraphVis {
   static getStateColors() {
     return Map({

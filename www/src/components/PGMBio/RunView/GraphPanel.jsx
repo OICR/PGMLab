@@ -1,9 +1,12 @@
 import React from "react"
+import {is} from "immutable"
+
+import GraphVis from "./GraphVis.jsx"
+import {getLabel, getName, getID} from "./PathwayNormalizers.jsx"
+
 import Paper from "material-ui/Paper"
 import SelectField from "material-ui/SelectField"
 import MenuItem from "material-ui/MenuItem"
-import {is} from "immutable"
-import GraphVis from "./GraphVis.jsx"
 
 class StateLegend extends React.Component {
   render(){
@@ -19,22 +22,18 @@ class StateLegend extends React.Component {
   }
 }
 
-//put these into a module
-const getName = p => p.has("name") ? p.get("name") : p.get("filename")
-const getID = p => p.has("id") ? p.get("id") : p.get("_id")
-const getLabel = p => getName(p).length > 35 ? getName(p).substr(0,35).concat("...") : getName(p)
 class GraphController extends React.Component {
   constructor(props){
-    super(props);
+    super(props)
     this.getPathwayChildren = this.getPathwayChildren.bind(this)
-    this.getObservationChildren = this.getObservationChildren.bind(this);
+    this.getObservationChildren = this.getObservationChildren.bind(this)
   }
   getPathwayChildren(){
     return (
       this.props.dataspace.get("pathways")
         .valueSeq()
         .sort((a,b) => {
-          const [aName, bName] = [a,b].map(p => getName(p).toLowerCase());
+          const [aName, bName] = [a,b].map(p => getName(p).toLowerCase())
           switch (true) {
             case aName < bName: return -1
             case aName > bName: return 1
@@ -88,7 +87,7 @@ class GraphController extends React.Component {
 
 export default class GraphPanel extends React.Component {
   constructor(props){
-    super(props);
+    super(props)
     this.showGraph = () => this.props.dataspace.has("pathways") && this.props.dataspace.has("observationSet")
 
     this.changeViewPathway = (evt, idx, viewPathway) => {this.props.graphVisSelectPathway(viewPathway)}
@@ -121,7 +120,6 @@ export default class GraphPanel extends React.Component {
     const graphObservationAvailable = (nextViewObservation!=null) && observationSelected && sameObservationSet
     const currentViewPathway = this.props.graphVis.get("viewPathway")
     const currentViewObservation = this.props.graphVis.get("viewObservation")
-
     if (!is(nextProps.dataspace.get("pathways").size, 0)) {
       console.log("pathways can be drawn")
       if (nextProps.dataspace.hasIn(["pathways", nextProps.graphVis.get("viewPathway")])) {
