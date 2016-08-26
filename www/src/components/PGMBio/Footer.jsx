@@ -1,9 +1,9 @@
-import React from "react";
-import OICRlogo from "../../../assets/logos/logo_oicr_transparent.png";
+import React from "react"
+import OICRlogo from "../../../assets/logos/logo_oicr_transparent.png"
 
 export default class Footer extends React.Component {
   render(){
-    const noVertMargin = {marginTop:"0px",marginBottom:"0px"};
+    const noVertMargin = {marginTop:"0px",marginBottom:"0px"}
     return (
       <footer className="page-footer blue darken-1" style={noVertMargin}>
         <div className="container">
@@ -14,6 +14,6 @@ export default class Footer extends React.Component {
           </div>
         </div>
       </footer>
-    );
-  };
+    )
+  }
 }

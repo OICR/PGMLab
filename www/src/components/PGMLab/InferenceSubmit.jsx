@@ -15,7 +15,8 @@ export default class InferenceSubmit extends React.Component {
     data.append("id_token", this.props.auth.get("googleIdToken"));
     $.ajax({
       type: "POST",
-      url: "https://localhost:4433/run/inference/submit",
+      // url: "https://127.0.0.1:8888/run/inference/submit",
+      url: "http://127.0.0.1:8001/run/inference/submit",
       processData: false,
       contentType: false,
       data,

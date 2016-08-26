@@ -4,8 +4,8 @@ var webpack = require("webpack");
 module.exports = {
   context: __dirname + "/src",
   entry: {
-     "pgmlab": "./pgmlab.entry.jsx",
-     "pgmbio": "./pgmbio.entry.jsx"
+     pgmlab: "./pgmlab.entry.jsx",
+     pgmbio: "./pgmbio.entry.jsx"
   },
   output: {
     path:    path.join(__dirname, "js"),

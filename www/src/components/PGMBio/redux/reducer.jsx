@@ -1,35 +1,18 @@
-import {Map} from "immutable";
+import {Map} from "immutable"
 
-import uploadReducer from "./uploadReducer.jsx";
+import authenticationReducer from "./authenticationReducer.jsx"
+import uploadReducer from "./uploadReducer.jsx"
+import runViewSelectReducer from "./runViewSelectReducer.jsx"
+import graphReducer from "./graphReducer.jsx"
+import heatmapReducer from "./heatmapReducer.jsx"
 
-// Should match mapStateToProps
-const auth = Map({
-  signedIn: false,
-  googleClientId: "852145575631-l5luk85au20hbh9p2vbf68u3jd7v0h1k.apps.googleusercontent.com",
-  googleIdToken: ""
-});
-const initialAppState = {
-  auth,
-  uploads: Map({
+function changeView(state, action){
+  return state.update("view", view => action.payload.view)
+}
 
-  })
-};
-
-// AUTHENTICATION
-function setInitialState(state, action){
-  // pass reactomePathways from action.payload
-  return state.merge(initialAppState);
-};
-function signIn(state, action){
-  const signedIn = true;
-  const {googleIdToken, userUploads} = action.payload;
-  return state.withMutations(state => state
-      .update("auth", auth => auth.merge({signedIn, googleIdToken}))
-      .update("uploads", uploads => uploads.merge(userUploads))
-  );
-};
-function signOut(state){
-  return state.merge({auth});
+// RUN TYPE CONTROL
+function changeRunType(state, action){
+  return state.update("runType", runType => action.payload.runType)
 }
 
 // REDUCER
@@ -37,14 +20,26 @@ export default function(state = Map(), action) {
   console.log("...reducer.action: ", action);
   switch (action.type) {
     case "SET_INITIAL_STATE":
-      // return state.merge({...initialAppState});
-      return setInitialState(state)
     case "SIGN_IN":
-      return signIn(state, action);
     case "SIGN_OUT":
-      return signOut(state)
+      return authenticationReducer(state, action);
+    case "TOGGLE_UPLOAD_MODAL":
     case "UPLOAD":
-      return uploadReducer(state, action);
-  };
-  return state;
+      return uploadReducer(state, action)
+    case "CHANGE_RUNTYPE":
+      return changeRunType(state, action)
+    case "CHANGE_VIEW":
+      return state.update("view", view => action.payload.view) //add reducer once we have more than 'Run' tab
+    case "TOGGLE_DATASPACE_MODALS":
+    case "UPDATE_PATHWAYS_MODAL_FILTERS":
+    case "CHANGE_OBS_SET":
+    case "CHANGE_OBS":
+    case "CHANGE_PATHWAYS":
+      return runViewSelectReducer(state, action)
+    case "GRAPHVIS":
+      return graphReducer(state, action)
+    case "HEATMAP":
+      return heatmapReducer(state, action)
+  }
+  return state
 }
