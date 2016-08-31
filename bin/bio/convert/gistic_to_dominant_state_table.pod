@@ -21,12 +21,24 @@ Gistic to observation file converter - PGMLab Bio
 
 =head1 REQUIRED
 
-=item --gistic-file [=] <gistic_filepath>
+=item --gistic-file [=] <gistic_file>
 
 Input filepath for gistic
 
 =for Euclid:
-    gistic_filepath.type = readable
+    gistic_file.type = readable
+
+=item --key-outputs-file [=] <key_outputs_file>
+
+This file is tab delimited and contains two key columns: reactome_pathway_id pgmlab_node_id
+
+=for Euclid:
+    key_outputs_file = readable
+
+=item --reactome_pathway_id [=] <reactome_pathway_id>
+
+=for Euclid:
+   reapeatable
 
 =item --network [=] <network>
 

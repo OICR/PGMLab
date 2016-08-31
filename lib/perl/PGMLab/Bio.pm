@@ -10,6 +10,8 @@ use Data::Dumper;
 
 use PGMLab qw(create_obs_file);
 
+use Text::CSV;
+
 use base "Exporter";
 use vars qw(@EXPORT_OK);
 
@@ -20,10 +22,12 @@ use vars qw(@EXPORT_OK);
                 snv_to_obs_file);
 
 sub copy_number_to_dominant_state_table {
-    my ($ploidy_file, $db_id_to_name_mapping, $networks, $data_dir, $sample_list_file, $number_of_states, $copy_number_dir, $key_outputs_file, $verbose) = @_;
+    my ($ploidy_file, $db_id_to_name_mapping, $networks, $data_dir, $sample_list_file, $number_of_states, $copy_number_dir, $key_outputs_file, $reactome_pathway_ids, $verbose) = @_;
 
     $data_dir = $1 if($data_dir=~/(.*)\/$/); # if remove the trailing slash if it exists
     my ($network_dir, $observation_file, $pairwise_interaction_file, $posterior_probability_file, $command);
+
+    my $network_index = 0;
     foreach my $network (@{$networks}) {
         $network_dir = "$data_dir/$network";
         $observation_file = "$network_dir/inference.obs";
@@ -37,15 +41,18 @@ sub copy_number_to_dominant_state_table {
             say "Running command: $command";
         }
         system($command);
-        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs_file);
+        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs_file, $reactome_pathway_ids->[$network_index]);
+        $network_index++;
     }
 }
 
 sub gistic_to_dominant_state_table {
-    my ($db_id_to_name_mapping_file, $networks, $data_dir, $gistic_file, $number_of_states, $sample_list_file, $key_outputs_file, $verbose) = @_;
+    my ($db_id_to_name_mapping_file, $networks, $data_dir, $gistic_file, $number_of_states, $sample_list_file, $key_outputs_file, $reactome_pathway_ids, $verbose) = @_;
 
     $data_dir = $1 if($data_dir=~/(.*)\/$/); # if remove the trailing slash if it exists
     my ($network_dir, $observation_file, $pairwise_interaction_file, $posterior_probability_file, $command);
+   
+    my $network_index = 0;
     foreach my $network (@{$networks}) {
         $network_dir = "$data_dir/$network";
         $observation_file = "$network_dir/inference.obs";
@@ -59,17 +66,17 @@ sub gistic_to_dominant_state_table {
             say "Running command: $command";
         }
         system($command);
-        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs_file, $gistic_file);
+        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs_file, $reactome_pathway_ids->[$network_index], $gistic_file);
+        $network_index++;
     }
 
 
 }
 
 sub create_dominant_state_file {
-    my ($pp_file, $sample_list_file, $key_outputs_file, $gistic_file) = @_;
+    my ($pp_file, $sample_list_file, $key_outputs_file, $reactome_pathway_id, $gistic_file) = @_;
 
-    my ($sample_number, $sample_to_nodes_dominant_state, $nodes) = posterior_probability_file_to_dominant_state($pp_file, $key_outputs_file);
-
+    my ($sample_number, $sample_to_nodes_dominant_state, $nodes) = posterior_probability_file_to_dominant_state($pp_file, $key_outputs_file, $reactome_pathway_id);
      
     my $sample_names = ($sample_list_file)? 
                           get_sample_list_from_file($sample_list_file):
@@ -150,6 +157,43 @@ sub print_dominant_state_file {
     close($ds_fh);
 }
 
+sub get_key_outputs_from_tsv {
+    my ($key_outputs_file, $reactome_pathway_id) = @_;
+
+    my $csv = Text::CSV->new ( { binary => 1, eol => $/} )  # should set binary attribute.
+                or die "Cannot use CSV: ".Text::CSV->error_diag ();
+
+    open(my $fh, "<:encoding(utf8)", $key_outputs_file);
+
+    my $header = $csv->getline($fh);
+    my ($reactome_pathway_column_index, $pgmlab_node_column_index);
+    my $header_index = 0;
+    foreach my $column_name (@$header) {
+        if ( $column_name eq "reactome_pathway_id") {
+            $reactome_pathway_column_index = $header_index;
+        }
+        elsif ($column_name eq "pgmlab_node_id") {
+            $pgmlab_node_column_index = $header_index;
+        }
+
+        $header_index++;
+    }
+
+    my @key_outputs;
+    while ( my $row = $csv->getline( $fh ) ) {
+        if ($row->[$reactome_pathway_column_index] eq $reactome_pathway_id) {
+             push @key_outputs, $row->[$pgmlab_node_column_index];
+        }
+    }
+
+    $csv->eof or $csv->error_diag();
+
+    close $fh;
+
+    return \@key_outputs;
+}
+
+#legacy
 sub get_key_outputs_from_file {
     my ($key_outputs_file) = @_;
 
@@ -163,11 +207,11 @@ sub get_key_outputs_from_file {
 }
 
 sub posterior_probability_file_to_dominant_state {
-    my ($pp_file, $key_output_file) = @_;
+    my ($pp_file, $key_output_file, $reactome_pathway_id) = @_;
 
     my $key_outputs;
-    if ($key_output_file) {
-        $key_outputs = get_key_outputs_from_file($key_output_file);
+    if ($key_output_file && $reactome_pathway_id) {
+        $key_outputs = get_key_outputs_from_tsv($key_output_file, $reactome_pathway_id);
     }
 
 

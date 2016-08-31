@@ -27,4 +27,5 @@ copy_number_to_dominant_state_table($ARGV{'ploidy_file'},
                                     $ARGV{'number_of_states'},
                                     $ARGV{'copy_number_dir'},
                                     $ARGV{'key_outputs_file'},
+                                    $ARGV{'reactom_pathway_id'},
                                     $ARGV{'verbose'});
