@@ -13,7 +13,72 @@ use Data::Dumper;
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
-@EXPORT_OK = qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+@EXPORT_OK = qw(print_factorgraph generate_factorgraph_from_pi_file flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+
+sub print_factorgraph {
+    my ($factorgraph, $filepath) = @_; 
+
+    open(my $fh, ">", $filepath);
+
+    say scalar(@{$factorgraph});
+
+    foreach my $factor (@{$factorgraph}) {
+        say "";
+        my @parents = @{$factor->{parents}};
+        my $variable_nodes = [$factor->{child}, @parents];
+        my $num_variable_nodes = scalar @$variable_nodes;
+        say $num_variable_nodes;
+        my $variable_node_string = join " ", @$variable_nodes;
+        say $variable_node_string;
+    }       
+
+    close($fh);
+}
+
+sub generate_factorgraph {
+    my ($child_to_parent_pi, $number_of_states, $verbose) = @_;
+
+    my @factorgraph;
+    foreach my $child (keys %{$child_to_parent_pi}) {
+        my $and_or = $child_to_parent_pi->{$child}{and_or};
+        my @parents = keys %{$child_to_parent_pi->{$child}{parents}};
+        
+        my $factor = {"child" => $child,
+                      "parents" => \@parents,
+                      "cpt" => generate_cpt_table(\@parents, $verbose)};
+        push @factorgraph, $factor;
+    }
+
+    return \@factorgraph;
+}
+
+sub generate_cpt_table {
+  my ($parents, $verbose) = @_;
+  return 1;
+}
+
+sub generate_factorgraph_from_pi_file {
+    my ($pi_file_path, $number_of_states, $verbose) = @_;
+
+    open(my $fh_pi, "<", $pi_file_path);
+
+    <$fh_pi>;<$fh_pi>; ##remove fist two rows
+
+    my %child_to_parent_pi;
+    my ($parent, $child, $and_or, $interaction_type);
+    while (my $interaction = <$fh_pi>) {
+        chomp $interaction;
+        ($parent, $child, $and_or, $interaction_type) = split /\t/, $interaction;
+        $child_to_parent_pi{$child}{and_or} = $and_or;
+        $child_to_parent_pi{$child}{parents}{$parent} = $interaction_type;
+    }
+
+    close($fh_pi);
+
+    return generate_factorgraph(\%child_to_parent_pi, $number_of_states, $verbose);
+}
+
+
 
 
 sub flip_pi_logic {

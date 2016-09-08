@@ -1,0 +1,54 @@
+=head1 AUTHOR(S)
+
+Adam Wright <adam.j.wright82@gmail.com | adam.wright@oicr.on.ca>
+
+=over
+
+=item --usage
+
+=item --help
+
+
+=back
+
+=head1 DESCRIPTION
+
+Creates factorgaph file from pairwise interaction file and other knowledge
+
+=head1 NAME
+
+Factorgraph Generator - PGMLab Bio
+
+=head1 REQUIRED
+
+=item --pairwise-interaction-file [=] <pairwise_interaction_file>
+
+This is the filepath to the input pairwise interaction file.
+
+=for Euclid:
+   pairwise_interaction_file.type=readable
+
+=item --factorgraph-file [=] <factorgraph_file>
+
+This is the filepath to where you would like the factorgraph written to.
+
+=for Euclid:
+   factorgraph_file.type=writeable
+
+=item --number-of-states [=] <number_of_states>
+
+This is the number of states that we will use when running PGMLab
+
+for Euclid:
+   number_of_states.type=integer
+
+=head1 OPTIONAL ARGUMENTS
+
+=over 8
+
+=item -v[erbose]
+
+Print verbose output as the script runs. In particular, a report will be generated containing information on each network.
+This includes a check for if the network is a tree and if not whether or not there are cycles. It will list these cycles in standard out. 
+
+=back
