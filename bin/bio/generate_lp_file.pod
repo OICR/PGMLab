@@ -1,0 +1,38 @@
+=head1 AUTHOR(S)
+
+Adam Wright <adam.j.wright82@gmail.com | adam.wright@oicr.on.ca>
+
+=over
+
+=item --usage
+
+=item --help
+
+=back
+
+=head1 DESCRIPTION
+
+This tool creates lp files from reactome pathway pi files. 
+
+=head1 NAME
+
+Copy number to observation file converter - PGMLab Bio
+
+=head1 REQUIRED
+
+=item --pairwise-interaction [=] <pi_file> | -pi [=] <pi_file>
+
+Input pairwise interaction file
+
+=for Euclid:
+    pi_file.type = readable
+
+=head1 OPTIONAL ARGUMENTS
+
+=over 8
+
+=item -v[erbose]
+
+Print verbose output as the script runs.
+
+=back

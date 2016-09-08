@@ -55,3 +55,5 @@ sub create_obs_file {
     
     close($maf_fh);
 }
+
+1;
