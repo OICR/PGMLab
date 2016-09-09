@@ -13,8 +13,29 @@ use Data::Dumper;
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
-@EXPORT_OK = qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+@EXPORT_OK = qw(generate_factorgraph_from_pi_file flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
 
+
+sub generate_factorgraph_from_pi_file {
+    my ($pi_file_path, $verbose) = @_;
+
+    open(my $fh_pi, "<", $pi_file_path);
+
+    <$fh_pi>;<$fh_pi>; ##remove fist two rows
+
+    my %child_to_parent_pi;
+    my ($parent, $child, $and_or, $interaction_type);
+    while (my $interaction = <$fh_pi>) {
+        chomp $interaction;
+        ($parent, $child, $and_or, $interaction_type) = split /\t/, $interaction;
+        $child_to_parent_pi{$child}{and_or} = $and_or;
+        $child_to_parent_pi{$child}{parents}{$parent} = $interaction_type;
+    }
+
+    close($fh_pi);
+
+    return \%child_to_parent_pi;
+}
 
 sub flip_pi_logic {
     my ($pi_interactions, $verbose) = @_;

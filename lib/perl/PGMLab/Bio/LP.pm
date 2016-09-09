@@ -8,7 +8,7 @@ use feature qw(say);
 
 use Data::Dumper;
 
-use PGMLab qw(get_interactions_in_pi_file);
+use PGMLab qw(generate_factorgraph_from_pi_file get_nodes_in_pi_file);
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
@@ -18,9 +18,23 @@ use vars qw(@EXPORT_OK);
 sub create_lp_file {
     my ($pi_file, $verbose) = @_;
 
-    my $pairwise_interactions = get_interactions_in_pi_file($pi_file);
+    my $factorgraph = generate_factorgraph_from_pi_file($pi_file, $verbose);
 
-    print Dumper $pairwise_interactions;
+
+
+    my $nodes_map = get_nodes_in_pi_file($pi_file);
+    my @nodes = keys %$nodes_map;
+
+    my $variable_name = 'A';
+    my (%variables_to_nodes_map, %nodes_to_variables_map);
+    foreach my $node (@nodes) {
+        $variables_to_nodes_map{$variable_name} = $node;
+        $nodes_to_variables_map{$node} = $variable_name;
+
+        $variable_name++;
+    }
+
+
 }
 
 1;
