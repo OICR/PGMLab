@@ -8,7 +8,7 @@ use autodie;
 
 use Data::Dumper;
 
-use PGMLab qw(create_obs_file);
+use PGMLab qw(create_obs_file get_nodes_in_pi_file);
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
@@ -225,7 +225,7 @@ sub gistic_to_obs_file {
     my ($db_id_to_name_mapping_file, $pairwise_interaction_file, $gistic_file, $observation_file, $verbose) = @_;
 
     my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($db_id_to_name_mapping_file);
-    my $pi_genes = get_genes_in_pi_file($pairwise_interaction_file);
+    my $pi_genes = get_nodes_in_pi_file($pairwise_interaction_file);
     my ($sample_gene_states, $sample_list) = get_gistic_gene_states($gistic_file, $entity_name_to_reactome_id, $pi_genes);
 
     if (%{$sample_gene_states}) {
@@ -242,7 +242,7 @@ sub copy_number_to_obs_file {
    my $donor_ploidy = get_donor_ploidy($ploidy_file);
    my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($db_id_to_name_mapping_file);
 
-   my $pi_genes = get_genes_in_pi_file($pi_file);
+   my $pi_genes = get_nodes_in_pi_file($pi_file);
 
    my $sample_list = get_sample_list($sample_list_file);
 
@@ -261,7 +261,7 @@ sub snv_to_obs_file {
 
     my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($db_id_to_name_mapping_file);
 
-    my $pi_genes = get_genes_in_pi_file($pi_file);
+    my $pi_genes = get_nodes_in_pi_file($pi_file);
 
     my $sample_list = get_samples_from_sample_file($sample_list_file);
 
