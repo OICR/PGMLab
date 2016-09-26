@@ -90,3 +90,4 @@ foreach my $tsv_file (@tsv_files) {
        $member_group_index++;
     }
 }
+say "Done";

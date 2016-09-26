@@ -21,10 +21,10 @@ sub flip_pi_logic {
 
     my $negative_interaction_children = find_negative_interaction_children($pi_interactions, $verbose);
 
-    foreach my $from (keys %$pi_interactions) {
-        foreach my $to (keys %{$pi_interactions->{$from}}) {
-            if (grep {$to eq $_} @$negative_interaction_children) {
-                $pi_interactions->{$from}{$to}[1] = 1;
+    foreach my $to (keys %$pi_interactions) {
+        foreach my $from (keys %{$pi_interactions->{$to}}) {
+            if (grep {$from eq $_} @$negative_interaction_children) {
+                $pi_interactions->{$to}{$from}[1] = 1;
                 if ($verbose) {
                    say "switching interaction to 1 for interaction: $from > $to";
                 }
@@ -32,7 +32,6 @@ sub flip_pi_logic {
         }
     }
 }
-
 
 sub find_negative_interaction_children {
     my ($pi_interactions, $verbose) = @_;
@@ -148,7 +147,6 @@ sub add_pseudo_nodes_to_interactions {
         if ($num_parents >= 10) {
             $num_groups =  ceil($num_parents/$max_number_of_parents);
             $nodes_per_group = ceil($num_parents/$num_groups);
-    
             $group_index = 1;
             $node_index = 1;
             foreach my $parent (@parents) {
@@ -163,10 +161,12 @@ sub add_pseudo_nodes_to_interactions {
             for(my $i = 1; $i < $num_groups; $i++) {
                 $interactions->{$child}{"$child\_PSEUDONODE\_$i"} = [1,$interactions->{$child}{$parents[0]}[1]];
             }
+            foreach my $parent (@parents) {
+                delete $interactions->{$child}{$parent};
+            }
         }
     }
 }
-
 
 sub create_network {
     my ($pi_interactions) = @_;
@@ -195,9 +195,9 @@ sub create_pi_file {
     open(my $fh, ">", $pi_filepath);
 
     print $fh "$number_of_interactions\n\n";
-    foreach my $parent (keys %{$interactions}) {
-        foreach my $child (keys %{$interactions->{$parent}}) {
-            my @values = @{$interactions->{$parent}{$child}};
+    foreach my $child (keys %{$interactions}) {
+        foreach my $parent (keys %{$interactions->{$child}}) {
+            my @values = @{$interactions->{$child}{$parent}};
             print $fh "$parent\t$child\t".$values[0]."\t".$values[1]."\n";
         }
     }
@@ -209,8 +209,8 @@ sub get_number_of_interactions {
     my ($interactions) = @_;
 
     my $number_of_interactions = 0;
-    foreach my $child (keys %{$interactions}) {
-        $number_of_interactions += scalar( keys %{$interactions->{$child}});
+    foreach my $parent (keys %{$interactions}) {
+        $number_of_interactions += scalar( keys %{$interactions->{$parent}});
     }
 
     return $number_of_interactions;
@@ -253,7 +253,7 @@ sub get_interactions_in_pi_file {
     while (my $interaction = <$fh_pi>) {
         chomp $interaction;
         ($from, $to, $column_3, $column_4) = split /\t/, $interaction;
-        $pi_interactions{$from}{$to} = [$column_3, $column_4];
+        $pi_interactions{$to}{$from} = [$column_3, $column_4];
     }
 
     close($fh_pi);
