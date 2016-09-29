@@ -1,65 +1,11 @@
-import React from "react";
-import Dialog from "material-ui/Dialog";
-import RaisedButton from "material-ui/RaisedButton";
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table";
-var moment = require("moment");
+import React from "react"
+var moment = require("moment")
 
-export class UploadModal extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      open: false
-    }
-  }
-  getOpenBtn(){
-    return (
-      <a href="#!" onClick={()=>{this.setState({open:true})}}>
-        <span>{"Upload Data"}</span>
-      </a>
-    );
-  }
-  getTableHeader(){
-    const uploadBtns = ["pathway", "observation", "parameters", "probabilities"]
-      .map(uploadType =>
-        <UploadButton key={uploadType}
-          uploadType={uploadType} onUploadSuccess={this.props.onUploadSuccess}
-          auth={this.props.auth} />);
-    const headings = ["ID", "Date", "Type", "Status", "Name", "Comments"]
-      .map(heading => <TableHeaderColumn key={heading}>{heading}</TableHeaderColumn>);
-    return (
-      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-        <TableRow>
-          <TableHeaderColumn colSpan="6" className="row">{uploadBtns}</TableHeaderColumn>
-        </TableRow>
-        <TableRow>
-          {headings}
-        </TableRow>
-      </TableHeader>
-    );
-  }
-  getTableRows(){
-    return (
-      this.props.uploads.valueSeq()
-        .sort((u1, u2) => moment(u1.get("datetime")).isAfter(u2.get("datetime")) ? -1 : 1)
-        .map(upload => <UploadRow key={upload.get("_id")} upload={upload}/>)
-    );
-  }
-  render(){
-    return (
-      <div>
-        {this.getOpenBtn()}
-        <Dialog open={this.state.open} onRequestClose={()=>{this.setState({open:false})}}
-          title={"Upload Files"} titleStyle={{paddingBottom:"0px"}} titleClassName={"center-align"}>
-          <Table selectable={false} height={"250px"}>
-            {this.getTableHeader()}
-            <TableBody displayRowCheckbox={false} showRowHover={true} preScanRows={false} stripedRows={true}
-              children={this.getTableRows()} />
-          </Table>
-        </Dialog>
-      </div>
-    );
-  }
-}
+import Dialog from "material-ui/Dialog"
+import FlatButton from "material-ui/FlatButton"
+import RaisedButton from "material-ui/RaisedButton"
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from "material-ui/Table"
+
 
 class UploadButton extends React.Component {
   constructor(props){
@@ -123,11 +69,8 @@ class UploadButton extends React.Component {
 }
 
 class UploadRow extends React.Component {
-  constructor(props){
-    super(props);
-  }
   componentDidMount(){
-    $(".tooltipped").tooltip({"delay": 30});
+    $(".tooltipped").tooltip({"delay": 30})
   }
   render(){
     const upload = this.props.upload;
@@ -152,6 +95,56 @@ class UploadRow extends React.Component {
           {`${comments}`}
         </TableRowColumn>
       </TableRow>
+    )
+  }
+}
+
+export default class UploadModal extends React.Component {
+  getTableHeader(){
+    const uploadBtns = ["pathway", "observation", "parameters", "probabilities"]
+      .map(uploadType =>
+        <UploadButton key={uploadType}
+          uploadType={uploadType} onUploadSuccess={this.props.onUploadSuccess}
+          auth={this.props.auth} />);
+    const headings = ["ID", "Date", "Type", "Status", "Name", "Comments"]
+      .map(heading => <TableHeaderColumn key={heading}>{heading}</TableHeaderColumn>);
+    return (
+      <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+        <TableRow>
+          <TableHeaderColumn colSpan="6" className="row">{uploadBtns}</TableHeaderColumn>
+        </TableRow>
+        <TableRow>
+          {headings}
+        </TableRow>
+      </TableHeader>
+    )
+  }
+  getTableRows(){
+    return (
+      this.props.uploads.valueSeq()
+        .sort((u1, u2) => moment(u1.get("datetime")).isAfter(u2.get("datetime")) ? -1 : 1)
+        .map(upload => <UploadRow key={upload.get("_id")} upload={upload}/>)
+    )
+  }
+  render(){
+    const openBtn = (
+      <a href="#" onClick={()=>{this.props.toggleUploadModal(true)}}>{"Upload Data"}</a>
+    )
+    const closeBtn = (
+      <FlatButton label="Close" onTouchTap={()=>{this.props.toggleUploadModal(false)}}/>
+    )
+    return (
+      <div>
+        {openBtn}
+        <Dialog modal={true} open={this.props.uploadModalOpen} actions={[closeBtn]}
+          title={"Upload Files"} titleStyle={{paddingBottom:"0px"}} titleClassName={"center-align"}>
+          <Table selectable={false} height={"250px"}>
+            {this.getTableHeader()}
+            <TableBody displayRowCheckbox={false} showRowHover={true} preScanRows={false} stripedRows={true}
+              children={this.getTableRows()} />
+          </Table>
+        </Dialog>
+      </div>
     );
   }
 }

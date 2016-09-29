@@ -73,10 +73,15 @@ This is a list to be used in the header of the dominant state table. If this is 
 
 =item --key-outputs-file [=] <key_outputs_file>
 
-This file contains a list of the nodes that you would like kept in the resulting dominant state file. This list should be delimited by newlines.
+This file is tab delimited and contains two key columns: reactome_pathway_id pgmlab_node_id. When using this flag you are required provide corresponding reactome pathway ids as well.
 
-=for Euclid
-   key_outputs_file.type=readable
+=for Euclid:
+    key_outputs_file = readable
+
+=item --reactome_pathway_id [=] <reactome_pathway_id>
+
+=for Euclid:
+   reapeatable
 
 =over 8
 

@@ -16,7 +16,8 @@ export default class LearningSubmit extends React.Component {
     data.append("id_token", this.props.auth.get("googleIdToken"));
     $.ajax({
       type: "POST",
-      url: "https://localhost:4433/run/learning/submit",
+      // url: "https://127.0.0.1:8888/run/learning/submit",
+      url: "http://127.0.0.1:8001/run/learning/submit",
       processData: false,
       contentType: false,
       data,
@@ -30,7 +31,7 @@ export default class LearningSubmit extends React.Component {
       }
     });
   }
-  
+
   render(){
     const noMarginTop = {marginTop: "0px"};
     // Uploading .pi and .obs files

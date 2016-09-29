@@ -31,7 +31,6 @@
                 }
             ],
             "transports": [
-
                 {
                   "type": "websocket",
                   "endpoint": {

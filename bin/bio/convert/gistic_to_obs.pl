@@ -17,4 +17,3 @@ gistic_to_obs_file($ARGV{'db_id_to_name_mapping'},
                    $ARGV{'pairwise_interaction'},
                    $ARGV{'gistic'},
                    $ARGV{'observation_file'});
-

@@ -6,7 +6,7 @@ import {Provider} from "react-redux";
 import reducer from "./components/PGMBio/redux/reducer.jsx";
 import {AppContainer} from "./components/PGMBio/App.jsx";
 
-import {Map} from "immutable";
+import {Map, List, fromJS} from "immutable";
 
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
@@ -23,7 +23,7 @@ var $ = require("jquery");
 window.jQuery = $;
 window.$ = $;
 var materialize = require('./lib/materialize.min.js')
-var graphvis = require('./lib/graphvis.js');
+// var graphvis = require('./lib/graphvis.js');
 var autobahn = require("autobahn");
 var when = require("when");
 
@@ -46,12 +46,39 @@ connection.onopen = function(session, details) {
       .then(uploads =>
         JSON.parse(uploads)
           .map(u => {u._id = u._id.$oid; return Map(u)})
-          .reduce((uploads, u) => {uploads[u.get("_id")] = u; return uploads}, {})
+          .reduce((uploads, u) => uploads.set(u.get("_id"), u), Map())
       );
-  const loginWithGoogle = (id_token, name, email) => when.all([googleAuthenticate(id_token, name, email), getUploadsList(id_token)]);
+  // Get all user observations
+  const getObservationsList = (id_token) => session.call("db.observationsList", [], {id_token})
+    .then(observations =>
+      JSON.parse(observations)
+        .map(o => {o._id = o._id.$oid; o.data = List(o.data); return Map(o)})
+        .reduce((observations, o) => observations.set(o.get("_id"), o), Map())
+    );
+  // Get all user pathways
+  const getPathwaysList = (id_token) => session.call("db.pathwaysList", [], {id_token})
+    .then(pathways =>
+      JSON.parse(pathways)
+          .map(p => {p._id = p._id.$oid; return Map(p)})
+          .reduce((pathways, p) => pathways.set(p.get("_id"), p), Map())
+    );
+  const loginWithGoogle = (id_token, name, email) =>
+    when.all([
+      googleAuthenticate(id_token, name, email),
+      getUploadsList(id_token),
+      getObservationsList(id_token),
+      getPathwaysList(id_token)
+    ]);
   // REACTOME
-  const getReactomePathwaysList = () => session.call("reactome.pathwayslist");
-  const getReactomePathway = (pathway) => session.call("reactome.pathway", [], {pathway_id: pathway.id});
+  const getReactomePathwaysList = () => session.call("reactome.pathwayslist")
+    .then(pathways => pathways
+      .map(p => Map(p))
+      // .reduce((pathways, p) => {pathways[p.get("id")] = p; return pathways}, {})
+      .reduce((pathways, p) => pathways.set(p.get("id"), p), Map())
+    );
+  const getReactomePathway = (pathwayID) => session.call("reactome.pathway", [], {pathway_id: pathwayID})
+    .then(pairwiseData => fromJS(pairwiseData));
+  // PGM
   // Load WAMP with promise generators (WAMP RPC calls)
   const wamp = {
     loginWithGoogle,
@@ -87,24 +114,25 @@ function initializeApp(wamp) {
   const store = createStoreDevTools(reducer);
   wamp.getReactomePathwaysList()
     .then(reactomePathways => {
-        store.dispatch({
+      store.dispatch(
+        {
           type: "SET_INITIAL_STATE",
           payload: {
             reactomePathways
           }
-        });
-        render(
-          <MuiThemeProvider muiTheme={getMuiTheme()}>
-            <Provider store={store}>
-              <AppContainer
-                wamp={wamp}
-                    reactomePathways={reactomePathways}
-                    getReactomePathway={getReactomePathway}
-                    PGMLabInference={PGMLabInference}
-                    callInchlibCluster={callInchlibCluster} />
-            </Provider>
-          </MuiThemeProvider>,
-          document.getElementById('app')
-        );
-      })
+        })
+      render(
+        <MuiThemeProvider muiTheme={getMuiTheme()}>
+          <Provider store={store}>
+            <AppContainer
+              wamp={wamp}
+                  reactomePathways={reactomePathways}
+                  getReactomePathway={getReactomePathway}
+                  PGMLabInference={PGMLabInference}
+                  callInchlibCluster={callInchlibCluster} />
+          </Provider>
+        </MuiThemeProvider>,
+        document.getElementById('app')
+      )
+    })
 };

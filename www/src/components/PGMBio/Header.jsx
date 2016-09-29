@@ -1,81 +1,70 @@
 import React from 'react'
+import GoogleLogin from "react-google-login"
 
-import GoogleLogin from "react-google-login";
-import {UploadModal} from "./UploadModal.jsx";
+import UploadModal from "./UploadModal.jsx"
 
-var classNames = require("classnames");
-
-export default class Header extends React.Component {
-  constructor(props){
-    super(props);
-    this.getLeftTabs = this.getLeftTabs.bind(this);
-    this.getSignOutBtn = this.getSignOutBtn.bind(this);
-  }
-
-  getLinkBtns(){
-    const links = {
-      "Wiki":"http://oicr.github.io/PGMLab/",
-      "Github":"http://github.com/OICR/PGMLab"
-    };
-    return Object.keys(links)
-      .map(k => (
-        <li key={k}>
-          <a href={links[k]} target="_blank">{`${k}`}</a>
-        </li>
-      ));
-  }
-  getSignOutBtn(){
-    return (
-      !this.props.auth.get("signedIn") ? null :
-      <li>
-        <a href="#" onClick={evt => this.props.signOut()}>
-          <span>{"Sign Out"}</span>
-        </a>
-      </li>
-    );
-  }
-  getLeftTabs(){
+class LeftHeaderLinks extends React.Component {
+  render(){
     return (
       <ul className="left">
-        {
-          ["Run", "Results"].map(tab => (
-            <li key={tab} className={classNames({"active":tab===this.props.tab})}>
-              <a href="#!" onClick={()=>{this.handleSetTab(tab)}}>{tab}</a>
-            </li>
-          ))
-        }
-        {/* <li>
-          <UploadModal  uploadList                     = {this.props.uploadList}
-                        uploadListAddFailure           = {this.props.uploadListAddFailure}
-                        addNewPathway                  = {this.props.addNewPathway}
-                        addNewObservationSet           = {this.props.addNewObservationSet}
-                        addNewEstimatedParameterSet    = {this.props.addNewEstimatedParameterSet}
-                        addNewPosteriorProbabilitySet  = {this.props.addNewPosteriorProbabilitySet} />
-        </li> */}
+        <li key={"Run"}>
+          <a href="#" onClick={evt=>this.props.changeView("Run")}>{"Run"}</a>
+        </li>
+        <li key={"Results"}>
+          <a href="#" onClick={evt=>this.props.changeView("Results")}>{`Results (${this.props.resultsCount})`}</a>
+        </li>
         <li>
-          <UploadModal onUploadSuccess = {this.props.onUploadSuccess} uploads={this.props.uploads} auth={this.props.auth} />
+          <UploadModal
+              auth={this.props.auth}
+              uploads={this.props.uploads}
+              onUploadSuccess = {this.props.onUploadSuccess}
+              uploadModalOpen = {this.props.uploadModalOpen}
+              toggleUploadModal = {this.props.toggleUploadModal}
+          />
         </li>
       </ul>
     )
   }
+}
 
-  handleSetTab(tab){
-    this.props.setTab(tab);
-  }
+class RightHeaderLinks extends React.Component {
   render(){
-    const noVertMargin = {marginTop:"0px",marginBottom:"0px"};
+    const links = {
+      Wiki:"http://oicr.github.io/PGMLab/",
+      Github:"http://github.com/OICR/PGMLab"
+    }
     return (
-      <header className="row" style={noVertMargin}>
+      <ul className="right">
+        {
+          Object.keys(links)
+            .map(key =>
+              <li key={key}>
+                <a href={links[key]} target="_blank">{`${key}`}</a>
+              </li>
+            )
+        }
+        {
+          !this.props.auth.get("signedIn") ? null :
+            <li>
+              <a href="#" onClick={evt => this.props.signOut()}>
+                <span>{"Sign Out"}</span>
+              </a>
+            </li>
+        }
+      </ul>
+    )
+  }
+}
+
+export default class Header extends React.Component {
+  render(){
+    return (
+      <header className="row" style={{marginTop:"0px",marginBottom:"0px"}}>
         <nav className="light-blue" role="navigation">
           <div className="nav-wrapper">
-            {this.getLeftTabs()}
-            <span className="brand-logo center">
-              <h4>{"PGMBio"}</h4>
-            </span>
-            <ul className="right">
-              {this.getLinkBtns()}
-              {this.getSignOutBtn()}
-            </ul>
+            <LeftHeaderLinks {...this.props} />
+            <span className="brand-logo center"><h4>{"PGMBio"}</h4></span>
+            <RightHeaderLinks auth={this.props.auth} signOut={this.props.signOut} />
           </div>
         </nav>
       </header>
