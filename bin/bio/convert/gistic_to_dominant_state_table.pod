@@ -77,13 +77,6 @@ This is a list to be used in the header of the dominant state table. If this is 
 =for Euclid
    sample_list_file.type=readable
 
-=item --key-outputs-file [=] <key_outputs_file>
-
-This file contains a list of the nodes that you would like kept in the resulting dominant state file. This list should be delimited by newlines. 
-
-=for Euclid
-   key_outputs_file.type=readable
-
 =over 8
 
 =item -v[erbose]
