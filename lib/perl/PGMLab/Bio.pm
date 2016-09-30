@@ -16,13 +16,15 @@ use base "Exporter";
 use vars qw(@EXPORT_OK);
 
 @EXPORT_OK = qw(gistic_to_obs_file
+                get_key_outputs_from_tsv
+                get_sample_list_from_file
                 gistic_to_dominant_state_table
                 copy_number_to_dominant_state_table
                 copy_number_to_obs_file
                 snv_to_obs_file);
 
 sub copy_number_to_dominant_state_table {
-    my ($ploidy_file, $db_id_to_name_mapping, $networks, $data_dir, $sample_list_file, $number_of_states, $copy_number_dir, $key_outputs_file, $reactome_pathway_ids, $verbose) = @_;
+    my ($ploidy_file, $db_id_to_name_mapping, $networks, $data_dir, $sample_list_file, $number_of_states, $copy_number_dir, $key_outputs, $reactome_pathway_ids, $verbose) = @_;
 
     $data_dir = $1 if($data_dir=~/(.*)\/$/); # if remove the trailing slash if it exists
     my ($network_dir, $observation_file, $pairwise_interaction_file, $posterior_probability_file, $command);
@@ -41,13 +43,13 @@ sub copy_number_to_dominant_state_table {
             say "Running command: $command";
         }
         system($command);
-        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs_file, $reactome_pathway_ids->[$network_index]);
+        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs, $reactome_pathway_ids->[$network_index]);
         $network_index++;
     }
 }
 
 sub gistic_to_dominant_state_table {
-    my ($db_id_to_name_mapping_file, $networks, $data_dir, $gistic_file, $number_of_states, $sample_list_file, $key_outputs_file, $reactome_pathway_ids, $verbose) = @_;
+    my ($db_id_to_name_mapping_file, $networks, $data_dir, $gistic_file, $number_of_states, $sample_list_file, $key_outputs, $reactome_pathway_ids, $verbose) = @_;
 
     $data_dir = $1 if($data_dir=~/(.*)\/$/); # if remove the trailing slash if it exists
     my ($network_dir, $observation_file, $pairwise_interaction_file, $posterior_probability_file, $command);
@@ -66,7 +68,7 @@ sub gistic_to_dominant_state_table {
             say "Running command: $command";
         }
         system($command);
-        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs_file, $reactome_pathway_ids->[$network_index], $gistic_file);
+        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs, $reactome_pathway_ids->[$network_index], $gistic_file);
         $network_index++;
     }
 
@@ -74,9 +76,9 @@ sub gistic_to_dominant_state_table {
 }
 
 sub create_dominant_state_file {
-    my ($pp_file, $sample_list_file, $key_outputs_file, $reactome_pathway_id, $gistic_file) = @_;
+    my ($pp_file, $sample_list_file, $key_outputs, $reactome_pathway_id, $gistic_file) = @_;
 
-    my ($sample_number, $sample_to_nodes_dominant_state, $nodes) = posterior_probability_file_to_dominant_state($pp_file, $key_outputs_file, $reactome_pathway_id);
+    my ($sample_number, $sample_to_nodes_dominant_state, $nodes) = posterior_probability_file_to_dominant_state($pp_file, $key_outputs, $reactome_pathway_id);
      
     my $sample_names = ($sample_list_file)? 
                           get_sample_list_from_file($sample_list_file):
@@ -207,13 +209,7 @@ sub get_key_outputs_from_file {
 }
 
 sub posterior_probability_file_to_dominant_state {
-    my ($pp_file, $key_output_file, $reactome_pathway_id) = @_;
-
-    my $key_outputs;
-    if ($key_output_file && $reactome_pathway_id) {
-        $key_outputs = get_key_outputs_from_tsv($key_output_file, $reactome_pathway_id);
-    }
-
+    my ($pp_file, $key_outputs, $reactome_pathway_id) = @_;
 
     open(my $fh_pp, "<", $pp_file);
     my %sample_to_nodes_dominant_state;

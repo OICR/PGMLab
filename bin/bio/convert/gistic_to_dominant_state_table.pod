@@ -28,18 +28,6 @@ Input filepath for gistic
 =for Euclid:
     gistic_file.type = readable
 
-=item --key-outputs-file [=] <key_outputs_file>
-
-This file is tab delimited and contains two key columns: reactome_pathway_id pgmlab_node_id
-
-=for Euclid:
-    key_outputs_file = readable
-
-=item --reactome_pathway_id [=] <reactome_pathway_id>
-
-=for Euclid:
-   reapeatable
-
 =item --network [=] <network>
 
 The name of the networks that are to be used in the analysis. This is based on the folder name that contains the pairwise interaction file by the same name.
@@ -76,6 +64,25 @@ This is a list to be used in the header of the dominant state table. If this is 
 
 =for Euclid
    sample_list_file.type=readable
+
+=item --key-outputs-file [=] <key_outputs_file>
+
+This file is tab delimited and contains two key columns: reactome_pathway_id pgmlab_node_id
+
+=for Euclid:
+    key_outputs_file.type = readable
+
+=item --key-outputs-table-file [=] <key_outputs_table_file>
+
+This file is tab delimited and contains two key columns: reactome_pathway_id pgmlab_node_id
+If this file is specified the "--key-outputs-file" flag value will be ignored. And requires "--reactome-pathwy-id" to be specified.
+
+=item --reactome_pathway_id [=] <reactome_pathway_id>
+
+This id is the id of the pathway as found in the key outputs table.
+
+=for Euclid:
+   repeatable
 
 =over 8
 
