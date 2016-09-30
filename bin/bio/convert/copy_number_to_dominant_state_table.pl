@@ -30,9 +30,7 @@ if ($ARGV{'key_outputs_table_file'}) {
    }
 }
 elsif ($ARGV{'key_outputs_file'}) {
-   say "before";
    $key_outputs = get_sample_list_from_file($ARGV{'key_outputs_file'});
-say "AFTER";
 }
 
 
