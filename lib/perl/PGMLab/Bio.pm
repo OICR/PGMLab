@@ -43,7 +43,7 @@ sub copy_number_to_dominant_state_table {
             say "Running command: $command";
         }
         system($command);
-        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs, $reactome_pathway_ids->[$network_index]);
+        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs, $reactome_pathway_ids->[$network_index], $number_of_states);
         $network_index++;
     }
 }
@@ -68,7 +68,7 @@ sub gistic_to_dominant_state_table {
             say "Running command: $command";
         }
         system($command);
-        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs, $reactome_pathway_ids->[$network_index], $gistic_file);
+        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs, $reactome_pathway_ids->[$network_index], $gistic_file, $number_of_states);
         $network_index++;
     }
 
@@ -76,9 +76,9 @@ sub gistic_to_dominant_state_table {
 }
 
 sub create_dominant_state_file {
-    my ($pp_file, $sample_list_file, $key_outputs, $reactome_pathway_id, $gistic_file) = @_;
+    my ($pp_file, $sample_list_file, $key_outputs, $reactome_pathway_id, $gistic_file, $number_of_states) = @_;
 
-    my ($sample_number, $sample_to_nodes_dominant_state, $nodes) = posterior_probability_file_to_dominant_state($pp_file, $key_outputs, $reactome_pathway_id);
+    my ($sample_number, $sample_to_nodes_dominant_state, $nodes) = posterior_probability_file_to_dominant_state($pp_file, $key_outputs, $reactome_pathway_id, $number_of_states);
      
     my $sample_names = ($sample_list_file)? 
                           get_sample_list_from_file($sample_list_file):
@@ -209,7 +209,7 @@ sub get_key_outputs_from_file {
 }
 
 sub posterior_probability_file_to_dominant_state {
-    my ($pp_file, $key_outputs, $reactome_pathway_id) = @_;
+    my ($pp_file, $key_outputs, $reactome_pathway_id, $number_of_states) = @_;
 
     open(my $fh_pp, "<", $pp_file);
     my %sample_to_nodes_dominant_state;
@@ -255,6 +255,17 @@ sub posterior_probability_file_to_dominant_state {
     close($fh_pp);
 
     my @unique_nodes = keys %nodes;
+
+    if ($number_of_states == 3) {
+        foreach my $node (keys %sample_to_nodes_dominant_state) {
+            my $node = $sample_to_nodes_dominant_state{$node};
+            foreach my $sample_number (keys %{$sample_to_nodes_dominant_state{$node}})
+                if ($sample_to_nodes_dominant_state{$node}{$sample_number}{"probability"} < 0.5) {
+                     $sample_to_nodes_dominant_state{$node}{$sample_number}{"state"} = 2;
+                }
+            }
+        }
+    }
 
     return ($sample_number, \%sample_to_nodes_dominant_state, \@unique_nodes);
 }
