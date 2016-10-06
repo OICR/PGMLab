@@ -254,19 +254,14 @@ sub posterior_probability_file_to_dominant_state {
     
     close($fh_pp);
 
-    say "number of states $number_of_states";
- 
-    print Dumper \%sample_to_nodes_dominant_state;
-
     my @unique_nodes = keys %nodes;
 
     if ($number_of_states == 3) {
-        say "inside if";
-        foreach my $node (keys %sample_to_nodes_dominant_state) {
-            my $node = $sample_to_nodes_dominant_state{$node};
-            foreach my $sample_number (keys %{$sample_to_nodes_dominant_state{$node}}) {
-                if ($sample_to_nodes_dominant_state{$node}{$sample_number}{"probability"} < 0.5) {
-                     $sample_to_nodes_dominant_state{$node}{$sample_number}{"state"} = 2;
+        foreach my $node_name (keys %sample_to_nodes_dominant_state) {
+            foreach my $sample_number (keys %{$sample_to_nodes_dominant_state{$node_name}}) {
+                if ($sample_to_nodes_dominant_state{$node_name}{$sample_number}{"probability"} < 0.5) {
+                     #say "changing state for $node_name, $sample_number";
+                     $sample_to_nodes_dominant_state{$node_name}{$sample_number}{"state"} = 2;
                 }
             }
         }
