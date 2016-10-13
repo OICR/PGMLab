@@ -13,8 +13,7 @@ use Data::Dumper;
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
-@EXPORT_OK = qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
-
+@EXPORT_OK = qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_root_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
 
 sub flip_pi_logic {
     my ($pi_interactions, $verbose) = @_;
@@ -259,6 +258,36 @@ sub get_interactions_in_pi_file {
     close($fh_pi);
 
     return \%pi_interactions;
+}
+
+sub get_root_nodes_in_pi_file {
+    my ($pi_file_path) = @_;
+
+    open(my $fh_pi, "<", $pi_file_path);
+
+    <$fh_pi>;<$fh_pi>; ##remove fist two rows
+
+    my %pi_nodes_from;
+    my %pi_nodes_to;
+    my ($from, $to, $column_3, $column_4);
+    while (my $interaction = <$fh_pi>) {
+        chomp $interaction;
+        ($from, $to, $column_3, $column_4) = split /\t/, $interaction;
+        $pi_nodes_from{$from} = 1;
+        $pi_nodes_to{$to} = 1;
+
+    }
+
+    my %pi_nodes;
+    foreach my $node (keys %pi_nodes_from) {
+        if (!$pi_nodes_to{$node}) {
+            $pi_nodes{$node} = 1;
+        }
+    }
+
+    close($fh_pi);
+
+    return \%pi_nodes;
 }
 
 sub get_nodes_in_pi_file {

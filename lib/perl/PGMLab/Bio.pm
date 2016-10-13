@@ -8,7 +8,7 @@ use autodie;
 
 use Data::Dumper;
 
-use PGMLab qw(create_obs_file get_nodes_in_pi_file);
+use PGMLab qw(create_obs_file get_nodes_in_pi_file get_root_nodes_in_pi_file);
 
 use Text::CSV;
 
@@ -276,7 +276,8 @@ sub gistic_to_obs_file {
     my ($db_id_to_name_mapping_file, $pairwise_interaction_file, $gistic_file, $observation_file, $verbose) = @_;
 
     my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($db_id_to_name_mapping_file);
-    my $pi_genes = get_nodes_in_pi_file($pairwise_interaction_file);
+    #my $pi_genes = get_nodes_in_pi_file($pairwise_interaction_file);
+    my $pi_genes = get_root_nodes_in_pi_file($pairwise_interaction_file);
     my ($sample_gene_states, $sample_list) = get_gistic_gene_states($gistic_file, $entity_name_to_reactome_id, $pi_genes);
 
     if (%{$sample_gene_states}) {
