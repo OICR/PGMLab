@@ -294,7 +294,7 @@ sub copy_number_to_obs_file {
    my $donor_ploidy = get_donor_ploidy($ploidy_file);
    my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($db_id_to_name_mapping_file);
 
-   my $pi_genes = get_nodes_in_pi_file($pi_file);
+   my $pi_genes = get_root_nodes_in_pi_file($pi_file);
 
    my $sample_list = get_sample_list($sample_list_file);
 
@@ -313,7 +313,7 @@ sub snv_to_obs_file {
 
     my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($db_id_to_name_mapping_file);
 
-    my $pi_genes = get_nodes_in_pi_file($pi_file);
+    my $pi_genes = get_root_nodes_in_pi_file($pi_file);
 
     my $sample_list = get_samples_from_sample_file($sample_list_file);
 
