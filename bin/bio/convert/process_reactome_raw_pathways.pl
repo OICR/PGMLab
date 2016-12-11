@@ -70,15 +70,18 @@ foreach my $file (@tsv_files) {
             my $tree_y_n = ($is_a_tree)?"Yes":"No";
             print $fh_analysis "Tree: $tree_y_n\n";
      
-            unless ($is_a_tree) {
-                 my $cycles = find_cycles(\%member_interactions);
-                 if (scalar(@{$cycles})) {
-                     print_cycles($cycles, $fh_analysis);
-                 } 
-                 else {
-                     print $fh_analysis "No Cycles for this graph\n";
-                 }
-                 print $fh_analysis "\n";
+            if ($is_a_tree) {
+	        print "\n";
+	    }
+	    else {
+                my $cycles = find_cycles(\%member_interactions);
+                if (scalar(@{$cycles})) {
+                    print_cycles($cycles, $fh_analysis);
+                } 
+                else {
+                    print $fh_analysis "No Cycles for this graph\n";
+                }
+                print $fh_analysis "\n";
             }
        }
 
