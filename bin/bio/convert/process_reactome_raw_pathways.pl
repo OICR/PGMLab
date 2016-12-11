@@ -71,7 +71,7 @@ foreach my $file (@tsv_files) {
             print $fh_analysis "Tree: $tree_y_n\n";
      
             if ($is_a_tree) {
-	        print "\n";
+	        print $fh_analysis "\n";
 	    }
 	    else {
                 my $cycles = find_cycles(\%member_interactions);
