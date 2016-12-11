@@ -1,4 +1,4 @@
-This is gsl-ref.info, produced by makeinfo version 5.2 from
+This is gsl-ref.info, produced by makeinfo version 6.1 from
 gsl-ref.texi.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
@@ -592,9 +592,9 @@ K, Marsaglia's lookup table can be quite large.
 method for generating discrete random variables with general
 distributions, ACM Trans on Mathematical Software 3, 253-256 (1977); see
 also Knuth, v2, 3rd ed, p120-121,139).  This requires two lookup tables,
-one floating point and one integer, but both only of size K.  After
+one floating point and one integer, but both only of size K. After
 preprocessing, the random numbers are generated in O(1) time, even for
-large K.  The preprocessing suggested by Walker requires O(K^2) effort,
+large K. The preprocessing suggested by Walker requires O(K^2) effort,
 but that is not actually necessary, and the implementation provided here
 only takes O(K) effort.  In general, more preprocessing leads to faster
 generation of the individual random numbers, but a diminishing return is
@@ -2607,7 +2607,7 @@ simplest way to use a two dimensional histogram is to record
 two-dimensional position information, n(x,y).  Another possibility is to
 form a "joint distribution" by recording related variables.  For example
 a detector might record both the position of an event (x) and the amount
-of energy it deposited E.  These could be histogrammed as the joint
+of energy it deposited E. These could be histogrammed as the joint
 distribution n(x,E).
 
 
@@ -3108,6 +3108,7 @@ which are printed out.
 
        return 0;
      }
+
 
 
 File: gsl-ref.info,  Node: N-tuples,  Next: Monte Carlo Integration,  Prev: Histograms,  Up: Top
@@ -5647,6 +5648,7 @@ same y-value for a periodic spline.
        return 0;
      }
 
+
    The output can be plotted with GNU 'graph'.
 
      $ ./a.out > interp.dat
@@ -7098,7 +7100,7 @@ t_n=(j_{\nu,n}/j_{\nu,M}) X in real space and at u_n=j_{\nu,n}/X in
 reciprocal space.  Here, j_{\nu,m} are the m-th zeros of the Bessel
 function J_\nu(x) arranged in ascending order.  Moreover, the discrete
 functions are assumed to be band limited, so f(t_n)=0 and F(u_n)=0 for
-n>M.  Accordingly, the function f is defined on the interval [0,X].
+n>M. Accordingly, the function f is defined on the interval [0,X].
 
    Following the work of Johnson, 1987 and Lemoine, 1994, the discrete
 Hankel transform is given by
@@ -7168,7 +7170,7 @@ File: gsl-ref.info,  Node: Discrete Hankel Transform Functions,  Next: Discrete 
 
  -- Function: double gsl_dht_x_sample (const gsl_dht * T, int N)
      This function returns the value of the N-th sample point in the
-     unit interval, (j_{\nu,n+1}/j_{\nu,M}) X.  These are the points
+     unit interval, (j_{\nu,n+1}/j_{\nu,M}) X. These are the points
      where the function f(t) is assumed to be sampled.
 
  -- Function: double gsl_dht_k_sample (const gsl_dht * T, int N)

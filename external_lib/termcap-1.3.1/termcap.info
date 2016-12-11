@@ -1,4 +1,4 @@
-This is termcap.info, produced by makeinfo version 5.2 from
+This is termcap.info, produced by makeinfo version 6.1 from
 termcap.texi.
 
 This file documents the termcap library of the GNU system.
@@ -2400,7 +2400,7 @@ finds and removes the next 'so' magic cookie on the screen.  (It may
 also be possible to remove a cookie which is not at the beginning of a
 line by clearing that line.)  The 'xt' capability also has implications
 for the use of tab characters, but in that regard it is obsolete (*Note
-Cursor Motion::.).
+Cursor Motion::).
 
 'so'
      String of commands to enter standout mode.
@@ -3583,19 +3583,19 @@ Node: Clearing83773
 Node: Insdel Line85542
 Node: Insdel Char90455
 Node: Standout100434
-Node: Underlining109499
-Node: Cursor Visibility111925
-Node: Bell112680
-Node: Keypad113236
-Node: Meta Key117958
-Node: Initialization118919
-Node: Pad Specs121480
-Node: Status Line123539
-Node: Half-Line125430
-Node: Printer126239
-Node: Summary127920
-Node: Var Index138089
-Node: Cap Index139055
-Node: Index149049
+Node: Underlining109498
+Node: Cursor Visibility111924
+Node: Bell112679
+Node: Keypad113235
+Node: Meta Key117957
+Node: Initialization118918
+Node: Pad Specs121479
+Node: Status Line123538
+Node: Half-Line125429
+Node: Printer126238
+Node: Summary127919
+Node: Var Index138088
+Node: Cap Index139054
+Node: Index149048
 
 End Tag Table

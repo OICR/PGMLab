@@ -33,9 +33,10 @@ closedir($dir_h);
 
 $| = 1;
 
-foreach my $tsv_file (@tsv_files) {
-    my ($pathway_name, $extension) = split /\./, $tsv_file;
-    $tsv_file = "$reactome_export_dir/$tsv_file";
+foreach my $file (@tsv_files) {
+    my ($pathway_name, $extension) = split /\./, $file;
+    my $tsv_file = "$reactome_export_dir/$file";
+    my $tsv_analysis_file = "$reactome_pi_result_dir/$file.analysis";
 
     my $interactions = get_interactions_in_pi_file($tsv_file);
     my $siblings = get_siblings_in_pi_file($tsv_file);
@@ -49,6 +50,8 @@ foreach my $tsv_file (@tsv_files) {
         $member_group_id++;
     }
 
+    open(my $fh_analysis, ">", $tsv_analysis_file) if ($ARGV{create_analysis_file});
+
     my $member_group_index = 1;
     foreach my $key (sort {scalar(@{$member_hash{$b}}) <=> scalar(@{$member_hash{$a}})} keys %member_hash) {
        my $members = $member_hash{$key};
@@ -60,34 +63,41 @@ foreach my $tsv_file (@tsv_files) {
            }
        }
 
-       my $filepath = "$reactome_pi_result_dir/$pathway_name";
-       $filepath .= "_$member_group_index" if ($member_group_index != 1);
-       $filepath .= ".pi";
-        
-       if($ARGV{verbose}) {
-            say "Writing: $filepath";
+       if ($ARGV{create_analysis_file}) {
+            print $fh_analysis "Group $member_group_index\n\n";
+
             my $is_a_tree = is_pi_a_tree(\%member_interactions);
             my $tree_y_n = ($is_a_tree)?"Yes":"No";
-            say "Tree: $tree_y_n";
+            print $fh_analysis "Tree: $tree_y_n\n";
      
             unless ($is_a_tree) {
                  my $cycles = find_cycles(\%member_interactions);
                  if (scalar(@{$cycles})) {
-                     print_cycles($cycles);
+                     print_cycles($cycles, $fh_analysis);
                  } 
                  else {
-                     say "No Cycles for this graph";
+                     print $fh_analysis "No Cycles for this graph\n";
                  }
-                 say "";
+                 print $fh_analysis "\n";
             }
        }
 
-       flip_pi_logic(\%member_interactions, $ARGV{verbose}) unless($ARGV{leave_logic});
+       flip_pi_logic(\%member_interactions, $fh_analysis) if ($ARGV{flip_logic});
 
-       add_pseudo_nodes_to_interactions(\%member_interactions, $ARGV{max_number_of_parents}) unless ($ARGV{no_add_pseudonodes});
-       create_pi_file($filepath, \%member_interactions);
+       add_pseudo_nodes_to_interactions(\%member_interactions, $ARGV{max_number_of_parents}) if ($ARGV{add_pseudonodes});
+
+       if ($ARGV{create_pi_file}) {
+           my $filepath = "$reactome_pi_result_dir/$pathway_name";
+           $filepath .= "_$member_group_index" if ($member_group_index != 1);
+           $filepath .= ".pi";
+
+           say "Writing: $filepath" if($ARGV{verbose});
+           create_pi_file($filepath, \%member_interactions)
+       }
 
        $member_group_index++;
     }
+
+    close($fh_analysis) if ($ARGV{create_analysis_file});
 }
-say "Done";
+say "Done" if ($ARGV{verbose});

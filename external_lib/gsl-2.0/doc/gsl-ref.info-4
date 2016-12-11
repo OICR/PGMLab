@@ -1,4 +1,4 @@
-This is gsl-ref.info, produced by makeinfo version 5.2 from
+This is gsl-ref.info, produced by makeinfo version 6.1 from
 gsl-ref.texi.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
@@ -2737,6 +2737,7 @@ The simplex algorithm is described in the following paper,
      J.A. Nelder and R. Mead, 'A simplex method for function
      minimization', Computer Journal vol. 7 (1965), 308-313.
 
+
 
 File: gsl-ref.info,  Node: Least-Squares Fitting,  Next: Nonlinear Least-Squares Fitting,  Prev: Multidimensional Minimization,  Up: Top
 
@@ -3328,7 +3329,7 @@ the partial derivatives to zero produces the system of equations
 
      \sum_i \psi(e_i) X_i = 0
 
-   where X_i is a vector containing row i of the design matrix X.  Next,
+   where X_i is a vector containing row i of the design matrix X. Next,
 we define a weight function w(e) = \psi(e)/e, and let w_i = w(e_i):
 
      \sum_i w_i e_i X_i = 0
@@ -3345,7 +3346,7 @@ solution is used, called Iteratively Reweighted Least Squares (IRLS).
      c^{(k-1)})/(t \sigma^{(k)} \sqrt{1 - h_i}), where t is a tuning
      constant depending on the choice of \psi, and h_i are the
      statistical leverages (diagonal elements of the matrix X (X^T
-     X)^{-1} X^T).  Including t and h_i in the residual calculation has
+     X)^{-1} X^T). Including t and h_i in the residual calculation has
      been shown to improve the convergence of the method.  The residual
      standard deviation is approximated as \sigma^{(k)} = MAD / 0.6745,
      where MAD is the Median-Absolute-Deviation of the n-p largest
@@ -3568,7 +3569,7 @@ File: gsl-ref.info,  Node: Troubleshooting,  Next: Fitting Examples for linear r
 ====================
 
 When using models based on polynomials, care should be taken when
-constructing the design matrix X.  If the x values are large, then the
+constructing the design matrix X. If the x values are large, then the
 matrix X could be ill-conditioned since its columns are powers of x,
 leading to unstable least-squares solutions.  In this case it can often
 help to center and scale the x values using the mean and standard
@@ -4861,7 +4862,7 @@ File: gsl-ref.info,  Node: Computing the covariance matrix of best fit parameter
      For an unweighted least-squares function f_i = (Y(x, t_i) - y_i)
      the covariance matrix above should be multiplied by the variance of
      the residuals about the best-fit \sigma^2 = \sum (y_i - Y(x,t_i))^2
-     / (n-p) to give the variance-covariance matrix \sigma^2 C.  This
+     / (n-p) to give the variance-covariance matrix \sigma^2 C. This
      estimates the statistical error on the best-fit parameters from the
      scatter of the underlying data.
 
@@ -5942,7 +5943,7 @@ File: gsl-ref.info,  Node: Sparse BLAS operations,  Next: Sparse BLAS References
  -- Function: int gsl_spblas_dgemm (const double ALPHA, const
           gsl_spmatrix * A, const gsl_spmatrix * B, gsl_spmatrix * C)
      This function computes the sparse matrix-matrix product C = \alpha
-     A B.  The matrices must be in compressed format.
+     A B. The matrices must be in compressed format.
 
 
 File: gsl-ref.info,  Node: Sparse BLAS References and Further Reading,  Prev: Sparse BLAS operations,  Up: Sparse BLAS Support
@@ -6263,7 +6264,7 @@ File: gsl-ref.info,  Node: Physical Constants,  Next: IEEE floating-point arithm
 *********************
 
 This chapter describes macros for the values of physical constants, such
-as the speed of light, c, and gravitational constant, G.  The values are
+as the speed of light, c, and gravitational constant, G. The values are
 available in different unit systems, including the standard MKSA system
 (meters, kilograms, seconds, amperes) and the CGSM system (centimeters,
 grams, seconds, gauss), which is commonly used in Astronomy.
@@ -7156,11 +7157,13 @@ following paper,
      Scientist Should Know About Floating-Point Arithmetic".  'ACM
      Computing Surveys', Vol. 24, No. 3 (September 1992), page 319.
 
+
    A detailed textbook on IEEE arithmetic and its practical use is
 available from SIAM Press,
 
      Michael L. Overton, 'Numerical Computing with IEEE Floating Point
      Arithmetic', SIAM Press, ISBN 0898715717.
+
 
 
 File: gsl-ref.info,  Node: Debugging Numerical Programs,  Next: Contributors to GSL,  Prev: IEEE floating-point arithmetic,  Up: Top

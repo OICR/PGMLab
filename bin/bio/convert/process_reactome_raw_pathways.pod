@@ -38,14 +38,23 @@ into seperate network (pi) files if they are seperate networks in the pathway fi
 
 =head1 OPTIONAL
 
-=item --leave-logic
+=item --flip-logic
 
 If this flag is not set the program will revers ands and with or for all incoming nodes when one of them negatively
 interacts with the child.
 
-=item --no-add-pseudonodes
+=item --add-pseudonodes
 
-By default we will be adding pseudonodes. If you would like to skip this step add this flag.
+In order to split the number of parents per child. Use in combination with "max-number-of-parents"
+
+=item --create-pi-file
+
+This will cause the pi files to be generated.
+
+=item --create-analysis-file
+
+This will cause the analyis file to be generated.
+
 
 =item --max-number-of-parents [=] <max_number_of_parents>
 

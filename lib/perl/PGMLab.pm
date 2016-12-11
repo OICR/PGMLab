@@ -16,24 +16,22 @@ use vars qw(@EXPORT_OK);
 @EXPORT_OK = qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_root_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
 
 sub flip_pi_logic {
-    my ($pi_interactions, $verbose) = @_;
+    my ($pi_interactions, $fh) = @_;
 
-    my $negative_interaction_children = find_negative_interaction_children($pi_interactions, $verbose);
+    my $negative_interaction_children = find_negative_interaction_children($pi_interactions);
 
     foreach my $to (keys %$pi_interactions) {
         foreach my $from (keys %{$pi_interactions->{$to}}) {
             if (grep {$from eq $_} @$negative_interaction_children) {
                 $pi_interactions->{$to}{$from}[1] = 1;
-                if ($verbose) {
-                   say "switching interaction to 1 for interaction: $from > $to";
-                }
+                print $fh "switching interaction to 1 for interaction: $from > $to\n";
             }
         }
     }
 }
 
 sub find_negative_interaction_children {
-    my ($pi_interactions, $verbose) = @_;
+    my ($pi_interactions) = @_;
 
     my (%has_negative_interactions, $interaction_details);
     foreach my $from (keys %$pi_interactions) {
@@ -124,13 +122,13 @@ sub visit_node {
 
 
 sub print_cycles {
-    my ($cycles) = @_;
+    my ($cycles, $fh) = @_;
 
-    say "Cycles:";
+    print $fh "Cycles:\n";
     my $path_str;
     foreach my $path (@$cycles) {
         $path_str = join ' -> ', @$path;
-        say $path_str;
+        print $fh "$path_str\n";
     }
 }
 
