@@ -13,7 +13,7 @@ use lib "$Bin/../../../lib/perl";
 
 use Getopt::Euclid qw( :minimal_keys );
 
-use PGMLab qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+use PGMLab qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file get_interactions_in_pi_file get_siblings_in_pi_file get_number_of_interactions);
 use PGMLab::NetworkComponents qw(network_components);
 
 print "I got the following options:                                                                    
@@ -36,10 +36,11 @@ $| = 1;
 foreach my $file (@tsv_files) {
     my ($pathway_name, $extension) = split /\./, $file;
     my $tsv_file = "$reactome_export_dir/$file";
-    my $tsv_analysis_file = "$reactome_pi_result_dir/$file.analysis";
+    my $tsv_analysis_file = "$reactome_pi_result_dir/$pathway_name.analysis.txt";
 
-    my $interactions = get_interactions_in_pi_file($tsv_file);
-    my $siblings = get_siblings_in_pi_file($tsv_file);
+    my $interactions = get_interactions_in_pi_file($tsv_file, "tsv");
+    my $siblings = get_siblings_in_pi_file($tsv_file, "tsv");
+
     my $member_groups = network_components($siblings);
 
     my %member_hash =();
@@ -65,6 +66,9 @@ foreach my $file (@tsv_files) {
 
        if ($ARGV{create_analysis_file}) {
             print $fh_analysis "Group $member_group_index\n\n";
+
+	    my $number_of_interactions = get_number_of_interactions(\%member_interactions);
+            print $fh_analysis "Number of interactions: $number_of_interactions\n";
 
             my $is_a_tree = is_pi_a_tree(\%member_interactions);
             my $tree_y_n = ($is_a_tree)?"Yes":"No";

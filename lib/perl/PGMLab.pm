@@ -13,7 +13,7 @@ use Data::Dumper;
 
 use base "Exporter";
 use vars qw(@EXPORT_OK);
-@EXPORT_OK = qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_root_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file);
+@EXPORT_OK = qw(flip_pi_logic find_cycles print_cycles add_pseudo_nodes_to_interactions is_pi_a_tree create_pi_file create_obs_file get_nodes_in_pi_file get_root_nodes_in_pi_file get_interactions_in_pi_file get_siblings_in_pi_file get_number_of_interactions);
 
 sub flip_pi_logic {
     my ($pi_interactions, $fh) = @_;
@@ -239,11 +239,13 @@ sub create_obs_file {
 
 
 sub get_interactions_in_pi_file {
-    my ($pi_file_path) = @_;
+    my ($pi_file_path, $filetype) = @_;
 
     open(my $fh_pi, "<", $pi_file_path);
 
-    <$fh_pi>;<$fh_pi>; ##remove fist two rows
+    if($filetype eq "pi") {
+       <$fh_pi>;<$fh_pi>; ##remove fist two rows
+    }
 
     my %pi_interactions;
     my ($from, $to, $column_3, $column_4);
@@ -311,19 +313,20 @@ sub get_nodes_in_pi_file {
 }
 
 sub get_siblings_in_pi_file {
-    my ($pi_filepath) = @_;
+    my ($pi_filepath, $filetype) = @_;
 
     open(my $fh, "<", $pi_filepath);
 
-    #skip header
-    <$fh>;<$fh>;
+    if ($filetype eq "pi") {
+       <$fh>;<$fh>; #skip header
+    }
 
     my %siblings;
     while (my $line = <$fh>) {
         chomp $line;
         my ($from, $to, $part_three, $part_four) = split /\t/, $line;
-        $siblings{$to}{siblings}{$from} = 1;
-        $siblings{$from}{siblings}{$to} = 1;
+        $siblings{"$to"}{siblings}{"$from"} = 1;
+        $siblings{"$from"}{siblings}{"$to"} = 1;
     }
 
     close $fh;

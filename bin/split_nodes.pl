@@ -20,7 +20,7 @@ my $output_filepath = $ARGV[1];
 
 my $max_number_of_parents = 10;
 
-my $interactions = get_interactions_in_pi_file($input_filepath);
+my $interactions = get_interactions_in_pi_file($input_filepath, "pi");
 
 add_pseudo_nodes_to_interactions($interactions, $max_number_of_parents);
 
