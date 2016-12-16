@@ -16,6 +16,7 @@ use base "Exporter";
 use vars qw(@EXPORT_OK);
 
 @EXPORT_OK = qw(gistic_to_obs_file
+                csv_to_dominant_state_table
                 get_key_outputs_from_tsv
                 get_sample_list_from_file
                 gistic_to_dominant_state_table
@@ -47,6 +48,36 @@ sub copy_number_to_dominant_state_table {
         $network_index++;
     }
 }
+
+
+sub csv_to_dominant_state_table {
+    my ($db_id_to_name_mapping_file, $networks, $data_dir, $csv_file, $number_of_states, $sample_list_file, $key_outputs, $reactome_pathway_ids, $verbose) = @_;
+
+    $data_dir = $1 if($data_dir=~/(.*)\/$/); # if remove the trailing slash if it exists
+    my ($network_dir, $observation_file, $pairwise_interaction_file, $posterior_probability_file, $command);
+   
+    my $network_index = 0;
+    foreach my $network (@{$networks}) {
+        $network_dir = "$data_dir/$network";
+        $observation_file = "$network_dir/inference.obs";
+        $pairwise_interaction_file = "$network_dir/$network.pi";
+        $posterior_probability_file = "$network_dir/$network.pp"; 
+
+        my $exit_code = csv_to_obs_file($db_id_to_name_mapping_file, $pairwise_interaction_file, $csv_file, $observation_file, $verbose);
+
+	return $exit_code if ($exit_code != 0);
+        $command = "../../../bin/pgmlab --data-dir $data_dir --network $network --number-of-states $number_of_states --verbose";
+        if ($verbose) {
+            say "Running command: $command";
+        }
+        system($command);
+        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs, $reactome_pathway_ids->[$network_index], $observation_file, $number_of_states);
+        $network_index++;
+    }
+
+
+}
+
 
 sub gistic_to_dominant_state_table {
     my ($db_id_to_name_mapping_file, $networks, $data_dir, $gistic_file, $number_of_states, $sample_list_file, $key_outputs, $reactome_pathway_ids, $verbose) = @_;
@@ -270,6 +301,24 @@ sub posterior_probability_file_to_dominant_state {
     return ($sample_number, \%sample_to_nodes_dominant_state, \@unique_nodes);
 }
 
+sub csv_to_obs_file {
+    my ($db_id_to_name_mapping_file, $pairwise_interaction_file, $csv_file, $observation_file, $verbose) = @_;
+
+    my ($entity_name_to_reactome_id, $reactome_id_to_entity_name) = get_reactome_ids_to_names_maps($db_id_to_name_mapping_file);
+    #my $pi_genes = get_nodes_in_pi_file($pairwise_interaction_file);
+    my $pi_genes = get_root_nodes_in_pi_file($pairwise_interaction_file);
+
+    my ($sample_gene_states, $sample_list) = get_csv_gene_states($csv_file, $entity_name_to_reactome_id, $pi_genes);
+    if (%{$sample_gene_states}) {
+        create_obs_file($observation_file, $sample_gene_states, $sample_list, $verbose);
+	return 0
+    }
+    elsif($verbose) {
+        say "No results for $observation_file. Therefor not creating file";
+    }
+    return 1;
+}
+
 
 
 sub gistic_to_obs_file {
@@ -465,6 +514,41 @@ sub get_copy_number_gene_states {
     }
     
     return \%sample_gene_state;
+}
+
+sub get_csv_gene_states {
+    my ($csv_file_path, $entity_name_to_reactome_id, $pi_genes) = @_;
+
+    #getting information from csv
+    open(my $fh_csv, "<", $csv_file_path);
+    
+    my %gene_names_hash;
+    my $header_row = <$fh_csv>;
+    chomp $header_row;
+    my @column_names = split /\t/, $header_row;
+    my @sample_names = @column_names[1.. $#column_names];
+
+    my %sample_gene_states;
+    my (@line, @genes, @cnv_values, $gene_list_str);
+    while (my $row = <$fh_csv>) {
+        chomp $row;
+        my @line = split /\t/, $row;
+	my $gene = $line[0];
+        @cnv_values = @line[1.. $#line];
+        for my $x (0.. $#cnv_values) {
+            if ($entity_name_to_reactome_id->{$gene})  {
+                foreach my $reactome_id (@{$entity_name_to_reactome_id->{$gene}}) {
+                    if (exists $pi_genes->{$reactome_id}) {
+                        $sample_gene_states{$sample_names[$x]}{$reactome_id} = $cnv_values[$x];
+                    }
+                }
+            }
+        }
+    }
+    
+    close($fh_csv);
+    
+    return (\%sample_gene_states, \@sample_names);
 }
 
 sub get_gistic_gene_states {
