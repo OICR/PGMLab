@@ -115,6 +115,7 @@ sub create_dominant_state_file {
                           get_sample_list_from_file($sample_list_file):
                           get_sample_names_from_gistic_file($gistic_file);
 
+
     my $dominant_state_file = "$pp_file.tsv";
     print_dominant_state_file($sample_number, $sample_to_nodes_dominant_state, $dominant_state_file, $sample_names, $nodes);
 }
@@ -193,7 +194,7 @@ sub print_dominant_state_file {
 sub get_key_outputs_from_tsv {
     my ($key_outputs_file, $reactome_pathway_id) = @_;
 
-    my $csv = Text::CSV->new ( { binary => 1, eol => $/} )  # should set binary attribute.
+    my $csv = Text::CSV->new( { sep_char => "\t"} )  # should set binary attribute.
                 or die "Cannot use CSV: ".Text::CSV->error_diag ();
 
     open(my $fh, "<:encoding(utf8)", $key_outputs_file);
@@ -202,10 +203,10 @@ sub get_key_outputs_from_tsv {
     my ($reactome_pathway_column_index, $pgmlab_node_column_index);
     my $header_index = 0;
     foreach my $column_name (@$header) {
-        if ( $column_name eq "reactome_pathway_id") {
+        if ( $column_name eq "parent_pathway_id") {
             $reactome_pathway_column_index = $header_index;
         }
-        elsif ($column_name eq "pgmlab_node_id") {
+        elsif ($column_name eq "mapping_id") {
             $pgmlab_node_column_index = $header_index;
         }
 

@@ -23,7 +23,7 @@ my $key_outputs;
 if ($ARGV{'key_outputs_table_file'}) {
    if($ARGV{'reactome_pathway_id'}) {
        $key_outputs = get_key_outputs_from_tsv($ARGV{'key_outputs_table_file'},
-                                               $ARGV{'reactome_pathway_id'});
+                                               $ARGV{'reactome_pathway_id'}[0]);
    }
    else {
        die("reactome_pathway_id flag is required if specifying table");
@@ -32,7 +32,6 @@ if ($ARGV{'key_outputs_table_file'}) {
 elsif ($ARGV{'key_outputs_file'}) {
    $key_outputs = get_sample_list_from_file($ARGV{'key_outputs_file'});
 }
-
 
 csv_to_dominant_state_table($ARGV{'db_id_to_name_mapping'}, 
                             $ARGV{'network'},
