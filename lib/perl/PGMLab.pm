@@ -155,7 +155,7 @@ sub add_pseudo_nodes_to_interactions {
                   $interactions->{"$child\_PSEUDONODE\_$group_index"}{$parent} = \@node_data;
                   $node_index++; 
             } 
-            for(my $i = 1; $i < $num_groups; $i++) {
+            for(my $i = 1; $i <= $num_groups; $i++) {
                 $interactions->{$child}{"$child\_PSEUDONODE\_$i"} = [1,$interactions->{$child}{$parents[0]}[1]];
             }
             foreach my $parent (@parents) {
