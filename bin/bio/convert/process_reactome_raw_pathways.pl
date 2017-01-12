@@ -28,7 +28,7 @@ my $reactome_pi_result_dir = $ARGV{processed_dir};
 $reactome_pi_result_dir = $1 if($reactome_pi_result_dir=~/(.*)\/$/);
 
 opendir(my $dir_h, $reactome_export_dir);
-my @tsv_files = grep(/\.tsv$/,readdir($dir_h));
+my @tsv_files = grep(/\.tsv$|\.pi$/,readdir($dir_h));
 closedir($dir_h);
 
 $| = 1;
