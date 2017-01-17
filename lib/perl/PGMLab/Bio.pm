@@ -71,7 +71,7 @@ sub csv_to_dominant_state_table {
             say "Running command: $command";
         }
         system($command);
-        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs, $reactome_pathway_ids->[$network_index], $observation_file, $number_of_states);
+        create_dominant_state_file($posterior_probability_file, $key_outputs, $reactome_pathway_ids->[$network_index], $csv_file, $number_of_states, 1);
         $network_index++;
     }
 
@@ -99,63 +99,39 @@ sub gistic_to_dominant_state_table {
             say "Running command: $command";
         }
         system($command);
-        create_dominant_state_file($posterior_probability_file, $sample_list_file, $key_outputs, $reactome_pathway_ids->[$network_index], $gistic_file, $number_of_states);
+        create_dominant_state_file($posterior_probability_file, $key_outputs, $reactome_pathway_ids->[$network_index], $gistic_file, $number_of_states, 6);
         $network_index++;
     }
-
-
 }
 
 sub create_dominant_state_file {
-    my ($pp_file, $sample_list_file, $key_outputs, $reactome_pathway_id, $gistic_file, $number_of_states) = @_;
+    my ($pp_file, $key_outputs, $reactome_pathway_id, $csv_file, $number_of_states, $offset) = @_;
 
     my ($sample_number, $sample_to_nodes_dominant_state, $nodes) = posterior_probability_file_to_dominant_state($pp_file, $key_outputs, $reactome_pathway_id, $number_of_states);
      
-    my $sample_names = ($sample_list_file)? 
-                          get_sample_list_from_file($sample_list_file):
-                          get_sample_names_from_gistic_file($gistic_file);
-
+    my $sample_names = get_sample_names_from_observation_file($csv_file, $offset);
 
     my $dominant_state_file = "$pp_file.tsv";
     print_dominant_state_file($sample_number, $sample_to_nodes_dominant_state, $dominant_state_file, $sample_names, $nodes);
 }
 
-sub get_sample_list_from_file {
-    my ($sample_list_file) = @_;
-
-    open(my $fh, "<", $sample_list_file);
-
-    my @sample_list;
-    while(my $sample_name = <$fh>) {
-        chomp($sample_name);
-        push @sample_list, $sample_name
-    }
-    close($fh);
-
-    return \@sample_list;
-}
-
-
-sub get_sample_names_from_gistic_file {
-    my ($gistic_file) = @_;
-
-    my $sample_column = 6;
+sub get_sample_names_from_observation_file {
+    my ($observation_file, $sample_column) = @_;
 
     my @sample_names;
-    if (defined $gistic_file) {
-        open(my $fh_gistic, "<", $gistic_file);
+    if (defined $observation_file) {
+        open(my $fh, "<", $observation_file);
     
-        my $header = <$fh_gistic>;
+        my $header = <$fh>;
         chomp($header);
 
         my @column_names = split /\t/, $header;
         @sample_names = @column_names[$sample_column..$#column_names];
-        close($fh_gistic);
+        close($fh);
     }
 
     return \@sample_names;   
 }
-
 
 sub print_dominant_state_file {
     my ($sample_number, $sample_to_nodes_dominant_state, $dominant_state_file, $sample_names_ref, $nodes) = @_;
