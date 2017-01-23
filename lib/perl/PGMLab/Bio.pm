@@ -153,7 +153,7 @@ sub print_dominant_state_file {
 
     print $ds_fh "\n"; 
   
-    foreach my $node_name (@{$nodes}) {
+    foreach my $node_name (sort @{$nodes}) {
         print $ds_fh "$node_name\t";
     
         my @states;
