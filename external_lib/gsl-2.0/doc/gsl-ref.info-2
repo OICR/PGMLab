@@ -1,4 +1,4 @@
-This is gsl-ref.info, produced by makeinfo version 5.2 from
+This is gsl-ref.info, produced by makeinfo version 6.1 from
 gsl-ref.texi.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
@@ -183,6 +183,7 @@ increasing order.  The 'gsl_combination' structure looks like this,
        size_t k;
        size_t *data;
      } gsl_combination;
+
 
 
 File: gsl-ref.info,  Node: Combination allocation,  Next: Accessing combination elements,  Prev: The Combination struct,  Up: Combinations
@@ -401,6 +402,7 @@ Further information on combinations can be found in,
      Generation, Enumeration and Search', 1998, CRC Press LLC, ISBN
      084933988X
 
+
 
 File: gsl-ref.info,  Node: Multisets,  Next: Sorting,  Prev: Combinations,  Up: Top
 
@@ -446,6 +448,7 @@ increasing order.  The 'gsl_multiset' structure looks like this,
        size_t k;
        size_t *data;
      } gsl_multiset;
+
 
 
 File: gsl-ref.info,  Node: Multiset allocation,  Next: Accessing multiset elements,  Prev: The Multiset struct,  Up: Multisets
@@ -867,7 +870,7 @@ File: gsl-ref.info,  Node: Selecting the k smallest or largest elements,  Next: 
 =================================================
 
 The functions described in this section select the k smallest or largest
-elements of a data set of size N.  The routines use an O(kN) direct
+elements of a data set of size N. The routines use an O(kN) direct
 insertion algorithm which is suited to subsets that are small compared
 with the total size of the dataset.  For example, the routines are
 useful for selecting the 10 largest values from one million data points,
@@ -1832,10 +1835,10 @@ matrices.
  -- Function: int gsl_linalg_complex_LU_decomp (gsl_matrix_complex * A,
           gsl_permutation * P, int * SIGNUM)
      These functions factorize the square matrix A into the LU
-     decomposition PA = LU.  On output the diagonal and upper triangular
-     part of the input matrix A contain the matrix U.  The lower
+     decomposition PA = LU. On output the diagonal and upper triangular
+     part of the input matrix A contain the matrix U. The lower
      triangular part of the input matrix (excluding the diagonal)
-     contains L.  The diagonal elements of L are unity, and are not
+     contains L. The diagonal elements of L are unity, and are not
      stored.
 
      The permutation matrix P is encoded in the permutation P on output.
@@ -1936,12 +1939,12 @@ rank.
  -- Function: int gsl_linalg_QR_decomp (gsl_matrix * A, gsl_vector *
           TAU)
      This function factorizes the M-by-N matrix A into the QR
-     decomposition A = Q R.  On output the diagonal and upper triangular
-     part of the input matrix contain the matrix R.  The vector TAU and
+     decomposition A = Q R. On output the diagonal and upper triangular
+     part of the input matrix contain the matrix R. The vector TAU and
      the columns of the lower triangular part of the matrix A contain
      the Householder coefficients and Householder vectors which encode
      the orthogonal matrix Q.  The vector TAU must be of length
-     k=\min(M,N).  The matrix Q is related to these components by, Q =
+     k=\min(M,N). The matrix Q is related to these components by, Q =
      Q_k ... Q_2 Q_1 where Q_i = I - \tau_i v_i v_i^T and v_i is the
      Householder vector v_i = (0,...,1,A(i+1,i),A(i+2,i),...,A(m,i)).
      This is the same storage scheme as used by LAPACK.
@@ -2061,8 +2064,8 @@ R P^T.
  -- Function: int gsl_linalg_QRPT_decomp (gsl_matrix * A, gsl_vector *
           TAU, gsl_permutation * P, int * SIGNUM, gsl_vector * NORM)
      This function factorizes the M-by-N matrix A into the QRP^T
-     decomposition A = Q R P^T.  On output the diagonal and upper
-     triangular part of the input matrix contain the matrix R.  The
+     decomposition A = Q R P^T. On output the diagonal and upper
+     triangular part of the input matrix contain the matrix R. The
      permutation matrix P is stored in the permutation P.  The sign of
      the permutation is given by SIGNUM.  It has the value (-1)^n, where
      n is the number of interchanges in the permutation.  The vector TAU
@@ -2167,8 +2170,8 @@ M-by-N diagonal matrix (with additional rows of zeros).
  -- Function: int gsl_linalg_SV_decomp (gsl_matrix * A, gsl_matrix * V,
           gsl_vector * S, gsl_vector * WORK)
      This function factorizes the M-by-N matrix A into the singular
-     value decomposition A = U S V^T for M >= N.  On output the matrix A
-     is replaced by U.  The diagonal elements of the singular value
+     value decomposition A = U S V^T for M >= N. On output the matrix A
+     is replaced by U. The diagonal elements of the singular value
      matrix S are stored in the vector S.  The singular values are
      non-negative and form a non-increasing sequence from S_1 to S_N.
      The matrix V contains the elements of V in untransposed form.  To
@@ -2180,13 +2183,13 @@ M-by-N diagonal matrix (with additional rows of zeros).
  -- Function: int gsl_linalg_SV_decomp_mod (gsl_matrix * A, gsl_matrix *
           X, gsl_matrix * V, gsl_vector * S, gsl_vector * WORK)
      This function computes the SVD using the modified Golub-Reinsch
-     algorithm, which is faster for M>>N.  It requires the vector WORK
-     of length N and the N-by-N matrix X as additional working space.
+     algorithm, which is faster for M>>N. It requires the vector WORK of
+     length N and the N-by-N matrix X as additional working space.
 
  -- Function: int gsl_linalg_SV_decomp_jacobi (gsl_matrix * A,
           gsl_matrix * V, gsl_vector * S)
      This function computes the SVD of the M-by-N matrix A using
-     one-sided Jacobi orthogonalization for M >= N.  The Jacobi method
+     one-sided Jacobi orthogonalization for M >= N. The Jacobi method
      can compute singular values to higher relative accuracy than
      Golub-Reinsch algorithms (see references for details).
 
@@ -2243,9 +2246,9 @@ back-substitution.
      triangular part is ignored).  On output the diagonal and lower
      triangular part of the input matrix A contain the matrix L, while
      the upper triangular part of the input matrix is overwritten with
-     L^T (the diagonal terms being identical for both L and L^T).  If
-     the matrix is not positive-definite then the decomposition will
-     fail, returning the error code 'GSL_EDOM'.
+     L^T (the diagonal terms being identical for both L and L^T). If the
+     matrix is not positive-definite then the decomposition will fail,
+     returning the error code 'GSL_EDOM'.
 
      When testing whether a matrix is positive-definite, disable the
      error handler first to avoid triggering an error.
@@ -2295,13 +2298,13 @@ where Q is an orthogonal matrix and T is a symmetric tridiagonal matrix.
  -- Function: int gsl_linalg_symmtd_decomp (gsl_matrix * A, gsl_vector *
           TAU)
      This function factorizes the symmetric square matrix A into the
-     symmetric tridiagonal decomposition Q T Q^T.  On output the
-     diagonal and subdiagonal part of the input matrix A contain the
-     tridiagonal matrix T.  The remaining lower triangular part of the
-     input matrix contains the Householder vectors which, together with
-     the Householder coefficients TAU, encode the orthogonal matrix Q.
-     This storage scheme is the same as used by LAPACK.  The upper
-     triangular part of A is not referenced.
+     symmetric tridiagonal decomposition Q T Q^T. On output the diagonal
+     and subdiagonal part of the input matrix A contain the tridiagonal
+     matrix T. The remaining lower triangular part of the input matrix
+     contains the Householder vectors which, together with the
+     Householder coefficients TAU, encode the orthogonal matrix Q. This
+     storage scheme is the same as used by LAPACK.  The upper triangular
+     part of A is not referenced.
 
  -- Function: int gsl_linalg_symmtd_unpack (const gsl_matrix * A, const
           gsl_vector * TAU, gsl_matrix * Q, gsl_vector * DIAG,
@@ -2334,14 +2337,13 @@ matrix.
  -- Function: int gsl_linalg_hermtd_decomp (gsl_matrix_complex * A,
           gsl_vector_complex * TAU)
      This function factorizes the hermitian matrix A into the symmetric
-     tridiagonal decomposition U T U^T.  On output the real parts of the
+     tridiagonal decomposition U T U^T. On output the real parts of the
      diagonal and subdiagonal part of the input matrix A contain the
-     tridiagonal matrix T.  The remaining lower triangular part of the
+     tridiagonal matrix T. The remaining lower triangular part of the
      input matrix contains the Householder vectors which, together with
-     the Householder coefficients TAU, encode the unitary matrix U.
-     This storage scheme is the same as used by LAPACK.  The upper
-     triangular part of A and imaginary parts of the diagonal are not
-     referenced.
+     the Householder coefficients TAU, encode the unitary matrix U. This
+     storage scheme is the same as used by LAPACK.  The upper triangular
+     part of A and imaginary parts of the diagonal are not referenced.
 
  -- Function: int gsl_linalg_hermtd_unpack (const gsl_matrix_complex *
           A, const gsl_vector_complex * TAU, gsl_matrix_complex * U,
@@ -2376,8 +2378,8 @@ eigenvalue problem, but has applications in other areas as well.
  -- Function: int gsl_linalg_hessenberg_decomp (gsl_matrix * A,
           gsl_vector * TAU)
      This function computes the Hessenberg decomposition of the matrix A
-     by applying the similarity transformation H = U^T A U.  On output,
-     H is stored in the upper portion of A.  The information required to
+     by applying the similarity transformation H = U^T A U. On output, H
+     is stored in the upper portion of A.  The information required to
      construct the matrix U is stored in the lower triangular portion of
      A.  U is a product of N - 2 Householder matrices.  The Householder
      vectors are stored in the lower portion of A (below the
@@ -2393,7 +2395,7 @@ eigenvalue problem, but has applications in other areas as well.
  -- Function: int gsl_linalg_hessenberg_unpack_accum (gsl_matrix * H,
           gsl_vector * TAU, gsl_matrix * V)
      This function is similar to 'gsl_linalg_hessenberg_unpack', except
-     it accumulates the matrix U into V, so that V' = VU.  The matrix V
+     it accumulates the matrix U into V, so that V' = VU. The matrix V
      must be initialized prior to calling this function.  Setting V to
      the identity matrix provides the same result as
      'gsl_linalg_hessenberg_unpack'.  If H is order N, then V must have
@@ -2447,9 +2449,9 @@ The size of U is M-by-N and the size of V is N-by-N.
  -- Function: int gsl_linalg_bidiag_decomp (gsl_matrix * A, gsl_vector *
           TAU_U, gsl_vector * TAU_V)
      This function factorizes the M-by-N matrix A into bidiagonal form U
-     B V^T.  The diagonal and superdiagonal of the matrix B are stored
-     in the diagonal and superdiagonal of A.  The orthogonal matrices U
-     and V are stored as compressed Householder vectors in the remaining
+     B V^T. The diagonal and superdiagonal of the matrix B are stored in
+     the diagonal and superdiagonal of A.  The orthogonal matrices U and
+     V are stored as compressed Householder vectors in the remaining
      elements of A.  The Householder coefficients are stored in the
      vectors TAU_U and TAU_V.  The length of TAU_U must equal the number
      of elements in the diagonal of A and the length of TAU_V should be
@@ -2941,7 +2943,7 @@ involves computing the Schur decomposition
    where Z is an orthogonal matrix of Schur vectors and T, the Schur
 form, is quasi upper triangular with diagonal 1-by-1 blocks which are
 real eigenvalues of A, and diagonal 2-by-2 blocks whose eigenvalues are
-complex conjugate eigenvalues of A.  The algorithm used is the
+complex conjugate eigenvalues of A. The algorithm used is the
 double-shift Francis method.
 
  -- Function: gsl_eigen_nonsymm_workspace * gsl_eigen_nonsymm_alloc
@@ -2984,8 +2986,8 @@ double-shift Francis method.
 
           T = Z^(-1) A Z
 
-     with Z = D Q.  Note that Z will not be orthogonal.  For this
-     reason, balancing is not performed by default.
+     with Z = D Q. Note that Z will not be orthogonal.  For this reason,
+     balancing is not performed by default.
 
  -- Function: int gsl_eigen_nonsymm (gsl_matrix * A, gsl_vector_complex
           * EVAL, gsl_eigen_nonsymm_workspace * W)
@@ -3034,7 +3036,7 @@ double-shift Francis method.
      them using the Schur vectors.  The Schur vectors are destroyed in
      the process, but can be saved by using 'gsl_eigen_nonsymmv_Z'.  The
      computed eigenvectors are normalized to have unit magnitude.  On
-     output, the upper portion of A contains the Schur form T.  If
+     output, the upper portion of A contains the Schur form T. If
      'gsl_eigen_nonsymm' fails, no eigenvectors are computed, and an
      error code is returned.
 
@@ -3061,7 +3063,7 @@ applying the Cholesky decomposition to B:
      ( L^{-1} A L^{-t} ) L^t x = \lambda L^t x
    Therefore, the problem becomes C y = \lambda y where C = L^{-1} A
 L^{-t} is symmetric, and y = L^t x.  The standard symmetric eigensolver
-can be applied to the matrix C.  The resulting eigenvectors are
+can be applied to the matrix C. The resulting eigenvectors are
 backtransformed to find the vectors of the original problem.  The
 eigenvalues and eigenvectors of the generalized symmetric-definite
 eigenproblem are always real.
@@ -3114,7 +3116,7 @@ eigenvalues \lambda and eigenvectors x such that
    where A and B are hermitian matrices, and B is positive-definite.
 Similarly to the real case, this can be reduced to C y = \lambda y where
 C = L^{-1} A L^{-H} is hermitian, and y = L^H x.  The standard hermitian
-eigensolver can be applied to the matrix C.  The resulting eigenvectors
+eigensolver can be applied to the matrix C. The resulting eigenvectors
 are backtransformed to find the vectors of the original problem.  The
 eigenvalues of the generalized hermitian-definite eigenproblem are
 always real.
@@ -3242,7 +3244,7 @@ method due to Moler and Stewart (see references).
      If S is desired, it is stored in A on output.  If T is desired, it
      is stored in B on output.  The ordering of eigenvalues in (ALPHA,
      BETA) follows the ordering of the diagonal blocks in the Schur
-     forms S and T.  In rare cases, this function may fail to find all
+     forms S and T. In rare cases, this function may fail to find all
      eigenvalues.  If this occurs, an error code is returned.
 
  -- Function: int gsl_eigen_gen_QZ (gsl_matrix * A, gsl_matrix * B,
@@ -3273,7 +3275,7 @@ method due to Moler and Stewart (see references).
      Schur vectors.  The Schur vectors are destroyed in the process, but
      can be saved by using 'gsl_eigen_genv_QZ'.  The computed
      eigenvectors are normalized to have unit magnitude.  On output, (A,
-     B) contains the generalized Schur form (S, T).  If 'gsl_eigen_gen'
+     B) contains the generalized Schur form (S, T). If 'gsl_eigen_gen'
      fails, no eigenvectors are computed, and an error code is returned.
 
  -- Function: int gsl_eigen_genv_QZ (gsl_matrix * A, gsl_matrix * B,

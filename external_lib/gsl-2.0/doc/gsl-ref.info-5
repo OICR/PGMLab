@@ -1,4 +1,4 @@
-This is gsl-ref.info, produced by makeinfo version 5.2 from
+This is gsl-ref.info, produced by makeinfo version 6.1 from
 gsl-ref.texi.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
@@ -3536,9 +3536,9 @@ Function Index
 * gsl_linalg_hermtd_decomp:              Tridiagonal Decomposition of Hermitian Matrices.
                                                               (line  14)
 * gsl_linalg_hermtd_unpack:              Tridiagonal Decomposition of Hermitian Matrices.
-                                                              (line  26)
+                                                              (line  25)
 * gsl_linalg_hermtd_unpack_T:            Tridiagonal Decomposition of Hermitian Matrices.
-                                                              (line  34)
+                                                              (line  33)
 * gsl_linalg_hessenberg_decomp:          Hessenberg Decomposition of Real Matrices.
                                                               (line  16)
 * gsl_linalg_hessenberg_set_zero:        Hessenberg Decomposition of Real Matrices.
@@ -4174,7 +4174,7 @@ Function Index
 * gsl_permutation_memcpy:                Permutation allocation.
                                                               (line  26)
 * gsl_permutation_mul:                   Applying Permutations.
-                                                              (line  35)
+                                                              (line  34)
 * gsl_permutation_next:                  Permutation functions.
                                                               (line  14)
 * gsl_permutation_prev:                  Permutation functions.
@@ -4194,7 +4194,7 @@ Function Index
 * gsl_permute_vector:                    Applying Permutations.
                                                               (line  16)
 * gsl_permute_vector_inverse:            Applying Permutations.
-                                                              (line  25)
+                                                              (line  24)
 * gsl_poly_complex_eval:                 Polynomial Evaluation.
                                                               (line  16)
 * gsl_poly_complex_solve:                General Polynomial Equations.
@@ -4941,15 +4941,15 @@ Function Index
 * gsl_sf_coulomb_CL_e:                   Coulomb Wave Function Normalization Constant.
                                                               (line   9)
 * gsl_sf_coulomb_wave_FGp_array:         Coulomb Wave Functions.
-                                                              (line  47)
+                                                              (line  48)
 * gsl_sf_coulomb_wave_FG_array:          Coulomb Wave Functions.
-                                                              (line  39)
+                                                              (line  40)
 * gsl_sf_coulomb_wave_FG_e:              Coulomb Wave Functions.
-                                                              (line  19)
+                                                              (line  20)
 * gsl_sf_coulomb_wave_F_array:           Coulomb Wave Functions.
-                                                              (line  33)
+                                                              (line  34)
 * gsl_sf_coulomb_wave_sphF_array:        Coulomb Wave Functions.
-                                                              (line  57)
+                                                              (line  58)
 * gsl_sf_coupling_3j:                    3-j Symbols.         (line   6)
 * gsl_sf_coupling_3j_e:                  3-j Symbols.         (line   8)
 * gsl_sf_coupling_6j:                    6-j Symbols.         (line   6)
@@ -5039,15 +5039,15 @@ Function Index
 * gsl_sf_expint_E1_e:                    Exponential Integral.
                                                               (line   7)
 * gsl_sf_expint_E2:                      Exponential Integral.
-                                                              (line  12)
-* gsl_sf_expint_E2_e:                    Exponential Integral.
                                                               (line  13)
+* gsl_sf_expint_E2_e:                    Exponential Integral.
+                                                              (line  14)
 * gsl_sf_expint_Ei:                      Ei(x).               (line   6)
 * gsl_sf_expint_Ei_e:                    Ei(x).               (line   7)
 * gsl_sf_expint_En:                      Exponential Integral.
-                                                              (line  19)
+                                                              (line  21)
 * gsl_sf_expint_En_e:                    Exponential Integral.
-                                                              (line  20)
+                                                              (line  22)
 * gsl_sf_expm1:                          Relative Exponential Functions.
                                                               (line   6)
 * gsl_sf_expm1_e:                        Relative Exponential Functions.

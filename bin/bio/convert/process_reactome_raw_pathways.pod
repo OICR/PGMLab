@@ -1,0 +1,74 @@
+=head1 AUTHOR(S)
+
+Adam Wright <adam.j.wright82@gmail.com | adam.wright@oicr.on.ca>
+
+=over
+
+=item --usage
+
+=item --help
+
+
+=back
+
+=head1 DESCRIPTION
+
+Creates pairwise interaction files from Reactome pathways.
+
+=head1 NAME
+
+Gistic to observation file converter - PGMLab Bio
+
+=head1 REQUIRED
+
+=item --reactome-dir [=] <reactome_dir>
+
+This is the directory containing the tsv files of the pairwise actions files as provided by Reactome. 
+
+=for Euclid:
+   reactome_dir.type=readable
+
+=item --processed-dir [=] <processed_dir>
+
+This is the directory containing the pi files of the pairwise actions for each of the pathway. A pathway will be split
+into seperate network (pi) files if they are seperate networks in the pathway files. 
+
+=for Euclid:
+   processed_dir.type=writeable
+
+=head1 OPTIONAL
+
+=item --flip-logic
+
+If this flag is not set the program will revers ands and with or for all incoming nodes when one of them negatively
+interacts with the child.
+
+=item --add-pseudonodes
+
+In order to split the number of parents per child. Use in combination with "max-number-of-parents"
+
+=item --create-pi-file
+
+This will cause the pi files to be generated.
+
+=item --create-analysis-file
+
+This will cause the analyis file to be generated.
+
+
+=item --max-number-of-parents [=] <max_number_of_parents>
+
+This will be used for adding parents when the number of parents to a node exceeds the max. (default 10)
+
+=for Euclid:
+   max_number_of_parents.default=10
+   max_number_of_parents.type=int
+
+=over 8
+
+=item -v[erbose]
+
+Print verbose output as the script runs. In particular, a report will be generated containing information on each network.
+This includes a check for if the network is a tree and if not whether or not there are cycles. It will list these cycles in standard out. 
+
+=back

@@ -7,60 +7,21 @@ use autodie;
 use feature qw(say);
 use POSIX;
 
-my $input_file = $ARGV[0];
+use FindBin qw($Bin);
+use lib "$Bin/../lib/perl";
 
-my $max_number_of_parents = 3;
+use PGMLab qw(add_pseudo_nodes_to_interactions get_interactions_in_pi_file create_pi_file);
 
-open(my $fh, "<", $input_file);
+#USAGE: perl split_nodes.pl <input_file> <output_file>
 
-#skip header
-<$fh>;<$fh>;
+my $input_filepath = $ARGV[0];
 
-my %child_to_parents;
-while (my $line = <$fh>) {
-    chomp $line;
-    my ($from, $to, $part_three, $part_four) = split /\t/, $line;
-    $child_to_parents{$to}{$from} = [$part_three, $part_four];
-}
+my $output_filepath = $ARGV[1];
 
-close($fh);
+my $max_number_of_parents = 10;
 
-my ($num_groups, $num_parents, $nodes_per_group, $node_index, $group_index);
-foreach my $child (keys %child_to_parents) {
-    my @parents = keys %{$child_to_parents{$child}};
-    $num_parents = scalar @parents;
-    if ($num_parents >= 10) {
-        $num_groups =  ceil($num_parents/$max_number_of_parents);
-        $nodes_per_group = ceil($num_parents/$num_groups);
+my $interactions = get_interactions_in_pi_file($input_filepath, "pi");
 
-        $group_index = 1;
-        $node_index = 1;
-        foreach my $parent (@parents) {
-              if ($node_index > $nodes_per_group) {
-                   $node_index = 1;
-                   $group_index++;
-              }
-              my @node_data = @{$child_to_parents{$child}{$parent}};
-              $child_to_parents{"$child\_PSEUDONODE\_$group_index"}{$parent} = \@node_data;
-              $node_index++; 
-        } 
-        for(my $i = 1; $i < $num_groups; $i++) {
-            $child_to_parents{$child}{"$child\_PSEUDONODE\_$i"} = [1,$child_to_parents{$child}{$parents[0]}[1]];
-        }
-    }
-}
+add_pseudo_nodes_to_interactions($interactions, $max_number_of_parents);
 
-###output file
-
-my $number_of_interactions = 0;
-foreach my $child (keys %child_to_parents) {
-    $number_of_interactions += scalar( keys %{$child_to_parents{$child}});
-}
-
-say "$number_of_interactions\n";
-foreach my $child (keys %child_to_parents) {
-    foreach my $parent (keys %{$child_to_parents{$child}}) {
-        my @values = @{$child_to_parents{$child}{$parent}};
-        say "$parent\t$child\t".$values[0]."\t".$values[1];
-    }
-}
+create_pi_file($output_filepath, $interactions);

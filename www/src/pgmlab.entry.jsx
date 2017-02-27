@@ -1,45 +1,54 @@
-require("../assets/css/materialize.css")
-require("../assets/css/style.css")
+import React from "react";
+import {render} from "react-dom";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import {Map} from "immutable";
+import {compose, createStore} from "redux";
+import {Provider} from "react-redux";
+import reducer from "./components/PGMLab/redux/reducer.jsx";
+import {AppContainer} from "./components/PGMLab/App.jsx"
 
-var $ = require('jquery')
-window.jQuery = $
-window.$ = $
+var injectTapEvenPlugin = require("react-tap-event-plugin");
+injectTapEvenPlugin();
 
-var materialize = require('./lib/materialize.min.js')
-require("material-design-icons")
+require("../assets/css/materialize.css");
+require("../assets/css/style.css");
+require("material-design-icons");
+var $ = require("jquery");
+window.jQuery = $;
+window.$ = $;
+var materialize = require("./lib/materialize.min.js");
 
-import React from 'react'
-import { render } from 'react-dom'
-
-import {Header} from './components/Header.jsx'
-import {Body}   from './components/BodyPGMLab.jsx'
-import {Footer} from './components/Footer.jsx'
-
-var moment = require('moment')
-
-class App extends  React.Component {
-
-    constructor (props) {
-        super(props)
-
-    }
-
-    static getCurrentDateTime() {
-        return moment().format('MMM D, YYYY HH:mm')
-    }
-
-    componentDidMount () {
-      $('.modal-trigger').leanModal()
-    }
-
-    render () {
-        return (
-            <div>
-                <Header />
-                <Body />
-                <Footer />
-            </div> )
-    }
+// AUTOBAHN
+try {var autobahn = require("autobahn")}
+catch (err) {console.log("autobahn error: ", e)};
+const wssuri = "wss://127.0.0.1:443";
+const wsuri = "ws://127.0.0.1:4444";
+var connection = new autobahn.Connection({
+  url: wsuri,
+  realm: "realm1"
+});
+connection.onopen = function(session, details) {
+  console.log("...autobahn connected");
+  initializeApp(session);
 }
+connection.open()
 
-render(<App />, document.getElementById('app'))
+function initializeApp(wamp){
+  const createStoreDevTools = compose(
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+  )(createStore);
+  const store = createStoreDevTools(reducer);
+  store.dispatch({
+    type: "SET_INITIAL_STATE",
+    wamp
+  });
+  render(
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
+    <Provider store={store}>
+      <AppContainer/>
+    </Provider>
+    </MuiThemeProvider>,
+    document.getElementById('app')
+  );
+}

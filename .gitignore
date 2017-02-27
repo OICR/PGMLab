@@ -7,8 +7,10 @@ net/hash_obj
 #GSL library
 external_lib/gsl
 external_lib/gsl-*
+external_lib/gsl-*/*
+external_lib/gsl-*/*/*
 
-#readline 
+#readline
 external_lib/readline
 external_lib/readline-*/
 external_lib/termcap
@@ -20,7 +22,6 @@ makeHashTable/phash.*
 #binaries
 out/
 bin/pgmlab
-lib/
 
 # Object files
 *.o
@@ -36,16 +37,37 @@ lib/
 #OS X files
 .DS_Store
 
+#net library
+net/lib
 
-#This is is for securing the websocket each implementation should generate it's own 
+#This is is for securing the websocket each implementation should generate it's own
 wamp/.crossbar/pgmlab.pem
 
 #python compiled files
 *.pyc
 
+www/pgmlab/twistd.pid
+www/pgmbio/twistd.pid
 
 #node file for running process
-wamp/.crossbar/node.pid
-wamp/.crossbar/node.key
+www/*/.crossbar/node.pid
+www/*/.crossbar/node.key
+www/*/.crossbar/key.priv
+www/*/.crossbar/key.pub
+*/.crossbar/node.pid
+*/.crossbar/node.key
+*/.crossbar/key.priv
+*/.crossbar/key.pub
 
 www/node_modules/
+
+#tmp files created from running PGMLab
+tmp/*
+
+#Data files created from running PGMLab queueing
+www/pgmlab/results/*
+www/pgmlab/pgmlab.db
+data/pgmlab/*
+
+www/pgmbio/db/*
+www/pgmbio/results/*

@@ -1,4 +1,4 @@
-This is gsl-ref.info, produced by makeinfo version 5.2 from
+This is gsl-ref.info, produced by makeinfo version 6.1 from
 gsl-ref.texi.
 
 Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
@@ -3030,6 +3030,7 @@ solution can be reconstructed from the following relations,
      F_L'(eta,x) = fcp[k_L] * exp(exp_F)
      G_L'(eta,x) = gcp[k_L] * exp(exp_G)
 
+
  -- Function: int gsl_sf_coulomb_wave_FG_e (double ETA, double X, double
           L_F, int K, gsl_sf_result * F, gsl_sf_result * FP,
           gsl_sf_result * G, gsl_sf_result * GP, double * EXP_F, double
@@ -3699,6 +3700,7 @@ File: gsl-ref.info,  Node: Exponential Integral,  Next: Ei(x),  Up: Exponential 
 
           E_1(x) := \Re \int_1^\infty dt \exp(-xt)/t.
 
+
  -- Function: double gsl_sf_expint_E2 (double X)
  -- Function: int gsl_sf_expint_E2_e (double X, gsl_sf_result * RESULT)
      These routines compute the second-order exponential integral
@@ -3706,12 +3708,14 @@ File: gsl-ref.info,  Node: Exponential Integral,  Next: Ei(x),  Up: Exponential 
 
           E_2(x) := \Re \int_1^\infty dt \exp(-xt)/t^2.
 
+
  -- Function: double gsl_sf_expint_En (int N, double X)
  -- Function: int gsl_sf_expint_En_e (int N, double X, gsl_sf_result *
           RESULT)
      These routines compute the exponential integral E_n(x) of order n,
 
           E_n(x) := \Re \int_1^\infty dt \exp(-xt)/t^n.
+
 
 
 File: gsl-ref.info,  Node: Ei(x),  Next: Hyperbolic Integrals,  Prev: Exponential Integral,  Up: Exponential Integrals
@@ -6974,6 +6978,7 @@ elements of the permutation array are all of type 'size_t'.  The
        size_t * data;
      } gsl_permutation;
 
+
 
 File: gsl-ref.info,  Node: Permutation allocation,  Next: Accessing permutation elements,  Prev: The Permutation struct,  Up: Permutations
 
@@ -7092,16 +7097,15 @@ File: gsl-ref.info,  Node: Applying Permutations,  Next: Reading and writing per
           gsl_vector * V)
      This function applies the permutation P to the elements of the
      vector V, considered as a row-vector acted on by a permutation
-     matrix from the right, v' = v P.  The j-th column of the
-     permutation matrix P is given by the P_j-th column of the identity
-     matrix.  The permutation P and the vector V must have the same
-     length.
+     matrix from the right, v' = v P. The j-th column of the permutation
+     matrix P is given by the P_j-th column of the identity matrix.  The
+     permutation P and the vector V must have the same length.
 
  -- Function: int gsl_permute_vector_inverse (const gsl_permutation * P,
           gsl_vector * V)
      This function applies the inverse of the permutation P to the
      elements of the vector V, considered as a row-vector acted on by an
-     inverse permutation matrix from the right, v' = v P^T.  Note that
+     inverse permutation matrix from the right, v' = v P^T. Note that
      for permutation matrices the inverse is the same as the transpose.
      The j-th column of the permutation matrix P is given by the P_j-th
      column of the identity matrix.  The permutation P and the vector V
