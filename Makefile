@@ -38,7 +38,9 @@ else
     endif
 endif
 
-all: cli r_package
+all: cli 
+	
+#r_package
 
 cli: pgmlab readline
 	make -C cli 
