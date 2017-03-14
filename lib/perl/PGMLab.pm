@@ -20,8 +20,8 @@ sub flip_pi_logic {
 
     my $negative_interaction_children = find_negative_interaction_children($pi_interactions);
 
-    foreach my $to (keys %$pi_interactions) {
-        foreach my $from (keys %{$pi_interactions->{$to}}) {
+    foreach my $to (sort keys %$pi_interactions) {
+        foreach my $from (sort keys %{$pi_interactions->{$to}}) {
             if (grep {$from eq $_} @$negative_interaction_children) {
                 $pi_interactions->{$to}{$from}[1] = 1;
                 print $fh "switching interaction to 1 for interaction: $from > $to\n";
@@ -138,7 +138,7 @@ sub add_pseudo_nodes_to_interactions {
     my ($interactions, $max_number_of_parents) = @_;
     
     my ($num_groups, $num_parents, $nodes_per_group, $node_index, $group_index);
-    foreach my $child (keys %{$interactions}) {
+    foreach my $child (sort  keys %{$interactions}) {
         my @parents = keys %{$interactions->{$child}};
         $num_parents = scalar @parents;
         if ($num_parents >= 10) {
@@ -146,7 +146,7 @@ sub add_pseudo_nodes_to_interactions {
             $nodes_per_group = ceil($num_parents/$num_groups);
             $group_index = 1;
             $node_index = 1;
-            foreach my $parent (@parents) {
+            foreach my $parent (sort @parents) {
                   if ($node_index > $nodes_per_group) {
                        $node_index = 1;
                        $group_index++;
@@ -192,8 +192,8 @@ sub create_pi_file {
     open(my $fh, ">", $pi_filepath);
 
     print $fh "$number_of_interactions\n\n";
-    foreach my $child (keys %{$interactions}) {
-        foreach my $parent (keys %{$interactions->{$child}}) {
+    foreach my $child (sort keys %{$interactions}) {
+        foreach my $parent (sort keys %{$interactions->{$child}}) {
             my @values = @{$interactions->{$child}{$parent}};
             print $fh "$parent\t$child\t".$values[0]."\t".$values[1]."\n";
         }
