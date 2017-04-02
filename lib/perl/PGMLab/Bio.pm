@@ -239,7 +239,7 @@ sub posterior_probability_file_to_dominant_state {
 
         ($node, $probability) = split /\t/, $line;
 
-        if ((not $key_outputs) || ($key_output_hash{$node})) {
+		#   if ((not $key_outputs) || ($key_output_hash{$node})) {
             unless ($sample_to_nodes_dominant_state{$node}{$sample_number}) {
                 $state = 1;
                 $nodes{$node} = 1;
@@ -256,7 +256,7 @@ sub posterior_probability_file_to_dominant_state {
     
                 }
             }
-        }
+#     }
     }
     $sample_number--;
     
