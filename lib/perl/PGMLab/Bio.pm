@@ -399,19 +399,20 @@ sub get_reactome_ids_to_names_maps {
     my ($db_id_to_name_mapping) = @_;
 
     open(my $fh_db_id, "<", $db_id_to_name_mapping);
-    
+ 
+    my $header = <$fh_db_id>;
     my %reactome_id_to_entity_name;
     my %entity_name_to_reactome_id;
-    my ($reactome_id, $entity_name, $entity_type);
+    my ($database_id, $node_name, $reference_entity_name, $reference_entity_id, $instance_class);
     while (my $reactome_map = <$fh_db_id>) {
          chomp $reactome_map;
-         ($reactome_id, $entity_name, $entity_type) = split /\t/, $reactome_map;
-	 #        if (( $entity_type =~ /^Reference/) || ($entity_type =~ /^DefinedSet$/)) {
-              $reactome_id_to_entity_name{$reactome_id} = $entity_name;
-              unless( exists $entity_name_to_reactome_id{$entity_name}) {
-                 $entity_name_to_reactome_id{$entity_name} = ();
+         ($database_id, $node_name, $reference_entity_name, $reference_entity_id, $instance_class) = split /\t/, $reactome_map;
+	 #        if (( $instance_class =~ /^Reference/) || ($instance_class =~ /^DefinedSet$/)) {
+              $reactome_id_to_entity_name{$node_name} = $reference_entity_name;
+              unless( exists $entity_name_to_reactome_id{$reference_entity_name}) {
+                 $entity_name_to_reactome_id{$reference_entity_name} = ();
               }
-              push @{$entity_name_to_reactome_id{$entity_name}}, $reactome_id;
+              push @{$entity_name_to_reactome_id{$reference_entity_name}}, $node_name;
 	      #    }
     }
     
@@ -498,7 +499,7 @@ sub get_csv_gene_states {
 
     #getting information from csv
     open(my $fh_csv, "<", $csv_file_path);
-    
+
     my %gene_names_hash;
     my $header_row = <$fh_csv>;
     chomp $header_row;
@@ -510,7 +511,7 @@ sub get_csv_gene_states {
     while (my $row = <$fh_csv>) {
         chomp $row;
         my @line = split /\t/, $row;
-	my $gene = $line[0];
+        my $gene = $line[0];
         @cnv_values = @line[1.. $#line];
         for my $x (0.. $#cnv_values) {
             if ($entity_name_to_reactome_id->{$gene})  {
